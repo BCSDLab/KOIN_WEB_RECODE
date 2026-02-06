@@ -20,7 +20,7 @@ export default function DeleteModal({ articleId, closeDeleteModal }: DeleteModal
   const router = useRouter();
   const { logFindUserDeleteConfirmClick } = useArticlesLogger();
   const { mutate: deleteArticle } = useDeleteLostItemArticle({
-    onSuccess: () => router.replace(ROUTES.Articles()),
+    onSuccess: () => router.replace(ROUTES.LostItems()),
   });
 
   useEscapeKeyDown({ onEscape: closeDeleteModal });

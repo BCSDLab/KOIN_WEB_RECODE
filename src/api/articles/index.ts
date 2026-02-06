@@ -13,6 +13,10 @@ import {
   GetLostItemChatroomList,
   GetLostItemChatroomDetail,
   GetLostItemChatroomDetailMessages,
+  GetLostItemStat,
+  PostFoundLostItem,
+  PutLostItemArticle,
+  GetLostItemSearch,
 } from './APIDetail';
 
 export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
@@ -40,3 +44,11 @@ export const getLostItemChatroomDetail = APIClient.of(GetLostItemChatroomDetail)
 export const getLostItemChatroomDetailMessages = APIClient.of(GetLostItemChatroomDetailMessages);
 
 export const postBlockLostItemChatroom = APIClient.of(PostBlockLostItemChatroom);
+
+export const getLostItemStat = APIClient.of(GetLostItemStat);
+
+export const postFoundLostItem = APIClient.of(PostFoundLostItem);
+
+export const putLostItemArticle = APIClient.of(PutLostItemArticle);
+
+export const getLostItemSearch = APIClient.of(GetLostItemSearch);

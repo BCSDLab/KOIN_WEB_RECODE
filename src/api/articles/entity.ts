@@ -16,6 +16,14 @@ export interface Article {
   is_reported: boolean;
 }
 
+export interface ArticleWithNew extends Article {
+  isNew: boolean;
+}
+
+export function isArticleWithNew(article: Article | ArticleWithNew): article is ArticleWithNew {
+  return 'isNew' in article && typeof (article as ArticleWithNew).isNew === 'boolean';
+}
+
 export interface Attachment {
   id: 1;
   name: string;
@@ -45,23 +53,27 @@ export interface ArticleResponse extends Article, APIResponse {
   next_id: number;
 }
 
+export interface ArticleResponseWithNew extends ArticleResponse {
+  isNew: boolean;
+}
+
 export type HotArticle = Article;
 
 export type HotArticlesResponse = HotArticle[];
 
-// GET /articles/lost-item
-interface LostItemArticleForGetDTO {
+// GET /articles/lost-item/v2
+export interface LostItemArticleForGetDTO {
   id: number;
   board_id: number;
   type: string;
   category: string;
   found_place: string;
   found_date: string;
-  content: string;
+  content: string | null;
   author: string;
   registered_at: string;
-  updated_at: string;
   is_reported: boolean;
+  is_found: boolean;
 }
 
 export interface LostItemArticlesResponseDTO extends APIResponse {
@@ -72,9 +84,32 @@ export interface LostItemArticlesResponseDTO extends APIResponse {
   current_page: number;
 }
 
-interface ImageDTO {
+export type LostItemType = 'LOST' | 'FOUND';
+export type LostItemCategory = 'ALL' | 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
+export type LostItemFoundStatus = 'ALL' | 'FOUND' | 'NOT_FOUND';
+export type LostItemSort = 'LATEST' | 'OLDEST';
+export type LostItemAuthor = 'ALL' | 'MY';
+
+export interface LostItemArticlesRequest {
+  [key: string]: unknown;
+  type?: LostItemType;
+  page?: number;
+  limit?: number;
+  category?: LostItemCategory[];
+  foundStatus?: LostItemFoundStatus;
+  sort?: LostItemSort;
+  author?: LostItemAuthor;
+  title?: string;
+}
+
+export interface LostItemImageDTO {
   id: number;
   image_url: string;
+}
+
+interface Organization {
+  name: string;
+  location: string;
 }
 
 export interface SingleLostItemArticleResponseDTO extends APIResponse {
@@ -84,11 +119,12 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   category: string;
   found_place: string;
   found_date: string;
-  content: string;
+  content: string | null;
   author: string;
-  is_council: boolean;
+  organization: Organization | null;
   is_mine: boolean;
-  images: ImageDTO[];
+  is_found: boolean;
+  images: LostItemImageDTO[];
   prev_id: number | null;
   next_id: number | null;
   registered_at: string; // yyyy-MM-dd
@@ -103,7 +139,7 @@ export interface LostItemResponse extends APIResponse {
   found_date: string;
   content: string;
   author: string;
-  images: ImageDTO[];
+  images: LostItemImageDTO[];
   prev_id: number | null;
   next_id: number | null;
   registered_at: string;
@@ -144,11 +180,6 @@ export interface LostItemArticlesPostResponseDTO {
   updated_at: string;
 }
 
-interface LostItemImageDTO {
-  id: number;
-  image_url: string;
-}
-
 export interface LostItemArticleResponse {
   article: LostItemArticlesPostResponseDTO;
 }
@@ -162,12 +193,6 @@ export interface ReportItemArticleRequestDTO {
 }
 
 export type ReportItemArticleResponseDTO = APIResponse;
-
-export interface ItemArticleRequestDTO {
-  boardId: number;
-  page: number;
-  limit: number;
-}
 export interface LostItemChatroomDetailResponse {
   article_id: number;
   chat_room_id: number;
@@ -199,3 +224,33 @@ export interface LostItemChatroomDetailMessage {
 }
 
 export type LostItemChatroomDetailMessagesResponse = LostItemChatroomDetailMessage[];
+
+export interface LostItemStatResponse {
+  found_count: number;
+  not_found_count: number;
+}
+
+// PUT /articles/lost-item/{id}
+export interface UpdateLostItemArticleRequestDTO {
+  category: string;
+  found_place: string;
+  found_date: string; // yyyy-MM-dd
+  content: string;
+  new_images: string[];
+  delete_image_ids: number[];
+}
+
+// GET /articles/lost-item/search
+export interface SearchLostItemArticleRequest {
+  query: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface SearchLostItemArticleResponse {
+  articles: LostItemArticleForGetDTO[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}

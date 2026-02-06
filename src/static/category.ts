@@ -2,6 +2,7 @@ import ROUTES from './routes';
 
 export type SubmenuTitle =
   | '공지사항'
+  | '분실물'
   | '버스 교통편'
   | '버스 시간표'
   | '식단'
@@ -43,6 +44,13 @@ export const CATEGORY: Category[] = [
       {
         title: '공지사항',
         link: ROUTES.Articles(),
+        newFlag: false,
+        planFlag: false,
+        tag: null,
+      },
+      {
+        title: '분실물',
+        link: ROUTES.LostItems(),
         newFlag: false,
         planFlag: false,
         tag: null,

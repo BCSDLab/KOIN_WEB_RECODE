@@ -2,7 +2,6 @@ import Link from 'next/link';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexArticles.module.scss';
@@ -10,15 +9,6 @@ import styles from './IndexArticles.module.scss';
 export default function IndexArticles() {
   const articlesData = useArticles();
   const logger = useLogger();
-
-  const getLink = (id: string, boardId: number) => {
-    switch (boardId) {
-      case 14:
-        return ROUTES.LostItemDetail({ id, isLink: true });
-      default:
-        return ROUTES.ArticlesDetail({ id, isLink: true });
-    }
-  };
 
   return (
     <section className={styles.template}>
@@ -45,10 +35,10 @@ export default function IndexArticles() {
       <ul className={styles.list}>
         {articlesData?.articles.slice(0, 7).map((article) => (
           <li key={article.id} className={styles.list__item}>
-            <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
+            <Link href={ROUTES.ArticlesDetail({ id: String(article.id) })} className={styles['list__item-link']}>
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
-              {setArticleRegisteredDate(article.registered_at) && (
+              {article.isNew && (
                 // NOTE: NEW 아이콘은 98x98 고정 크기의 소형 정적 이미지라 next/image 최적화 이점이 거의 없어 <img> 유지
                 // eslint-disable-next-line @next/next/no-img-element
                 <img

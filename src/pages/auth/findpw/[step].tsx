@@ -63,7 +63,7 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
   });
 
   const goToFirstStep = useCallback(() => {
-    router.push(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }));
+    router.push(ROUTES.AuthFindPW({ step: '계정인증' }));
   }, [router]);
 
   useEffect(() => {
@@ -90,10 +90,10 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
 
   const nextStep = (next: StepTitle, options?: { replace: boolean }) => {
     if (options?.replace) {
-      router.replace(ROUTES.AuthFindPW({ step: next, isLink: true }));
+      router.replace(ROUTES.AuthFindPW({ step: next }));
       return;
     }
-    router.push(ROUTES.AuthFindPW({ step: next, isLink: true }));
+    router.push(ROUTES.AuthFindPW({ step: next }));
   };
 
   const goBack = () => router.back();

@@ -19,7 +19,7 @@ export default function usePutClubEvent(clubId: number) {
     onSuccess: () => {
       showToast('success', '동아리 행사 수정 요청이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['clubDetail', 'clubEvent'] });
-      router.push(ROUTES.ClubDetail({ id: String(clubId), isLink: true }));
+      router.push(ROUTES.ClubDetail({ id: String(clubId) }));
     },
     onError: (e) => {
       if (isKoinError(e)) {

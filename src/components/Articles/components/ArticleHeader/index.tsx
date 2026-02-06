@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 
@@ -10,9 +9,10 @@ interface ArticleHeaderProps {
   registeredAt: string;
   author: string;
   hit: number;
+  isNew: boolean;
 }
 
-export default function ArticleHeader({ boardId, title, registeredAt, author, hit }: ArticleHeaderProps) {
+export default function ArticleHeader({ boardId, title, registeredAt, author, hit, isNew }: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
   return (
@@ -21,7 +21,7 @@ export default function ArticleHeader({ boardId, title, registeredAt, author, hi
         <div className={styles.title}>
           <span className={styles['title__board-id']}>{convertArticlesTag(boardId)}</span>
           <span className={styles.title__content}>{title}</span>
-          {setArticleRegisteredDate(registeredAt)[1] && (
+          {isNew && (
             <Image
               className={styles['title__new-tag']}
               src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"

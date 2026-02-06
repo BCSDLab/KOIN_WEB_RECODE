@@ -38,7 +38,7 @@ export default function AdditionalLink() {
         </Link>
         <Link
           className={styles.help__link}
-          href={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
+          href={ROUTES.AuthFindPW({ step: '계정인증' })}
           onClick={onClickFindPassword}
         >
           <LockIcon />
@@ -69,14 +69,14 @@ export default function AdditionalLink() {
       </Link>
       <Link
         className={styles.help__link}
-        href={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
+        href={ROUTES.AuthFindPW({ step: '계정인증' })}
         onClick={onClickFindPassword}
       >
         비밀번호 찾기
       </Link>
       <Link
         className={styles.help__link}
-        href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
+        href={ROUTES.AuthSignup({ currentStep: '약관동의' })}
         onClick={() => {
           sessionLogger.actionSessionEvent({
             session_name: 'sign_up',

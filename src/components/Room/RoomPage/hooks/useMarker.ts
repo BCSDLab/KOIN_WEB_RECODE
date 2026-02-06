@@ -29,7 +29,7 @@ function useMarker({ getMap, roomList }: MarkerProps) {
         clickable: true,
       });
       marker.addListener('click', () => {
-        router.push(ROUTES.RoomDetail({ id: String(land.id), isLink: true }));
+        router.push(ROUTES.RoomDetail({ id: String(land.id) }));
       });
       return marker;
     });

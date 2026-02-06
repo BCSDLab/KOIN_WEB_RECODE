@@ -54,7 +54,7 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
       event_label: 'bus_announcement',
       value: logValue,
     });
-    navigate(ROUTES.ArticlesDetail({ id: String(id), isLink: true }));
+    navigate(ROUTES.ArticlesDetail({ id: String(id) }));
   };
 
   const handleClickDismissNotice = () => {

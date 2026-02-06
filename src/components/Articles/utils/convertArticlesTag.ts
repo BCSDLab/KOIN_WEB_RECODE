@@ -44,4 +44,5 @@ export const BOARD_IDS = {
   홍보게시판: 11,
   현장실습: 12,
   학생생활: 13,
+  분실물: 14,
 } as const;

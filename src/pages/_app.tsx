@@ -12,6 +12,7 @@ import Layout from 'components/layout';
 import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
@@ -61,7 +62,7 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
   useEffect(() => {
     if (!requireAuth) return;
     if (!isMount) return;
-    const token = getCookie('AUTH_TOKEN_KEY');
+    const token = getCookie(COOKIE_KEY.AUTH_TOKEN);
     if (!token) {
       // 하이드레이션 경합 방지
       router.replace(ROUTES.Main());

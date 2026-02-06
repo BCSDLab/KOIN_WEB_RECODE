@@ -20,7 +20,7 @@ export default function usePostNewEvent(clubId: number | undefined) {
     onSuccess: () => {
       showToast('success', '동아리 행사가 생성되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['clubList'] });
-      router.push(ROUTES.ClubDetail({ id: String(clubId), isLink: true }));
+      router.push(ROUTES.ClubDetail({ id: String(clubId) }));
     },
     onError: (e) => {
       if (isKoinError(e)) {

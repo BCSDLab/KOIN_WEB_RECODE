@@ -30,6 +30,7 @@ import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmM
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -82,7 +83,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   const clubId = Number(id);
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const tab = query.tab as TabType | undefined;
   const eventId = query.eventId as string | undefined;
   const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
@@ -242,7 +243,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_correction',
       value: '수정하기',
     });
-    navigate(ROUTES.ClubEdit({ id: String(initialClubId), isLink: true }));
+    navigate(ROUTES.ClubEdit({ id: String(initialClubId) }));
   };
   const handleMandateClick = () => {
     logger.actionEventClick({
@@ -292,7 +293,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_new_recruitment',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubRecruitment({ id: String(initialClubId), isLink: true }));
+    navigate(ROUTES.NewClubRecruitment({ id: String(initialClubId) }));
   };
 
   const handleClickEventAddButton = () => {
@@ -301,7 +302,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_new_event',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubEvent({ id: String(initialClubId), isLink: true }));
+    navigate(ROUTES.NewClubEvent({ id: String(initialClubId) }));
   };
 
   const handleDeleteRecruitment = async () => {
@@ -328,7 +329,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_recruitment_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubRecruitmentEdit({ id: String(initialClubId), isLink: true }));
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(initialClubId) }));
   };
 
   const handleDeleteEvent = async () => {
@@ -356,7 +357,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_event_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubEventEdit({ id: String(initialClubId), eventId: String(eventId), isLink: true }));
+    navigate(ROUTES.ClubEventEdit({ id: String(initialClubId), eventId: String(eventId) }));
   };
 
   const handleClickRecruitNotifyButton = () => {

@@ -10,11 +10,15 @@ import {
   LostItemArticlesPostResponseDTO,
   ReportItemArticleRequestDTO,
   ReportItemArticleResponseDTO,
-  ItemArticleRequestDTO,
   LostItemChatroomPostResponse,
   LostItemChatroomListResponse,
   LostItemChatroomDetailResponse,
   LostItemChatroomDetailMessagesResponse,
+  LostItemStatResponse,
+  LostItemArticlesRequest,
+  UpdateLostItemArticleRequestDTO,
+  SearchLostItemArticleResponse,
+  SearchLostItemArticleRequest,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -29,8 +33,9 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
   constructor(
     public authorization: string,
     page: string | undefined,
+    boardId: number = 4,
   ) {
-    this.path = `/articles?page=${page}&limit=10`;
+    this.path = `/articles?boardId=${boardId}&page=${page}&limit=10`;
   }
 }
 
@@ -57,7 +62,9 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
 export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/articles/lost-item/v2';
+
+  params: LostItemArticlesRequest;
 
   response!: R;
 
@@ -65,9 +72,9 @@ export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implemen
 
   constructor(
     public authorization: string,
-    public data: ItemArticleRequestDTO,
+    params: LostItemArticlesRequest,
   ) {
-    this.path = '/articles/lost-item';
+    this.params = params;
   }
 }
 
@@ -82,7 +89,7 @@ export class GetSingleLostItemArticle<R extends SingleLostItemArticleResponseDTO
     public authorization: string,
     id: number,
   ) {
-    this.path = `/articles/lost-item/${id}`;
+    this.path = `/articles/lost-item/v2/${id}`;
   }
 }
 
@@ -98,7 +105,7 @@ export class PostLostItemArticles<R extends LostItemArticlesPostResponseDTO> imp
   constructor(
     public authorization: string,
     public data: LostItemArticlesRequestDTO,
-  ) {}
+  ) { }
 }
 
 export class DeleteLostItemArticle<R extends LostItemResponse> implements APIRequest<R> {
@@ -161,7 +168,7 @@ export class GetLostItemChatroomList<R extends LostItemChatroomListResponse> imp
 
   auth = true;
 
-  constructor(public authorization: string) {}
+  constructor(public authorization: string) { }
 }
 
 export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse> implements APIRequest<R> {
@@ -183,8 +190,7 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
 }
 
 export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
-  implements APIRequest<R>
-{
+  implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -217,5 +223,70 @@ export class PostBlockLostItemChatroom<R extends object> implements APIRequest<R
     chatroomId: number,
   ) {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/block`;
+  }
+}
+
+export class GetLostItemStat<R extends LostItemStatResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/articles/lost-item/stats';
+
+  response!: R;
+
+  auth = false;
+}
+
+export class PostFoundLostItem<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    id: number,
+  ) {
+    this.path = `/articles/lost-item/${id}/found`;
+  }
+}
+
+export class PutLostItemArticle<R extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    id: number,
+    public data: UpdateLostItemArticleRequestDTO,
+  ) {
+    this.path = `/articles/lost-item/${id}`;
+  }
+}
+
+export class GetLostItemSearch<R extends SearchLostItemArticleResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/articles/lost-item/search';
+
+  params: {
+    query: string;
+    page?: number;
+    limit?: number;
+  };
+
+  response!: R;
+
+  auth = false;
+
+  constructor(params: SearchLostItemArticleRequest) {
+    this.params = params;
   }
 }

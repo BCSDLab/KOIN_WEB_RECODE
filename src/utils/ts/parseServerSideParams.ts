@@ -1,4 +1,5 @@
 import type { GetServerSidePropsContext } from 'next';
+import { COOKIE_KEY } from 'static/url';
 import { getValidToken } from './auth';
 import type { ParsedUrlQuery } from 'querystring';
 
@@ -9,7 +10,7 @@ interface ParsedParams {
 
 export const parseServerSideParams = (context: GetServerSidePropsContext): ParsedParams => {
   const { req } = context;
-  const token = req.cookies['AUTH_TOKEN_KEY'] || undefined;
+  const token = req.cookies[COOKIE_KEY.AUTH_TOKEN] || undefined;
   const validToken = getValidToken(token);
 
   return {

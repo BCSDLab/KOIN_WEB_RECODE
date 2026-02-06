@@ -86,7 +86,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     if (rate) {
       mutate(reviewData);
       reviewSuccessLogging();
-      router.replace(`${ROUTES.StoreDetail({ id: String(storeDetail.id), isLink: true })}?state=리뷰`);
+      router.replace(`${ROUTES.StoreDetail({ id: String(storeDetail.id) })}?state=리뷰`);
     }
   };
 

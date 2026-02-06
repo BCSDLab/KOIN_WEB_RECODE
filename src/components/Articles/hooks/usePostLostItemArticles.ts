@@ -1,8 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postLostItemArticle } from 'api/articles';
-import { transformLostItemArticlesForPost } from 'components/Articles/utils/transform';
-import { LostItemArticlesForPost } from 'static/articles';
+import { LostItemArticlesRequestDTO } from 'api/articles/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -10,8 +9,8 @@ const usePostLostItemArticles = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { status, mutateAsync } = useMutation({
-    mutationFn: async (data: LostItemArticlesForPost) => {
-      const response = await postLostItemArticle(token, transformLostItemArticlesForPost(data));
+    mutationFn: async (data: LostItemArticlesRequestDTO) => {
+      const response = await postLostItemArticle(token, data);
       return response.id;
     },
     onSuccess: () => {

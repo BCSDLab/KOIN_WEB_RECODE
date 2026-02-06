@@ -36,6 +36,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
+    if (title === '분실물') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '분실물' });
     if (title === '버스 교통편')
       logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교통편 조회하기' });
     if (title === '버스 시간표')

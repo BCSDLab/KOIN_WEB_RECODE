@@ -29,7 +29,7 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     navigate(
-      `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType, isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
+      `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType })}&year=${semester?.year}&term=${semester?.term}`,
     );
   };
   const modifyType = router.query.type;

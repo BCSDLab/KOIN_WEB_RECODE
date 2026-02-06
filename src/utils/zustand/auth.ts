@@ -1,3 +1,4 @@
+import { COOKIE_KEY } from 'static/url';
 import { getCookie } from 'utils/ts/cookie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -19,9 +20,9 @@ type Actions = {
 export const useTokenStore = create(
   persist<State & Actions>(
     (set) => ({
-      token: getCookie('AUTH_TOKEN_KEY') || '',
+      token: getCookie(COOKIE_KEY.AUTH_TOKEN) || '',
       refreshToken: '',
-      userType: (getCookie('AUTH_USER_TYPE') || null) as UserType,
+      userType: (getCookie(COOKIE_KEY.AUTH_USER_TYPE) || null) as UserType,
       setToken: (token) => set({ token }),
       setRefreshToken: (refreshToken) => set({ refreshToken }),
       setUserType: (userType) => set({ userType }),

@@ -57,7 +57,7 @@ export default function EditConfirmModal({
     if (formData) {
       resetForm();
       closeModal();
-      navigate(ROUTES.ClubDetail({ id: String(id), isLink: true }));
+      navigate(ROUTES.ClubDetail({ id: String(id) }));
     }
     if (setIsEdit) {
       if (introduction) {

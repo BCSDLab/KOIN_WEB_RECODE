@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
+import { COOKIE_KEY } from 'static/url';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
@@ -104,7 +105,7 @@ export default class APIClient {
       .then((result) => {
         const domain = getCookieDomain();
 
-        setCookie('AUTH_TOKEN_KEY', result.token, domain ? { domain: domain } : undefined);
+        setCookie(COOKIE_KEY.AUTH_TOKEN, result.token, domain ? { domain: domain } : undefined);
         useTokenStore.getState().setToken(result.token);
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
@@ -161,8 +162,8 @@ export default class APIClient {
 
     if (error.response?.status === 401) {
       const domain = getCookieDomain();
-      deleteCookie('AUTH_TOKEN_KEY'); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
-      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain } : undefined);
+      deleteCookie(COOKIE_KEY.AUTH_TOKEN); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
+      deleteCookie(COOKIE_KEY.AUTH_TOKEN, domain ? { domain } : undefined);
 
       try {
         const storage = window.localStorage.getItem('refresh-token-storage');

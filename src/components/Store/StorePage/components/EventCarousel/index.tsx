@@ -29,7 +29,7 @@ function Card({ shop_id, event_id, shop_name, thumbnail_images }: CardProps) {
       event_label: 'shop_categories_event',
       value: `${shop_name}`,
     });
-    router.push(`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`);
+    router.push(`${ROUTES.StoreDetail({ id: String(shop_id) })}?state=이벤트/공지`);
   };
 
   const hasThumbnail = thumbnail_images && thumbnail_images.length > 0;

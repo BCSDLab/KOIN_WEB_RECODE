@@ -32,7 +32,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreListV2) => (
         <Link
-          href={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
+          href={`${ROUTES.StoreDetail({ id: String(store.id) })}?state=메뉴&type=${storeType}`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() =>

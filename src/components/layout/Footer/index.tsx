@@ -25,6 +25,7 @@ function Footer(): JSX.Element {
   const logShortcut = (title: string) => {
     const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
       공지사항: { team: 'CAMPUS', event_label: 'footer', value: '공지사항' },
+      분실물: { team: 'CAMPUS', event_label: 'footer', value: '분실물' },
       '버스 교통편': { team: 'CAMPUS', event_label: 'footer', value: '버스 교통편' },
       '버스 시간표': { team: 'CAMPUS', event_label: 'footer', value: '버스 시간표' },
       식단: { team: 'CAMPUS', event_label: 'footer', value: '식단' },

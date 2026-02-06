@@ -17,7 +17,7 @@ interface FormImageProps {
 
 export default function FormImage({ images, setImages, type, formIndex }: FormImageProps) {
   const isMobile = useMediaQuery();
-  const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
+  const { imgRef, saveImgFile, setImageFile } = useImageUpload({ domain: 'LOST_ITEMS', maxLength: MAX_IMAGES_LENGTH });
 
   const imageCounter = `${images.length}/${MAX_IMAGES_LENGTH}`;
   const inputId = `image-file-${formIndex}`;
@@ -41,7 +41,9 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
   };
 
   const deleteImage = (url: string) => {
-    setImages(images.filter((image: string) => image !== url));
+    const filtered = images.filter((image: string) => image !== url);
+    setImages(filtered);
+    setImageFile(filtered);
   };
 
   const uploadImage = type === 'FOUND' ? '습득물 사진을 업로드해주세요.' : '분실물 사진을 업로드해주세요.';

@@ -55,7 +55,7 @@ export default function ClubRecruitment({
       event_label: 'club_recruitment_correction',
       value: clubName,
     });
-    router.push(ROUTES.ClubRecruitmentEdit({ id: String(clubId), isLink: true }));
+    router.push(ROUTES.ClubRecruitmentEdit({ id: String(clubId) }));
   };
 
   const isRecruitmentExist = clubRecruitmentData.status !== 'NONE';

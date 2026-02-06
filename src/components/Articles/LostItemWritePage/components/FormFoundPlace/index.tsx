@@ -19,11 +19,21 @@ export default function FormFoundPlace({ foundPlace, setFoundPlace, isFoundPlace
 
   const placeLabel = type === 'FOUND' ? '습득 장소' : '분실 장소';
   const placeholderText = type === 'FOUND' ? '습득 장소를 선택해주세요.' : '예상되는 분실 장소가 있다면 입력해주세요.';
-  const warningText = type === 'FOUND' ? '습득 장소가 입력되지 않았습니다.' : '분실 장소가 입력되지 않았습니다.';
 
   return (
     <div className={styles['found-place']}>
-      <span className={styles.title}>{placeLabel}</span>
+      <div className={styles['found-place__text']}>
+        <div className={styles['found-place__label']}>
+          <span className={styles['found-place__title']}>{placeLabel}</span>
+          {type === 'FOUND' && <span className={styles['found-place__required']}>*</span>}
+        </div>
+        {type === 'FOUND' && !isFoundPlaceSelected && (
+          <span className={styles['found-place__warning']}>
+            <WarnIcon />
+            습득 장소가 입력되지 않았습니다.
+          </span>
+        )}
+      </div>
       <div className={styles['found-place__wrapper']}>
         <input
           className={styles['found-place__input']}
@@ -32,12 +42,6 @@ export default function FormFoundPlace({ foundPlace, setFoundPlace, isFoundPlace
           maxLength={MAX_LENGTH}
           placeholder={placeholderText}
         />
-        {type === 'FOUND' && !isFoundPlaceSelected && (
-          <span className={styles.warning}>
-            <WarnIcon />
-            {warningText}
-          </span>
-        )}
       </div>
     </div>
   );

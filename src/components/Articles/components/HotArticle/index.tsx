@@ -48,7 +48,7 @@ export default function HotArticles() {
         {hotArticles.map((article, index) => (
           <Link
             className={styles['hot-article__content']}
-            href={ROUTES.ArticlesDetail({ id: String(article.id), isLink: true })}
+            href={ROUTES.ArticlesDetail({ id: String(article.id) })}
             key={article.id + article.board_id}
             onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
           >
