@@ -40,7 +40,8 @@
     "sourcemap:clean": "find ./build -name '*.map' -type f -delete",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/",
-    "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json"
+    "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json",
+    "log": "tsx scripts/notion/fetch-logging-spec.ts"
   },
   "browserslist": {
     "production": [
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.0.0",
+    "@notionhq/client": "^5.9.0",
     "@sentry/cli": "^2.45.0",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.14.1",
@@ -69,6 +71,7 @@
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@types/react-window": "^1.8.5",
+    "dotenv": "^17.2.3",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -86,6 +89,7 @@
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^4.0.0",
     "stylelint-selector-bem-pattern": "^2.1.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2"
   },
