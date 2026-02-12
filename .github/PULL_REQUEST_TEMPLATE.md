@@ -1,15 +1,15 @@
+@claude 리뷰 요청
+
 - Close #ISSUE_NUMBER
-  
+
 ## What is this PR? 🔍
 
-- 기능 : 
+- 기능 :
 - issue : #
 
 ## Changes 📝
 
 <!-- 이번 PR에서의 변경점 -->
-
-
 
 ## ScreenShot 📷
 
@@ -17,7 +17,7 @@
 
 ## Test CheckList ✅
 
-<!-- 
+<!--
 - [ ] 카테고리 설정이 null 로 들어가지 않는지 체크
 -->
 
@@ -26,7 +26,6 @@
 - [ ] test 3
 
 ## Precaution
-
 
 ## ✔️ Please check if the PR fulfills these requirements
 
