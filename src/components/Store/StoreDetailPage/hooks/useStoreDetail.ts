@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getStoreDetailInfo } from 'api/store';
 
 const useStoreDetail = (id: string) => {
   const { data: storeDetail } = useSuspenseQuery({
@@ -7,7 +7,7 @@ const useStoreDetail = (id: string) => {
     queryFn: async ({ queryKey }) => {
       const queryFnParams = queryKey[1];
 
-      return api.store.getStoreDetailInfo(queryFnParams);
+      return getStoreDetailInfo(queryFnParams);
     },
   });
 

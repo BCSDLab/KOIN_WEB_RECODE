@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getRoomList } from 'api/room';
 
 const useRoomList = () => {
   const { data: roomList } = useQuery({
     queryKey: ['roomList'],
-    queryFn: api.room.getRoomList,
+    queryFn: getRoomList,
   });
 
   return roomList;

@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { club } from 'api';
+import { getClubCategories } from 'api/club';
 
 function useClubCategories() {
   const { data } = useSuspenseQuery({
     queryKey: ['club-categories'],
-    queryFn: () => club.getClubCategories(),
+    queryFn: () => getClubCategories(),
   });
   return data.club_categories;
 }

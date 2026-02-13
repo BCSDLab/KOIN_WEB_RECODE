@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { getTimetableFrame } from 'api/timetable';
 import { Semester } from 'api/timetable/entity';
 import { useTokenStore } from 'utils/zustand/auth';
 
@@ -12,7 +12,7 @@ function useTimetableFrameList(token: string, semester: Semester) {
     queryFn: async () => {
       if (token && userType === 'STUDENT') {
         try {
-          return await timetable.getTimetableFrame(token, semester);
+          return await getTimetableFrame(token, semester);
         } catch {
           return [{ id: null, name: '기본 시간표', is_main: true }];
         }

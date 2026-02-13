@@ -1,6 +1,6 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { rollbackTimetableLecture } from 'api/timetable';
 import { RollbackTimetableLectureRequest } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
@@ -9,7 +9,7 @@ export default function useRollbackLecture(token: string, timetableFrameId: numb
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: RollbackTimetableLectureRequest) => timetable.rollbackTimetableLecture(id, token),
+    mutationFn: (id: RollbackTimetableLectureRequest) => rollbackTimetableLecture(id, token),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TIMETABLE_INFO_LIST, timetableFrameId] });

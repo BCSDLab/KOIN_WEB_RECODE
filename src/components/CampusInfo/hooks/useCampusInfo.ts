@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { coopshop } from 'api';
+import { getAllShopInfo } from 'api/coopshop';
 
 function useCampusInfo() {
   const { data: campusInfo } = useSuspenseQuery({
     queryKey: ['/coopshop'],
-    queryFn: async () => coopshop.getAllShopInfo(),
+    queryFn: async () => getAllShopInfo(),
   });
 
   return { campusInfo };

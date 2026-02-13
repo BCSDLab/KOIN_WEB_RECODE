@@ -1,6 +1,6 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { deleteTimetableFrame } from 'api/timetable';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
@@ -20,7 +20,7 @@ export default function useDeleteTimetableFrame(token: string, frameInfo: Timeta
   const recoverFrame = () => rollbackFrame(frameInfo.id!);
 
   return useMutation({
-    mutationFn: ({ id }: DeleteTimetableFrameProps) => timetable.deleteTimetableFrame(token, id),
+    mutationFn: ({ id }: DeleteTimetableFrameProps) => deleteTimetableFrame(token, id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });

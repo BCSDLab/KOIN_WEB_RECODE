@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import * as api from 'api';
+import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
@@ -40,7 +40,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const backInDetailPage = async () => {
     if (pathname.includes(ROUTES.Store()) && id) {
-      const response = await api.store.getStoreDetailInfo(Array.isArray(id) ? id[0] : id);
+      const response = await getStoreDetailInfo(Array.isArray(id) ? id[0] : id);
       logger.actionEventClick({
         team: 'BUSINESS',
         event_label: 'shop_detail_view_back',

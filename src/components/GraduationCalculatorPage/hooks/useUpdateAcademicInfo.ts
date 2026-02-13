@@ -1,6 +1,6 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { auth } from 'api';
+import { updateAcademicInfo } from 'api/auth';
 import { UpdateAcademicInfoRequest } from 'api/auth/entity';
 import showToast from 'utils/ts/showToast';
 import useAgreeGraduationCreidts from './useAgreeGraduationCreidts';
@@ -10,7 +10,7 @@ export default function useUpdateAcademicInfo(token: string) {
   const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts(token);
 
   return useMutation({
-    mutationFn: (data: UpdateAcademicInfoRequest) => auth.updateAcademicInfo(token, data),
+    mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(token, data),
 
     onSuccess: () => {
       agreeGraduationCredits();

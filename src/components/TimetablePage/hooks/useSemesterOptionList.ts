@@ -1,5 +1,5 @@
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { getSemesterInfoList } from 'api/timetable';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useSemesterCheck, { MY_SEMESTER_INFO_KEY } from './useMySemester';
 
@@ -8,7 +8,7 @@ export const SEMESTER_INFO_KEY = 'semester';
 export const useSemester = () => {
   const { data } = useSuspenseQuery({
     queryKey: [SEMESTER_INFO_KEY],
-    queryFn: timetable.getSemesterInfoList,
+    queryFn: getSemesterInfoList,
   });
 
   return data ?? [];

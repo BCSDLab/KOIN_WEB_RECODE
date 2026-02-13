@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { auth } from 'api';
+import { login } from 'api/auth';
 import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
@@ -27,7 +27,7 @@ export const useLogin = (state: IsAutoLogin) => {
   const logger = useLogger();
 
   const postLogin = useMutation({
-    mutationFn: auth.login,
+    mutationFn: login,
     onSuccess: (data: LoginResponse) => {
       const domain = getCookieDomain();
 
@@ -64,7 +64,7 @@ export const useLogin = (state: IsAutoLogin) => {
     },
   });
 
-  const login = async (userInfo: UserInfo) => {
+  const submitLogin = async (userInfo: UserInfo) => {
     const hashedPassword = await sha256(userInfo.login_pw);
 
     if (userInfo.login_id === '') {
@@ -82,5 +82,5 @@ export const useLogin = (state: IsAutoLogin) => {
     });
   };
 
-  return login;
+  return submitLogin;
 };

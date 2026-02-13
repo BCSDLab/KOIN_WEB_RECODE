@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { getLectureList, getMySemester, getTimetableLectureInfo } from 'api/timetable';
 import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
@@ -22,7 +22,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (token && userType === 'STUDENT') {
     const mySemesterData = await queryClient.fetchQuery({
       queryKey: [MY_SEMESTER_INFO_KEY],
-      queryFn: () => timetable.getMySemester(token),
+      queryFn: () => getMySemester(token),
     });
     const year = Number(query.year);
     const term = query.term as Term;
@@ -32,11 +32,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     await Promise.all([
       queryClient.prefetchQuery({
         queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
-        queryFn: () => timetable.getTimetableLectureInfo(token, timetableFrameId),
+        queryFn: () => getTimetableLectureInfo(token, timetableFrameId),
       }),
       queryClient.prefetchQuery({
         queryKey: [SEMESTER_INFO_KEY, semester],
-        queryFn: () => (semester ? timetable.getLectureList(semester) : null),
+        queryFn: () => (semester ? getLectureList(semester) : null),
       }),
     ]);
   }

@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { articles } from 'api';
+import { getSingleLostItemArticle, getLostItemArticles } from 'api/articles';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import ReportIcon from 'assets/svg/Articles/report.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
@@ -43,11 +43,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['lostItem', 'detail', articleId],
-      queryFn: () => articles.getSingleLostItemArticle(token, articleId),
+      queryFn: () => getSingleLostItemArticle(token, articleId),
     }),
     queryClient.prefetchInfiniteQuery({
       queryKey: ['lostItem', latestLostItemParams],
-      queryFn: () => articles.getLostItemArticles(token, { ...latestLostItemParams, page: 1 }),
+      queryFn: () => getLostItemArticles(token, { ...latestLostItemParams, page: 1 }),
       initialPageParam: 1,
     }),
   ]);

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { articles } from 'api';
+import { getSingleLostItemArticle } from 'api/articles';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const useSingleLostItemArticle = (articleId: number) => {
@@ -8,7 +8,7 @@ const useSingleLostItemArticle = (articleId: number) => {
   const { data: article } = useSuspenseQuery({
     queryKey: ['lostItem', 'detail', articleId],
     queryFn: async () => {
-      const response = await articles.getSingleLostItemArticle(token, articleId);
+      const response = await getSingleLostItemArticle(token, articleId);
       return response;
     },
   });

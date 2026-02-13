@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import * as api from 'api';
+import { updateUser, updateGeneralUser } from 'api/auth';
 import { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
 import { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -23,8 +23,8 @@ const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateO
   >({
     mutationFn: (data) =>
       userType === 'STUDENT'
-        ? (api.auth.updateUser(token, data as UserUpdateRequest) as Promise<T>)
-        : (api.auth.updateGeneralUser(token, data as GeneralUserUpdateRequest) as Promise<T>),
+        ? (updateUser(token, data as UserUpdateRequest) as Promise<T>)
+        : (updateGeneralUser(token, data as GeneralUserUpdateRequest) as Promise<T>),
     onSuccess: () => {
       options.onSuccess?.();
       logger.actionEventClick({
