@@ -14,6 +14,7 @@ export default [
       '**/dist/**',
       '**/.yarn/**',
       'node_modules/**',
+      'scripts/**',
       '**/*.d.ts',
       '**/.pnp.*',
       'prettier.config.js',
