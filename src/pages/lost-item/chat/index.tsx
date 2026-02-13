@@ -90,7 +90,7 @@ function LostItemChatPage({ token }: { token: string }) {
       await sendChatMessage({ content: inputValue });
       setInputValue('');
     } catch {
-      // onError in useMutation handles toast
+      showToast('error', '메세지를 전송하는데 실패했습니다.');
     }
   }, [inputValue, userInfo, chatroomDetail, sendChatMessage]);
 
