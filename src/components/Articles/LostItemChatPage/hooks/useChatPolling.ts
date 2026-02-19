@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import {
   keepPreviousData,
   skipToken,
@@ -87,7 +88,14 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
 
   const leaveRoom = useCallback(
     (aId: number, cId: number) => {
-      postLeaveLostItemChatroomV2(token, aId, cId).catch(() => {});
+      postLeaveLostItemChatroomV2(token, aId, cId).catch((error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
+        } else {
+          showToast('error', '채팅방 퇴장을 실패하였습니다');
+          sendClientError(error);
+        }
+      });
     },
     [token],
   );
@@ -113,7 +121,7 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
     };
   }, [numericArticleId, numericChatroomId, leaveRoom]);
 
-  const { mutateAsync: sendMessage } = useMutation({
+  const { mutate: sendMessage } = useMutation({
     mutationFn: ({ content, isImage = false }: { content: string; isImage?: boolean }) => {
       if (defaultArticleId == null || defaultChatroomId == null) {
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
@@ -129,8 +137,13 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
         queryKey: ['chatroom', 'lost-item', 'messages', defaultArticleId, defaultChatroomId],
       });
     },
-    onError: () => {
-      showToast('error', '메세지 전송에 실패했습니다.');
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '메시지 전송을 실패하였습니다');
+      } else {
+        showToast('error', '메시지 전송을 실패하였습니다');
+        sendClientError(error);
+      }
     },
   });
 
@@ -150,8 +163,13 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
         queryKey: ['chatroom', 'lost-item', 'list'],
       });
     },
-    onError: () => {
-      showToast('error', '채팅방 퇴장에 실패했습니다.');
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
+      } else {
+        showToast('error', '채팅방 퇴장을 실패하였습니다');
+        sendClientError(error);
+      }
     },
   });
 
