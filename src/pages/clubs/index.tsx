@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { club } from 'api';
+import { getClubList, getClubCategories } from 'api/club';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
@@ -82,12 +82,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['club-categories'],
-      queryFn: () => club.getClubCategories(),
+      queryFn: () => getClubCategories(),
     }),
     queryClient.prefetchQuery({
       queryKey: ['club-list', params.categoryId, params.sortType, params.isRecruiting, params.clubName],
       queryFn: () =>
-        club.getClubList(token, params.categoryId ?? undefined, params.sortType, params.isRecruiting, params.clubName),
+        getClubList(token, params.categoryId ?? undefined, params.sortType, params.isRecruiting, params.clubName),
     }),
   ]);
 

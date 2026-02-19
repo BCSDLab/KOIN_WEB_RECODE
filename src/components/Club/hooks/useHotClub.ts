@@ -1,13 +1,13 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { club } from 'api';
+import { getHotClub } from 'api/club';
 
 function useHotClub() {
   const data = useSuspenseQuery({
     queryKey: ['hot-club'],
     queryFn: async () => {
       try {
-        return await club.getHotClub();
+        return await getHotClub();
       } catch (e) {
         if (isKoinError(e) && e.status === 404) {
           return {

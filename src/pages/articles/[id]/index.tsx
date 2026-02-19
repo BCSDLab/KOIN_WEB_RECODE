@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
-import { articles } from 'api';
+import { getArticle } from 'api/articles';
 import { ArticleResponseWithNew } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleContent from 'components/Articles/components/ArticleContent';
@@ -12,7 +12,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (typeof id !== 'string') {
     return { notFound: true };
   }
-  const article = await articles.getArticle(id);
+  const article = await getArticle(id);
   const serverTime = new Date(); // 서버 시간 고정
 
   const articleWithNew: ArticleResponseWithNew = {

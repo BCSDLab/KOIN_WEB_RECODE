@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { articles } from 'api';
+import { getHotArticles } from 'api/articles';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -34,7 +34,7 @@ export default function HotArticles() {
   const logger = useLogger();
   const { data: hotArticles, isLoading } = useQuery({
     queryKey: ['hotArticles'],
-    queryFn: articles.getHotArticles,
+    queryFn: getHotArticles,
   });
 
   if (isLoading || !hotArticles) {

@@ -1,6 +1,6 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { addTimetableFrame } from 'api/timetable';
 import { AddTimetableFrameRequest } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
@@ -11,7 +11,7 @@ export default function useAddSemester(token: string) {
   const semester = useSemester();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: AddTimetableFrameRequest) => timetable.addTimetableFrame(data, token),
+    mutationFn: (data: AddTimetableFrameRequest) => addTimetableFrame(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
       queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });

@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { getTimetableAllLectureInfo } from 'api/timetable';
 
 export default function useAllMyLectures(token: string) {
   const { data } = useSuspenseQuery({
     queryKey: ['allLectures'],
 
-    queryFn: () => (token ? timetable.getTimetableAllLectureInfo(token) : null),
+    queryFn: () => (token ? getTimetableAllLectureInfo(token) : null),
   });
 
   return data ? data.timetable : null;

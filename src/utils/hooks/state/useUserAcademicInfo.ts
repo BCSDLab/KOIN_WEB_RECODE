@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { auth } from 'api';
+import { getUserAcademicInfo } from 'api/auth';
 import useTokenState from './useTokenState';
 
 export default function useUserAcademicInfo() {
@@ -8,6 +8,6 @@ export default function useUserAcademicInfo() {
   return useSuspenseQuery({
     queryKey: ['userAcademicinfo'],
 
-    queryFn: () => (token ? auth.getUserAcademicInfo(token) : null),
+    queryFn: () => (token ? getUserAcademicInfo(token) : null),
   });
 }

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { club } from 'api';
+import { getClubList } from 'api/club';
 
 interface ClubListProps {
   token?: string;
@@ -12,7 +12,7 @@ interface ClubListProps {
 function useClubList({ token, categoryId, sortType, isRecruiting, clubName }: ClubListProps) {
   const { data } = useQuery({
     queryKey: ['club-list', categoryId, sortType, isRecruiting, clubName],
-    queryFn: () => club.getClubList(token, categoryId, sortType, isRecruiting, clubName),
+    queryFn: () => getClubList(token, categoryId, sortType, isRecruiting, clubName),
   });
 
   return data?.clubs ?? [];

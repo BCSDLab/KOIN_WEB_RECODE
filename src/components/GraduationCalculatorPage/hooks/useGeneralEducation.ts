@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { graduationCalculator } from 'api';
+import { getGeneralEducation } from 'api/graduationCalculator';
 
 const useGeneralEducation = (token: string) => {
   const { data } = useQuery({
     queryKey: ['generalEducation'],
-    queryFn: () => graduationCalculator.getGeneralEducation(token),
+    queryFn: () => getGeneralEducation(token),
     enabled: !!token,
   });
 

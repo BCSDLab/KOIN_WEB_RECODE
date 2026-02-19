@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getStoreBenefitCategory } from 'api/store';
 
 const useBenefitCategory = () => {
   return useSuspenseQuery({
     queryKey: ['benefitCategory'],
-    queryFn: api.store.getStoreBenefitCategory,
+    queryFn: getStoreBenefitCategory,
     select: (data) => data.benefits,
   });
 };
