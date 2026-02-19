@@ -72,7 +72,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
       const imageUrlList = await saveImgFile();
       if (imageUrlList && imageUrlList.length === 1) {
-        await sendChatMessage({ content: imageUrlList[0], isImage: true });
+        sendChatMessage({ content: imageUrlList[0], isImage: true });
       }
     } catch (error) {
       if (error instanceof UploadError) {
@@ -81,24 +81,20 @@ function LostItemChatPage({ token }: { token: string }) {
     }
   }, [userInfo, chatroomDetail, saveImgFile, sendChatMessage]);
 
-  const sendMessage = useCallback(async () => {
-    try {
-      if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
-        return;
-      }
-
-      await sendChatMessage({ content: inputValue });
-      setInputValue('');
-    } catch {
-      showToast('error', '메세지를 전송하는데 실패했습니다.');
+  const sendMessage = useCallback(() => {
+    if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
+      return;
     }
+
+    sendChatMessage({ content: inputValue });
+    setInputValue('');
   }, [inputValue, userInfo, chatroomDetail, sendChatMessage]);
 
   const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       if (e.nativeEvent.isComposing) return;
       e.preventDefault();
-      await sendMessage();
+      sendMessage();
     }
   };
 
