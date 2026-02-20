@@ -35,7 +35,6 @@ const RAW_RUNTIME_STATE =
           ["@notionhq/client", "npm:5.9.0"],\
           ["@sentry/browser", "npm:9.14.0"],\
           ["@sentry/cli", "npm:2.45.0"],\
-          ["@stomp/stompjs", "npm:7.0.0"],\
           ["@svgr/webpack", "npm:8.1.0"],\
           ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
           ["@testing-library/jest-dom", "npm:5.17.0"],\
@@ -5052,15 +5051,6 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@sinonjs/commons", "npm:3.0.1"],\
           ["@sinonjs/fake-timers", "npm:10.3.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@stomp/stompjs", [\
-      ["npm:7.0.0", {\
-        "packageLocation": "./.yarn/cache/@stomp-stompjs-npm-7.0.0-c66e011389-f60db460e0.zip/node_modules/@stomp/stompjs/",\
-        "packageDependencies": [\
-          ["@stomp/stompjs", "npm:7.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11617,7 +11607,6 @@ const RAW_RUNTIME_STATE =
           ["@notionhq/client", "npm:5.9.0"],\
           ["@sentry/browser", "npm:9.14.0"],\
           ["@sentry/cli", "npm:2.45.0"],\
-          ["@stomp/stompjs", "npm:7.0.0"],\
           ["@svgr/webpack", "npm:8.1.0"],\
           ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
           ["@testing-library/jest-dom", "npm:5.17.0"],\
