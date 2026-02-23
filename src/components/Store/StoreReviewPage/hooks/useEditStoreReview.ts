@@ -1,6 +1,6 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import * as api from 'api';
+import { putStoreReview } from 'api/review';
 import { ReviewRequest } from 'api/review/entity';
 import { useKoinToast } from 'utils/hooks/koinToast/useKoinToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -11,7 +11,7 @@ export const useEditStoreReview = (shopId: string, reviewId: string) => {
   const queryClient = useQueryClient();
   const openToast = useKoinToast();
   const { mutate, error } = useMutation({
-    mutationFn: (reviewData: ReviewRequest) => api.review.putStoreReview(token, shopId, reviewId, reviewData),
+    mutationFn: (reviewData: ReviewRequest) => putStoreReview(token, shopId, reviewId, reviewData),
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['review'] });
       openToast({ message: '리뷰 수정이 완료되었습니다.' });

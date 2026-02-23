@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { banner } from 'api';
+import { getBanners } from 'api/banner';
 
 const useBanners = (categoryId: number) => {
   const { data } = useSuspenseQuery({
     queryKey: ['banners', categoryId],
-    queryFn: () => banner.getBanners(categoryId),
+    queryFn: () => getBanners(categoryId),
   });
   return { data };
 };

@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { dept } from 'api';
+import { getDeptList } from 'api/dept';
 
 const useDeptList = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['dept'],
-    queryFn: dept.getDeptList,
+    queryFn: getDeptList,
   });
 
   return { data };

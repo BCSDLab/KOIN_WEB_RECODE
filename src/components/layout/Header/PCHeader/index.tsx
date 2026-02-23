@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import * as api from 'api';
+import { getStoreDetailInfo } from 'api/store';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
@@ -138,7 +138,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
     if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
       const shopId = pathname.split('/')[2];
-      const shopName = await api.store.getStoreDetailInfo(shopId);
+      const shopName = await getStoreDetailInfo(shopId);
       logger.actionEventClick({
         team: 'BUSINESS',
         event_label: 'shop_detail_view_back',

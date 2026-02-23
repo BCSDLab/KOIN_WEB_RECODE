@@ -1,5 +1,5 @@
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { room } from 'api';
+import { getRoomList } from 'api/room';
 import { SSRLayout } from 'components/layout';
 import RoomList from 'components/Room/components/RoomList';
 import useMarker from 'components/Room/RoomPage/hooks/useMarker';
@@ -17,7 +17,7 @@ export const getServerSideProps = async () => {
 
   await queryClient.prefetchQuery({
     queryKey: ['roomList'],
-    queryFn: () => room.getRoomList(),
+    queryFn: () => getRoomList(),
   });
 
   return {

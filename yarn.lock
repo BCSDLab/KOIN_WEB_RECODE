@@ -3329,13 +3329,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/stompjs@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@stomp/stompjs@npm:7.0.0"
-  checksum: 10/f60db460e0cb3a48ddb0aa6ee7cd3fd3de6cffadccce153a791580ee7c0c89a1bc5e90d612cab621d539c237bece361f3f019e48f2de847789074373eaca037d
-  languageName: node
-  linkType: hard
-
 "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0":
   version: 8.0.0
   resolution: "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0"
@@ -8773,7 +8766,6 @@ __metadata:
     "@notionhq/client": "npm:^5.9.0"
     "@sentry/browser": "npm:^9.14.0"
     "@sentry/cli": "npm:^2.45.0"
-    "@stomp/stompjs": "npm:^7.0.0"
     "@svgr/webpack": "npm:^8.1.0"
     "@tanstack/react-query": "npm:^5.28.6"
     "@testing-library/jest-dom": "npm:^5.14.1"

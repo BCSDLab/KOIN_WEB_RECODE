@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { abTestAssign } from 'api/abTest';
 
 export const useABTestView = (title: string, authorization?: string) => {
   const accessHistoryId = typeof window !== 'undefined' ? localStorage.getItem('access_history_id') : null;
@@ -8,7 +8,7 @@ export const useABTestView = (title: string, authorization?: string) => {
     queryKey: ['abTestView', title, accessHistoryId],
     queryFn: async () => {
       try {
-        const response = await api.abTest.abTestAssign(title, authorization || undefined, accessHistoryId);
+        const response = await abTestAssign(title, authorization || undefined, accessHistoryId);
         return response;
       } catch {
         return { access_history_id: null, variable_name: 'default' };

@@ -3,7 +3,8 @@ import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { timetable, dept } from 'api';
+import { getDeptList } from 'api/dept';
+import { getMySemester, getSemesterInfoList, getTimetableFrame, getTimetableLectureInfo } from 'api/timetable';
 import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
@@ -34,14 +35,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (token) {
     const mySemesterData = await queryClient.fetchQuery({
       queryKey: [MY_SEMESTER_INFO_KEY],
-      queryFn: () => timetable.getMySemester(token),
+      queryFn: () => getMySemester(token),
     });
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 
     const timetableFrameList = await queryClient.fetchQuery({
       queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term],
-      queryFn: () => timetable.getTimetableFrame(token, semester),
+      queryFn: () => getTimetableFrame(token, semester),
     });
 
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
@@ -50,11 +51,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const prefetchPromises = [
       queryClient.prefetchQuery({
         queryKey: [SEMESTER_INFO_KEY],
-        queryFn: timetable.getSemesterInfoList,
+        queryFn: getSemesterInfoList,
       }),
       queryClient.prefetchQuery({
         queryKey: ['dept'],
-        queryFn: () => dept.getDeptList(),
+        queryFn: () => getDeptList(),
       }),
     ];
 
@@ -62,7 +63,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       prefetchPromises.push(
         queryClient.prefetchQuery({
           queryKey: [TIMETABLE_INFO_LIST, currentFrameId],
-          queryFn: () => timetable.getTimetableLectureInfo(token, currentFrameId),
+          queryFn: () => getTimetableLectureInfo(token, currentFrameId),
         }),
       );
     }

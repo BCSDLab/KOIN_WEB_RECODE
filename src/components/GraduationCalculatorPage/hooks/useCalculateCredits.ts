@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { graduationCalculator } from 'api';
+import { calculateGraduationCredits } from 'api/graduationCalculator';
 
 export default function useCalculateCredits(token: string) {
   return useQuery({
     queryKey: ['creditsByCourseType'],
-    queryFn: () => (token ? graduationCalculator.calculateGraduationCredits(token) : null),
+    queryFn: () => (token ? calculateGraduationCredits(token) : null),
   });
 }

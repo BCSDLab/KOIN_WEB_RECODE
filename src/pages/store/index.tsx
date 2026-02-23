@@ -4,8 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient, useQuery } from '@tanstack/react-query';
-import * as api from 'api';
-import { getStoreCategories } from 'api/store';
+import { getStoreCategories, getStoreListV2, getAllEvent } from 'api/store';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
@@ -83,7 +82,7 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
 
   const { data: storeList } = useQuery({
     queryKey: ['storeListV2', sorter, filter, selectedCategory],
-    queryFn: () => api.store.getStoreListV2(sorter, filter, params.storeName),
+    queryFn: () => getStoreListV2(sorter, filter, params.storeName),
     placeholderData: (previousData) => previousData,
     select: (data) => {
       if (!data || !data.shops) return [];
@@ -114,12 +113,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   await queryClient.prefetchQuery({
     queryKey: ['storeListV2', 'NONE', [], selectedCategory],
-    queryFn: () => api.store.getStoreListV2('NONE', [], selectedStoreName),
+    queryFn: () => getStoreListV2('NONE', [], selectedStoreName),
   });
 
   await queryClient.prefetchQuery({
     queryKey: ['all-event'],
-    queryFn: () => api.store.getAllEvent(),
+    queryFn: () => getAllEvent(),
   });
 
   return {

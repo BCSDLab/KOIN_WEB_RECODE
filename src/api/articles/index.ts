@@ -1,3 +1,8 @@
+import {
+  GetLostItemChatroomMessagesV2,
+  PostLeaveLostItemChatroomV2,
+  PostLostItemChatroomMessageV2,
+} from 'api/articles/ChatAPIDetailV2';
 import APIClient from 'utils/ts/apiClient';
 import {
   GetArticles,
@@ -52,3 +57,9 @@ export const postFoundLostItem = APIClient.of(PostFoundLostItem);
 export const putLostItemArticle = APIClient.of(PutLostItemArticle);
 
 export const getLostItemSearch = APIClient.of(GetLostItemSearch);
+
+export const getLostItemChatroomMessagesV2 = APIClient.of(GetLostItemChatroomMessagesV2);
+
+export const postLostItemChatroomMessageV2 = APIClient.of(PostLostItemChatroomMessageV2);
+
+export const postLeaveLostItemChatroomV2 = APIClient.of(PostLeaveLostItemChatroomV2);

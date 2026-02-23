@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getStoreBenefitList } from 'api/store';
 
 const useStoreBenefitList = (id: string) => {
   return useSuspenseQuery({
@@ -7,7 +7,7 @@ const useStoreBenefitList = (id: string) => {
     queryFn: async ({ queryKey }) => {
       const queryFnParams = queryKey[1];
 
-      return api.store.getStoreBenefitList(queryFnParams);
+      return getStoreBenefitList(queryFnParams);
     },
     select: (data) => {
       return {

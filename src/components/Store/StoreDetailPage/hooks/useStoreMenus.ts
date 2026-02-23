@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getStoreDetailMenu } from 'api/store';
 
 const useStoreMenus = (params: string) => {
   const { data } = useSuspenseQuery({
@@ -7,7 +7,7 @@ const useStoreMenus = (params: string) => {
     queryFn: async ({ queryKey }) => {
       const queryFnParams = queryKey[1];
 
-      return api.store.getStoreDetailMenu(queryFnParams);
+      return getStoreDetailMenu(queryFnParams);
     },
   });
 

@@ -1,6 +1,6 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import * as api from 'api';
+import { postStoreReview } from 'api/review';
 import { ReviewRequest } from 'api/review/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -9,7 +9,7 @@ export const useAddStoreReview = (id: string) => {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: (reviewData: ReviewRequest) => api.review.postStoreReview(token, id, reviewData),
+    mutationFn: (reviewData: ReviewRequest) => postStoreReview(token, id, reviewData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['storeDetail', 'storeDetailMenu', 'review', id] });
       queryClient.invalidateQueries({ queryKey: ['review'] });

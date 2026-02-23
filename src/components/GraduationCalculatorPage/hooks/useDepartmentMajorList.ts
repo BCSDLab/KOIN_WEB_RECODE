@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { dept } from 'api';
+import { getDeptMajorList } from 'api/dept';
 
 export default function useDepartmentMajorList() {
   const { data } = useSuspenseQuery({
     queryKey: ['deptMajor'],
-    queryFn: dept.getDeptMajorList,
+    queryFn: getDeptMajorList,
   });
 
   return { data };

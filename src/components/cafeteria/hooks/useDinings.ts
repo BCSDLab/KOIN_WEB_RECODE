@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { cafeteria } from 'api';
+import { cancelCafeteriaDiningLike, getCafeteriaDinings, likeCafeteriaDining } from 'api/cafeteria';
 import { Dining, OriginalDining } from 'api/dinings/entity';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -13,7 +13,7 @@ function useDinings(date: Date) {
 
   const { data: dinings } = useSuspenseQuery({
     queryKey: [DININGS_KEY, convertedDate],
-    queryFn: async () => cafeteria.default(convertedDate),
+    queryFn: async () => getCafeteriaDinings(convertedDate),
     select: (data) => {
       if ('status' in data || !Array.isArray(data)) {
         return [];
@@ -25,15 +25,15 @@ function useDinings(date: Date) {
     },
   });
 
-  const like = useMutation({
-    mutationFn: async (diningId: number) => cafeteria.like(diningId, token),
+  const likeDiningMutation = useMutation({
+    mutationFn: async (diningId: number) => likeCafeteriaDining(diningId, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [DININGS_KEY, convertedDate] });
     },
   });
 
-  const cancelLike = useMutation({
-    mutationFn: async (diningId: number) => cafeteria.cancelLike(diningId, token),
+  const cancelLikeDiningMutation = useMutation({
+    mutationFn: async (diningId: number) => cancelCafeteriaDiningLike(diningId, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [DININGS_KEY, convertedDate] });
     },
@@ -41,10 +41,10 @@ function useDinings(date: Date) {
 
   const likeDining = (diningId: number, isLike: boolean) => {
     if (isLike) {
-      return cancelLike.mutate(diningId);
+      return cancelLikeDiningMutation.mutate(diningId);
     }
 
-    return like.mutate(diningId);
+    return likeDiningMutation.mutate(diningId);
   };
 
   return { dinings, likeDining };

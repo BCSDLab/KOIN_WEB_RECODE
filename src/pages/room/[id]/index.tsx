@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { room } from 'api';
+import { getRoomDetailInfo } from 'api/room';
 import { SSRLayout } from 'components/layout';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
 import RoomDetailMap from 'components/Room/components/RoomDetailMap';
@@ -27,7 +27,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   await queryClient.prefetchQuery({
     queryKey: ['roomDetail', id],
-    queryFn: () => room.getRoomDetailInfo(id),
+    queryFn: () => getRoomDetailInfo(id),
   });
 
   return {
