@@ -1,4 +1,4 @@
-@claude 리뷰 요청
+@coderabbitai 리뷰 요청
 
 - Close #ISSUE_NUMBER
 
