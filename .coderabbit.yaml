@@ -29,10 +29,6 @@ reviews:
       enabled: false
     ruff:
       enabled: false
-    markdownlint:
-      enabled: false
-    eslint:
-      enabled: true
     biome:
       enabled: false
     github-checks:
