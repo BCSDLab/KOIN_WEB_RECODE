@@ -1,0 +1,36 @@
+.filter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #cacaca;
+  background: #fff;
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b4b4b;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #b611f5;
+    color: #b611f5;
+  }
+
+  &--active {
+    background: #f5e6ff;
+    border-color: #b611f5;
+    color: #b611f5;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+  }
+}
