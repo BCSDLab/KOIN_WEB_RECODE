@@ -53,6 +53,7 @@ const ROUTES = {
   ReviewReport: ({ shopid, reviewid }: ROUTESParams<'shopid' | 'reviewid'>) =>
     `/report/review/shopid/${shopid}/reviewid/${reviewid}`,
   Webview: () => '/webview',
+  Callvan: () => '/callvan',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
