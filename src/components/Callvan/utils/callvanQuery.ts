@@ -1,4 +1,4 @@
-import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
+import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus, CALLVAN_LOCATIONS } from 'api/callvan/entity';
 import type { ParsedUrlQuery } from 'querystring';
 
 export interface CallvanParams {
@@ -9,6 +9,27 @@ export interface CallvanParams {
   arrivals: CallvanLocation[];
   title: string;
   author: CallvanAuthor;
+}
+
+const VALID_SORTS: readonly string[] = ['DEPARTURE_ASC', 'DEPARTURE_DESC', 'LATEST_ASC', 'LATEST_DESC'];
+const VALID_AUTHORS: readonly string[] = ['ALL', 'MY'];
+const VALID_STATUSES: readonly string[] = ['RECRUITING', 'CLOSED', 'COMPLETED'];
+const VALID_LOCATIONS: readonly string[] = [...CALLVAN_LOCATIONS, 'CUSTOM'];
+
+function isCallvanSort(value: string): value is CallvanSort {
+  return VALID_SORTS.includes(value);
+}
+
+function isCallvanAuthor(value: string): value is CallvanAuthor {
+  return VALID_AUTHORS.includes(value);
+}
+
+function isCallvanStatus(value: string): value is CallvanStatus {
+  return VALID_STATUSES.includes(value);
+}
+
+function isCallvanLocation(value: string): value is CallvanLocation {
+  return VALID_LOCATIONS.includes(value);
 }
 
 function parseStringParam(query: ParsedUrlQuery, key: string): string {
@@ -26,18 +47,25 @@ function parseArrayParam(query: ParsedUrlQuery, key: string): string[] {
 
 export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams): CallvanParams {
   const page = Number(parseStringParam(query, 'page')) || fallback.page;
-  const sort = (parseStringParam(query, 'sort') || fallback.sort) as CallvanSort;
-  const author = (parseStringParam(query, 'author') || fallback.author) as CallvanAuthor;
   const title = parseStringParam(query, 'title') || fallback.title;
 
+  const rawSort = parseStringParam(query, 'sort');
+  const sort = isCallvanSort(rawSort) ? rawSort : fallback.sort;
+
+  const rawAuthor = parseStringParam(query, 'author');
+  const author = isCallvanAuthor(rawAuthor) ? rawAuthor : fallback.author;
+
   const rawStatuses = parseArrayParam(query, 'statuses');
-  const statuses = rawStatuses.length > 0 ? (rawStatuses as CallvanStatus[]) : fallback.statuses;
+  const validStatuses = rawStatuses.filter(isCallvanStatus);
+  const statuses = validStatuses.length > 0 ? validStatuses : fallback.statuses;
 
   const rawDepartures = parseArrayParam(query, 'departures');
-  const departures = rawDepartures.length > 0 ? (rawDepartures as CallvanLocation[]) : fallback.departures;
+  const validDepartures = rawDepartures.filter(isCallvanLocation);
+  const departures = validDepartures.length > 0 ? validDepartures : fallback.departures;
 
   const rawArrivals = parseArrayParam(query, 'arrivals');
-  const arrivals = rawArrivals.length > 0 ? (rawArrivals as CallvanLocation[]) : fallback.arrivals;
+  const validArrivals = rawArrivals.filter(isCallvanLocation);
+  const arrivals = validArrivals.length > 0 ? validArrivals : fallback.arrivals;
 
   return {
     page,
