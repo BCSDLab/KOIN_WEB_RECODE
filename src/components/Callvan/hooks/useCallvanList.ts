@@ -9,6 +9,7 @@ export const useCallvanList = (params: CallvanListRequest) => {
   return useQuery({
     queryKey: ['callvanList', params],
     queryFn: () => getCallvanList(token, params),
+    enabled: !!token,
     placeholderData: keepPreviousData,
     select: (data) => ({
       posts: data.posts,

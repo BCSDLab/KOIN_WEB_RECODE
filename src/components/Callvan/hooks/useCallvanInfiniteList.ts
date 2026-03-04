@@ -16,6 +16,7 @@ export const useCallvanInfiniteList = (params: Omit<CallvanListRequest, 'page' |
         page: pageParam,
         limit: LIMIT,
       }),
+    enabled: !!token,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       if (lastPage.current_page < lastPage.total_page) {
