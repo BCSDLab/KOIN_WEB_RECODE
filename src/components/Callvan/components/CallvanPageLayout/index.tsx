@@ -7,6 +7,8 @@ import FilterIcon from 'assets/svg/Callvan/filter.svg';
 import NotificationIcon from 'assets/svg/Callvan/notification.svg';
 import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
+import useCallvanNotifications from 'components/Callvan/hooks/useCallvanNotifications';
+import ROUTES from 'static/routes';
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {
@@ -30,6 +32,9 @@ export default function CallvanPageLayout({
 }: CallvanPageLayoutProps) {
   const router = useRouter();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { data: notifications } = useCallvanNotifications();
+
+  const hasUnreadNotifications = notifications?.some((n) => !n.is_read) ?? false;
 
   const hasActiveFilter = statuses.length > 0 || departures.length > 0 || arrivals.length > 0 || sort !== 'LATEST_DESC';
 
@@ -77,8 +82,14 @@ export default function CallvanPageLayout({
           <ArrowBackIcon />
         </button>
         <h1 className={styles.layout__title}>콜밴팟</h1>
-        <button type="button" className={styles['layout__notification-button']} aria-label="알림">
+        <button
+          type="button"
+          className={styles['layout__notification-button']}
+          onClick={() => router.push(ROUTES.CallvanNotifications())}
+          aria-label="알림"
+        >
           <NotificationIcon />
+          {hasUnreadNotifications && <span className={styles['layout__notification-dot']} />}
         </button>
       </div>
 

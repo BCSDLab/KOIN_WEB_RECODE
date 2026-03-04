@@ -54,6 +54,7 @@ const ROUTES = {
     `/report/review/shopid/${shopid}/reviewid/${reviewid}`,
   Webview: () => '/webview',
   Callvan: () => '/callvan',
+  CallvanNotifications: () => '/callvan/notifications',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',

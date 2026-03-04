@@ -69,3 +69,28 @@ export interface CallvanListResponse extends APIResponse {
   current_page: number;
   total_page: number;
 }
+
+export type CallvanNotificationType =
+  | 'RECRUITMENT_COMPLETE'
+  | 'NEW_MESSAGE'
+  | 'PARTICIPANT_JOINED'
+  | 'DEPARTURE_UPCOMING';
+
+export interface CallvanNotification {
+  id: number;
+  type: CallvanNotificationType;
+  message_preview: string | null;
+  is_read: boolean;
+  created_at: string;
+  post_id: number;
+  departure: string;
+  arrival: string;
+  departure_date: string;
+  departure_time: string;
+  current_participants: number;
+  max_participants: number;
+  sender_nickname: string | null;
+  joined_member_nickname: string | null;
+}
+
+export type CallvanNotificationsResponse = CallvanNotification[];
