@@ -9,20 +9,19 @@ import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useArticles from 'components/Articles/hooks/useArticles';
 import { SSRLayout } from 'components/layout';
-import { COOKIE_KEY } from 'static/url';
 import useMount from 'utils/hooks/state/useMount';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const page = context.query.page;
-  const pageNumber = typeof page === 'string' ? page : '1';
+  const { token, query } = parseServerSideParams(context);
+  const pageNumber = typeof query.page === 'string' ? query.page : '1';
 
   const queryClient = new QueryClient();
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['articles', pageNumber],
-      queryFn: () => articlesApi.getArticles(token, pageNumber),
+      queryFn: () => articlesApi.getArticles(token ?? '', pageNumber),
     }),
     queryClient.prefetchQuery({
       queryKey: ['hotArticles'],

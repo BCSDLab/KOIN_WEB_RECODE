@@ -11,13 +11,13 @@ import useLostItemPagination from 'components/Articles/hooks/useLostItemPaginati
 import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
-import { COOKIE_KEY } from 'static/url';
 import useMount from 'utils/hooks/state/useMount';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
+  const { token, query } = parseServerSideParams(context);
 
   const fallback: LostItemParams = {
     page: 1,
@@ -28,13 +28,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     author: 'ALL',
   };
 
-  const params = parseLostItemQuery(context.query, fallback);
+  const params = parseLostItemQuery(query, fallback);
 
   const apiParams = toLostItemArticlesRequest(params);
 
   await queryClient.prefetchQuery({
     queryKey: ['lostItemPagination', apiParams],
-    queryFn: () => getLostItemArticles(token, apiParams),
+    queryFn: () => getLostItemArticles(token ?? '', apiParams),
   });
 
   return {

@@ -1,5 +1,6 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
+import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLectureList, getMySemester, getTimetableLectureInfo } from 'api/timetable';
 import { SSRLayout } from 'components/layout';
@@ -10,6 +11,7 @@ import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import type { Term } from 'api/timetable/entity';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -20,25 +22,30 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const timetableFrameId = Number(query.id);
 
   if (token && userType === 'STUDENT') {
-    const mySemesterData = await queryClient.fetchQuery({
-      queryKey: [MY_SEMESTER_INFO_KEY],
-      queryFn: () => getMySemester(token),
-    });
-    const year = Number(query.year);
-    const term = query.term as Term;
-    const userSemester = mySemesterData?.semesters?.[0];
-    const semester = year && term ? { year, term } : userSemester || getRecentSemester();
+    try {
+      const mySemesterData = await queryClient.fetchQuery({
+        queryKey: [MY_SEMESTER_INFO_KEY],
+        queryFn: () => getMySemester(token),
+      });
+      const year = Number(query.year);
+      const term = query.term as Term;
+      const userSemester = mySemesterData?.semesters?.[0];
+      const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 
-    await Promise.all([
-      queryClient.prefetchQuery({
-        queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
-        queryFn: () => getTimetableLectureInfo(token, timetableFrameId),
-      }),
-      queryClient.prefetchQuery({
-        queryKey: [SEMESTER_INFO_KEY, semester],
-        queryFn: () => (semester ? getLectureList(semester) : null),
-      }),
-    ]);
+      await Promise.all([
+        queryClient.prefetchQuery({
+          queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
+          queryFn: () => getTimetableLectureInfo(token, timetableFrameId),
+        }),
+        queryClient.prefetchQuery({
+          queryKey: [SEMESTER_INFO_KEY, semester],
+          queryFn: () => (semester ? getLectureList(semester) : null),
+        }),
+      ]);
+    } catch (error) {
+      if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) throw error;
+      if (isServerAuthError(error)) clearServerAuthCookies(context);
+    }
   }
 
   return {

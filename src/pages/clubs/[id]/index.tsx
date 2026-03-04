@@ -30,13 +30,13 @@ import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmM
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import type { ClubRecruitmentResponse } from 'api/club/entity';
@@ -73,7 +73,8 @@ const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { params, req, query } = context;
+  const { params, query } = context;
+  const { token } = parseServerSideParams(context);
   const id = params?.id;
 
   if (!id || Array.isArray(id)) {
@@ -83,7 +84,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   const clubId = Number(id);
-  const token = req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const tab = query.tab as TabType | undefined;
   const eventId = query.eventId as string | undefined;
   const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
@@ -98,7 +98,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['clubDetail', clubId],
-      queryFn: () => getClubDetail(token, clubId),
+      queryFn: () => getClubDetail(token ?? '', clubId),
     }),
 
     queryClient.prefetchQuery({
