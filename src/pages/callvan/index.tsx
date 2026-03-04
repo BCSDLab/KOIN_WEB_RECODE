@@ -42,16 +42,20 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const params = parseCallvanQuery(context.query, DEFAULT_PARAMS);
   const apiParams = toCallvanApiParams(params);
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['callvanInfiniteList', apiParams],
-    queryFn: ({ pageParam = 1 }) =>
-      getCallvanList(token, {
-        ...apiParams,
-        page: pageParam,
-        limit: 10,
-      }),
-    initialPageParam: 1,
-  });
+  try {
+    await queryClient.prefetchInfiniteQuery({
+      queryKey: ['callvanInfiniteList', apiParams],
+      queryFn: ({ pageParam = 1 }) =>
+        getCallvanList(token, {
+          ...apiParams,
+          page: pageParam,
+          limit: 10,
+        }),
+      initialPageParam: 1,
+    });
+  } catch {
+    // TODO: 에러 처리 (UI 필요)
+  }
 
   return {
     props: {
