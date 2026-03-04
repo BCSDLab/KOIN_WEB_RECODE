@@ -47,7 +47,7 @@ function parseArrayParam(query: ParsedUrlQuery, key: string): string[] {
 
 export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams): CallvanParams {
   const rawPage = Number(parseStringParam(query, 'page'));
-  const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.floor(rawPage) : fallback.page;
+  const page = Number.isInteger(rawPage) && rawPage >= 1 ? rawPage : fallback.page;
   const title = parseStringParam(query, 'title') || fallback.title;
 
   const rawSort = parseStringParam(query, 'sort');
