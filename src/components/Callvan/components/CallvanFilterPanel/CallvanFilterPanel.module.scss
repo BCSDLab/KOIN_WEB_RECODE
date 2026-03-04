@@ -1,9 +1,9 @@
-@use 'src/utils/scss/media' as media;
+@use "src/utils/scss/media" as media;
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgb(0 0 0 / 70%);
   z-index: 100;
 }
 
@@ -19,11 +19,11 @@
   flex-direction: column;
   max-height: 85vh;
   box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.06),
-    0 24px 60px rgba(0, 0, 0, 0.12);
-  animation: slideUp 0.25s ease-out;
+    0 8px 20px rgb(0 0 0 / 6%),
+    0 24px 60px rgb(0 0 0 / 12%);
+  animation: slide-up 0.25s ease-out;
 
-  @keyframes slideUp {
+  @keyframes slide-up {
     from {
       transform: translateY(100%);
     }

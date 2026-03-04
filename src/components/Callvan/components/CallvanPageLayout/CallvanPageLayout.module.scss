@@ -1,4 +1,4 @@
-@use 'src/utils/scss/media' as media;
+@use "src/utils/scss/media" as media;
 
 .layout {
   display: flex;
@@ -134,8 +134,8 @@
     flex-shrink: 0;
     white-space: nowrap;
     box-shadow:
-      0 1px 1px rgba(0, 0, 0, 0.02),
-      0 2px 4px rgba(0, 0, 0, 0.04);
+      0 1px 1px rgb(0 0 0 / 2%),
+      0 2px 4px rgb(0 0 0 / 4%);
 
     &--active {
       background: #ead3fe;
@@ -182,8 +182,8 @@
     border-radius: 999px;
     cursor: pointer;
     box-shadow:
-      0 1px 4px rgba(0, 0, 0, 0.04),
-      0 4px 10px rgba(0, 0, 0, 0.08);
+      0 1px 4px rgb(0 0 0 / 4%),
+      0 4px 10px rgb(0 0 0 / 8%);
     z-index: 10;
 
     svg {
