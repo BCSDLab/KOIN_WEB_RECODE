@@ -33,6 +33,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const year = Number(query.year);
   const term = query.term as Term;
   const frameId = Number(query.timetableFrameId);
+  const validatedFrameId = Number.isNaN(frameId) ? null : frameId;
 
   if (token) {
     try {
@@ -49,7 +50,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       });
 
       const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-      const currentFrameId = frameId ?? mainFrame?.id ?? null;
+      const currentFrameId = validatedFrameId ?? mainFrame?.id ?? null;
 
       const prefetchPromises = [
         queryClient.prefetchQuery({

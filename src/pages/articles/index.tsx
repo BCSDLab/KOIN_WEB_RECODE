@@ -18,16 +18,23 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   const queryClient = new QueryClient();
 
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['articles', pageNumber],
-      queryFn: () => articlesApi.getArticles(token ?? '', pageNumber),
-    }),
+  const prefetchPromises = [
     queryClient.prefetchQuery({
       queryKey: ['hotArticles'],
       queryFn: articlesApi.getHotArticles,
     }),
-  ]);
+  ];
+
+  if (token) {
+    prefetchPromises.push(
+      queryClient.prefetchQuery({
+        queryKey: ['articles', pageNumber],
+        queryFn: () => articlesApi.getArticles(token, pageNumber),
+      }),
+    );
+  }
+
+  await Promise.all(prefetchPromises);
 
   return {
     props: {

@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
     const remainingCookies = request.cookies
       .getAll()
-      .filter((cookie) => cookie.name !== COOKIE_KEY.AUTH_TOKEN)
+      .filter((cookie) => cookie.name !== COOKIE_KEY.AUTH_TOKEN && cookie.name !== COOKIE_KEY.AUTH_USER_TYPE)
       .map((cookie) => `${cookie.name}=${cookie.value}`)
       .join('; ');
 
