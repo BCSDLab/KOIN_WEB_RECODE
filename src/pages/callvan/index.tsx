@@ -53,8 +53,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         }),
       initialPageParam: 1,
     });
-  } catch {
-    // TODO: 에러 처리 (UI 필요)
+  } catch (error) {
+    console.error('[SSR] callvan prefetch failed:', error);
   }
 
   return {
@@ -87,25 +87,27 @@ export default function CallvanPage({ initialParams }: InferGetServerSidePropsTy
   }, [mounted, isMobile, router]);
 
   const params = useCallvanParams(initialParams);
-  const apiParams = toCallvanApiParams(params);
 
-  const [searchTitle, setSearchTitle] = useState(params.title);
-
-  const [prevTitle, setPrevTitle] = useState(params.title);
-  if (prevTitle !== params.title) {
-    setPrevTitle(params.title);
-    setSearchTitle(params.title);
+  if (mounted && !isMobile) {
+    return null;
   }
+
+  return <CallvanContent key={params.title} params={params} />;
+}
+
+interface CallvanContentProps {
+  params: CallvanParams;
+}
+
+function CallvanContent({ params }: CallvanContentProps) {
+  const [searchTitle, setSearchTitle] = useState(params.title);
+  const apiParams = toCallvanApiParams(params);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useCallvanInfiniteList(apiParams);
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.posts) ?? [], [data]);
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
-
-  if (mounted && !isMobile) {
-    return null;
-  }
 
   return (
     <CallvanPageLayout
