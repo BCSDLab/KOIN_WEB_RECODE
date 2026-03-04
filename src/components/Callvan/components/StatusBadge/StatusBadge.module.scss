@@ -1,0 +1,34 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 8px 12px;
+  border-radius: 24px;
+  border: 1px solid #e1e1e1;
+  background: #fff;
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #727272;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #b611f5;
+    color: #b611f5;
+  }
+
+  &--active {
+    background: #fff;
+    border-color: #b611f5;
+    color: #b611f5;
+
+    &:hover {
+      background: #f9f0ff;
+      border-color: #b611f5;
+      color: #b611f5;
+    }
+  }
+}

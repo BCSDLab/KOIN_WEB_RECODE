@@ -1,0 +1,170 @@
+@use "src/utils/scss/media" as media;
+
+.card {
+  padding: 8px 24px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border: 0.5px solid #cacaca;
+    border-radius: 8px;
+    min-height: 1px;
+    min-width: 1px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &__text-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8px;
+    flex-shrink: 0;
+
+    svg {
+      width: 8px;
+      height: 35px;
+    }
+  }
+
+  &__main-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    width: 129px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__location-label {
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__location-value {
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__sub-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #4b4b4b;
+    white-space: nowrap;
+  }
+
+  &__date-time {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__date {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__divider {
+    color: #4b4b4b;
+  }
+
+  &__count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  &__badge--recruiting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    background-color: #b611f5;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #fff;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #980ac9;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
+  }
+
+  &__badge--closed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    background: transparent;
+    border: 0.5px solid #727272;
+    border-radius: 4px;
+    cursor: default;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #727272;
+    white-space: nowrap;
+  }
+}
