@@ -144,6 +144,11 @@
     &:hover {
       background-color: #980ac9;
     }
+
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
   }
 
   &__badge--closed {
