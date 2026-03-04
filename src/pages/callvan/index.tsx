@@ -71,7 +71,7 @@ function useCallvanParams(initialParams: CallvanParams): CallvanParams {
 
   return useMemo(() => {
     if (!mounted) return initialParams;
-    return parseCallvanQuery(router.query, initialParams);
+    return parseCallvanQuery(router.query, DEFAULT_PARAMS);
   }, [mounted, router.query, initialParams]);
 }
 
