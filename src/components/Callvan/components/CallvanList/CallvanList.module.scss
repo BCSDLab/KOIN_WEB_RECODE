@@ -17,3 +17,17 @@
     color: #727272;
   }
 }
+
+.loading-indicator {
+  text-align: center;
+  padding: 16px 0;
+
+  &__text {
+    color: #a1a1a1;
+    font-size: 14px;
+  }
+}
+
+.scroll-trigger {
+  height: 1px;
+}

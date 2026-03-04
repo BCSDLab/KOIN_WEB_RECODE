@@ -9,10 +9,11 @@ import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
 import useCallvanInfiniteList from 'components/Callvan/hooks/useCallvanInfiniteList';
 import { CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
 
 const DEFAULT_PARAMS: CallvanParams = {
   page: 1,
@@ -37,16 +38,16 @@ function toCallvanApiParams(params: CallvanParams): Omit<CallvanListRequest, 'pa
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
+  const { token, query } = parseServerSideParams(context);
 
-  const params = parseCallvanQuery(context.query, DEFAULT_PARAMS);
+  const params = parseCallvanQuery(query, DEFAULT_PARAMS);
   const apiParams = toCallvanApiParams(params);
 
   try {
     await queryClient.prefetchInfiniteQuery({
       queryKey: ['callvanInfiniteList', apiParams],
       queryFn: ({ pageParam = 1 }) =>
-        getCallvanList(token, {
+        getCallvanList(token ?? '', {
           ...apiParams,
           page: pageParam,
           limit: 10,
@@ -121,12 +122,12 @@ function CallvanContent({ params }: CallvanContentProps) {
       <CallvanList posts={posts} />
 
       {isFetchingNextPage && (
-        <div style={{ textAlign: 'center', padding: '16px 0' }}>
-          <span style={{ color: '#a1a1a1', fontSize: '14px' }}>불러오는 중...</span>
+        <div className={listStyles['loading-indicator']}>
+          <span className={listStyles['loading-indicator__text']}>불러오는 중...</span>
         </div>
       )}
 
-      <div ref={scrollTriggerRef} style={{ height: '1px' }} />
+      <div ref={scrollTriggerRef} className={listStyles['scroll-trigger']} />
     </CallvanPageLayout>
   );
 }
