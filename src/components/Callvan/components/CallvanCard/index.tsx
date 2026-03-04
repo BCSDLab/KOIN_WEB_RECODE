@@ -1,6 +1,7 @@
 import { CallvanPost } from 'api/callvan/entity';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
+import { DAYS } from 'static/day';
 import styles from './CallvanCard.module.scss';
 
 interface CallvanCardProps {
@@ -8,7 +9,6 @@ interface CallvanCardProps {
 }
 
 function getDayOfWeek(dateStr: string): string {
-  const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
   const date = new Date(dateStr);
   return DAYS[date.getDay()];
 }
