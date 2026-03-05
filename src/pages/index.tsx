@@ -23,6 +23,8 @@ import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import styles from './IndexPage.module.scss';
 
 const getHotClubData = async () => {
@@ -42,21 +44,37 @@ const getHotClubData = async () => {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
-  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
+  let token = parseServerSideParams(context).token ?? '';
+  let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
+
+  const resetAuthContext = () => {
+    token = '';
+    userType = '';
+    clearServerAuthCookies(context);
+  };
+
+  const fetchMySemester = async () => {
+    if (!token || userType !== 'STUDENT') return null;
+
+    try {
+      return await queryClient.fetchQuery({
+        queryKey: [MY_SEMESTER_INFO_KEY],
+        queryFn: () => getMySemester(token),
+      });
+    } catch (error) {
+      if (isServerAuthError(error)) {
+        resetAuthContext();
+        return null;
+      }
+      if (isKoinError(error) && error.status === 403) {
+        return null;
+      }
+      throw error;
+    }
+  };
 
   const [[banners, categories, hotClubInfo, mySemester]] = await Promise.all([
-    Promise.all([
-      getBannerCategoryList(),
-      getStoreCategories(),
-      getHotClubData(),
-      token && userType === 'STUDENT'
-        ? queryClient.fetchQuery({
-            queryKey: [MY_SEMESTER_INFO_KEY],
-            queryFn: () => getMySemester(token),
-          })
-        : null,
-    ]),
+    Promise.all([getBannerCategoryList(), getStoreCategories(), getHotClubData(), fetchMySemester()]),
     queryClient.prefetchQuery({
       queryKey: ['articles', '1'],
       queryFn: () => getArticles(token, '1'),
@@ -78,19 +96,26 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const isBannerOpen =
     context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
 
-  let mainFrameId: number | null = null;
   if (token && userType === 'STUDENT') {
-    const timetableFrameList = await queryClient.fetchQuery({
-      queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
-      queryFn: () => getTimetableFrame(token, userSemester),
-    });
-    const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    mainFrameId = mainFrame?.id ?? null;
-    if (mainFrameId !== null) {
-      await queryClient.prefetchQuery({
-        queryKey: [TIMETABLE_INFO_LIST, mainFrameId],
-        queryFn: () => getTimetableLectureInfo(token, mainFrameId!),
+    try {
+      const timetableFrameList = await queryClient.fetchQuery({
+        queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
+        queryFn: () => getTimetableFrame(token, userSemester),
       });
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+      const activeMainFrameId = mainFrame?.id;
+      if (typeof activeMainFrameId === 'number') {
+        await queryClient.prefetchQuery({
+          queryKey: [TIMETABLE_INFO_LIST, activeMainFrameId],
+          queryFn: () => getTimetableLectureInfo(token, activeMainFrameId),
+        });
+      }
+    } catch (error) {
+      if (isServerAuthError(error)) {
+        resetAuthContext();
+      } else if (!(isKoinError(error) && error.status === 403)) {
+        throw error;
+      }
     }
   }
 
