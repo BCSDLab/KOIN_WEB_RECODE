@@ -1,11 +1,12 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { club, articles as articlesApi, banner, timetable } from 'api';
-import { getLostItemStat } from 'api/articles';
-import { getBannerCategoryList } from 'api/banner';
+import { getArticles, getLostItemStat } from 'api/articles';
+import { getBannerCategoryList, getBanners } from 'api/banner';
+import { getHotClub } from 'api/club';
 import { HotClubResponse } from 'api/club/entity';
 import { getStoreCategories } from 'api/store';
+import { getMySemester, getSemesterInfoList, getTimetableFrame, getTimetableLectureInfo } from 'api/timetable';
 import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
@@ -22,11 +23,13 @@ import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import styles from './IndexPage.module.scss';
 
-const getHotClub = async () => {
+const getHotClubData = async () => {
   try {
-    return await club.getHotClub();
+    return await getHotClub();
   } catch (e) {
     if (isKoinError(e) && e.status === 404) {
       return {
@@ -41,28 +44,44 @@ const getHotClub = async () => {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
-  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
+  let token = parseServerSideParams(context).token ?? '';
+  let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
+
+  const resetAuthContext = () => {
+    token = '';
+    userType = '';
+    clearServerAuthCookies(context);
+  };
+
+  const fetchMySemester = async () => {
+    if (!token || userType !== 'STUDENT') return null;
+
+    try {
+      return await queryClient.fetchQuery({
+        queryKey: [MY_SEMESTER_INFO_KEY],
+        queryFn: () => getMySemester(token),
+      });
+    } catch (error) {
+      if (isServerAuthError(error)) {
+        resetAuthContext();
+        return null;
+      }
+      if (isKoinError(error) && error.status === 403) {
+        return null;
+      }
+      throw error;
+    }
+  };
 
   const [[banners, categories, hotClubInfo, mySemester]] = await Promise.all([
-    Promise.all([
-      getBannerCategoryList(),
-      getStoreCategories(),
-      getHotClub(),
-      token && userType === 'STUDENT'
-        ? queryClient.fetchQuery({
-            queryKey: [MY_SEMESTER_INFO_KEY],
-            queryFn: () => timetable.getMySemester(token),
-          })
-        : null,
-    ]),
+    Promise.all([getBannerCategoryList(), getStoreCategories(), getHotClubData(), fetchMySemester()]),
     queryClient.prefetchQuery({
       queryKey: ['articles', '1'],
-      queryFn: () => articlesApi.getArticles(token, '1'),
+      queryFn: () => getArticles(token, '1'),
     }),
     queryClient.prefetchQuery({
       queryKey: [SEMESTER_INFO_KEY],
-      queryFn: timetable.getSemesterInfoList,
+      queryFn: getSemesterInfoList,
     }),
     queryClient.prefetchQuery({
       queryKey: ['lostItemStat'],
@@ -73,23 +92,30 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const userSemester = mySemester?.semesters?.[0] || getRecentSemester();
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
-  const bannersList = await banner.getBanners(bannerCategoryId);
+  const bannersList = await getBanners(bannerCategoryId);
   const isBannerOpen =
     context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
 
-  let mainFrameId: number | null = null;
   if (token && userType === 'STUDENT') {
-    const timetableFrameList = await queryClient.fetchQuery({
-      queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
-      queryFn: () => timetable.getTimetableFrame(token, userSemester),
-    });
-    const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    mainFrameId = mainFrame?.id ?? null;
-    if (mainFrameId !== null) {
-      await queryClient.prefetchQuery({
-        queryKey: [TIMETABLE_INFO_LIST, mainFrameId],
-        queryFn: () => timetable.getTimetableLectureInfo(token, mainFrameId!),
+    try {
+      const timetableFrameList = await queryClient.fetchQuery({
+        queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
+        queryFn: () => getTimetableFrame(token, userSemester),
       });
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+      const activeMainFrameId = mainFrame?.id;
+      if (typeof activeMainFrameId === 'number') {
+        await queryClient.prefetchQuery({
+          queryKey: [TIMETABLE_INFO_LIST, activeMainFrameId],
+          queryFn: () => getTimetableLectureInfo(token, activeMainFrameId),
+        });
+      }
+    } catch (error) {
+      if (isServerAuthError(error)) {
+        resetAuthContext();
+      } else if (!(isKoinError(error) && error.status === 403)) {
+        throw error;
+      }
     }
   }
 

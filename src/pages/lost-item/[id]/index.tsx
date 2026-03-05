@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { articles } from 'api';
+import { getSingleLostItemArticle, getLostItemArticles } from 'api/articles';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import ReportIcon from 'assets/svg/Articles/report.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
@@ -20,20 +20,20 @@ import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hoo
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import styles from './LostItemDetailPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { token } = parseServerSideParams(context);
   const id = context.query.id;
   if (typeof id !== 'string') {
     return { notFound: true };
   }
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const articleId = Number(id);
 
   const queryClient = new QueryClient();
@@ -43,11 +43,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['lostItem', 'detail', articleId],
-      queryFn: () => articles.getSingleLostItemArticle(token, articleId),
+      queryFn: () => getSingleLostItemArticle(token ?? '', articleId),
     }),
     queryClient.prefetchInfiniteQuery({
       queryKey: ['lostItem', latestLostItemParams],
-      queryFn: () => articles.getLostItemArticles(token, { ...latestLostItemParams, page: 1 }),
+      queryFn: () => getLostItemArticles(token ?? '', { ...latestLostItemParams, page: 1 }),
       initialPageParam: 1,
     }),
   ]);
