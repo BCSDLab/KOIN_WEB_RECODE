@@ -1,5 +1,4 @@
-// stylelint-disable-next-line string-quotes
-@use 'src/utils/scss/media' as media;
+@use "src/utils/scss/media" as media;
 
 .notification-page {
   display: flex;
