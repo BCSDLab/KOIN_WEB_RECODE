@@ -17,7 +17,6 @@ import useCallvanNotifications, {
 import useDeleteAllNotifications from 'components/Callvan/hooks/useDeleteAllNotifications';
 import useMarkAllNotificationsRead from 'components/Callvan/hooks/useMarkAllNotificationsRead';
 import useMarkNotificationRead from 'components/Callvan/hooks/useMarkNotificationRead';
-import MOCK_CALLVAN_NOTIFICATIONS from 'components/Callvan/mocks/callvanNotificationsMock';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -33,10 +32,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (token) {
       await queryClient.prefetchQuery({
         queryKey: [...CALLVAN_NOTIFICATIONS_QUERY_KEY],
-        queryFn: () => getCallvanNotifications(token).catch(() => MOCK_CALLVAN_NOTIFICATIONS),
+        queryFn: () => getCallvanNotifications(token),
       });
     } else {
-      queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], MOCK_CALLVAN_NOTIFICATIONS);
+      queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], []);
     }
   } catch (error) {
     console.error('[SSR] callvan notifications prefetch failed:', error);

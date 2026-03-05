@@ -8,7 +8,6 @@ import CallvanList from 'components/Callvan/components/CallvanList';
 import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
 import useCallvanInfiniteList from 'components/Callvan/hooks/useCallvanInfiniteList';
 import { CALLVAN_NOTIFICATIONS_QUERY_KEY } from 'components/Callvan/hooks/useCallvanNotifications';
-import MOCK_CALLVAN_NOTIFICATIONS from 'components/Callvan/mocks/callvanNotificationsMock';
 import { CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -60,9 +59,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       token
         ? queryClient.prefetchQuery({
             queryKey: [...CALLVAN_NOTIFICATIONS_QUERY_KEY],
-            queryFn: () => getCallvanNotifications(token).catch(() => MOCK_CALLVAN_NOTIFICATIONS),
+            queryFn: () => getCallvanNotifications(token),
           })
-        : queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], MOCK_CALLVAN_NOTIFICATIONS),
+        : queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], []),
     ]);
   } catch (error) {
     console.error('[SSR] callvan prefetch failed:', error);
