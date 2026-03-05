@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
@@ -14,6 +14,9 @@ import ThreeDotsIcon from 'assets/svg/Callvan/three-dots.svg';
 import useCallvanNotifications, {
   CALLVAN_NOTIFICATIONS_QUERY_KEY,
 } from 'components/Callvan/hooks/useCallvanNotifications';
+import useDeleteAllNotifications from 'components/Callvan/hooks/useDeleteAllNotifications';
+import useMarkAllNotificationsRead from 'components/Callvan/hooks/useMarkAllNotificationsRead';
+import useMarkNotificationRead from 'components/Callvan/hooks/useMarkNotificationRead';
 import MOCK_CALLVAN_NOTIFICATIONS from 'components/Callvan/mocks/callvanNotificationsMock';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
@@ -82,14 +85,21 @@ function formatDepartureTime(time: string): string {
 
 interface NotificationCardProps {
   notification: CallvanNotification;
+  onCardClick: (id: number) => void;
 }
 
-function NotificationCard({ notification }: NotificationCardProps) {
+function NotificationCard({ notification, onCardClick }: NotificationCardProps) {
   const isUnread = !notification.is_read;
   const readClass = isUnread ? '--unread' : '--read';
 
   return (
-    <div className={styles['notification-page__card']}>
+    <div
+      className={styles['notification-page__card']}
+      onClick={() => onCardClick(notification.id)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && onCardClick(notification.id)}
+    >
       <div className={styles['notification-page__card-inner']}>
         <div className={styles['notification-page__card-icon']}>
           {isUnread ? <NotificationBellUnread /> : <NotificationBellRead />}
@@ -146,10 +156,88 @@ function EmptyState() {
   );
 }
 
+interface NotificationDropdownProps {
+  onMarkAllRead: () => void;
+  onDeleteAll: () => void;
+  onClose: () => void;
+}
+
+function NotificationDropdown({ onMarkAllRead, onDeleteAll, onClose }: NotificationDropdownProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
+
+  return (
+    <div ref={dropdownRef} className={styles['notification-page__dropdown']}>
+      <button
+        type="button"
+        className={styles['notification-page__dropdown-item']}
+        onClick={() => {
+          onMarkAllRead();
+          onClose();
+        }}
+      >
+        모두 읽음으로 표시
+      </button>
+      <div className={styles['notification-page__dropdown-divider']} />
+      <button
+        type="button"
+        className={`${styles['notification-page__dropdown-item']} ${styles['notification-page__dropdown-item--danger']}`}
+        onClick={() => {
+          onDeleteAll();
+          onClose();
+        }}
+      >
+        알림 전체 삭제
+      </button>
+    </div>
+  );
+}
+
+interface DeleteConfirmModalProps {
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function DeleteConfirmModal({ onConfirm, onCancel }: DeleteConfirmModalProps) {
+  return (
+    <div className={styles['notification-page__modal-overlay']}>
+      <button type="button" className={styles['notification-page__modal-dim']} onClick={onCancel} aria-label="닫기" />
+      <div className={styles['notification-page__modal-sheet']}>
+        <div className={styles['notification-page__modal-title-area']}>
+          <h2 className={styles['notification-page__modal-title']}>알림을 모두 삭제할까요?</h2>
+        </div>
+        <div className={styles['notification-page__modal-body']}>
+          <div className={styles['notification-page__modal-content']}>
+            <p className={styles['notification-page__modal-description']}>삭제한 알림은 되돌릴 수 없습니다.</p>
+            <button type="button" className={styles['notification-page__modal-btn-confirm']} onClick={onConfirm}>
+              예
+            </button>
+            <button type="button" className={styles['notification-page__modal-btn-cancel']} onClick={onCancel}>
+              아니요
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CallvanNotificationsPage() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const mounted = useMount();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     if (mounted && !isMobile) {
@@ -158,10 +246,46 @@ export default function CallvanNotificationsPage() {
   }, [mounted, isMobile, router]);
 
   const { data: notifications } = useCallvanNotifications();
+  const { mutate: markAllRead } = useMarkAllNotificationsRead();
+  const { mutate: markRead } = useMarkNotificationRead();
+  const { mutate: deleteAll } = useDeleteAllNotifications({
+    onSuccess: () => setIsDeleteModalOpen(false),
+  });
 
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);
+
+  const handleToggleDropdown = useCallback(() => {
+    setIsDropdownOpen((prev) => !prev);
+  }, []);
+
+  const handleCloseDropdown = useCallback(() => {
+    setIsDropdownOpen(false);
+  }, []);
+
+  const handleMarkAllRead = useCallback(() => {
+    markAllRead();
+  }, [markAllRead]);
+
+  const handleOpenDeleteModal = useCallback(() => {
+    setIsDeleteModalOpen(true);
+  }, []);
+
+  const handleConfirmDelete = useCallback(() => {
+    deleteAll();
+  }, [deleteAll]);
+
+  const handleCancelDelete = useCallback(() => {
+    setIsDeleteModalOpen(false);
+  }, []);
+
+  const handleCardClick = useCallback(
+    (id: number) => {
+      markRead(id);
+    },
+    [markRead],
+  );
 
   if (mounted && !isMobile) {
     return null;
@@ -182,9 +306,23 @@ export default function CallvanNotificationsPage() {
         </button>
         <h1 className={styles['notification-page__title']}>알림</h1>
         {hasNotifications ? (
-          <button type="button" className={styles['notification-page__menu-button']} aria-label="더보기">
-            <ThreeDotsIcon />
-          </button>
+          <div className={styles['notification-page__menu-wrapper']}>
+            <button
+              type="button"
+              className={styles['notification-page__menu-button']}
+              onClick={handleToggleDropdown}
+              aria-label="더보기"
+            >
+              <ThreeDotsIcon />
+            </button>
+            {isDropdownOpen && (
+              <NotificationDropdown
+                onMarkAllRead={handleMarkAllRead}
+                onDeleteAll={handleOpenDeleteModal}
+                onClose={handleCloseDropdown}
+              />
+            )}
+          </div>
         ) : (
           <div style={{ width: 24, height: 24 }} />
         )}
@@ -197,13 +335,15 @@ export default function CallvanNotificationsPage() {
           <div className={styles['notification-page__list']}>
             {notifications.map((notification, index) => (
               <div key={notification.id}>
-                <NotificationCard notification={notification} />
+                <NotificationCard notification={notification} onCardClick={handleCardClick} />
                 {index < notifications.length - 1 && <div className={styles['notification-page__divider']} />}
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {isDeleteModalOpen && <DeleteConfirmModal onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />}
     </div>
   );
 }

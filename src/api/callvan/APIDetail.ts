@@ -31,3 +31,44 @@ export class GetCallvanNotifications<R extends CallvanNotificationsResponse> imp
 
   constructor(public authorization: string) {}
 }
+
+export class PostMarkAllNotificationsRead<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/callvan/notifications/mark-all-read';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
+
+export class PostMarkNotificationRead<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    notificationId: number,
+  ) {
+    this.path = `/callvan/notifications/${notificationId}/read`;
+  }
+}
+
+export class DeleteAllNotifications<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = '/callvan/notifications';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
