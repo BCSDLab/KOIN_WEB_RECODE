@@ -94,3 +94,64 @@ export interface CallvanNotification {
 }
 
 export type CallvanNotificationsResponse = CallvanNotification[];
+
+export type CallvanPostLocationType =
+  | 'FRONT_GATE'
+  | 'BACK_GATE'
+  | 'TENNIS_COURT'
+  | 'DORMITORY_MAIN'
+  | 'DORMITORY_SUB'
+  | 'TERMINAL'
+  | 'STATION'
+  | 'ASAN_STATION'
+  | 'CUSTOM';
+
+export const CALLVAN_POST_LOCATION_LABEL: Record<CallvanPostLocationType, string> = {
+  FRONT_GATE: '정문',
+  BACK_GATE: '후문',
+  TENNIS_COURT: '테니스장',
+  DORMITORY_MAIN: '본관동',
+  DORMITORY_SUB: '별관동',
+  TERMINAL: '천안 터미널',
+  STATION: '천안역',
+  ASAN_STATION: '천안아산역',
+  CUSTOM: '직접입력',
+};
+
+export const CALLVAN_POST_LOCATIONS: CallvanPostLocationType[] = [
+  'FRONT_GATE',
+  'BACK_GATE',
+  'TENNIS_COURT',
+  'DORMITORY_MAIN',
+  'DORMITORY_SUB',
+  'TERMINAL',
+  'STATION',
+  'ASAN_STATION',
+  'CUSTOM',
+];
+
+export interface CreateCallvanRequest {
+  departure_type: CallvanPostLocationType;
+  departure_custom_name?: string | null;
+  arrival_type: CallvanPostLocationType;
+  arrival_custom_name?: string | null;
+  departure_date: string;
+  departure_time: string;
+  max_participants: number;
+}
+
+export interface CreateCallvanResponse {
+  id: number;
+  author: string;
+  departure_type: CallvanPostLocationType;
+  departure_custom_name: string;
+  arrival_type: CallvanPostLocationType;
+  arrival_custom_name: string;
+  departure_date: string;
+  departure_time: string;
+  max_participants: number;
+  current_participants: number;
+  status: CallvanStatus;
+  created_at: string;
+  updated_at: string;
+}
