@@ -67,7 +67,8 @@ export default function CallvanNotificationsPage() {
   });
 
   const handleCardClick = useCallback(
-    (id: number) => {
+    (id: number, isRead: boolean) => {
+      if (isRead) return;
       markRead(id);
     },
     [markRead],
@@ -121,7 +122,10 @@ export default function CallvanNotificationsPage() {
           <div className={styles['notification-page__list']}>
             {notifications.map((notification, index) => (
               <div key={notification.id}>
-                <NotificationCard notification={notification} onCardClick={handleCardClick} />
+                <NotificationCard
+                  notification={notification}
+                  onCardClick={() => handleCardClick(notification.id, notification.is_read)}
+                />
                 {index < notifications.length - 1 && <div className={styles['notification-page__divider']} />}
               </div>
             ))}
