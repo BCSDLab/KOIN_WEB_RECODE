@@ -1,4 +1,14 @@
 import APIClient from 'utils/ts/apiClient';
-import { GetCallvanList } from './APIDetail';
+import {
+  DeleteAllNotifications,
+  GetCallvanList,
+  GetCallvanNotifications,
+  PostMarkAllNotificationsRead,
+  PostMarkNotificationRead,
+} from './APIDetail';
 
 export const getCallvanList = APIClient.of(GetCallvanList);
+export const getCallvanNotifications = APIClient.of(GetCallvanNotifications);
+export const markAllNotificationsRead = APIClient.of(PostMarkAllNotificationsRead);
+export const markNotificationRead = APIClient.of(PostMarkNotificationRead);
+export const deleteAllNotifications = APIClient.of(DeleteAllNotifications);

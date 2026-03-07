@@ -57,11 +57,22 @@
     z-index: 1;
     width: 24px;
     height: 24px;
+    position: relative;
 
     svg {
       width: 24px;
       height: 24px;
     }
+  }
+
+  &__notification-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b611f5;
   }
 
   &__search-bar {
