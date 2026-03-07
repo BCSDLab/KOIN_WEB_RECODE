@@ -123,7 +123,7 @@ export default function CallvanPageLayout({
 
       <div className={styles.layout__content}>{children}</div>
 
-      <button type="button" className={styles.layout__fab} aria-label="모집하기">
+      <button type="button" className={styles.layout__fab} aria-label="모집하기" onClick={() => router.push(ROUTES.CallvanAdd())}>
         <CarIcon />
         <span className={styles['layout__fab-label']}>모집하기</span>
       </button>
