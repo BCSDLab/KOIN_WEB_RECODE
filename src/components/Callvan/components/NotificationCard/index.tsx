@@ -14,7 +14,7 @@ const NOTIFICATION_TITLE_MAP: Record<CallvanNotificationType, string> = {
 };
 
 function formatNotificationDate(dateString: string): string {
-  const date = new Date(dateString);
+  const date = new Date(dateString + 'T00:00:00');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const dayOfWeek = DAYS[date.getDay()];
@@ -65,7 +65,7 @@ export default function NotificationCard({ notification, onCardClick }: Notifica
           </p>
           <div className={styles.card__sub}>
             <span className={`${styles.card__datetime} ${styles[`card__datetime${readClass}`]}`}>
-              <span>{formatNotificationDate(new Date(`${notification.departure_date}T00:00:00`).toISOString())}</span>
+              <span>{formatNotificationDate(notification.departure_date)}</span>
               <span>{formatDepartureTime(notification.departure_time)}</span>
             </span>
             <span className={`${styles.card__route} ${styles[`card__route${readClass}`]}`}>
