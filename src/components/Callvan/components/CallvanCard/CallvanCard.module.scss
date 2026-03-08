@@ -125,6 +125,32 @@
     flex-shrink: 0;
   }
 
+  &__phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #b611f5;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__phone-placeholder {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  &__badge-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
   &__badge--recruiting {
     display: flex;
     align-items: center;
@@ -143,6 +169,84 @@
 
     &:hover {
       background-color: #980ac9;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
+  }
+
+  &__badge--reopen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    background: transparent;
+    border: 0.5px solid #b611f5;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b611f5;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgb(182 17 245 / 8%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
+  }
+
+  &__badge--complete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    background-color: #980ac9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #fff;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #7d08a4;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #980ac9;
+      outline-offset: 2px;
+    }
+  }
+
+  &__badge--closeable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    background: transparent;
+    border: 0.5px solid #b611f5;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b611f5;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgb(182 17 245 / 8%);
     }
 
     &:focus-visible {

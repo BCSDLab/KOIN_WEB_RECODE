@@ -97,3 +97,54 @@ export class DeleteAllNotifications<R extends object> implements APIRequest<R> {
 
   constructor(public authorization: string) {}
 }
+
+export class PutCloseCallvanPost<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    postId: number,
+  ) {
+    this.path = `/callvan/posts/${postId}/close`;
+  }
+}
+
+export class PutReopenCallvanPost<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    postId: number,
+  ) {
+    this.path = `/callvan/posts/${postId}/reopen`;
+  }
+}
+
+export class PutCompleteCallvanPost<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    postId: number,
+  ) {
+    this.path = `/callvan/posts/${postId}/complete`;
+  }
+}
