@@ -1,5 +1,11 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { CallvanListRequest, CallvanListResponse, CallvanNotificationsResponse } from './entity';
+import {
+  CallvanListRequest,
+  CallvanListResponse,
+  CallvanNotificationsResponse,
+  CreateCallvanRequest,
+  CreateCallvanResponse,
+} from './entity';
 
 export class GetCallvanList<R extends CallvanListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -58,6 +64,25 @@ export class PostMarkNotificationRead<R extends object> implements APIRequest<R>
     notificationId: number,
   ) {
     this.path = `/callvan/notifications/${notificationId}/read`;
+  }
+}
+
+export class PostCallvan<R extends CreateCallvanResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/callvan';
+
+  data: CreateCallvanRequest;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    data: CreateCallvanRequest,
+  ) {
+    this.data = data;
   }
 }
 

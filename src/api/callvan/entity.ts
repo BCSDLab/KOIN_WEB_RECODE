@@ -4,34 +4,37 @@ export type CallvanStatus = 'RECRUITING' | 'CLOSED' | 'COMPLETED';
 export type CallvanSort = 'DEPARTURE_ASC' | 'DEPARTURE_DESC' | 'LATEST_ASC' | 'LATEST_DESC';
 export type CallvanAuthor = 'ALL' | 'MY';
 export type CallvanLocation =
-  | 'SCHOOL'
-  | 'CHEONAN_TERMINAL'
-  | 'BYEONGCHEON'
-  | 'SINGYE_RI'
-  | 'OCHANG'
-  | 'CHEONAN_STATION'
-  | 'CHEONAN_ASAN_STATION'
+  | 'FRONT_GATE'
+  | 'BACK_GATE'
+  | 'TENNIS_COURT'
+  | 'DORMITORY_MAIN'
+  | 'DORMITORY_SUB'
+  | 'TERMINAL'
+  | 'STATION'
+  | 'ASAN_STATION'
   | 'CUSTOM';
 
 export const CALLVAN_LOCATION_LABEL: Record<CallvanLocation, string> = {
-  SCHOOL: '학교',
-  CHEONAN_TERMINAL: '천안터미널',
-  BYEONGCHEON: '병천 시내',
-  SINGYE_RI: '신계리',
-  OCHANG: '오창',
-  CHEONAN_STATION: '천안역',
-  CHEONAN_ASAN_STATION: '천안아산역',
+  FRONT_GATE: '정문',
+  BACK_GATE: '후문',
+  TENNIS_COURT: '테니스장',
+  DORMITORY_MAIN: '본관동',
+  DORMITORY_SUB: '별관동',
+  TERMINAL: '천안 터미널',
+  STATION: '천안역',
+  ASAN_STATION: '천안아산역',
   CUSTOM: '직접입력',
 };
 
 export const CALLVAN_LOCATIONS: CallvanLocation[] = [
-  'SCHOOL',
-  'CHEONAN_TERMINAL',
-  'BYEONGCHEON',
-  'SINGYE_RI',
-  'OCHANG',
-  'CHEONAN_STATION',
-  'CHEONAN_ASAN_STATION',
+  'FRONT_GATE',
+  'BACK_GATE',
+  'TENNIS_COURT',
+  'DORMITORY_MAIN',
+  'DORMITORY_SUB',
+  'TERMINAL',
+  'STATION',
+  'ASAN_STATION',
 ];
 
 export interface CallvanListRequest {
@@ -94,3 +97,64 @@ export interface CallvanNotification {
 }
 
 export type CallvanNotificationsResponse = CallvanNotification[];
+
+export type CallvanPostLocationType =
+  | 'FRONT_GATE'
+  | 'BACK_GATE'
+  | 'TENNIS_COURT'
+  | 'DORMITORY_MAIN'
+  | 'DORMITORY_SUB'
+  | 'TERMINAL'
+  | 'STATION'
+  | 'ASAN_STATION'
+  | 'CUSTOM';
+
+export const CALLVAN_POST_LOCATION_LABEL: Record<CallvanPostLocationType, string> = {
+  FRONT_GATE: '정문',
+  BACK_GATE: '후문',
+  TENNIS_COURT: '테니스장',
+  DORMITORY_MAIN: '본관동',
+  DORMITORY_SUB: '별관동',
+  TERMINAL: '천안 터미널',
+  STATION: '천안역',
+  ASAN_STATION: '천안아산역',
+  CUSTOM: '직접입력',
+};
+
+export const CALLVAN_POST_LOCATIONS: CallvanPostLocationType[] = [
+  'FRONT_GATE',
+  'BACK_GATE',
+  'TENNIS_COURT',
+  'DORMITORY_MAIN',
+  'DORMITORY_SUB',
+  'TERMINAL',
+  'STATION',
+  'ASAN_STATION',
+  'CUSTOM',
+];
+
+export interface CreateCallvanRequest {
+  departure_type: CallvanPostLocationType;
+  departure_custom_name?: string | null;
+  arrival_type: CallvanPostLocationType;
+  arrival_custom_name?: string | null;
+  departure_date: string;
+  departure_time: string;
+  max_participants: number;
+}
+
+export interface CreateCallvanResponse {
+  id: number;
+  author: string;
+  departure_type: CallvanPostLocationType;
+  departure_custom_name: string;
+  arrival_type: CallvanPostLocationType;
+  arrival_custom_name: string;
+  departure_date: string;
+  departure_time: string;
+  max_participants: number;
+  current_participants: number;
+  status: CallvanStatus;
+  created_at: string;
+  updated_at: string;
+}
