@@ -3,6 +3,8 @@ import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
 import CloseConfirmModal from 'components/Callvan/components/CloseConfirmModal';
+import CompleteConfirmModal from 'components/Callvan/components/CompleteConfirmModal';
+import ReopenConfirmModal from 'components/Callvan/components/ReopenConfirmModal';
 import useCloseCallvan from 'components/Callvan/hooks/useCloseCallvan';
 import useCompleteCallvan from 'components/Callvan/hooks/useCompleteCallvan';
 import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
@@ -33,6 +35,9 @@ function formatTime(timeStr: string): string {
 
 export default function CallvanCard({ post }: CallvanCardProps) {
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
+  const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
+  const [isCompleteModalOpen, openCompleteModal, closeCompleteModal] = useBooleanState(false);
+
   const { mutate: closePost } = useCloseCallvan();
   const { mutate: reopenPost } = useReopenCallvan();
   const { mutate: completePost } = useCompleteCallvan();
@@ -40,6 +45,16 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const handleCloseConfirm = () => {
     closePost(post.id);
     closeCloseModal();
+  };
+
+  const handleReopenConfirm = () => {
+    reopenPost(post.id);
+    closeReopenModal();
+  };
+
+  const handleCompleteConfirm = () => {
+    completePost(post.id);
+    closeCompleteModal();
   };
 
   const renderTopAction = () => {
@@ -80,7 +95,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           <button
             type="button"
             className={styles['card__badge--reopen']}
-            onClick={() => reopenPost(post.id)}
+            onClick={openReopenModal}
             aria-label="재모집"
           >
             재모집
@@ -88,7 +103,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           <button
             type="button"
             className={styles['card__badge--complete']}
-            onClick={() => completePost(post.id)}
+            onClick={openCompleteModal}
             aria-label="이용완료"
           >
             이용완료
@@ -145,6 +160,8 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </div>
       </div>
       {isCloseModalOpen && <CloseConfirmModal onConfirm={handleCloseConfirm} onCancel={closeCloseModal} />}
+      {isReopenModalOpen && <ReopenConfirmModal onConfirm={handleReopenConfirm} onCancel={closeReopenModal} />}
+      {isCompleteModalOpen && <CompleteConfirmModal onConfirm={handleCompleteConfirm} onCancel={closeCompleteModal} />}
     </>
   );
 }
