@@ -4,34 +4,37 @@ export type CallvanStatus = 'RECRUITING' | 'CLOSED' | 'COMPLETED';
 export type CallvanSort = 'DEPARTURE_ASC' | 'DEPARTURE_DESC' | 'LATEST_ASC' | 'LATEST_DESC';
 export type CallvanAuthor = 'ALL' | 'MY';
 export type CallvanLocation =
-  | 'SCHOOL'
-  | 'CHEONAN_TERMINAL'
-  | 'BYEONGCHEON'
-  | 'SINGYE_RI'
-  | 'OCHANG'
-  | 'CHEONAN_STATION'
-  | 'CHEONAN_ASAN_STATION'
+  | 'FRONT_GATE'
+  | 'BACK_GATE'
+  | 'TENNIS_COURT'
+  | 'DORMITORY_MAIN'
+  | 'DORMITORY_SUB'
+  | 'TERMINAL'
+  | 'STATION'
+  | 'ASAN_STATION'
   | 'CUSTOM';
 
 export const CALLVAN_LOCATION_LABEL: Record<CallvanLocation, string> = {
-  SCHOOL: '학교',
-  CHEONAN_TERMINAL: '천안터미널',
-  BYEONGCHEON: '병천 시내',
-  SINGYE_RI: '신계리',
-  OCHANG: '오창',
-  CHEONAN_STATION: '천안역',
-  CHEONAN_ASAN_STATION: '천안아산역',
+  FRONT_GATE: '정문',
+  BACK_GATE: '후문',
+  TENNIS_COURT: '테니스장',
+  DORMITORY_MAIN: '본관동',
+  DORMITORY_SUB: '별관동',
+  TERMINAL: '천안 터미널',
+  STATION: '천안역',
+  ASAN_STATION: '천안아산역',
   CUSTOM: '직접입력',
 };
 
 export const CALLVAN_LOCATIONS: CallvanLocation[] = [
-  'SCHOOL',
-  'CHEONAN_TERMINAL',
-  'BYEONGCHEON',
-  'SINGYE_RI',
-  'OCHANG',
-  'CHEONAN_STATION',
-  'CHEONAN_ASAN_STATION',
+  'FRONT_GATE',
+  'BACK_GATE',
+  'TENNIS_COURT',
+  'DORMITORY_MAIN',
+  'DORMITORY_SUB',
+  'TERMINAL',
+  'STATION',
+  'ASAN_STATION',
 ];
 
 export interface CallvanListRequest {
