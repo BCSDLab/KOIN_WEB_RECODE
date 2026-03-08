@@ -1,9 +1,13 @@
 import APIClient from 'utils/ts/apiClient';
 import {
   DeleteAllNotifications,
+  DeleteCancelCallvan,
+  GetCallvanChat,
   GetCallvanList,
   GetCallvanNotifications,
   PostCallvan,
+  PostCallvanChat,
+  PostJoinCallvan,
   PostMarkAllNotificationsRead,
   PostMarkNotificationRead,
   PutCloseCallvanPost,
@@ -20,3 +24,7 @@ export const createCallvan = APIClient.of(PostCallvan);
 export const closeCallvanPost = APIClient.of(PutCloseCallvanPost);
 export const reopenCallvanPost = APIClient.of(PutReopenCallvanPost);
 export const completeCallvanPost = APIClient.of(PutCompleteCallvanPost);
+export const joinCallvan = APIClient.of(PostJoinCallvan);
+export const cancelCallvan = APIClient.of(DeleteCancelCallvan);
+export const getCallvanChat = APIClient.of(GetCallvanChat);
+export const sendCallvanChat = APIClient.of(PostCallvanChat);
