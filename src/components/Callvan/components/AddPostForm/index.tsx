@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { CALLVAN_POST_LOCATION_LABEL, CallvanPostLocationType } from 'api/callvan/entity';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
-import ChevronDownIcon from 'assets/svg/Callvan/chevron-down.svg';
 import SwapIcon from 'assets/svg/Callvan/swap.svg';
+import DateDropdown from 'components/Callvan/components/DateDropdown';
+import LocationBottomSheet from 'components/Callvan/components/LocationBottomSheet';
+import TimeDropdown from 'components/Callvan/components/TimeDropdown';
 import useCreateCallvan from 'components/Callvan/hooks/useCreateCallvan';
-import DatePicker from 'components/ui/DatePicker';
 import ROUTES from 'static/routes';
-import { formatKoreanDate } from 'utils/ts/calendar';
 import styles from './AddPostForm.module.scss';
 
 interface FormState {
@@ -17,17 +17,15 @@ interface FormState {
   arrivalType: CallvanPostLocationType | null;
   arrivalCustomName: string;
   departureDate: Date;
-  departureHour: string;
-  departureMinute: string;
+  departureHour: number;
+  departureMinute: number;
   isPM: boolean;
   maxParticipants: number;
 }
 
-function formatTime(hour: string, minute: string, isPM: boolean): string {
-  const h = parseInt(hour || '0', 10);
-  const m = parseInt(minute || '0', 10);
-  const hour24 = isPM ? (h === 12 ? 12 : h + 12) : h === 12 ? 0 : h;
-  return `${String(hour24).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+function formatTime(hour: number, minute: number, isPM: boolean): string {
+  const hour24 = isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
+  return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 }
 
 function formatDateParam(date: Date): string {
@@ -53,11 +51,14 @@ export default function AddPostForm() {
     arrivalType: null,
     arrivalCustomName: '',
     departureDate: new Date(),
-    departureHour: '12',
-    departureMinute: '00',
+    departureHour: 12,
+    departureMinute: 0,
     isPM: false,
     maxParticipants: 2,
   });
+
+  const [departureSheetOpen, setDepartureSheetOpen] = useState(false);
+  const [arrivalSheetOpen, setArrivalSheetOpen] = useState(false);
 
   const isFormValid =
     form.departureType !== null &&
@@ -121,6 +122,7 @@ export default function AddPostForm() {
                 [styles['location-field__button']]: true,
                 [styles['location-field__button--selected']]: form.departureType !== null,
               })}
+              onClick={() => setDepartureSheetOpen(true)}
             >
               {form.departureType ? getLocationLabel(form.departureType, form.departureCustomName) : '출발지 선택'}
             </button>
@@ -138,6 +140,7 @@ export default function AddPostForm() {
                 [styles['location-field__button']]: true,
                 [styles['location-field__button--selected']]: form.arrivalType !== null,
               })}
+              onClick={() => setArrivalSheetOpen(true)}
             >
               {form.arrivalType ? getLocationLabel(form.arrivalType, form.arrivalCustomName) : '도착지 선택'}
             </button>
@@ -150,15 +153,9 @@ export default function AddPostForm() {
             <span className={styles['form-section__title']}>출발일</span>
             <span className={styles['form-section__hint']}>출발 날짜를 선택해주세요.</span>
           </div>
-          <DatePicker
+          <DateDropdown
             selectedDate={form.departureDate}
             onChange={(date) => setForm((prev) => ({ ...prev, departureDate: date }))}
-            renderTrigger={(toggle) => (
-              <button type="button" className={styles['date-trigger']} onClick={toggle}>
-                <span>{formatKoreanDate(form.departureDate)}</span>
-                <ChevronDownIcon />
-              </button>
-            )}
           />
         </div>
 
@@ -168,40 +165,12 @@ export default function AddPostForm() {
             <span className={styles['form-section__title']}>출발 시각</span>
             <span className={styles['form-section__hint']}>출발 시각을 선택해주세요.</span>
           </div>
-          <div className={styles['time-picker']}>
-            <button
-              type="button"
-              className={cn({
-                [styles['time-picker__ampm']]: true,
-                [styles['time-picker__ampm--pm']]: form.isPM,
-              })}
-              onClick={() => setForm((prev) => ({ ...prev, isPM: !prev.isPM }))}
-            >
-              {form.isPM ? '오후' : '오전'}
-            </button>
-            <div className={styles['time-picker__divider']} />
-            <div className={styles['time-picker__inputs']}>
-              <input
-                type="number"
-                className={styles['time-picker__input']}
-                value={form.departureHour}
-                min={1}
-                max={12}
-                onChange={(e) => setForm((prev) => ({ ...prev, departureHour: e.target.value }))}
-                aria-label="시"
-              />
-              <span className={styles['time-picker__colon']}>:</span>
-              <input
-                type="number"
-                className={styles['time-picker__input']}
-                value={form.departureMinute}
-                min={0}
-                max={59}
-                onChange={(e) => setForm((prev) => ({ ...prev, departureMinute: e.target.value }))}
-                aria-label="분"
-              />
-            </div>
-          </div>
+          <TimeDropdown
+            value={{ hour: form.departureHour, minute: form.departureMinute, isPM: form.isPM }}
+            onChange={({ hour, minute, isPM }) =>
+              setForm((prev) => ({ ...prev, departureHour: hour, departureMinute: minute, isPM }))
+            }
+          />
         </div>
 
         {/* 참여 인원 */}
@@ -241,6 +210,30 @@ export default function AddPostForm() {
           </div>
         </div>
       </div>
+
+      <LocationBottomSheet
+        isOpen={departureSheetOpen}
+        title="출발지가 어디인가요?"
+        initialType={form.departureType}
+        initialCustomName={form.departureCustomName}
+        onClose={() => setDepartureSheetOpen(false)}
+        onConfirm={(type, customName) => {
+          setForm((prev) => ({ ...prev, departureType: type, departureCustomName: customName }));
+          setDepartureSheetOpen(false);
+        }}
+      />
+
+      <LocationBottomSheet
+        isOpen={arrivalSheetOpen}
+        title="도착지가 어디인가요?"
+        initialType={form.arrivalType}
+        initialCustomName={form.arrivalCustomName}
+        onClose={() => setArrivalSheetOpen(false)}
+        onConfirm={(type, customName) => {
+          setForm((prev) => ({ ...prev, arrivalType: type, arrivalCustomName: customName }));
+          setArrivalSheetOpen(false);
+        }}
+      />
 
       <div className={styles.page__footer}>
         <p className={styles['page__footer-hint']}>※ 모든 항목을 다 작성해주세요.</p>
