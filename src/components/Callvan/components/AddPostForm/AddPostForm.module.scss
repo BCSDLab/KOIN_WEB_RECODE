@@ -116,10 +116,10 @@
     justify-content: center;
     width: 31px;
     height: 31px;
-    border: 0.8px solid #e1e1e1;
     border-radius: 50%;
     flex-shrink: 0;
     margin-bottom: 2px;
+    padding: 8px 0;
   }
 }
 
@@ -158,7 +158,10 @@
 
     &--selected {
       color: #000;
-      background: #f0d9fd;
+      background-color: transparent;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.6;
     }
   }
 }
@@ -194,103 +197,6 @@
     strong {
       font-weight: 600;
     }
-  }
-}
-
-.date-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #000;
-
-  svg {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-}
-
-.time-picker {
-  display: flex;
-  align-items: stretch;
-  border: 1px solid #cacaca;
-  border-radius: 4px;
-  overflow: hidden;
-
-  &__ampm {
-    padding: 8px 16px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: #000;
-    flex-shrink: 0;
-    transition: background 0.15s;
-
-    &--pm {
-      background: #f0d9fd;
-    }
-  }
-
-  &__divider {
-    width: 1px;
-    background: #cacaca;
-    flex-shrink: 0;
-  }
-
-  &__inputs {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 8px 16px;
-    flex: 1;
-  }
-
-  &__input {
-    width: 40px;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: #000;
-    text-align: center;
-
-    /* Hide spinner */
-    appearance: textfield;
-
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      appearance: none;
-      margin: 0;
-    }
-
-    &:focus-visible {
-      outline: 2px solid #b611f5;
-      outline-offset: -1px;
-      border-radius: 2px;
-    }
-  }
-
-  &__colon {
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    color: #000;
   }
 }
 
