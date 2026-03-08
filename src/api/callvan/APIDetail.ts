@@ -4,6 +4,7 @@ import {
   CallvanListResponse,
   CallvanNotificationsResponse,
   CallvanPostDetail,
+  CallvanReportRequest,
   CreateCallvanRequest,
   CreateCallvanResponse,
 } from './entity';
@@ -164,5 +165,26 @@ export class PutCompleteCallvanPost<R extends object> implements APIRequest<R> {
     postId: number,
   ) {
     this.path = `/callvan/posts/${postId}/complete`;
+  }
+}
+
+export class PostCallvanReport<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  data: CallvanReportRequest;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    postId: number,
+    data: CallvanReportRequest,
+  ) {
+    this.path = `/callvan/posts/${postId}/reports`;
+    this.data = data;
   }
 }
