@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCallvanPostDetail } from 'api/callvan';
@@ -12,6 +11,7 @@ import ThreeDotsIcon from 'assets/svg/Callvan/three-dots-small.svg';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { ParticipantAvatarFilledIcon, ParticipantAvatarIcon } from './ParticipantAvatarIcon';
 import styles from './ParticipantsList.module.scss';
@@ -52,9 +52,9 @@ interface ParticipantRowProps {
 }
 
 function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, , closeMenu, toggleMenu] = useBooleanState(false);
   const { containerRef } = useOutsideClick<HTMLDivElement>({
-    onOutsideClick: () => setIsMenuOpen(false),
+    onOutsideClick: closeMenu,
   });
 
   return (
@@ -72,7 +72,7 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
           <button
             type="button"
             className={`${styles['participant-row__menu-button']} ${isMenuOpen ? styles['participant-row__menu-button--active'] : ''}`}
-            onClick={() => setIsMenuOpen((prev) => !prev)}
+            onClick={toggleMenu}
             aria-label="더보기"
           >
             <ThreeDotsIcon />
