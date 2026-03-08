@@ -7,6 +7,7 @@ import SwapIcon from 'assets/svg/Callvan/swap.svg';
 import DateDropdown from 'components/Callvan/components/DateDropdown';
 import LocationBottomSheet from 'components/Callvan/components/LocationBottomSheet';
 import TimeDropdown from 'components/Callvan/components/TimeDropdown';
+import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useCreateCallvan from 'components/Callvan/hooks/useCreateCallvan';
 import ROUTES from 'static/routes';
 import styles from './AddPostForm.module.scss';
@@ -43,6 +44,7 @@ function getLocationLabel(type: CallvanPostLocationType | null, customName: stri
 
 export default function AddPostForm() {
   const router = useRouter();
+  const { open: openToast } = useCallvanToast();
   const { mutate, isPending } = useCreateCallvan();
 
   const [form, setForm] = useState<FormState>({
@@ -90,11 +92,12 @@ export default function AddPostForm() {
       },
       {
         onSuccess: () => {
-          router.replace(ROUTES.Callvan());
+          openToast('작성되었습니다.');
+          router.replace({ pathname: ROUTES.Callvan(), query: { created: '1' } });
         },
       },
     );
-  }, [form, isPending, mutate, router]);
+  }, [form, isPending, mutate, openToast, router]);
 
   return (
     <div className={styles.page}>
