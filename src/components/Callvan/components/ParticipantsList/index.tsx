@@ -104,6 +104,8 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
     queryFn: () => getCallvanPostDetail(token, postId),
   });
 
+  const colorIndexMap = new Map(post.participants.filter((p) => !p.is_me).map((p, i) => [p.user_id, i]));
+
   return (
     <div className={styles.page}>
       <div className={styles.page__header}>
@@ -158,19 +160,12 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
         </div>
 
         <div className={styles['participants-list']}>
-          {post.participants.reverse().map((participant, index) => {
-            let colorIndex = 0;
-            if (!participant.is_me) {
-              colorIndex = post.participants.slice(0, index).filter((p) => !p.is_me).length;
-            }
-
-            return (
-              <div key={participant.user_id}>
-                {index > 0 && <div className={styles['participants-list__divider']} />}
-                <ParticipantRow participant={participant} colorIndex={colorIndex} />
-              </div>
-            );
-          })}
+          {post.participants.map((participant, index) => (
+            <div key={participant.user_id}>
+              {index > 0 && <div className={styles['participants-list__divider']} />}
+              <ParticipantRow participant={participant} colorIndex={colorIndexMap.get(participant.user_id) ?? 0} />
+            </div>
+          ))}
         </div>
       </div>
 
