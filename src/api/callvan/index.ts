@@ -5,6 +5,7 @@ import {
   GetCallvanNotifications,
   GetCallvanPostDetail,
   PostCallvan,
+  PostCallvanReport,
   PostMarkAllNotificationsRead,
   PostMarkNotificationRead,
   PutCloseCallvanPost,
@@ -22,3 +23,4 @@ export const createCallvan = APIClient.of(PostCallvan);
 export const closeCallvanPost = APIClient.of(PutCloseCallvanPost);
 export const reopenCallvanPost = APIClient.of(PutReopenCallvanPost);
 export const completeCallvanPost = APIClient.of(PutCompleteCallvanPost);
+export const reportCallvanParticipant = APIClient.of(PostCallvanReport);
