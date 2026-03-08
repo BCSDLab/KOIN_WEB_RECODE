@@ -49,9 +49,10 @@ function ParticipantAvatar({ participant, colorIndex }: ParticipantAvatarProps) 
 interface ParticipantRowProps {
   participant: CallvanParticipant;
   colorIndex: number;
+  onReport: () => void;
 }
 
-function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
+function ParticipantRow({ participant, colorIndex, onReport }: ParticipantRowProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { containerRef } = useOutsideClick<HTMLDivElement>({
     onOutsideClick: () => setIsMenuOpen(false),
@@ -79,7 +80,11 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
           </button>
           {isMenuOpen && (
             <div className={styles['participant-row__dropdown']}>
-              <button type="button" className={styles['participant-row__dropdown-item']}>
+              <button
+                type="button"
+                className={styles['participant-row__dropdown-item']}
+                onClick={onReport}
+              >
                 <SirenIcon />
                 <span>신고하기</span>
               </button>
@@ -163,7 +168,11 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
           {post.participants.map((participant, index) => (
             <div key={participant.user_id}>
               {index > 0 && <div className={styles['participants-list__divider']} />}
-              <ParticipantRow participant={participant} colorIndex={colorIndexMap.get(participant.user_id) ?? 0} />
+              <ParticipantRow
+                participant={participant}
+                colorIndex={colorIndexMap.get(participant.user_id) ?? 0}
+                onReport={() => router.push(ROUTES.CallvanReport({ postId: String(postId), userId: String(participant.user_id) }))}
+              />
             </div>
           ))}
         </div>
