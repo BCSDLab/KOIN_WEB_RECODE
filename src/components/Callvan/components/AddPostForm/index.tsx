@@ -222,7 +222,7 @@ export default function AddPostForm() {
                 type="button"
                 className={styles['participants-picker__button']}
                 onClick={() => handleParticipantsChange(-1)}
-                disabled={form.maxParticipants < 1}
+                disabled={form.maxParticipants <= 2}
                 aria-label="인원 감소"
               >
                 <span className={styles['participants-picker__icon']}>−</span>
@@ -232,7 +232,7 @@ export default function AddPostForm() {
                 type="button"
                 className={styles['participants-picker__button']}
                 onClick={() => handleParticipantsChange(1)}
-                disabled={form.maxParticipants > 8}
+                disabled={form.maxParticipants >= 11}
                 aria-label="인원 증가"
               >
                 <span className={styles['participants-picker__icon']}>+</span>
