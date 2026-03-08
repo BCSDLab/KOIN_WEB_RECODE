@@ -6,6 +6,9 @@ import {
   PostCallvan,
   PostMarkAllNotificationsRead,
   PostMarkNotificationRead,
+  PutCloseCallvanPost,
+  PutCompleteCallvanPost,
+  PutReopenCallvanPost,
 } from './APIDetail';
 
 export const getCallvanList = APIClient.of(GetCallvanList);
@@ -14,3 +17,6 @@ export const markAllNotificationsRead = APIClient.of(PostMarkAllNotificationsRea
 export const markNotificationRead = APIClient.of(PostMarkNotificationRead);
 export const deleteAllNotifications = APIClient.of(DeleteAllNotifications);
 export const createCallvan = APIClient.of(PostCallvan);
+export const closeCallvanPost = APIClient.of(PutCloseCallvanPost);
+export const reopenCallvanPost = APIClient.of(PutReopenCallvanPost);
+export const completeCallvanPost = APIClient.of(PutCompleteCallvanPost);
