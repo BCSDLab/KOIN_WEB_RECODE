@@ -190,3 +190,25 @@ export interface CreateCallvanResponse {
   created_at: string;
   updated_at: string;
 }
+
+export interface CallvanChatMessage {
+  user_id: number;
+  sender_nickname: string;
+  content: string;
+  date: string;
+  time: string;
+  unread_count: number;
+  is_image: boolean;
+  is_left_user: boolean;
+  is_mine: boolean;
+}
+
+export interface CallvanChatResponse {
+  room_name: string;
+  messages: CallvanChatMessage[];
+}
+
+export interface SendChatRequest {
+  is_image: boolean;
+  content: string;
+}

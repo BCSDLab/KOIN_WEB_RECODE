@@ -1,13 +1,18 @@
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
 import { CallvanPost } from 'api/callvan/entity';
+import ChatIcon from 'assets/svg/Callvan/chat.svg';
+import ChevronRightIcon from 'assets/svg/Callvan/chevron-right.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
 import CloseConfirmModal from 'components/Callvan/components/CloseConfirmModal';
 import CompleteConfirmModal from 'components/Callvan/components/CompleteConfirmModal';
 import ReopenConfirmModal from 'components/Callvan/components/ReopenConfirmModal';
+import useCancelCallvan from 'components/Callvan/hooks/useCancelCallvan';
 import useCloseCallvan from 'components/Callvan/hooks/useCloseCallvan';
 import useCompleteCallvan from 'components/Callvan/hooks/useCompleteCallvan';
+import useJoinCallvan from 'components/Callvan/hooks/useJoinCallvan';
 import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
@@ -44,6 +49,8 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const { mutate: closePost } = useCloseCallvan();
   const { mutate: reopenPost } = useReopenCallvan();
   const { mutate: completePost } = useCompleteCallvan();
+  const { mutate: joinPost, isPending: isJoinPending } = useJoinCallvan();
+  const { mutate: cancelPost, isPending: isCancelPending } = useCancelCallvan();
 
   const handleCloseConfirm = () => {
     closePost(post.id);
@@ -60,6 +67,11 @@ export default function CallvanCard({ post }: CallvanCardProps) {
     closeCompleteModal();
   };
 
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(ROUTES.CallvanChat({ id: String(post.id) }));
+  };
+
   const renderTopAction = () => {
     if (post.is_author && post.status !== 'COMPLETED') {
       return (
@@ -68,51 +80,134 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </span>
       );
     }
+    if (post.is_joined && !post.is_author) {
+      return (
+        <button type="button" className={styles['card__chat-button']} onClick={handleChatClick} aria-label="채팅하기">
+          <ChatIcon />
+        </button>
+      );
+    }
     return <span className={styles['card__phone-placeholder']} />;
   };
 
+  const renderCount = () => {
+    if (post.is_author) {
+      return (
+        <button
+          type="button"
+          className={styles['card__count--author']}
+          onClick={handleChatClick}
+          aria-label="그룹 채팅 입장"
+        >
+          <PeopleIcon />
+          <span>
+            {post.current_participants}/{post.max_participants}
+          </span>
+          <ChevronRightIcon />
+        </button>
+      );
+    }
+    return (
+      <div className={styles.card__count}>
+        <PeopleIcon />
+        <span>
+          {post.current_participants}/{post.max_participants}
+        </span>
+      </div>
+    );
+  };
+
   const renderActionButton = () => {
-    if (post.status === 'RECRUITING') {
-      if (post.is_author) {
+    if (post.is_author) {
+      if (post.status === 'RECRUITING') {
         return (
           <button
             type="button"
             className={styles['card__badge--closeable']}
-            onClick={openCloseModal}
+            onClick={(e) => {
+              e.stopPropagation();
+              openCloseModal();
+            }}
             aria-label="마감하기"
           >
             마감하기
           </button>
         );
       }
+      if (post.status === 'CLOSED') {
+        return (
+          <div className={styles['card__badge-group']}>
+            <button
+              type="button"
+              className={styles['card__badge--reopen']}
+              onClick={(e) => {
+                e.stopPropagation();
+                openReopenModal();
+              }}
+              aria-label="재모집"
+            >
+              재모집
+            </button>
+            <button
+              type="button"
+              className={styles['card__badge--complete']}
+              onClick={(e) => {
+                e.stopPropagation();
+                openCompleteModal();
+              }}
+              aria-label="이용완료"
+            >
+              이용완료
+            </button>
+          </div>
+        );
+      }
+      return null;
+    }
+
+    if (post.status === 'CLOSED') {
       return (
-        <button type="button" className={styles['card__badge--recruiting']} aria-label="참여하기">
-          참여하기
+        <button type="button" className={styles['card__badge--closed']} disabled aria-label="모집마감">
+          모집마감
         </button>
       );
     }
 
-    if (post.status === 'CLOSED' && post.is_author) {
+    if (post.is_joined && post.status === 'RECRUITING') {
       return (
-        <div className={styles['card__badge-group']}>
-          <button type="button" className={styles['card__badge--reopen']} onClick={openReopenModal} aria-label="재모집">
-            재모집
-          </button>
-          <button
-            type="button"
-            className={styles['card__badge--complete']}
-            onClick={openCompleteModal}
-            aria-label="이용완료"
-          >
-            이용완료
-          </button>
-        </div>
+        <button
+          type="button"
+          className={cn({
+            [styles['card__badge--joined']]: true,
+            [styles['card__badge--pending']]: isCancelPending,
+          })}
+          onClick={(e) => {
+            e.stopPropagation();
+            cancelPost(post.id);
+          }}
+          disabled={isCancelPending}
+          aria-label="참여취소"
+        >
+          참여취소
+        </button>
       );
     }
 
     return (
-      <button type="button" className={styles['card__badge--closed']} disabled aria-label="모집마감">
-        모집마감
+      <button
+        type="button"
+        className={cn({
+          [styles['card__badge--recruiting']]: true,
+          [styles['card__badge--pending']]: isJoinPending,
+        })}
+        onClick={(e) => {
+          e.stopPropagation();
+          joinPost(post.id);
+        }}
+        disabled={isJoinPending}
+        aria-label="참여하기"
+      >
+        참여하기
       </button>
     );
   };
@@ -129,6 +224,9 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         onKeyDown={
           post.is_joined
             ? (e) => {
+                if ((e.target as HTMLElement).closest('button')) {
+                  return;
+                }
                 if (e.key === 'Enter' || e.key === ' ') {
                   router.push(ROUTES.CallvanParticipants({ postId: String(post.id) }));
                 }
@@ -159,12 +257,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
                 <span>{formatTime(post.departure_time)}</span>
               </div>
               <span className={styles.card__divider}>|</span>
-              <div className={styles.card__count}>
-                <PeopleIcon />
-                <span>
-                  {post.current_participants}/{post.max_participants}
-                </span>
-              </div>
+              {renderCount()}
             </div>
           </div>
           <div className={styles.card__actions}>
