@@ -22,6 +22,10 @@
     gap: 4px;
     align-items: flex-start;
     justify-content: center;
+
+    &--clickable {
+      cursor: pointer;
+    }
   }
 
   &__text-card {

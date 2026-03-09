@@ -81,12 +81,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
     }
     if (post.is_joined && !post.is_author) {
       return (
-        <button
-          type="button"
-          className={styles['card__chat-button']}
-          onClick={handleChatClick}
-          aria-label="채팅하기"
-        >
+        <button type="button" className={styles['card__chat-button']} onClick={handleChatClick} aria-label="채팅하기">
           <ChatIcon />
         </button>
       );
@@ -138,7 +133,12 @@ export default function CallvanCard({ post }: CallvanCardProps) {
       if (post.status === 'CLOSED') {
         return (
           <div className={styles['card__badge-group']}>
-            <button type="button" className={styles['card__badge--reopen']} onClick={openReopenModal} aria-label="재모집">
+            <button
+              type="button"
+              className={styles['card__badge--reopen']}
+              onClick={openReopenModal}
+              aria-label="재모집"
+            >
               재모집
             </button>
             <button
@@ -165,9 +165,19 @@ export default function CallvanCard({ post }: CallvanCardProps) {
 
     if (post.is_joined) {
       return (
-        <button type="button" className={styles['card__badge--joined']} onClick={() => cancelPost(post.id)} aria-label="참여취소">
-          참여취소
-        </button>
+        <div className={styles['card__badge-group']}>
+          <button type="button" className={styles['card__badge--reopen']} onClick={openReopenModal} aria-label="재모집">
+            재모집
+          </button>
+          <button
+            type="button"
+            className={styles['card__badge--complete']}
+            onClick={openCompleteModal}
+            aria-label="이용완료"
+          >
+            이용완료
+          </button>
+        </div>
       );
     }
 
@@ -189,9 +199,25 @@ export default function CallvanCard({ post }: CallvanCardProps) {
 
   return (
     <>
-      <div className={styles.card}>
+      <div
+        className={styles.card}
+        role={post.is_joined ? 'button' : undefined}
+        tabIndex={post.is_joined ? 0 : undefined}
+        onClick={
+          post.is_joined ? () => router.push(ROUTES.CallvanParticipants({ postId: String(post.id) })) : undefined
+        }
+        onKeyDown={
+          post.is_joined
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  router.push(ROUTES.CallvanParticipants({ postId: String(post.id) }));
+                }
+              }
+            : undefined
+        }
+      >
         <div className={styles.card__inner}>
-          <div className={styles.card__content}>
+          <div className={`${styles.card__content} ${post.is_joined ? styles['card__content--clickable'] : ''}`}>
             <div className={styles['card__text-card']}>
               <div className={styles.card__indicator}>
                 <RouteIndicatorIcon />

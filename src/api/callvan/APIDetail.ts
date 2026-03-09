@@ -4,6 +4,7 @@ import {
   CallvanListRequest,
   CallvanListResponse,
   CallvanNotificationsResponse,
+  CallvanPostDetail,
   CreateCallvanRequest,
   CreateCallvanResponse,
   SendChatRequest,
@@ -98,6 +99,23 @@ export class DeleteAllNotifications<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(public authorization: string) {}
+}
+
+export class GetCallvanPostDetail<R extends CallvanPostDetail> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    postId: number,
+  ) {
+    this.path = `/callvan/posts/${postId}`;
+  }
 }
 
 export class PostJoinCallvan<R extends object> implements APIRequest<R> {

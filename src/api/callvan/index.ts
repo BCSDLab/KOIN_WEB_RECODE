@@ -5,6 +5,7 @@ import {
   GetCallvanChat,
   GetCallvanList,
   GetCallvanNotifications,
+  GetCallvanPostDetail,
   PostCallvan,
   PostCallvanChat,
   PostJoinCallvan,
@@ -16,6 +17,7 @@ import {
 } from './APIDetail';
 
 export const getCallvanList = APIClient.of(GetCallvanList);
+export const getCallvanPostDetail = APIClient.of(GetCallvanPostDetail);
 export const getCallvanNotifications = APIClient.of(GetCallvanNotifications);
 export const markAllNotificationsRead = APIClient.of(PostMarkAllNotificationsRead);
 export const markNotificationRead = APIClient.of(PostMarkNotificationRead);
