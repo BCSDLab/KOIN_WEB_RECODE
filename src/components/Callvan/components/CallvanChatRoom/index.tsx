@@ -52,7 +52,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const { uploadFile, isPending: isUploading } = useUploadFile();
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView();
   }, [data.messages]);
 
   const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
