@@ -24,6 +24,16 @@ interface ReasonStepProps {
 }
 
 export default function ReasonStep({ selected, customText, onToggle, onCustomTextChange }: ReasonStepProps) {
+  const handleOtherChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onCustomTextChange(e.target.value);
+    if (!selected.has('OTHER')) {
+      onToggle('OTHER');
+    }
+    if (e.target.value.length === 0) {
+      onToggle('OTHER');
+    }
+  };
+
   return (
     <div className={styles['reason-step']}>
       <h2 className={styles['reason-step__heading']}>신고 이유를 선택해주세요.</h2>
@@ -71,7 +81,7 @@ export default function ReasonStep({ selected, customText, onToggle, onCustomTex
                     placeholder="신고 사유를 입력해주세요."
                     value={customText}
                     maxLength={MAX_CUSTOM_TEXT_LENGTH}
-                    onChange={(e) => onCustomTextChange(e.target.value)}
+                    onChange={handleOtherChange}
                   />
                 )}
               </div>
