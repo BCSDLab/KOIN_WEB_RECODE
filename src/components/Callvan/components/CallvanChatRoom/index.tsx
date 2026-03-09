@@ -48,6 +48,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { uploadFile, isPending: isUploading } = useUploadFile();
 
   useEffect(() => {
@@ -79,12 +80,25 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
     sendMessage(
       { is_image: false, content },
       {
-        onSuccess: () => setInputValue(''),
+        onSuccess: () => {
+          setInputValue('');
+          if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+          }
+        },
       },
     );
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -157,7 +171,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                       </div>
                     ) : (
                       <div className={styles['chat-room__bubble--mine']}>
-                        <span>{msg.content}</span>
+                        <span className={styles['chat-room__message-text']}>{msg.content}</span>
                       </div>
                     )}
                   </div>
@@ -192,7 +206,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                       </div>
                     ) : (
                       <div className={styles['chat-room__bubble--others']}>
-                        <span>{msg.content}</span>
+                        <span className={styles['chat-room__message-text']}>{msg.content}</span>
                       </div>
                     )}
                     {msg.unread_count > 0 ? (
@@ -230,12 +244,13 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
           style={{ display: 'none' }}
           onChange={handleImageFileChange}
         />
-        <input
+        <textarea
           className={styles['chat-room__input']}
-          type="text"
           placeholder="메세지 보내기"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          rows={1}
+          ref={textareaRef}
+          onChange={handleInput}
           onKeyDown={handleKeyDown}
         />
         <button

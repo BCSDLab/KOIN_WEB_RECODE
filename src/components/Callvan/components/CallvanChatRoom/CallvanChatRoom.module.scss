@@ -230,6 +230,10 @@
     word-break: break-word;
   }
 
+  &__message-text {
+    white-space: pre-wrap;
+  }
+
   &__bubble-image {
     max-width: 220px;
     border-radius: 8px;
@@ -284,7 +288,7 @@
 
   &__send-bar {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     padding: 8px 24px;
     background-color: #f5f5f5;
@@ -310,7 +314,8 @@
 
   &__input {
     flex: 1;
-    height: 32px;
+    min-height: 32px;
+    max-height: 100px;
     padding: 8px 16px;
     margin: 0 10px;
     background-color: #fff;
@@ -319,9 +324,12 @@
     font-family: Pretendard, sans-serif;
     font-weight: 400;
     font-size: 12px;
+    line-height: 1.5;
     color: #000;
     outline: none;
     box-sizing: border-box;
+    resize: none;
+    overflow-y: auto;
 
     &::placeholder {
       color: #727272;
