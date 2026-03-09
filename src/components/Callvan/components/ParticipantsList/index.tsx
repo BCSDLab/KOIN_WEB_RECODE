@@ -57,6 +57,8 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
   const { containerRef } = useOutsideClick<HTMLDivElement>({
     onOutsideClick: closeMenu,
   });
+  const router = useRouter();
+  const postId = Number(router.query.postId);
 
   return (
     <div className={styles['participant-row']}>
@@ -80,7 +82,13 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
           </button>
           {isMenuOpen && (
             <div className={styles['participant-row__dropdown']}>
-              <button type="button" className={styles['participant-row__dropdown-item']} onClick={onReport}>
+              <button
+                type="button"
+                className={styles['participant-row__dropdown-item']}
+                onClick={() =>
+                  router.push(ROUTES.CallvanReport({ postId: String(postId), userId: String(participant.user_id) }))
+                }
+              >
                 <SirenIcon />
                 <span>신고하기</span>
               </button>
