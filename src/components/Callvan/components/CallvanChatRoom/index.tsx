@@ -1,13 +1,15 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { CallvanChatMessage } from 'api/callvan/entity';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import ImageUploadIcon from 'assets/svg/Callvan/image-upload.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
-import PersonAvatarIcon from 'assets/svg/Callvan/person-avatar.svg';
 import SendIcon from 'assets/svg/Callvan/send.svg';
+import { ParticipantAvatarIcon } from 'components/Callvan/components/ParticipantsList/ParticipantAvatarIcon';
 import useCallvanChat from 'components/Callvan/hooks/useCallvanChat';
+import useCallvanPostDetail from 'components/Callvan/hooks/useCallvanPostDetail';
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
+import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import styles from './CallvanChatRoom.module.scss';
 
@@ -30,12 +32,6 @@ function groupMessagesByDate(messages: CallvanChatMessage[]): { date: string; me
   return groups;
 }
 
-const AVATAR_BORDER_COLORS = ['#DDB1FE', '#C969FC', '#C358FC', '#B611F5', '#9A0AD4'];
-
-function getAvatarColor(userId: number): string {
-  return AVATAR_BORDER_COLORS[userId % AVATAR_BORDER_COLORS.length];
-}
-
 function formatKoreanDateString(dateStr: string): string {
   const parts = dateStr.match(/\d+/g);
   if (parts && parts.length >= 3) {
@@ -47,6 +43,7 @@ function formatKoreanDateString(dateStr: string): string {
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
   const { data } = useCallvanChat(postId);
+  const { data: postDetail } = useCallvanPostDetail(postId);
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -95,6 +92,16 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
     }
   };
 
+  const senderColorMap = useMemo(() => {
+    const map = new Map<number, number>();
+    data.messages.forEach((msg) => {
+      if (!msg.is_mine && !map.has(msg.user_id)) {
+        map.set(msg.user_id, map.size);
+      }
+    });
+    return map;
+  }, [data.messages]);
+
   const messageGroups = groupMessagesByDate(data.messages);
 
   return (
@@ -104,11 +111,16 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
           <ArrowBackIcon />
         </button>
         <div className={styles['chat-room__header-center']}>
-          <div className={styles['chat-room__title-row']}>{data.room_name}</div>
+          <div className={styles['chat-room__title-row']}>
+            <span className={styles['chat-room__route-text']}>{postDetail.departure}</span>
+            <span>-</span>
+            <span className={styles['chat-room__route-text']}>{postDetail.arrival}</span>
+            <span>{postDetail.departure_time}</span>
+          </div>
           <div className={styles['chat-room__header-count']}>
             <PeopleIcon />
             <span>
-              {}/{}
+              {postDetail.current_participants}/{postDetail.max_participants}
             </span>
           </div>
         </div>
@@ -165,9 +177,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                 >
                   {showSender && (
                     <div className={styles['chat-room__sender-row']}>
-                      <div className={styles['chat-room__avatar']} style={{ borderColor: getAvatarColor(msg.user_id) }}>
-                        <PersonAvatarIcon />
-                      </div>
+                      <ParticipantAvatarIcon color={getParticipantColor(senderColorMap.get(msg.user_id) ?? 0)} />
                       <div className={styles['chat-room__sender-info']}>
                         <span className={styles['chat-room__sender-name']}>{msg.sender_nickname}</span>
                         {msg.is_left_user && <span className={styles['chat-room__left-badge']}>(나간 사용자)</span>}

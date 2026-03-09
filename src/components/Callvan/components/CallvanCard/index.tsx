@@ -50,7 +50,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const { mutate: reopenPost } = useReopenCallvan();
   const { mutate: completePost } = useCompleteCallvan();
   const { mutate: joinPost, isPending: isJoinPending } = useJoinCallvan();
-  const { mutate: cancelPost } = useCancelCallvan();
+  const { mutate: cancelPost, isPending: isCancelPending } = useCancelCallvan();
 
   const handleCloseConfirm = () => {
     closePost(post.id);
@@ -67,7 +67,8 @@ export default function CallvanCard({ post }: CallvanCardProps) {
     closeCompleteModal();
   };
 
-  const handleChatClick = () => {
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push(ROUTES.CallvanChat({ id: String(post.id) }));
   };
 
@@ -123,7 +124,10 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           <button
             type="button"
             className={styles['card__badge--closeable']}
-            onClick={openCloseModal}
+            onClick={(e) => {
+              e.stopPropagation();
+              openCloseModal();
+            }}
             aria-label="마감하기"
           >
             마감하기
@@ -136,7 +140,10 @@ export default function CallvanCard({ post }: CallvanCardProps) {
             <button
               type="button"
               className={styles['card__badge--reopen']}
-              onClick={openReopenModal}
+              onClick={(e) => {
+                e.stopPropagation();
+                openReopenModal();
+              }}
               aria-label="재모집"
             >
               재모집
@@ -144,7 +151,10 @@ export default function CallvanCard({ post }: CallvanCardProps) {
             <button
               type="button"
               className={styles['card__badge--complete']}
-              onClick={openCompleteModal}
+              onClick={(e) => {
+                e.stopPropagation();
+                openCompleteModal();
+              }}
               aria-label="이용완료"
             >
               이용완료
@@ -165,19 +175,21 @@ export default function CallvanCard({ post }: CallvanCardProps) {
 
     if (post.is_joined) {
       return (
-        <div className={styles['card__badge-group']}>
-          <button type="button" className={styles['card__badge--reopen']} onClick={openReopenModal} aria-label="재모집">
-            재모집
-          </button>
-          <button
-            type="button"
-            className={styles['card__badge--complete']}
-            onClick={openCompleteModal}
-            aria-label="이용완료"
-          >
-            이용완료
-          </button>
-        </div>
+        <button
+          type="button"
+          className={cn({
+            [styles['card__badge--joined']]: true,
+            [styles['card__badge--pending']]: isCancelPending,
+          })}
+          onClick={(e) => {
+            e.stopPropagation();
+            cancelPost(post.id);
+          }}
+          disabled={isCancelPending}
+          aria-label="참여취소"
+        >
+          참여취소
+        </button>
       );
     }
 
@@ -185,10 +197,13 @@ export default function CallvanCard({ post }: CallvanCardProps) {
       <button
         type="button"
         className={cn({
-          [styles['card__badge--recruiting']]: !isJoinPending,
+          [styles['card__badge--recruiting']]: true,
           [styles['card__badge--pending']]: isJoinPending,
         })}
-        onClick={() => joinPost(post.id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          joinPost(post.id);
+        }}
         disabled={isJoinPending}
         aria-label="참여하기"
       >
@@ -209,6 +224,9 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         onKeyDown={
           post.is_joined
             ? (e) => {
+                if ((e.target as HTMLElement).closest('button')) {
+                  return;
+                }
                 if (e.key === 'Enter' || e.key === ' ') {
                   router.push(ROUTES.CallvanParticipants({ postId: String(post.id) }));
                 }
