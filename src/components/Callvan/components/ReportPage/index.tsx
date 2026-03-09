@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { CallvanReportReason, CallvanReportReasonCode } from 'api/callvan/entity';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
+import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useReportCallvan from 'components/Callvan/hooks/useReportCallvan';
+import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
 import DetailStep from './DetailStep';
 import ReasonStep from './ReasonStep';
@@ -22,6 +24,7 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
   const [customText, setCustomText] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<File[]>([]);
+  const { open: openToast } = useCallvanToast();
 
   const toggleReason = (code: CallvanReportReasonCode) => {
     setSelectedReasons((prev) => {
@@ -71,8 +74,8 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
       },
       {
         onSuccess: () => {
-          showToast('success', '신고가 접수되었습니다.');
-          router.back();
+          openToast('사용자가 신고되었습니다.');
+          router.push(ROUTES.CallvanParticipants({ postId: String(postId) }));
         },
       },
     );
