@@ -173,7 +173,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
       );
     }
 
-    if (post.is_joined) {
+    if (post.is_joined && post.status === 'RECRUITING') {
       return (
         <button
           type="button"
