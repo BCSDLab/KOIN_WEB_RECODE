@@ -1,4 +1,4 @@
-@use 'src/utils/scss/media' as media;
+@use "src/utils/scss/media" as media;
 
 .card {
   padding: 8px 24px;
@@ -109,6 +109,12 @@
     color: #4b4b4b;
   }
 
+  &__phone-placeholder {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
   &__count {
     display: flex;
     align-items: center;
@@ -136,13 +142,13 @@
     color: #4b4b4b;
     white-space: nowrap;
 
-    svg:first-child {
+    & > svg:first-child {
       width: 16px;
       height: 16px;
       flex-shrink: 0;
     }
 
-    svg:last-child {
+    & > svg:last-child {
       width: 12px;
       height: 12px;
       flex-shrink: 0;
@@ -155,42 +161,6 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 8px;
-    flex-shrink: 0;
-  }
-
-  &__chat-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: #980ac9;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
-
-  &__phone {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    color: #b611f5;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
-
-  &__phone-placeholder {
-    width: 24px;
-    height: 24px;
     flex-shrink: 0;
   }
 
