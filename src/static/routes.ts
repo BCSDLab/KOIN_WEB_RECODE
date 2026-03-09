@@ -58,6 +58,7 @@ const ROUTES = {
   CallvanNotifications: () => '/callvan/notifications',
   CallvanChat: ({ id }: ROUTESParams<'id'>) => `/callvan/chat/${id}`,
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
+  CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',

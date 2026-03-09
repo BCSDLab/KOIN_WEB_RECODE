@@ -152,6 +152,19 @@ export interface CallvanPostDetail {
   participants: CallvanParticipant[];
 }
 
+export type CallvanReportReasonCode = 'NO_SHOW' | 'NON_PAYMENT' | 'PROFANITY' | 'OTHER';
+
+export interface CallvanReportReason {
+  reason_code: CallvanReportReasonCode;
+  custom_text?: string;
+}
+
+export interface CallvanReportRequest {
+  reported_user_id: number;
+  description?: string;
+  reasons: CallvanReportReason[];
+}
+
 export interface CreateCallvanRequest {
   departure_type: CallvanPostLocationType;
   departure_custom_name?: string | null;
