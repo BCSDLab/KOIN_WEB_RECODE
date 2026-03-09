@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { CallvanPost } from 'api/callvan/entity';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
@@ -9,6 +10,7 @@ import useCloseCallvan from 'components/Callvan/hooks/useCloseCallvan';
 import useCompleteCallvan from 'components/Callvan/hooks/useCompleteCallvan';
 import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
 import { DAYS } from 'static/day';
+import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './CallvanCard.module.scss';
 
@@ -34,6 +36,7 @@ function formatTime(timeStr: string): string {
 }
 
 export default function CallvanCard({ post }: CallvanCardProps) {
+  const router = useRouter();
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
   const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
   const [isCompleteModalOpen, openCompleteModal, closeCompleteModal] = useBooleanState(false);
@@ -92,12 +95,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
     if (post.status === 'CLOSED' && post.is_author) {
       return (
         <div className={styles['card__badge-group']}>
-          <button
-            type="button"
-            className={styles['card__badge--reopen']}
-            onClick={openReopenModal}
-            aria-label="재모집"
-          >
+          <button type="button" className={styles['card__badge--reopen']} onClick={openReopenModal} aria-label="재모집">
             재모집
           </button>
           <button
@@ -121,9 +119,25 @@ export default function CallvanCard({ post }: CallvanCardProps) {
 
   return (
     <>
-      <div className={styles.card}>
+      <div
+        className={styles.card}
+        role={post.is_joined ? 'button' : undefined}
+        tabIndex={post.is_joined ? 0 : undefined}
+        onClick={
+          post.is_joined ? () => router.push(ROUTES.CallvanParticipants({ postId: String(post.id) })) : undefined
+        }
+        onKeyDown={
+          post.is_joined
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  router.push(ROUTES.CallvanParticipants({ postId: String(post.id) }));
+                }
+              }
+            : undefined
+        }
+      >
         <div className={styles.card__inner}>
-          <div className={styles.card__content}>
+          <div className={`${styles.card__content} ${post.is_joined ? styles['card__content--clickable'] : ''}`}>
             <div className={styles['card__text-card']}>
               <div className={styles.card__indicator}>
                 <RouteIndicatorIcon />

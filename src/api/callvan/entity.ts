@@ -133,6 +133,25 @@ export const CALLVAN_POST_LOCATIONS: CallvanPostLocationType[] = [
   'CUSTOM',
 ];
 
+export interface CallvanParticipant {
+  user_id: number;
+  nickname: string;
+  is_me: boolean;
+}
+
+export interface CallvanPostDetail {
+  id: number;
+  title: string;
+  departure: string;
+  arrival: string;
+  departure_date: string;
+  departure_time: string;
+  current_participants: number;
+  max_participants: number;
+  status: CallvanStatus;
+  participants: CallvanParticipant[];
+}
+
 export interface CreateCallvanRequest {
   departure_type: CallvanPostLocationType;
   departure_custom_name?: string | null;
