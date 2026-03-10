@@ -1,0 +1,63 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+    padding: 16px 8px;
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.6;
+    color: #175c8e;
+  }
+}
+
+.cards {
+  display: flex;
+  gap: 16px;
+}
+
+.card {
+  flex: 1;
+  height: 65px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+
+  &__guide {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  &__subtitle {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    color: #4b4b4b;
+  }
+}

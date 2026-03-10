@@ -6,6 +6,7 @@ import ChevronRightIcon from 'assets/svg/Callvan/chevron-right.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
+import CallvanActionModal from 'components/Callvan/components/CallvanActionModal';
 import CloseConfirmModal from 'components/Callvan/components/CloseConfirmModal';
 import CompleteConfirmModal from 'components/Callvan/components/CompleteConfirmModal';
 import ReopenConfirmModal from 'components/Callvan/components/ReopenConfirmModal';
@@ -17,6 +18,8 @@ import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { redirectToLogin } from 'utils/ts/auth';
 import styles from './CallvanCard.module.scss';
 
 interface CallvanCardProps {
@@ -42,9 +45,13 @@ function formatTime(timeStr: string): string {
 
 export default function CallvanCard({ post }: CallvanCardProps) {
   const router = useRouter();
+  const token = useTokenState();
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
   const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
   const [isCompleteModalOpen, openCompleteModal, closeCompleteModal] = useBooleanState(false);
+  const [isLoginModalOpen, openLoginModal, closeLoginModal] = useBooleanState(false);
+  const [isJoinModalOpen, openJoinModal, closeJoinModal] = useBooleanState(false);
+  const [isCancelModalOpen, openCancelModal, closeCancelModal] = useBooleanState(false);
 
   const { mutate: closePost } = useCloseCallvan();
   const { mutate: reopenPost } = useReopenCallvan();
@@ -65,6 +72,20 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const handleCompleteConfirm = () => {
     completePost(post.id);
     closeCompleteModal();
+  };
+
+  const handleLoginConfirm = () => {
+    redirectToLogin(router.asPath);
+  };
+
+  const handleJoinConfirm = () => {
+    joinPost(post.id);
+    closeJoinModal();
+  };
+
+  const handleCancelConfirm = () => {
+    cancelPost(post.id);
+    closeCancelModal();
   };
 
   const handleChatClick = (e: React.MouseEvent) => {
@@ -183,7 +204,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           })}
           onClick={(e) => {
             e.stopPropagation();
-            cancelPost(post.id);
+            openCancelModal();
           }}
           disabled={isCancelPending}
           aria-label="참여취소"
@@ -202,7 +223,11 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         })}
         onClick={(e) => {
           e.stopPropagation();
-          joinPost(post.id);
+          if (!token) {
+            openLoginModal();
+          } else {
+            openJoinModal();
+          }
         }}
         disabled={isJoinPending}
         aria-label="참여하기"
@@ -269,6 +294,33 @@ export default function CallvanCard({ post }: CallvanCardProps) {
       {isCloseModalOpen && <CloseConfirmModal onConfirm={handleCloseConfirm} onCancel={closeCloseModal} />}
       {isReopenModalOpen && <ReopenConfirmModal onConfirm={handleReopenConfirm} onCancel={closeReopenModal} />}
       {isCompleteModalOpen && <CompleteConfirmModal onConfirm={handleCompleteConfirm} onCancel={closeCompleteModal} />}
+      {isLoginModalOpen && (
+        <CallvanActionModal
+          title="콜밴팟에 참여하려면 로그인이 필요해요."
+          confirmLabel="로그인하기"
+          cancelLabel="닫기"
+          onConfirm={handleLoginConfirm}
+          onCancel={closeLoginModal}
+        />
+      )}
+      {isJoinModalOpen && (
+        <CallvanActionModal
+          title="해당 콜밴팟에 참여할까요?"
+          confirmLabel="예"
+          cancelLabel="아니요"
+          onConfirm={handleJoinConfirm}
+          onCancel={closeJoinModal}
+        />
+      )}
+      {isCancelModalOpen && (
+        <CallvanActionModal
+          title="해당 콜밴팟 참여를 취소할까요?"
+          confirmLabel="예"
+          cancelLabel="아니요"
+          onConfirm={handleCancelConfirm}
+          onCancel={closeCancelModal}
+        />
+      )}
     </>
   );
 }

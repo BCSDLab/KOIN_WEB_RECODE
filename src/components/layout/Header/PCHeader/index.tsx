@@ -236,7 +236,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
         >
           <ul className={styles.megamenu__content}>
-            {panelMenuList?.slice(0, -4).map((menu) => {
+            {panelMenuList?.slice(0, -4).filter((menu) => !menu.mobileOnly).map((menu) => {
               const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
               const href = preferred ?? ROUTES.Main();
               return (

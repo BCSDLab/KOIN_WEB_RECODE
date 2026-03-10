@@ -10,7 +10,7 @@ import { getMySemester, getSemesterInfoList, getTimetableFrame, getTimetableLect
 import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
-import IndexClub from 'components/IndexComponents/IndexClub';
+import IndexCallvan from 'components/IndexComponents/IndexCallvan';
 import IndexLostItem from 'components/IndexComponents/IndexLostItem';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
@@ -134,7 +134,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 function Index({
   bannersList,
   categories,
-  hotClubInfo,
+  // hotClubInfo,
   bannerCategoryId,
   isBannerOpen,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -145,7 +145,7 @@ function Index({
       <div className={styles['left-container']}>
         <IndexStore categories={categories} />
         <IndexBus />
-        <IndexClub hotClubInfo={hotClubInfo} />
+        <IndexCallvan />
         <IndexLostItem />
         <IndexArticles />
       </div>
