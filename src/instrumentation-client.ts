@@ -22,7 +22,7 @@ Sentry.init({
     ...(process.env.NEXT_PUBLIC_API_PATH ? [process.env.NEXT_PUBLIC_API_PATH] : []),
   ],
 
-  tracesSampleRate: isProduction ? 0.7 : 0.1,
+  tracesSampleRate: isProduction ? 0.7 : 1.0,
   replaysSessionSampleRate: isProduction ? 0.3 : 0.0,
   replaysOnErrorSampleRate: 1.0,
   sendDefaultPii: true,
