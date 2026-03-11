@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
@@ -58,4 +59,11 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG || 'bcsd',
+  project: process.env.SENTRY_PROJECT || 'koin-prod',
+  release: { name: process.env.NEXT_PUBLIC_SENTRY_RELEASE },
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  tunnelRoute: '/monitoring',
+});
