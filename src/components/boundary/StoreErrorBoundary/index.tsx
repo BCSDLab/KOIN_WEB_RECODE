@@ -1,5 +1,6 @@
 import React from 'react';
 import { isKoinError } from '@bcsdlab/koin';
+import * as Sentry from '@sentry/nextjs';
 import axios, { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 import styles from './StoreErrorBoundary.module.scss';
@@ -38,6 +39,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error: Error) {
     showToast('error', error.message);
+    Sentry.captureException(error);
   }
 
   render() {
