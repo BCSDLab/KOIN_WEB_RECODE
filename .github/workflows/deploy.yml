@@ -141,15 +141,18 @@ jobs:
           ENVIRONMENT=$([[ "${{ github.ref_name }}" == "main" ]] && echo "Production" || echo "Stage")
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1)
           RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ACTOR=${{ steps.resolve_actor.outputs.actorName }}
+
+          BODY=$(jq -n \
+            --arg status "$STATUS" \
+            --arg environment "$ENVIRONMENT" \
+            --arg repository "${{ github.repository }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg actor "$ACTOR" \
+            --arg commitMessage "$COMMIT_MSG" \
+            --arg runUrl "$RUN_URL" \
+            '{status: $status, environment: $environment, repository: $repository, branch: $branch, actor: $actor, commitMessage: $commitMessage, runUrl: $runUrl}')
 
           curl -X POST https://api-slack.internal.bcsdlab.com/api/deploy/frontend \
           -H 'Content-Type: application/json' \
-          -d "{
-            \"status\": \"$STATUS\",
-            \"environment\": \"$ENVIRONMENT\",
-            \"repository\": \"${{ github.repository }}\",
-            \"branch\": \"${{ github.ref_name }}\",
-            \"actor\": ${{ steps.resolve_actor.outputs.actorName }},
-            \"commitMessage\": \"$COMMIT_MSG\",
-            \"runUrl\": \"$RUN_URL\"
-          }"
+          -d "$BODY"
