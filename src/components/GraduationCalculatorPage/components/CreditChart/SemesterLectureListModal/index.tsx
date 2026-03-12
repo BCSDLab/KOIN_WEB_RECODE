@@ -1,15 +1,16 @@
 import { startTransition, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries } from 'api/auth/queries';
 import { LectureInfo } from 'api/graduationCalculator/entity';
+import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
-import useCourseType from 'components/GraduationCalculatorPage/hooks/useCourseType';
 import DeptListbox from 'components/TimetablePage/components/LectureList/DeptListbox';
 import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useSelect from 'components/TimetablePage/hooks/useSelect';
 import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { pick } from 'utils/ts/object';
 import styles from './SemesterLectureListModal.module.scss';
@@ -48,7 +49,7 @@ export default function SemesterLectureListModal({
   const token = useTokenState();
   const allMyLectures = useAllMyLectures(token);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  const { data: academicInfo } = useUserAcademicInfo();
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
     value: `${semesterInfo.year}년 ${semesterInfo.term}`,
@@ -61,7 +62,7 @@ export default function SemesterLectureListModal({
   const { value: lectureStatus, onChangeSelect: onChangeLectureStatus } = useSelect(lectureStatusOptions[0].value);
   const { value: department, onChangeSelect: onChangeDepartment } = useSelect(academicInfo?.department);
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
-  const { data: generalCourses } = useCourseType(token, semester, course!);
+  const { data: generalCourses } = useSuspenseQuery(graduationCalculatorQueries.courseType(token, semester, course!));
 
   const allMyLecturesInfo = (allMyLectures ?? [])
     .filter((myLecture) => myLecture.course_type === course)
