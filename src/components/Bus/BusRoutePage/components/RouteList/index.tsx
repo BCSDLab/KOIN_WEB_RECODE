@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
+import { busQueries } from 'api/bus/queries';
 import BusRoute from 'components/Bus/BusRoutePage/components/BusRoute';
-import useBusRoute from 'components/Bus/BusRoutePage/hooks/useBusRoute';
 import { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import { transformBusRoute } from 'components/Bus/BusRoutePage/utils/transform';
 import styles from './RouteList.module.scss';
 
 interface RouteListProps {
@@ -13,12 +15,16 @@ interface RouteListProps {
 
 export default function RouteList({ timeSelect, busType, depart, arrival }: RouteListProps) {
   const { formattedValues } = timeSelect;
-  const { data } = useBusRoute({
-    dayOfMonth: formattedValues.date,
-    time: formattedValues.time,
-    busType,
-    depart,
-    arrival,
+  const { data } = useQuery({
+    ...busQueries.route({
+      dayOfMonth: formattedValues.date,
+      time: formattedValues.time,
+      busType,
+      depart,
+      arrival,
+    }),
+    select: transformBusRoute,
+    enabled: Boolean(depart) && Boolean(arrival),
   });
   const isReady = Boolean(depart) && Boolean(arrival);
 

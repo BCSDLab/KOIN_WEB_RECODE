@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { dehydrate, DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { getCafeteriaDinings } from 'api/cafeteria';
-import { getCafeteriaInfo } from 'api/coopshop';
+import { cafeteriaQueries } from 'api/cafeteria/queries';
+import { coopshopQueries } from 'api/coopshop/queries';
 import { DiningType } from 'api/dinings/entity';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
@@ -23,18 +23,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const convertedDate = convertDateToSimpleString(currentDate);
 
-  await queryClient.prefetchQuery({
-    queryKey: ['DININGS_KEY', convertedDate],
-    queryFn: async () => {
-      const data = await getCafeteriaDinings(convertedDate);
-      return data;
-    },
-  });
+  await queryClient.prefetchQuery(cafeteriaQueries.dinings(convertedDate));
 
-  await queryClient.prefetchQuery({
-    queryKey: ['COOPSHOP_CAFETERIA_KEY'],
-    queryFn: () => getCafeteriaInfo(),
-  });
+  await queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo());
 
   return {
     props: {

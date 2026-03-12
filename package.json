@@ -7,7 +7,7 @@
     "@bcsdlab/utils": "^0.0.15",
     "@next/third-parties": "latest",
     "@sentry/browser": "^9.14.0",
-    "@tanstack/react-query": "^5.28.6",
+    "@tanstack/react-query": "^5.90.21",
     "axios": "^0.27.2",
     "dayjs": "^1.11.12",
     "embla-carousel-autoplay": "^8.0.4",
