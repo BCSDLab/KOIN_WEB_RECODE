@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { deleteClubQnA, getClubQnA, postClubQnA } from 'api/club';
+import { deleteClubQnA, postClubQnA } from 'api/club';
 import { ClubNewQnA } from 'api/club/entity';
+import { clubQueries } from 'api/club/queries';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -18,7 +19,7 @@ export default function useClubQnA(clubId: number | string | undefined) {
       await postClubQnA(token, clubId!, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubQnA', clubId] });
+      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, token).queryKey });
     },
     onError: (e) => {
       if (isKoinError(e)) {
@@ -27,17 +28,14 @@ export default function useClubQnA(clubId: number | string | undefined) {
     },
   });
 
-  const { data: clubQnAData } = useSuspenseQuery({
-    queryKey: ['clubQnA', clubId],
-    queryFn: () => getClubQnA(token, Number(clubId)),
-  });
+  const { data: clubQnAData } = useSuspenseQuery(clubQueries.qna(clubId!, token));
 
   const { status: deleteClubQnAStatus, mutateAsync: deleteClubQnAMutateAsync } = useMutation({
     mutationFn: async (qnaId: number) => {
       await deleteClubQnA(token, clubId!, qnaId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubQnA', clubId] });
+      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, token).queryKey });
     },
     onError: (e) => {
       if (isKoinError(e)) {

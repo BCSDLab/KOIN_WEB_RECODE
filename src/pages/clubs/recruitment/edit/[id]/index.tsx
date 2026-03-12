@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { ClubRecruitment } from 'api/club/entity';
+import { clubQueries } from 'api/club/queries';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import usePutClubRecruitment from 'components/Club/ClubRecruitmentEditPage/hooks/usePutClubRecruitment';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
@@ -26,7 +27,7 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const { clubDetail } = useClubDetail(Number(id));
-  const { clubRecruitmentData } = useClubRecruitment(Number(id));
+  const { data: clubRecruitmentData } = useSuspenseQuery(clubQueries.recruitment(Number(id)));
   const { mutateAsync } = usePutClubRecruitment(Number(id));
 
   const [modalType, setModalType] = useState<'edit' | 'editCancel'>('edit');

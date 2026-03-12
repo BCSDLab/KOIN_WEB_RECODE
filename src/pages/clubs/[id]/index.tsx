@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getClubDetail, getClubEventDetail, getRecruitmentClub } from 'api/club';
+import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from 'api/club/queries';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -22,7 +21,6 @@ import MandateClubManagerModal from 'components/Club/ClubDetailPage/components/M
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLike';
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
-import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
@@ -39,7 +37,6 @@ import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
-import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubDetailPage.module.scss';
 
 export const NO_SELECTED_EVENT_ID = -1;
@@ -59,17 +56,6 @@ const TAB: Record<string, TabType> = {
   모집: 'recruit',
   행사: 'event',
   'Q&A': 'qna',
-};
-
-const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
-  id: 0,
-  status: 'NONE',
-  dday: 0,
-  start_date: '',
-  end_date: '',
-  image_url: '',
-  content: '',
-  is_manager: false,
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -96,32 +82,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['clubDetail', clubId],
-      queryFn: () => getClubDetail(token ?? '', clubId),
-    }),
-
-    queryClient.prefetchQuery({
-      queryKey: ['clubRecruitment', clubId],
-      queryFn: async () => {
-        try {
-          const data = await getRecruitmentClub(clubId);
-          return data;
-        } catch (e) {
-          if (isKoinError(e) && e.status === 404) {
-            return EMPTY_RECRUITMENT;
-          }
-          throw e;
-        }
-      },
-    }),
+    queryClient.prefetchQuery(clubQueries.detail(clubId, token)),
+    queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
   ]);
 
   if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
-    await queryClient.prefetchQuery({
-      queryKey: ['clubEventDetail', clubId, numericEventId],
-      queryFn: () => getClubEventDetail(clubId, numericEventId),
-    });
+    await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
   }
 
   return {
@@ -147,7 +113,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   const navigate = (path: string) => router.push(path);
 
   const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
-  const { clubRecruitmentData } = useClubRecruitment(initialClubId);
+  const { data: clubRecruitmentData } = useSuspenseQuery(clubQueries.recruitment(initialClubId));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
 
