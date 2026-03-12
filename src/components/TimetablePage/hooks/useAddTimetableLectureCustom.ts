@@ -1,17 +1,13 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addTimetableLectureCustom } from 'api/timetable';
-import { AddTimetableLectureCustomRequest } from 'api/timetable/entity';
+import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
-import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
 export default function useAddTimetableLectureCustom(token: string) {
   const queryClient = useQueryClient();
+  const mutation = timetableMutations.addLectureCustom(queryClient, token);
   return useMutation({
-    mutationFn: (data: AddTimetableLectureCustomRequest) => addTimetableLectureCustom(data, token),
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData([TIMETABLE_INFO_LIST, variables.timetable_frame_id], data);
-    },
+    ...mutation,
     onError: (error) => {
       if (isKoinError(error)) {
         if (error.status === 401) showToast('error', '로그인을 해주세요');
