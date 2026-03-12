@@ -1,5 +1,6 @@
 import { cn } from '@bcsdlab/utils';
-import useCampusInfo from './hooks/useCampusInfo';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { coopshopQueries } from 'api/coopshop/queries';
 import Book from './svg/book.svg';
 import Cafe from './svg/cafe.svg';
 import Cut from './svg/cut.svg';
@@ -57,7 +58,7 @@ const formatDateRange = (fromDate: string, toDate: string) => {
 };
 
 function CampusInfo() {
-  const { campusInfo } = useCampusInfo();
+  const { data: campusInfo } = useSuspenseQuery(coopshopQueries.allShopInfo());
 
   const cafeteriaInfo = campusInfo?.coop_shops.find((shop) => shop.name === '학생식당');
   const filteredCampusInfo = campusInfo?.coop_shops.filter((shop) => shop.name !== '학생식당');
