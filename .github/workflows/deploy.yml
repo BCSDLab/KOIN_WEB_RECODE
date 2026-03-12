@@ -116,3 +116,40 @@ jobs:
         run: |
           scp -o ConnectTimeout=30 -P 22222 $ARCHIVE_NAME ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/ubuntu/koin/web/
           ssh -o ConnectTimeout=30 -p 22222 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash -lc '$DEPLOY_SCRIPT'"
+
+  notify:
+    needs: [build-and-deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve actor name
+        id: resolve_actor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const developers = JSON.parse(fs.readFileSync(`${{ github.workspace }}/.github/workflows/reviewer.json`));
+            const matched = developers.reviewers.find(p => p.githubName === '${{ github.actor }}');
+            core.setOutput('actorName', JSON.stringify(matched?.name ?? '${{ github.actor }}'));
+
+      - name: Send Slack Notification
+        run: |
+          STATUS="${{ needs.build-and-deploy.result }}"
+          ENVIRONMENT=$([[ "${{ github.ref_name }}" == "main" ]] && echo "Production" || echo "Stage")
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1)
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          curl -X POST https://api-slack.internal.bcsdlab.com/api/deploy/frontend \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"status\": \"$STATUS\",
+            \"environment\": \"$ENVIRONMENT\",
+            \"repository\": \"${{ github.repository }}\",
+            \"branch\": \"${{ github.ref_name }}\",
+            \"actor\": ${{ steps.resolve_actor.outputs.actorName }},
+            \"commitMessage\": \"$COMMIT_MSG\",
+            \"runUrl\": \"$RUN_URL\"
+          }"
