@@ -8,11 +8,33 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
-  build-and-deploy:
+  lint:
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run lint
+        run: yarn lint
+
+  build-and-deploy:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: ${{ github.ref_name == 'main' && 'production' || 'stage' }}
 
     steps:
@@ -55,11 +77,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-        env:
-          NODE_OPTIONS: --max-old-space-size=6144
 
       - name: Build
-        run: yarn next build
+        run: yarn build
         env:
           NODE_OPTIONS: --max-old-space-size=6144
           SENTRY_ORG: bcsd
