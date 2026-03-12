@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { LostItemImageDTO } from 'api/articles/entity';
+import { articleQueries } from 'api/articles/queries';
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
 import { FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
-import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hooks/useSingleLostItemArticle';
 import usePutLostItemArticle from 'components/Articles/LostItemEditPage/hooks/usePutLostItemArticle';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 
 interface LostItemEditPageProps {
@@ -29,8 +31,9 @@ const EDIT_TITLES = {
 
 export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
   const router = useRouter();
+  const token = useTokenState();
   const { logLostItemModifyComplete } = useArticlesLogger();
-  const { article } = useSingleLostItemArticle(articleId);
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
   const { status, mutateAsync: putLostItem } = usePutLostItemArticle(articleId);
 
   const type = article.type as 'FOUND' | 'LOST';
