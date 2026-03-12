@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useQuery } from '@tanstack/react-query';
+import { busQueries } from 'api/bus/queries';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
-import { useExpressTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import dayjs from 'dayjs';
 import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -22,7 +23,7 @@ export default function ExpressBusTimetable() {
   const [selectedCourseId, setSelectedCourseId] = useState(0);
   const [destinationCategory, setDestinationCategory] = useState('병천방면');
 
-  const { data: timetable, isLoading } = useExpressTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const { data: timetable, isLoading } = useQuery(busQueries.expressTimetable(EXPRESS_COURSES[selectedCourseId]));
 
   const prefetchBusTimetable = useBusPrefetch();
   const logger = useLogger();
