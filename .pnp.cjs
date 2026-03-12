@@ -6424,6 +6424,8 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/@sentry-nextjs-virtual-b61873f954/0/cache/@sentry-nextjs-npm-10.43.0-522ec5f88f-a22938081b.zip/node_modules/@sentry/nextjs/",\
         "packageDependencies": [\
           ["@opentelemetry/api", "npm:1.9.0"],\
+          ["@opentelemetry/core", "virtual:4c7fcaed4308fae27f8033d6c20aa1c80d5ff2f17ef109545f98d5d67b17a95ef85ddea942192b220a3c6ca21803e1269d862a5521bdee0be8fe08e330e8af71#npm:2.6.0"],\
+          ["@opentelemetry/sdk-trace-base", "virtual:4c7fcaed4308fae27f8033d6c20aa1c80d5ff2f17ef109545f98d5d67b17a95ef85ddea942192b220a3c6ca21803e1269d862a5521bdee0be8fe08e330e8af71#npm:2.6.0"],\
           ["@opentelemetry/semantic-conventions", "npm:1.40.0"],\
           ["@rollup/plugin-commonjs", "virtual:b61873f9545530461749d78f9bde76fc9a6b6dc92c78702c77f1a1597fec363ac41367267acf9ec6c5179e1f1550f9a2d091fe865cb4d3c0e9f1536897e31401#npm:28.0.1"],\
           ["@sentry-internal/browser-utils", "npm:10.43.0"],\
@@ -6583,8 +6585,8 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@opentelemetry/api", "npm:1.9.0"],\
           ["@opentelemetry/context-async-hooks", null],\
-          ["@opentelemetry/core", null],\
-          ["@opentelemetry/sdk-trace-base", null],\
+          ["@opentelemetry/core", "virtual:4c7fcaed4308fae27f8033d6c20aa1c80d5ff2f17ef109545f98d5d67b17a95ef85ddea942192b220a3c6ca21803e1269d862a5521bdee0be8fe08e330e8af71#npm:2.6.0"],\
+          ["@opentelemetry/sdk-trace-base", "virtual:4c7fcaed4308fae27f8033d6c20aa1c80d5ff2f17ef109545f98d5d67b17a95ef85ddea942192b220a3c6ca21803e1269d862a5521bdee0be8fe08e330e8af71#npm:2.6.0"],\
           ["@opentelemetry/semantic-conventions", "npm:1.40.0"],\
           ["@sentry/core", "npm:10.43.0"],\
           ["@sentry/opentelemetry", "virtual:b61873f9545530461749d78f9bde76fc9a6b6dc92c78702c77f1a1597fec363ac41367267acf9ec6c5179e1f1550f9a2d091fe865cb4d3c0e9f1536897e31401#npm:10.43.0"],\
