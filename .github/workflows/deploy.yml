@@ -1,0 +1,93 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'stage' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+          cache: 'yarn'
+
+      - name: Set deploy config
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "ARCHIVE_NAME=dist-production.tar.gz" >> $GITHUB_ENV
+            echo "SENTRY_PROJECT=koin-prod" >> $GITHUB_ENV
+            echo "DEPLOY_SCRIPT=/usr/local/koin/production/deploy/deploy.sh" >> $GITHUB_ENV
+          else
+            echo "ARCHIVE_NAME=dist.tar.gz" >> $GITHUB_ENV
+            echo "SENTRY_PROJECT=koin-stage" >> $GITHUB_ENV
+            echo "DEPLOY_SCRIPT=/usr/local/koin/stage/deploy/deploy.sh" >> $GITHUB_ENV
+          fi
+
+      - name: Create .env
+        env:
+          NEXT_PUBLIC_API_PATH: ${{ secrets.NEXT_PUBLIC_API_PATH }}
+          NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
+          NEXT_PUBLIC_GTM_ID: ${{ secrets.NEXT_PUBLIC_GTM_ID }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_SENTRY_ENVIRONMENT }}
+        run: |
+          echo "NEXT_PUBLIC_API_PATH=$NEXT_PUBLIC_API_PATH" >> .env
+          echo "NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID=$NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID" >> .env
+          echo "NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID" >> .env
+          echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> .env
+          echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT" >> .env
+
+      - name: Install dependencies
+        run: CI=false yarn
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+
+      - name: Build
+        run: CI=false yarn next build
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+          SENTRY_ORG: bcsd
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
+
+      - name: Create deploy package
+        run: |
+          mkdir -p deploy-pkg
+          cp -r .next deploy-pkg/
+          cp -r public deploy-pkg/ 2>/dev/null || true
+          cp package.json deploy-pkg/
+          cp yarn.lock deploy-pkg/
+          cp .env deploy-pkg/
+          cp next.config.mjs deploy-pkg/
+          cp -r .yarn deploy-pkg/ 2>/dev/null || true
+          cp .pnp.* deploy-pkg/ 2>/dev/null || true
+          cp .yarnrc.yml deploy-pkg/ 2>/dev/null || true
+          tar -czf $ARCHIVE_NAME -C deploy-pkg .
+          rm -rf deploy-pkg
+
+      - name: Setup SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 22222 ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          scp -P 22222 $ARCHIVE_NAME ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/ubuntu/koin/web/
+          ssh -p 22222 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash -lc '$DEPLOY_SCRIPT'"
