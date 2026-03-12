@@ -1,10 +1,13 @@
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import Rating from 'components/Store/StoreDetailPage/components/Review/components/Rating/Rating';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
-import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './AverageRating.module.scss';
 
 export default function AverageRating({ id }: { id: string }) {
-  const { data } = useGetReview(Number(id), 'LATEST');
+  const token = useTokenState();
+  const { data } = useSuspenseInfiniteQuery(storeQueries.reviewFeed({ shopId: Number(id), sorter: 'LATEST', token }));
   const totalReviewCount = data.pages[0].total_count;
 
   const ratingObject = data.pages[0].statistics;

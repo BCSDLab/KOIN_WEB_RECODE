@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRelateSearch } from 'api/store';
 import { RelatedSearchResponse } from 'api/store/entity';
+import { storeQueries } from 'api/store/queries';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import RelateSearchItem from 'components/Store/StorePage/components/RelateSearchItem';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -18,7 +19,7 @@ interface SearchBarModalProps {
 }
 export default function SearchBarModal({ onClose }: SearchBarModalProps) {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
-  const { data: categories } = useStoreCategories();
+  const { data: categories } = useSuspenseQuery(storeQueries.categories());
   const [relateSearchItems, setRelateSearchItems] = useState<RelatedSearchResponse>();
   const { params, searchParams, setParams } = useParamsHandler();
   const logger = useLogger();
