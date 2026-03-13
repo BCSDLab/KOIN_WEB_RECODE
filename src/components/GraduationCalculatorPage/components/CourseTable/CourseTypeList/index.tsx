@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useQuery } from '@tanstack/react-query';
+import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
-import useGeneralEducation from 'components/GraduationCalculatorPage/hooks/useGeneralEducation';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -28,7 +29,10 @@ function CourseTypeList({
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
   const token = useTokenState();
-  const { generalEducation } = useGeneralEducation(token);
+  const { data: generalEducation } = useQuery({
+    ...graduationCalculatorQueries.generalEducation(token),
+    enabled: !!token,
+  });
   // '교양선택'은 교양 세부 영역 리스트에서 제외
   const generalCourseType = generalEducation?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);

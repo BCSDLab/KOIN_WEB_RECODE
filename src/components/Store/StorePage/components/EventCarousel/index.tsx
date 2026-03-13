@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import Suspense from 'components/ssr/SSRSuspense';
-import { useGetAllEvents } from 'components/Store/StorePage/components/hooks/useGetAllEvents';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -66,7 +67,9 @@ function Card({ shop_id, event_id, shop_name, thumbnail_images }: CardProps) {
 
 export default function EventCarousel() {
   const isMobile = useMediaQuery();
-  const { events } = useGetAllEvents();
+  const {
+    data: { events },
+  } = useSuspenseQuery(storeQueries.allEvents());
   const { emblaRef, currentIndex, scrollTo } = useCarouselController(isMobile);
 
   if (events.length < 1) return null;
