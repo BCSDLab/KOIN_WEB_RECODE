@@ -1,9 +1,8 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteAllNotifications } from 'api/callvan';
+import { callvanMutations } from 'api/callvan/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import { CALLVAN_NOTIFICATIONS_QUERY_KEY } from './useCallvanNotifications';
 
 interface UseDeleteAllNotificationsProps {
   onSuccess?: () => void;
@@ -12,11 +11,12 @@ interface UseDeleteAllNotificationsProps {
 const useDeleteAllNotifications = ({ onSuccess }: UseDeleteAllNotificationsProps = {}) => {
   const token = useTokenState();
   const queryClient = useQueryClient();
+  const mutation = callvanMutations.deleteAllNotifications(queryClient, token);
 
   const { mutate } = useMutation({
-    mutationFn: () => deleteAllNotifications(token),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CALLVAN_NOTIFICATIONS_QUERY_KEY });
+    ...mutation,
+    onSuccess: async (...args) => {
+      await mutation.onSuccess?.(...args);
       onSuccess?.();
     },
     onError: (e) => {

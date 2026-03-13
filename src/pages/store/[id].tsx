@@ -3,8 +3,15 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { getReviewList, getStoreDetailInfo, getStoreDetailMenu, getStoreEventList } from 'api/store';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+  useQueryClient,
+  useSuspenseQuery,
+  type DehydratedState,
+} from '@tanstack/react-query';
+import { storeQueries, storeQueryKeys } from 'api/store/queries';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
@@ -44,24 +51,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['storeDetail', storeId],
-      queryFn: () => getStoreDetailInfo(storeId),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['storeDetailMenu', storeId],
-      queryFn: () => getStoreDetailMenu(storeId),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['review', storeId, 'LATEST'],
-      queryFn: () => getReviewList(Number(storeId), 1, 'LATEST'),
-    }),
+    queryClient.prefetchQuery(storeQueries.detail(storeId)),
+    queryClient.prefetchQuery(storeQueries.detailMenu(storeId)),
+    queryClient.prefetchQuery(
+      storeQueries.reviewList({
+        shopId: Number(storeId),
+        page: 1,
+        sorter: 'LATEST',
+      }),
+    ),
   ]);
 
-  await queryClient.prefetchQuery({
-    queryKey: ['storeEventList', storeId],
-    queryFn: ({ queryKey }) => getStoreEventList(queryKey[1] ?? ''),
-  });
+  await queryClient.prefetchQuery(storeQueries.eventList(storeId));
 
   return {
     props: {
@@ -81,21 +82,19 @@ function StoreDetailPage({ id }: Props) {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: parallelData } = useSuspenseQuery({
-    queryKey: ['storeDetail', 'storeDetailMenu', 'review', id],
+    queryKey: storeQueryKeys.detailPage(id),
     queryFn: () =>
       Promise.all([
-        queryClient.fetchQuery({
-          queryKey: ['storeDetail', id],
-          queryFn: () => getStoreDetailInfo(id),
-        }),
-        queryClient.fetchQuery({
-          queryKey: ['storeDetailMenu', id],
-          queryFn: () => getStoreDetailMenu(id),
-        }),
-        queryClient.fetchQuery({
-          queryKey: ['review', id, 'LATEST'],
-          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
-        }),
+        queryClient.fetchQuery(storeQueries.detail(id)),
+        queryClient.fetchQuery(storeQueries.detailMenu(id)),
+        queryClient.fetchQuery(
+          storeQueries.reviewList({
+            shopId: Number(id),
+            page: 1,
+            sorter: 'LATEST',
+            token,
+          }),
+        ),
       ]),
   });
 
@@ -477,12 +476,12 @@ function StoreDetailPage({ id }: Props) {
   );
 }
 
-function StoreDetail({ dehydratedstate, id }: { dehydratedstate: unknown; id: string }) {
+function StoreDetail({ dehydratedState, id }: { dehydratedState: DehydratedState; id: string }) {
   const router = useRouter();
 
   return (
     <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
-      <HydrationBoundary state={dehydratedstate}>
+      <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div />}>
           <StoreDetailPage id={id} />
         </Suspense>

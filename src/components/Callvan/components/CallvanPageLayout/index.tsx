@@ -1,14 +1,16 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
 import { CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
+import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import CarIcon from 'assets/svg/Callvan/car.svg';
 import FilterIcon from 'assets/svg/Callvan/filter.svg';
 import NotificationIcon from 'assets/svg/Callvan/notification.svg';
 import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
-import useCallvanNotifications from 'components/Callvan/hooks/useCallvanNotifications';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {
@@ -32,7 +34,11 @@ export default function CallvanPageLayout({
 }: CallvanPageLayoutProps) {
   const router = useRouter();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { data: notifications } = useCallvanNotifications();
+  const token = useTokenState();
+  const { data: notifications } = useQuery({
+    ...callvanQueries.notifications(token ?? ''),
+    enabled: !!token,
+  });
 
   const hasUnreadNotifications = notifications?.some((n) => !n.is_read) ?? false;
 

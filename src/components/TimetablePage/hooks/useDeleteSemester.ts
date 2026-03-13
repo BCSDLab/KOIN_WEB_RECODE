@@ -1,22 +1,19 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteSemester } from 'api/timetable';
 import { Semester } from 'api/timetable/entity';
+import { timetableMutations } from 'api/timetable/mutations';
 import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
-import { MY_SEMESTER_INFO_KEY } from './useMySemester';
-import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 export default function useDeleteSemester(token: string, semester: Semester) {
   const queryClient = useQueryClient();
   const slicedSemester = `${semester.year} ${semester.term}`;
   const toast = useToast();
+  const mutation = timetableMutations.deleteSemester(queryClient, token, semester);
   return useMutation({
-    mutationFn: () => deleteSemester(token, semester),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
-      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
-      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+    ...mutation,
+    onSuccess: async (...args) => {
+      await mutation.onSuccess?.(...args);
       toast.open({
         message: `선택하신 [${slicedSemester}]가 삭제되었습니다.`,
       });

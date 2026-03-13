@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { startTransition, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import CompletedIcon from 'assets/svg/ellipse-icon-green.svg';
 import NotCompletedIcon from 'assets/svg/ellipse-icon-red.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
-import useGeneralEducation from 'components/GraduationCalculatorPage/hooks/useGeneralEducation';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -22,7 +23,10 @@ function GeneralCourse() {
   const portalManager = useModalPortal();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const token = useTokenState();
-  const { generalEducation } = useGeneralEducation(token);
+  const { data: generalEducation } = useQuery({
+    ...graduationCalculatorQueries.generalEducation(token),
+    enabled: !!token,
+  });
   const requiredEducationArea = generalEducation?.general_education_area || [];
 
   const handleOpenModal = (courseType: string) => {

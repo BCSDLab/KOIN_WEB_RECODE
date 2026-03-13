@@ -1,5 +1,7 @@
 import { DragEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
+import { timetableQueryKeys } from 'api/timetable/queries';
 import usePostGraduationExcel from 'components/GraduationCalculatorPage/hooks/usePostGraduationExcel';
 import { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -16,9 +18,8 @@ export function useExcelUpload() {
 
     mutate(formData as unknown as GraduationExcelUploadForPost, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
-        queryClient.invalidateQueries({ queryKey: ['my_semester'] });
-        queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+        queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
+        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester() });
         showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
       },
       onError: () => {

@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from 'api/club/queries';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';
 import MikeIcon from 'assets/svg/Club/mike-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
-import useClubCategories from 'components/Club/hooks/useClubCategories';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -12,7 +13,8 @@ import styles from './ClubMobileViewB.module.scss';
 
 function ClubMobileViewB() {
   const logger = useLogger();
-  const clubCategories = useClubCategories();
+  const { data } = useSuspenseQuery(clubQueries.categories());
+  const clubCategories = data.club_categories;
   const router = useRouter();
   const { searchParams } = useParamsHandler();
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;

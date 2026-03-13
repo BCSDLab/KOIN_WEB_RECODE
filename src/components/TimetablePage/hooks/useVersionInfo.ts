@@ -1,11 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getVersion } from 'api/timetable';
+import { timetableQueries } from 'api/timetable/queries';
 
 const useVersionInfo = () => {
-  const { data } = useSuspenseQuery({
-    queryKey: ['timetable'],
-    queryFn: () => getVersion('timetable'),
-  });
+  const { data } = useSuspenseQuery(timetableQueries.version('timetable'));
 
   return {
     data,
