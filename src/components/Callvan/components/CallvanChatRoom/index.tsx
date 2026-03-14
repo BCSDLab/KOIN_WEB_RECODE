@@ -60,7 +60,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
     if (!file) return;
 
     try {
-      const { file_url } = await uploadFile({ domain: 'SHOPS', file });
+      const { file_url } = await uploadFile({ domain: 'CALLVAN_CHAT', file });
       if (file_url) {
         sendMessage({ is_image: true, content: file_url });
       }
