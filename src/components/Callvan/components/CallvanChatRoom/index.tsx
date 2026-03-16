@@ -1,15 +1,16 @@
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { CallvanChatMessage } from 'api/callvan/entity';
+import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import ImageUploadIcon from 'assets/svg/Callvan/image-upload.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import SendIcon from 'assets/svg/Callvan/send.svg';
 import { ParticipantAvatarIcon } from 'components/Callvan/components/ParticipantsList/ParticipantAvatarIcon';
-import useCallvanChat from 'components/Callvan/hooks/useCallvanChat';
-import useCallvanPostDetail from 'components/Callvan/hooks/useCallvanPostDetail';
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import styles from './CallvanChatRoom.module.scss';
 
@@ -42,8 +43,9 @@ function formatKoreanDateString(dateStr: string): string {
 
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
-  const { data } = useCallvanChat(postId);
-  const { data: postDetail } = useCallvanPostDetail(postId);
+  const token = useTokenState();
+  const { data } = useSuspenseQuery(callvanQueries.chat(token ?? '', postId));
+  const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(token ?? '', postId));
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);

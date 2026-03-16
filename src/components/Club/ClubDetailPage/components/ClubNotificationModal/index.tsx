@@ -6,7 +6,7 @@ import styles from './ClubNotificationModal.module.scss';
 
 interface ClubNotificationModalProps {
   closeModal: () => void;
-  onSubmit: () => void;
+  onSubmit: () => void | Promise<unknown>;
   variant: 'recruit' | 'event';
   type?: 'subscribed' | 'unsubscribed';
 }
@@ -36,9 +36,13 @@ export default function ClubNotificationModal({
     );
   }
 
-  const handleSubmit = () => {
-    onSubmit();
-    closeModal();
+  const handleSubmit = async () => {
+    try {
+      await onSubmit();
+      closeModal();
+    } catch {
+      // The mutation hook already reports the error.
+    }
   };
 
   return (

@@ -1,21 +1,18 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postLostItemArticle } from 'api/articles';
-import { LostItemArticlesRequestDTO } from 'api/articles/entity';
+import { articleMutations } from 'api/articles/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const usePostLostItemArticles = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
+  const mutation = articleMutations.createLostItem(queryClient, token);
   const { status, mutateAsync } = useMutation({
-    mutationFn: async (data: LostItemArticlesRequestDTO) => {
-      const response = await postLostItemArticle(token, data);
-      return response.id;
-    },
-    onSuccess: () => {
+    ...mutation,
+    onSuccess: async (...args) => {
+      await mutation.onSuccess?.(...args);
       showToast('success', '게시글 작성이 완료되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['lostItem'] });
     },
     onError: (e) => {
       if (isKoinError(e)) {

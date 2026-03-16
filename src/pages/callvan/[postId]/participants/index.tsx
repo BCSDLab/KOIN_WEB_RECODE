@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getCallvanPostDetail } from 'api/callvan';
+import { callvanQueries } from 'api/callvan/queries';
 import ParticipantsList from 'components/Callvan/components/ParticipantsList';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -20,10 +20,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   try {
     if (token) {
-      await queryClient.prefetchQuery({
-        queryKey: ['callvanPostDetail', postId],
-        queryFn: () => getCallvanPostDetail(token, postId),
-      });
+      await queryClient.prefetchQuery(callvanQueries.postDetail(token, postId));
     }
   } catch (error) {
     console.error('[SSR] callvan post detail prefetch failed:', error);

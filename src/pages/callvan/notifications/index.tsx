@@ -1,23 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getCallvanNotifications } from 'api/callvan';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import ThreeDotsIcon from 'assets/svg/Callvan/three-dots.svg';
 import DeleteConfirmModal from 'components/Callvan/components/DeleteConfirmModal';
 import NotificationCard from 'components/Callvan/components/NotificationCard';
 import NotificationDropdown from 'components/Callvan/components/NotificationDropdown';
 import NotificationEmptyState from 'components/Callvan/components/NotificationEmptyState';
-import useCallvanNotifications, {
-  CALLVAN_NOTIFICATIONS_QUERY_KEY,
-} from 'components/Callvan/hooks/useCallvanNotifications';
 import useDeleteAllNotifications from 'components/Callvan/hooks/useDeleteAllNotifications';
 import useMarkAllNotificationsRead from 'components/Callvan/hooks/useMarkAllNotificationsRead';
 import useMarkNotificationRead from 'components/Callvan/hooks/useMarkNotificationRead';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import styles from './CallvanNotifications.module.scss';
 
@@ -27,12 +25,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   try {
     if (token) {
-      await queryClient.prefetchQuery({
-        queryKey: [...CALLVAN_NOTIFICATIONS_QUERY_KEY],
-        queryFn: () => getCallvanNotifications(token),
-      });
+      await queryClient.prefetchQuery(callvanQueries.notifications(token));
     } else {
-      queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], []);
+      queryClient.setQueryData(callvanQueryKeys.notifications, []);
     }
   } catch (error) {
     console.error('[SSR] callvan notifications prefetch failed:', error);
@@ -49,6 +44,7 @@ export default function CallvanNotificationsPage() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const mounted = useMount();
+  const token = useTokenState();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -59,7 +55,10 @@ export default function CallvanNotificationsPage() {
     }
   }, [mounted, isMobile, router]);
 
-  const { data: notifications } = useCallvanNotifications();
+  const { data: notifications } = useQuery({
+    ...callvanQueries.notifications(token ?? ''),
+    enabled: !!token,
+  });
   const { mutate: markAllRead } = useMarkAllNotificationsRead();
   const { mutate: markRead } = useMarkNotificationRead();
   const { mutate: deleteAll } = useDeleteAllNotifications({

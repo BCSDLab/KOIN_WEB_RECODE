@@ -4,8 +4,10 @@
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn, sha256 } from '@bcsdlab/utils';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
+import { authQueryKeys } from 'api/auth/queries';
+import { deptQueries } from 'api/dept/queries';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
@@ -22,7 +24,6 @@ import {
 } from 'components/Auth/ModifyInfoPage/hooks/useValidationContext';
 import { passwordValidationReducer } from 'components/Auth/ModifyInfoPage/reducers/passwordReducer';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
@@ -513,7 +514,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const { data: deptList } = useDeptList();
+  const { data: deptList } = useSuspenseQuery(deptQueries.list());
 
   // ✅ 안전 기본값
   const [studentNumber, setStudentNumber] = useState<string>('');
@@ -1129,13 +1130,12 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
 const useModifyInfoForm = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const token = useTokenState();
   const isMobile = useMediaQuery();
   const onSuccess = () => {
     localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
     router.push(ROUTES.Main());
     showToast('success', '성공적으로 정보를 수정하였습니다.');
-    queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
+    queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
   };
   const { userType } = useTokenStore();
   const isStudent = userType === 'STUDENT';

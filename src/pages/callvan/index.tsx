@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getCallvanList, getCallvanNotifications } from 'api/callvan';
+import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { CallvanListRequest } from 'api/callvan/entity';
+import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import CallvanList from 'components/Callvan/components/CallvanList';
 import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
-import useCallvanInfiniteList from 'components/Callvan/hooks/useCallvanInfiniteList';
-import { CALLVAN_NOTIFICATIONS_QUERY_KEY } from 'components/Callvan/hooks/useCallvanNotifications';
 import { CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
@@ -46,22 +45,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   try {
     await Promise.all([
-      queryClient.prefetchInfiniteQuery({
-        queryKey: ['callvanInfiniteList', apiParams],
-        queryFn: ({ pageParam = 1 }) =>
-          getCallvanList(token ?? '', {
-            ...apiParams,
-            page: pageParam,
-            limit: 10,
-          }),
-        initialPageParam: 1,
-      }),
+      queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(token ?? '', apiParams)),
       token
-        ? queryClient.prefetchQuery({
-            queryKey: [...CALLVAN_NOTIFICATIONS_QUERY_KEY],
-            queryFn: () => getCallvanNotifications(token),
-          })
-        : queryClient.setQueryData([...CALLVAN_NOTIFICATIONS_QUERY_KEY], []),
+        ? queryClient.prefetchQuery(callvanQueries.notifications(token))
+        : queryClient.setQueryData(callvanQueryKeys.notifications, []),
     ]);
   } catch (error) {
     console.error('[SSR] callvan prefetch failed:', error);
@@ -111,9 +98,13 @@ interface CallvanContentProps {
 
 function CallvanContent({ params }: CallvanContentProps) {
   const [searchTitle, setSearchTitle] = useState(params.title);
+  const token = useTokenState();
   const apiParams = toCallvanApiParams(params);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useCallvanInfiniteList(apiParams);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    ...callvanQueries.infiniteList(token ?? '', apiParams),
+    enabled: !!token,
+  });
 
   const posts = useMemo(() => data?.pages.flatMap((page) => page.posts) ?? [], [data]);
 

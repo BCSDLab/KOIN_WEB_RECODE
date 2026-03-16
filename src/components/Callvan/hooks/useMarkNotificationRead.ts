@@ -1,19 +1,16 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { markNotificationRead } from 'api/callvan';
+import { callvanMutations } from 'api/callvan/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import { CALLVAN_NOTIFICATIONS_QUERY_KEY } from './useCallvanNotifications';
 
 const useMarkNotificationRead = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
+  const mutation = callvanMutations.markNotificationRead(queryClient, token);
 
   const { mutate } = useMutation({
-    mutationFn: (notificationId: number) => markNotificationRead(token, notificationId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CALLVAN_NOTIFICATIONS_QUERY_KEY });
-    },
+    ...mutation,
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);

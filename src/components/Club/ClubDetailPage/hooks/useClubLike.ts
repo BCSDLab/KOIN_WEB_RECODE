@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteClubLike, putClubLike } from 'api/club';
+import { clubMutations } from 'api/club/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -16,12 +16,7 @@ export default function useClubLikeMutation(clubId: number | string | undefined)
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { status: clubLikeStatus, mutateAsync: clubLikeMutateAsync } = useMutation({
-    mutationFn: async () => {
-      await putClubLike(token, Number(clubId));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail'] });
-    },
+    ...clubMutations.likeForDetail(queryClient, token, Number(clubId)),
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);
@@ -29,12 +24,7 @@ export default function useClubLikeMutation(clubId: number | string | undefined)
     },
   });
   const { status: clubUnlikeStatus, mutateAsync: clubUnlikeMutateAsync } = useMutation({
-    mutationFn: async () => {
-      await deleteClubLike(token, Number(clubId));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail'] });
-    },
+    ...clubMutations.unlikeForDetail(queryClient, token, Number(clubId)),
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);

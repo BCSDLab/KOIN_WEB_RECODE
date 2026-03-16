@@ -1,15 +1,20 @@
 import Link from 'next/link';
-import useLostItemArticles from 'components/Articles/hooks/useLostItemArticles';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { articleQueries } from 'api/articles/queries';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import styles from './LatestLostItemList.module.scss';
 
 function LatestLostItemList() {
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useLostItemArticles({
-    limit: 10,
-    sort: 'LATEST',
-  });
+  const token = useTokenState();
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
+    articleQueries.lostItemInfiniteList(token, {
+      limit: 10,
+      sort: 'LATEST',
+    }),
+  );
 
   const observerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
   const articles = data.pages.flatMap((page) => page.articles);
