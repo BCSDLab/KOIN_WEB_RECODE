@@ -1,5 +1,6 @@
 import React from 'react';
 import { sendClientError } from '@bcsdlab/koin';
+import * as Sentry from '@sentry/nextjs';
 import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 
@@ -43,6 +44,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
       : error.message;
     showToast('error', errorMessage);
     sendClientError(error);
+    Sentry.captureException(error);
   }
 
   render() {

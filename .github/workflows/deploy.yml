@@ -1,0 +1,158 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run lint
+        run: yarn lint
+
+  build-and-deploy:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ github.ref_name == 'main' && 'production' || 'stage' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+          cache: 'yarn'
+
+      - name: Set deploy config
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "ARCHIVE_NAME=dist-production.tar.gz" >> $GITHUB_ENV
+            echo "SENTRY_PROJECT=koin-prod" >> $GITHUB_ENV
+            echo "DEPLOY_SCRIPT=/usr/local/koin/production/deploy/deploy.sh" >> $GITHUB_ENV
+          else
+            echo "ARCHIVE_NAME=dist.tar.gz" >> $GITHUB_ENV
+            echo "SENTRY_PROJECT=koin-stage" >> $GITHUB_ENV
+            echo "DEPLOY_SCRIPT=/usr/local/koin/stage/deploy/deploy.sh" >> $GITHUB_ENV
+          fi
+
+      - name: Create .env
+        env:
+          NEXT_PUBLIC_API_PATH: ${{ secrets.NEXT_PUBLIC_API_PATH }}
+          NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID }}
+          NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
+          NEXT_PUBLIC_GTM_ID: ${{ secrets.NEXT_PUBLIC_GTM_ID }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_SENTRY_ENVIRONMENT }}
+        run: |
+          echo "NEXT_PUBLIC_API_PATH=$NEXT_PUBLIC_API_PATH" >> .env
+          echo "NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID=$NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID" >> .env
+          echo "NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID" >> .env
+          echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> .env
+          echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT" >> .env
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+          SENTRY_ORG: bcsd
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
+
+      - name: Create deploy package
+        run: |
+          mkdir -p deploy-pkg
+          cp -r .next deploy-pkg/
+          cp -r public deploy-pkg/ 2>/dev/null || true
+          cp package.json deploy-pkg/
+          cp yarn.lock deploy-pkg/
+          cp .env deploy-pkg/
+          cp next.config.mjs deploy-pkg/
+          cp -r .yarn deploy-pkg/ 2>/dev/null || true
+          cp .pnp.* deploy-pkg/ 2>/dev/null || true
+          cp .yarnrc.yml deploy-pkg/ 2>/dev/null || true
+          tar -czf $ARCHIVE_NAME -C deploy-pkg .
+          rm -rf deploy-pkg
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add SSH known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22222 ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          scp -o ConnectTimeout=30 -P 22222 $ARCHIVE_NAME ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/ubuntu/koin/web/
+          ssh -o ConnectTimeout=30 -p 22222 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash -lc '$DEPLOY_SCRIPT'"
+
+  notify:
+    needs: [build-and-deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve actor name
+        id: resolve_actor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const developers = JSON.parse(fs.readFileSync(`${{ github.workspace }}/.github/workflows/reviewer.json`));
+            const matched = developers.reviewers.find(p => p.githubName === '${{ github.actor }}');
+            core.setOutput('actorName', JSON.stringify(matched?.name ?? '${{ github.actor }}'));
+
+      - name: Send Slack Notification
+        run: |
+          STATUS="${{ needs.build-and-deploy.result }}"
+          ENVIRONMENT=$([[ "${{ github.ref_name }}" == "main" ]] && echo "Production" || echo "Stage")
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1)
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          ACTOR=${{ steps.resolve_actor.outputs.actorName }}
+
+          BODY=$(jq -n \
+            --arg status "$STATUS" \
+            --arg environment "$ENVIRONMENT" \
+            --arg repository "${{ github.repository }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg actor "$ACTOR" \
+            --arg commitMessage "$COMMIT_MSG" \
+            --arg runUrl "$RUN_URL" \
+            '{status: $status, environment: $environment, repository: $repository, branch: $branch, actor: $actor, commitMessage: $commitMessage, runUrl: $runUrl}')
+
+          curl -X POST https://api-slack.internal.bcsdlab.com/api/deploy/frontend \
+          -H 'Content-Type: application/json' \
+          -d "$BODY"
