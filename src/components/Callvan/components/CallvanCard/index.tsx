@@ -17,10 +17,14 @@ import useJoinCallvan from 'components/Callvan/hooks/useJoinCallvan';
 import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
+import { ORDER_BASE_URL } from 'static/url';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { redirectToLogin } from 'utils/ts/auth';
 import styles from './CallvanCard.module.scss';
+
+const CALLVAN_CATEGORY = '11';
 
 interface CallvanCardProps {
   post: CallvanPost;
@@ -46,6 +50,7 @@ function formatTime(timeStr: string): string {
 export default function CallvanCard({ post }: CallvanCardProps) {
   const router = useRouter();
   const token = useTokenState();
+  const logger = useLogger();
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
   const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
   const [isCompleteModalOpen, openCompleteModal, closeCompleteModal] = useBooleanState(false);
@@ -81,24 +86,33 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const handleJoinConfirm = () => {
     joinPost(post.id);
     closeJoinModal();
+    logger.actionEventClick({ event_label: 'callvan_join', team: 'CAMPUS', value: '예, 아니요' });
   };
 
   const handleCancelConfirm = () => {
     cancelPost(post.id);
     closeCancelModal();
+    logger.actionEventClick({ event_label: 'callvan_join_cancel', team: 'CAMPUS', value: '예, 아니요' });
   };
 
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    logger.actionEventClick({ event_label: 'callvan_chat', team: 'CAMPUS', value: '' });
     router.push(ROUTES.CallvanChat({ id: String(post.id) }));
+  };
+
+  const handleCallClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    logger.actionEventClick({ event_label: 'callvan_call', team: 'CAMPUS', value: '' });
+    router.push(`${ORDER_BASE_URL}/shops/?category=${CALLVAN_CATEGORY}`);
   };
 
   const renderTopAction = () => {
     if (post.is_author && post.status !== 'COMPLETED') {
       return (
-        <span className={styles.card__phone}>
+        <button className={styles.card__phone} onClick={handleCallClick}>
           <PhoneCallingIcon />
-        </span>
+        </button>
       );
     }
     if (post.is_joined && !post.is_author) {
@@ -207,7 +221,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
             openCancelModal();
           }}
           disabled={isCancelPending}
-          aria-label="참여취소"
+          aria-label=""
         >
           참여취소
         </button>

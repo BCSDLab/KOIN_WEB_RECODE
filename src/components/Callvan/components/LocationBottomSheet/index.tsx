@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { CALLVAN_POST_LOCATION_LABEL, CallvanPostLocationType } from 'api/callvan/entity';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './LocationBottomSheet.module.scss';
 
 const CHIP_ROWS: CallvanPostLocationType[][] = [
@@ -35,6 +36,7 @@ function LocationBottomSheetContent({
   const [selectedType, setSelectedType] = useState<CallvanPostLocationType | null>(initialType);
   const [customName, setCustomName] = useState(initialCustomName);
   const inputRef = useRef<HTMLInputElement>(null);
+  const logger = useLogger();
 
   useEffect(() => {
     if (selectedType === 'CUSTOM') {
@@ -47,6 +49,11 @@ function LocationBottomSheetContent({
   const handleConfirm = () => {
     if (!selectedType || !isConfirmEnabled) return;
     onConfirm(selectedType, customName);
+    logger.actionEventClick({
+      event_label: `${title === '출발지가 어디인가요?' ? 'callvan_write_departure' : 'callvan_write_arrival'}`,
+      team: 'CAMPUS',
+      value: selectedType,
+    });
   };
 
   return (
