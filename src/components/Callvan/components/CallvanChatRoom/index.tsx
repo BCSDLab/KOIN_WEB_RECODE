@@ -10,6 +10,7 @@ import useCallvanChat from 'components/Callvan/hooks/useCallvanChat';
 import useCallvanPostDetail from 'components/Callvan/hooks/useCallvanPostDetail';
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import styles from './CallvanChatRoom.module.scss';
 
@@ -42,6 +43,7 @@ function formatKoreanDateString(dateStr: string): string {
 
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
+  const logger = useLogger();
   const { data } = useCallvanChat(postId);
   const { data: postDetail } = useCallvanPostDetail(postId);
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
@@ -88,6 +90,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
         },
       },
     );
+    logger.actionEventClick({ event_label: 'callvan_chat_send', team: 'CAMPUS', value: '' });
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -6,13 +6,13 @@ import styles from './IndexCallvan.module.scss';
 
 const CALLVAN_LINKS = [
   {
-    key: 'find',
+    key: 'view',
     title: '콜밴팟 찾기',
     subtitle: '바로가기',
     link: ROUTES.Callvan(),
   },
   {
-    key: 'create',
+    key: 'write',
     title: '콜밴팟 모집',
     subtitle: '글 작성하기',
     link: ROUTES.CallvanAdd(),
@@ -33,7 +33,7 @@ function IndexCallvan() {
             href={link}
             key={key}
             className={styles.card}
-            onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: `main_callvan_${key}`, value: title })}
+            onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: `main_callvan_${key}`, value: '' })}
           >
             <div className={styles.card__guide}>
               <span className={styles.card__title}>{title}</span>

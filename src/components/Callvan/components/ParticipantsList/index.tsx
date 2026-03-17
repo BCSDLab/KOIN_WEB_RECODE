@@ -11,6 +11,7 @@ import ThreeDotsIcon from 'assets/svg/Callvan/three-dots-small.svg';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { ParticipantAvatarFilledIcon, ParticipantAvatarIcon } from './ParticipantAvatarIcon';
@@ -107,6 +108,7 @@ interface ParticipantsListProps {
 
 export default function ParticipantsList({ postId, token }: ParticipantsListProps) {
   const router = useRouter();
+  const logger = useLogger();
 
   const { data: post } = useSuspenseQuery({
     queryKey: ['callvanPostDetail', postId],
@@ -114,6 +116,11 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
   });
 
   const colorIndexMap = new Map(post.participants.filter((p) => !p.is_me).map((p, i) => [p.user_id, i]));
+
+  const handleChatClick = () => {
+    router.push(ROUTES.CallvanChat({ id: String(postId) }));
+    logger.actionEventClick({ event_label: 'callvan_chat_entry', team: 'CAMPUS', value: '' });
+  };
 
   return (
     <div className={styles.page}>
@@ -186,7 +193,7 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
 
       <div className={styles.page__footer}>
         <div className={styles.page__divider} />
-        <button type="button" className={styles['page__chat-button']}>
+        <button type="button" className={styles['page__chat-button']} onClick={handleChatClick}>
           단체 채팅방 입장
         </button>
       </div>

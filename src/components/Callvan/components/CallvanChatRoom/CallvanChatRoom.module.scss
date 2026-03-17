@@ -299,17 +299,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 32px;
+    height: 32px;
     background: none;
     border: none;
+    border-radius: 12px;
     cursor: pointer;
     padding: 0;
-    color: #727272;
+    background-color: #ffffff;
     flex-shrink: 0;
-
-    svg {
-      width: 32px;
-      height: 32px;
-    }
   }
 
   &__input {

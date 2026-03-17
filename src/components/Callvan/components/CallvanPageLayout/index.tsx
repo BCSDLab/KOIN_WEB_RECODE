@@ -9,6 +9,7 @@ import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
 import useCallvanNotifications from 'components/Callvan/hooks/useCallvanNotifications';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {
@@ -31,6 +32,7 @@ export default function CallvanPageLayout({
   onTitleChange,
 }: CallvanPageLayoutProps) {
   const router = useRouter();
+  const logger = useLogger();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { data: notifications } = useCallvanNotifications();
 
@@ -38,9 +40,10 @@ export default function CallvanPageLayout({
 
   const hasActiveFilter = statuses.length > 0 || departures.length > 0 || arrivals.length > 0 || sort !== 'LATEST_DESC';
 
-  const handleBack = useCallback(() => {
+  const handleBack = () => {
+    logger.actionEventClick({ event_label: `${router.pathname === ROUTES.Callvan() && 'callvan_back'} ${router.pathname === ROUTES.CallvanAdd() && 'callvan_write_back'}`, team: 'CAMPUS', value: '' });
     router.back();
-  }, [router]);
+  };
 
   const handleApply = useCallback(
     (filter: {
@@ -104,6 +107,7 @@ export default function CallvanPageLayout({
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearch();
             }}
+            onClick={() => logger.actionEventClick({ event_label: 'callvan_search', team: 'CAMPUS', value: '' })}
           />
           <button type="button" className={styles['layout__search-button']} onClick={handleSearch} aria-label="검색">
             <SearchIcon />
@@ -112,7 +116,10 @@ export default function CallvanPageLayout({
         <button
           type="button"
           className={`${styles['layout__filter-button']} ${hasActiveFilter ? styles['layout__filter-button--active'] : ''}`}
-          onClick={() => setIsFilterOpen(true)}
+          onClick={() => {
+            setIsFilterOpen(true);
+            logger.actionEventClick({ event_label: 'callvan_filter', team: 'CAMPUS', value: '' });
+          }}
         >
           <span className={styles['layout__filter-label']}>필터</span>
           <span className={styles['layout__filter-icon']}>
@@ -123,7 +130,15 @@ export default function CallvanPageLayout({
 
       <div className={styles.layout__content}>{children}</div>
 
-      <button type="button" className={styles.layout__fab} aria-label="모집하기" onClick={() => router.push(ROUTES.CallvanAdd())}>
+      <button
+        type="button"
+        className={styles.layout__fab}
+        aria-label="모집하기"
+        onClick={() => {
+          router.push(ROUTES.CallvanAdd());
+          logger.actionEventClick({ event_label: 'callvan_create', team: 'CAMPUS', value: '' });
+        }}
+      >
         <CarIcon />
         <span className={styles['layout__fab-label']}>모집하기</span>
       </button>
