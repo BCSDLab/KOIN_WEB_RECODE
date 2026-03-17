@@ -75,6 +75,7 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
         );
         attachments = uploadResults.map((result: { file_url: string }) => ({ attachment_type: 'IMAGE' as const, url: result.file_url }));
       } catch {
+        showToast('error', '이미지 업로드에 실패했습니다.');
         return;
       }
     }
