@@ -40,8 +40,14 @@ export default function CallvanPageLayout({
 
   const hasActiveFilter = statuses.length > 0 || departures.length > 0 || arrivals.length > 0 || sort !== 'LATEST_DESC';
 
+  const getBackEventLabel = () => {
+    if (router.pathname === ROUTES.Callvan()) return 'callvan_back';
+    if (router.pathname === ROUTES.CallvanAdd()) return 'callvan_write_back';
+    return '';
+  };
+
   const handleBack = () => {
-    logger.actionEventClick({ event_label: `${router.pathname === ROUTES.Callvan() && 'callvan_back'} ${router.pathname === ROUTES.CallvanAdd() && 'callvan_write_back'}`, team: 'CAMPUS', value: '' });
+    logger.actionEventClick({ event_label: getBackEventLabel(), team: 'CAMPUS', value: '' });
     router.back();
   };
 
