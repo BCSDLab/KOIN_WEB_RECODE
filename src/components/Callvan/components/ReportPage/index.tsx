@@ -5,6 +5,7 @@ import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useReportCallvan from 'components/Callvan/hooks/useReportCallvan';
 import ROUTES from 'static/routes';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import showToast from 'utils/ts/showToast';
 import DetailStep from './DetailStep';
 import ReasonStep from './ReasonStep';
@@ -18,6 +19,7 @@ interface ReportPageProps {
 export default function ReportPage({ postId, reportedUserId }: ReportPageProps) {
   const router = useRouter();
   const { mutate, isPending } = useReportCallvan(postId);
+  const { uploadFile, isPending: isUploading } = useUploadFile();
 
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedReasons, setSelectedReasons] = useState<Set<CallvanReportReasonCode>>(new Set());
@@ -59,18 +61,31 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const reasons: CallvanReportReason[] = Array.from(selectedReasons).map((code) => ({
       reason_code: code,
       ...(code === 'OTHER' ? { custom_text: customText } : {}),
     }));
+
+    let attachments: { attachment_type: 'IMAGE'; url: string }[] = [];
+    if (images.length > 0) {
+      try {
+        const uploadResults = await Promise.all(
+          images.map((file) => uploadFile({ domain: 'CALLVAN_REPORT', file })),
+        );
+        attachments = uploadResults.map((result: { file_url: string }) => ({ attachment_type: 'IMAGE' as const, url: result.file_url }));
+      } catch {
+        showToast('error', '이미지 업로드에 실패했습니다.');
+        return;
+      }
+    }
 
     mutate(
       {
         reported_user_id: reportedUserId,
         ...(description.trim() ? { description: description.trim() } : {}),
         reasons,
-        // TODO: images를 FormData로 업로드하는 API가 완성되면 여기에 연결
+        ...(attachments.length > 0 ? { attachments } : {}),
       },
       {
         onSuccess: () => {
@@ -120,7 +135,7 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
             다음
           </button>
         ) : (
-          <button type="button" className={styles['page__submit-button']} onClick={handleSubmit} disabled={isPending}>
+          <button type="button" className={styles['page__submit-button']} onClick={handleSubmit} disabled={isPending || isUploading}>
             신고하기
           </button>
         )}

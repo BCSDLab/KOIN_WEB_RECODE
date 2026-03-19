@@ -11,6 +11,7 @@ import { ParticipantAvatarIcon } from 'components/Callvan/components/Participant
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import styles from './CallvanChatRoom.module.scss';
 
@@ -43,9 +44,11 @@ function formatKoreanDateString(dateStr: string): string {
 
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
+  const logger = useLogger();
   const token = useTokenState();
   const { data } = useSuspenseQuery(callvanQueries.chat(token ?? '', postId));
   const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(token ?? '', postId));
+
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -62,7 +65,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
     if (!file) return;
 
     try {
-      const { file_url } = await uploadFile({ domain: 'SHOPS', file });
+      const { file_url } = await uploadFile({ domain: 'CALLVAN_CHAT', file });
       if (file_url) {
         sendMessage({ is_image: true, content: file_url });
       }
@@ -90,6 +93,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
         },
       },
     );
+    logger.actionEventClick({ event_label: 'callvan_chat_send', team: 'CAMPUS', value: '' });
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

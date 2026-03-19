@@ -10,6 +10,7 @@ import TimeDropdown from 'components/Callvan/components/TimeDropdown';
 import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useCreateCallvan from 'components/Callvan/hooks/useCreateCallvan';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './AddPostForm.module.scss';
 
 interface FormState {
@@ -44,6 +45,7 @@ function getLocationLabel(type: CallvanPostLocationType | null, customName: stri
 
 export default function AddPostForm() {
   const router = useRouter();
+  const logger = useLogger();
   const { open: openToast } = useCallvanToast();
   const { mutate, isPending } = useCreateCallvan();
 
@@ -75,7 +77,7 @@ export default function AddPostForm() {
     }));
   }, []);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = () => {
     if (!form.departureType || !form.arrivalType || isPending) return;
 
     const departureTime = formatTime(form.departureHour, form.departureMinute, form.isPM);
@@ -97,7 +99,8 @@ export default function AddPostForm() {
         },
       },
     );
-  }, [form, isPending, mutate, openToast, router]);
+    logger.actionEventClick({ event_label: 'callvan_write_done', team: 'CAMPUS', value: '' });
+  };
 
   return (
     <div className={styles.page}>

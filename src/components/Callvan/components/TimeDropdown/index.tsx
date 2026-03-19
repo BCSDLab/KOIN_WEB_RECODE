@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './TimeDropdown.module.scss';
@@ -201,6 +202,7 @@ export default function TimeDropdown({ value, onChange }: TimeDropdownProps) {
   const [tempIsPM, setTempIsPM] = useState(value.isPM);
   const [tempHour, setTempHour] = useState(value.hour);
   const [tempMinute, setTempMinute] = useState(value.minute);
+  const logger = useLogger();
 
   const handleOpen = () => {
     setTempIsPM(value.isPM);
@@ -211,6 +213,7 @@ export default function TimeDropdown({ value, onChange }: TimeDropdownProps) {
 
   const handleConfirm = () => {
     onChange({ hour: tempHour, minute: tempMinute, isPM: tempIsPM });
+    logger.actionEventClick({ event_label: 'callvan_write_time', team: 'CAMPUS', value: `${tempHour}:${tempMinute}` });
     close();
   };
 

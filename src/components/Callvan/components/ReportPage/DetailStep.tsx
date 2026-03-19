@@ -86,7 +86,6 @@ export default function DetailStep({ description, images, onDescriptionChange, o
             </button>
           )}
         </div>
-        {/* TODO: 이미지 API 완성 후 FormData로 업로드 연결 */}
         <input
           ref={fileInputRef}
           type="file"

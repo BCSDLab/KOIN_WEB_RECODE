@@ -9,6 +9,7 @@ import {
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CallvanFilterPanel.module.scss';
 
 const STATUS_OPTIONS: { value: CallvanStatus; label: string }[] = [
@@ -53,6 +54,7 @@ export default function CallvanFilterPanel({
   const [localArrivals, setLocalArrivals] = useState<CallvanLocation[]>(arrivals);
   const [localSort, setLocalSort] = useState<CallvanSort>(sort);
   const panelRef = useRef<HTMLDivElement>(null);
+  const logger = useLogger();
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -83,6 +85,7 @@ export default function CallvanFilterPanel({
       sort: localSort,
     });
     onClose();
+    logger.actionEventClick({ event_label: 'callvan_filter_apply', team: 'CAMPUS', value: '' });
   };
 
   const handleReset = () => {

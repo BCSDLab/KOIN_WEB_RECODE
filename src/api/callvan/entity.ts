@@ -159,10 +159,18 @@ export interface CallvanReportReason {
   custom_text?: string;
 }
 
+export type CallvanReportAttachmentType = 'IMAGE';
+
+export interface CallvanReportAttachment {
+  attachment_type: CallvanReportAttachmentType;
+  url: string;
+}
+
 export interface CallvanReportRequest {
   reported_user_id: number;
   description?: string;
   reasons: CallvanReportReason[];
+  attachments?: CallvanReportAttachment[];
 }
 
 export interface CreateCallvanRequest {
