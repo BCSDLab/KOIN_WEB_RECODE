@@ -10,8 +10,8 @@ import NotificationIcon from 'assets/svg/Callvan/notification.svg';
 import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {

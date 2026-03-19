@@ -10,8 +10,8 @@ import SendIcon from 'assets/svg/Callvan/send.svg';
 import { ParticipantAvatarIcon } from 'components/Callvan/components/ParticipantsList/ParticipantAvatarIcon';
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import styles from './CallvanChatRoom.module.scss';
 
