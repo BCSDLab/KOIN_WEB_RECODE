@@ -8,13 +8,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import {
-  getLostItemChatroomDetail,
-  getLostItemChatroomList,
-  getLostItemChatroomMessagesV2,
-  postLeaveLostItemChatroomV2,
-  postLostItemChatroomMessageV2,
-} from 'api/articles';
+import { postLeaveLostItemChatroomV2, postLostItemChatroomMessageV2 } from 'api/articles';
+import { articleQueries, articleQueryKeys } from 'api/articles/queries';
 import { getCachedMessages, cacheMessages, clearChatroomCache } from 'utils/db/chatDB';
 import showToast from 'utils/ts/showToast';
 
@@ -31,8 +26,7 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
   const queryClient = useQueryClient();
 
   const { data: chatroomList } = useSuspenseQuery({
-    queryKey: ['chatroom', 'lost-item', 'list'],
-    queryFn: () => getLostItemChatroomList(token),
+    ...articleQueries.lostItemChatroomList(token),
     staleTime: isOnline ? 0 : Infinity,
     refetchInterval: isOnline ? POLLING_INTERVAL_MS : false,
     refetchIntervalInBackground: false,
@@ -48,7 +42,7 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
   useEffect(() => {
     if (numericArticleId == null || numericChatroomId == null) return;
 
-    const queryKey = ['chatroom', 'lost-item', 'messages', defaultArticleId, defaultChatroomId];
+    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId);
     const existing = queryClient.getQueryData(queryKey);
     if (existing) return;
 
@@ -60,20 +54,22 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
   }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId]);
 
   const { data: chatroomDetail } = useQuery({
-    queryKey: ['chatroom', 'lost-item', 'detail', defaultArticleId, defaultChatroomId],
-    queryFn:
-      defaultArticleId && defaultChatroomId && isOnline
-        ? () => getLostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
-        : skipToken,
+    ...(defaultArticleId && defaultChatroomId && isOnline
+      ? articleQueries.lostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
+      : {
+          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId),
+          queryFn: skipToken,
+        }),
     placeholderData: keepPreviousData,
   });
 
   const { data: messages } = useQuery({
-    queryKey: ['chatroom', 'lost-item', 'messages', defaultArticleId, defaultChatroomId],
-    queryFn:
-      defaultArticleId && defaultChatroomId && isOnline
-        ? () => getLostItemChatroomMessagesV2(token, Number(defaultArticleId), Number(defaultChatroomId))
-        : skipToken,
+    ...(defaultArticleId && defaultChatroomId && isOnline
+      ? articleQueries.lostItemChatroomMessages(token, Number(defaultArticleId), Number(defaultChatroomId))
+      : {
+          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+          queryFn: skipToken,
+        }),
     placeholderData: keepPreviousData,
     refetchInterval: isOnline && defaultArticleId && defaultChatroomId ? POLLING_INTERVAL_MS : false,
     refetchIntervalInBackground: false,
@@ -85,6 +81,58 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
       cacheMessages(numericArticleId, numericChatroomId, messages);
     }
   }, [messages, numericArticleId, numericChatroomId]);
+
+  const { mutate: sendMessage } = useMutation({
+    mutationFn: ({ content, isImage = false }: { content: string; isImage?: boolean }) => {
+      if (defaultArticleId == null || defaultChatroomId == null) {
+        return Promise.reject(new Error('채팅방 정보가 없습니다.'));
+      }
+
+      return postLostItemChatroomMessageV2(token, Number(defaultArticleId), Number(defaultChatroomId), {
+        content,
+        is_image: isImage,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+      });
+    },
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '메시지 전송을 실패하였습니다');
+      } else {
+        showToast('error', '메시지 전송을 실패하였습니다');
+        sendClientError(error);
+      }
+    },
+  });
+
+  const { mutateAsync: leaveChatroom } = useMutation({
+    mutationFn: () => {
+      if (defaultArticleId == null || defaultChatroomId == null) {
+        return Promise.reject(new Error('채팅방 정보가 없습니다.'));
+      }
+
+      return postLeaveLostItemChatroomV2(token, Number(defaultArticleId), Number(defaultChatroomId));
+    },
+    onSuccess: () => {
+      if (numericArticleId != null && numericChatroomId != null) {
+        clearChatroomCache(numericArticleId, numericChatroomId);
+      }
+      queryClient.invalidateQueries({
+        queryKey: articleQueryKeys.lostItemChatroomList,
+      });
+    },
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
+      } else {
+        showToast('error', '채팅방 퇴장을 실패하였습니다');
+        sendClientError(error);
+      }
+    },
+  });
 
   const leaveRoom = useCallback(
     (aId: number, cId: number) => {
@@ -121,67 +169,15 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
     };
   }, [numericArticleId, numericChatroomId, leaveRoom]);
 
-  const { mutate: sendMessage } = useMutation({
-    mutationFn: ({ content, isImage = false }: { content: string; isImage?: boolean }) => {
-      if (defaultArticleId == null || defaultChatroomId == null) {
-        return Promise.reject(new Error('채팅방 정보가 없습니다.'));
-      }
-
-      return postLostItemChatroomMessageV2(token, Number(defaultArticleId), Number(defaultChatroomId), {
-        content,
-        is_image: isImage,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['chatroom', 'lost-item', 'messages', defaultArticleId, defaultChatroomId],
-      });
-    },
-    onError: (error) => {
-      if (isKoinError(error)) {
-        showToast('error', error.message || '메시지 전송을 실패하였습니다');
-      } else {
-        showToast('error', '메시지 전송을 실패하였습니다');
-        sendClientError(error);
-      }
-    },
-  });
-
-  const { mutateAsync: leaveChatroom } = useMutation({
-    mutationFn: () => {
-      if (defaultArticleId == null || defaultChatroomId == null) {
-        return Promise.reject(new Error('채팅방 정보가 없습니다.'));
-      }
-
-      return postLeaveLostItemChatroomV2(token, Number(defaultArticleId), Number(defaultChatroomId));
-    },
-    onSuccess: () => {
-      if (numericArticleId != null && numericChatroomId != null) {
-        clearChatroomCache(numericArticleId, numericChatroomId);
-      }
-      queryClient.invalidateQueries({
-        queryKey: ['chatroom', 'lost-item', 'list'],
-      });
-    },
-    onError: (error) => {
-      if (isKoinError(error)) {
-        showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
-      } else {
-        showToast('error', '채팅방 퇴장을 실패하였습니다');
-        sendClientError(error);
-      }
-    },
-  });
-
   const invalidateChatroomList = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ['chatroom', 'lost-item', 'list'],
+      queryKey: articleQueryKeys.lostItemChatroomList,
     });
   }, [queryClient]);
 
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ['chatroom', 'lost-item', 'messages', defaultArticleId, defaultChatroomId],
+      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
     });
   }, [queryClient, defaultArticleId, defaultChatroomId]);
 

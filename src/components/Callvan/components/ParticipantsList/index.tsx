@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getCallvanPostDetail } from 'api/callvan';
 import { CallvanParticipant } from 'api/callvan/entity';
+import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import NotificationBellIcon from 'assets/svg/Callvan/notification.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
@@ -110,10 +110,7 @@ export default function ParticipantsList({ postId, token }: ParticipantsListProp
   const router = useRouter();
   const logger = useLogger();
 
-  const { data: post } = useSuspenseQuery({
-    queryKey: ['callvanPostDetail', postId],
-    queryFn: () => getCallvanPostDetail(token, postId),
-  });
+  const { data: post } = useSuspenseQuery(callvanQueries.postDetail(token, postId));
 
   const colorIndexMap = new Map(post.participants.filter((p) => !p.is_me).map((p, i) => [p.user_id, i]));
 

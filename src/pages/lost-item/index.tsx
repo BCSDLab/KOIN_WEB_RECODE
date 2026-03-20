@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getLostItemArticles } from 'api/articles';
+import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
 import { LostItemArticlesRequest } from 'api/articles/entity';
+import { articleQueries } from 'api/articles/queries';
 import LostItemList from 'components/Articles/components/LostItemList';
 import LostItemPageLayout from 'components/Articles/components/LostItemPageLayout';
 import Pagination from 'components/Articles/components/Pagination';
-import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
-import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
+import { selectLostItemPaginationData } from 'components/Articles/utils/selectArticlesData';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import styles from './LostItemArticleListPage.module.scss';
 
@@ -32,10 +32,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   const apiParams = toLostItemArticlesRequest(params);
 
-  await queryClient.prefetchQuery({
-    queryKey: ['lostItemPagination', apiParams],
-    queryFn: () => getLostItemArticles(token ?? '', apiParams),
-  });
+  await queryClient.prefetchQuery(articleQueries.lostItemList(token ?? '', apiParams));
 
   return {
     props: {
@@ -68,6 +65,7 @@ export default function LostItemArticleListPage({
   initialParams,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const token = useTokenState();
 
   const params = useLostItemParams(initialParams);
   const apiParams = toLostItemArticlesRequest(params);
@@ -77,12 +75,19 @@ export default function LostItemArticleListPage({
 
   const isSearching = keyword.length > 0;
 
-  const { data: lostItemData } = useLostItemPagination(apiParams);
+  const { data: lostItemData } = useQuery({
+    ...articleQueries.lostItemList(token, apiParams),
+    placeholderData: keepPreviousData,
+    select: selectLostItemPaginationData,
+  });
 
-  const { data: searchData } = useLostItemSearch({
-    query: keyword,
-    page: params.page,
-    limit: 10,
+  const { data: searchData } = useQuery({
+    ...articleQueries.lostItemSearch({
+      query: keyword.trim(),
+      page: params.page ?? 1,
+      limit: 10,
+    }),
+    enabled: keyword.length > 0,
   });
 
   const articles = isSearching ? (searchData?.articles ?? []) : (lostItemData?.articles ?? []);

@@ -1,17 +1,18 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cancelCallvan } from 'api/callvan';
+import { callvanMutations } from 'api/callvan/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const useCancelCallvan = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
+  const mutation = callvanMutations.cancel(queryClient, token);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (postId: number) => cancelCallvan(token, postId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['callvanInfiniteList'] });
+    ...mutation,
+    onSuccess: async (...args) => {
+      await mutation.onSuccess?.(...args);
       showToast('success', '참여가 취소되었습니다.');
     },
     onError: (e) => {

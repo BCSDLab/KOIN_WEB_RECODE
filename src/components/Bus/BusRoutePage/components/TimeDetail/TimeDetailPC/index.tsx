@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { coopshopQueries } from 'api/coopshop/queries';
 import SelectDropdown from 'components/Bus/BusRoutePage/components/SelectDropdown';
-import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import styles from './TimeDetailPC.module.scss';
@@ -19,7 +20,7 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
   const { hour, minute } = timeSelect.timeState;
   const { setNow, setDayOfMonth, setHour, setMinute } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
-  const { data: semesterData } = useCoopSemester();
+  const { data: semesterData } = useSuspenseQuery(coopshopQueries.allShopInfo());
 
   const displaySemester = formatSemesterLabel(semesterData.semester);
 

@@ -1,21 +1,20 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getShuttleCourseInfo } from 'api/bus';
+import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import BusCoursePage, { useBusCourse } from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
-import { useClientShuttleTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
-import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCourse';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMount from 'utils/hooks/state/useMount';
 import styles from './ShuttleBusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -37,8 +36,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['bus', 'courses', 'shuttle'],
-    queryFn: getShuttleCourseInfo,
+    ...busQueries.shuttleCourse(),
     staleTime: 1000 * 60 * 10,
   });
 
@@ -56,10 +54,14 @@ export default function ShuttleBusTimetable() {
 
   const logger = useLogger();
   const { isMobile } = useBusCourse();
+  const isMount = useMount();
 
-  const { shuttleCourse } = useShuttleCourse();
+  const { data: shuttleCourse } = useSuspenseQuery(busQueries.shuttleCourse());
 
-  const { data: timetable } = useClientShuttleTimetable(SHUTTLE_COURSES[0]);
+  const { data: timetable } = useQuery({
+    ...busQueries.shuttleTimetable(SHUTTLE_COURSES[0]),
+    enabled: isMount,
+  });
 
   const displaySemester = shuttleCourse.semester_info.name;
   const updatedAt = timetable?.updated_at;

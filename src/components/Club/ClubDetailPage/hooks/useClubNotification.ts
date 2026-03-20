@@ -1,50 +1,38 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  deleteClubEventNotification,
-  deleteClubRecruitmentNotification,
-  postClubEventNotification,
-  postClubRecruitmentNotification,
-} from 'api/club';
+import { clubMutations } from 'api/club/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 
 export default function useClubNotification(clubId: number) {
   const token = useTokenState();
   const queryClient = useQueryClient();
+  const handleError = (error: unknown) => {
+    if (isKoinError(error)) {
+      showToast('error', error.message);
+    } else {
+      sendClientError(error);
+    }
+  };
 
   const { mutateAsync: subscribeRecruitmentNotification } = useMutation({
-    mutationFn: async () => {
-      await postClubRecruitmentNotification(token, clubId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    },
+    ...clubMutations.subscribeRecruitmentNotification(queryClient, token, clubId),
+    onError: handleError,
   });
 
   const { mutateAsync: unsubscribeRecruitmentNotification } = useMutation({
-    mutationFn: async () => {
-      await deleteClubRecruitmentNotification(token, clubId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    },
+    ...clubMutations.unsubscribeRecruitmentNotification(queryClient, token, clubId),
+    onError: handleError,
   });
 
   const { mutateAsync: subscribeEventNotification } = useMutation({
-    mutationFn: async (eventId: number) => {
-      await postClubEventNotification(token, clubId, eventId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    },
+    ...clubMutations.subscribeEventNotification(queryClient, token, clubId),
+    onError: handleError,
   });
 
   const { mutateAsync: unsubscribeEventNotification } = useMutation({
-    mutationFn: async (eventId: number) => {
-      await deleteClubEventNotification(token, clubId, eventId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    },
+    ...clubMutations.unsubscribeEventNotification(queryClient, token, clubId),
+    onError: handleError,
   });
 
   return {

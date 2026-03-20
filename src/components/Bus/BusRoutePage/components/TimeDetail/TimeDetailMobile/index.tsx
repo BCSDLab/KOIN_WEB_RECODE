@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { coopshopQueries } from 'api/coopshop/queries';
 import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
-import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -27,7 +28,7 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
   const [selectedHour, setSelectedHour] = useState(hour % 12);
   const [selectedMinute, setSelectedMinute] = useState(minute);
 
-  const { data: semesterData } = useCoopSemester();
+  const { data: semesterData } = useSuspenseQuery(coopshopQueries.allShopInfo());
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
   useBodyScrollLock();
 

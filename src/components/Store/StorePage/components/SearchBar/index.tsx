@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -10,7 +11,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {
-  const { data: categories } = useStoreCategories();
+  const { data: categories } = useSuspenseQuery(storeQueries.categories());
   const { params, searchParams } = useParamsHandler();
   const logger = useLogger();
   const isMobile = useMediaQuery();

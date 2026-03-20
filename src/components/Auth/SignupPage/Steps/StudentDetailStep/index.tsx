@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent } from 'api/auth';
+import { deptQueries } from 'api/dept/queries';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
@@ -65,7 +65,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     studentNumber &&
     !errors.student_number;
 
-  const { data: deptList } = useDeptList();
+  const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,

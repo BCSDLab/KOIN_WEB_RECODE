@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { articleQueries } from 'api/articles/queries';
 import ChevronRightIcon from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useLostItemStat from './hooks/useLostItemStat';
 import styles from './IndexLostItem.module.scss';
 
 const SLIDE_INTERVAL = 5000;
@@ -11,7 +12,7 @@ const MIN_FOUND_COUNT = 50;
 
 function IndexLostItem() {
   const logger = useLogger();
-  const { lostItemStat } = useLostItemStat();
+  const { data: lostItemStat } = useSuspenseQuery(articleQueries.lostItemStat());
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const cardMessages = useMemo(() => {

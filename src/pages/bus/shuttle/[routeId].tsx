@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import { useQuery } from '@tanstack/react-query';
+import { busQueries } from 'api/bus/queries';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
-import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ShuttleDetailPage.module.scss';
@@ -18,9 +19,11 @@ export default function ShuttleDetailPage() {
   const router = useRouter();
   const { routeId } = router.query;
 
-  const { shuttleTimetableDetail } = useShuttleTimetableDetail(
-    routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null,
-  );
+  const shuttleTimetableId = routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null;
+  const { data: shuttleTimetableDetail } = useQuery({
+    ...busQueries.shuttleTimetableDetail(shuttleTimetableId),
+    staleTime: 1000 * 60 * 10,
+  });
 
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
