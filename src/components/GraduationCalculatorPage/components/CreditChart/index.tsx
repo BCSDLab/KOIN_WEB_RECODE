@@ -1,7 +1,8 @@
 import { startTransition } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useQuery } from '@tanstack/react-query';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
-import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
+import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'components/TimetablePage/hooks/useGetMultiMajorLecture';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,7 +18,10 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
   const token = useTokenState();
   const portalManager = useModalPortal();
   const { lock, unlock } = useScrollLock(false);
-  const { data: calculateCredits } = useCalculateCredits(token);
+  const { data: calculateCredits } = useQuery({
+    ...graduationCalculatorQueries.creditsByCourseType(token),
+    enabled: !!token,
+  });
   const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
 
   const onClickBar = (courseType: string) => {

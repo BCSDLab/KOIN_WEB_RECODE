@@ -1,16 +1,11 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { timetable } from 'api';
 import { TimetableFrameInfo } from 'api/timetable/entity';
+import { timetableMutations } from 'api/timetable/mutations';
 import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 import useRollbackTimetableFrame from './useRollbackTimetableFrame';
-import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
-
-type DeleteTimetableFrameProps = {
-  id: number;
-};
 
 export default function useDeleteTimetableFrame(token: string, frameInfo: TimetableFrameInfo) {
   const queryClient = useQueryClient();
@@ -18,12 +13,12 @@ export default function useDeleteTimetableFrame(token: string, frameInfo: Timeta
   const semester = useSemester();
   const { mutate: rollbackFrame } = useRollbackTimetableFrame(token);
   const recoverFrame = () => rollbackFrame(frameInfo.id!);
+  const mutation = timetableMutations.deleteFrame(queryClient, token, semester);
 
   return useMutation({
-    mutationFn: ({ id }: DeleteTimetableFrameProps) => timetable.deleteTimetableFrame(token, id),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
+    ...mutation,
+    onSuccess: async (...args) => {
+      await mutation.onSuccess?.(...args);
       toast.open({
         message: `선택하신 [${frameInfo.name}]이 삭제되었습니다.`,
         recoverMessage: `[${frameInfo.name}]이 복구되었습니다.`,

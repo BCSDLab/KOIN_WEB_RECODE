@@ -1,7 +1,9 @@
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Course, PreCourse } from 'api/course/entity';
+import { courseQueries } from 'api/course/queries';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
   CreditDisplay,
@@ -9,7 +11,6 @@ import CourseTable, {
   createPreCoursesColumns,
   createSelectedCoursesColumns,
 } from 'components/Course/components/CourseTable';
-import { useSuspenseCourseSearch, useSuspensePreCourseList } from 'components/Course/hooks/useCourseQuery';
 import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
@@ -28,7 +29,7 @@ interface OpenCoursesTableContentProps {
 
 function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTableContentProps) {
   const logger = useLogger();
-  const { data: courses } = useSuspenseCourseSearch(searchParams);
+  const { data: courses } = useSuspenseQuery(courseQueries.search(searchParams));
 
   const handleAddOpenCourse = (course: PreCourse) => {
     logger.actionEventClick({ team: 'User', event_label: 'application_training_apply', value: '' });
@@ -56,7 +57,7 @@ interface PreCoursesTableContentProps {
 
 function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCoursesTableContentProps) {
   const logger = useLogger();
-  const { data: preCourses } = useSuspensePreCourseList(token, timetableFrameId);
+  const { data: preCourses } = useSuspenseQuery(courseQueries.preCourseList(token, timetableFrameId));
 
   const handleAddPreCourse = (course: PreCourse) => {
     logger.actionEventClick({ team: 'User', event_label: 'application_training_pre_apply', value: '' });

@@ -1,7 +1,8 @@
 import { startTransition, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
-import useCourseType from 'components/GraduationCalculatorPage/hooks/useCourseType';
 import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -27,7 +28,9 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
     term: string;
   }>({ year: semesters[0].year, term: semesters[0].term });
 
-  const { data: generalCourses } = useCourseType(token, semester, '교양선택', courseType ?? undefined);
+  const { data: generalCourses } = useSuspenseQuery(
+    graduationCalculatorQueries.courseType(token, semester, '교양선택', courseType ?? undefined),
+  );
   const generalCourseLectures = generalCourses?.lectures ?? [];
 
   const tableData = generalCourseLectures.map((lecture) => [

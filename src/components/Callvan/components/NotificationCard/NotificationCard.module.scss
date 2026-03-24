@@ -1,0 +1,142 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 24px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &__inner {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 16px;
+      height: 24px;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    white-space: nowrap;
+    margin: 0;
+
+    &--unread {
+      color: #000;
+    }
+
+    &--read {
+      color: #727272;
+    }
+  }
+
+  &__sub {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__datetime {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: nowrap;
+
+    &--unread {
+      color: #b611f5;
+    }
+
+    &--read {
+      color: #727272;
+    }
+  }
+
+  &__route {
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: nowrap;
+
+    &--unread {
+      color: #b611f5;
+    }
+
+    &--read {
+      color: #727272;
+    }
+  }
+
+  &__count {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  &__count-text {
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: nowrap;
+
+    &--unread {
+      color: #b611f5;
+    }
+
+    &--read {
+      color: #727272;
+    }
+  }
+
+  &__message {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 0;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+
+    &--unread {
+      color: #4b4b4b;
+    }
+
+    &--read {
+      color: #727272;
+    }
+  }
+}

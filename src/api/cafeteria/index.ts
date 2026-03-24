@@ -1,8 +1,8 @@
 import APIClient from 'utils/ts/apiClient';
 import DiningResponse, { DiningLikePatcher, CancelDiningLikePatcher } from './APIDetail';
 
-export const like = APIClient.of(DiningLikePatcher);
+export const getCafeteriaDinings = APIClient.of(DiningResponse);
 
-export const cancelLike = APIClient.of(CancelDiningLikePatcher);
+export const likeCafeteriaDining = APIClient.of(DiningLikePatcher);
 
-export default APIClient.of(DiningResponse);
+export const cancelCafeteriaDiningLike = APIClient.of(CancelDiningLikePatcher);

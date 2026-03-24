@@ -2,8 +2,8 @@ import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'nex
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { club } from 'api';
+import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from 'api/club/queries';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
@@ -12,9 +12,7 @@ import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';
 import MikeIcon from 'assets/svg/Club/mike-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import ClubSearchContainer from 'components/Club/ClubListPage/components/ClubSearchContainer';
-import useClubCategories from 'components/Club/hooks/useClubCategories';
 import useClubLike from 'components/Club/hooks/useClubLike';
-import useClubList from 'components/Club/hooks/useClubList';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { Portal } from 'components/modal/Modal/PortalProvider';
@@ -80,15 +78,16 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['club-categories'],
-      queryFn: () => club.getClubCategories(),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['club-list', params.categoryId, params.sortType, params.isRecruiting, params.clubName],
-      queryFn: () =>
-        club.getClubList(token, params.categoryId ?? undefined, params.sortType, params.isRecruiting, params.clubName),
-    }),
+    queryClient.prefetchQuery(clubQueries.categories()),
+    queryClient.prefetchQuery(
+      clubQueries.list({
+        token,
+        categoryId: params.categoryId ?? undefined,
+        sortType: params.sortType,
+        isRecruiting: params.isRecruiting,
+        clubName: params.clubName,
+      }),
+    ),
   ]);
 
   return {
@@ -122,15 +121,19 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
     ? Number(searchParams.get('categoryId'))
     : (initialQuery.categoryId ?? undefined);
 
-  const clubCategories = useClubCategories();
+  const { data: clubCategoryData } = useSuspenseQuery(clubQueries.categories());
+  const clubCategories = clubCategoryData.club_categories;
   const { mutate: clubLikeMutate } = useClubLike();
-  const clubList = useClubList({
-    token,
-    categoryId: selectedCategoryId,
-    sortType: sortValue,
-    isRecruiting: isRecruitingParam,
-    clubName: clubName,
-  });
+  const { data: clubListData } = useQuery(
+    clubQueries.list({
+      token,
+      categoryId: selectedCategoryId,
+      sortType: sortValue,
+      isRecruiting: isRecruitingParam,
+      clubName,
+    }),
+  );
+  const clubList = clubListData?.clubs ?? [];
 
   const totalCount = clubList.length;
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);

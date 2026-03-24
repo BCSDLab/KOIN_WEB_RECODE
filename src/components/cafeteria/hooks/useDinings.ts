@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { cafeteria } from 'api';
+import { cafeteriaMutations } from 'api/cafeteria/mutations';
+import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { Dining, OriginalDining } from 'api/dinings/entity';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import useTokenState from 'utils/hooks/state/useTokenState';
-
-const DININGS_KEY = 'DININGS_KEY';
 
 function useDinings(date: Date) {
   const convertedDate = convertDateToSimpleString(date);
@@ -12,8 +11,7 @@ function useDinings(date: Date) {
   const token = useTokenState();
 
   const { data: dinings } = useSuspenseQuery({
-    queryKey: [DININGS_KEY, convertedDate],
-    queryFn: async () => cafeteria.default(convertedDate),
+    ...cafeteriaQueries.dinings(convertedDate),
     select: (data) => {
       if ('status' in data || !Array.isArray(data)) {
         return [];
@@ -24,27 +22,23 @@ function useDinings(date: Date) {
       })) as Array<Dining>;
     },
   });
+  const likeMutation = cafeteriaMutations.likeDining(queryClient, token, convertedDate);
+  const cancelLikeMutation = cafeteriaMutations.cancelLikeDining(queryClient, token, convertedDate);
 
-  const like = useMutation({
-    mutationFn: async (diningId: number) => cafeteria.like(diningId, token),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [DININGS_KEY, convertedDate] });
-    },
+  const likeDiningMutation = useMutation({
+    ...likeMutation,
   });
 
-  const cancelLike = useMutation({
-    mutationFn: async (diningId: number) => cafeteria.cancelLike(diningId, token),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [DININGS_KEY, convertedDate] });
-    },
+  const cancelLikeDiningMutation = useMutation({
+    ...cancelLikeMutation,
   });
 
   const likeDining = (diningId: number, isLike: boolean) => {
     if (isLike) {
-      return cancelLike.mutate(diningId);
+      return cancelLikeDiningMutation.mutate(diningId);
     }
 
-    return like.mutate(diningId);
+    return likeDiningMutation.mutate(diningId);
   };
 
   return { dinings, likeDining };

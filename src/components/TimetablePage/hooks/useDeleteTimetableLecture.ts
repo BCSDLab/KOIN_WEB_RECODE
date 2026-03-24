@@ -1,19 +1,14 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteTimetableLecture } from 'api/timetable';
+import { timetableMutations } from 'api/timetable/mutations';
 import { toast } from 'react-toastify';
-import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
 export default function useDeleteTimetableLecture(authorization: string) {
   const queryClient = useQueryClient();
+  const mutation = timetableMutations.deleteLecture(queryClient, authorization);
 
   return useMutation({
-    mutationFn: (id: number) => deleteTimetableLecture(authorization, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TIMETABLE_INFO_LIST] });
-      queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
-      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
-    },
+    ...mutation,
     onError: (error) => {
       if (isKoinError(error)) {
         if (error.status === 401) toast('로그인을 해주세요');

@@ -3,16 +3,14 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient, useQuery } from '@tanstack/react-query';
-import * as api from 'api';
-import { getStoreCategories } from 'api/store';
+import { dehydrate, HydrationBoundary, QueryClient, useQuery, useSuspenseQuery, type DehydratedState } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
 import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
 import SearchBar from 'components/Store/StorePage/components/SearchBar';
 import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'components/Store/utils/durationTime';
 import IntroToolTip from 'components/ui/IntroToolTip';
 import ROUTES from 'static/routes';
@@ -70,8 +68,6 @@ const toggleNameLabel = {
   DELIVERY: 'delivery',
 } as const;
 
-const CATEGORY_IS_UNDEFINED = -1;
-
 const loggingCategoryToggleSorterValue = (toggleName: 'COUNT' | 'RATING', category: string | undefined) =>
   `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
@@ -82,8 +78,11 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
   const selectedCategory = Number(params.category);
 
   const { data: storeList } = useQuery({
-    queryKey: ['storeListV2', sorter, filter, selectedCategory],
-    queryFn: () => api.store.getStoreListV2(sorter, filter, params.storeName),
+    ...storeQueries.listV2({
+      sorter,
+      filter,
+      query: params.storeName,
+    }),
     placeholderData: (previousData) => previousData,
     select: (data) => {
       if (!data || !data.shops) return [];
@@ -102,25 +101,20 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
 
-  const { category, storeName } = context.query;
-
-  const selectedCategory = category ? Number(category) : CATEGORY_IS_UNDEFINED;
+  const { storeName } = context.query;
   const selectedStoreName = storeName ? String(storeName) : undefined;
 
-  await queryClient.prefetchQuery({
-    queryKey: ['storeCategories'],
-    queryFn: getStoreCategories,
-  });
+  await queryClient.prefetchQuery(storeQueries.categories());
 
-  await queryClient.prefetchQuery({
-    queryKey: ['storeListV2', 'NONE', [], selectedCategory],
-    queryFn: () => api.store.getStoreListV2('NONE', [], selectedStoreName),
-  });
+  await queryClient.prefetchQuery(
+    storeQueries.listV2({
+      sorter: 'NONE',
+      filter: [],
+      query: selectedStoreName,
+    }),
+  );
 
-  await queryClient.prefetchQuery({
-    queryKey: ['all-event'],
-    queryFn: () => api.store.getAllEvent(),
-  });
+  await queryClient.prefetchQuery(storeQueries.allEvents());
 
   return {
     props: {
@@ -146,7 +140,7 @@ function Store() {
   const filteredTypeList = Object.entries(storeFilterList)
     .filter(([, value]) => value)
     .map(([key]) => key as StoreFilterType);
-  const { data: categories } = useStoreCategories();
+  const { data: categories } = useSuspenseQuery(storeQueries.categories());
   const storeList = useStoreList(storeSorter, filteredTypeList, router.query);
 
   const selectedCategory = router.query.category ? Number(router.query.category) : -1;
@@ -372,9 +366,9 @@ function Store() {
   );
 }
 
-export default function StorePage({ dehydrateState }: { dehydrateState: unknown }) {
+export default function StorePage({ dehydratedState }: { dehydratedState: DehydratedState }) {
   return (
-    <HydrationBoundary state={dehydrateState}>
+    <HydrationBoundary state={dehydratedState}>
       <Store />
     </HydrationBoundary>
   );

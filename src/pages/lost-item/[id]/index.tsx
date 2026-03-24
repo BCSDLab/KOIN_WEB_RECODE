@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getSingleLostItemArticle, getLostItemArticles } from 'api/articles';
+import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { articleQueries } from 'api/articles/queries';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import ReportIcon from 'assets/svg/Articles/report.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
@@ -16,7 +16,6 @@ import LostItemSEO from 'components/Articles/LostItemDetailPage/components/LostI
 import ReportModal from 'components/Articles/LostItemDetailPage/components/ReportModal';
 import usePostFoundLostItem from 'components/Articles/LostItemDetailPage/hooks/usePostFoundLostItem';
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
-import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hooks/useSingleLostItemArticle';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
@@ -41,15 +40,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['lostItem', 'detail', articleId],
-      queryFn: () => getSingleLostItemArticle(token ?? '', articleId),
-    }),
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ['lostItem', latestLostItemParams],
-      queryFn: () => getLostItemArticles(token ?? '', { ...latestLostItemParams, page: 1 }),
-      initialPageParam: 1,
-    }),
+    queryClient.prefetchQuery(articleQueries.lostItemDetail(token ?? '', articleId)),
+    queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(token ?? '', latestLostItemParams)),
   ]);
 
   return {
@@ -72,7 +64,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const portalManager = useModalPortal();
   const token = useTokenState();
 
-  const { article } = useSingleLostItemArticle(articleId);
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { mutate: toggleFound, isPending: isToggling } = usePostFoundLostItem(articleId);
   const {

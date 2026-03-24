@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { getJosaPicker } from '@bcsdlab/utils';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { StoreListV2 } from 'api/store/entity';
+import { storeQueries } from 'api/store/queries';
 import EventIcon from 'assets/svg/event.svg';
 import EmptyStar from 'assets/svg/Review/empty-star.svg';
 import Star from 'assets/svg/Review/star.svg';
 import BenefitRotator from 'components/Store/StorePage/components/BenefitRotator';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
 import ROUTES from 'static/routes';
 import { StorePageType } from 'static/store';
@@ -24,7 +25,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
   const pickTopicJosa = getJosaPicker('은');
 
   const { searchParams } = useParamsHandler();
-  const { data: categories } = useStoreCategories();
+  const { data: categories } = useSuspenseQuery(storeQueries.categories());
   const selectedCategory = Number(searchParams.get('category'));
   const koreanCategory = categories?.shop_categories.find((category) => category.id === selectedCategory)?.name;
 

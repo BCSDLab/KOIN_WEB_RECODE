@@ -1,12 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { timetable } from 'api';
+import { timetableQueries } from 'api/timetable/queries';
 
 export default function useGetMultiMajorLecture(token: string) {
   return useSuspenseQuery({
-    queryKey: ['allLectures'],
-
-    queryFn: () => (token ? timetable.getTimetableAllLectureInfo(token) : null),
-
+    ...timetableQueries.allLectures(token),
     select: (data) => (data ? data.timetable.filter((item) => item.course_type === '다전공') : null),
   });
 }

@@ -5,6 +5,7 @@ export type SubmenuTitle =
   | '분실물'
   | '버스 교통편'
   | '버스 시간표'
+  | '콜밴팟 모집'
   | '식단'
   | '동아리'
   | '시간표'
@@ -26,6 +27,7 @@ export interface Submenu {
   tag: number | null;
   openInNewTab?: boolean;
   stageLink?: string;
+  mobileOnly?: boolean;
 }
 
 export type CategoryTitle = '서비스';
@@ -68,6 +70,14 @@ export const CATEGORY: Category[] = [
         newFlag: false,
         planFlag: false,
         tag: null,
+      },
+      {
+        title: '콜밴팟 모집',
+        link: ROUTES.Callvan(),
+        newFlag: false,
+        planFlag: false,
+        tag: null,
+        mobileOnly: true,
       },
       {
         title: '식단',

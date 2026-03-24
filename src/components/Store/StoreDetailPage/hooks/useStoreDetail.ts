@@ -1,15 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { storeQueries } from 'api/store/queries';
 
 const useStoreDetail = (id: string) => {
-  const { data: storeDetail } = useSuspenseQuery({
-    queryKey: ['storeDetail', id],
-    queryFn: async ({ queryKey }) => {
-      const queryFnParams = queryKey[1];
-
-      return api.store.getStoreDetailInfo(queryFnParams);
-    },
-  });
+  const { data: storeDetail } = useSuspenseQuery(storeQueries.detail(id));
 
   const storeDescription = storeDetail?.description ? storeDetail?.description.replace(/(?:\/)/g, '\n') : '-';
 

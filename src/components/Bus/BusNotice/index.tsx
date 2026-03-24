@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
-import useBusNotice from 'components/Bus/hooks/useBusNotice';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -36,8 +37,8 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
-  const res = useBusNotice();
-  const { id, title } = res.data;
+  const { data } = useSuspenseQuery(busQueries.notice());
+  const { id, title } = data;
   const [lastBusNotice, setLastBusNotice] = useLocalStorage('lastBusNotice', '');
   const [busNoticeDismissed, setBusNoticeDismissed] = useLocalStorage('busNoticeDismissed', 'false');
   const isDismissed = busNoticeDismissed === 'true';

@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
-import useDepartmentMajorList from 'components/GraduationCalculatorPage/hooks/useDepartmentMajorList';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries } from 'api/auth/queries';
+import { deptQueries } from 'api/dept/queries';
 import useUpdateAcademicInfo from 'components/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
   const logger = useLogger();
   const token = useTokenState();
-  const { data: academicInfo } = useUserAcademicInfo();
-  const { data: deptMajorList } = useDepartmentMajorList();
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
+  const { data: deptMajorList } = useSuspenseQuery(deptQueries.majorList());
 
   const [studentNumber, setStudentNumber] = useState<string>(academicInfo?.student_number ?? '');
   const [department, setDepartment] = useState<string>(academicInfo?.department ?? '');
