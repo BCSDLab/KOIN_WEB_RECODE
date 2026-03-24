@@ -14,10 +14,14 @@
   color: #727272;
   white-space: nowrap;
   transition: all 0.15s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 
-  &:hover {
-    border-color: #b611f5;
-    color: #b611f5;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: #b611f5;
+      color: #b611f5;
+    }
   }
 
   &--active {
@@ -25,10 +29,12 @@
     border-color: #b611f5;
     color: #b611f5;
 
-    &:hover {
-      background: #f9f0ff;
-      border-color: #b611f5;
-      color: #b611f5;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: #f9f0ff;
+        border-color: #b611f5;
+        color: #b611f5;
+      }
     }
   }
 }

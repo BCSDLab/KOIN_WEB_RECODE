@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
-import { CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
+import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import CarIcon from 'assets/svg/Callvan/car.svg';
@@ -20,6 +20,8 @@ interface CallvanPageLayoutProps {
   departures: CallvanLocation[];
   arrivals: CallvanLocation[];
   sort: CallvanSort;
+  author: CallvanAuthor;
+  joined: boolean;
   title: string;
   onTitleChange: (title: string) => void;
 }
@@ -30,6 +32,8 @@ export default function CallvanPageLayout({
   departures,
   arrivals,
   sort,
+  author,
+  joined,
   title,
   onTitleChange,
 }: CallvanPageLayoutProps) {
@@ -44,7 +48,13 @@ export default function CallvanPageLayout({
 
   const hasUnreadNotifications = notifications?.some((n) => !n.is_read) ?? false;
 
-  const hasActiveFilter = statuses.length > 0 || departures.length > 0 || arrivals.length > 0 || sort !== 'LATEST_DESC';
+  const hasActiveFilter =
+    statuses.length > 0 ||
+    departures.length > 0 ||
+    arrivals.length > 0 ||
+    sort !== 'LATEST_DESC' ||
+    author !== 'ALL' ||
+    joined;
 
   const getBackEventLabel = () => {
     if (router.pathname === ROUTES.Callvan()) return 'callvan_back';
@@ -63,6 +73,8 @@ export default function CallvanPageLayout({
       departures: CallvanLocation[];
       arrivals: CallvanLocation[];
       sort: CallvanSort;
+      author: CallvanAuthor;
+      joined: boolean;
     }) => {
       router.push({
         pathname: router.pathname,
@@ -72,6 +84,8 @@ export default function CallvanPageLayout({
           departures: filter.departures.length > 0 ? filter.departures.join(',') : undefined,
           arrivals: filter.arrivals.length > 0 ? filter.arrivals.join(',') : undefined,
           sort: filter.sort !== 'LATEST_DESC' ? filter.sort : undefined,
+          author: filter.author !== 'ALL' ? filter.author : undefined,
+          joined: filter.joined ? 'true' : undefined,
           page: undefined,
         },
       });
@@ -163,6 +177,8 @@ export default function CallvanPageLayout({
         departures={departures}
         arrivals={arrivals}
         sort={sort}
+        author={author}
+        joined={joined}
         onApply={handleApply}
       />
     </div>

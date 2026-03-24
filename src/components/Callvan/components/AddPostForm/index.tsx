@@ -112,13 +112,18 @@ export default function AddPostForm() {
     logger.actionEventClick({ event_label: 'callvan_write_done', team: 'CAMPUS', value: '' });
   };
 
+  const handleBack = () => {
+    logger.actionEventClick({ event_label: 'callvan_write_back', team: 'CAMPUS', value: '' });
+    router.back();
+  };
+  
   return (
     <div className={styles.page}>
       <header className={styles.page__header}>
         <button
           type="button"
           className={styles['page__back-button']}
-          onClick={() => router.back()}
+          onClick={handleBack}
           aria-label="뒤로가기"
         >
           <ArrowBackIcon />

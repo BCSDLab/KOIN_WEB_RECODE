@@ -9,6 +9,7 @@ export interface CallvanParams {
   arrivals: CallvanLocation[];
   title: string;
   author: CallvanAuthor;
+  joined: boolean;
 }
 
 const VALID_SORTS: readonly string[] = ['DEPARTURE_ASC', 'DEPARTURE_DESC', 'LATEST_ASC', 'LATEST_DESC'];
@@ -56,6 +57,9 @@ export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams
   const rawAuthor = parseStringParam(query, 'author');
   const author = isCallvanAuthor(rawAuthor) ? rawAuthor : fallback.author;
 
+  const rawJoined = parseStringParam(query, 'joined');
+  const joined = rawJoined === 'true' ? true : rawJoined === 'false' ? false : fallback.joined;
+
   const rawStatuses = parseArrayParam(query, 'statuses');
   const validStatuses = rawStatuses.filter(isCallvanStatus);
   const statuses = validStatuses.length > 0 ? validStatuses : fallback.statuses;
@@ -76,5 +80,6 @@ export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams
     arrivals,
     title,
     author,
+    joined,
   };
 }

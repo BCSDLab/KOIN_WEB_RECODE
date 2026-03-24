@@ -47,6 +47,7 @@ export interface CallvanListRequest {
   arrival_keyword?: string;
   title?: string;
   sort?: CallvanSort;
+  joined?: boolean;
   page?: number;
   limit?: number;
 }
