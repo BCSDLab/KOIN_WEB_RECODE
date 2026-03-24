@@ -153,6 +153,14 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   };
 
   const renderActionButton = () => {
+    if (post.status === 'COMPLETED') {
+      return (
+        <button type="button" className={styles['card__badge--closed']} disabled aria-label="이용완료">
+          이용완료
+        </button>
+      );
+    }
+
     if (post.is_author) {
       if (post.status === 'RECRUITING') {
         return (
@@ -200,15 +208,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
       return null;
     }
 
-    if (post.status === 'CLOSED') {
-      return (
-        <button type="button" className={styles['card__badge--closed']} disabled aria-label="모집마감">
-          모집마감
-        </button>
-      );
-    }
-
-    if (post.is_joined && post.status === 'RECRUITING') {
+    if (post.is_joined) {
       return (
         <button
           type="button"
@@ -221,9 +221,17 @@ export default function CallvanCard({ post }: CallvanCardProps) {
             openCancelModal();
           }}
           disabled={isCancelPending}
-          aria-label=""
+          aria-label=""
         >
           참여취소
+        </button>
+      );
+    }
+
+    if (post.status === 'CLOSED') {
+      return (
+        <button type="button" className={styles['card__badge--closed']} disabled aria-label="모집마감">
+          모집마감
         </button>
       );
     }
