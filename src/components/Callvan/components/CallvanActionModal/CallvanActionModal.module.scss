@@ -2,7 +2,7 @@
   &__overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: 200;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -20,7 +20,7 @@
 
   &__sheet {
     position: relative;
-    z-index: 101;
+    z-index: 201;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

@@ -79,8 +79,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     padding: 4px 24px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
   }
 
   &__search-input {
@@ -195,7 +198,7 @@
     box-shadow:
       0 1px 4px rgb(0 0 0 / 4%),
       0 4px 10px rgb(0 0 0 / 8%);
-    z-index: 10;
+    z-index: 99;
 
     svg {
       width: 24px;
