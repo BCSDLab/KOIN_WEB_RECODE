@@ -76,7 +76,7 @@ export default function CallvanPageLayout({
       author: CallvanAuthor;
       joined: boolean;
     }) => {
-      router.push({
+      router.replace({
         pathname: router.pathname,
         query: {
           ...router.query,
@@ -94,7 +94,7 @@ export default function CallvanPageLayout({
   );
 
   const handleSearch = useCallback(() => {
-    router.push({
+    router.replace({
       pathname: router.pathname,
       query: {
         ...router.query,
