@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  CallvanAuthor,
   CallvanLocation,
   CallvanSort,
   CallvanStatus,
   CALLVAN_LOCATION_LABEL,
-  CALLVAN_LOCATIONS,
 } from 'api/callvan/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
@@ -15,14 +15,21 @@ import styles from './CallvanFilterPanel.module.scss';
 const STATUS_OPTIONS: { value: CallvanStatus; label: string }[] = [
   { value: 'RECRUITING', label: '모집중' },
   { value: 'CLOSED', label: '모집마감' },
-  { value: 'COMPLETED', label: '완료' },
 ];
 
 const SORT_OPTIONS: { value: CallvanSort; label: string }[] = [
   { value: 'LATEST_DESC', label: '최신순' },
-  { value: 'LATEST_ASC', label: '오래된순' },
-  { value: 'DEPARTURE_ASC', label: '출발일 빠른순' },
-  { value: 'DEPARTURE_DESC', label: '출발일 느린순' },
+  { value: 'DEPARTURE_ASC', label: '출발시각순' },
+];
+
+const CALLVAN_FILTER_LOCATIONS: CallvanLocation[] = [
+  'FRONT_GATE',
+  'BACK_GATE',
+  'DORMITORY_MAIN',
+  'DORMITORY_SUB',
+  'TERMINAL',
+  'STATION',
+  'ASAN_STATION',
 ];
 
 interface CallvanFilterPanelProps {
@@ -32,11 +39,15 @@ interface CallvanFilterPanelProps {
   departures: CallvanLocation[];
   arrivals: CallvanLocation[];
   sort: CallvanSort;
+  author: CallvanAuthor;
+  joined: boolean;
   onApply: (filter: {
     statuses: CallvanStatus[];
     departures: CallvanLocation[];
     arrivals: CallvanLocation[];
     sort: CallvanSort;
+    author: CallvanAuthor;
+    joined: boolean;
   }) => void;
 }
 
@@ -47,12 +58,16 @@ export default function CallvanFilterPanel({
   departures,
   arrivals,
   sort,
+  author,
+  joined,
   onApply,
 }: CallvanFilterPanelProps) {
   const [localStatuses, setLocalStatuses] = useState<CallvanStatus[]>(statuses);
   const [localDepartures, setLocalDepartures] = useState<CallvanLocation[]>(departures);
   const [localArrivals, setLocalArrivals] = useState<CallvanLocation[]>(arrivals);
   const [localSort, setLocalSort] = useState<CallvanSort>(sort);
+  const [localAuthor, setLocalAuthor] = useState<CallvanAuthor>(author);
+  const [localJoined, setLocalJoined] = useState<boolean>(joined);
   const panelRef = useRef<HTMLDivElement>(null);
   const logger = useLogger();
 
@@ -67,15 +82,27 @@ export default function CallvanFilterPanel({
   }, [isOpen, onClose]);
 
   const toggleStatus = useCallback((value: CallvanStatus) => {
-    setLocalStatuses((prev) => (prev.includes(value) ? prev.filter((s) => s !== value) : [...prev, value]));
+    setLocalStatuses((prev) => {
+      if (prev.includes(value)) return prev.filter((s) => s !== value);
+      return [...prev, value];
+    });
   }, []);
 
-  const toggleLocation = useCallback(
-    (setter: React.Dispatch<React.SetStateAction<CallvanLocation[]>>, value: CallvanLocation) => {
-      setter((prev) => (prev.includes(value) ? prev.filter((l) => l !== value) : [...prev, value]));
-    },
-    [],
-  );
+  const toggleDeparture = (value: CallvanLocation) => {
+    setLocalDepartures((prev) => {
+      if (prev.includes(value)) return prev.filter((l) => l !== value);
+      const next = [...prev, value];
+      return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
+    });
+  }
+
+  const toggleArrival = (value: CallvanLocation) => {
+    setLocalArrivals((prev) => {
+      if (prev.includes(value)) return prev.filter((l) => l !== value);
+      const next = [...prev, value];
+      return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
+    });
+  }
 
   const handleApply = () => {
     onApply({
@@ -83,6 +110,8 @@ export default function CallvanFilterPanel({
       departures: localDepartures,
       arrivals: localArrivals,
       sort: localSort,
+      author: localAuthor,
+      joined: localJoined,
     });
     onClose();
     logger.actionEventClick({ event_label: 'callvan_filter_apply', team: 'CAMPUS', value: '' });
@@ -93,6 +122,8 @@ export default function CallvanFilterPanel({
     setLocalDepartures([]);
     setLocalArrivals([]);
     setLocalSort('LATEST_DESC');
+    setLocalAuthor('ALL');
+    setLocalJoined(false);
   };
 
   if (!isOpen) return null;
@@ -109,6 +140,38 @@ export default function CallvanFilterPanel({
         </div>
 
         <div className={styles.panel__body}>
+          <section className={styles.section}>
+            <h3 className={styles.section__title}>목록</h3>
+            <div className={styles.section__badges}>
+              <StatusBadge
+                label="전체"
+                isActive={localAuthor === 'ALL' && !localJoined}
+                onClick={() => {
+                  setLocalAuthor('ALL');
+                  setLocalJoined(false);
+                }}
+              />
+              <StatusBadge
+                label="내 게시물"
+                isActive={localAuthor === 'MY'}
+                onClick={() => {
+                  setLocalAuthor('MY');
+                  setLocalJoined(false);
+                }}
+              />
+              <StatusBadge
+                label="참여중인 게시물"
+                isActive={localJoined}
+                onClick={() => {
+                  setLocalJoined(true);
+                  setLocalAuthor('ALL');
+                }}
+              />
+            </div>
+          </section>
+
+          <hr className={styles.divider} />
+
           <section className={styles.section}>
             <h3 className={styles.section__title}>정렬</h3>
             <div className={styles.section__badges}>
@@ -128,6 +191,11 @@ export default function CallvanFilterPanel({
           <section className={styles.section}>
             <h3 className={styles.section__title}>모집 상태</h3>
             <div className={styles.section__badges}>
+              <StatusBadge
+                label="전체"
+                isActive={localStatuses.length === 0}
+                onClick={() => setLocalStatuses([])}
+              />
               {STATUS_OPTIONS.map((opt) => (
                 <StatusBadge
                   key={opt.value}
@@ -147,12 +215,17 @@ export default function CallvanFilterPanel({
               <span className={styles.section__description}>기타 장소는 검색창을 이용해주세요.</span>
             </div>
             <div className={styles.section__badges}>
-              {CALLVAN_LOCATIONS.map((loc) => (
+              <StatusBadge
+                label="전체"
+                isActive={localDepartures.length === 0}
+                onClick={() => setLocalDepartures([])}
+              />
+              {CALLVAN_FILTER_LOCATIONS.map((loc) => (
                 <StatusBadge
                   key={loc}
                   label={CALLVAN_LOCATION_LABEL[loc]}
                   isActive={localDepartures.includes(loc)}
-                  onClick={() => toggleLocation(setLocalDepartures, loc)}
+                  onClick={() => toggleDeparture(loc)}
                 />
               ))}
             </div>
@@ -166,12 +239,17 @@ export default function CallvanFilterPanel({
               <span className={styles.section__description}>기타 장소는 검색창을 이용해주세요.</span>
             </div>
             <div className={styles.section__badges}>
-              {CALLVAN_LOCATIONS.map((loc) => (
+              <StatusBadge
+                label="전체"
+                isActive={localArrivals.length === 0}
+                onClick={() => setLocalArrivals([])}
+              />
+              {CALLVAN_FILTER_LOCATIONS.map((loc) => (
                 <StatusBadge
                   key={loc}
                   label={CALLVAN_LOCATION_LABEL[loc]}
                   isActive={localArrivals.includes(loc)}
-                  onClick={() => toggleLocation(setLocalArrivals, loc)}
+                  onClick={() => toggleArrival(loc)}
                 />
               ))}
             </div>

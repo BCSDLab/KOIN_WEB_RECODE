@@ -57,6 +57,8 @@
     border: none;
     cursor: pointer;
     padding: 4px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 
     svg {
       width: 24px;
@@ -70,7 +72,7 @@
     padding: 12px 32px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
     border-top: 0.5px solid #e1e1e1;
   }
 
@@ -100,6 +102,8 @@
     color: #4b4b4b;
     flex-shrink: 0;
     white-space: nowrap;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 
     svg {
       width: 16px;
@@ -119,6 +123,8 @@
     font-weight: 600;
     color: #fff;
     line-height: 1.6;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       background: #980ac9;

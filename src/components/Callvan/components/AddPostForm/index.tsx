@@ -70,6 +70,16 @@ export default function AddPostForm() {
     (form.departureType !== 'CUSTOM' || form.departureCustomName.trim() !== '') &&
     (form.arrivalType !== 'CUSTOM' || form.arrivalCustomName.trim() !== '');
 
+  const handleSwapLocation = useCallback(() => {
+    setForm((prev) => ({
+      ...prev,
+      departureType: prev.arrivalType,
+      departureCustomName: prev.arrivalCustomName,
+      arrivalType: prev.departureType,
+      arrivalCustomName: prev.departureCustomName,
+    }));
+  }, []);
+
   const handleParticipantsChange = useCallback((delta: number) => {
     setForm((prev) => ({
       ...prev,
@@ -79,6 +89,15 @@ export default function AddPostForm() {
 
   const handleSubmit = () => {
     if (!form.departureType || !form.arrivalType || isPending) return;
+
+    const selectedDateTime = new Date(form.departureDate);
+    const hour24 = form.isPM ? (form.departureHour === 12 ? 12 : form.departureHour + 12) : form.departureHour === 12 ? 0 : form.departureHour;
+    selectedDateTime.setHours(hour24, form.departureMinute, 0, 0);
+
+    if (selectedDateTime < new Date()) {
+      openToast('현재 시각보다 이전 시각으로 모집글을 생성할 수 없습니다.');
+      return;
+    }
 
     const departureTime = formatTime(form.departureHour, form.departureMinute, form.isPM);
 
@@ -102,13 +121,18 @@ export default function AddPostForm() {
     logger.actionEventClick({ event_label: 'callvan_write_done', team: 'CAMPUS', value: '' });
   };
 
+  const handleBack = () => {
+    logger.actionEventClick({ event_label: 'callvan_write_back', team: 'CAMPUS', value: '' });
+    router.back();
+  };
+  
   return (
     <div className={styles.page}>
       <header className={styles.page__header}>
         <button
           type="button"
           className={styles['page__back-button']}
-          onClick={() => router.back()}
+          onClick={handleBack}
           aria-label="뒤로가기"
         >
           <ArrowBackIcon />
@@ -134,9 +158,14 @@ export default function AddPostForm() {
             </button>
           </div>
 
-          <div className={styles['location-row__swap']} aria-hidden>
+          <button
+            type="button"
+            className={styles['location-row__swap']}
+            onClick={handleSwapLocation}
+            aria-label="출발지/도착지 교환"
+          >
             <SwapIcon />
-          </div>
+          </button>
 
           <div className={styles['location-field']}>
             <span className={styles['location-field__label']}>도착</span>

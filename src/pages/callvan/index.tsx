@@ -23,6 +23,7 @@ const DEFAULT_PARAMS: CallvanParams = {
   arrivals: [],
   title: '',
   author: 'ALL',
+  joined: false,
 };
 
 function toCallvanApiParams(params: CallvanParams): Omit<CallvanListRequest, 'page' | 'limit'> {
@@ -33,6 +34,7 @@ function toCallvanApiParams(params: CallvanParams): Omit<CallvanListRequest, 'pa
     ...(params.arrivals.length > 0 ? { arrivals: params.arrivals } : {}),
     ...(params.title ? { title: params.title } : {}),
     ...(params.author !== 'ALL' ? { author: params.author } : {}),
+    ...(params.joined ? { joined: true } : {}),
   };
 }
 
@@ -116,6 +118,8 @@ function CallvanContent({ params }: CallvanContentProps) {
       departures={params.departures}
       arrivals={params.arrivals}
       sort={params.sort}
+      author={params.author}
+      joined={params.joined}
       title={searchTitle}
       onTitleChange={setSearchTitle}
     >

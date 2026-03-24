@@ -71,7 +71,7 @@ function Footer(): JSX.Element {
         {!isMobile && (
           <ul className={styles.footer__services}>
             {CATEGORY.flatMap((categoryInfo) => categoryInfo.submenu)
-              .slice(0, -4)
+              .slice(0, -4).filter((menu) => !menu.mobileOnly)
               .map((submenuInfo) => (
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link
