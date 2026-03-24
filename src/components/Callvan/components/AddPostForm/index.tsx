@@ -70,6 +70,16 @@ export default function AddPostForm() {
     (form.departureType !== 'CUSTOM' || form.departureCustomName.trim() !== '') &&
     (form.arrivalType !== 'CUSTOM' || form.arrivalCustomName.trim() !== '');
 
+  const handleSwapLocation = useCallback(() => {
+    setForm((prev) => ({
+      ...prev,
+      departureType: prev.arrivalType,
+      departureCustomName: prev.arrivalCustomName,
+      arrivalType: prev.departureType,
+      arrivalCustomName: prev.departureCustomName,
+    }));
+  }, []);
+
   const handleParticipantsChange = useCallback((delta: number) => {
     setForm((prev) => ({
       ...prev,
@@ -134,9 +144,14 @@ export default function AddPostForm() {
             </button>
           </div>
 
-          <div className={styles['location-row__swap']} aria-hidden>
+          <button
+            type="button"
+            className={styles['location-row__swap']}
+            onClick={handleSwapLocation}
+            aria-label="출발지/도착지 교환"
+          >
             <SwapIcon />
-          </div>
+          </button>
 
           <div className={styles['location-field']}>
             <span className={styles['location-field__label']}>도착</span>
