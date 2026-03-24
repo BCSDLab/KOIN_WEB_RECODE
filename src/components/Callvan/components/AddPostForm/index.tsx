@@ -90,6 +90,15 @@ export default function AddPostForm() {
   const handleSubmit = () => {
     if (!form.departureType || !form.arrivalType || isPending) return;
 
+    const selectedDateTime = new Date(form.departureDate);
+    const hour24 = form.isPM ? (form.departureHour === 12 ? 12 : form.departureHour + 12) : form.departureHour === 12 ? 0 : form.departureHour;
+    selectedDateTime.setHours(hour24, form.departureMinute, 0, 0);
+
+    if (selectedDateTime < new Date()) {
+      openToast('현재 시각보다 이전 시각으로 모집글을 생성할 수 없습니다.');
+      return;
+    }
+
     const departureTime = formatTime(form.departureHour, form.departureMinute, form.isPM);
 
     mutate(
