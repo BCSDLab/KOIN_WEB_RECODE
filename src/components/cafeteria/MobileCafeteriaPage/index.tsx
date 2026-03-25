@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { coopshopQueries } from 'api/coopshop/queries';
 import { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
-import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
@@ -26,7 +27,7 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
-  const { cafeteriaInfo } = useCoopshopCafeteria();
+  const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);

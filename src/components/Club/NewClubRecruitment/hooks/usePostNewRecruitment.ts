@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postClubRecruitment } from 'api/club';
-import { ClubRecruitmentRequest } from 'api/club/entity';
+import { clubMutations } from 'api/club/mutations';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -13,15 +12,12 @@ export default function usePostNewRecruitment(clubId: number | undefined) {
   const router = useRouter();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: ClubRecruitmentRequest) => {
-      const response = await postClubRecruitment(token, clubId!, data);
-      return response;
-    },
-    onSuccess: () => {
-      showToast('success', '동아리 모집이 생성되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['clubRecruitment'] });
-      router.push(ROUTES.ClubDetail({ id: String(clubId) }));
-    },
+    ...clubMutations.createRecruitment(queryClient, token, clubId!, {
+      onSuccess: () => {
+        showToast('success', '동아리 모집이 생성되었습니다.');
+        router.push(ROUTES.ClubDetail({ id: String(clubId) }));
+      },
+    }),
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);

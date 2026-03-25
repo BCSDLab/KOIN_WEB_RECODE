@@ -1,23 +1,18 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { editTimetableFrame } from 'api/timetable';
-import { TimetableFrameInfo } from 'api/timetable/entity';
+import { timetableMutations } from 'api/timetable/mutations';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
-import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 export default function useUpdateTimetableFrame() {
   const token = useTokenState();
 
   const queryClient = useQueryClient();
   const semester = useSemester();
+  const mutation = timetableMutations.updateFrame(queryClient, token, semester);
   const mutate = useMutation({
-    mutationFn: (frameInfo: TimetableFrameInfo) =>
-      editTimetableFrame(token, frameInfo.id!, { name: frameInfo.name, is_main: frameInfo.is_main }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
-    },
+    ...mutation,
     onError: (error) => {
       if (isKoinError(error)) {
         if (error.status === 400) showToast('error', error.message || '올바른 값을 입력해주세요.');

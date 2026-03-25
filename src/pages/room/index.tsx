@@ -1,11 +1,10 @@
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { room } from 'api';
+import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
+import { roomQueries } from 'api/room/queries';
 import { SSRLayout } from 'components/layout';
 import RoomList from 'components/Room/components/RoomList';
 import useMarker from 'components/Room/RoomPage/hooks/useMarker';
 import useNaverMap from 'components/Room/RoomPage/hooks/useNaverMap';
 import useNaverMapScript from 'components/Room/RoomPage/hooks/useNaverMapScript';
-import useRoomList from 'components/Room/RoomPage/hooks/useRoomList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './RoomPage.module.scss';
@@ -15,10 +14,7 @@ const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 export const getServerSideProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['roomList'],
-    queryFn: () => room.getRoomList(),
-  });
+  await queryClient.prefetchQuery(roomQueries.list());
 
   return {
     props: {
@@ -29,7 +25,7 @@ export const getServerSideProps = async () => {
 
 function RoomPage() {
   const isMobile = useMediaQuery();
-  const roomList = useRoomList();
+  const { data: roomList } = useQuery(roomQueries.list());
   const isMapLoaded = useNaverMapScript();
   const { getMap } = useNaverMap(LOCATION.latitude, LOCATION.longitude, isMapLoaded);
   useMarker({ getMap, roomList });

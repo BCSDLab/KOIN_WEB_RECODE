@@ -4,13 +4,10 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getDeptList } from 'api/dept';
-import { getMySemester, getSemesterInfoList, getTimetableFrame, getTimetableLectureInfo } from 'api/timetable';
+import { deptQueries } from 'api/dept/queries';
+import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
-import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
-import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
-import useTimetableFrameList, { TIMETABLE_FRAME_KEY } from 'components/TimetablePage/hooks/useTimetableFrameList';
-import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -37,39 +34,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   if (token) {
     try {
-      const mySemesterData = await queryClient.fetchQuery({
-        queryKey: [MY_SEMESTER_INFO_KEY],
-        queryFn: () => getMySemester(token),
-      });
+      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token));
       const userSemester = mySemesterData?.semesters?.[0];
       const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 
-      const timetableFrameList = await queryClient.fetchQuery({
-        queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term],
-        queryFn: () => getTimetableFrame(token, semester),
-      });
+      const timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
 
       const mainFrame = timetableFrameList.find((frame) => frame.is_main);
       const currentFrameId = validatedFrameId ?? mainFrame?.id ?? null;
 
       const prefetchPromises = [
-        queryClient.prefetchQuery({
-          queryKey: [SEMESTER_INFO_KEY],
-          queryFn: getSemesterInfoList,
-        }),
-        queryClient.prefetchQuery({
-          queryKey: ['dept'],
-          queryFn: () => getDeptList(),
-        }),
+        queryClient.prefetchQuery(timetableQueries.semesterInfo()),
+        queryClient.prefetchQuery(deptQueries.list()),
       ];
 
       if (currentFrameId !== null) {
-        prefetchPromises.push(
-          queryClient.prefetchQuery({
-            queryKey: [TIMETABLE_INFO_LIST, currentFrameId],
-            queryFn: () => getTimetableLectureInfo(token, currentFrameId),
-          }),
-        );
+        prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(token, currentFrameId)));
       }
 
       await Promise.all(prefetchPromises);
@@ -77,17 +57,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) throw error;
       if (isServerAuthError(error)) clearServerAuthCookies(context);
       const semester = getRecentSemester();
-      queryClient.setQueryData(
-        [TIMETABLE_FRAME_KEY + semester.year + semester.term],
-        [{ id: null, name: '기본 시간표', is_main: true }],
-      );
+      queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
     }
   } else {
     const semester = getRecentSemester();
-    queryClient.setQueryData(
-      [TIMETABLE_FRAME_KEY + semester.year + semester.term],
-      [{ id: null, name: '기본 시간표', is_main: true }],
-    );
+    queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
   }
 
   return {

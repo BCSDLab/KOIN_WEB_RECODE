@@ -1,9 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { deptQueries } from 'api/dept/queries';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'components/TimetablePage/components/Curriculum';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import TotalGrades from 'components/TimetablePage/components/TotalGrades';
@@ -27,7 +28,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const router = useRouter();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
   const { myLectures } = useMyLectures(timetableFrameId);
-  const { data: deptList } = useDeptList();
+  const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const { data: mySemester } = useSemesterCheck(token);
 
   const isSemesterAndTimetableExist = () => {

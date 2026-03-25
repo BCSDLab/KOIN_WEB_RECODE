@@ -1,13 +1,20 @@
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { articleQueries } from 'api/articles/queries';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import useArticles from 'components/Articles/hooks/useArticles';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
+import { selectArticlesWithNew } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './IndexArticles.module.scss';
 
 export default function IndexArticles() {
-  const articlesData = useArticles();
+  const token = useTokenState();
+  const { data: articlesData } = useQuery({
+    ...articleQueries.list(token, '1'),
+    select: selectArticlesWithNew,
+  });
   const logger = useLogger();
 
   return (

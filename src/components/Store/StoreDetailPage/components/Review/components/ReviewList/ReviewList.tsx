@@ -1,4 +1,6 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
+import { keepPreviousData, useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import ChervronUp from 'assets/svg/chervron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
@@ -7,9 +9,8 @@ import { REVEIW_LOGIN } from 'components/Store/StoreDetailPage/components/Review
 import ReviewCard from 'components/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
 import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
-import { useGetMyReview } from 'components/Store/StoreDetailPage/hooks/useGetMyReview';
-import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ReviewList.module.scss';
 
@@ -38,9 +39,20 @@ export default function ReviewList({ id }: { id: string }) {
   const [currentSortType, setCurrentSortType] = useState<SortType>(sortType.최신순);
   const previousSortType = useDeferredValue(currentSortType);
   const currentSortLabel = typeToLabel[currentSortType];
-  const { data, hasNextPage, fetchNextPage } = useGetReview(Number(id), previousSortType);
+  const token = useTokenState();
+  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
+    storeQueries.reviewFeed({
+      shopId: Number(id),
+      sorter: previousSortType,
+      token,
+    }),
+  );
   const reviews = data.pages.flatMap((page) => page.reviews);
-  const { data: myReview } = useGetMyReview(id, previousSortType);
+  const { data: myReview } = useQuery({
+    ...storeQueries.myReview(id, previousSortType, token),
+    enabled: !!token,
+    placeholderData: keepPreviousData,
+  });
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);

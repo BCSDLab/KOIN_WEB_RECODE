@@ -1,10 +1,8 @@
 import { Suspense, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { getStoreBenefitCategory, getStoreBenefitList, getStoreCategories } from 'api/store';
-import useBenefitCategory from 'components/Store/StoreBenefitPage/hooks/useBenefitCategory';
-import useStoreBenefitList from 'components/Store/StoreBenefitPage/hooks/useStoreBenefitList';
+import { dehydrate, HydrationBoundary, QueryClient, useSuspenseQuery, type DehydratedState } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
 import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
@@ -26,25 +24,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  await queryClient.prefetchQuery({
-    queryKey: ['benefitCategory'],
-    queryFn: getStoreBenefitCategory,
-  });
+  await queryClient.prefetchQuery(storeQueries.benefitCategory());
 
-  await queryClient.prefetchQuery({
-    queryKey: ['storeBenefit', categoryId],
-    queryFn: async ({ queryKey }) => {
-      const queryFnParams = queryKey[1];
-
-      return getStoreBenefitList(queryFnParams ?? '1');
-    },
-  });
+  await queryClient.prefetchQuery(storeQueries.benefitList(categoryId));
 
   // StoreList 페이지에서 사용하는 API
-  await queryClient.prefetchQuery({
-    queryKey: ['storeCategories'],
-    queryFn: getStoreCategories,
-  });
+  await queryClient.prefetchQuery(storeQueries.categories());
 
   return {
     props: {
@@ -57,10 +42,19 @@ function StoreBenefit() {
   const { params, searchParams, setParams } = useParamsHandler();
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { data } = useStoreBenefitList(params?.category ?? '1');
+  const { data } = useSuspenseQuery({
+    ...storeQueries.benefitList(params?.category ?? '1'),
+    select: (benefitListData) => ({
+      storeBenefitList: benefitListData.shops,
+      count: benefitListData.count,
+    }),
+  });
   const { count, storeBenefitList } = data;
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
-  const { data: benefitCategory } = useBenefitCategory();
+  const { data: benefitCategory } = useSuspenseQuery({
+    ...storeQueries.benefitCategory(),
+    select: (benefitCategoryData) => benefitCategoryData.benefits,
+  });
 
   useEffect(() => {
     initializeCategoryEntryTime();
@@ -139,9 +133,9 @@ function StoreBenefit() {
   );
 }
 
-export default function StoreBenefitPage({ dehydrateState }: { dehydrateState: unknown }) {
+export default function StoreBenefitPage({ dehydratedState }: { dehydratedState: DehydratedState }) {
   return (
-    <HydrationBoundary state={dehydrateState}>
+    <HydrationBoundary state={dehydratedState}>
       {/* TODO: Loading 디자인 추가 요청 */}
       <Suspense fallback={null}>
         <StoreBenefit />

@@ -1,0 +1,155 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 70%);
+  z-index: 100;
+}
+
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 32px 32px 0 0;
+  box-shadow:
+    0 8px 20px rgb(0 0 0 / 6%),
+    0 24px 60px rgb(0 0 0 / 12%);
+  z-index: 101;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px 12px 32px;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #b611f5;
+    margin: 0;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 12px 32px;
+    border-top: 0.5px solid #e1e1e1;
+  }
+}
+
+.chip-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 8px 12px;
+  border-radius: 24px;
+  border: 1px solid #e1e1e1;
+  background: #fff;
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #727272;
+  white-space: nowrap;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &--selected {
+    border-color: #b611f5;
+    color: #b611f5;
+  }
+}
+
+.divider {
+  height: 0;
+  margin: 0;
+  border: none;
+  border-top: 0.5px solid #e1e1e1;
+  flex-shrink: 0;
+}
+
+.custom-input {
+  width: 100%;
+  height: 47px;
+  padding: 10px 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  background: #fff;
+  font-family: Pretendard, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #4b4b4b;
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #cacaca;
+  }
+
+  &:focus {
+    border-color: #b611f5;
+  }
+}
+
+.confirm-button {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: #b611f5;
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #fff;
+  transition: background 0.15s;
+
+  &:disabled {
+    background: #cacaca;
+    cursor: not-allowed;
+  }
+
+  &:active:not(:disabled) {
+    background: #9b0fcf;
+  }
+}

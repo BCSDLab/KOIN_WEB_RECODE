@@ -1,6 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export type UploadDomain = 'SHOPS' | 'LOST_ITEMS' | 'CLUB';
+export type UploadDomain = 'SHOPS' | 'LOST_ITEMS' | 'CLUB' | 'CALLVAN_REPORT' | 'CALLVAN_CHAT';
 
 export interface UploadImage extends APIResponse {
   file_url: string;

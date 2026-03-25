@@ -1,0 +1,82 @@
+language: ko
+early_access: true
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: '@coderabbitai summary'
+  changed_files_summary: true
+  sequence_diagrams: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  path_filters:
+    - '**'
+    - '!.next/**'
+    - '!yarn.lock'
+    - '!.yarn/**'
+    - '!.pnp.cjs'
+    - '!.pnp.loader.mjs'
+    - '!public/**'
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - develop
+      - main
+  tools:
+    shellcheck:
+      enabled: false
+    ruff:
+      enabled: false
+    biome:
+      enabled: false
+    github-checks:
+      enabled: true
+      timeout_ms: 120000
+  path_instructions:
+    - path: src/pages/**
+      instructions: |
+        이 디렉토리는 Next.js Pages Router의 페이지 컴포넌트입니다.
+        1. 페이지 컴포넌트에서 비즈니스 로직이 과도하게 포함되어 있지 않은지 확인해주세요.
+        2. SEO 관련 메타 태그(Head 컴포넌트)가 적절히 설정되어 있는지 확인해주세요.
+        3. getServerSideProps/getStaticProps 사용 시 에러 핸들링이 적절한지 확인해주세요.
+    - path: src/components/**
+      instructions: |
+        1. 컴포넌트의 단일 책임 원칙(SRP)을 준수하고 있는지 확인해주세요.
+        2. Props 타입이 명확하게 정의되어 있는지(interface 사용 권장) 확인해주세요.
+        3. 불필요한 리렌더링을 유발하는 패턴(인라인 함수, 객체 리터럴 등)이 있는지 확인해주세요.
+        4. 접근성(a11y) 관련 속성이 적절히 사용되고 있는지 확인해주세요.
+    - path: src/api/**
+      instructions: |
+        1. API 호출 시 적절한 에러 핸들링이 되어 있는지 확인해주세요.
+        2. 요청/응답 타입이 명확하게 정의되어 있는지 확인해주세요.
+        3. API 엔드포인트 URL에 하드코딩된 값이 없는지 확인해주세요.
+        4. 인증 토큰 등 민감 정보 처리가 안전한지 확인해주세요.
+    - path: src/hooks/**
+      instructions: |
+        1. 커스텀 훅의 네이밍이 use 접두사를 따르고 있는지 확인해주세요.
+        2. 의존성 배열이 정확하게 설정되어 있는지 확인해주세요.
+        3. 메모리 누수 가능성이 있는 패턴(cleanup 미처리)이 없는지 확인해주세요.
+    - path: src/utils/**
+      instructions: |
+        1. 유틸 함수가 순수 함수로 작성되어 있는지 확인해주세요.
+        2. 엣지 케이스(null, undefined, 빈 배열 등) 처리가 되어 있는지 확인해주세요.
+    - path: src/**
+      instructions: |
+        1. Next.js, React, TypeScript 팀 코드 컨벤션 및 공식 스타일 가이드(React/TS best practices)를 우선적으로 반영하여, 가독성·안정성(Null/에러 처리)·테스트/유지보수 용이성·브라우저/접근성 이슈 등을 검토해주세요.
+        2. 최신 React/TypeScript 트렌드, 팀 스타일 통일성, 성능 최적화, 보안 취약점 등도 함께 고려해주세요.
+        3. 각 리뷰 포인트별로 문제점과 대안, 장단점을 논리적으로 제시하고, 필요한 경우 예시 코드도 추가해주세요.
+        4. 리뷰가 너무 많아서 피로감을 줄 수 있으니, 꼭 필요한 부분에 집중해주고, 나머지는 캡션으로 설명해주세요.
+        5. 리뷰 남겨주는 부분은 해당 라인 범위의 코멘트에 작성해주세요.
+        6. zustand 스토어 사용 시 selector 패턴을 권장해주세요.
+        7. @tanstack/react-query 사용 시 queryKey 컨벤션과 에러/로딩 상태 처리를 확인해주세요.
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  web_search:
+    enabled: true
+  learnings:
+    scope: local

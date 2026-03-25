@@ -3,7 +3,7 @@
 // NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
@@ -15,15 +15,13 @@ import SendIcon from 'assets/svg/Articles/send.svg';
 
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
-import useChatroomQuery from 'components/Articles/LostItemChatPage/hooks/useChatroomQuery';
+import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
 import {
   formatDate,
   formatISODateToMonthAndDay,
   formatISODateToTime,
-  getKoreaISODate,
 } from 'components/Articles/LostItemChatPage/utils/date';
 import ROUTES from 'static/routes';
-import useChatWorker from 'utils/hooks/chat/useChatWorker';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -55,30 +53,17 @@ function LostItemChatPage({ token }: { token: string }) {
     messages,
     defaultChatroomId: chatroomId,
     defaultArticleId: articleId,
-    invalidateChatroomList,
-  } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'), isOnline);
-
-  const {
-    realtimeMessages,
-    sendMessage: workerSendMessage,
-    mergeMessages,
-    setMessagesFromAPI,
-  } = useChatWorker({
+    sendMessage: sendChatMessage,
+  } = useChatPolling({
     token,
-    userId: userInfo?.id ?? 0,
-    articleId: articleId ? Number(articleId) : null,
-    chatroomId: chatroomId ? Number(chatroomId) : null,
-    onChatroomListUpdated: invalidateChatroomList,
+    articleId: searchParams.get('articleId'),
+    chatroomId: searchParams.get('chatroomId'),
+    isOnline,
   });
 
-  useEffect(() => {
-    if (messages && messages.length > 0) {
-      setMessagesFromAPI(messages);
-      mergeMessages(messages);
-    }
-  }, [messages, setMessagesFromAPI, mergeMessages]);
+  const prevMessagesLengthRef = useRef(0);
 
-  const uploadImage = async () => {
+  const uploadImage = useCallback(async () => {
     try {
       if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
@@ -87,49 +72,29 @@ function LostItemChatPage({ token }: { token: string }) {
 
       const imageUrlList = await saveImgFile();
       if (imageUrlList && imageUrlList.length === 1) {
-        const newMessage = {
-          user_nickname: userInfo.nickname || userInfo.anonymous_nickname,
-          user_id: chatroomDetail.user_id,
-          content: imageUrlList[0],
-          timestamp: getKoreaISODate(),
-          is_image: true,
-        };
-
-        workerSendMessage(newMessage);
+        sendChatMessage({ content: imageUrlList[0], isImage: true });
       }
     } catch (error) {
       if (error instanceof UploadError) {
         showToast('error', error.message);
       }
     }
-  };
+  }, [userInfo, chatroomDetail, saveImgFile, sendChatMessage]);
 
-  const sendMessage = async () => {
-    try {
-      if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
-        return;
-      }
-
-      const newMessage = {
-        user_nickname: userInfo.nickname || userInfo.anonymous_nickname,
-        user_id: chatroomDetail.user_id,
-        content: inputValue,
-        timestamp: getKoreaISODate(),
-        is_image: false,
-      };
-
-      workerSendMessage(newMessage);
-      setInputValue('');
-    } catch {
-      showToast('error', '메세지 전송에 실패했습니다.');
+  const sendMessage = useCallback(() => {
+    if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
+      return;
     }
-  };
+
+    sendChatMessage({ content: inputValue });
+    setInputValue('');
+  }, [inputValue, userInfo, chatroomDetail, sendChatMessage]);
 
   const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       if (e.nativeEvent.isComposing) return;
       e.preventDefault();
-      await sendMessage();
+      sendMessage();
     }
   };
 
@@ -137,15 +102,15 @@ function LostItemChatPage({ token }: { token: string }) {
     e.currentTarget.src = DefaultPhotoUrl;
   };
 
-  /**
-   * @description
-   * 채팅방의 메세지를 받아온 후, 스크롤을 맨 아래로 내립니다.
-   */
   useEffect(() => {
-    if (chatContainerRef.current) {
+    const currentLength = messages?.length ?? 0;
+    const hasNewMessages = currentLength > prevMessagesLengthRef.current;
+    prevMessagesLengthRef.current = currentLength;
+
+    if (hasNewMessages && chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [realtimeMessages, messages]);
+  }, [messages]);
 
   /**
    * @description
@@ -248,12 +213,12 @@ function LostItemChatPage({ token }: { token: string }) {
               </div>
 
               <div className={styles['message-container']} ref={chatContainerRef}>
-                {realtimeMessages.reduce((acc, message, index) => {
+                {(messages ?? []).reduce((acc, message, index) => {
                   const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                  const prevDate = formatISODateToMonthAndDay(realtimeMessages[index - 1]?.timestamp);
+                  const prevDate = formatISODateToMonthAndDay((messages ?? [])[index - 1]?.timestamp);
                   const messageTime = formatISODateToTime(message.timestamp);
-                  const prevTime = formatISODateToTime(realtimeMessages[index - 1]?.timestamp);
-                  const isSenderChanged = message.user_id !== realtimeMessages[index - 1]?.user_id;
+                  const prevTime = formatISODateToTime((messages ?? [])[index - 1]?.timestamp);
+                  const isSenderChanged = message.user_id !== (messages ?? [])[index - 1]?.user_id;
                   const isMe = message.user_id === userInfo?.id;
 
                   return acc.concat(

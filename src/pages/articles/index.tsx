@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { articles as articlesApi } from 'api/index';
+import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
+import { articleQueries } from 'api/articles/queries';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleList from 'components/Articles/components/ArticleList';
 import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
 import Pagination from 'components/Articles/components/Pagination';
-import useArticles from 'components/Articles/hooks/useArticles';
+import { selectArticlesWithNew } from 'components/Articles/utils/selectArticlesData';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -19,20 +20,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const queryClient = new QueryClient();
 
   const prefetchPromises = [
-    queryClient.prefetchQuery({
-      queryKey: ['hotArticles'],
-      queryFn: articlesApi.getHotArticles,
-    }),
+    queryClient.prefetchQuery(articleQueries.hot()),
+    queryClient.prefetchQuery(articleQueries.list(token ?? '', pageNumber)),
   ];
-
-  if (token) {
-    prefetchPromises.push(
-      queryClient.prefetchQuery({
-        queryKey: ['articles', pageNumber],
-        queryFn: () => articlesApi.getArticles(token, pageNumber),
-      }),
-    );
-  }
 
   await Promise.all(prefetchPromises);
 
@@ -56,8 +46,13 @@ function usePageParams(initialPage: string) {
 }
 
 export default function ArticleListPage({ initialPage }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const token = useTokenState();
   const paramsPage = usePageParams(initialPage);
-  const articlesData = useArticles(paramsPage);
+  const { data: articlesData } = useQuery({
+    ...articleQueries.list(token, paramsPage),
+    placeholderData: keepPreviousData,
+    select: selectArticlesWithNew,
+  });
 
   const articles = articlesData?.articles ?? [];
   const paginationInfo = articlesData?.paginationInfo ?? {

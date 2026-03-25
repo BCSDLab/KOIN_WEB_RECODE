@@ -1,0 +1,358 @@
+@use "src/utils/scss/media" as media;
+
+.chat-room {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background-color: #fff;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px 12px;
+    background-color: #fff;
+    flex-shrink: 0;
+  }
+
+  &__back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    color: #000;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__header-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  &__route {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__route-text {
+    max-width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__header-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    span {
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      color: #4b4b4b;
+      white-space: nowrap;
+    }
+  }
+
+  &__header-menu {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  &__messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__loading,
+  &__empty {
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #727272;
+    padding: 24px 0;
+  }
+
+  &__date-badge {
+    display: flex;
+    justify-content: center;
+    padding: 12px 24px;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      background-color: #f5f5f5;
+      border-radius: 16px;
+      font-family: Pretendard, sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      color: #980ac9;
+    }
+  }
+
+  &__message-row--mine {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 24px;
+  }
+
+  &__message-group--others {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 24px;
+  }
+
+  &__message-group--others-consecutive {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 24px 8px;
+  }
+
+  &__sender-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__sender-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #ddb1fe;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 2px;
+    box-sizing: border-box;
+    color: #980ac9;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__sender-name {
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #4b4b4b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__left-badge {
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    color: #b611f5;
+    flex-shrink: 0;
+  }
+
+  &__message-row--others {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  &__bubble--mine {
+    max-width: 220px;
+    padding: 8px 12px;
+    background-color: rgba(#eee, 0.8);
+    border-radius: 8px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #000;
+    word-break: break-word;
+  }
+
+  &__bubble--others {
+    max-width: 220px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #000;
+    word-break: break-word;
+  }
+
+  &__message-text {
+    white-space: pre-wrap;
+  }
+
+  &__bubble-image {
+    max-width: 220px;
+    border-radius: 8px;
+    display: flex;
+    overflow: hidden;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  &__textheader--mine {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__textheader--others {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__unread-count {
+    color: #1f1f1f;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__timestamp {
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #727272;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__send-bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 8px 24px;
+    background-color: #f5f5f5;
+    flex-shrink: 0;
+  }
+
+  &__image-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 0;
+    background-color: #fff;
+    flex-shrink: 0;
+  }
+
+  &__input {
+    flex: 1;
+    min-height: 32px;
+    max-height: 100px;
+    padding: 8px 16px;
+    margin: 0 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #000;
+    outline: none;
+    box-sizing: border-box;
+    resize: none;
+    overflow-y: auto;
+
+    &::placeholder {
+      color: #727272;
+    }
+  }
+
+  &__send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #980ac9;
+    flex-shrink: 0;
+
+    &:disabled {
+      color: #cacaca;
+      cursor: default;
+    }
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

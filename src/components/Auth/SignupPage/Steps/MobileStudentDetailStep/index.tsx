@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
+import { deptQueries } from 'api/dept/queries';
 import { Controller, ControllerRenderProps, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
@@ -11,7 +12,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import CustomSelector from '../../components/CustomSelector';
-import useDeptList from '../../hooks/useDeptList';
 import styles from './MobileStudentDetailStep.module.scss';
 
 interface MobileVerificationProps {
@@ -51,7 +51,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
   const isFormFilled = isIdPasswordValid && major && (!nicknameControl || isCorrectNickname);
 
-  const { data: deptList } = useDeptList();
+  const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,

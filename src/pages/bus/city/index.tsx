@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { DirectionType } from 'api/bus/entity';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { CityInfo, DirectionType } from 'api/bus/entity';
+import { busQueries } from 'api/bus/queries';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
-import { useCityBusTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import dayjs from 'dayjs';
 import { CITY_COURSES, CITY_COURSES_MAP } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -32,9 +33,15 @@ export default function CityBusTimetable() {
 
   const selectedDirection = CITY_COURSES_MAP.get(`${selectedBusNumber}-${selectedDirectionType}`)?.direction ?? '';
 
-  const timetable = useCityBusTimetable({
-    bus_number: selectedBusNumber,
-    direction: selectedDirection,
+  const { data: timetable } = useSuspenseQuery({
+    ...busQueries.cityTimetable({
+      bus_number: selectedBusNumber,
+      direction: selectedDirection,
+    }),
+    select: (response) => ({
+      info: response as CityInfo,
+      type: 'city' as const,
+    }),
   });
 
   const handleBusNumberButton = (busNum: number) => {
