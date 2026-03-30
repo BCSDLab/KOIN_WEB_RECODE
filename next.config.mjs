@@ -64,7 +64,12 @@ export default withSentryConfig(nextConfig, {
   project: process.env.SENTRY_PROJECT || 'koin-prod',
   release: { name: process.env.NEXT_PUBLIC_SENTRY_RELEASE },
   silent: !process.env.CI,
-  widenClientFileUpload: false,
+  widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
-  disableLogger: true,
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+  },
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
 });
