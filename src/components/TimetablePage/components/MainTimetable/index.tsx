@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
+import { isValidTimetableFrameId } from 'api/timetable/queries';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
@@ -37,7 +38,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
       return false;
     }
 
-    if (timeTableFrameList.length === 0) {
+    if (!timeTableFrameList.some((frame) => isValidTimetableFrameId(frame.id))) {
       toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
       return false;
     }

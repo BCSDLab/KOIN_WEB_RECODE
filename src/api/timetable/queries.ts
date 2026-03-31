@@ -31,6 +31,9 @@ type FrameListQueryParams = {
 const canUseStudentTimetableQuery = (token: string, userType?: TimetableUserType) =>
   Boolean(token) && (!userType || userType === 'STUDENT');
 
+export const isValidTimetableFrameId = (timetableFrameId: number | null | undefined): timetableFrameId is number =>
+  typeof timetableFrameId === 'number' && Number.isInteger(timetableFrameId) && timetableFrameId > 0;
+
 export const createDefaultTimetableFrameList = (): TimetableFrameListResponse => [
   {
     id: null,
@@ -92,7 +95,10 @@ export const timetableQueries = {
   lectureInfo: (authorization: string, timetableFrameId: number) =>
     queryOptions({
       queryKey: timetableQueryKeys.lectureInfo(timetableFrameId),
-      queryFn: () => (authorization ? getTimetableLectureInfo(authorization, timetableFrameId) : null),
+      queryFn: () =>
+        authorization && isValidTimetableFrameId(timetableFrameId)
+          ? getTimetableLectureInfo(authorization, timetableFrameId)
+          : null,
     }),
 
   allLectures: (token: string) =>
