@@ -9,6 +9,32 @@ Sentry.init({
   environment,
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
 
+  beforeSend(event, hint) {
+    const error = hint.originalException;
+
+    // Axios 네트워크/타임아웃/취소 에러
+    if (
+      error != null
+      && typeof error === 'object'
+      && 'code' in error
+      && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
+    ) {
+      return null;
+    }
+
+    // 브라우저 네트워크 에러 (fetch, Safari)
+    if (error instanceof TypeError && /Load failed|Failed to fetch/.test(error.message)) {
+      return null;
+    }
+
+    // 배포 후 이전 청크 캐시 요청 실패
+    if (error instanceof Error && error.name === 'ChunkLoadError') {
+      return null;
+    }
+
+    return event;
+  },
+
   integrations: [
     Sentry.replayIntegration({
       maskAllText: false,
