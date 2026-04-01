@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
+import TimetableGridPlaceholder from 'components/TimetablePage/components/TimetableGridPlaceholder';
 import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
@@ -29,8 +30,7 @@ export default function IndexTimeTable() {
   }, [semesterOptionList, updateSemester]);
 
   const renderPlaceholder = (
-    <Timetable
-      timetableFrameId={0}
+    <TimetableGridPlaceholder
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}
