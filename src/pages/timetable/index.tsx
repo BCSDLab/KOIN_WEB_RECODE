@@ -1,11 +1,16 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
-import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
+import {
+  createDefaultTimetableFrameList,
+  isValidTimetableFrameId,
+  timetableQueries,
+  timetableQueryKeys,
+} from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
@@ -30,7 +35,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const year = Number(query.year);
   const term = query.term as Term;
   const frameId = Number(query.timetableFrameId);
-  const validatedFrameId = Number.isNaN(frameId) ? null : frameId;
+  const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
   if (token) {
     try {
@@ -80,24 +85,24 @@ function TimetablePage() {
   const { timetableFrameId } = router.query;
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(mainFrame?.id ? mainFrame.id : 0);
+  const mainFrameId = isValidTimetableFrameId(mainFrame?.id) ? mainFrame.id : 0;
+  const queryFrameId = typeof timetableFrameId === 'string' ? Number(timetableFrameId) : Number.NaN;
+  const initialFrameId = isValidTimetableFrameId(queryFrameId) ? queryFrameId : mainFrameId;
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(initialFrameId);
+  const resolvedCurrentFrameIndex = timetableFrameList.some((frame) => frame.id === currentFrameIndex)
+    ? currentFrameIndex
+    : initialFrameId;
 
-  React.useEffect(() => {
-    if (timetableFrameId) {
-      setCurrentFrameIndex(Number(timetableFrameId));
-    } else {
-      setCurrentFrameIndex(mainFrame?.id ? mainFrame.id : 0);
-    }
+  useEffect(() => {
     sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage timetableFrameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
       ) : (
-        <MobilePage timetableFrameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
       )}
     </div>
   );
