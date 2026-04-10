@@ -76,6 +76,7 @@ function Footer(): JSX.Element {
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link
                     href={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
+                    prefetch={false}
                     onClick={(e) => handleClickMenu(e, submenuInfo.title)}
                   >
                     {submenuInfo.title}
@@ -117,7 +118,7 @@ function Footer(): JSX.Element {
                   아우누리 바로가기
                 </a>
               </li>
-              <Link href={ROUTES.PrivatePolicy()} className={styles.sitemap__link}>
+              <Link href={ROUTES.PrivatePolicy()} prefetch={false} className={styles.sitemap__link}>
                 개인정보 처리방침
               </Link>
             </ul>
@@ -143,7 +144,7 @@ function Footer(): JSX.Element {
                   BCSD Lab 바로가기
                 </a>
               </li>
-              <Link href={ROUTES.PrivatePolicy()} className={styles.sitemap__link}>
+              <Link href={ROUTES.PrivatePolicy()} prefetch={false} className={styles.sitemap__link}>
                 개인정보 처리방침
               </Link>
             </ul>
