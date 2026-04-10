@@ -1,26 +1,65 @@
-import { GetServerSidePropsContext } from 'next';
-import { getArticle } from 'api/articles';
+import type { GetStaticPaths, GetStaticProps } from 'next';
+import { getArticle, getArticles } from 'api/articles';
 import { ArticleResponseWithNew } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleContent from 'components/Articles/components/ArticleContent';
 import ArticleHeader from 'components/Articles/components/ArticleHeader';
 import { isNewArticle } from 'components/Articles/utils/setArticleRegisteredDate';
 import { SSRLayout } from 'components/layout';
+import {
+  ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS,
+  ARTICLE_HOT_PATH_LIMIT,
+  isNotFoundKoinError,
+  withStaticFetchRetry,
+} from 'utils/ts/isr';
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const id = ctx.query.id;
-  if (typeof id !== 'string') {
-    return { notFound: true };
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const { articles } = await withStaticFetchRetry(() => getArticles('', '1'));
+
+    return {
+      paths: articles.slice(0, ARTICLE_HOT_PATH_LIMIT).map((article) => ({
+        params: { id: String(article.id) },
+      })),
+      fallback: 'blocking',
+    };
+  } catch (error) {
+    console.error('[ISR] failed to prebuild article detail paths:', error);
+
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
   }
-  const article = await getArticle(id);
-  const serverTime = new Date(); // 서버 시간 고정
+};
 
-  const articleWithNew: ArticleResponseWithNew = {
-    ...article,
-    isNew: isNewArticle(article.registered_at, serverTime),
-  };
+export const getStaticProps: GetStaticProps<{ article: ArticleResponseWithNew }, { id: string }> = async ({
+  params,
+}) => {
+  const id = params?.id;
+  if (!id) {
+    return { notFound: true, revalidate: ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS };
+  }
 
-  return { props: { article: articleWithNew } };
+  try {
+    const article = await withStaticFetchRetry(() => getArticle(id));
+    const serverTime = new Date();
+
+    const articleWithNew: ArticleResponseWithNew = {
+      ...article,
+      isNew: isNewArticle(article.registered_at, serverTime),
+    };
+
+    return {
+      props: { article: articleWithNew },
+      revalidate: ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS,
+    };
+  } catch (error) {
+    if (isNotFoundKoinError(error)) {
+      return { notFound: true, revalidate: ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS };
+    }
+    throw error;
+  }
 };
 
 export default function ArticlesDetailPage({ article }: { article: ArticleResponseWithNew }) {

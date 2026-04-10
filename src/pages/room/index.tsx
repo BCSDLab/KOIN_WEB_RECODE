@@ -1,3 +1,4 @@
+import type { GetStaticProps } from 'next';
 import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
 import { roomQueries } from 'api/room/queries';
 import { SSRLayout } from 'components/layout';
@@ -7,19 +8,21 @@ import useNaverMap from 'components/Room/RoomPage/hooks/useNaverMap';
 import useNaverMapScript from 'components/Room/RoomPage/hooks/useNaverMapScript';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { ROOM_ISR_REVALIDATE_SECONDS, withStaticFetchRetry } from 'utils/ts/isr';
 import styles from './RoomPage.module.scss';
 
 const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(roomQueries.list());
+  await withStaticFetchRetry(() => queryClient.prefetchQuery(roomQueries.list()));
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
+    revalidate: ROOM_ISR_REVALIDATE_SECONDS,
   };
 };
 

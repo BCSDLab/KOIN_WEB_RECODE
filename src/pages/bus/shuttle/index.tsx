@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetServerSideProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
@@ -15,6 +15,7 @@ import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+import { BUS_SHUTTLE_ISR_REVALIDATE_SECONDS, withStaticFetchRetry } from 'utils/ts/isr';
 import styles from './ShuttleBusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -32,18 +33,21 @@ function asString(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    ...busQueries.shuttleCourse(),
-    staleTime: 1000 * 60 * 10,
-  });
+  await withStaticFetchRetry(() =>
+    queryClient.prefetchQuery({
+      ...busQueries.shuttleCourse(),
+      staleTime: 1000 * 60 * 10,
+    }),
+  );
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
+    revalidate: BUS_SHUTTLE_ISR_REVALIDATE_SECONDS,
   };
 };
 
