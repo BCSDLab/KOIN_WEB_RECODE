@@ -25,9 +25,10 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './LostItemDetailPage.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const { token } = parseServerSideParams(context);
   const id = context.query.id;
   if (typeof id !== 'string') {
@@ -44,13 +45,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(token ?? '', latestLostItemParams)),
   ]);
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       articleId,
     },
   };
-};
+});
 
 interface LostItemDetailPageProps {
   articleId: number;

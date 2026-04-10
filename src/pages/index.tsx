@@ -20,9 +20,10 @@ import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './IndexPage.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   let token = parseServerSideParams(context).token ?? '';
   let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
@@ -88,6 +89,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
   }
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       bannerCategoryId,
@@ -98,7 +103,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       dehydratedState: dehydrate(queryClient),
     },
   };
-};
+});
 
 function Index({
   bannersList,

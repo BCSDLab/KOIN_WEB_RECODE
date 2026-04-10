@@ -3,7 +3,14 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient, useQuery, useSuspenseQuery, type DehydratedState } from '@tanstack/react-query';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+  useQuery,
+  useSuspenseQuery,
+  type DehydratedState,
+} from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
@@ -19,10 +26,10 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
 import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
 import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import styles from './StorePage.module.scss';
 
@@ -98,7 +105,7 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
   return storeList || [];
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
 
   const { storeName } = context.query;
@@ -116,12 +123,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   await queryClient.prefetchQuery(storeQueries.allEvents());
 
+  cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}
+});
 
 function Store() {
   const enterCategoryTimeRef = useRef<number | null>(null);

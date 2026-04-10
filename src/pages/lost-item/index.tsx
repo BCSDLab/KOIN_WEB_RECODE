@@ -13,9 +13,10 @@ import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './LostItemArticleListPage.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { token, query } = parseServerSideParams(context);
 
@@ -34,13 +35,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   await queryClient.prefetchQuery(articleQueries.lostItemList(token ?? '', apiParams));
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       initialParams: params,
     },
   };
-};
+});
 
 function useLostItemParams(initialParams: LostItemParams) {
   const router = useRouter();
