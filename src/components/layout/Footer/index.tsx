@@ -118,9 +118,11 @@ function Footer(): JSX.Element {
                   아우누리 바로가기
                 </a>
               </li>
-              <Link href={ROUTES.PrivatePolicy()} prefetch={false} className={styles.sitemap__link}>
-                개인정보 처리방침
-              </Link>
+              <li className={styles.sitemap__link}>
+                <Link href={ROUTES.PrivatePolicy()} prefetch={false}>
+                  개인정보 처리방침
+                </Link>
+              </li>
             </ul>
           ) : (
             <ul className={styles.sitemap__content}>
@@ -144,9 +146,11 @@ function Footer(): JSX.Element {
                   BCSD Lab 바로가기
                 </a>
               </li>
-              <Link href={ROUTES.PrivatePolicy()} prefetch={false} className={styles.sitemap__link}>
-                개인정보 처리방침
-              </Link>
+              <li className={styles.sitemap__link}>
+                <Link href={ROUTES.PrivatePolicy()} prefetch={false}>
+                  개인정보 처리방침
+                </Link>
+              </li>
             </ul>
           )}
           <div className={styles['sitemap__icon-links']}>
