@@ -67,8 +67,6 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
-  const isBannerOpen =
-    context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
 
   if (token && userType === 'STUDENT') {
     try {
@@ -97,7 +95,6 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     props: {
       bannerCategoryId,
       bannersList,
-      isBannerOpen,
       categories,
       hotClubInfo,
       dehydratedState: dehydrate(queryClient),
@@ -110,11 +107,10 @@ function Index({
   categories,
   // hotClubInfo,
   bannerCategoryId,
-  isBannerOpen,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className={styles.template}>
-      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} isBannerOpen={isBannerOpen} />
+      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
       <UserInfoModal />
       <div className={styles['left-container']}>
         <IndexStore categories={categories} />
