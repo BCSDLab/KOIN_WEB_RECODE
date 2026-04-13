@@ -11,9 +11,10 @@ import { STORE_PAGE } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './StoreBenefitPage.module.scss';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { category } = context.query;
   const categoryId = Array.isArray(category) ? category[0] : category;
@@ -31,12 +32,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // StoreList 페이지에서 사용하는 API
   await queryClient.prefetchQuery(storeQueries.categories());
 
+  cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}
+});
 
 function StoreBenefit() {
   const { params, searchParams, setParams } = useParamsHandler();

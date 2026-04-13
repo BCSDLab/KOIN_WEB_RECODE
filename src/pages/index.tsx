@@ -20,9 +20,10 @@ import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './IndexPage.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   let token = parseServerSideParams(context).token ?? '';
   let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
@@ -66,8 +67,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
-  const isBannerOpen =
-    context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
 
   if (token && userType === 'STUDENT') {
     try {
@@ -88,28 +87,30 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
   }
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       bannerCategoryId,
       bannersList,
-      isBannerOpen,
       categories,
       hotClubInfo,
       dehydratedState: dehydrate(queryClient),
     },
   };
-};
+});
 
 function Index({
   bannersList,
   categories,
   // hotClubInfo,
   bannerCategoryId,
-  isBannerOpen,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className={styles.template}>
-      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} isBannerOpen={isBannerOpen} />
+      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
       <UserInfoModal />
       <div className={styles['left-container']}>
         <IndexStore categories={categories} />

@@ -13,9 +13,10 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './Cafeteria.module.scss';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { date } = context.query;
 
@@ -27,12 +28,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   await queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo());
 
+  cacheControl.enablePublicCache();
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}
+});
 
 function Cafeteria() {
   const isMobile = useMediaQuery();

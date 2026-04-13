@@ -40,13 +40,14 @@ export default function ReviewList({ id }: { id: string }) {
   const previousSortType = useDeferredValue(currentSortType);
   const currentSortLabel = typeToLabel[currentSortType];
   const token = useTokenState();
-  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
-    storeQueries.reviewFeed({
+
+  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
+    ...storeQueries.reviewFeed({
       shopId: Number(id),
       sorter: previousSortType,
       token,
     }),
-  );
+  });
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useQuery({
     ...storeQueries.myReview(id, previousSortType, token),

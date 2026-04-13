@@ -7,7 +7,10 @@ import styles from './AverageRating.module.scss';
 
 export default function AverageRating({ id }: { id: string }) {
   const token = useTokenState();
-  const { data } = useSuspenseInfiniteQuery(storeQueries.reviewFeed({ shopId: Number(id), sorter: 'LATEST', token }));
+
+  const { data } = useSuspenseInfiniteQuery({
+    ...storeQueries.reviewFeed({ shopId: Number(id), sorter: 'LATEST', token }),
+  });
   const totalReviewCount = data.pages[0].total_count;
 
   const ratingObject = data.pages[0].statistics;

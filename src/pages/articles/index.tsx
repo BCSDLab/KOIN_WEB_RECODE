@@ -12,8 +12,9 @@ import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const { token, query } = parseServerSideParams(context);
   const pageNumber = typeof query.page === 'string' ? query.page : '1';
 
@@ -26,13 +27,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   await Promise.all(prefetchPromises);
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       initialPage: pageNumber,
     },
   };
-};
+});
 
 function usePageParams(initialPage: string) {
   const router = useRouter();

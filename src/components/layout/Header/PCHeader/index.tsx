@@ -242,7 +242,12 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               return (
                 <li className={styles.megamenu__menu} key={menu.title}>
                   {/* TODO: 키보드 Focus 접근성 향상 */}
-                  <Link className={styles.megamenu__link} href={href} onClick={(e) => handleMenuClick(e, menu.title)}>
+                  <Link
+                    className={styles.megamenu__link}
+                    href={href}
+                    prefetch={false}
+                    onClick={(e) => handleMenuClick(e, menu.title)}
+                  >
                     {menu.title}
                   </Link>
                 </li>
@@ -257,6 +262,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             <li className={styles['header__auth-link']}>
               <Link
                 href={ROUTES.AuthSignup({ currentStep: '약관동의' })}
+                prefetch={false}
                 onClick={() => {
                   sessionLogger.actionSessionEvent({
                     session_name: 'sign_up',
@@ -272,6 +278,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             <li className={styles['header__auth-link']}>
               <Link
                 href={ROUTES.Auth()}
+                prefetch={false}
                 onClick={() => {
                   logger.actionEventClick({
                     team: 'USER',

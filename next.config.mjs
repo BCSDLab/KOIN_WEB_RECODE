@@ -1,6 +1,7 @@
 import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: false,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,

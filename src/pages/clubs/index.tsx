@@ -30,6 +30,7 @@ import {
   parseQueryString,
   parseServerSideParams,
 } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -71,7 +72,7 @@ export const parseClubListQuery = createQueryParser<ClubListQuery>({
   },
 });
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const { token, query } = parseServerSideParams(context);
   const params = parseClubListQuery(query);
 
@@ -90,6 +91,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     ),
   ]);
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -97,7 +102,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       serverToken: token ?? null,
     },
   };
-};
+});
 
 function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();
