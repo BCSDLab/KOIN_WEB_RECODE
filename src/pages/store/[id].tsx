@@ -77,16 +77,15 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ pa
   try {
     await withStaticFetchRetry(() =>
       Promise.all([
-        queryClient.prefetchQuery(storeQueries.detail(storeId)),
-        queryClient.prefetchQuery(storeQueries.detailMenu(storeId)),
-        queryClient.prefetchQuery(
+        queryClient.fetchQuery(storeQueries.detail(storeId)),
+        queryClient.fetchQuery(storeQueries.detailMenu(storeId)),
+        queryClient.fetchQuery(
           storeQueries.reviewList({
             shopId: Number(storeId),
             page: 1,
             sorter: 'LATEST',
           }),
         ),
-        queryClient.prefetchQuery(storeQueries.eventList(storeId)),
       ]),
     );
   } catch (error) {
@@ -94,6 +93,13 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ pa
       return { notFound: true, revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS };
     }
     throw error;
+  }
+
+  try {
+    // 이벤트/공지 탭 데이터는 부가 정보이므로 ISR 생성을 막지 않도록 분리합니다.
+    await withStaticFetchRetry(() => queryClient.fetchQuery(storeQueries.eventList(storeId)));
+  } catch (error) {
+    console.error(`[ISR] failed to prefetch optional store events for ${storeId}:`, error);
   }
 
   return {
