@@ -1,6 +1,6 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
-import { keepPreviousData, useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { storeQueries, storeQueryKeys } from 'api/store/queries';
+import { keepPreviousData, useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { storeQueries } from 'api/store/queries';
 import ChervronUp from 'assets/svg/chervron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
@@ -12,8 +12,6 @@ import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown'
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
-import type { InfiniteData } from '@tanstack/react-query';
-import type { ReviewListResponse } from 'api/store/entity';
 import styles from './ReviewList.module.scss';
 
 type SortType = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
@@ -42,11 +40,6 @@ export default function ReviewList({ id }: { id: string }) {
   const previousSortType = useDeferredValue(currentSortType);
   const currentSortLabel = typeToLabel[currentSortType];
   const token = useTokenState();
-  const queryClient = useQueryClient();
-  const publicReviewFeedKey = storeQueryKeys.reviewFeed(Number(id), previousSortType, 'public');
-  const publicInitialData = token
-    ? queryClient.getQueryData<InfiniteData<ReviewListResponse, number>>(publicReviewFeedKey)
-    : undefined;
 
   const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
     ...storeQueries.reviewFeed({
@@ -54,8 +47,6 @@ export default function ReviewList({ id }: { id: string }) {
       sorter: previousSortType,
       token,
     }),
-    initialData: publicInitialData,
-    initialDataUpdatedAt: publicInitialData ? 0 : undefined,
   });
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useQuery({
