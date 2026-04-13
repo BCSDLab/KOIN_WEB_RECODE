@@ -27,6 +27,12 @@ interface StoreReviewListQueryParams {
   token?: string;
 }
 
+export type StoreReviewViewerScope = 'public' | 'auth';
+
+export function getStoreReviewViewerScope(token?: string): StoreReviewViewerScope {
+  return token ? 'auth' : 'public';
+}
+
 export const storeQueryKeys = {
   all: ['store'] as const,
   categories: () => [...storeQueryKeys.all, 'categories'] as const,
@@ -40,11 +46,12 @@ export const storeQueryKeys = {
   benefitCategory: () => [...storeQueryKeys.all, 'benefit-category'] as const,
   benefitList: (id: string) => [...storeQueryKeys.all, 'benefit-list', id] as const,
   relatedSearch: (query: string) => [...storeQueryKeys.all, 'related-search', query] as const,
-  reviews: (shopId: number) => ['review', shopId] as const,
-  reviewFeed: (shopId: number, sorter: string) => [...storeQueryKeys.reviews(shopId), sorter] as const,
-  reviewList: ({ shopId, page, sorter }: Omit<StoreReviewListQueryParams, 'token'>) =>
-    [...storeQueryKeys.reviewFeed(shopId, sorter), page] as const,
-  myReviews: (shopId: string) => ['review', 'my-review', shopId] as const,
+  reviews: (shopId: number, viewerScope: StoreReviewViewerScope) => ['review', viewerScope, shopId] as const,
+  reviewFeed: (shopId: number, sorter: string, viewerScope: StoreReviewViewerScope) =>
+    [...storeQueryKeys.reviews(shopId, viewerScope), sorter] as const,
+  reviewList: ({ shopId, page, sorter, token }: StoreReviewListQueryParams) =>
+    [...storeQueryKeys.reviewFeed(shopId, sorter, getStoreReviewViewerScope(token)), page] as const,
+  myReviews: (shopId: string) => ['review', 'auth', 'my-review', shopId] as const,
   myReview: (shopId: string, sorter: string) => [...storeQueryKeys.myReviews(shopId), sorter] as const,
 };
 
@@ -105,13 +112,13 @@ export const storeQueries = {
 
   reviewList: ({ shopId, page, sorter, token }: StoreReviewListQueryParams) =>
     queryOptions({
-      queryKey: storeQueryKeys.reviewList({ shopId, page, sorter }),
+      queryKey: storeQueryKeys.reviewList({ shopId, page, sorter, token }),
       queryFn: () => getReviewList(shopId, page, sorter, token),
     }),
 
   reviewFeed: ({ shopId, sorter, token }: Omit<StoreReviewListQueryParams, 'page'>) =>
     infiniteQueryOptions({
-      queryKey: storeQueryKeys.reviewFeed(shopId, sorter),
+      queryKey: storeQueryKeys.reviewFeed(shopId, sorter, getStoreReviewViewerScope(token)),
       initialPageParam: 1,
       queryFn: ({ pageParam }) => getReviewList(shopId, pageParam, sorter, token),
       getNextPageParam: (lastPage) => {

@@ -36,6 +36,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import styles from './ClubDetailPage.module.scss';
 
@@ -58,7 +59,7 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const { params, query } = context;
   const { token } = parseServerSideParams(context);
   const id = params?.id;
@@ -90,6 +91,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
   }
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -98,7 +103,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       initialEventId: numericEventId,
     },
   };
-};
+});
 
 interface ClubDetailPageProps {
   initialClubId: number;

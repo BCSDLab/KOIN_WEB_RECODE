@@ -42,7 +42,11 @@ export default function IndexArticles() {
       <ul className={styles.list}>
         {articlesData?.articles.slice(0, 7).map((article) => (
           <li key={article.id} className={styles.list__item}>
-            <Link href={ROUTES.ArticlesDetail({ id: String(article.id) })} className={styles['list__item-link']}>
+            <Link
+              href={ROUTES.ArticlesDetail({ id: String(article.id) })}
+              prefetch={false}
+              className={styles['list__item-link']}
+            >
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
               {article.isNew && (

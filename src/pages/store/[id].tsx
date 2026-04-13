@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
@@ -11,6 +11,7 @@ import {
   useSuspenseQuery,
   type DehydratedState,
 } from '@tanstack/react-query';
+import { getStoreListV2 } from 'api/store';
 import { storeQueries, storeQueryKeys } from 'api/store/queries';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
@@ -32,6 +33,12 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import {
+  isNotFoundKoinError,
+  STORE_DETAIL_ISR_REVALIDATE_SECONDS,
+  STORE_HOT_PATH_LIMIT,
+  withStaticFetchRetry,
+} from 'utils/ts/isr';
 import showToast from 'utils/ts/showToast';
 import styles from './StoreDetailPage.module.scss';
 
@@ -39,38 +46,70 @@ interface Props {
   id: string;
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const queryClient = new QueryClient();
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const { shops } = await withStaticFetchRetry(() => getStoreListV2('NONE', [], undefined));
 
-  const id = context.params!.id;
-  const storeId = Array.isArray(id) ? id[0] : id;
-
-  if (!storeId) {
     return {
-      notFound: true,
+      paths: shops.slice(0, STORE_HOT_PATH_LIMIT).map((shop) => ({
+        params: { id: String(shop.id) },
+      })),
+      fallback: 'blocking',
+    };
+  } catch (error) {
+    console.error('[ISR] failed to prebuild store detail paths:', error);
+
+    return {
+      paths: [],
+      fallback: 'blocking',
     };
   }
-  await Promise.all([
-    queryClient.prefetchQuery(storeQueries.detail(storeId)),
-    queryClient.prefetchQuery(storeQueries.detailMenu(storeId)),
-    queryClient.prefetchQuery(
-      storeQueries.reviewList({
-        shopId: Number(storeId),
-        page: 1,
-        sorter: 'LATEST',
-      }),
-    ),
-  ]);
+};
 
-  await queryClient.prefetchQuery(storeQueries.eventList(storeId));
+export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ params }) => {
+  const queryClient = new QueryClient();
+
+  const storeId = params?.id;
+  if (!storeId) {
+    return { notFound: true, revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS };
+  }
+
+  try {
+    await withStaticFetchRetry(() =>
+      Promise.all([
+        queryClient.fetchQuery(storeQueries.detail(storeId)),
+        queryClient.fetchQuery(storeQueries.detailMenu(storeId)),
+        queryClient.fetchQuery(
+          storeQueries.reviewList({
+            shopId: Number(storeId),
+            page: 1,
+            sorter: 'LATEST',
+          }),
+        ),
+      ]),
+    );
+  } catch (error) {
+    if (isNotFoundKoinError(error)) {
+      return { notFound: true, revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS };
+    }
+    throw error;
+  }
+
+  try {
+    // 이벤트/공지 탭 데이터는 부가 정보이므로 ISR 생성을 막지 않도록 분리합니다.
+    await withStaticFetchRetry(() => queryClient.fetchQuery(storeQueries.eventList(storeId)));
+  } catch (error) {
+    console.error(`[ISR] failed to prefetch optional store events for ${storeId}:`, error);
+  }
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       id: storeId,
     },
+    revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS,
   };
-}
+};
 
 function StoreDetailPage({ id }: Props) {
   const isMobile = useMediaQuery();

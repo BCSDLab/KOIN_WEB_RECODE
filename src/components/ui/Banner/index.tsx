@@ -7,7 +7,7 @@ import { useSwipeable } from 'react-swipeable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { setCookie } from 'utils/ts/cookie';
+import { getCookie, setCookie } from 'utils/ts/cookie';
 import styles from './Banner.module.scss';
 
 interface BannerCardProps {
@@ -63,18 +63,34 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }:
 interface BannerProps {
   bannersList: BannersResponse;
   bannerCategoryId: number;
-  isBannerOpen: boolean;
 }
 
 const HIDE_BANNER_DURATION_DAYS = 7;
+const HIDE_BANNER_COOKIE = 'HIDE_BANNER';
 
-function Banner({ bannersList, bannerCategoryId, isBannerOpen }: BannerProps) {
+function Banner({ bannersList, bannerCategoryId }: BannerProps) {
   const isMobile = useMediaQuery();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const logger = useLogger();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersList.banners[currentPageIndex];
-  const [isModalOpen, , closeModal] = useBooleanState(isBannerOpen);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  useEffect(() => {
+    if (bannersList.count === 0) {
+      closeModal();
+      return;
+    }
+
+    // 배너 노출 여부를 SSR에서 분리해 페이지 HTML 캐시를 안전하게 유지
+    const isBannerHidden = getCookie(HIDE_BANNER_COOKIE) === `modal_category_${bannerCategoryId}`;
+    if (isBannerHidden) {
+      closeModal();
+      return;
+    }
+
+    openModal();
+  }, [bannerCategoryId, bannersList.count, closeModal, openModal]);
 
   const resetAutoSlide = useCallback(() => {
     if (intervalRef.current) clearTimeout(intervalRef.current);
@@ -128,7 +144,7 @@ function Banner({ bannersList, bannerCategoryId, isBannerOpen }: BannerProps) {
       value: `${currentBanner.title}`,
     });
     if (bannerCategoryId === 1) {
-      setCookie('HIDE_BANNER', `modal_category_${bannerCategoryId}`, HIDE_BANNER_DURATION_DAYS);
+      setCookie(HIDE_BANNER_COOKIE, `modal_category_${bannerCategoryId}`, HIDE_BANNER_DURATION_DAYS);
     }
     closeModal();
   };

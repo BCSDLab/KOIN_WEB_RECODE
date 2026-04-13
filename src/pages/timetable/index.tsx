@@ -20,6 +20,7 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
 import type { Term } from 'api/timetable/entity';
 import styles from './TimetablePage.module.scss';
@@ -29,7 +30,7 @@ const MobilePage = dynamic(
   { ssr: true },
 );
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { token, query } = parseServerSideParams(context);
   const year = Number(query.year);
@@ -69,12 +70,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
   }
 
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}
+});
 
 function TimetablePage() {
   const isMobile = useMediaQuery();

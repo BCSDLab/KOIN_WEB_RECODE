@@ -1,6 +1,7 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { getRoomList } from 'api/room';
 import { roomQueries } from 'api/room/queries';
 import { SSRLayout } from 'components/layout';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
@@ -10,32 +11,67 @@ import RoomDetailTable from 'components/Room/components/RoomDetailTable';
 import useRoomDetail from 'components/Room/RoomDetailPage/hooks/useRoomDetail';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { parseQueryString, parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import {
+  isNotFoundKoinError,
+  ROOM_HOT_PATH_LIMIT,
+  ROOM_ISR_REVALIDATE_SECONDS,
+  withStaticFetchRetry,
+} from 'utils/ts/isr';
 import styles from './RoomDetailPage.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { query } = parseServerSideParams(context);
-  const id = parseQueryString(query.id);
+interface RoomDetailPageProps {
+  id: string;
+}
 
-  if (!id) {
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const { lands } = await withStaticFetchRetry(() => getRoomList());
+
     return {
-      notFound: true,
+      paths: lands
+        .filter((land) => !land.softDeleted)
+        .slice(0, ROOM_HOT_PATH_LIMIT)
+        .map((land) => ({
+          params: { id: String(land.id) },
+        })),
+      fallback: 'blocking',
+    };
+  } catch (error) {
+    console.error('[ISR] failed to prebuild room detail paths:', error);
+
+    return {
+      paths: [],
+      fallback: 'blocking',
     };
   }
+};
 
+export const getStaticProps: GetStaticProps<RoomDetailPageProps, { id: string }> = async ({ params }) => {
+  const id = params?.id;
+  if (!id) {
+    return { notFound: true, revalidate: ROOM_ISR_REVALIDATE_SECONDS };
+  }
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(roomQueries.detail(id));
+  try {
+    await withStaticFetchRetry(() => queryClient.fetchQuery(roomQueries.detail(id)));
+  } catch (error) {
+    if (isNotFoundKoinError(error)) {
+      return { notFound: true, revalidate: ROOM_ISR_REVALIDATE_SECONDS };
+    }
+    throw error;
+  }
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       id,
     },
+    revalidate: ROOM_ISR_REVALIDATE_SECONDS,
   };
 };
 
-function RoomDetailPage({ id }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function RoomDetailPage({ id }: RoomDetailPageProps) {
   const isMobile = useMediaQuery();
   const { roomDetail, roomOptions } = useRoomDetail(id);
   useScrollToTop();
