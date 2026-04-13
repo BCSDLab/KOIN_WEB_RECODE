@@ -8,6 +8,7 @@ import type { ParsedUrlQuery } from 'querystring';
 
 export const PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300';
 export const STORE_PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=1800';
+export const PRIVATE_SSR_CACHE_CONTROL = 'private, no-store';
 
 type SSRPageProps = Record<string, unknown>;
 
@@ -47,9 +48,15 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
     },
   });
 
-  // Redirect/notFound 응답은 공유 캐시 대상이 아니므로 페이지 props가 있을 때만 헤더를 설정합니다.
-  if (shouldCachePublicResponse && 'props' in result) {
-    context.res.setHeader('Cache-Control', publicCacheControl);
+  const setCookieHeader = context.res.getHeader('Set-Cookie');
+  const hasSetCookieHeader = Array.isArray(setCookieHeader) ? setCookieHeader.length > 0 : setCookieHeader !== undefined;
+  const hasCacheControlHeader = context.res.getHeader('Cache-Control') !== undefined;
+
+  // Redirect/notFound 응답은 제외하고, props 응답은 명시적인 캐시 정책을 부여합니다.
+  if ('props' in result && !hasCacheControlHeader) {
+    // 쿠키를 갱신하는 응답은 공용 캐시에 저장하면 안 되므로 private로 고정합니다.
+    const cacheControl = shouldCachePublicResponse && !hasSetCookieHeader ? publicCacheControl : PRIVATE_SSR_CACHE_CONTROL;
+    context.res.setHeader('Cache-Control', cacheControl);
   }
 
   return result;
