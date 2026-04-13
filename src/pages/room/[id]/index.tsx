@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps<RoomDetailPageProps, { id: string }>
   const queryClient = new QueryClient();
 
   try {
-    await withStaticFetchRetry(() => queryClient.prefetchQuery(roomQueries.detail(id)));
+    await withStaticFetchRetry(() => queryClient.fetchQuery(roomQueries.detail(id)));
   } catch (error) {
     if (isNotFoundKoinError(error)) {
       return { notFound: true, revalidate: ROOM_ISR_REVALIDATE_SECONDS };
