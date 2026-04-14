@@ -48,7 +48,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.27.2"],\
+          ["axios", "npm:0.31.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -3630,7 +3630,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@types/axios", null],\
-          ["axios", "npm:0.27.2"]\
+          ["axios", "npm:0.31.0"]\
         ],\
         "packagePeers": [\
           "@types/axios",\
@@ -8471,12 +8471,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["axios", [\
-      ["npm:0.27.2", {\
-        "packageLocation": "./.yarn/cache/axios-npm-0.27.2-dbe3a48aea-2efaf18dd0.zip/node_modules/axios/",\
+      ["npm:0.31.0", {\
+        "packageLocation": "./.yarn/cache/axios-npm-0.31.0-c3cc4d3e42-80536a915c.zip/node_modules/axios/",\
         "packageDependencies": [\
-          ["axios", "npm:0.27.2"],\
-          ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5"],\
-          ["form-data", "npm:4.0.0"]\
+          ["axios", "npm:0.31.0"],\
+          ["follow-redirects", "virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0"],\
+          ["form-data", "npm:4.0.5"],\
+          ["proxy-from-env", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11127,19 +11128,19 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["follow-redirects", [\
-      ["npm:1.15.5", {\
-        "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.5-9d14db76ca-d467f13c1c.zip/node_modules/follow-redirects/",\
+      ["npm:1.16.0", {\
+        "packageLocation": "./.yarn/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
-          ["follow-redirects", "npm:1.15.5"]\
+          ["follow-redirects", "npm:1.16.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5", {\
-        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-c3a9c2b13a/0/cache/follow-redirects-npm-1.15.5-9d14db76ca-d467f13c1c.zip/node_modules/follow-redirects/",\
+      ["virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0", {\
+        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-408cb32876/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
           ["@types/debug", null],\
           ["debug", null],\
-          ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5"]\
+          ["follow-redirects", "virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0"]\
         ],\
         "packagePeers": [\
           "@types/debug",\
@@ -11178,12 +11179,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["form-data", [\
-      ["npm:4.0.0", {\
-        "packageLocation": "./.yarn/cache/form-data-npm-4.0.0-916facec2d-7264aa760a.zip/node_modules/form-data/",\
+      ["npm:4.0.5", {\
+        "packageLocation": "./.yarn/cache/form-data-npm-4.0.5-c35fce815a-52ecd6e927.zip/node_modules/form-data/",\
         "packageDependencies": [\
           ["asynckit", "npm:0.4.0"],\
           ["combined-stream", "npm:1.0.8"],\
-          ["form-data", "npm:4.0.0"],\
+          ["es-set-tostringtag", "npm:2.1.0"],\
+          ["form-data", "npm:4.0.5"],\
+          ["hasown", "npm:2.0.2"],\
           ["mime-types", "npm:2.1.35"]\
         ],\
         "linkType": "HARD"\
@@ -13459,7 +13462,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.27.2"],\
+          ["axios", "npm:0.31.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
