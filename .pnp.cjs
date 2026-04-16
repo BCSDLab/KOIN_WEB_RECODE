@@ -7070,7 +7070,7 @@ const RAW_RUNTIME_STATE =
           ["chalk", "npm:3.0.0"],\
           ["css.escape", "npm:1.5.1"],\
           ["dom-accessibility-api", "npm:0.5.16"],\
-          ["lodash", "npm:4.17.21"],\
+          ["lodash", "npm:4.18.1"],\
           ["redent", "npm:3.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -13577,10 +13577,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["lodash", [\
-      ["npm:4.17.21", {\
-        "packageLocation": "./.yarn/cache/lodash-npm-4.17.21-6382451519-c08619c038.zip/node_modules/lodash/",\
+      ["npm:4.18.1", {\
+        "packageLocation": "./.yarn/cache/lodash-npm-4.18.1-a64c3070ac-306fea53df.zip/node_modules/lodash/",\
         "packageDependencies": [\
-          ["lodash", "npm:4.17.21"]\
+          ["lodash", "npm:4.18.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15313,7 +15313,7 @@ const RAW_RUNTIME_STATE =
           ["@types/quill", "npm:1.3.10"],\
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
-          ["lodash", "npm:4.17.21"],\
+          ["lodash", "npm:4.18.1"],\
           ["quill", "npm:1.3.7"],\
           ["react", "npm:19.2.5"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.5"],\
@@ -16865,7 +16865,7 @@ const RAW_RUNTIME_STATE =
       ["npm:2.1.1", {\
         "packageLocation": "./.yarn/cache/stylelint-selector-bem-pattern-npm-2.1.1-f7f3e59d73-43e0eacbf1.zip/node_modules/stylelint-selector-bem-pattern/",\
         "packageDependencies": [\
-          ["lodash", "npm:4.17.21"],\
+          ["lodash", "npm:4.18.1"],\
           ["postcss", "npm:8.4.35"],\
           ["postcss-bem-linter", "npm:3.3.0"],\
           ["stylelint", "npm:16.2.1"],\
