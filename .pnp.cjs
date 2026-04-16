@@ -6973,7 +6973,7 @@ const RAW_RUNTIME_STATE =
           ["@types/svgr__core", null],\
           ["cosmiconfig", "virtual:77cc138b8f03e76bc81b53d7c536b91810383e8b8e9f294aac9f969daaf6fd5a72e29c2099e3025b537aac701c45d44c7e6af1647a2799c9f61d4f4f9312b7a3#npm:8.3.6"],\
           ["deepmerge", "npm:4.3.1"],\
-          ["svgo", "npm:3.3.2"]\
+          ["svgo", "npm:3.3.3"]\
         ],\
         "packagePeers": [\
           "@svgr/core",\
@@ -7122,15 +7122,6 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@testing-library/dom",\
           "@types/testing-library__dom"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@trysound/sax", [\
-      ["npm:0.2.0", {\
-        "packageLocation": "./.yarn/cache/@trysound-sax-npm-0.2.0-9f763d0295-7379713eca.zip/node_modules/@trysound/sax/",\
-        "packageDependencies": [\
-          ["@trysound/sax", "npm:0.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15862,6 +15853,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["sax", [\
+      ["npm:1.6.0", {\
+        "packageLocation": "./.yarn/cache/sax-npm-1.6.0-39dc3ef158-0909cedcd9.zip/node_modules/sax/",\
+        "packageDependencies": [\
+          ["sax", "npm:1.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["scheduler", [\
       ["npm:0.27.0", {\
         "packageLocation": "./.yarn/cache/scheduler-npm-0.27.0-772f0dd512-eab3c3a837.zip/node_modules/scheduler/",\
@@ -16948,17 +16948,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["svgo", [\
-      ["npm:3.3.2", {\
-        "packageLocation": "./.yarn/cache/svgo-npm-3.3.2-69e1d32944-82fdea9b93.zip/node_modules/svgo/",\
+      ["npm:3.3.3", {\
+        "packageLocation": "./.yarn/cache/svgo-npm-3.3.3-f4851edd74-f3c1b4d05d.zip/node_modules/svgo/",\
         "packageDependencies": [\
-          ["@trysound/sax", "npm:0.2.0"],\
           ["commander", "npm:7.2.0"],\
           ["css-select", "npm:5.2.2"],\
           ["css-tree", "npm:2.3.1"],\
           ["css-what", "npm:6.2.2"],\
           ["csso", "npm:5.0.5"],\
           ["picocolors", "npm:1.0.0"],\
-          ["svgo", "npm:3.3.2"]\
+          ["sax", "npm:1.6.0"],\
+          ["svgo", "npm:3.3.3"]\
         ],\
         "linkType": "HARD"\
       }]\
