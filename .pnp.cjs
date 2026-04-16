@@ -13586,10 +13586,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["lodash-es", [\
-      ["npm:4.17.21", {\
-        "packageLocation": "./.yarn/cache/lodash-es-npm-4.17.21-b45832dfce-03f39878ea.zip/node_modules/lodash-es/",\
+      ["npm:4.18.1", {\
+        "packageLocation": "./.yarn/cache/lodash-es-npm-4.18.1-02cf41b912-8bfad225ef.zip/node_modules/lodash-es/",\
         "packageDependencies": [\
-          ["lodash-es", "npm:4.17.21"]\
+          ["lodash-es", "npm:4.18.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15183,7 +15183,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/quill-npm-2.0.3-15cb4b4fc0-e4207da225.zip/node_modules/quill/",\
         "packageDependencies": [\
           ["eventemitter3", "npm:5.0.1"],\
-          ["lodash-es", "npm:4.17.21"],\
+          ["lodash-es", "npm:4.18.1"],\
           ["parchment", "npm:3.0.0"],\
           ["quill", "npm:2.0.3"],\
           ["quill-delta", "npm:5.1.0"]\
@@ -15342,7 +15342,7 @@ const RAW_RUNTIME_STATE =
           ["@types/quill-delta", null],\
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
-          ["lodash-es", "npm:4.17.21"],\
+          ["lodash-es", "npm:4.18.1"],\
           ["quill", "npm:2.0.3"],\
           ["quill-delta", null],\
           ["react", "npm:19.2.5"],\
