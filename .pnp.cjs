@@ -4061,7 +4061,7 @@ const RAW_RUNTIME_STATE =
           ["@eslint/config-array", "npm:0.21.1"],\
           ["@eslint/object-schema", "npm:2.1.7"],\
           ["debug", "virtual:428f325a939c2653ad822eb3d75efb02ac311523dd0d4f9645afc39ea00bd86eceac35a9d59c9b6977d76b670a4ef0ae057ea572338a44729aa592711a8c05a3#npm:4.3.4"],\
-          ["minimatch", "npm:3.1.2"]\
+          ["minimatch", "npm:3.1.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4098,7 +4098,7 @@ const RAW_RUNTIME_STATE =
           ["ignore", "npm:5.3.1"],\
           ["import-fresh", "npm:3.3.0"],\
           ["js-yaml", "npm:4.1.0"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["strip-json-comments", "npm:3.1.1"]\
         ],\
         "linkType": "HARD"\
@@ -10423,7 +10423,7 @@ const RAW_RUNTIME_STATE =
           ["jiti", null],\
           ["json-stable-stringify-without-jsonify", "npm:1.0.1"],\
           ["lodash.merge", "npm:4.6.2"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["natural-compare", "npm:1.4.0"],\
           ["optionator", "npm:0.9.3"]\
         ],\
@@ -10596,7 +10596,7 @@ const RAW_RUNTIME_STATE =
           ["hasown", "npm:2.0.2"],\
           ["is-core-module", "npm:2.16.1"],\
           ["is-glob", "npm:4.0.3"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["object.fromentries", "npm:2.0.8"],\
           ["object.groupby", "npm:1.0.3"],\
           ["object.values", "npm:1.2.1"],\
@@ -10638,7 +10638,7 @@ const RAW_RUNTIME_STATE =
           ["hasown", "npm:2.0.2"],\
           ["jsx-ast-utils", "npm:3.3.5"],\
           ["language-tags", "npm:1.0.9"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["object.fromentries", "npm:2.0.8"],\
           ["safe-regex-test", "npm:1.1.0"],\
           ["string.prototype.includes", "npm:2.0.1"]\
@@ -10705,7 +10705,7 @@ const RAW_RUNTIME_STATE =
           ["estraverse", "npm:5.3.0"],\
           ["hasown", "npm:2.0.2"],\
           ["jsx-ast-utils", "npm:3.3.5"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["object.entries", "npm:1.1.9"],\
           ["object.fromentries", "npm:2.0.8"],\
           ["object.values", "npm:1.2.1"],\
@@ -11452,7 +11452,7 @@ const RAW_RUNTIME_STATE =
           ["foreground-child", "npm:3.1.1"],\
           ["glob", "npm:10.3.10"],\
           ["jackspeak", "npm:2.3.6"],\
-          ["minimatch", "npm:9.0.3"],\
+          ["minimatch", "npm:9.0.5"],\
           ["minipass", "npm:7.0.4"],\
           ["path-scurry", "npm:1.10.1"]\
         ],\
@@ -11475,7 +11475,7 @@ const RAW_RUNTIME_STATE =
           ["glob", "npm:7.2.3"],\
           ["inflight", "npm:1.0.6"],\
           ["inherits", "npm:2.0.4"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["once", "npm:1.4.0"],\
           ["path-is-absolute", "npm:1.0.1"]\
         ],\
@@ -13948,19 +13948,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:3.1.2", {\
-        "packageLocation": "./.yarn/cache/minimatch-npm-3.1.2-9405269906-e0b25b04cd.zip/node_modules/minimatch/",\
+      ["npm:3.1.5", {\
+        "packageLocation": "./.yarn/cache/minimatch-npm-3.1.5-86958baf50-b11a7ee577.zip/node_modules/minimatch/",\
         "packageDependencies": [\
           ["brace-expansion", "npm:1.1.11"],\
-          ["minimatch", "npm:3.1.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:9.0.3", {\
-        "packageLocation": "./.yarn/cache/minimatch-npm-9.0.3-69d7d6fad5-c81b47d281.zip/node_modules/minimatch/",\
-        "packageDependencies": [\
-          ["brace-expansion", "npm:2.0.1"],\
-          ["minimatch", "npm:9.0.3"]\
+          ["minimatch", "npm:3.1.5"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -14871,7 +14863,7 @@ const RAW_RUNTIME_STATE =
       ["npm:3.3.0", {\
         "packageLocation": "./.yarn/cache/postcss-bem-linter-npm-3.3.0-94699b7a71-76a7d2f29c.zip/node_modules/postcss-bem-linter/",\
         "packageDependencies": [\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["postcss", "npm:7.0.39"],\
           ["postcss-bem-linter", "npm:3.3.0"],\
           ["postcss-resolve-nested-selector", "npm:0.1.1"]\
@@ -17008,7 +17000,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@istanbuljs/schema", "npm:0.1.3"],\
           ["glob", "npm:7.2.3"],\
-          ["minimatch", "npm:3.1.2"],\
+          ["minimatch", "npm:3.1.5"],\
           ["test-exclude", "npm:6.0.0"]\
         ],\
         "linkType": "HARD"\
