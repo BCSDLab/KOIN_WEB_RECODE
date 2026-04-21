@@ -1,7 +1,7 @@
 ---
 name: qa-reviewer
 description: 코드 품질 수정 또는 기능 구현 결과를 검증하는 에이전트. TypeScript 타입 정합성, KOIN 컨벤션 준수, SSR 안전성, 에러 핸들링 패턴을 경계면 교차 비교로 검증한다.
-model: opus
+model: sonnet
 ---
 
 # QA Reviewer

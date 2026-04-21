@@ -39,7 +39,7 @@ ls _workspace/ 2>/dev/null && echo "기존 작업 있음" || echo "신규 실행
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "sonnet",
   prompt: "sonarcloud-analyzer 에이전트 정의 파일(.claude/agents/sonarcloud-analyzer.md)을 읽고,
           sonarcloud-analysis 스킬(.claude/skills/sonarcloud-analysis/SKILL.md)을 사용하여
           SonarCloud 이슈를 조회하고 _workspace/01_analyzer_issues.json을 생성하라.
@@ -54,7 +54,7 @@ A-1 완료 후 → A-2 실행
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "sonnet",
   prompt: "code-quality-fixer 에이전트 정의 파일(.claude/agents/code-quality-fixer.md)을 읽고,
           code-quality-fix 스킬(.claude/skills/code-quality-fix/SKILL.md)을 사용하여
           _workspace/01_analyzer_issues.json의 이슈를 수정하라.
@@ -69,7 +69,7 @@ A-2 완료 후 → A-3 실행
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "sonnet",
   prompt: "qa-reviewer 에이전트 정의 파일(.claude/agents/qa-reviewer.md)을 읽고,
           qa-review 스킬(.claude/skills/qa-review/SKILL.md)을 사용하여
           _workspace/02_fixer_result.json의 changed_files를 검증하라.
@@ -86,7 +86,7 @@ QA 결과 확인:
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "haiku",
   prompt: "pr-creator 에이전트 정의 파일(.claude/agents/pr-creator.md)을 읽고,
           github-pr-creation 스킬(.claude/skills/github-pr-creation/SKILL.md)을 사용하여
           _workspace/02_fixer_result.json과 _workspace/03_qa_result.json을 바탕으로
@@ -138,7 +138,7 @@ B-2 완료 후 → B-3 실행
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "sonnet",
   prompt: "qa-reviewer 에이전트 정의 파일(.claude/agents/qa-reviewer.md)을 읽고,
           qa-review 스킬(.claude/skills/qa-review/SKILL.md)을 사용하여
           _workspace/02_implementer_result.json의 created_files와 modified_files를 검증하라.
@@ -155,7 +155,7 @@ QA 결과 확인:
 ```
 Agent(
   subagent_type: "general-purpose",
-  model: "opus",
+  model: "haiku",
   prompt: "pr-creator 에이전트 정의 파일(.claude/agents/pr-creator.md)을 읽고,
           github-pr-creation 스킬(.claude/skills/github-pr-creation/SKILL.md)을 사용하여
           _workspace/02_implementer_result.json과 _workspace/03_qa_result.json을 바탕으로

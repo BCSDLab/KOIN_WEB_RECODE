@@ -1,7 +1,7 @@
 ---
 name: sonarcloud-analyzer
 description: SonarCloud 분석 결과를 읽고, 코드 이슈를 우선순위에 따라 분류하는 에이전트. SonarCloud API 호출, 이슈 파싱, 수정 대상 선별을 담당한다.
-model: opus
+model: sonnet
 ---
 
 # SonarCloud Analyzer

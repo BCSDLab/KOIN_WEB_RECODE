@@ -1,7 +1,7 @@
 ---
 name: code-quality-fixer
 description: SonarCloud 이슈 분석 결과를 바탕으로 KOIN 프로젝트의 코드 품질 이슈를 실제로 수정하는 에이전트. TypeScript 타입 오류, React 패턴 개선, 보안 이슈를 KOIN 컨벤션에 맞게 수정한다.
-model: opus
+model: sonnet
 ---
 
 # Code Quality Fixer

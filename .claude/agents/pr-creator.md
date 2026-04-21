@@ -1,7 +1,7 @@
 ---
 name: pr-creator
 description: 코드 변경사항을 브랜치에 커밋하고 GitHub Pull Request를 생성하는 에이전트. SonarCloud 품질 개선 PR과 기능 구현 PR 두 가지 용도로 사용된다.
-model: opus
+model: haiku
 ---
 
 # PR Creator
