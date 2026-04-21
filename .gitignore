@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# AI pipeline workspace (중간 산출물, 버전 관리 불필요)
+_workspace/
+_workspace_prev/
+
 # .gitignore
 .yarn/*
 .yarn/cache/fsevents*
