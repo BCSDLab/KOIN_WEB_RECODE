@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { CallvanListRequest } from './entity';
-import { getCallvanChat, getCallvanList, getCallvanNotifications, getCallvanPostDetail } from './index';
+import { getCallvanChat, getCallvanList, getCallvanNotifications, getCallvanPostDetail, getCallvanRestriction } from './index';
 
 const CALLVAN_LIST_LIMIT = 10;
 
@@ -13,6 +13,7 @@ export const callvanQueryKeys = {
   infiniteListRoot: ['callvan', 'infinite-list'] as const,
   infiniteList: (params: CallvanInfiniteListParams) => [...callvanQueryKeys.infiniteListRoot, params] as const,
   notifications: ['callvan', 'notifications'] as const,
+  restriction: ['callvan', 'restriction'] as const,
   postDetail: (postId: number) => ['callvan', 'post-detail', postId] as const,
   chat: (postId: number) => ['callvan', 'chat', postId] as const,
 };
@@ -47,6 +48,12 @@ export const callvanQueries = {
     queryOptions({
       queryKey: callvanQueryKeys.notifications,
       queryFn: () => getCallvanNotifications(token),
+    }),
+
+  restriction: (token: string) =>
+    queryOptions({
+      queryKey: callvanQueryKeys.restriction,
+      queryFn: () => getCallvanRestriction(token),
     }),
 
   postDetail: (token: string, postId: number) =>

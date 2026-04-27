@@ -5,6 +5,7 @@ import {
   CallvanListResponse,
   CallvanNotificationsResponse,
   CallvanPostDetail,
+  CallvanRestrictionResponse,
   CallvanReportRequest,
   CreateCallvanRequest,
   CreateCallvanResponse,
@@ -34,6 +35,18 @@ export class GetCallvanNotifications<R extends CallvanNotificationsResponse> imp
   method = HTTP_METHOD.GET;
 
   path = '/callvan/notifications';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
+
+export class GetCallvanRestriction<R extends CallvanRestrictionResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/callvan/restriction';
 
   response!: R;
 

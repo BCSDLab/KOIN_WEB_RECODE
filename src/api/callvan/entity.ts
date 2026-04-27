@@ -74,6 +74,14 @@ export interface CallvanListResponse extends APIResponse {
   total_page: number;
 }
 
+export type CallvanRestrictionType = 'TEMPORARY_RESTRICTION_14_DAYS' | 'PERMANENT_RESTRICTION' | null;
+
+export interface CallvanRestrictionResponse {
+  is_restricted: boolean;
+  restriction_type: CallvanRestrictionType;
+  restricted_until: string | null;
+}
+
 export type CallvanNotificationType =
   | 'RECRUITMENT_COMPLETE'
   | 'NEW_MESSAGE'
