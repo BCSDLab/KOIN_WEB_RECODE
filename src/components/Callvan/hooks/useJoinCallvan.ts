@@ -18,7 +18,11 @@ const useJoinCallvan = () => {
       showToast('success', '참여가 완료되었습니다.');
     },
     onError: async (e) => {
-      if (await openFromError(e)) return;
+      try {
+        if (await openFromError(e)) return;
+      } catch (restrictionError) {
+        sendClientError(restrictionError);
+      }
 
       if (isKoinError(e)) {
         showToast('error', e.message || '참여에 실패했습니다.');

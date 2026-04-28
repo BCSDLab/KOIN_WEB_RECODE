@@ -1,7 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { CallvanRestrictionResponse } from 'api/callvan/entity';
 
-export const CALLVAN_RESTRICTED_ERROR_CODE = 'FORBIDDEN_CALLVAN_RESTRICTED_USER';
+const CALLVAN_RESTRICTED_ERROR_STATUS = 403;
 
 interface CallvanRestrictionModalCopy {
   titleAccent: string;
@@ -18,7 +18,7 @@ const restrictionDateFormatter = new Intl.DateTimeFormat('ko-KR', {
 export function isCallvanRestrictedError(error: unknown): boolean {
   if (!isKoinError(error)) return false;
 
-  return String(error.code) === CALLVAN_RESTRICTED_ERROR_CODE;
+  return error.status === CALLVAN_RESTRICTED_ERROR_STATUS;
 }
 
 function formatRestrictedUntil(restrictedUntil: string | null): string | null {

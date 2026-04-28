@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
-import { CallvanRestrictionResponse } from 'api/callvan/entity';
+import { RestrictedCallvanResponse } from 'api/callvan/entity';
 import { getCallvanRestrictionModalCopy } from 'components/Callvan/utils/callvanRestriction';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CallvanRestrictionModal.module.scss';
 
 interface CallvanRestrictionModalProps {
-  restriction: CallvanRestrictionResponse | null;
+  restriction: RestrictedCallvanResponse | null;
   onClose: () => void;
 }
 
 export default function CallvanRestrictionModal({ restriction, onClose }: CallvanRestrictionModalProps) {
+  useBodyScrollLock();
+
   const { titleAccent, titleRest, descriptionLines } = getCallvanRestrictionModalCopy(restriction);
 
   useEffect(() => {
@@ -36,8 +39,8 @@ export default function CallvanRestrictionModal({ restriction, onClose }: Callva
               {titleRest}
             </h2>
             <div className={styles.modal__description}>
-              {descriptionLines.map((line) => (
-                <p key={line}>{line}</p>
+              {descriptionLines.map((line, index) => (
+                <p key={`${line}-${index}`}>{line}</p>
               ))}
             </div>
           </div>

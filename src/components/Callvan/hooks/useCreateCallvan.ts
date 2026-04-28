@@ -14,7 +14,11 @@ const useCreateCallvan = () => {
   const { mutate, isPending } = useMutation({
     ...mutation,
     onError: async (e) => {
-      if (await openFromError(e)) return;
+      try {
+        if (await openFromError(e)) return;
+      } catch (restrictionError) {
+        sendClientError(restrictionError);
+      }
 
       if (isKoinError(e)) {
         showToast('error', e.message || '게시글 작성에 실패했습니다.');
