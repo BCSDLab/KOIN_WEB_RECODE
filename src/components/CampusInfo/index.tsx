@@ -44,7 +44,7 @@ function ShopIcon({ iconUrl, name }: ShopIconProps) {
       {iconUrl ? (
         // NOTE: 백엔드가 내려주는 소형 반복 아이콘은 호스트가 고정되지 않을 수 있어 <img>를 유지합니다.
         // eslint-disable-next-line @next/next/no-img-element
-        <img className={styles['icon-image']} src={iconUrl} alt="" aria-hidden="true" decoding="async" />
+        <img className={styles['icon-image']} src={iconUrl} alt={name} decoding="async" />
       ) : (
         <span className={styles['icon-fallback']} aria-hidden="true">
           {name.slice(0, 1)}
