@@ -50,7 +50,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(token ?? '', apiParams)),
       token
         ? queryClient.prefetchQuery(callvanQueries.notifications(token))
-        : queryClient.setQueryData(callvanQueryKeys.notifications, []),
+        : queryClient.setQueryData(callvanQueryKeys.notifications(''), []),
     ]);
   } catch (error) {
     console.error('[SSR] callvan prefetch failed:', error);
