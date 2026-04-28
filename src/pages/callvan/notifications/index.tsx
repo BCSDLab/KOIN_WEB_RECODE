@@ -27,7 +27,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (token) {
       await queryClient.prefetchQuery(callvanQueries.notifications(token));
     } else {
-      queryClient.setQueryData(callvanQueryKeys.notifications, []);
+      queryClient.setQueryData(callvanQueryKeys.notifications(''), []);
     }
   } catch (error) {
     console.error('[SSR] callvan notifications prefetch failed:', error);

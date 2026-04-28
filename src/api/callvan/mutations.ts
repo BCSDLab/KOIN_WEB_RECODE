@@ -19,7 +19,7 @@ const invalidateCallvanInfiniteList = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: callvanQueryKeys.infiniteListRoot });
 
 const invalidateCallvanNotifications = (queryClient: QueryClient) =>
-  queryClient.invalidateQueries({ queryKey: callvanQueryKeys.notifications });
+  queryClient.invalidateQueries({ queryKey: ['callvan', 'notifications'] });
 
 export const callvanMutations = {
   create: (queryClient: QueryClient, token: string) =>

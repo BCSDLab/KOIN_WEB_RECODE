@@ -6,6 +6,7 @@ import {
   GetCallvanList,
   GetCallvanNotifications,
   GetCallvanPostDetail,
+  GetCallvanRestriction,
   PostCallvan,
   PostCallvanReport,
   PostCallvanChat,
@@ -20,6 +21,7 @@ import {
 export const getCallvanList = APIClient.of(GetCallvanList);
 export const getCallvanPostDetail = APIClient.of(GetCallvanPostDetail);
 export const getCallvanNotifications = APIClient.of(GetCallvanNotifications);
+export const getCallvanRestriction = APIClient.of(GetCallvanRestriction);
 export const markAllNotificationsRead = APIClient.of(PostMarkAllNotificationsRead);
 export const markNotificationRead = APIClient.of(PostMarkNotificationRead);
 export const deleteAllNotifications = APIClient.of(DeleteAllNotifications);

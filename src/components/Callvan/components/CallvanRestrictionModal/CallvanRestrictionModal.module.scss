@@ -1,0 +1,97 @@
+$callvan-restriction-accent-color: #b611f5;
+$callvan-restriction-font-family: var(--font-pretendard), sans-serif;
+
+.modal {
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  &__dim {
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: rgb(0 0 0 / 70%);
+    padding: 0;
+    cursor: pointer;
+  }
+
+  &__sheet {
+    position: relative;
+    z-index: 301;
+    width: min(301px, 100%);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 4%),
+      0 4px 5px rgb(0 0 0 / 8%);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 32px;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    color: #4b4b4b;
+    font-family: $callvan-restriction-font-family;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  &__accent {
+    color: $callvan-restriction-accent-color;
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: #727272;
+    font-family: $callvan-restriction-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    background: $callvan-restriction-accent-color;
+    padding: 12px;
+    color: #fff;
+    font-family: $callvan-restriction-font-family;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    cursor: pointer;
+  }
+}
