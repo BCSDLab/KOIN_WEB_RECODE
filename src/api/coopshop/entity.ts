@@ -24,5 +24,6 @@ export interface CoopShopDetailResponse extends APIResponse {
   phone: string | null;
   location: string;
   remarks: string | null;
+  icon_url: string | null;
   updated_at: string; // yyyy-MM-dd
 }

@@ -86,12 +86,32 @@
 }
 
 .icon-wrapper {
+  align-items: center;
   border-radius: 8px;
   background: #f1f8ff;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
   padding: 12px;
   width: 32px;
   height: 32px;
   margin: 0;
+}
+
+.icon-image {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.icon-fallback {
+  color: #072552;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .info-title-container {

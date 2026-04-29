@@ -1,34 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
-import Book from './svg/book.svg';
-import Cafe from './svg/cafe.svg';
-import Cut from './svg/cut.svg';
-import Flatware from './svg/flatware.svg';
-import Glasses from './svg/glasses.svg';
-import Laundry from './svg/laundry.svg';
-import PostOffice from './svg/post-office.svg';
-import Print from './svg/print.svg';
 import styles from './CampusInfo.module.scss';
 
 const CAFETERIA_HEAD_TABLE = {
   row: ['평일', '주말'],
   col: ['아침', '점심', '저녁'],
-};
-
-const SHOP_ICON = {
-  서점: <Book />,
-  대즐: <Cafe />,
-  미용실: <Cut />,
-  세탁소: <Laundry />,
-  우체국: <PostOffice />,
-  '복지관 참빛관 편의점': <Cafe />,
-  복사실: <Print />,
-  학생식당: <Flatware />,
-  복지관식당: <Flatware />,
-  오락실: <Cafe />,
-  안경원: <Glasses />,
-  우편취급국: <PostOffice />,
 };
 
 const formatDateRange = (fromDate: string, toDate: string) => {
@@ -55,6 +32,27 @@ const formatDateRange = (fromDate: string, toDate: string) => {
 
   return `기간 : ${fromFormatted} - ${toFormatted}`;
 };
+
+type ShopIconProps = {
+  iconUrl: string | null | undefined;
+  name: string;
+};
+
+function ShopIcon({ iconUrl, name }: ShopIconProps) {
+  return (
+    <div className={styles['icon-wrapper']}>
+      {iconUrl ? (
+        // NOTE: 백엔드가 내려주는 소형 반복 아이콘은 호스트가 고정되지 않을 수 있어 <img>를 유지합니다.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className={styles['icon-image']} src={iconUrl} alt={name} decoding="async" />
+      ) : (
+        <span className={styles['icon-fallback']} aria-hidden="true">
+          {name.slice(0, 1)}
+        </span>
+      )}
+    </div>
+  );
+}
 
 function CampusInfo() {
   const { data: campusInfo } = useSuspenseQuery(coopshopQueries.allShopInfo());
@@ -87,10 +85,8 @@ function CampusInfo() {
           <div className={styles['info-block']}>
             <div className={styles['info-cafeteria']}>
               <div className={styles['info-title-container']}>
-                <div className={styles['icon-wrapper']}>
-                  <Flatware />
-                </div>
-                <div className={styles['info-title']}>학생식당</div>
+                <ShopIcon iconUrl={cafeteriaInfo?.icon_url} name={cafeteriaInfo?.name ?? '학생식당'} />
+                <div className={styles['info-title']}>{cafeteriaInfo?.name ?? '학생식당'}</div>
               </div>
               <table className={styles.table}>
                 <thead>
@@ -125,9 +121,9 @@ function CampusInfo() {
             </div>
           </div>
 
-          {filteredCampusInfo.slice(0, 2).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(0, 2).map(({ id, name, opens, icon_url }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
+              <ShopIcon iconUrl={icon_url} name={name} />
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
@@ -141,9 +137,9 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(2, 6).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(2, 6).map(({ id, name, opens, icon_url }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
+              <ShopIcon iconUrl={icon_url} name={name} />
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
@@ -157,9 +153,9 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(6).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(6).map(({ id, name, opens, icon_url }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
+              <ShopIcon iconUrl={icon_url} name={name} />
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
