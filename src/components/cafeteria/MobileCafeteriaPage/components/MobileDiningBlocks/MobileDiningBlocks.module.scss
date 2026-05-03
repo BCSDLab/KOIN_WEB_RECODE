@@ -1,7 +1,9 @@
 .category {
   display: block;
-  margin: 0;
   background-color: #fff;
+  margin: 0 24px 16px;
+  border-radius: 16px;
+  overflow: hidden;
 
   &__menu-list-row {
     display: flex;
