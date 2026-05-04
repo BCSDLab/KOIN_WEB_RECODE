@@ -84,7 +84,7 @@ export default function CallvanPageLayout({
           departures: filter.departures.length > 0 ? filter.departures.join(',') : undefined,
           arrivals: filter.arrivals.length > 0 ? filter.arrivals.join(',') : undefined,
           sort: filter.sort !== 'LATEST_DESC' ? filter.sort : undefined,
-          author: filter.author !== 'ALL' ? filter.author : undefined,
+          author: filter.author === 'ALL' ? undefined : filter.author,
           joined: filter.joined ? 'true' : undefined,
           page: undefined,
         },

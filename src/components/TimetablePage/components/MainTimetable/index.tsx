@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+import { Lecture, MyLectureInfo, SemesterCheckResponse, TimetableFrameListResponse } from 'api/timetable/entity';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
@@ -24,13 +24,30 @@ import DownloadTimetableModal from './DownloadTimetableModal';
 import styles from './MyLectureTimetable.module.scss';
 
 interface MainTimetableLayoutProps {
-  curriculum: React.ReactNode;
-  myLectures: Lecture[] | MyLectureInfo[] | undefined;
-  onClickDownloadImage: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onClickEdit: () => void;
-  onClickGraduation: () => void;
-  timetableContent: React.ReactNode;
-  footer?: React.ReactNode;
+  readonly curriculum: React.ReactNode;
+  readonly myLectures: Lecture[] | MyLectureInfo[] | undefined;
+  readonly onClickDownloadImage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  readonly onClickEdit: () => void;
+  readonly onClickGraduation: () => void;
+  readonly timetableContent: React.ReactNode;
+  readonly footer?: React.ReactNode;
+}
+
+function checkSemesterAndTimetable(
+  mySemester: SemesterCheckResponse | null | undefined,
+  frameList: TimetableFrameListResponse,
+): boolean {
+  if (mySemester?.semesters.length === 0) {
+    toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+    return false;
+  }
+
+  if (!frameList.some((frame) => isValidTimetableFrameId(frame.id))) {
+    toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+    return false;
+  }
+
+  return true;
 }
 
 function MainTimetableLayout({
@@ -79,27 +96,13 @@ function InvalidMainTimetable() {
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const { data: mySemester } = useSemesterCheck(token);
 
-  const isSemesterAndTimetableExist = () => {
-    if (mySemester?.semesters.length === 0) {
-      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
-      return false;
-    }
-
-    if (!timeTableFrameList.some((frame) => isValidTimetableFrameId(frame.id))) {
-      toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
-      return false;
-    }
-
-    return true;
-  };
-
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    isSemesterAndTimetableExist();
+    checkSemesterAndTimetable(mySemester, timeTableFrameList);
   };
 
   const onClickEdit = () => {
-    isSemesterAndTimetableExist();
+    checkSemesterAndTimetable(mySemester, timeTableFrameList);
   };
 
   return (
@@ -121,7 +124,7 @@ function InvalidMainTimetable() {
   );
 }
 
-function ValidMainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
+function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const semester = useSemester();
@@ -132,24 +135,10 @@ function ValidMainTimetable({ timetableFrameId }: { timetableFrameId: number }) 
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const { data: mySemester } = useSemesterCheck(token);
 
-  const isSemesterAndTimetableExist = () => {
-    if (mySemester?.semesters.length === 0) {
-      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
-      return false;
-    }
-
-    if (!timeTableFrameList.some((frame) => isValidTimetableFrameId(frame.id))) {
-      toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
-      return false;
-    }
-
-    return true;
-  };
-
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    if (isSemesterAndTimetableExist()) {
+    if (checkSemesterAndTimetable(mySemester, timeTableFrameList)) {
       logger.actionEventClick({
         team: 'USER',
         event_label: 'timetable',
@@ -161,7 +150,7 @@ function ValidMainTimetable({ timetableFrameId }: { timetableFrameId: number }) 
   };
 
   const onClickEdit = () => {
-    if (isSemesterAndTimetableExist()) {
+    if (checkSemesterAndTimetable(mySemester, timeTableFrameList)) {
       router.push(
         `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
@@ -190,7 +179,7 @@ function ValidMainTimetable({ timetableFrameId }: { timetableFrameId: number }) 
   );
 }
 
-function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
+function MainTimetable({ timetableFrameId }: { readonly timetableFrameId: number }) {
   if (!isValidTimetableFrameId(timetableFrameId)) {
     return <InvalidMainTimetable />;
   }

@@ -91,7 +91,12 @@ export default function AddPostForm() {
     if (!form.departureType || !form.arrivalType || isPending) return;
 
     const selectedDateTime = new Date(form.departureDate);
-    const hour24 = form.isPM ? (form.departureHour === 12 ? 12 : form.departureHour + 12) : form.departureHour === 12 ? 0 : form.departureHour;
+    let hour24: number;
+    if (form.isPM) {
+      hour24 = form.departureHour === 12 ? 12 : form.departureHour + 12;
+    } else {
+      hour24 = form.departureHour === 12 ? 0 : form.departureHour;
+    }
     selectedDateTime.setHours(hour24, form.departureMinute, 0, 0);
 
     if (selectedDateTime < new Date()) {

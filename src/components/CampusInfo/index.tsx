@@ -34,8 +34,8 @@ const formatDateRange = (fromDate: string, toDate: string) => {
 };
 
 type ShopIconProps = {
-  iconUrl: string | null | undefined;
-  name: string;
+  readonly iconUrl: string | null | undefined;
+  readonly name: string;
 };
 
 function ShopIcon({ iconUrl, name }: ShopIconProps) {

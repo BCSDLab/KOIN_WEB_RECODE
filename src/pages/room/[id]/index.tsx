@@ -20,7 +20,7 @@ import {
 import styles from './RoomDetailPage.module.scss';
 
 interface RoomDetailPageProps {
-  id: string;
+  readonly id: string;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
