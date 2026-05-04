@@ -5,8 +5,8 @@ import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CallvanRestrictionModal.module.scss';
 
 interface CallvanRestrictionModalProps {
-  restriction: RestrictedCallvanResponse | null;
-  onClose: () => void;
+  readonly restriction: RestrictedCallvanResponse | null;
+  readonly onClose: () => void;
 }
 
 export default function CallvanRestrictionModal({ restriction, onClose }: CallvanRestrictionModalProps) {
@@ -29,7 +29,7 @@ export default function CallvanRestrictionModal({ restriction, onClose }: Callva
   }, [onClose]);
 
   return (
-    <div className={styles.modal__overlay} role="dialog" aria-modal="true" aria-labelledby="callvan-restriction-title">
+    <dialog className={styles.modal__overlay} open aria-modal="true" aria-labelledby="callvan-restriction-title">
       <button type="button" className={styles.modal__dim} onClick={onClose} aria-label="닫기" />
       <div className={styles.modal__sheet}>
         <div className={styles.modal__content}>
@@ -49,6 +49,6 @@ export default function CallvanRestrictionModal({ restriction, onClose }: Callva
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

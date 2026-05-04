@@ -13,6 +13,8 @@ import {
   getSingleLostItemArticle,
 } from './index';
 
+type ChatroomParamId = number | string | null;
+
 type LostItemInfiniteListParams = Omit<LostItemArticlesRequest, 'page'>;
 
 type LostItemSearchParams = Required<Pick<SearchLostItemArticleRequest, 'query'>> & {
@@ -37,9 +39,9 @@ export const articleQueryKeys = {
   lostItemStat: ['lostItem', 'stat'] as const,
   lostItemChatroomAll: ['chatroom', 'lost-item'] as const,
   lostItemChatroomList: ['chatroom', 'lost-item', 'list'] as const,
-  lostItemChatroomDetail: (articleId: number | string | null, chatroomId: number | string | null) =>
+  lostItemChatroomDetail: (articleId: ChatroomParamId, chatroomId: ChatroomParamId) =>
     ['chatroom', 'lost-item', 'detail', articleId, chatroomId] as const,
-  lostItemChatroomMessages: (articleId: number | string | null, chatroomId: number | string | null) =>
+  lostItemChatroomMessages: (articleId: ChatroomParamId, chatroomId: ChatroomParamId) =>
     ['chatroom', 'lost-item', 'messages', articleId, chatroomId] as const,
 };
 

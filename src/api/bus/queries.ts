@@ -83,8 +83,8 @@ export const busQueries = {
           ? () =>
               getBusRouteInfo({
                 ...rest,
-                depart: depart as Depart,
-                arrival: arrival as Arrival,
+                depart,
+                arrival,
               })
           : skipToken,
     });

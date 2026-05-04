@@ -30,6 +30,41 @@ const MobilePage = dynamic(
   { ssr: true },
 );
 
+async function prefetchTimetableWithToken(
+  queryClient: QueryClient,
+  token: string,
+  year: number,
+  term: Term,
+  validatedFrameId: number | null,
+  context: GetServerSidePropsContext,
+) {
+  try {
+    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token));
+    const userSemester = mySemesterData?.semesters?.[0];
+    const semester = year && term ? { year, term } : userSemester || getRecentSemester();
+
+    const timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
+
+    const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+    const currentFrameId = validatedFrameId ?? mainFrame?.id ?? null;
+
+    const prefetchPromises = [
+      queryClient.prefetchQuery(timetableQueries.semesterInfo()),
+      queryClient.prefetchQuery(deptQueries.list()),
+    ];
+
+    if (currentFrameId !== null) {
+      prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(token, currentFrameId)));
+    }
+
+    await Promise.all(prefetchPromises);
+  } catch (error) {
+    if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) throw error;
+    if (isServerAuthError(error)) clearServerAuthCookies(context);
+    queryClient.setQueryData(timetableQueryKeys.frameList(getRecentSemester()), createDefaultTimetableFrameList());
+  }
+}
+
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { token, query } = parseServerSideParams(context);
@@ -39,35 +74,9 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
   if (token) {
-    try {
-      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token));
-      const userSemester = mySemesterData?.semesters?.[0];
-      const semester = year && term ? { year, term } : userSemester || getRecentSemester();
-
-      const timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
-
-      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-      const currentFrameId = validatedFrameId ?? mainFrame?.id ?? null;
-
-      const prefetchPromises = [
-        queryClient.prefetchQuery(timetableQueries.semesterInfo()),
-        queryClient.prefetchQuery(deptQueries.list()),
-      ];
-
-      if (currentFrameId !== null) {
-        prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(token, currentFrameId)));
-      }
-
-      await Promise.all(prefetchPromises);
-    } catch (error) {
-      if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) throw error;
-      if (isServerAuthError(error)) clearServerAuthCookies(context);
-      const semester = getRecentSemester();
-      queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
-    }
+    await prefetchTimetableWithToken(queryClient, token, year, term, validatedFrameId, context);
   } else {
-    const semester = getRecentSemester();
-    queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+    queryClient.setQueryData(timetableQueryKeys.frameList(getRecentSemester()), createDefaultTimetableFrameList());
   }
 
   if (!token) {

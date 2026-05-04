@@ -33,10 +33,10 @@ const formatDateRange = (fromDate: string, toDate: string) => {
   return `기간 : ${fromFormatted} - ${toFormatted}`;
 };
 
-type ShopIconProps = {
+type ShopIconProps = Readonly<{
   iconUrl: string | null | undefined;
   name: string;
-};
+}>;
 
 function ShopIcon({ iconUrl, name }: ShopIconProps) {
   return (

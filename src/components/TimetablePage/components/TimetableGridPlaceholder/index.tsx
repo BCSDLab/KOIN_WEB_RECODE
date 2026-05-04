@@ -8,10 +8,10 @@ const DEFAULT_TIME_STRING = ['9', '10', '11', '12', '13', '14', '15', '16', '17'
 ]);
 
 interface TimetableGridPlaceholderProps {
-  firstColumnWidth: number;
-  columnWidth: number;
-  rowHeight: number;
-  totalHeight: number;
+  readonly firstColumnWidth: number;
+  readonly columnWidth: number;
+  readonly rowHeight: number;
+  readonly totalHeight: number;
 }
 
 export default function TimetableGridPlaceholder({

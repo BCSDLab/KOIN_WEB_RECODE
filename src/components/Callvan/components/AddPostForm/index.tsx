@@ -25,8 +25,13 @@ interface FormState {
   maxParticipants: number;
 }
 
+function convertTo24Hour(hour: number, isPM: boolean): number {
+  if (isPM) return hour === 12 ? 12 : hour + 12;
+  return hour === 12 ? 0 : hour;
+}
+
 function formatTime(hour: number, minute: number, isPM: boolean): string {
-  const hour24 = isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
+  const hour24 = convertTo24Hour(hour, isPM);
   return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 }
 
@@ -91,7 +96,7 @@ export default function AddPostForm() {
     if (!form.departureType || !form.arrivalType || isPending) return;
 
     const selectedDateTime = new Date(form.departureDate);
-    const hour24 = form.isPM ? (form.departureHour === 12 ? 12 : form.departureHour + 12) : form.departureHour === 12 ? 0 : form.departureHour;
+    const hour24 = convertTo24Hour(form.departureHour, form.isPM);
     selectedDateTime.setHours(hour24, form.departureMinute, 0, 0);
 
     if (selectedDateTime < new Date()) {
