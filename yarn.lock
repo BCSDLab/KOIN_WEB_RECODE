@@ -5740,14 +5740,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.31.0":
-  version: 0.31.0
-  resolution: "axios@npm:0.31.0"
+"axios@npm:^0.31.1":
+  version: 0.31.1
+  resolution: "axios@npm:0.31.1"
   dependencies:
     follow-redirects: "npm:^1.15.4"
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/80536a915c36ff9e31f32a25e93f558963a89b4182b90a829c0fab44d5c9ee84ebbe34501c45448f422a181db75b8bab4272076a6b128184da2bfa340943d0d5
+  checksum: 10/097dffdc0ab1229fd2f2e792d038e81272568e8280217933f4ad68234761ffebe2b51468f6190f5d98eb3df9511800083f74f78dda4c6229b24b4f9d98d300e5
   languageName: node
   linkType: hard
 
@@ -10026,7 +10026,7 @@ __metadata:
     "@types/react": "npm:^19.2.10"
     "@types/react-dom": "npm:^19.2.3"
     "@types/react-window": "npm:^1.8.5"
-    axios: "npm:^0.31.0"
+    axios: "npm:^0.31.1"
     dayjs: "npm:^1.11.12"
     dotenv: "npm:^17.2.3"
     embla-carousel-autoplay: "npm:^8.0.4"
@@ -10048,7 +10048,7 @@ __metadata:
     jest: "npm:^29.7.0"
     lottie-react: "npm:^2.4.1"
     next: "npm:15.5.15"
-    postcss: "npm:^8.4.48"
+    postcss: "npm:^8.5.11"
     prettier: "npm:^3.6.2"
     react: "npm:^19.2.5"
     react-dom: "npm:^19.2.5"
@@ -11342,14 +11342,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.48":
-  version: 8.5.10
-  resolution: "postcss@npm:8.5.10"
+"postcss@npm:^8.5.11":
+  version: 8.5.14
+  resolution: "postcss@npm:8.5.14"
   dependencies:
     nanoid: "npm:^3.3.11"
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
-  checksum: 10/7eac6169e535b63c8412e94d4f6047fc23efa3e9dde804b541940043c831b25f1cd867d83cd2c4371ad2450c8abcb42c208aa25668c1f0f3650d7f72faf711a8
+  checksum: 10/2e3f4dea69692918fe9df5402beb0e54df84499995a094f2fbf63d1a9e38bc1b7a42854df47f09e02593213e01a5eb0627b1d1bd6d1b0ea90767b2e072f7167c
   languageName: node
   linkType: hard
 

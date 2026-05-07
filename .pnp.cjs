@@ -48,7 +48,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.0"],\
+          ["axios", "npm:0.31.1"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -71,7 +71,7 @@ const RAW_RUNTIME_STATE =
           ["koin_web_recode", "workspace:."],\
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.15"],\
-          ["postcss", "npm:8.5.10"],\
+          ["postcss", "npm:8.5.14"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.5"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.5"],\
@@ -3629,7 +3629,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@types/axios", null],\
-          ["axios", "npm:0.31.0"]\
+          ["axios", "npm:0.31.1"]\
         ],\
         "packagePeers": [\
           "@types/axios",\
@@ -8461,11 +8461,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["axios", [\
-      ["npm:0.31.0", {\
-        "packageLocation": "./.yarn/cache/axios-npm-0.31.0-c3cc4d3e42-80536a915c.zip/node_modules/axios/",\
+      ["npm:0.31.1", {\
+        "packageLocation": "./.yarn/cache/axios-npm-0.31.1-0574a0de7d-097dffdc0a.zip/node_modules/axios/",\
         "packageDependencies": [\
-          ["axios", "npm:0.31.0"],\
-          ["follow-redirects", "virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0"],\
+          ["axios", "npm:0.31.1"],\
+          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"],\
           ["form-data", "npm:4.0.5"],\
           ["proxy-from-env", "npm:1.1.0"]\
         ],\
@@ -11125,12 +11125,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0", {\
-        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-408cb32876/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
+      ["virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0", {\
+        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-575fb99746/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
           ["@types/debug", null],\
           ["debug", null],\
-          ["follow-redirects", "virtual:c3cc4d3e42e0cbc24baf969e9e9c4d3a62a5b9e6de095ef349c8ef855208fd6fff9a9d64360963b98fa8437dabdf13fd910e8e20dac0ba935d3dec8e4d29ac0a#npm:1.16.0"]\
+          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"]\
         ],\
         "packagePeers": [\
           "@types/debug",\
@@ -13452,7 +13452,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.10"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.0"],\
+          ["axios", "npm:0.31.1"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -13475,7 +13475,7 @@ const RAW_RUNTIME_STATE =
           ["koin_web_recode", "workspace:."],\
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.15"],\
-          ["postcss", "npm:8.5.10"],\
+          ["postcss", "npm:8.5.14"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.5"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.5"],\
@@ -14838,12 +14838,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.5.10", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.10-e528db09cb-7eac6169e5.zip/node_modules/postcss/",\
+      ["npm:8.5.14", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.14-1cf8d01c78-2e3f4dea69.zip/node_modules/postcss/",\
         "packageDependencies": [\
           ["nanoid", "npm:3.3.11"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.10"],\
+          ["postcss", "npm:8.5.14"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
