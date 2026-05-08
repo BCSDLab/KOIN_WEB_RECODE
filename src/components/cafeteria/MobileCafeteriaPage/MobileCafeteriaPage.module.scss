@@ -71,7 +71,7 @@
   border-radius: 16px;
   display: flex;
   align-items: center;
-  margin-top: 12px;
+  margin: 16px 24px;
   box-shadow:
     0 2px 4px rgb(0 0 0 / 4%),
     0 1px 1px rgb(0 0 0 / 2%);
@@ -90,5 +90,9 @@
     color: #d47415;
     line-height: 160%;
     font-weight: 600;
+  }
+
+  &__arrow {
+    margin-left: auto;
   }
 }
