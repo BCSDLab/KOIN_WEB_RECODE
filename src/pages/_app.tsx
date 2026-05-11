@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
@@ -11,6 +10,7 @@ import Toast from 'components/feedback/Toast';
 import Layout from 'components/layout';
 import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
+import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { COOKIE_KEY } from 'static/url';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
@@ -79,7 +79,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
   const pageTitle = React.useMemo(() => {
-    if (!Component.title) return 'KOIN';
+    if (!Component.title) return undefined;
     return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
   }, [Component, router.asPath]);
 
@@ -141,9 +141,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
           {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
           <PortalProvider>
-            <Head>
-              <title>{pageTitle}</title>
-            </Head>
+            <Seo title={pageTitle} />
             <AutoLogin />
             {getLayout(<Component {...pageProps} />)}
             <Toast />
