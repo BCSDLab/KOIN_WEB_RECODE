@@ -10,9 +10,7 @@ const SITE_URL = IS_STAGE ? 'https://stage.koreatech.in' : 'https://koreatech.in
 const PRIVATE_PATHS = [
   '/auth',
   '/auth/*',
-  '/webview',
   '/webview/*',
-  '/report',
   '/report/*',
   '/callvan/add',
   '/callvan/chat/*',
@@ -28,9 +26,7 @@ const PRIVATE_PATHS = [
   '/lost-item/report/*',
   '/lost-item/chat',
   '/store/review/*',
-  '/store/review/edit/*',
-  '/monitoring',
-  '/monitoring/*',
+  '/store/review/edit/**',
 ];
 
 /** @type {import('next-sitemap').IConfig} */
@@ -61,7 +57,6 @@ export default {
           '/lost-item/report',
           '/lost-item/chat',
           '/store/review',
-          '/monitoring',
         ],
       },
     ],
