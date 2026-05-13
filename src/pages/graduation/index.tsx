@@ -21,6 +21,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './GraduationCalculatorPage.module.scss';
 
@@ -59,10 +60,10 @@ function GraduationCalculatorComponent() {
   useEffect(() => {
     if (!token) return;
 
-    const isFirstVisit = sessionStorage.getItem('visitedGraduationPage');
+    const isFirstVisit = isomorphicSessionStorage.getItem('visitedGraduationPage');
 
     if (!isFirstVisit) {
-      sessionStorage.setItem('visitedGraduationPage', 'true');
+      isomorphicSessionStorage.setItem('visitedGraduationPage', 'true');
 
       portalManager.open(() => <CalculatorHelpModal closeInfo={closeInfo} />);
     }
@@ -70,7 +71,7 @@ function GraduationCalculatorComponent() {
 
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
-    if (sessionStorage.getItem('swipeToBack') === 'true') {
+    if (isomorphicSessionStorage.getItem('swipeToBack') === 'true') {
       logger.actionEventSwipe({
         team: 'USER',
         event_label: 'graduation_calculator_back',
