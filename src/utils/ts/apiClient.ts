@@ -10,6 +10,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
 import { redirectToClub, redirectToLogin } from './auth';
 import { deleteCookie, getCookieDomain, setCookie } from './cookie';
+import { isomorphicLocalStorage } from './env';
 import { saveTokensToNative } from './iosBridge';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
@@ -166,10 +167,11 @@ export default class APIClient {
       deleteCookie(COOKIE_KEY.AUTH_TOKEN, domain ? { domain } : undefined);
 
       try {
-        const storage = window.localStorage.getItem('refresh-token-storage');
-        const refreshToken = storage
-          ? (JSON.parse(storage) as { state: { refreshToken: string } }).state.refreshToken
-          : null;
+        const storage = isomorphicLocalStorage.getJSONItem<{ state?: { refreshToken?: string } } | null>(
+          'refresh-token-storage',
+          null,
+        );
+        const refreshToken = storage?.state?.refreshToken ?? null;
 
         if (refreshToken) {
           await this.refreshAccessToken(refreshToken);
