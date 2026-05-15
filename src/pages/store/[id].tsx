@@ -32,6 +32,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import {
   isNotFoundKoinError,
@@ -140,7 +141,7 @@ function StoreDetailPage({ id }: Props) {
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
-      sessionStorage.setItem('enter_storeDetail', currentTime.toString());
+      isomorphicSessionStorage.setItem('enter_storeDetail', currentTime.toString());
       enterCategoryTimeRef.current = currentTime;
     }
   }, [logger, testValue]);
@@ -154,21 +155,21 @@ function StoreDetailPage({ id }: Props) {
   const storeType = searchParams.get('type') ?? 'shop';
   const portalManager = useModalPortal();
   const onClickCallNumber = () => {
-    if (searchParams.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+    if (searchParams.get('state') === '리뷰' && isomorphicSessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
         team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: '',
         previous_page: '리뷰',
         current_page: '전화',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
       });
     }
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: `${storeType}_call`,
       value: storeDetail!.name,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
 
@@ -184,14 +185,14 @@ function StoreDetailPage({ id }: Props) {
     ));
   };
   const onClickList = () => {
-    if (searchParams.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+    if (searchParams.get('state') === '리뷰' && isomorphicSessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
         team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: storeDetail.name,
         previous_page: '리뷰',
         current_page: '전체보기',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
       });
     }
     logger.actionEventClick({
@@ -199,8 +200,8 @@ function StoreDetailPage({ id }: Props) {
       event_label: 'shop_detail_view_back',
       value: storeDetail!.name,
       event_category: 'ShopList',
-      current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
+      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
@@ -258,16 +259,16 @@ function StoreDetailPage({ id }: Props) {
 
   React.useEffect(() => {
     if (searchParams.get('state') !== '리뷰') {
-      if (sessionStorage.getItem('enterReviewPage')) {
+      if (isomorphicSessionStorage.getItem('enterReviewPage')) {
         logger.actionEventClick({
           team: 'BUSINESS',
           event_label: 'shop_detail_view_review_back',
           value: storeDetail.name,
           previous_page: '리뷰',
           current_page: searchParams.get('state') || '메뉴',
-          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+          duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
         });
-        sessionStorage.removeItem('enterReviewPage');
+        isomorphicSessionStorage.removeItem('enterReviewPage');
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -281,13 +282,13 @@ function StoreDetailPage({ id }: Props) {
           event_label: 'shop_detail_view_back',
           value: storeDetail.name,
           event_category: 'swipe',
-          current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+          current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
+          duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
         });
       };
       window.addEventListener('popstate', handlePopState);
       return () => {
-        sessionStorage.removeItem('enterReviewPage');
+        isomorphicSessionStorage.removeItem('enterReviewPage');
         window.removeEventListener('popstate', handlePopState);
       };
     },

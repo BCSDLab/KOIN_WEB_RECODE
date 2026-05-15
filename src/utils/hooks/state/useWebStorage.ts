@@ -1,15 +1,26 @@
 import { useSyncExternalStore } from 'react';
+import {
+  getBrowserStorage,
+  getStorageJSONValue,
+  isomorphicLocalStorage,
+  isomorphicSessionStorage,
+} from 'utils/ts/env';
 
 type StorageVariant = 'local' | 'session';
 
-const getStorage = (variant: StorageVariant): Storage => variant === 'local' ? localStorage : sessionStorage;
+const getStorage = (variant: StorageVariant) => getBrowserStorage(variant);
+
+const getIsomorphicStorage = (variant: StorageVariant) => (
+  variant === 'local' ? isomorphicLocalStorage : isomorphicSessionStorage
+);
 
 const subscribe = (variant: StorageVariant, key: string) => {
   return (callback: () => void) => {
     if (typeof window === 'undefined') return () => {};
 
     const onStorage = (event: StorageEvent) => {
-      if (event.key === key && event.storageArea === getStorage(variant)) {
+      const storage = getStorage(variant);
+      if (event.key === key && (!storage || event.storageArea === storage)) {
         callback();
       }
     };
@@ -22,12 +33,7 @@ const subscribe = (variant: StorageVariant, key: string) => {
 const getSnapshot = <T>(variant: StorageVariant, key: string, defaultValue: T) => {
   return () => {
     if (typeof window === 'undefined') return defaultValue;
-    try {
-      const item = getStorage(variant).getItem(key);
-      return item ? (JSON.parse(item) as T) : defaultValue;
-    } catch {
-      return defaultValue;
-    }
+    return getIsomorphicStorage(variant).getJSONItem(key, defaultValue);
   };
 };
 
@@ -42,17 +48,22 @@ export function useWebStorage<T>(key: string, defaultValue: T, options?: { varia
 
   const setValue = (newValue: T | null) => {
     if (typeof window === 'undefined') return;
+    const nextStorageValue = newValue === null ? null : getStorageJSONValue(newValue);
 
-    const storage = getStorage(variant);
     if (newValue === null) {
-      storage.removeItem(key);
+      getIsomorphicStorage(variant).removeItem(key);
     } else {
-      storage.setItem(key, JSON.stringify(newValue));
+      getIsomorphicStorage(variant).setJSONItem(key, newValue);
     }
 
-    window.dispatchEvent(
-      new StorageEvent('storage', { key, newValue: newValue ? JSON.stringify(newValue) : null, storageArea: storage }),
-    );
+    const storage = getStorage(variant);
+    const storageEventInit: StorageEventInit = { key, newValue: nextStorageValue };
+
+    if (storage) {
+      storageEventInit.storageArea = storage;
+    }
+
+    window.dispatchEvent(new StorageEvent('storage', storageEventInit));
   };
 
   return [value, setValue] as const;

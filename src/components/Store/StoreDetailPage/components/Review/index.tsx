@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DropdownProvider } from 'components/Store/StoreDetailPage/hooks/useDropdown';
 import ROUTES from 'static/routes';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import AverageRating from './components/AverageRating/AverageRating';
 import ReviewButton from './components/ReviewButton';
 import ReviewList from './components/ReviewList/ReviewList';
@@ -12,7 +13,7 @@ export default function ReviewPage({ id }: { id: string }) {
 
   useEffect(() => {
     // 리뷰 페이지 진입 시간 기록
-    sessionStorage.setItem('enterReviewPage', new Date().getTime().toString());
+    isomorphicSessionStorage.setItem('enterReviewPage', new Date().getTime().toString());
   }, []);
 
   return (

@@ -18,6 +18,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { getRecentSemester } from 'utils/timetable/semester';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
@@ -107,7 +108,7 @@ function TimetablePage() {
     : initialFrameId;
 
   useEffect(() => {
-    sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
+    isomorphicSessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
   }, []);
 
   return (

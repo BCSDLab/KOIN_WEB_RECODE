@@ -45,12 +45,12 @@ function IndexCafeteria() {
   };
 
   const handleTooltipContentButtonClick = () => {
-    localStorage.setItem('cafeteria-tooltip', 'used');
+    isomorphicLocalStorage.setItem('cafeteria-tooltip', 'used');
     handleMoreClick();
   };
 
   const handleTooltipCloseButtonClick = () => {
-    localStorage.setItem('cafeteria-tooltip', 'used');
+    isomorphicLocalStorage.setItem('cafeteria-tooltip', 'used');
     closeTooltip();
   };
 

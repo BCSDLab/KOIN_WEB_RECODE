@@ -13,6 +13,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Panel.module.scss';
@@ -62,7 +63,7 @@ export default function Panel({ openModal }: PanelProps) {
         value: '햄버거',
         previous_page: '시간표',
         current_page: title,
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
   };

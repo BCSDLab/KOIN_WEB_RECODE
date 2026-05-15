@@ -7,6 +7,7 @@ import MainTimetable from 'components/TimetablePage/components/MainTimetable';
 import TimetableList from 'components/TimetablePage/components/TimetableList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
@@ -19,14 +20,14 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
     // swipe로 뒤로가기 시
-    if (sessionStorage.getItem('swipeToBack') === 'true') {
+    if (isomorphicSessionStorage.getItem('swipeToBack') === 'true') {
       logger.actionEventSwipe({
         team: 'USER',
         event_label: 'timetable_back',
         value: 'OS스와이프',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
       history.back();
       return;
@@ -38,7 +39,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       value: '뒤로가기버튼',
       previous_page: '시간표',
       current_page: '메인',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
     });
   }, [logger]);
 
@@ -51,11 +52,11 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
   }, []);
 
   React.useEffect(() => {
-    sessionStorage.setItem('swipeToBack', 'false');
+    isomorphicSessionStorage.setItem('swipeToBack', 'false');
     const handleWheel = (e: WheelEvent) => {
       // 한 번에 최소 100px만큼 스크롤(드래그) 시 swipe했다고 간주
       if (e.deltaX < -100) {
-        sessionStorage.setItem('swipeToBack', 'true');
+        isomorphicSessionStorage.setItem('swipeToBack', 'true');
       }
     };
     window.addEventListener('wheel', handleWheel);

@@ -36,6 +36,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
@@ -1132,7 +1133,7 @@ const useModifyInfoForm = () => {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const onSuccess = () => {
-    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
+    isomorphicLocalStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
     router.push(ROUTES.Main());
     showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: authQueryKeys.all });

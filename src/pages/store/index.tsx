@@ -29,6 +29,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
 import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { isomorphicLocalStorage, isomorphicSessionStorage } from 'utils/ts/env';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
 import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import styles from './StorePage.module.scss';
@@ -155,7 +156,7 @@ function Store() {
   const selectedCategory = router.query.category ? Number(router.query.category) : -1;
 
   const handleTooltipCloseButtonClick = () => {
-    localStorage.setItem('store-review-tooltip', 'used');
+    isomorphicLocalStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
 
@@ -219,7 +220,7 @@ function Store() {
       initializeCategoryEntryTime();
       enterCategoryTimeRef.current = currentTime;
     }
-    sessionStorage.setItem('cameFrom', categories.shop_categories[selectedCategory]?.name || '전체보기');
+    isomorphicSessionStorage.setItem('cameFrom', categories.shop_categories[selectedCategory]?.name || '전체보기');
   }, [categories, selectedCategory]);
 
   const handleBenefitClick = () => {

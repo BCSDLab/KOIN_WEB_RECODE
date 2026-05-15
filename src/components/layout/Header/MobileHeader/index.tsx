@@ -11,6 +11,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import { backButtonTapped } from 'utils/ts/iosBridge';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
@@ -46,8 +47,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         event_label: 'shop_detail_view_back',
         value: response.name,
         event_category: 'click',
-        current_page: sessionStorage.getItem('cameFrom') || '',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        current_page: isomorphicSessionStorage.getItem('cameFrom') || '',
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
       }); // 상점 내 뒤로가기 버튼 로깅
       router.back();
       return;
@@ -59,7 +60,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         value: '뒤로가기버튼',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
 

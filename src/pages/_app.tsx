@@ -16,6 +16,7 @@ import { COOKIE_KEY } from 'static/url';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -103,7 +104,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     }
     // 로깅을 위한 userId 전달 및 gtag 함수 정의
     if (typeof window !== 'undefined') {
-      const userId = localStorage.getItem('uuid') || '';
+      const userId = isomorphicLocalStorage.getItem('uuid') || '';
 
       window.dataLayer = window.dataLayer || [];
 
