@@ -12,7 +12,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Footer.module.scss';
 
-function Footer(): JSX.Element {
+function Footer() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
@@ -21,6 +21,10 @@ function Footer(): JSX.Element {
 
   const router = useRouter();
   const { pathname } = router; // 현재 URL의 경로
+
+  if (isMobile) {
+    return null;
+  }
 
   const logShortcut = (title: string) => {
     const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
