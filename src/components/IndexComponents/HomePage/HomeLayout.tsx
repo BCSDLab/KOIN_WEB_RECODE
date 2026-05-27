@@ -1,8 +1,8 @@
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
+import MobileHomeRedesignHeader from 'components/layout/Header/MobileHomeRedesignHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useHomeExperimentVariant } from 'utils/zustand/homeExperiment';
-import MobileHomeRedesignHeader from './MobileHomeRedesignHeader';
 
 function HomeLayout({ children }: { children: React.ReactNode }) {
   const isMobile = useMediaQuery();
