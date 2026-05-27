@@ -7,7 +7,7 @@ import { clubQueries } from 'api/club/queries';
 import { storeQueries } from 'api/store/queries';
 import { timetableQueries } from 'api/timetable/queries';
 import HomePage from 'components/IndexComponents/HomePage';
-import HomeLayout from 'components/IndexComponents/HomePage/HomeLayout';
+import HomeLayout from 'components/layout/HomeLayout';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
