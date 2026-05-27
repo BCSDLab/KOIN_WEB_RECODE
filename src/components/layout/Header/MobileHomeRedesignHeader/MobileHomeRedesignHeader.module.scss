@@ -1,4 +1,5 @@
 .header {
+  box-sizing: border-box;
   width: 100%;
   padding: 8px 24px;
   display: flex;
@@ -8,11 +9,5 @@
   &__brand {
     display: flex;
     align-items: center;
-  }
-
-  &__bbico,
-  &__title,
-  &__notification {
-    display: block;
   }
 }
