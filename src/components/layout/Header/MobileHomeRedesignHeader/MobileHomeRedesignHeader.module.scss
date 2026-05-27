@@ -1,3 +1,18 @@
 .header {
   width: 100%;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  &__bbico,
+  &__title,
+  &__notification {
+    display: block;
+  }
 }
