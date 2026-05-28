@@ -1,6 +1,7 @@
 .layout {
   width: 100%;
   min-height: 100vh;
+  box-sizing: border-box;
 
   &--redesign {
     padding-bottom: calc(74px + env(safe-area-inset-bottom));
