@@ -49,7 +49,7 @@ function MobileBottomNavigation() {
               key={key}
               className={`${styles.navigation__item} ${isActive ? styles['navigation__item--active'] : ''}`}
             >
-              <Link href={href} className={styles.navigation__link}>
+              <Link href={href} className={styles.navigation__link} aria-current={isActive ? 'page' : undefined}>
                 <Icon className={styles.navigation__icon} />
                 <span className={styles.navigation__label}>{label}</span>
               </Link>
