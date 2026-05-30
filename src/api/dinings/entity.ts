@@ -13,7 +13,7 @@ export type OriginalDining = {
   place: DiningPlace;
   price_card: number | null;
   price_cash: number | null;
-  kcal: number | null;
+  kcal: number;
   menu: string[];
   image_url: string | null;
   created_at: string;
