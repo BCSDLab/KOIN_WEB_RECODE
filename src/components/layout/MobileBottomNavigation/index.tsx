@@ -5,6 +5,7 @@ import ClipBoardIcon from 'assets/svg/common/clipboard-icon.svg';
 import HomeIcon from 'assets/svg/common/home-icon.svg';
 import UserIcon from 'assets/svg/common/user-icon.svg';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './MobileBottomNavigation.module.scss';
 
 const NAVIGATION_ITEMS = [
@@ -37,19 +38,21 @@ const NAVIGATION_ITEMS = [
 
 function MobileBottomNavigation() {
   const { pathname } = useRouter();
+  const token = useTokenState();
 
   return (
     <nav className={styles.navigation} aria-label="하단 메뉴">
       <ul className={styles['navigation__list']}>
         {NAVIGATION_ITEMS.map(({ key, label, href, Icon }) => {
-          const isActive = pathname === href;
+          const resolvedHref = key === 'profile' && !token ? ROUTES.Auth() : href;
+          const isActive = pathname === resolvedHref || (key === 'profile' && pathname === ROUTES.AuthModifyInfo());
 
           return (
             <li
               key={key}
               className={`${styles.navigation__item} ${isActive ? styles['navigation__item--active'] : ''}`}
             >
-              <Link href={href} className={styles.navigation__link} aria-current={isActive ? 'page' : undefined}>
+              <Link href={resolvedHref} className={styles.navigation__link} aria-current={isActive ? 'page' : undefined}>
                 <Icon className={styles.navigation__icon} />
                 <span className={styles.navigation__label}>{label}</span>
               </Link>
