@@ -9,6 +9,7 @@ import {
 } from 'api/timetable/entity';
 import useToast from 'components/feedback/Toast/useToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import showToast from 'utils/ts/showToast';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
@@ -67,7 +68,9 @@ export default function useTimetableMutation(timetableFrameId: number) {
 
   // 강의 복원
   const restoreLecture = (id: number[]) => {
-    const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
+    const restoredLecture = isomorphicSessionStorage.getJSONItem<Lecture | MyLectureInfo | null>('restoreLecture', null);
+    if (!restoredLecture || typeof restoredLecture !== 'object') return;
+
     if ('name' in restoredLecture) {
       addLectureFromLocalStorage(restoredLecture, `${semester?.year}${semester?.term}`);
     } else {
@@ -107,7 +110,7 @@ export default function useTimetableMutation(timetableFrameId: number) {
 
   const removeMyLecture = useMutation({
     mutationFn: async ({ clickedLecture, id }: RemoveMyLectureProps & { disableRecoverButton?: boolean }) => {
-      sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
+      isomorphicSessionStorage.setJSONItem('restoreLecture', clickedLecture);
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`));
       }

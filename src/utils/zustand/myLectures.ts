@@ -1,4 +1,5 @@
 import { Lecture } from 'api/timetable/entity';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -7,6 +8,10 @@ interface TimetableInfoFromLocalStorage {
 }
 
 const MY_LECTURES_KEY = 'my-lectures';
+
+const getInitialLectures = (): TimetableInfoFromLocalStorage => {
+  return isomorphicLocalStorage.getJSONItem<TimetableInfoFromLocalStorage>(MY_LECTURES_KEY, {});
+};
 
 type State = {
   lectures: TimetableInfoFromLocalStorage;
@@ -25,14 +30,14 @@ interface TimeStringState {
 }
 
 export const useLecturesStore = create<State & Action>((set, get) => ({
-  lectures: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}') : {},
+  lectures: getInitialLectures(),
   action: {
     addLecture: (lecture, semester) => {
       const timetableInfoList = get().lectures;
       const newValue = [...(timetableInfoList[semester] || [])];
       newValue.push(lecture);
 
-      localStorage.setItem(MY_LECTURES_KEY, JSON.stringify({ ...timetableInfoList, [semester]: newValue }));
+      isomorphicLocalStorage.setJSONItem(MY_LECTURES_KEY, { ...timetableInfoList, [semester]: newValue });
       set(() => ({ lectures: { ...timetableInfoList, [semester]: newValue } }));
     },
     removeLecture: (lecture, semester) => {
@@ -40,10 +45,10 @@ export const useLecturesStore = create<State & Action>((set, get) => ({
       const timetableInfoWithNewValue = timetableInfoList[semester].filter(
         (newValue) => lecture.code !== newValue.code || lecture.lecture_class !== newValue.lecture_class,
       );
-      localStorage.setItem(
-        MY_LECTURES_KEY,
-        JSON.stringify({ ...timetableInfoList, [semester]: timetableInfoWithNewValue }),
-      );
+      isomorphicLocalStorage.setJSONItem(MY_LECTURES_KEY, {
+        ...timetableInfoList,
+        [semester]: timetableInfoWithNewValue,
+      });
       set(() => ({ lectures: { ...timetableInfoList, [semester]: timetableInfoWithNewValue } }));
     },
   },

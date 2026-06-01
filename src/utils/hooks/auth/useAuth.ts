@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
 import { COOKIE_KEY } from 'static/url';
@@ -8,10 +9,13 @@ import { useTokenStore } from 'utils/zustand/auth';
 const useAuth = () => {
   const { setToken, setRefreshToken } = useTokenStore.getState();
 
-  const getRefreshToken = () => {
-    const refreshTokenStorage = isomorphicLocalStorage.getItem('refresh-token-storage');
-    return refreshTokenStorage && JSON.parse(refreshTokenStorage).state.refreshToken;
-  };
+  const getRefreshToken = useCallback(() => {
+    const refreshTokenStorage = isomorphicLocalStorage.getJSONItem<{ state?: { refreshToken?: string } } | null>(
+      'refresh-token-storage',
+      null,
+    );
+    return refreshTokenStorage?.state?.refreshToken ?? null;
+  }, []);
 
   const { mutateAsync: refreshAccessToken } = useMutation({
     mutationFn: async (refresh_token: string) => {

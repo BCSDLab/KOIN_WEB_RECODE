@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
@@ -11,11 +10,13 @@ import Toast from 'components/feedback/Toast';
 import Layout from 'components/layout';
 import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
+import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { COOKIE_KEY } from 'static/url';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -79,7 +80,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
   const pageTitle = React.useMemo(() => {
-    if (!Component.title) return 'KOIN';
+    if (!Component.title) return undefined;
     return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
   }, [Component, router.asPath]);
 
@@ -103,7 +104,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     }
     // 로깅을 위한 userId 전달 및 gtag 함수 정의
     if (typeof window !== 'undefined') {
-      const userId = localStorage.getItem('uuid') || '';
+      const userId = isomorphicLocalStorage.getItem('uuid') || '';
 
       window.dataLayer = window.dataLayer || [];
 
@@ -141,9 +142,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
           {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
           <PortalProvider>
-            <Head>
-              <title>{pageTitle}</title>
-            </Head>
+            <Seo title={pageTitle} />
             <AutoLogin />
             {getLayout(<Component {...pageProps} />)}
             <Toast />

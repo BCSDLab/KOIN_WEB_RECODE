@@ -11,6 +11,7 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './PCHeader.module.scss';
 
@@ -133,7 +134,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: '로고',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
     if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
@@ -144,8 +145,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         event_label: 'shop_detail_view_back',
         value: shopName.name,
         event_category: 'logo',
-        current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
+        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
       });
     }
     if (pathname.includes(ROUTES.GraduationCalculator())) {

@@ -8,20 +8,10 @@ export default function Document() {
       <Head>
         <link rel="preconnect" href="https://static.koreatech.in" crossOrigin="anonymous" />
 
-        {/* 기본 메타 */}
+        {/* 기본 메타 (페이지 단위 메타는 components/seo/Seo 가 처리) */}
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#000000" />
         <meta name="author" content="BCSD Lab" />
-        <meta name="description" content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다." />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="코인 - 한기대 커뮤니티" />
-        <meta
-          property="og:description"
-          content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다."
-        />
-        <meta property="og:image" content="https://static.koreatech.in/assets/img/facebook_showcase_image.png" />
-        <meta property="og:image:width" content="1200" />
 
         {/* 국제화/번역 제어 */}
         <meta name="google" content="notranslate" />

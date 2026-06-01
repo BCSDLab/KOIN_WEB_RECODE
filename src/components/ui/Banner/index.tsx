@@ -173,12 +173,6 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
         value: `${currentBanner.title}`,
         event_category: 'entry',
       });
-      logger.actionEventLoad({
-        team: 'CAMPUS',
-        event_label: 'CAMPUS_modal_1',
-        value: 'design_A',
-        event_category: 'a/b test 로깅(메인 모달)',
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);

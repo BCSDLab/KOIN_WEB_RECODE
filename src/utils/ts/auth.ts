@@ -1,17 +1,18 @@
 import ROUTES from 'static/routes';
+import { isomorphicSessionStorage } from './env';
 
 const REDIRECT_KEY = 'REDIRECT_AFTER_LOGIN';
 
 export function setRedirectPath(path: string) {
-  sessionStorage.setItem(REDIRECT_KEY, path);
+  isomorphicSessionStorage.setItem(REDIRECT_KEY, path);
 }
 
 export function getRedirectPath(): string {
-  return sessionStorage.getItem(REDIRECT_KEY) || ROUTES.Main();
+  return isomorphicSessionStorage.getItem(REDIRECT_KEY) || ROUTES.Main();
 }
 
 export function clearRedirectPath() {
-  sessionStorage.removeItem(REDIRECT_KEY);
+  isomorphicSessionStorage.removeItem(REDIRECT_KEY);
 }
 
 export function redirectToLogin(currentPath?: string) {

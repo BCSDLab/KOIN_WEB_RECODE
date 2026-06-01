@@ -3,10 +3,10 @@ import useAuth from './useAuth';
 
 const useAutoLogin = () => {
   const { refreshAccessToken, getRefreshToken } = useAuth();
-  const refreshToken = getRefreshToken();
 
   useEffect(() => {
     const autoLogin = async () => {
+      const refreshToken = getRefreshToken();
       if (!refreshToken) return;
       try {
         await refreshAccessToken(refreshToken);
@@ -16,7 +16,7 @@ const useAutoLogin = () => {
     };
 
     void autoLogin();
-  }, [refreshAccessToken, refreshToken]);
+  }, [refreshAccessToken, getRefreshToken]);
 };
 
 export default useAutoLogin;

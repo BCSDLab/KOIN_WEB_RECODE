@@ -1,23 +1,15 @@
 import { useMemo, useState } from 'react';
 import { PreCourse } from 'api/course/entity';
+import { isomorphicSessionStorage } from 'utils/ts/env';
 
 const SELECTED_COURSES_KEY = 'selected-courses';
 
 const getStoredCourses = (): PreCourse[] => {
-  try {
-    const stored = sessionStorage.getItem(SELECTED_COURSES_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
+  return isomorphicSessionStorage.getJSONItem<PreCourse[]>(SELECTED_COURSES_KEY, []);
 };
 
 const storeCourses = (courses: PreCourse[]) => {
-  try {
-    sessionStorage.setItem(SELECTED_COURSES_KEY, JSON.stringify(courses));
-  } catch {
-    // sessionStorage 용량 초과 등 무시
-  }
+  isomorphicSessionStorage.setJSONItem(SELECTED_COURSES_KEY, courses);
 };
 
 export const getCourseKey = (course: PreCourse) => {
