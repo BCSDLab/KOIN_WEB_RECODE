@@ -25,6 +25,7 @@ type MySemesterQueryParams = {
 
 type FrameListQueryParams = {
   fallbackOnError?: boolean;
+  hasUserSemester?: boolean;
   userType?: TimetableUserType;
 };
 
@@ -72,11 +73,15 @@ export const timetableQueries = {
       queryFn: () => getLectureList(semester),
     }),
 
-  frameList: (token: string, semester: Semester, { fallbackOnError = false, userType }: FrameListQueryParams = {}) =>
+  frameList: (
+    token: string,
+    semester: Semester,
+    { fallbackOnError = false, hasUserSemester = true, userType }: FrameListQueryParams = {},
+  ) =>
     queryOptions({
       queryKey: timetableQueryKeys.frameList(semester),
       queryFn: async () => {
-        if (!canUseStudentTimetableQuery(token, userType)) {
+        if (!hasUserSemester || !canUseStudentTimetableQuery(token, userType)) {
           return createDefaultTimetableFrameList();
         }
 
