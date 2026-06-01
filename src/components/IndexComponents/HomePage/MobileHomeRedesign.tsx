@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
 import { storeQueries } from 'api/store/queries';
+import { weatherQueries } from 'api/weather/queries';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import ForkKnifeIcon from 'assets/svg/common/fork-knife-icon.svg';
 import QRCodeIcon from 'assets/svg/common/qr-code-icon.svg';
 import BusRouteIcon from 'assets/svg/common/route-icon.svg';
-import SunIcon from 'assets/svg/common/sun-icon.svg';
 import VanIcon from 'assets/svg/common/van-icon.svg';
 import IndexMobileCafeteria from 'components/IndexComponents/IndexMobileCafeteria';
 import { BUS_LINKS } from 'static/bus';
@@ -60,6 +61,7 @@ function SectionHeader({ titleId, title, children }: SectionHeaderProps) {
 
 function MobileHomeRedesign() {
   const { data: userInfo } = useUser();
+  const { data: weatherData } = useSuspenseQuery(weatherQueries.info());
   const { data: callvanData } = useSuspenseQuery({
     ...callvanQueries.list('', {
       statuses: ['RECRUITING'],
@@ -80,8 +82,17 @@ function MobileHomeRedesign() {
         <div className={styles.hero__meta}>
           <span className={styles.hero__date}>{todayLabel}</span>
           <span className={styles.weather}>
-            <SunIcon className={styles.weather__icon} aria-hidden />
-            <span className={styles.weather__text}>맑음 18°</span>
+            <Image
+              className={styles.weather__icon}
+              src={weatherData.weather_icon_url}
+              alt=""
+              width={16}
+              height={16}
+              aria-hidden
+            />
+            <span className={styles.weather__text}>
+              {weatherData.weather} {weatherData.temperature}°
+            </span>
           </span>
         </div>
         <h1 id="home-greeting-title" className={styles.hero__title}>

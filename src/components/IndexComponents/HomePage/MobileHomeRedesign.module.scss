@@ -39,6 +39,7 @@
 .weather {
   display: flex;
   align-items: center;
+  gap: 2px;
 
   &__text {
     color: #6f6f6f;
