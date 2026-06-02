@@ -5,6 +5,7 @@ import useDinings from 'components/cafeteria/hooks/useDinings';
 import { filterDinings } from 'components/cafeteria/utils/filter';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import type { CoopShopDetailResponse } from 'api/coopshop/entity';
 import type { Dining, DiningPlace } from 'api/dinings/entity';
 import styles from './IndexMobileCafeteria.module.scss';
@@ -41,6 +42,7 @@ function MealCard({ dining, diningLabel }: { dining: Dining; diningLabel: string
 }
 
 function IndexMobileCafeteria() {
+  const logger = useLogger();
   const diningTime = new DiningTime();
   const diningDate = diningTime.generateDiningDate();
 
@@ -62,6 +64,11 @@ function IndexMobileCafeteria() {
   const handleTabClick = (place: DiningPlace) => {
     const diningIndex = availableDinings.findIndex((dining) => dining.place === place);
 
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'menu_corner',
+      value: place,
+    });
     setSelectedPlace(place);
     carouselRef.current?.children[diningIndex]?.scrollIntoView({
       behavior: 'smooth',
