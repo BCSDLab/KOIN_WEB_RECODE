@@ -5,18 +5,21 @@ import ClipBoardIcon from 'assets/svg/common/clipboard-icon.svg';
 import HomeIcon from 'assets/svg/common/home-icon.svg';
 import UserIcon from 'assets/svg/common/user-icon.svg';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './MobileBottomNavigation.module.scss';
 
 const NAVIGATION_ITEMS = [
   {
     key: 'home',
+    event_label: 'nav_home',
     label: '홈',
     href: ROUTES.Main(),
     Icon: HomeIcon,
   },
   {
     key: 'category',
+    event_label: 'nav_category',
     label: '카테고리',
     // TODO: 카테고리 페이지 라우트 확정 시 수정
     href: '/category',
@@ -24,12 +27,14 @@ const NAVIGATION_ITEMS = [
   },
   {
     key: 'board',
+    event_label: 'nav_bulletin',
     label: '게시판',
     href: ROUTES.Articles(),
     Icon: ClipBoardIcon,
   },
   {
     key: 'profile',
+    event_label: 'nav_profile',
     label: '프로필',
     href: ROUTES.AuthModifyInfo(),
     Icon: UserIcon,
@@ -38,12 +43,13 @@ const NAVIGATION_ITEMS = [
 
 function MobileBottomNavigation() {
   const { pathname } = useRouter();
+  const logger = useLogger();
   const token = useTokenState();
 
   return (
     <nav className={styles.navigation} aria-label="하단 메뉴">
       <ul className={styles['navigation__list']}>
-        {NAVIGATION_ITEMS.map(({ key, label, href, Icon }) => {
+        {NAVIGATION_ITEMS.map(({ key, event_label, label, href, Icon }) => {
           const resolvedHref = key === 'profile' && !token ? ROUTES.Auth() : href;
           const isActive = pathname === resolvedHref || (key === 'profile' && pathname === ROUTES.AuthModifyInfo());
 
@@ -52,7 +58,18 @@ function MobileBottomNavigation() {
               key={key}
               className={`${styles.navigation__item} ${isActive ? styles['navigation__item--active'] : ''}`}
             >
-              <Link href={resolvedHref} className={styles.navigation__link} aria-current={isActive ? 'page' : undefined}>
+              <Link
+                href={resolvedHref}
+                className={styles.navigation__link}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() =>
+                  logger.actionEventClick({
+                    team: 'CAMPUS',
+                    event_label: event_label,
+                    value: label,
+                  })
+                }
+              >
                 <Icon className={styles.navigation__icon} />
                 <span className={styles.navigation__label}>{label}</span>
               </Link>
