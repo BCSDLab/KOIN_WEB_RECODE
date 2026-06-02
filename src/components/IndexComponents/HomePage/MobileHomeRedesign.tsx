@@ -15,6 +15,7 @@ import IndexMobileCafeteria from 'components/IndexComponents/IndexMobileCafeteri
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './MobileHomeRedesign.module.scss';
 
@@ -33,12 +34,20 @@ const transportCards = [
     title: '버스 시간표',
     description: '노선 별 출발 시간',
     Icon: BusTimeIcon,
+    logging: {
+      event_label: 'bus_timetable',
+      value: '버스 시간표 조회하기',
+    },
   },
   {
     href: ROUTES.BusRoute(),
     title: '버스 노선 조회',
     description: '가장 빠른 버스 찾기',
     Icon: BusRouteIcon,
+    logging: {
+      event_label: 'bus_route',
+      value: '버스 노선 조회하기',
+    },
   },
 ];
 
@@ -60,6 +69,7 @@ function SectionHeader({ titleId, title, children }: SectionHeaderProps) {
 }
 
 function MobileHomeRedesign() {
+  const logger = useLogger();
   const { data: userInfo } = useUser();
   const { data: weatherData } = useSuspenseQuery(weatherQueries.info());
   const { data: callvanData } = useSuspenseQuery({
@@ -75,6 +85,14 @@ function MobileHomeRedesign() {
 
   const displayName = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '코리';
   const todayLabel = dateFormatter.format(new Date());
+
+  const logClick = (event_label: string, value: string) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label,
+      value,
+    });
+  };
 
   return (
     <main className={styles.template}>
@@ -103,7 +121,11 @@ function MobileHomeRedesign() {
 
       <section className={styles.section} aria-labelledby="today-menu-title">
         <SectionHeader titleId="today-menu-title" title="오늘의 식단">
-          <Link href={ROUTES.Cafeteria()} className={styles['section-link']}>
+          <Link
+            href={ROUTES.Cafeteria()}
+            className={styles['section-link']}
+            onClick={() => logClick('today_meal', '전체보기')}
+          >
             <span>전체보기</span>
             <ArrowRightIcon aria-hidden />
           </Link>
@@ -114,7 +136,13 @@ function MobileHomeRedesign() {
 
       <section className={styles.section} aria-labelledby="transport-title">
         <SectionHeader titleId="transport-title" title="교통">
-          <Link href={unibus.link} className={styles['ticket-card']} target="_blank" rel="noreferrer">
+          <Link
+            href={unibus.link}
+            className={styles['ticket-card']}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => logClick('shuttle_ticket', '셔틀 탑승권')}
+          >
             <span className={styles['ticket-card__text']}>
               <strong>셔틀 탑승권</strong>
               <span>QR 조회</span>
@@ -123,7 +151,11 @@ function MobileHomeRedesign() {
           </Link>
         </SectionHeader>
 
-        <Link href={ROUTES.Callvan()} className={styles['callvan-card']}>
+        <Link
+          href={ROUTES.Callvan()}
+          className={styles['callvan-card']}
+          onClick={() => logClick('callvanpot', '콜밴팟 모집보기')}
+        >
           <span className={`${styles['icon-box']} ${styles['callvan-card__icon']}`} aria-hidden>
             <VanIcon />
           </span>
@@ -138,8 +170,13 @@ function MobileHomeRedesign() {
         </Link>
 
         <div className={styles['transport-grid']}>
-          {transportCards.map(({ href, title, description, Icon }) => (
-            <Link href={href} className={styles['transport-card']} key={href}>
+          {transportCards.map(({ href, title, description, Icon, logging }) => (
+            <Link
+              href={href}
+              className={styles['transport-card']}
+              key={href}
+              onClick={() => logClick(logging.event_label, logging.value)}
+            >
               <span className={styles['icon-box']} aria-hidden>
                 <Icon />
               </span>
@@ -155,13 +192,17 @@ function MobileHomeRedesign() {
 
       <section className={styles.section} aria-labelledby="nearby-store-title">
         <SectionHeader titleId="nearby-store-title" title="주변 상점">
-          <Link href={mobileStoreLink} className={styles['section-link']}>
+          <Link href={mobileStoreLink} className={styles['section-link']} onClick={() => logClick('shop', '전체보기')}>
             <span>전체보기</span>
             <ArrowRightIcon aria-hidden />
           </Link>
         </SectionHeader>
 
-        <Link href={mobileStoreLink} className={styles['store-card']}>
+        <Link
+          href={mobileStoreLink}
+          className={styles['store-card']}
+          onClick={() => logClick('popular_shop', '많이 찾는 상점 둘러보기')}
+        >
           <span className={styles['store-card__content']}>
             <span className={styles['store-card__badge']}>KOIN 전용 이벤트 {storeEventCount.count}곳</span>
             <span className={styles['store-card__title']}>
