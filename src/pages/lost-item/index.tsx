@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
@@ -51,10 +50,8 @@ function useLostItemParams(initialParams: LostItemParams) {
   const router = useRouter();
   const mounted = useMount();
 
-  return useMemo(() => {
-    if (!mounted) return initialParams;
-    return parseLostItemQuery(router.query, initialParams);
-  }, [mounted, router.query, initialParams]);
+  if (!mounted) return initialParams;
+  return parseLostItemQuery(router.query, initialParams);
 }
 
 function toLostItemArticlesRequest(params: LostItemParams): LostItemArticlesRequest {
