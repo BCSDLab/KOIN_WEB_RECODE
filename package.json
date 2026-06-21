@@ -70,6 +70,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/react-window": "^1.8.5",
+    "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "^17.2.3",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",

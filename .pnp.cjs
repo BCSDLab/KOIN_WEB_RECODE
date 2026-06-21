@@ -49,6 +49,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
           ["axios", "npm:0.31.1"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -838,6 +839,13 @@ const RAW_RUNTIME_STATE =
           ["@babel/helper-string-parser", "npm:7.27.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-helper-string-parser-npm-7.29.7-87998d618e-4d8ef0ef71.zip/node_modules/@babel/helper-string-parser/",\
+        "packageDependencies": [\
+          ["@babel/helper-string-parser", "npm:7.29.7"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@babel/helper-validator-identifier", [\
@@ -873,6 +881,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@babel-helper-validator-identifier-npm-7.28.5-1953d49d2b-8e5d9b0133.zip/node_modules/@babel/helper-validator-identifier/",\
         "packageDependencies": [\
           ["@babel/helper-validator-identifier", "npm:7.28.5"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-helper-validator-identifier-npm-7.29.7-9939aac13d-2efa42701e.zip/node_modules/@babel/helper-validator-identifier/",\
+        "packageDependencies": [\
+          ["@babel/helper-validator-identifier", "npm:7.29.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3627,6 +3642,15 @@ const RAW_RUNTIME_STATE =
           ["@babel/helper-string-parser", "npm:7.27.1"],\
           ["@babel/helper-validator-identifier", "npm:7.28.5"],\
           ["@babel/types", "npm:7.29.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-types-npm-7.29.7-8e5b8d613f-bd4f5635db.zip/node_modules/@babel/types/",\
+        "packageDependencies": [\
+          ["@babel/helper-string-parser", "npm:7.29.7"],\
+          ["@babel/helper-validator-identifier", "npm:7.29.7"],\
+          ["@babel/types", "npm:7.29.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8647,6 +8671,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["babel-plugin-react-compiler", [\
+      ["npm:1.0.0", {\
+        "packageLocation": "./.yarn/cache/babel-plugin-react-compiler-npm-1.0.0-5beba4221c-51358f4da7.zip/node_modules/babel-plugin-react-compiler/",\
+        "packageDependencies": [\
+          ["@babel/types", "npm:7.29.7"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["babel-preset-current-node-syntax", [\
       ["npm:1.1.0", {\
         "packageLocation": "./.yarn/cache/babel-preset-current-node-syntax-npm-1.1.0-a3b84fe89f-46331111ae.zip/node_modules/babel-preset-current-node-syntax/",\
@@ -13493,6 +13527,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
           ["axios", "npm:0.31.1"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -14237,7 +14272,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/sass", null],\
-          ["babel-plugin-react-compiler", null],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["caniuse-lite", "npm:1.0.30001734"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["postcss", "npm:8.4.31"],\
