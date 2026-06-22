@@ -18,10 +18,10 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
   const today = useMemo(() => new Date(), []);
   const [pendingDate, setPendingDate] = useState<Date>(selectedDate);
 
-  const { years, months, days, currentYear, currentMonth, currentDay } = useMemo(
-    () => getDateRange({ selectedDate: pendingDate, maxDate: today }),
-    [pendingDate, today],
-  );
+  const { years, months, days, currentYear, currentMonth, currentDay } = getDateRange({
+    selectedDate: pendingDate,
+    maxDate: today,
+  });
 
   const { syncScrollPosition, createScrollHandler } = useScrollPicker({ itemHeight: ITEM_HEIGHT });
 
