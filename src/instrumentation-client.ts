@@ -9,6 +9,9 @@ Sentry.init({
   environment,
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
 
+  // GTM이 Dynatrace RUM 태그를 실행할 때 dtrum 스크립트가 없으면 발생하는 서드파티 에러
+  ignoreErrors: [/dtrum is not defined/],
+
   beforeSend(event, hint) {
     const error = hint.originalException;
 

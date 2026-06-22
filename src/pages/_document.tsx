@@ -6,6 +6,14 @@ export default function Document() {
   return (
     <Html lang="ko">
       <Head>
+        {/*
+         * GTM에 Dynatrace 태그가 구성되어 있으나 Dynatrace RUM 스크립트가 로드되지 않으면
+         * `ReferenceError: dtrum is not defined`가 발생한다. GTM보다 먼저 실행되는
+         * 이 stub으로 전역 참조 오류를 방지한다.
+         */}
+        {/* eslint-disable-next-line react/no-danger */}
+        <script dangerouslySetInnerHTML={{ __html: 'window.dtrum=window.dtrum||{}' }} />
+
         <link rel="preconnect" href="https://static.koreatech.in" crossOrigin="anonymous" />
 
         {/* 기본 메타 (페이지 단위 메타는 components/seo/Seo 가 처리) */}
