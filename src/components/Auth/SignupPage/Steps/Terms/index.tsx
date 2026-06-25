@@ -1,4 +1,4 @@
-'use no memo';
+'use no memo'; //react compiler로 인한 watch 오류 방지
 import { cn } from '@bcsdlab/utils';
 import CustomCheckbox from 'components/Auth/SignupPage/components/CustomCheckbox';
 import { useFormContext } from 'react-hook-form';
