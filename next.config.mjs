@@ -32,7 +32,7 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    reactCompiler: process.env.REACT_COMPILER === 'true',
+    reactCompiler: true,
     workerThreads: false,
   },
   images: {
