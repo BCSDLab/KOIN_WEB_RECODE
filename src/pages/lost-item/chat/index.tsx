@@ -3,7 +3,7 @@
 // NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
@@ -63,7 +63,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
   const prevMessagesLengthRef = useRef(0);
 
-  const uploadImage = useCallback(async () => {
+  const uploadImage = async () => {
     try {
       if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
@@ -79,16 +79,16 @@ function LostItemChatPage({ token }: { token: string }) {
         showToast('error', error.message);
       }
     }
-  }, [userInfo, chatroomDetail, saveImgFile, sendChatMessage]);
+  }
 
-  const sendMessage = useCallback(() => {
+  const sendMessage = () => {
     if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
       return;
     }
 
     sendChatMessage({ content: inputValue });
     setInputValue('');
-  }, [inputValue, userInfo, chatroomDetail, sendChatMessage]);
+  }
 
   const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

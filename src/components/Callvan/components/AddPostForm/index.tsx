@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { CALLVAN_POST_LOCATION_LABEL, CallvanPostLocationType } from 'api/callvan/entity';
@@ -70,7 +70,7 @@ export default function AddPostForm() {
     (form.departureType !== 'CUSTOM' || form.departureCustomName.trim() !== '') &&
     (form.arrivalType !== 'CUSTOM' || form.arrivalCustomName.trim() !== '');
 
-  const handleSwapLocation = useCallback(() => {
+  const handleSwapLocation = () => {
     setForm((prev) => ({
       ...prev,
       departureType: prev.arrivalType,
@@ -78,14 +78,14 @@ export default function AddPostForm() {
       arrivalType: prev.departureType,
       arrivalCustomName: prev.departureCustomName,
     }));
-  }, []);
+  }
 
-  const handleParticipantsChange = useCallback((delta: number) => {
+  const handleParticipantsChange = (delta: number) => {
     setForm((prev) => ({
       ...prev,
       maxParticipants: Math.min(11, Math.max(2, prev.maxParticipants + delta)),
     }));
-  }, []);
+  }
 
   const handleSubmit = () => {
     if (!form.departureType || !form.arrivalType || isPending) return;

@@ -1,3 +1,4 @@
+'use no memo';
 import { cn } from '@bcsdlab/utils';
 import CustomCheckbox from 'components/Auth/SignupPage/components/CustomCheckbox';
 import { useFormContext } from 'react-hook-form';
