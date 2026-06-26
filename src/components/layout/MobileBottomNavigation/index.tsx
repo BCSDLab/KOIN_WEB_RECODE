@@ -21,8 +21,7 @@ const NAVIGATION_ITEMS = [
     key: 'category',
     event_label: 'nav_category',
     label: '카테고리',
-    // TODO: 카테고리 페이지 라우트 확정 시 수정
-    href: '/category',
+    href: ROUTES.Category(),
     Icon: CategoryIcon,
   },
   {
@@ -41,6 +40,13 @@ const NAVIGATION_ITEMS = [
   },
 ];
 
+const isNavigationActive = (pathname: string, key: string, href: string) => {
+  if (key === 'home') return pathname === href;
+  if (key === 'profile') return pathname === ROUTES.AuthModifyInfo() || pathname === ROUTES.Auth();
+
+  return pathname === href || pathname.startsWith(`${href}/`);
+};
+
 function MobileBottomNavigation() {
   const { pathname } = useRouter();
   const logger = useLogger();
@@ -51,7 +57,7 @@ function MobileBottomNavigation() {
       <ul className={styles['navigation__list']}>
         {NAVIGATION_ITEMS.map(({ key, event_label, label, href, Icon }) => {
           const resolvedHref = key === 'profile' && !token ? ROUTES.Auth() : href;
-          const isActive = pathname === resolvedHref || (key === 'profile' && pathname === ROUTES.AuthModifyInfo());
+          const isActive = isNavigationActive(pathname, key, resolvedHref);
 
           return (
             <li

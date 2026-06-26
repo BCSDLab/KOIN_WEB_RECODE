@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import BbicoIcon from 'assets/svg/common/bbico-icon.svg';
 import KoinTitleIcon from 'assets/svg/common/koin-title-icon.svg';
 import NotificationBellIcon from 'assets/svg/common/notification-icon.svg';
@@ -9,10 +10,10 @@ function MobileHomeRedesignHeader() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.header__brand}>
+      <Link href="/" className={styles.header__brand}>
         <BbicoIcon aria-hidden />
         <KoinTitleIcon aria-label="KOIN" />
-      </div>
+      </Link>
       <button
         type="button"
         className={styles.header__notification}
