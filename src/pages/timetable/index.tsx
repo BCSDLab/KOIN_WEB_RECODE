@@ -17,13 +17,13 @@ import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage'
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { getRecentSemester } from 'utils/timetable/semester';
+import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
-import type { Term } from 'api/timetable/entity';
+import type { TimetableFrameListResponse } from 'api/timetable/entity';
 import styles from './TimetablePage.module.scss';
 
 const MobilePage = dynamic(
@@ -31,28 +31,54 @@ const MobilePage = dynamic(
   { ssr: true },
 );
 
+const prefetchBaseTimetableData = async (queryClient: QueryClient) => {
+  await Promise.all([
+    queryClient.prefetchQuery(timetableQueries.semesterInfo()),
+    queryClient.prefetchQuery(deptQueries.list()),
+  ]);
+};
+
+const setDefaultTimetableFrameList = (queryClient: QueryClient, semester = getRecentSemester()) => {
+  queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+};
+
 async function prefetchTimetableData(
   queryClient: QueryClient,
   context: GetServerSidePropsContext,
   token: string,
-  year: number,
-  term: Term,
+  query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
   try {
     const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token));
     const userSemester = mySemesterData?.semesters?.[0];
-    const semester = year && term ? { year, term } : userSemester || getRecentSemester();
+    const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
-    const timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
+    if (!semester) {
+      setDefaultTimetableFrameList(queryClient);
+      await prefetchBaseTimetableData(queryClient);
+      return;
+    }
+
+    let timetableFrameList: TimetableFrameListResponse;
+
+    try {
+      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
+    } catch (error) {
+      if (!(isKoinError(error) && error.status === 404)) {
+        throw error;
+      }
+
+      setDefaultTimetableFrameList(queryClient, semester);
+      await prefetchBaseTimetableData(queryClient);
+      return;
+    }
 
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    const currentFrameId = validatedFrameId ?? mainFrame?.id ?? null;
+    const hasValidatedFrame = validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
+    const currentFrameId = hasValidatedFrame ? validatedFrameId : (mainFrame?.id ?? null);
 
-    const prefetchPromises = [
-      queryClient.prefetchQuery(timetableQueries.semesterInfo()),
-      queryClient.prefetchQuery(deptQueries.list()),
-    ];
+    const prefetchPromises = [prefetchBaseTimetableData(queryClient)];
 
     if (currentFrameId !== null) {
       prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(token, currentFrameId)));
@@ -64,22 +90,21 @@ async function prefetchTimetableData(
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
     if (isAuthError) clearServerAuthCookies(context);
-    queryClient.setQueryData(timetableQueryKeys.frameList(getRecentSemester()), createDefaultTimetableFrameList());
+    setDefaultTimetableFrameList(queryClient, getSemesterFromQuery(query.year, query.term) ?? getRecentSemester());
+    await prefetchBaseTimetableData(queryClient);
   }
 }
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
   const { token, query } = parseServerSideParams(context);
-  const year = Number(query.year);
-  const term = query.term as Term;
   const frameId = Number(query.timetableFrameId);
   const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
   if (token) {
-    await prefetchTimetableData(queryClient, context, token, year, term, validatedFrameId);
+    await prefetchTimetableData(queryClient, context, token, query, validatedFrameId);
   } else {
-    queryClient.setQueryData(timetableQueryKeys.frameList(getRecentSemester()), createDefaultTimetableFrameList());
+    setDefaultTimetableFrameList(queryClient);
     cacheControl.enablePublicCache();
   }
 

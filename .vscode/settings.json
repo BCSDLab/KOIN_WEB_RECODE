@@ -12,7 +12,12 @@
   "js/ts.tsdk.promptToUseWorkspaceVersion": true,
 
   "editor.formatOnSave": true,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "workbench.editorAssociations": {
     "*.svg": "default"
@@ -23,5 +28,12 @@
   "[scss]": {
     "editor.formatOnSave": false
   },
-  "cSpell.words": ["bcsdlab", "BUGSINK", "GLITCHTIP", "Koin", "tanstack", "zustand"]
+  "cSpell.words": [
+    "bcsdlab",
+    "BUGSINK",
+    "GLITCHTIP",
+    "Koin",
+    "tanstack",
+    "zustand"
+  ]
 }
