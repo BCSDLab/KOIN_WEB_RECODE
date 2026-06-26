@@ -242,11 +242,8 @@ export default class APIClient {
       headers.Authorization = `Bearer ${request.authorization}`;
     }
 
-    // json body 사용 (FormData는 axios가 multipart boundary를 자동 설정)
-    if (
-      (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) &&
-      !(request.data instanceof FormData)
-    ) {
+    // json body 사용
+    if (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) {
       headers['Content-Type'] = 'application/json';
     }
 

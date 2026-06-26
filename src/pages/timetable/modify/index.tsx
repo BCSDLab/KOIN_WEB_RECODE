@@ -6,9 +6,10 @@ import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { COOKIE_KEY } from 'static/url';
-import { resolveTimetableSemester } from 'utils/timetable/semester';
+import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import type { Term } from 'api/timetable/entity';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
@@ -20,20 +21,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (token && userType === 'STUDENT') {
     try {
       const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
+      const year = Number(query.year);
+      const term = query.term as Term;
       const userSemester = mySemesterData?.semesters?.[0];
-      const semester = resolveTimetableSemester(query.year, query.term, userSemester);
+      const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 
-      const prefetchPromises = [queryClient.prefetchQuery(timetableQueries.lectureInfo(token, timetableFrameId))];
-
-      if (semester) {
-        prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureList(semester)));
-      }
-
-      await Promise.all(prefetchPromises);
+      await Promise.all([
+        queryClient.prefetchQuery(timetableQueries.lectureInfo(token, timetableFrameId)),
+        queryClient.prefetchQuery(timetableQueries.lectureList(semester)),
+      ]);
     } catch (error) {
-      if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) {
-        throw error;
-      }
+      if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) throw error;
       if (isServerAuthError(error)) clearServerAuthCookies(context);
     }
   }
