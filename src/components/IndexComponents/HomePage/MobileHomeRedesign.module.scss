@@ -249,6 +249,12 @@
     min-width: 0;
   }
 
+  &__content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
   &__title {
     margin-bottom: 2px;
     color: #1f1f1f;
