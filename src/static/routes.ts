@@ -4,6 +4,7 @@ type ROUTESParams<T extends string = string> = {
 
 const ROUTES = {
   Main: () => '/',
+  Category: () => '/category',
   NotFound: () => '*',
   Timetable: () => '/timetable',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>

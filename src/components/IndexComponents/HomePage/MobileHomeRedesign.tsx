@@ -203,24 +203,24 @@ function MobileHomeRedesign() {
           className={styles['store-card']}
           onClick={() => logClick('popular_shop', '많이 찾는 상점 둘러보기')}
         >
-          <span className={styles['store-card__content']}>
-            <span className={styles['store-card__badge']}>KOIN 전용 이벤트 {storeEventCount.count}곳</span>
-            <span className={styles['store-card__title']}>
-              많이 찾는 상점
-              <br />
-              둘러보기
-            </span>
-            <span className={styles['store-card__meta']}>
-              영업중 <span className={styles['store-card__count']}>{storeCounts.open_count}곳</span> | 전체{' '}
-              {storeCounts.total_count}곳
-            </span>
-          </span>
-          <span className={styles['store-card__side']} aria-hidden>
+          <div className={styles['store-card__content-wrapper']}>
             <span className={styles['icon-box']} aria-hidden>
               <ForkKnifeIcon />
             </span>
-            <ArrowRightIcon className={styles['store-card__arrow']} aria-hidden />
-          </span>
+            <span className={styles['store-card__content']}>
+              <span className={styles['store-card__badge']}>KOIN 전용 이벤트 {storeEventCount.count}곳</span>
+              <span className={styles['store-card__title']}>
+                많이 찾는 상점
+                <br />
+                둘러보기
+              </span>
+              <span className={styles['store-card__meta']}>
+                영업중 <span className={styles['store-card__count']}>{storeCounts.open_count}곳</span> | 전체{' '}
+                {storeCounts.total_count}곳
+              </span>
+            </span>
+          </div>
+          <ArrowRightIcon className={styles['store-card__arrow']} aria-hidden />
         </Link>
       </section>
     </main>
