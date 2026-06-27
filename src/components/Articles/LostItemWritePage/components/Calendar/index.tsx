@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import ChevronLeftIcon from 'assets/svg/Articles/chevron-left.svg';
 import ChevronRightIcon from 'assets/svg/Articles/chevron-right.svg';
@@ -25,15 +25,11 @@ interface CalendarProps {
 export default function Calendar({ selectedDate, setSelectedDate }: CalendarProps) {
   const today = new Date();
   const [currentMonthDate, setCurrentMonthDate] = useState(selectedDate);
-  const days = useMemo(
-    () =>
-      Array.from({ length: 35 }, (_, i) => {
-        const startDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), 1);
-        startDate.setDate(startDate.getDate() - startDate.getDay());
-        return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
-      }),
-    [currentMonthDate],
-  );
+  const days = Array.from({ length: 35 }, (_, i) => {
+    const startDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), 1);
+    startDate.setDate(startDate.getDate() - startDate.getDay());
+    return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
+  });
 
   const handleMonthChevronClick = (diff: number) => {
     setCurrentMonthDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + diff, 1));

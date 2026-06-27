@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
@@ -43,11 +42,10 @@ function usePageParams(initialPage: string) {
   const router = useRouter();
   const mounted = useMount();
 
-  return useMemo(() => {
-    if (!mounted) return initialPage; // SSR 초기값
-    const page = router.query.page;
-    return typeof page === 'string' ? page : initialPage;
-  }, [mounted, router.query.page, initialPage]);
+  if (!mounted) return initialPage; // SSR 초기값
+  const page = router.query.page;
+  return typeof page === 'string' ? page : initialPage;
+
 }
 
 export default function ArticleListPage({ initialPage }: InferGetServerSidePropsType<typeof getServerSideProps>) {

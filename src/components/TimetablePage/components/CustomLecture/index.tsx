@@ -1,3 +1,6 @@
+'use no memo';
+/* eslint-disable react-hooks/refs */
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { MyLectureInfo } from 'api/timetable/entity';

@@ -1,4 +1,4 @@
-import { type ChangeEvent, useCallback, useState } from 'react';
+import { type ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { searchClub } from 'api/club';
@@ -31,14 +31,11 @@ export default function ClubSearchContainer() {
     setRelateSearchItems(data);
   }, 300);
 
-  const handleInputChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const inputValue = e.target.value.trim();
-      setSearchValue(inputValue);
-      debouncedSearch(inputValue);
-    },
-    [debouncedSearch],
-  );
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.trim();
+    setSearchValue(inputValue);
+    debouncedSearch(inputValue);
+  };
 
   const handleSearch = () => {
     const value = searchValue.trim();

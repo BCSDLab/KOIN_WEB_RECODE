@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -24,7 +24,7 @@ function ScrollColumn({ items, selectedIndex, onSelect }: ScrollColumnProps) {
     ref.current.scrollTo({ top: selectedIndex * ITEM_HEIGHT, behavior: 'smooth' });
   }, [selectedIndex]);
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = () => {
     if (!ref.current) return;
     isScrollingRef.current = true;
     if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
@@ -36,7 +36,7 @@ function ScrollColumn({ items, selectedIndex, onSelect }: ScrollColumnProps) {
       ref.current.scrollTop = clamped * ITEM_HEIGHT;
       isScrollingRef.current = false;
     }, 150);
-  }, [items.length, onSelect]);
+  };
 
   return (
     <div ref={ref} className={styles['scroll-column']} onScroll={handleScroll}>
@@ -102,7 +102,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
     ref.current.scrollTop = (middleOffset + selectedIndex) * ITEM_HEIGHT;
   }, [selectedIndex, middleOffset]);
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = () => {
     if (!ref.current || isTeleportingRef.current) return;
 
     if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
@@ -131,7 +131,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
       const actualIndex = ((virtualIndex % count) + count) % count;
       onSelect(actualIndex);
     }, 150);
-  }, [count, middleOffset, onSelect]);
+  };
 
   return (
     <div ref={ref} className={styles['infinite-scroll-column']} onScroll={handleScroll}>

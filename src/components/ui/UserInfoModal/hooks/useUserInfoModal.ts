@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
@@ -17,21 +17,12 @@ export default function useUserInfoModal() {
 
   const isStudent = isStudentUser(userInfo);
 
-  const isInfoMissing = useMemo(() => {
-    if (!isStudent) return false;
-    const requiredFields: (keyof typeof userInfo)[] = [
-      'login_id',
-      'gender',
-      'major',
-      'name',
-      'phone_number',
-      'student_number',
-    ];
-    return requiredFields.some((field) => {
-      const v = userInfo?.[field] as unknown;
-      return v === undefined || v === null || v === '';
-    });
-  }, [isStudent, userInfo]);
+  const isInfoMissing = isStudent
+    ? (['login_id', 'gender', 'major', 'name', 'phone_number', 'student_number'] as const).some((field) => {
+        const v = userInfo[field];
+        return v === undefined || v === null || v === '';
+      })
+    : false;
 
   const canOpen = !!token && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
 
