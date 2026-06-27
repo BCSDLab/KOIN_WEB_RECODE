@@ -48,7 +48,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.1"],\
+          ["axios", "npm:0.32.0"],\
           ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
@@ -73,7 +73,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.6"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.6"],\
@@ -3677,7 +3677,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@types/axios", null],\
-          ["axios", "npm:0.31.1"]\
+          ["axios", "npm:0.32.0"]\
         ],\
         "packagePeers": [\
           "@types/axios",\
@@ -8525,11 +8525,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["axios", [\
-      ["npm:0.31.1", {\
-        "packageLocation": "./.yarn/cache/axios-npm-0.31.1-0574a0de7d-097dffdc0a.zip/node_modules/axios/",\
+      ["npm:0.32.0", {\
+        "packageLocation": "./.yarn/cache/axios-npm-0.32.0-366a131b81-1e35bb0778.zip/node_modules/axios/",\
         "packageDependencies": [\
-          ["axios", "npm:0.31.1"],\
-          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"],\
+          ["axios", "npm:0.32.0"],\
+          ["follow-redirects", "virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0"],\
           ["form-data", "npm:4.0.5"],\
           ["proxy-from-env", "npm:1.1.0"]\
         ],\
@@ -11199,12 +11199,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0", {\
-        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-575fb99746/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
+      ["virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0", {\
+        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-7c6a5fc4e3/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
           ["@types/debug", null],\
           ["debug", null],\
-          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"]\
+          ["follow-redirects", "virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0"]\
         ],\
         "packagePeers": [\
           "@types/debug",\
@@ -13526,7 +13526,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.1"],\
+          ["axios", "npm:0.32.0"],\
           ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
@@ -13551,7 +13551,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.6"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.6"],\
@@ -14205,6 +14205,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/nanoid-npm-3.3.11-f98c1f9ef6-73b5afe597.zip/node_modules/nanoid/",\
         "packageDependencies": [\
           ["nanoid", "npm:3.3.11"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:3.3.15", {\
+        "packageLocation": "./.yarn/cache/nanoid-npm-3.3.15-2658de05f8-13c74a5208.zip/node_modules/nanoid/",\
+        "packageDependencies": [\
+          ["nanoid", "npm:3.3.15"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -14940,12 +14947,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.5.14", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.14-1cf8d01c78-2e3f4dea69.zip/node_modules/postcss/",\
+      ["npm:8.5.15", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.15-8e6eef9b78-d02ad19eb1.zip/node_modules/postcss/",\
         "packageDependencies": [\
-          ["nanoid", "npm:3.3.11"],\
+          ["nanoid", "npm:3.3.15"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
@@ -18256,16 +18263,16 @@ function convertToBigIntStats(stats) {
     if (Object.hasOwn(stats, key)) {
       const element = stats[key];
       if (typeof element === `number`) {
-        bigintStats[key] = BigInt(element);
+        bigintStats[key] = BigInt(Math.floor(element));
       } else if (nodeUtils__namespace.types.isDate(element)) {
         bigintStats[key] = new Date(element);
       }
     }
   }
-  bigintStats.atimeNs = bigintStats.atimeMs * BigInt(1e6);
-  bigintStats.mtimeNs = bigintStats.mtimeMs * BigInt(1e6);
-  bigintStats.ctimeNs = bigintStats.ctimeMs * BigInt(1e6);
-  bigintStats.birthtimeNs = bigintStats.birthtimeMs * BigInt(1e6);
+  bigintStats.atimeNs = bigintStats.atimeMs * BigInt(1e6) + BigInt(Math.floor(stats.atimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.mtimeNs = bigintStats.mtimeMs * BigInt(1e6) + BigInt(Math.floor(stats.mtimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.ctimeNs = bigintStats.ctimeMs * BigInt(1e6) + BigInt(Math.floor(stats.ctimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.birthtimeNs = bigintStats.birthtimeMs * BigInt(1e6) + BigInt(Math.floor(stats.birthtimeMs % 1 * 1e3)) * BigInt(1e3);
   return bigintStats;
 }
 function areStatsEqual(a, b) {
@@ -20943,28 +20950,40 @@ class FileHandle {
   sync() {
     throw new Error(`Method not implemented.`);
   }
-  async read(bufferOrOptions, offset, length, position) {
+  async read(bufferOrOptions, offsetOrOptions, length, position) {
     try {
       this[kRef](this.read);
       let buffer;
-      if (!Buffer.isBuffer(bufferOrOptions)) {
-        bufferOrOptions ??= {};
-        buffer = bufferOrOptions.buffer ?? Buffer.alloc(16384);
-        offset = bufferOrOptions.offset || 0;
-        length = bufferOrOptions.length ?? buffer.byteLength;
-        position = bufferOrOptions.position ?? null;
+      let offset;
+      if (!ArrayBuffer.isView(bufferOrOptions)) {
+        buffer = bufferOrOptions?.buffer ?? Buffer.alloc(16384);
+        offset = bufferOrOptions?.offset ?? 0;
+        length = bufferOrOptions?.length ?? buffer.byteLength - offset;
+        position = bufferOrOptions?.position ?? null;
+      } else if (typeof offsetOrOptions === `object` && offsetOrOptions !== null) {
+        buffer = bufferOrOptions;
+        offset = offsetOrOptions?.offset ?? 0;
+        length = offsetOrOptions?.length ?? buffer.byteLength - offset;
+        position = offsetOrOptions?.position ?? null;
       } else {
         buffer = bufferOrOptions;
+        offset = offsetOrOptions ?? 0;
+        length ??= 0;
       }
-      offset ??= 0;
-      length ??= 0;
       if (length === 0) {
         return {
           bytesRead: length,
           buffer
         };
       }
-      const bytesRead = await this[kBaseFs].readPromise(this.fd, buffer, offset, length, position);
+      const bytesRead = await this[kBaseFs].readPromise(
+        this.fd,
+        // FIXME: FakeFS should support ArrayBufferViews directly
+        Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer.buffer, buffer.byteOffset, buffer.byteLength),
+        offset,
+        length,
+        position
+      );
       return {
         bytesRead,
         buffer
@@ -23741,7 +23760,7 @@ function getPathForDisplay(p) {
   return npath.normalize(npath.fromPortablePath(p));
 }
 
-const [major, minor] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
+const [major, minor, patch] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
 const WATCH_MODE_MESSAGE_USES_ARRAYS = major > 19 || major === 19 && minor >= 2 || major === 18 && minor >= 13;
 
 function readPackageScope(checkPath) {
@@ -23776,9 +23795,9 @@ Instead change the require of ${basename} in ${parentPath} to a dynamic import()
   err.code = `ERR_REQUIRE_ESM`;
   return err;
 }
-function reportRequiredFilesToWatchMode(files) {
+function reportRequiredFilesToWatchMode(paths) {
   if (process.env.WATCH_REPORT_DEPENDENCIES && process.send) {
-    files = files.map((filename) => npath.fromPortablePath(VirtualFS.resolveVirtual(npath.toPortablePath(filename))));
+    const files = paths.map((filename) => npath.fromPortablePath(VirtualFS.resolveVirtual(filename)));
     if (WATCH_MODE_MESSAGE_USES_ARRAYS) {
       process.send({ "watch:require": files });
     } else {
@@ -23869,6 +23888,7 @@ function applyPatch(pnpapi, opts) {
       const optionNames = new Set(Object.keys(options));
       optionNames.delete(`paths`);
       optionNames.delete(`plugnplay`);
+      optionNames.delete(`conditions`);
       if (optionNames.size > 0) {
         throw makeError(
           ErrorCode.UNSUPPORTED,
@@ -23897,11 +23917,15 @@ function applyPatch(pnpapi, opts) {
       const issuerApi = apiPath !== null ? opts.manager.getApiEntry(apiPath, true).instance : null;
       try {
         if (issuerApi !== null) {
-          resolution = issuerApi.resolveRequest(request, path !== null ? `${path}/` : null);
+          resolution = issuerApi.resolveRequest(request, path !== null ? `${path}/` : null, {
+            conditions: options?.conditions
+          });
         } else {
           if (path === null)
             throw new Error(`Assertion failed: Expected the path to be set`);
-          resolution = originalModuleResolveFilename.call(require$$0.Module, request, module || makeFakeParent(path), isMain);
+          resolution = originalModuleResolveFilename.call(require$$0.Module, request, module || makeFakeParent(path), isMain, {
+            conditions: options?.conditions
+          });
         }
       } catch (error) {
         firstError = firstError || error;
@@ -25416,9 +25440,10 @@ Required by: ${issuerLocator.name}@${issuerLocator.reference} (via ${issuerForDi
     const candidates = [];
     const qualifiedPath = applyNodeExtensionResolution(unqualifiedPath, candidates, { extensions });
     if (qualifiedPath) {
+      reportRequiredFilesToWatchMode([qualifiedPath]);
       return ppath.normalize(qualifiedPath);
     } else {
-      reportRequiredFilesToWatchMode(candidates.map((candidate) => npath.fromPortablePath(candidate)));
+      reportRequiredFilesToWatchMode(candidates);
       const unqualifiedPathForDisplay = getPathForDisplay(unqualifiedPath);
       const containingPackage = findPackageLocator(unqualifiedPath);
       if (containingPackage) {
