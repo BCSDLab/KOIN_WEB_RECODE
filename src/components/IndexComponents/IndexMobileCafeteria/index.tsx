@@ -1,13 +1,16 @@
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import { filterDinings } from 'components/cafeteria/utils/filter';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { getYyyyMmDd } from 'utils/ts/calendar';
 import type { CoopShopDetailResponse } from 'api/coopshop/entity';
-import type { Dining, DiningPlace } from 'api/dinings/entity';
+import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
 import styles from './IndexMobileCafeteria.module.scss';
 
 const mealTabs: DiningPlace[] = ['A코너', 'B코너', 'C코너', '능수관'];
@@ -23,11 +26,11 @@ const getDiningTimeLabel = (cafeteriaInfo: CoopShopDetailResponse, diningDate: D
   return `${schedule.open_time} - ${schedule.close_time}`;
 };
 
-function MealCard({ dining, diningLabel }: { dining: Dining; diningLabel: string }) {
+function MealCard({ dining, diningLabel, href }: { dining: Dining; diningLabel: string; href: string }) {
   const menu = dining.menu.map((menuItem) => menuItem.name).join(' · ');
 
   return (
-    <article className={styles['meal-card']}>
+    <Link href={href} className={styles['meal-card']}>
       <div className={styles['meal-card__meta']}>
         <span>{diningLabel}</span>
         <span>
@@ -37,7 +40,7 @@ function MealCard({ dining, diningLabel }: { dining: Dining; diningLabel: string
       </div>
       <h3 className={styles['meal-card__title']}>{dining.place}</h3>
       <p className={styles['meal-card__menu']}>{menu}</p>
-    </article>
+    </Link>
   );
 }
 
@@ -45,6 +48,7 @@ function IndexMobileCafeteria() {
   const logger = useLogger();
   const diningTime = new DiningTime();
   const diningDate = diningTime.generateDiningDate();
+  const currentDiningType: DiningType = diningTime.getType();
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
@@ -52,11 +56,12 @@ function IndexMobileCafeteria() {
   const { dinings } = useDinings(diningDate);
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
 
-  const filteredDinings = filterDinings(dinings, diningTime.getType());
+  const filteredDinings = filterDinings(dinings, currentDiningType);
   const availableDinings = mealTabs
     .map((place) => filteredDinings.find((dining) => dining.place === place && dining.menu.length > 0))
     .filter((dining): dining is Dining => Boolean(dining));
-  const diningLabel = getDiningTimeLabel(cafeteriaInfo, diningDate, diningTime.getType());
+  const diningLabel = getDiningTimeLabel(cafeteriaInfo, diningDate, currentDiningType);
+  const cafeteriaLink = ROUTES.Cafeteria({ date: getYyyyMmDd(diningDate), type: currentDiningType });
   const activePlace = availableDinings.some((dining) => dining.place === selectedPlace)
     ? selectedPlace
     : availableDinings[0]?.place;
@@ -102,15 +107,17 @@ function IndexMobileCafeteria() {
         onScroll={handleCarouselScroll}
       >
         {availableDinings.length > 0 ? (
-          availableDinings.map((dining) => <MealCard dining={dining} diningLabel={diningLabel} key={dining.id} />)
+          availableDinings.map((dining) => (
+            <MealCard dining={dining} diningLabel={diningLabel} href={cafeteriaLink} key={dining.id} />
+          ))
         ) : (
-          <article className={styles['meal-card']}>
+          <Link href={cafeteriaLink} className={styles['meal-card']}>
             <div className={styles['meal-card__meta']}>
               <span>{diningLabel}</span>
             </div>
             <h3 className={styles['meal-card__title']}>오늘의 식단</h3>
             <p className={styles['meal-card__menu']}>식단이 제공되지 않아 표시할 수 없습니다.</p>
-          </article>
+          </Link>
         )}
       </div>
 

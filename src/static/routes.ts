@@ -26,7 +26,8 @@ const ROUTES = {
   ClubRecruitmentEdit: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/edit/${id}`,
   NewClubEvent: ({ id }: ROUTESParams<'id'>) => `/clubs/event/${id}`,
   ClubEventEdit: ({ id, eventId }: ROUTESParams<'id' | 'eventId'>) => `/clubs/${id}/event/edit/${eventId}`,
-  Cafeteria: () => '/cafeteria',
+  Cafeteria: ({ date, type }: ROUTESParams<'date' | 'type'> = {}) =>
+    `/cafeteria${date ? `?date=${date}${type ? `&type=${type}` : ''}` : ''}`,
   Articles: () => '/articles',
   ArticlesDetail: ({ id }: ROUTESParams<'id'>) => `/articles/${id}`,
   LostItems: () => '/lost-item',
