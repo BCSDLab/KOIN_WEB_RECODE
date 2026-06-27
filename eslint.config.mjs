@@ -58,8 +58,7 @@ export default [
       ...next.configs['core-web-vitals'].rules,
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
-      'react-hooks/rules-of-hooks':'error',
-      'react-hooks/exhaustive-deps':'warn',
+      ...reactHooks.configs['recommended-latest'].rules,
 
       'import/order': [
         'error',
