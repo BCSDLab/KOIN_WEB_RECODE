@@ -71,8 +71,9 @@ export default function CityBusTimetable() {
   }
 
   const today = dayjs().day();
-  const dayType:DayType = today === 0 || today === 6 ? '주말' : '평일';
-  const todayTimetable = timetable.info.bus_timetables.find((item)=>item.day_of_week === dayType);
+  const dayType: DayType = today === 0 || today === 6 ? '주말' : '평일';
+  const busTimetables = timetable.info.bus_timetables ?? [];
+  const todayTimetable = busTimetables.find((item) => item.day_of_week === dayType);
   const departInfo = todayTimetable?.depart_info ?? [];
 
   const amTimes = departInfo.filter((time) => getHours(time) < 12);

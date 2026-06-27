@@ -75,6 +75,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
     onSuccess: (data: SmsSendResponse) => {
+      clearVerificationMessageTimer();
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       showVerification();
