@@ -78,7 +78,7 @@ export default function IndexStore({ categories }: { categories: StoreCategories
     });
 
     if (route.startsWith('http')) {
-      window.location.href = route;
+      window.location.assign(route);
       return;
     }
 

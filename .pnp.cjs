@@ -48,7 +48,8 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.1"],\
+          ["axios", "npm:0.32.0"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -60,7 +61,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-jsx-a11y", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:6.10.2"],\
           ["eslint-plugin-prettier", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.5.4"],\
           ["eslint-plugin-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.37.5"],\
-          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.1"],\
+          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.1.1"],\
           ["file-saver", "npm:2.0.5"],\
           ["framer-motion", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:12.4.4"],\
           ["globals", "npm:16.4.0"],\
@@ -72,7 +73,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.6"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.6"],\
@@ -838,6 +839,13 @@ const RAW_RUNTIME_STATE =
           ["@babel/helper-string-parser", "npm:7.27.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-helper-string-parser-npm-7.29.7-87998d618e-4d8ef0ef71.zip/node_modules/@babel/helper-string-parser/",\
+        "packageDependencies": [\
+          ["@babel/helper-string-parser", "npm:7.29.7"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@babel/helper-validator-identifier", [\
@@ -873,6 +881,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@babel-helper-validator-identifier-npm-7.28.5-1953d49d2b-8e5d9b0133.zip/node_modules/@babel/helper-validator-identifier/",\
         "packageDependencies": [\
           ["@babel/helper-validator-identifier", "npm:7.28.5"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-helper-validator-identifier-npm-7.29.7-9939aac13d-2efa42701e.zip/node_modules/@babel/helper-validator-identifier/",\
+        "packageDependencies": [\
+          ["@babel/helper-validator-identifier", "npm:7.29.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3629,6 +3644,15 @@ const RAW_RUNTIME_STATE =
           ["@babel/types", "npm:7.29.0"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.29.7", {\
+        "packageLocation": "./.yarn/cache/@babel-types-npm-7.29.7-8e5b8d613f-bd4f5635db.zip/node_modules/@babel/types/",\
+        "packageDependencies": [\
+          ["@babel/helper-string-parser", "npm:7.29.7"],\
+          ["@babel/helper-validator-identifier", "npm:7.29.7"],\
+          ["@babel/types", "npm:7.29.7"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@bcoe/v8-coverage", [\
@@ -3653,7 +3677,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@types/axios", null],\
-          ["axios", "npm:0.31.1"]\
+          ["axios", "npm:0.32.0"]\
         ],\
         "packagePeers": [\
           "@types/axios",\
@@ -8501,11 +8525,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["axios", [\
-      ["npm:0.31.1", {\
-        "packageLocation": "./.yarn/cache/axios-npm-0.31.1-0574a0de7d-097dffdc0a.zip/node_modules/axios/",\
+      ["npm:0.32.0", {\
+        "packageLocation": "./.yarn/cache/axios-npm-0.32.0-366a131b81-1e35bb0778.zip/node_modules/axios/",\
         "packageDependencies": [\
-          ["axios", "npm:0.31.1"],\
-          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"],\
+          ["axios", "npm:0.32.0"],\
+          ["follow-redirects", "virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0"],\
           ["form-data", "npm:4.0.5"],\
           ["proxy-from-env", "npm:1.1.0"]\
         ],\
@@ -8643,6 +8667,16 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@babel/core",\
           "@types/babel__core"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["babel-plugin-react-compiler", [\
+      ["npm:1.0.0", {\
+        "packageLocation": "./.yarn/cache/babel-plugin-react-compiler-npm-1.0.0-5beba4221c-51358f4da7.zip/node_modules/babel-plugin-react-compiler/",\
+        "packageDependencies": [\
+          ["@babel/types", "npm:7.29.7"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10753,24 +10787,24 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["eslint-plugin-react-hooks", [\
-      ["npm:7.0.1", {\
-        "packageLocation": "./.yarn/cache/eslint-plugin-react-hooks-npm-7.0.1-218b8cae26-12e96c68d5.zip/node_modules/eslint-plugin-react-hooks/",\
+      ["npm:7.1.1", {\
+        "packageLocation": "./.yarn/cache/eslint-plugin-react-hooks-npm-7.1.1-cf5b028313-9dfe543af9.zip/node_modules/eslint-plugin-react-hooks/",\
         "packageDependencies": [\
-          ["eslint-plugin-react-hooks", "npm:7.0.1"]\
+          ["eslint-plugin-react-hooks", "npm:7.1.1"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.1", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-hooks-virtual-758179043b/0/cache/eslint-plugin-react-hooks-npm-7.0.1-218b8cae26-12e96c68d5.zip/node_modules/eslint-plugin-react-hooks/",\
+      ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.1.1", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-hooks-virtual-a6f48f4c6d/0/cache/eslint-plugin-react-hooks-npm-7.1.1-cf5b028313-9dfe543af9.zip/node_modules/eslint-plugin-react-hooks/",\
         "packageDependencies": [\
           ["@babel/core", "npm:7.28.4"],\
           ["@babel/parser", "npm:7.28.4"],\
           ["@types/eslint", null],\
           ["eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.38.0"],\
-          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.1"],\
+          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.1.1"],\
           ["hermes-parser", "npm:0.25.1"],\
           ["zod", "npm:4.1.12"],\
-          ["zod-validation-error", "virtual:758179043b9deddcfbb089b62330b887fa4298018695f4e8d592a92d1ed5bf19827ba10fa2c688eac687ac095d51931642ed1c1f0c93756afec64acd860d2ebb#npm:4.0.2"]\
+          ["zod-validation-error", "virtual:a6f48f4c6d8e758bae63cda12dd9ccb8bdbf51f3bb0efdf6a777cdf782fdcd03f081a844906c59146e1410c30c0efdd89184dbcce6aa9478ac74aa65256fe746#npm:4.0.2"]\
         ],\
         "packagePeers": [\
           "@types/eslint",\
@@ -11165,12 +11199,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0", {\
-        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-575fb99746/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
+      ["virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0", {\
+        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-7c6a5fc4e3/0/cache/follow-redirects-npm-1.16.0-816e4f62d9-3fbe3d80b3.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
           ["@types/debug", null],\
           ["debug", null],\
-          ["follow-redirects", "virtual:0574a0de7d342461fa146d11ae87724ae03b292c6cf3a99ab5c90c004e7f3edcc2c36de3142ff4f8dd372c89635bfe914b3cf8526f198e64a9fb81d909d1c12d#npm:1.16.0"]\
+          ["follow-redirects", "virtual:366a131b81e34c0b86beb4e9f21400838f63f5828acce63c2196d7ea2bddd58052b1deeb79919c8fa855097c17705f0c235e17b1f49c7529f67103cc09e2f39c#npm:1.16.0"]\
         ],\
         "packagePeers": [\
           "@types/debug",\
@@ -13492,7 +13526,8 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/react-window", "npm:1.8.8"],\
-          ["axios", "npm:0.31.1"],\
+          ["axios", "npm:0.32.0"],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -13504,7 +13539,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-jsx-a11y", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:6.10.2"],\
           ["eslint-plugin-prettier", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.5.4"],\
           ["eslint-plugin-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.37.5"],\
-          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.1"],\
+          ["eslint-plugin-react-hooks", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.1.1"],\
           ["file-saver", "npm:2.0.5"],\
           ["framer-motion", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:12.4.4"],\
           ["globals", "npm:16.4.0"],\
@@ -13516,7 +13551,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["prettier", "npm:3.6.2"],\
           ["react", "npm:19.2.6"],\
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.6"],\
@@ -14173,6 +14208,13 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
+      ["npm:3.3.15", {\
+        "packageLocation": "./.yarn/cache/nanoid-npm-3.3.15-2658de05f8-13c74a5208.zip/node_modules/nanoid/",\
+        "packageDependencies": [\
+          ["nanoid", "npm:3.3.15"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.3.7", {\
         "packageLocation": "./.yarn/cache/nanoid-npm-3.3.7-98824ba130-ac1eb60f61.zip/node_modules/nanoid/",\
         "packageDependencies": [\
@@ -14237,7 +14279,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:19.2.14"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.3"],\
           ["@types/sass", null],\
-          ["babel-plugin-react-compiler", null],\
+          ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["caniuse-lite", "npm:1.0.30001734"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.18"],\
           ["postcss", "npm:8.4.31"],\
@@ -14905,12 +14947,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.5.14", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.14-1cf8d01c78-2e3f4dea69.zip/node_modules/postcss/",\
+      ["npm:8.5.15", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.15-8e6eef9b78-d02ad19eb1.zip/node_modules/postcss/",\
         "packageDependencies": [\
-          ["nanoid", "npm:3.3.11"],\
+          ["nanoid", "npm:3.3.15"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.14"],\
+          ["postcss", "npm:8.5.15"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
@@ -17972,12 +18014,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:758179043b9deddcfbb089b62330b887fa4298018695f4e8d592a92d1ed5bf19827ba10fa2c688eac687ac095d51931642ed1c1f0c93756afec64acd860d2ebb#npm:4.0.2", {\
-        "packageLocation": "./.yarn/__virtual__/zod-validation-error-virtual-5c0be35633/0/cache/zod-validation-error-npm-4.0.2-1b963160c8-5e35ca8ebb.zip/node_modules/zod-validation-error/",\
+      ["virtual:a6f48f4c6d8e758bae63cda12dd9ccb8bdbf51f3bb0efdf6a777cdf782fdcd03f081a844906c59146e1410c30c0efdd89184dbcce6aa9478ac74aa65256fe746#npm:4.0.2", {\
+        "packageLocation": "./.yarn/__virtual__/zod-validation-error-virtual-13e3d9764a/0/cache/zod-validation-error-npm-4.0.2-1b963160c8-5e35ca8ebb.zip/node_modules/zod-validation-error/",\
         "packageDependencies": [\
           ["@types/zod", null],\
           ["zod", "npm:4.1.12"],\
-          ["zod-validation-error", "virtual:758179043b9deddcfbb089b62330b887fa4298018695f4e8d592a92d1ed5bf19827ba10fa2c688eac687ac095d51931642ed1c1f0c93756afec64acd860d2ebb#npm:4.0.2"]\
+          ["zod-validation-error", "virtual:a6f48f4c6d8e758bae63cda12dd9ccb8bdbf51f3bb0efdf6a777cdf782fdcd03f081a844906c59146e1410c30c0efdd89184dbcce6aa9478ac74aa65256fe746#npm:4.0.2"]\
         ],\
         "packagePeers": [\
           "@types/zod",\
@@ -18221,16 +18263,16 @@ function convertToBigIntStats(stats) {
     if (Object.hasOwn(stats, key)) {
       const element = stats[key];
       if (typeof element === `number`) {
-        bigintStats[key] = BigInt(element);
+        bigintStats[key] = BigInt(Math.floor(element));
       } else if (nodeUtils__namespace.types.isDate(element)) {
         bigintStats[key] = new Date(element);
       }
     }
   }
-  bigintStats.atimeNs = bigintStats.atimeMs * BigInt(1e6);
-  bigintStats.mtimeNs = bigintStats.mtimeMs * BigInt(1e6);
-  bigintStats.ctimeNs = bigintStats.ctimeMs * BigInt(1e6);
-  bigintStats.birthtimeNs = bigintStats.birthtimeMs * BigInt(1e6);
+  bigintStats.atimeNs = bigintStats.atimeMs * BigInt(1e6) + BigInt(Math.floor(stats.atimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.mtimeNs = bigintStats.mtimeMs * BigInt(1e6) + BigInt(Math.floor(stats.mtimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.ctimeNs = bigintStats.ctimeMs * BigInt(1e6) + BigInt(Math.floor(stats.ctimeMs % 1 * 1e3)) * BigInt(1e3);
+  bigintStats.birthtimeNs = bigintStats.birthtimeMs * BigInt(1e6) + BigInt(Math.floor(stats.birthtimeMs % 1 * 1e3)) * BigInt(1e3);
   return bigintStats;
 }
 function areStatsEqual(a, b) {
@@ -20908,28 +20950,40 @@ class FileHandle {
   sync() {
     throw new Error(`Method not implemented.`);
   }
-  async read(bufferOrOptions, offset, length, position) {
+  async read(bufferOrOptions, offsetOrOptions, length, position) {
     try {
       this[kRef](this.read);
       let buffer;
-      if (!Buffer.isBuffer(bufferOrOptions)) {
-        bufferOrOptions ??= {};
-        buffer = bufferOrOptions.buffer ?? Buffer.alloc(16384);
-        offset = bufferOrOptions.offset || 0;
-        length = bufferOrOptions.length ?? buffer.byteLength;
-        position = bufferOrOptions.position ?? null;
+      let offset;
+      if (!ArrayBuffer.isView(bufferOrOptions)) {
+        buffer = bufferOrOptions?.buffer ?? Buffer.alloc(16384);
+        offset = bufferOrOptions?.offset ?? 0;
+        length = bufferOrOptions?.length ?? buffer.byteLength - offset;
+        position = bufferOrOptions?.position ?? null;
+      } else if (typeof offsetOrOptions === `object` && offsetOrOptions !== null) {
+        buffer = bufferOrOptions;
+        offset = offsetOrOptions?.offset ?? 0;
+        length = offsetOrOptions?.length ?? buffer.byteLength - offset;
+        position = offsetOrOptions?.position ?? null;
       } else {
         buffer = bufferOrOptions;
+        offset = offsetOrOptions ?? 0;
+        length ??= 0;
       }
-      offset ??= 0;
-      length ??= 0;
       if (length === 0) {
         return {
           bytesRead: length,
           buffer
         };
       }
-      const bytesRead = await this[kBaseFs].readPromise(this.fd, buffer, offset, length, position);
+      const bytesRead = await this[kBaseFs].readPromise(
+        this.fd,
+        // FIXME: FakeFS should support ArrayBufferViews directly
+        Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer.buffer, buffer.byteOffset, buffer.byteLength),
+        offset,
+        length,
+        position
+      );
       return {
         bytesRead,
         buffer
@@ -23706,7 +23760,7 @@ function getPathForDisplay(p) {
   return npath.normalize(npath.fromPortablePath(p));
 }
 
-const [major, minor] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
+const [major, minor, patch] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
 const WATCH_MODE_MESSAGE_USES_ARRAYS = major > 19 || major === 19 && minor >= 2 || major === 18 && minor >= 13;
 
 function readPackageScope(checkPath) {
@@ -23741,9 +23795,9 @@ Instead change the require of ${basename} in ${parentPath} to a dynamic import()
   err.code = `ERR_REQUIRE_ESM`;
   return err;
 }
-function reportRequiredFilesToWatchMode(files) {
+function reportRequiredFilesToWatchMode(paths) {
   if (process.env.WATCH_REPORT_DEPENDENCIES && process.send) {
-    files = files.map((filename) => npath.fromPortablePath(VirtualFS.resolveVirtual(npath.toPortablePath(filename))));
+    const files = paths.map((filename) => npath.fromPortablePath(VirtualFS.resolveVirtual(filename)));
     if (WATCH_MODE_MESSAGE_USES_ARRAYS) {
       process.send({ "watch:require": files });
     } else {
@@ -23834,6 +23888,7 @@ function applyPatch(pnpapi, opts) {
       const optionNames = new Set(Object.keys(options));
       optionNames.delete(`paths`);
       optionNames.delete(`plugnplay`);
+      optionNames.delete(`conditions`);
       if (optionNames.size > 0) {
         throw makeError(
           ErrorCode.UNSUPPORTED,
@@ -23862,11 +23917,15 @@ function applyPatch(pnpapi, opts) {
       const issuerApi = apiPath !== null ? opts.manager.getApiEntry(apiPath, true).instance : null;
       try {
         if (issuerApi !== null) {
-          resolution = issuerApi.resolveRequest(request, path !== null ? `${path}/` : null);
+          resolution = issuerApi.resolveRequest(request, path !== null ? `${path}/` : null, {
+            conditions: options?.conditions
+          });
         } else {
           if (path === null)
             throw new Error(`Assertion failed: Expected the path to be set`);
-          resolution = originalModuleResolveFilename.call(require$$0.Module, request, module || makeFakeParent(path), isMain);
+          resolution = originalModuleResolveFilename.call(require$$0.Module, request, module || makeFakeParent(path), isMain, {
+            conditions: options?.conditions
+          });
         }
       } catch (error) {
         firstError = firstError || error;
@@ -25381,9 +25440,10 @@ Required by: ${issuerLocator.name}@${issuerLocator.reference} (via ${issuerForDi
     const candidates = [];
     const qualifiedPath = applyNodeExtensionResolution(unqualifiedPath, candidates, { extensions });
     if (qualifiedPath) {
+      reportRequiredFilesToWatchMode([qualifiedPath]);
       return ppath.normalize(qualifiedPath);
     } else {
-      reportRequiredFilesToWatchMode(candidates.map((candidate) => npath.fromPortablePath(candidate)));
+      reportRequiredFilesToWatchMode(candidates);
       const unqualifiedPathForDisplay = getPathForDisplay(unqualifiedPath);
       const containingPackage = findPackageLocator(unqualifiedPath);
       if (containingPackage) {

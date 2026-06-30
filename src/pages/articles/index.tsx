@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
@@ -48,22 +47,18 @@ function usePageParams(initialPage: string) {
   const router = useRouter();
   const mounted = useMount();
 
-  return useMemo(() => {
-    if (!mounted) return initialPage;
-    const page = router.query.page;
-    return typeof page === 'string' ? page : initialPage;
-  }, [mounted, router.query.page, initialPage]);
+  if (!mounted) return initialPage;
+  const page = router.query.page;
+  return typeof page === 'string' ? page : initialPage;
 }
 
 function useBoardIdParams(initialBoardId: number) {
   const router = useRouter();
   const mounted = useMount();
 
-  return useMemo(() => {
-    if (!mounted) return initialBoardId;
-    const boardId = router.query.boardId;
-    return typeof boardId === 'string' ? Number(boardId) : initialBoardId;
-  }, [mounted, router.query.boardId, initialBoardId]);
+  if (!mounted) return initialBoardId;
+  const boardId = router.query.boardId;
+  return typeof boardId === 'string' ? Number(boardId) : initialBoardId;
 }
 
 export default function ArticleListPage({ initialPage, initialBoardId }: InferGetServerSidePropsType<typeof getServerSideProps>) {

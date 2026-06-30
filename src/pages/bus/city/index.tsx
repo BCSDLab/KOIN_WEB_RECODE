@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CityInfo, DirectionType } from 'api/bus/entity';
@@ -16,6 +16,9 @@ type CityDirectionOption = {
   label: string;
   value: DirectionType;
 };
+
+type DayType = '평일' | '주말';
+type TimetableRow = [am: string, pm: string];
 
 const cityBusDirections: CityDirectionOption[] = [
   { label: '천안방면', value: 'from' },
@@ -67,23 +70,20 @@ export default function CityBusTimetable() {
     return CITY_COURSES_MAP.get(`${bus_number}-${direction_type}`)?.direction ?? '';
   }
 
-  const processedTimetable = useMemo(() => {
-    if (!timetable?.info?.bus_timetables) return [];
+  const today = dayjs().day();
+  const dayType: DayType = today === 0 || today === 6 ? '주말' : '평일';
+  const busTimetables = timetable.info.bus_timetables ?? [];
+  const todayTimetable = busTimetables.find((item) => item.day_of_week === dayType);
+  const departInfo = todayTimetable?.depart_info ?? [];
 
-    const today = dayjs().day();
-    const dayType = today === 0 || today === 6 ? '주말' : '평일';
-    const todayTimetable = timetable.info.bus_timetables.find((info) => info.day_of_week === dayType);
+  const amTimes = departInfo.filter((time) => getHours(time) < 12);
+  const pmTimes = departInfo.filter((time) => getHours(time) >= 12);
+  const maxLength = Math.max(amTimes.length, pmTimes.length);
 
-    if (!todayTimetable) return [];
-
-    const departInfo = todayTimetable.depart_info;
-    const amTimes = departInfo.filter((time) => getHours(time) < 12);
-    const pmTimes = departInfo.filter((time) => getHours(time) >= 12);
-
-    const maxLength = Math.max(amTimes.length, pmTimes.length);
-
-    return Array.from({ length: maxLength }, (_, idx) => [amTimes[idx] || '', pmTimes[idx] || '']);
-  }, [timetable]);
+  const processedTimetable: TimetableRow[] = Array.from({ length: maxLength }, (_, index) => [
+    amTimes[index] || '',
+    pmTimes[index] || '',
+  ]);
 
   return (
     <BusCoursePage>

@@ -5,14 +5,24 @@ import { articleQueries } from 'api/articles/queries';
 import { bannerQueries } from 'api/banner/queries';
 import { clubQueries } from 'api/club/queries';
 import { storeQueries } from 'api/store/queries';
-import { timetableQueries } from 'api/timetable/queries';
-import HomePage from 'components/IndexComponents/HomePage';
-import HomeLayout from 'components/layout/HomeLayout';
+import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
+import IndexArticles from 'components/IndexComponents/IndexArticles';
+import IndexBus from 'components/IndexComponents/IndexBus';
+import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
+import IndexCallvan from 'components/IndexComponents/IndexCallvan';
+import IndexLostItem from 'components/IndexComponents/IndexLostItem';
+import IndexStore from 'components/IndexComponents/IndexStore';
+import IndexTimetable from 'components/IndexComponents/IndexTimetable';
+import { SSRLayout } from 'components/layout';
+import Banner from 'components/ui/Banner';
+import UserInfoModal from 'components/ui/UserInfoModal';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+import type { Semester } from 'api/timetable/entity';
+import styles from './IndexPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
@@ -23,6 +33,10 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     token = '';
     userType = '';
     clearServerAuthCookies(context);
+  };
+
+  const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {
+    queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
   };
 
   const fetchMySemester = async () => {
@@ -54,26 +68,32 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     queryClient.prefetchQuery(articleQueries.lostItemStat()),
   ]);
 
-  const userSemester = mySemester?.semesters?.[0] || getRecentSemester();
+  const userSemester = mySemester?.semesters?.[0];
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
 
   if (token && userType === 'STUDENT') {
-    try {
-      const timetableFrameList = await queryClient.fetchQuery(
-        timetableQueries.frameList(token, userSemester, { userType }),
-      );
-      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-      const activeMainFrameId = mainFrame?.id;
-      if (typeof activeMainFrameId === 'number') {
-        await queryClient.prefetchQuery(timetableQueries.lectureInfo(token, activeMainFrameId));
-      }
-    } catch (error) {
-      if (isServerAuthError(error)) {
-        resetAuthContext();
-      } else if (!(isKoinError(error) && error.status === 403)) {
-        throw error;
+    if (!userSemester) {
+      setDefaultTimetableFrameList();
+    } else {
+      try {
+        const timetableFrameList = await queryClient.fetchQuery(
+          timetableQueries.frameList(token, userSemester, { userType }),
+        );
+        const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+        const activeMainFrameId = mainFrame?.id;
+        if (typeof activeMainFrameId === 'number') {
+          await queryClient.prefetchQuery(timetableQueries.lectureInfo(token, activeMainFrameId));
+        }
+      } catch (error) {
+        if (isServerAuthError(error)) {
+          resetAuthContext();
+        } else if (isKoinError(error) && (error.status === 403 || error.status === 404)) {
+          setDefaultTimetableFrameList(userSemester);
+        } else {
+          throw error;
+        }
       }
     }
   }

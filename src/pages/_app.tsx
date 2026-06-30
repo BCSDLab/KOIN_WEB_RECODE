@@ -79,10 +79,11 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
-  const pageTitle = React.useMemo(() => {
-    if (!Component.title) return undefined;
-    return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
-  }, [Component, router.asPath]);
+  const pageTitle = !Component.title
+    ? undefined
+    : typeof Component.title === 'function'
+      ? Component.title(router.asPath)
+      : Component.title;
 
   // ios 브릿지
   useEffect(() => {

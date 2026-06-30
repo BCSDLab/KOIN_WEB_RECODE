@@ -256,7 +256,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     }
 
     dispatchValidation({ type: 'VALID' });
-    setIsValid((prev) => ({ ...prev, isPasswordValid: true, isFieldChanged: true }));
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,7 +294,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     }
 
     dispatchValidation({ type: 'VALID' });
-    setIsValid((prev) => ({ ...prev, isPasswordValid: true, isFieldChanged: true }));
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   return (
@@ -516,14 +516,13 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
-
-  // ✅ 안전 기본값
-  const [studentNumber, setStudentNumber] = useState<string>('');
-  const [major, setMajor] = useState<string | null>(null);
+  const isStudent = isStudentUser(userInfo);
+  // userInfo가 없거나 학생 정보가 없을 때도 controlled input을 유지하기 위한 기본값
+  const [studentNumber, setStudentNumber] = useState<string>(isStudent ? (userInfo.student_number ?? '') : '');
+  const [major, setMajor] = useState<string | null>(isStudent ? (userInfo.major ?? null) : null);
 
   const deptOptionList = (deptList ?? []).map((dept) => ({ label: dept.name, value: dept.name }));
   const { setIsValid } = useValidationContext();
-  const isStudent = isStudentUser(userInfo);
   const isMobile = useMediaQuery();
 
   const handleChangeStudentId = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -550,8 +549,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
 
   useEffect(() => {
     if (isStudentUser(userInfo)) {
-      setStudentNumber(userInfo.student_number ?? '');
-      setMajor(userInfo.major ?? null);
       // 초기 동일 값이면 valid 표시만
       setIsValid((prev) => ({
         ...prev,
@@ -573,16 +570,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     return { value: { studentNumber, major }, valid };
   }, [studentNumber, major]);
 
-  useEffect(() => {
-    if (isStudent) {
-      if (studentNumber === userInfo?.student_number) {
-        setIsValid((prev) => ({ ...prev, isStudentIdValid: true }));
-      }
-      if (major === userInfo?.major) {
-        setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
-      }
-    }
-  }, []);
   return (
     <div>
       {isMobile ? (
@@ -652,14 +639,15 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
 
 const GenderInput = React.forwardRef((_, ref) => {
   const { data: userInfo } = useUser();
-  const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
+  const gender = userInfo?.gender;
+  const initialSelectedValue = gender === 0 || gender === 1 ? String(gender) : null;
+  const [selectedValue, setSelectedValue] = React.useState<string | null>(initialSelectedValue);
   const { setIsValid } = useValidationContext();
 
   useImperativeHandle(ref, () => ({ value: selectedValue }));
 
   useEffect(() => {
     const g = userInfo?.gender; // 0 | 1 | null | undefined
-    setSelectedValue(g === 0 || g === 1 ? String(g) : null);
     if (g === 0 || g === 1) {
       setIsValid((prev) => ({ ...prev, isGenderValid: true }));
     }
