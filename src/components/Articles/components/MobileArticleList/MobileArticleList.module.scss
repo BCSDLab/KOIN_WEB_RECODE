@@ -1,0 +1,55 @@
+.list {
+  width: 100%;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ececec;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &__tag {
+    font-size: 12px;
+    font-weight: 500;
+    color: #600481;
+    line-height: 1.6;
+  }
+
+  &__title {
+    margin: 0;
+    overflow: hidden;
+    color: #0b0b0d;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__meta-author {
+    overflow: hidden;
+    color: #a1a1a1;
+    font-size: 12px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta-date {
+    flex-shrink: 0;
+    color: #a1a1a1;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+}
