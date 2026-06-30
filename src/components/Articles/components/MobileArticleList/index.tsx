@@ -19,12 +19,14 @@ const getLink = (article: ArticleWithNew) => {
   return ROUTES.ArticlesDetail({ id: String(article.id) });
 };
 
+const formatTag = (boardId: number) => convertArticlesTag(boardId).replace(/^\[|\]$/g, '');
+
 export default function MobileArticleList({ articles }: MobileArticleListProps) {
   return (
     <div className={styles.list}>
       {articles.map((article) => {
         const registeredDate = formatDate(article.registered_at);
-        const tag = convertArticlesTag(article.board_id);
+        const tag = formatTag(article.board_id);
 
         if (article.board_id === 14 && article.is_reported) {
           return (
@@ -53,7 +55,7 @@ export default function MobileArticleList({ articles }: MobileArticleListProps) 
             <span className={styles.item__tag}>{tag}</span>
             <p className={styles.item__title}>{article.title}</p>
             <div className={styles.item__meta}>
-              <span className={styles['item__meta-author']}>{article.author}</span>
+              <span className={styles['item__meta-author']}>{article.author}</span> &nbsp; • &nbsp;
               <span className={styles['item__meta-date']}>{registeredDate}</span>
             </div>
           </Link>
