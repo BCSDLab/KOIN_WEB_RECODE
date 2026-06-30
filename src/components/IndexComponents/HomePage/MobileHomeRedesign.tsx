@@ -12,6 +12,7 @@ import QRCodeIcon from 'assets/svg/common/qr-code-icon.svg';
 import BusRouteIcon from 'assets/svg/common/route-icon.svg';
 import VanIcon from 'assets/svg/common/van-icon.svg';
 import IndexMobileCafeteria from 'components/IndexComponents/IndexMobileCafeteria';
+import IconBox from 'components/ui/IconBox';
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
@@ -156,9 +157,9 @@ function MobileHomeRedesign() {
           className={styles['callvan-card']}
           onClick={() => logClick('callvanpot', '콜밴팟 모집보기')}
         >
-          <span className={`${styles['icon-box']} ${styles['callvan-card__icon']}`} aria-hidden>
+          <IconBox className={styles['callvan-card__icon']}>
             <VanIcon />
-          </span>
+          </IconBox>
           <span className={styles['callvan-card__content']}>
             <span className={styles['callvan-card__title-row']}>
               <span className={styles['callvan-card__title']}>콜밴팟</span>
@@ -177,9 +178,9 @@ function MobileHomeRedesign() {
               key={href}
               onClick={() => logClick(logging.event_label, logging.value)}
             >
-              <span className={styles['icon-box']} aria-hidden>
+              <IconBox>
                 <Icon />
-              </span>
+              </IconBox>
               <span className={styles['transport-card__content']}>
                 <span className={styles['transport-card__title']}>{title}</span>
                 <span className={styles['transport-card__description']}>{description}</span>
@@ -204,9 +205,9 @@ function MobileHomeRedesign() {
           onClick={() => logClick('popular_shop', '많이 찾는 상점 둘러보기')}
         >
           <div className={styles['store-card__content-wrapper']}>
-            <span className={styles['icon-box']} aria-hidden>
+            <IconBox>
               <ForkKnifeIcon />
-            </span>
+            </IconBox>
             <span className={styles['store-card__content']}>
               <span className={styles['store-card__badge']}>KOIN 전용 이벤트 {storeEventCount.count}곳</span>
               <span className={styles['store-card__title']}>

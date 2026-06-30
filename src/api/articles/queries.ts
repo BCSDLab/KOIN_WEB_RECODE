@@ -23,7 +23,7 @@ type LostItemSearchParams = Required<Pick<SearchLostItemArticleRequest, 'query'>
 export const articleQueryKeys = {
   all: ['articles'] as const,
   listRoot: ['articles', 'list'] as const,
-  list: (page: string) => [...articleQueryKeys.listRoot, page] as const,
+  list: (page: string, boardId?: number) => [...articleQueryKeys.listRoot, page, boardId ?? 4] as const,
   hot: ['articles', 'hot'] as const,
   detail: (id: string) => ['articles', 'detail', id] as const,
   lostItemAll: ['lostItem'] as const,
@@ -44,10 +44,10 @@ export const articleQueryKeys = {
 };
 
 export const articleQueries = {
-  list: (token: string, page: string) =>
+  list: (token: string, page: string, boardId?: number) =>
     queryOptions({
-      queryKey: articleQueryKeys.list(page),
-      queryFn: () => getArticles(token, page),
+      queryKey: articleQueryKeys.list(page, boardId),
+      queryFn: () => getArticles(token, page, boardId),
     }),
 
   hot: () =>

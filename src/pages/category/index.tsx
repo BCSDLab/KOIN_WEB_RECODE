@@ -12,6 +12,7 @@ import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import RouteIcon from 'assets/svg/common/route-icon.svg';
 import HomeLayout from 'components/layout/HomeLayout';
+import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CategoryPage.module.scss';
@@ -167,13 +168,13 @@ const sections: CategorySection[] = [
   },
 ];
 
-function IconBox({ Icon }: { Icon?: IconComponent }) {
+function CategoryIconBox({ Icon }: { Icon?: IconComponent }) {
   if (!Icon) return null;
 
   return (
-    <span className={styles['icon-box']} aria-hidden>
+    <IconBox>
       <Icon />
-    </span>
+    </IconBox>
   );
 }
 
@@ -194,7 +195,7 @@ function CategoryPage() {
             className={styles['quick-card']}
             onClick={() => handleCategoryClick(logging)}
           >
-            <IconBox Icon={Icon} />
+            <CategoryIconBox Icon={Icon} />
             <div>
               <p className={styles['quick-card__title']}>{title}</p>
               <p className={styles['quick-card__description']}>{description}</p>
@@ -213,7 +214,7 @@ function CategoryPage() {
               <li key={itemTitle}>
                 <Link href={href} className={styles.menu__link} onClick={() => handleCategoryClick(logging)}>
                   <div className={styles.menu__content}>
-                    <IconBox Icon={Icon} />
+                    <CategoryIconBox Icon={Icon} />
                     <span className={styles.menu__title}>{itemTitle}</span>
                   </div>
                   <ArrowRightIcon className={styles.chevron} aria-hidden />

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import MobileArticleList from 'components/Articles/components/MobileArticleList';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -29,6 +30,10 @@ const formatDate = (time: string) => {
 
 export default function ArticleList({ articles }: ArticleListProps) {
   const isMobile = useMediaQuery();
+
+  if (isMobile) {
+    return <MobileArticleList articles={articles} />;
+  }
 
   const getLink = (article: ArticleWithNew) => {
     switch (article.board_id) {
@@ -67,7 +72,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
                   <div>신고에 의해 숨김 처리 되었습니다.</div>
                 </div>
               </div>
-              <div className={styles.list__author}>{isMobile ? `${article.author}` : article.author}</div>
+              <div className={styles.list__author}>{article.author}</div>
               <div className={styles['list__registered-at']}>{registeredDate}</div>
             </div>
           );
@@ -115,7 +120,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
               </div>
             </div>
             <div className={styles.list__author}>
-              <div className={styles.list__author__content}>{isMobile ? `${article.author}` : article.author}</div>
+              <div className={styles.list__author__content}>{article.author}</div>
             </div>
             <div className={styles['list__registered-at']}>{registeredDate}</div>
           </Link>

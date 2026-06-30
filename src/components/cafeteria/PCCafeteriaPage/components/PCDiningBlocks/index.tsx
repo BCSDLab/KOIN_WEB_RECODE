@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Dining, DiningType } from 'api/dinings/entity';
-import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
+import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailModal from 'components/cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'components/cafeteria/PCCafeteriaPage/components/PCMealImage';
@@ -19,8 +19,8 @@ interface PCDiningBlocksProps {
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { currentDate } = useDatePicker();
-  const { dinings } = useDinings(currentDate());
+  const { date } = useCafeteriaParams();
+  const { dinings } = useDinings(date.current());
   const filteredDinings = filterDinings(dinings, diningType);
   const boxRef = useRef<HTMLDivElement>(null);
 

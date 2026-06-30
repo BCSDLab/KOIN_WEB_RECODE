@@ -85,6 +85,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   };
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
+  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
+  const useLightHeader = isClubRoute || isArticleRoute;
 
   return (
     <>
@@ -101,14 +103,14 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               backInDetailPage();
             }}
           >
-            {isClubRoute ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
+            {useLightHeader ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
           </button>
         )}
         <span
           className={cn({
             [styles.mobileheader__title]: true,
             [styles['mobileheader__title--main']]: isMain,
-            [styles['mobileheader__title--new-club']]: isClubRoute,
+            [styles['mobileheader__title--light']]: useLightHeader,
           })}
         >
           {isMain && <KoinServiceLogo />}
@@ -139,7 +141,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             className={cn({
               [styles.mobileheader__icon]: true,
               [styles['mobileheader__icon--right']]: true,
-              [styles['mobileheader__icon--none']]: isClubRoute,
+              [styles['mobileheader__icon--none']]: useLightHeader,
             })}
             type="button"
             aria-label="메뉴 버튼"
