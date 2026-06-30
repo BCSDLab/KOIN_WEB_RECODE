@@ -6,7 +6,12 @@ import MobileBottomNavigation from 'components/layout/MobileBottomNavigation';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './HomeLayout.module.scss';
 
-function HomeLayout({ children }: { children: React.ReactNode }) {
+interface HomeLayoutProps {
+  children: React.ReactNode;
+  whiteMobileBg?: boolean;
+}
+
+function HomeLayout({ children, whiteMobileBg }: HomeLayoutProps) {
   const isMobile = useMediaQuery();
 
   return (
@@ -15,6 +20,7 @@ function HomeLayout({ children }: { children: React.ReactNode }) {
       className={cn({
         [styles.layout]: true,
         [styles['layout--mobile-redesign']]: isMobile,
+        [styles['layout--white']]: isMobile && !!whiteMobileBg,
       })}
     >
       {isMobile ? <MobileHomeRedesignHeader /> : <Header />}
