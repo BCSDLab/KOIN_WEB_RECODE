@@ -16,6 +16,7 @@ function Header() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
+  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
 
   return (
     <header
@@ -23,6 +24,7 @@ function Header() {
         [styles.header]: true,
         [styles['header--main']]: isMain,
         [styles['header--new-club']]: isClubRoute && isMobile,
+        [styles['header--mobile-light']]: isArticleRoute && isMobile,
       })}
     >
       <nav className={styles.header__content}>
