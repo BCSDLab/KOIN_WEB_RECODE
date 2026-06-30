@@ -24,7 +24,7 @@ import {
   GetLostItemSearch,
 } from './APIDetail';
 
-export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
+export const getArticles = (token: string, page: string, boardId?: number) => APIClient.of(GetArticles)(token, page, boardId);
 
 export const getArticle = APIClient.of(GetArticle);
 
