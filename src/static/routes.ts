@@ -42,6 +42,7 @@ const ROUTES = {
   RoomDetail: ({ id }: ROUTESParams<'id'>) => `/room/${id}`,
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
+  Profile: () => '/profile',
   AuthSignup: ({ currentStep }: ROUTESParams<'currentStep'>) => `/auth/signup/${currentStep}`,
   AuthFindPW: ({ step }: ROUTESParams<'step'>) => `/auth/findpw/${step}`,
   // AuthFindPW: () => '/auth/findpw',

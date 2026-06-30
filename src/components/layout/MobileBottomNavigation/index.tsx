@@ -6,7 +6,6 @@ import HomeIcon from 'assets/svg/common/home-icon.svg';
 import UserIcon from 'assets/svg/common/user-icon.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './MobileBottomNavigation.module.scss';
 
 const NAVIGATION_ITEMS = [
@@ -35,14 +34,14 @@ const NAVIGATION_ITEMS = [
     key: 'profile',
     event_label: 'nav_profile',
     label: '프로필',
-    href: ROUTES.AuthModifyInfo(),
+    href: ROUTES.Profile(),
     Icon: UserIcon,
   },
 ];
 
 const isNavigationActive = (pathname: string, key: string, href: string) => {
   if (key === 'home') return pathname === href;
-  if (key === 'profile') return pathname === ROUTES.AuthModifyInfo() || pathname === ROUTES.Auth();
+  if (key === 'profile') return pathname === ROUTES.Profile() || pathname === ROUTES.Auth();
 
   return pathname === href || pathname.startsWith(`${href}/`);
 };
@@ -50,14 +49,12 @@ const isNavigationActive = (pathname: string, key: string, href: string) => {
 function MobileBottomNavigation() {
   const { pathname } = useRouter();
   const logger = useLogger();
-  const token = useTokenState();
 
   return (
     <nav className={styles.navigation} aria-label="하단 메뉴">
       <ul className={styles['navigation__list']}>
         {NAVIGATION_ITEMS.map(({ key, event_label, label, href, Icon }) => {
-          const resolvedHref = key === 'profile' && !token ? ROUTES.Auth() : href;
-          const isActive = isNavigationActive(pathname, key, resolvedHref);
+          const isActive = isNavigationActive(pathname, key, href);
 
           return (
             <li
@@ -65,7 +62,7 @@ function MobileBottomNavigation() {
               className={`${styles.navigation__item} ${isActive ? styles['navigation__item--active'] : ''}`}
             >
               <Link
-                href={resolvedHref}
+                href={href}
                 className={styles.navigation__link}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() =>
