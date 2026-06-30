@@ -41,6 +41,8 @@ export default function HotArticles() {
     enabled: mounted && !isMobile,
   });
 
+  if (mounted && isMobile) return null;
+
   return (
     <aside className={styles['hot-article']}>
       <div className={styles['hot-article__list']}>

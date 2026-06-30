@@ -89,7 +89,7 @@ export default function ArticleListPage({ initialPage, initialBoardId }: InferGe
     <ArticlesPageLayout mobileTabMenu={<MobileArticleTabMenu currentBoardId={boardId} />}>
       <ArticlesHeader />
       <ArticleList articles={articles} />
-      <Pagination totalPageNum={articles === null ? 5 : paginationInfo.total_count} />
+      <Pagination totalPageNum={paginationInfo.total_page} />
     </ArticlesPageLayout>
   );
 }

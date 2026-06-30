@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { HotArticle } from 'api/articles/entity';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './MobileArticleDetailFooter.module.scss';
 
 interface MobileArticleDetailFooterProps {
@@ -14,10 +13,6 @@ interface MobileArticleDetailFooterProps {
 const formatTag = (boardId: number) => convertArticlesTag(boardId).replace(/^\[|\]$/g, '');
 
 export default function MobileArticleDetailFooter({ prevId, nextId, hotArticles }: MobileArticleDetailFooterProps) {
-  const isMobile = useMediaQuery();
-
-  if (!isMobile) return null;
-
   return (
     <div className={styles.footer}>
       <nav className={styles.navigation} aria-label="공지사항 상세 이동">
