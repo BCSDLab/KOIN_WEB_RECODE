@@ -1,12 +1,13 @@
+// 프론트 알림 미구현으로 인한 관련 코드 주석 처리
 import Link from 'next/link';
 import BbicoIcon from 'assets/svg/common/bbico-icon.svg';
 import KoinTitleIcon from 'assets/svg/common/koin-title-icon.svg';
-import NotificationBellIcon from 'assets/svg/common/notification-icon.svg';
-import useLogger from 'utils/hooks/analytics/useLogger';
+// import NotificationBellIcon from 'assets/svg/common/notification-icon.svg';
+// import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './MobileHomeRedesignHeader.module.scss';
 
 function MobileHomeRedesignHeader() {
-  const logger = useLogger();
+  // const logger = useLogger();
 
   return (
     <header className={styles.header}>
@@ -14,7 +15,7 @@ function MobileHomeRedesignHeader() {
         <BbicoIcon aria-hidden />
         <KoinTitleIcon aria-label="KOIN" />
       </Link>
-      <button
+      {/* <button
         type="button"
         className={styles.header__notification}
         aria-label="알림"
@@ -27,7 +28,7 @@ function MobileHomeRedesignHeader() {
         }
       >
         <NotificationBellIcon aria-hidden />
-      </button>
+      </button> */}
     </header>
   );
 }
