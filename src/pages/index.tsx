@@ -6,23 +6,14 @@ import { bannerQueries } from 'api/banner/queries';
 import { clubQueries } from 'api/club/queries';
 import { storeQueries } from 'api/store/queries';
 import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
-import IndexArticles from 'components/IndexComponents/IndexArticles';
-import IndexBus from 'components/IndexComponents/IndexBus';
-import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
-import IndexCallvan from 'components/IndexComponents/IndexCallvan';
-import IndexLostItem from 'components/IndexComponents/IndexLostItem';
-import IndexStore from 'components/IndexComponents/IndexStore';
-import IndexTimetable from 'components/IndexComponents/IndexTimetable';
-import { SSRLayout } from 'components/layout';
-import Banner from 'components/ui/Banner';
-import UserInfoModal from 'components/ui/UserInfoModal';
+import HomePage from 'components/IndexComponents/HomePage';
+import HomeLayout from 'components/layout/HomeLayout';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import type { Semester } from 'api/timetable/entity';
-import styles from './IndexPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
