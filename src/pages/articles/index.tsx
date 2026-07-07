@@ -5,6 +5,7 @@ import { articleQueries } from 'api/articles/queries';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleList from 'components/Articles/components/ArticleList';
 import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
+import MobileArticleSearchButton from 'components/Articles/components/MobileArticleSearchButton';
 import MobileArticleTabMenu from 'components/Articles/components/MobileArticleTabMenu';
 import Pagination from 'components/Articles/components/Pagination';
 import { selectArticlesWithNew } from 'components/Articles/utils/selectArticlesData';
@@ -81,7 +82,14 @@ export default function ArticleListPage({ initialPage, initialBoardId }: InferGe
   };
 
   return (
-    <ArticlesPageLayout mobileTabMenu={<MobileArticleTabMenu currentBoardId={boardId} />}>
+    <ArticlesPageLayout
+      mobileTabMenu={(
+        <>
+          <MobileArticleTabMenu currentBoardId={boardId} />
+          <MobileArticleSearchButton />
+        </>
+      )}
+    >
       <ArticlesHeader />
       <ArticleList articles={articles} />
       <Pagination totalPageNum={paginationInfo.total_page} />
