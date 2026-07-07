@@ -7,7 +7,7 @@ import styles from './MobileArticleDetailFooter.module.scss';
 interface MobileArticleDetailFooterProps {
   prevId: number;
   nextId: number;
-  hotArticles: HotArticle[];
+  hotArticles?: HotArticle[];
 }
 
 const formatTag = (boardId: number) => convertArticlesTag(boardId).replace(/^\[|\]$/g, '');
@@ -42,7 +42,7 @@ export default function MobileArticleDetailFooter({ prevId, nextId, hotArticles 
           인기있는 공지
         </h2>
         <div className={styles.popular__list}>
-          {hotArticles.slice(0, 4).map((article) => (
+          {(hotArticles ?? []).slice(0, 4).map((article) => (
             <Link className={styles.notice} href={ROUTES.ArticlesDetail({ id: String(article.id) })} key={article.id}>
               <span className={styles.notice__tag}>{formatTag(article.board_id)}</span>
               <span className={styles.notice__title}>{article.title}</span>

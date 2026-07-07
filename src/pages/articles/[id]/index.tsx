@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps<
 
   try {
     const article = await withStaticFetchRetry(() => getArticle(id));
-    const hotArticles = await withStaticFetchRetry(() => getHotArticles()).catch(() => []);
+    const hotArticles = (await withStaticFetchRetry(() => getHotArticles()).catch(() => [])) ?? [];
     const serverTime = new Date();
 
     const articleWithNew: ArticleResponseWithNew = {
@@ -70,7 +70,7 @@ export default function ArticlesDetailPage({
   hotArticles,
 }: {
   article: ArticleResponseWithNew;
-  hotArticles: HotArticle[];
+  hotArticles?: HotArticle[];
 }) {
   return (
     <ArticlesPageLayout>
