@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import ViewIcon from 'assets/svg/Login/eye-open.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 
 interface ArticleHeaderProps {
@@ -30,13 +29,12 @@ const formatViewCount = (hit: number) => hit.toLocaleString('ko-KR');
 const getArticleTagLabel = (boardId: number) => convertArticlesTag(boardId).replace(/^\[|\]$/g, '');
 
 export default function ArticleHeader({ boardId, title, registeredAt, author, hit, isNew }: ArticleHeaderProps) {
-  const isMobile = useMediaQuery();
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>
-          <span className={styles['title__board-id']}>{isMobile ? getArticleTagLabel(boardId) : convertArticlesTag(boardId)}</span>
+          <span className={styles['title__board-id-desktop']}>{convertArticlesTag(boardId)}</span>
+          <span className={styles['title__board-id-mobile']}>{getArticleTagLabel(boardId)}</span>
           <span className={styles.title__content}>{title}</span>
           {isNew && (
             <Image
@@ -49,23 +47,20 @@ export default function ArticleHeader({ boardId, title, registeredAt, author, hi
           )}
         </div>
         <div className={styles.content}>
-          {isMobile ? (
-            <>
-              <span>{formatMobileDate(registeredAt)}</span>
-              <span>·</span>
-              <span>{author}</span>
-              <span>·</span>
-              <span className={styles.content__hit}>
-                <ViewIcon aria-hidden />
-                {formatViewCount(hit)}
-              </span>
-            </>
-          ) : (
-            <>
-              <div className={styles.content__author}>{author}</div>
-              <div className={styles['content__registered-at']}>{registeredAt}</div>
-            </>
-          )}
+          <div className={styles['content__desktop']}>
+            <div className={styles.content__author}>{author}</div>
+            <div className={styles['content__registered-at']}>{registeredAt}</div>
+          </div>
+          <div className={styles['content__mobile']}>
+            <span>{formatMobileDate(registeredAt)}</span>
+            <span>·</span>
+            <span>{author}</span>
+            <span>·</span>
+            <span className={styles.content__hit}>
+              <ViewIcon aria-hidden />
+              {formatViewCount(hit)}
+            </span>
+          </div>
         </div>
       </div>
     </div>

@@ -3,6 +3,10 @@
 .list {
   width: 100%;
 
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+
   &__link {
     width: 834px;
     height: 68px;

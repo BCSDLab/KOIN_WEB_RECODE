@@ -1,5 +1,12 @@
+@use "src/utils/scss/media" as media;
+
 .list {
+  display: none;
   width: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+  }
 }
 
 .item {

@@ -56,10 +56,19 @@
     overflow-wrap: anywhere;
   }
 
-  &__board-id {
+  &__board-id-desktop {
     font-weight: 600;
 
     @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__board-id-mobile {
+    display: none;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
       color: #8f05a6;
       font-size: 14px;
       font-weight: 700;
@@ -94,22 +103,36 @@
 }
 
 .content {
-  display: flex;
   padding: 0 20px 27px;
 
   @include media.media-breakpoint(mobile) {
-    gap: 4px;
-    margin-top: 4px;
     padding: 0;
     width: 100%;
+  }
+
+  &__desktop {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    color: #8e8e8e;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.6;
-    letter-spacing: 0;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__mobile {
+    display: none;
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #8e8e8e;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0;
+    }
   }
 
   &__author {
@@ -118,11 +141,6 @@
     letter-spacing: -0.7px;
     color: #175c8e;
     margin-right: 16px;
-
-    @include media.media-breakpoint(mobile) {
-      display: inline;
-      color: #a1a1a1;
-    }
   }
 
   &__registered-at {
@@ -130,11 +148,6 @@
     font-size: 13px;
     letter-spacing: -0.7px;
     color: #858585;
-
-    @include media.media-breakpoint(mobile) {
-      display: inline;
-      float: right;
-    }
   }
 
   &__hit {
