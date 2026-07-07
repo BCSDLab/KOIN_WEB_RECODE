@@ -78,7 +78,7 @@
     border-width: 50%;
     object-fit: contain;
 
-    @media (max-width: 576px) {
+    @media (width <= 576px) {
       width: 48px;
       height: 48px;
     }

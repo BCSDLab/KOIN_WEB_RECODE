@@ -7,8 +7,7 @@
   width: auto;
   margin: 0 -24px;
   padding: 0 var(--meal-carousel-side-padding);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
   box-sizing: border-box;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--meal-carousel-side-padding);

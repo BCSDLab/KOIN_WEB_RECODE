@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0 0 0 / 50%);
+  background-color: rgb(0 0 0 / 50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +16,7 @@
 .modal {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0 0 0 / 20%);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 20%);
   z-index: 1000;
   align-items: center;
   justify-content: center;

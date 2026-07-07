@@ -9,8 +9,8 @@
   padding: 12px 24px calc(0px + env(safe-area-inset-bottom));
   background: #fff;
   box-shadow:
-    0 2px 20px 0 rgba(0 0 0 / 4%),
-    0 8px 32px 0 rgba(0 0 0 / 8%);
+    0 2px 20px 0 rgb(0 0 0 / 4%),
+    0 8px 32px 0 rgb(0 0 0 / 8%);
   border-radius: 16px 16px 0 0;
 
   &__list {
