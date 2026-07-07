@@ -11,6 +11,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { backButtonTapped } from 'utils/ts/iosBridge';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
@@ -25,6 +26,7 @@ interface MobileHeaderProps {
 
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
   useResetHeaderButton();
+  const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
@@ -151,7 +153,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           </button>
         )}
       </div>
-      {createPortal(<Panel openModal={openModal} />, document.body)}
+      {mounted && createPortal(<Panel openModal={openModal} />, document.body)}
     </>
   );
 }
