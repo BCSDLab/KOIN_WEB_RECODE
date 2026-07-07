@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
-import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
+import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import styles from './WeeklyDatePicker.module.scss';
 
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
 
 export default function WeeklyDatePicker() {
-  const { currentDate, setDate } = useDatePicker();
+  const { date } = useCafeteriaParams();
 
   const addDays = (date: Date, days: number) => {
     const result = new Date(date);
@@ -39,11 +39,11 @@ export default function WeeklyDatePicker() {
                 className={cn({
                   [styles.picker__button]: true,
                   [styles['picker__button--before']]: dateFormat(day) < dateFormat(),
-                  [styles['picker__button--selected']]: dateFormat(day) === dateFormat(currentDate()),
+                  [styles['picker__button--selected']]: dateFormat(day) === dateFormat(date.current()),
                   [styles['picker__button--today']]: dateFormat(day) === dateFormat(),
                 })}
                 type="button"
-                onClick={() => setDate(day)}
+                onClick={() => date.set(day)}
               >
                 {dateFormat(day) === dateFormat() && <div className={styles['picker__button--selector']} />}
                 {day.getDate()}

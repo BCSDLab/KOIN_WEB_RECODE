@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import Link from 'next/link';
 import HotArticles from 'components/Articles/components/HotArticle';
 import ROUTES from 'static/routes';
@@ -5,7 +6,12 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './ArticlesPage.module.scss';
 
-export default function ArticlesPageLayout({ children }: { children: React.ReactNode }) {
+interface ArticlesPageLayoutProps {
+  children: ReactNode;
+  mobileTabMenu?: ReactNode;
+}
+
+export default function ArticlesPageLayout({ children, mobileTabMenu }: ArticlesPageLayoutProps) {
   useScrollToTop();
 
   const isMobile = useMediaQuery();
@@ -20,6 +26,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
             </Link>
           </div>
         )}
+        {mobileTabMenu}
         <div className={styles.listScroll}>{children}</div>
       </div>
       <div className={styles.aside}>

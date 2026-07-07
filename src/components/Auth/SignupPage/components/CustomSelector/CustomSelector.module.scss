@@ -8,13 +8,8 @@
 }
 
 @mixin scrollbar($width) {
-  /* Firefox 전용 스크롤바 스타일 */
-  @-moz-document url-prefix("") {
-    & {
-      scrollbar-width: thin;
-      scrollbar-color: #d9d9d9 transparent;
-    }
-  }
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
 
   &::-webkit-scrollbar {
     width: $width;
@@ -116,7 +111,9 @@
     box-shadow: 0 8px 32px 0 #00000014;
     background-color: #fafafa;
     overflow: auto;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
     height: 176px;
 
     @include scrollbar(8px);

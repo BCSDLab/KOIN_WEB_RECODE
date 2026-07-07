@@ -46,6 +46,18 @@ export interface PaginatedResponse<T> extends PaginationInfo, APIResponse {
 export type ArticlesResponse = PaginatedResponse<Article>;
 export type ArticlesSearchResponse = PaginatedResponse<Article>;
 
+export interface SearchArticlesRequest {
+  [key: string]: unknown;
+  query: string;
+  boardId?: number;
+  page?: number;
+  limit?: number;
+}
+
+export interface ArticleHotKeywordResponse {
+  keywords: string[];
+}
+
 export interface ArticleResponse extends Article, APIResponse {
   content: string;
   attachments: Attachment[];

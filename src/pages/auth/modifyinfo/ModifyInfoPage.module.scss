@@ -636,7 +636,7 @@
     padding: 20px 0;
     width: 100%;
 
-    @media (max-width: 576px) {
+    @media (width <= 576px) {
       width: 320px;
       margin: 20px auto 8px;
     }
