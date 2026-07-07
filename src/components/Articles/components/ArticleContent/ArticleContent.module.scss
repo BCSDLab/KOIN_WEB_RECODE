@@ -46,6 +46,56 @@
   }
 }
 
+.viewer {
+  width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  &,
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  iframe,
+  object,
+  embed {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  table {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  a {
+    overflow-wrap: anywhere;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    &,
+    * {
+      min-width: 0 !important;
+    }
+
+    table {
+      display: block;
+      width: 100% !important;
+    }
+
+    img,
+    video,
+    iframe,
+    object,
+    embed {
+      width: auto !important;
+    }
+  }
+}
+
 .attachments {
   margin-top: 24px;
   padding-top: 16px;
