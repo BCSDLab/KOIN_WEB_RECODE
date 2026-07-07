@@ -29,6 +29,7 @@ const ROUTES = {
   Cafeteria: ({ date, type }: ROUTESParams<'date' | 'type'> = {}) =>
     `/cafeteria${date ? `?date=${date}${type ? `&type=${type}` : ''}` : ''}`,
   Articles: () => '/articles',
+  ArticlesSearch: () => '/articles/search',
   ArticlesDetail: ({ id }: ROUTESParams<'id'>) => `/articles/${id}`,
   LostItems: () => '/lost-item',
   LostItemRedirect: () => '/lost-item',
