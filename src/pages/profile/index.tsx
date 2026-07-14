@@ -138,7 +138,8 @@ function ProfilePageContent() {
 
   const isLoggedIn = !!userInfo;
   const isStudent = isStudentUser(userInfo);
-  const title = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '로그인해주세요.';
+  const userName = userInfo?.nickname?.trim() || userInfo?.name?.trim();
+  const title = isLoggedIn ? userName || '정보를 입력해주세요.' : '로그인을 해주세요.';
   const subtitle = isStudent ? userInfo.student_number || '학번 정보 없음' : userInfo?.login_id;
   const actions = getProfileMenus(isLoggedIn);
 
