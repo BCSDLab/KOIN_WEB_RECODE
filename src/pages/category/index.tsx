@@ -14,6 +14,7 @@ import RouteIcon from 'assets/svg/common/route-icon.svg';
 import HomeLayout from 'components/layout/HomeLayout';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
+import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CategoryPage.module.scss';
 
@@ -96,10 +97,10 @@ const sections: CategorySection[] = [
       },
       {
         title: '주변상점',
-        href: ROUTES.Store(),
+        href: `${ORDER_BASE_URL}/shops/?category=1`,
         Icon: StoreIcon,
         logging: {
-          team: 'BUSINESS',
+          team: 'CAMPUS',
           event_label: 'category_campus',
           value: '주변상점',
         },
@@ -189,12 +190,7 @@ function CategoryPage() {
     <main className={styles.category}>
       <section className={styles.quick} aria-label="주요 서비스">
         {quickMenus.map(({ title, description, href, Icon, logging }) => (
-          <Link
-            key={title}
-            href={href}
-            className={styles['quick-card']}
-            onClick={() => handleCategoryClick(logging)}
-          >
+          <Link key={title} href={href} className={styles['quick-card']} onClick={() => handleCategoryClick(logging)}>
             <CategoryIconBox Icon={Icon} />
             <div>
               <p className={styles['quick-card__title']}>{title}</p>
