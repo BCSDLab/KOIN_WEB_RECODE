@@ -111,12 +111,8 @@ function IndexMobileCafeteria() {
             <MealCard dining={dining} diningLabel={diningLabel} href={cafeteriaLink} key={dining.id} />
           ))
         ) : (
-          <Link href={cafeteriaLink} className={styles['meal-card']}>
-            <div className={styles['meal-card__meta']}>
-              <span>{diningLabel}</span>
-            </div>
-            <h3 className={styles['meal-card__title']}>오늘의 식단</h3>
-            <p className={styles['meal-card__menu']}>식단이 제공되지 않아 표시할 수 없습니다.</p>
+          <Link href={cafeteriaLink} className={`${styles['meal-card']} ${styles['meal-card--empty']}`}>
+            <p className={styles['meal-card__empty-text']}>오늘은 식단이 없어요</p>
           </Link>
         )}
       </div>

@@ -71,6 +71,21 @@
     -webkit-line-clamp: 2;
     line-clamp: 2;
   }
+
+  &--empty {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__empty-text {
+    width: 100%;
+    color: #a8a8a8;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: center;
+    overflow-wrap: break-word;
+  }
 }
 
 .meal-tabs {
