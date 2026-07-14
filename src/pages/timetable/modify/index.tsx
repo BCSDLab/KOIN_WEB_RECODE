@@ -6,9 +6,10 @@ import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { COOKIE_KEY } from 'static/url';
-import { resolveTimetableSemester } from 'utils/timetable/semester';
+import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import type { Semester } from 'api/timetable/entity';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
@@ -16,12 +17,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { token, query } = parseServerSideParams(context);
   const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE];
   const timetableFrameId = Number(query.id);
+  let currentSemester = getSemesterFromQuery(query.year, query.term) ?? getRecentSemester();
 
   if (token && userType === 'STUDENT') {
     try {
       const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
       const userSemester = mySemesterData?.semesters?.[0];
       const semester = resolveTimetableSemester(query.year, query.term, userSemester);
+      currentSemester = semester ?? currentSemester;
 
       const prefetchPromises = [queryClient.prefetchQuery(timetableQueries.lectureInfo(token, timetableFrameId))];
 
@@ -41,11 +44,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      semester: currentSemester,
     },
   };
 }
 
-export default function ModifyTimetablePageWrapper() {
+export default function ModifyTimetablePageWrapper({ semester }: { semester: Semester }) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -53,7 +57,7 @@ export default function ModifyTimetablePageWrapper() {
     return null;
   }
 
-  return <ModifyTimetablePage id={id} />;
+  return <ModifyTimetablePage id={id} semester={semester} />;
 }
 
 ModifyTimetablePageWrapper.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
@@ -24,6 +24,7 @@ interface TimetableProps {
   totalHeight: number;
   forDownload?: boolean;
   timetableFrameId: number;
+  semester?: Semester;
 }
 
 function Timetable({
@@ -35,13 +36,14 @@ function Timetable({
   rowHeight,
   totalHeight,
   forDownload,
+  semester,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const [isMouseOver, setIsMouseOver] = useState('');
   const isEditable = router.pathname.includes('/timetable/modify');
-  const { removeMyLecture } = useTimetableMutation(timetableFrameId);
-  const { myLectures } = useMyLectures(timetableFrameId);
+  const { removeMyLecture } = useTimetableMutation(timetableFrameId, semester);
+  const { myLectures } = useMyLectures(timetableFrameId, semester);
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const { timeString, setTimeString } = useTimeString();
@@ -55,7 +57,11 @@ function Timetable({
       return;
     }
 
-    router.push(`/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}`);
+    router.push(
+      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
+        semester ? `&year=${semester.year}&term=${semester.term}` : ''
+      }`,
+    );
   };
 
   const handleRemoveLectureClick = (id: number) => {
