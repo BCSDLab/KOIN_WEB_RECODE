@@ -6,7 +6,7 @@
   z-index: 20;
   box-sizing: border-box;
   width: 100%;
-  padding: 12px 24px calc(0px + env(safe-area-inset-bottom));
+  padding: 12px 24px calc(8px + env(safe-area-inset-bottom));
   background: #fff;
   box-shadow:
     0 2px 20px 0 rgb(0 0 0 / 4%),
