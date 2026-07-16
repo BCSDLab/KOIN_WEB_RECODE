@@ -10,6 +10,7 @@ import HomeLayout from 'components/layout/HomeLayout';
 import { LoggedInTimetablePreview, ProfileTimetableGrid } from 'components/ProfilePage/TimetablePreview';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useUser } from 'utils/hooks/state/useUser';
@@ -64,9 +65,15 @@ const getProfileMenus = (isLoggedIn: boolean): ProfileMenuItem[] => [
 ];
 
 function TimetablePreview({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const logger = useLogger();
+
   return (
     <section className={styles.timetable}>
-      <Link href={ROUTES.Timetable()} className={styles.timetable__link}>
+      <Link
+        href={ROUTES.Timetable()}
+        className={styles.timetable__link}
+        onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'home_timetable', value: '내 시간표' })}
+      >
         <h2 className={styles.timetable__title}>내 시간표</h2>
         <div className={styles.timetable__board}>
           {isLoggedIn ? <LoggedInTimetablePreview /> : <ProfileTimetableGrid />}
@@ -81,10 +88,11 @@ interface ProfileMenuProps {
   actions: ProfileMenuItem[];
   onLogout: () => void;
   onOpenAuthModal: () => void;
+  onActionClick: (action: ProfileMenuItem) => void;
   subtitle?: string;
 }
 
-function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, subtitle }: ProfileMenuProps) {
+function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, onActionClick, subtitle }: ProfileMenuProps) {
   const getButtonAction = (action: ButtonProfileMenuItem) => {
     if (action.action === 'setting') return onOpenAuthModal;
     return onLogout;
@@ -108,14 +116,21 @@ function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, subtitle }: Pr
           return (
             <li key={action.title}>
               {action.type === 'link' ? (
-                <Link href={action.href} className={styles.profileMenu__action}>
+                <Link href={action.href} className={styles.profileMenu__action} onClick={() => onActionClick(action)}>
                   <IconBox>
                     <Icon />
                   </IconBox>
                   <span className={styles.profileMenu__actionLabel}>{action.title}</span>
                 </Link>
               ) : (
-                <button type="button" className={styles.profileMenu__action} onClick={getButtonAction(action)}>
+                <button
+                  type="button"
+                  className={styles.profileMenu__action}
+                  onClick={() => {
+                    onActionClick(action);
+                    getButtonAction(action)();
+                  }}
+                >
                   <IconBox>
                     <Icon />
                   </IconBox>
@@ -133,6 +148,7 @@ function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, subtitle }: Pr
 function ProfilePageContent() {
   const { data: userInfo } = useUser();
   const logout = useLogout();
+  const logger = useLogger();
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
@@ -142,6 +158,12 @@ function ProfilePageContent() {
   const title = isLoggedIn ? userName || '정보를 입력해주세요.' : '로그인을 해주세요.';
   const subtitle = isStudent ? userInfo.student_number || '학번 정보 없음' : userInfo?.login_id;
   const actions = getProfileMenus(isLoggedIn);
+  const handleProfileMenuActionClick = (action: ProfileMenuItem) => {
+    const eventLabel =
+      action.title === '로그인' ? 'home_login' : action.title === '로그아웃' ? 'home_logout' : 'home_settings';
+
+    logger.actionEventClick({ team: 'CAMPUS', event_label: eventLabel, value: action.title });
+  };
 
   return (
     <>
@@ -151,6 +173,7 @@ function ProfilePageContent() {
           actions={actions}
           onLogout={logout}
           onOpenAuthModal={openModal}
+          onActionClick={handleProfileMenuActionClick}
           subtitle={isLoggedIn ? subtitle : undefined}
         />
         <TimetablePreview isLoggedIn={isLoggedIn} />
