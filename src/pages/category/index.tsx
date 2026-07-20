@@ -5,6 +5,7 @@ import CalendarIcon from 'assets/svg/category/calendar-icon.svg';
 import DeliveryBoxIcon from 'assets/svg/category/delivery-box-icon.svg';
 import DishIcon from 'assets/svg/category/dish-icon.svg';
 import HomeIcon from 'assets/svg/category/home-icon.svg';
+import InfoIcon from 'assets/svg/category/info-icon.svg';
 import PermanentJobIcon from 'assets/svg/category/permanent-job-icon.svg';
 import StoreIcon from 'assets/svg/category/store-icon.svg';
 import UserAddIcon from 'assets/svg/category/user-add-icon.svg';
@@ -83,6 +84,16 @@ const sections: CategorySection[] = [
           team: 'CAMPUS',
           event_label: 'category_campus',
           value: '교내 시설물 정보',
+        },
+      },
+      {
+        title: '학교 부서정보',
+        href: ROUTES.Department(),
+        Icon: InfoIcon,
+        logging: {
+          team: 'CAMPUS',
+          event_label: 'category_campus',
+          value: '학교 부서정보',
         },
       },
       {
