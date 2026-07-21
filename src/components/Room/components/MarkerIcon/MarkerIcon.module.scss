@@ -1,10 +1,6 @@
 @keyframes pulsate {
   0% {
     transform: scale(0.1, 0.1);
-    opacity: 0.5;
-  }
-
-  0% {
     opacity: 1;
   }
 
@@ -61,7 +57,7 @@
 }
 
 .pluse {
-  background: rgba(0 0 0 / 20%);
+  background: rgb(0 0 0 / 20%);
   border-radius: 50%;
   height: 14px;
   width: 14px;

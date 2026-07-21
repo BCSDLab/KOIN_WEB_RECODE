@@ -9,8 +9,8 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow:
-    0 4px 10px rgba(0 0 0 / 8%),
-    0 1px 4px rgba(0 0 0 / 4%);
+    0 4px 10px rgb(0 0 0 / 8%),
+    0 1px 4px rgb(0 0 0 / 4%);
 }
 
 .year {
@@ -60,8 +60,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    column-gap: 16px;
-    row-gap: 10px;
+    gap: 10px 16px;
   }
 
   &__day-of-month {

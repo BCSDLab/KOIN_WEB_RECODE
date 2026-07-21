@@ -1,11 +1,6 @@
 @mixin scrollbar($width) {
-  /* Firefox 전용 스크롤바 스타일 */
-  @-moz-document url-prefix("") {
-    & {
-      scrollbar-width: thin;
-      scrollbar-color: #d9d9d9 transparent;
-    }
-  }
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
 
   &::-webkit-scrollbar {
     width: $width;
@@ -46,7 +41,9 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0 0 0 / 40%), 0 1px 1px rgba(0 0 0 / 10%);
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 40%),
+    0 1px 1px rgb(0 0 0 / 10%);
 }
 
 .menu {

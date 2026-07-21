@@ -12,8 +12,7 @@
     width: 100%;
     border: none;
     position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden auto;
     border-radius: 0;
     margin-top: 0;
   }
@@ -26,8 +25,7 @@
   @include media.media-breakpoint(mobile) {
     border: none;
     position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden auto;
     border-radius: 0;
   }
 }
@@ -54,7 +52,7 @@
 $template-shuttle-colors: (
   "순환": #4ed92c,
   "주중": #ffb443,
-  "주말": #34adff
+  "주말": #34adff,
 );
 
 .bus-type {

@@ -1,4 +1,5 @@
 import ROUTES from './routes';
+import { ORDER_BASE_URL } from './url';
 
 export type SubmenuTitle =
   | '공지사항'
@@ -109,7 +110,7 @@ export const CATEGORY: Category[] = [
       },
       {
         title: '주변상점',
-        link: ROUTES.Store(),
+        link: `${ORDER_BASE_URL}/shops/?category=1`,
         newFlag: false,
         planFlag: false,
         tag: null,
