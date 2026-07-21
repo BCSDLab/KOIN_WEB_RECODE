@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
@@ -68,9 +68,10 @@ function useCallvanParams(initialParams: CallvanParams): CallvanParams {
   const router = useRouter();
   const mounted = useMount();
 
-  if (!mounted) return initialParams;
-  return parseCallvanQuery(router.query, DEFAULT_PARAMS);
-
+  return useMemo(() => {
+    if (!mounted) return initialParams;
+    return parseCallvanQuery(router.query, DEFAULT_PARAMS);
+  }, [mounted, router.query, initialParams]);
 }
 
 export default function CallvanPage({ initialParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -107,7 +108,7 @@ function CallvanContent({ params }: CallvanContentProps) {
     enabled: !!token,
   });
 
-  const posts = data?.pages.flatMap((page) => page.posts) ?? []
+  const posts = useMemo(() => data?.pages.flatMap((page) => page.posts) ?? [], [data]);
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 

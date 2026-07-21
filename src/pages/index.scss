@@ -1,15 +1,23 @@
 @use "src/utils/scss/media" as media;
-/* stylelint-disable scss/load-no-partial-leading-underscore */
+/* stylelint-disable scss/at-import-no-partial-leading-underscore */
 @import "reset-css/sass/_reset";
-/* stylelint-enable scss/load-no-partial-leading-underscore */
+/* stylelint-enable scss/at-import-no-partial-leading-underscore */
 @import "react-quill/dist/quill.snow.css";
 @import "react-toastify/dist/ReactToastify.css";
 
 body {
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
   font-family:
-    var(--font-pretendard), system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
+    var(--font-pretendard),
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 #root {

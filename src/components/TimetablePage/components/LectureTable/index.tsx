@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
@@ -20,7 +20,6 @@ interface LectureTableProps {
   onClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList';
-  semester?: Semester;
 }
 
 interface RemoveLectureProps {
@@ -48,7 +47,6 @@ function LectureTable({
   onClickRow,
   onDoubleClickRow,
   version,
-  semester,
 }: LectureTableProps): JSX.Element {
   const router = useRouter();
   const navigate = router.push;
@@ -69,14 +67,10 @@ function LectureTable({
       return;
     }
 
-    navigate(
-      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
-        semester ? `&year=${semester.year}&term=${semester.term}` : ''
-      }`,
-    );
+    navigate(`/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}`);
   };
 
-  const { removeMyLecture } = useTimetableMutation(timetableFrameId, semester);
+  const { removeMyLecture } = useTimetableMutation(timetableFrameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
     myLectures.forEach((lecture) => {
       if (lecture.id === id) {

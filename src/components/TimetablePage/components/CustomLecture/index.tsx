@@ -1,8 +1,6 @@
-'use no memo';
-/* eslint-disable react-hooks/refs */
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
@@ -15,7 +13,6 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
-import type { MyLectureInfo, Semester } from 'api/timetable/entity';
 import styles from './CustomLecture.module.scss';
 
 type Hour = (typeof HOUR)[number]['value'] | '24시';
@@ -345,12 +342,12 @@ function TimeSpaceInput({
   );
 }
 
-function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
+function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
-  const { myLectures } = useMyLectures(timetableFrameId, semester);
-  const { addMyLecture, editMyLecture } = useTimetableMutation(timetableFrameId, semester);
+  const { myLectures } = useMyLectures(timetableFrameId);
+  const { addMyLecture, editMyLecture } = useTimetableMutation(timetableFrameId);
 
   const { searchParams } = useParamsHandler();
   const lectureIndex = searchParams.get('lectureIndex');

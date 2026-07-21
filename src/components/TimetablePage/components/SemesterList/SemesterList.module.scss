@@ -25,9 +25,8 @@
   &--opened {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow:
-      0 8px 32px 0 #00000014,
-      0 2px 20px 0 #0000000a;
+    box-shadow: 0 8px 32px 0 #00000014;
+    box-shadow: 0 2px 20px 0 #0000000a;
   }
 
   &--flex-end {
@@ -98,6 +97,7 @@
   &__content {
     position: absolute;
     z-index: 10;
+    box-shadow: 0 8px 32px 0 #00000014;
     box-shadow: 0 2px 20px 0 #0000000a;
     width: 100%;
     background-color: #fff;

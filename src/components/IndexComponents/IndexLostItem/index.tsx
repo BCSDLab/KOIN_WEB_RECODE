@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
@@ -15,21 +15,25 @@ function IndexLostItem() {
   const { data: lostItemStat } = useSuspenseQuery(articleQueries.lostItemStat());
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const cardMessages = [];
+  const cardMessages = useMemo(() => {
+    const messages = [];
 
-  if (lostItemStat.found_count >= MIN_FOUND_COUNT) {
-    cardMessages.push({
-      prefix: '지금까지 ',
-      highlight: `${lostItemStat.found_count}명`,
-      suffix: '이 분실물을 찾았어요.',
+    if (lostItemStat.found_count >= MIN_FOUND_COUNT) {
+      messages.push({
+        prefix: '지금까지 ',
+        highlight: `${lostItemStat.found_count}명`,
+        suffix: '이 분실물을 찾았어요.',
+      });
+    }
+
+    messages.push({
+      prefix: '',
+      highlight: `${lostItemStat.not_found_count}개`,
+      suffix: '의 분실물이 주인을 찾고 있어요.',
     });
-  }
 
-  cardMessages.push({
-    prefix: '',
-    highlight: `${lostItemStat.not_found_count}개`,
-    suffix: '의 분실물이 주인을 찾고 있어요.',
-  });
+    return messages;
+  }, [lostItemStat.found_count, lostItemStat.not_found_count]);
 
   const shouldAnimate = cardMessages.length > 1;
 

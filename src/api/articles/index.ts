@@ -7,8 +7,6 @@ import APIClient from 'utils/ts/apiClient';
 import {
   GetArticles,
   GetHotArticles,
-  GetArticlesHotKeyword,
-  SearchArticles,
   GetArticle,
   GetLostItemArticles,
   GetSingleLostItemArticle,
@@ -26,15 +24,11 @@ import {
   GetLostItemSearch,
 } from './APIDetail';
 
-export const getArticles = (token: string, page: string, boardId?: number) => APIClient.of(GetArticles)(token, page, boardId);
+export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
 
 export const getArticle = APIClient.of(GetArticle);
 
 export const getHotArticles = APIClient.of(GetHotArticles);
-
-export const getArticlesHotKeyword = APIClient.of(GetArticlesHotKeyword);
-
-export const searchArticles = APIClient.of(SearchArticles);
 
 export const getLostItemArticles = APIClient.of(GetLostItemArticles);
 

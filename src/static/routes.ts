@@ -4,7 +4,6 @@ type ROUTESParams<T extends string = string> = {
 
 const ROUTES = {
   Main: () => '/',
-  Category: () => '/category',
   NotFound: () => '*',
   Timetable: () => '/timetable',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
@@ -26,10 +25,8 @@ const ROUTES = {
   ClubRecruitmentEdit: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/edit/${id}`,
   NewClubEvent: ({ id }: ROUTESParams<'id'>) => `/clubs/event/${id}`,
   ClubEventEdit: ({ id, eventId }: ROUTESParams<'id' | 'eventId'>) => `/clubs/${id}/event/edit/${eventId}`,
-  Cafeteria: ({ date, type }: ROUTESParams<'date' | 'type'> = {}) =>
-    `/cafeteria${date ? `?date=${date}${type ? `&type=${type}` : ''}` : ''}`,
+  Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
-  ArticlesSearch: () => '/articles/search',
   ArticlesDetail: ({ id }: ROUTESParams<'id'>) => `/articles/${id}`,
   LostItems: () => '/lost-item',
   LostItemRedirect: () => '/lost-item',
@@ -43,7 +40,6 @@ const ROUTES = {
   RoomDetail: ({ id }: ROUTESParams<'id'>) => `/room/${id}`,
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
-  Profile: () => '/profile',
   AuthSignup: ({ currentStep }: ROUTESParams<'currentStep'>) => `/auth/signup/${currentStep}`,
   AuthFindPW: ({ step }: ROUTESParams<'step'>) => `/auth/findpw/${step}`,
   // AuthFindPW: () => '/auth/findpw',

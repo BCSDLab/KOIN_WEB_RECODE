@@ -20,8 +20,6 @@
   align-items: center;
 
   @include media.media-breakpoint(mobile) {
-    float: none;
-    align-items: stretch;
     width: 100%;
     min-height: calc(100vh - 115px);
     margin: 0;

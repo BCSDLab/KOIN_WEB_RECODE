@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
@@ -10,7 +10,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
@@ -74,7 +73,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const pathname = asPath.split('?')[0] || '/';
   const search = asPath.includes('?') ? `?${asPath.split('?')[1]}` : '';
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
-  const mounted = useMount();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const isLoggedin = mounted && !!token;
 
@@ -237,26 +237,23 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
         >
           <ul className={styles.megamenu__content}>
-            {panelMenuList
-              ?.slice(0, -4)
-              .filter((menu) => !menu.mobileOnly)
-              .map((menu) => {
-                const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
-                const href = preferred ?? ROUTES.Main();
-                return (
-                  <li className={styles.megamenu__menu} key={menu.title}>
-                    {/* TODO: 키보드 Focus 접근성 향상 */}
-                    <Link
-                      className={styles.megamenu__link}
-                      href={href}
-                      prefetch={false}
-                      onClick={(e) => handleMenuClick(e, menu.title)}
-                    >
-                      {menu.title}
-                    </Link>
-                  </li>
-                );
-              })}
+            {panelMenuList?.slice(0, -4).filter((menu) => !menu.mobileOnly).map((menu) => {
+              const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
+              const href = preferred ?? ROUTES.Main();
+              return (
+                <li className={styles.megamenu__menu} key={menu.title}>
+                  {/* TODO: 키보드 Focus 접근성 향상 */}
+                  <Link
+                    className={styles.megamenu__link}
+                    href={href}
+                    prefetch={false}
+                    onClick={(e) => handleMenuClick(e, menu.title)}
+                  >
+                    {menu.title}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

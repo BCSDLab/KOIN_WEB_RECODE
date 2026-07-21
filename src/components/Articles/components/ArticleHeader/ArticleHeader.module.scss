@@ -2,8 +2,8 @@
 
 .container {
   @include media.media-breakpoint(mobile) {
-    width: 100%;
-    border-bottom: 6px solid #f5f5f5;
+    width: calc(100vw - 24px);
+    margin: 0 auto;
   }
 }
 
@@ -19,8 +19,8 @@
   @include media.media-breakpoint(mobile) {
     width: 100%;
     border-top: 0;
-    padding: 12px 24px;
-    border-bottom: 0;
+    padding: 15px 16px;
+    border-bottom: 1px solid #ececec;
   }
 
   &__title {
@@ -42,44 +42,17 @@
   overflow-wrap: break-word;
 
   @include media.media-breakpoint(mobile) {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
+    font-size: 16px;
+    color: rgb(0 0 0 / 87%);
+    letter-spacing: -0.8px;
+    line-height: 1.5;
+    word-break: break-all;
+    width: calc(100% - 40px);
     padding: 0;
-    color: #000;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.6;
-    letter-spacing: 0;
-    word-break: keep-all;
-    overflow-wrap: anywhere;
   }
 
-  &__board-id-desktop {
+  &__board-id {
     font-weight: 600;
-
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
-  &__board-id-mobile {
-    display: none;
-
-    @include media.media-breakpoint(mobile) {
-      display: inline;
-      color: #8f05a6;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.6;
-    }
-  }
-
-  &__content {
-    @include media.media-breakpoint(mobile) {
-      display: block;
-    }
   }
 
   &__comment-count {
@@ -103,36 +76,19 @@
 }
 
 .content {
+  display: flex;
   padding: 0 20px 27px;
 
   @include media.media-breakpoint(mobile) {
-    padding: 0;
-    width: 100%;
-  }
-
-  &__desktop {
+    margin-top: 1px;
+    color: #a1a1a1;
+    font-size: 13px;
+    line-height: 1.54;
+    letter-spacing: -0.7px;
+    width: calc(100% - 40px);
     display: flex;
-
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
-  &__mobile {
-    display: none;
-
-    @include media.media-breakpoint(mobile) {
-      display: flex;
-      gap: 4px;
-      margin-top: 4px;
-      align-items: center;
-      flex-wrap: wrap;
-      color: #8e8e8e;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.6;
-      letter-spacing: 0;
-    }
+    padding: 0;
+    justify-content: space-between;
   }
 
   &__author {
@@ -141,23 +97,22 @@
     letter-spacing: -0.7px;
     color: #175c8e;
     margin-right: 16px;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      color: #a1a1a1;
+    }
   }
 
-  &__registered-at {
+  &__registered_at {
     font-family: Pretendard, sans-serif;
     font-size: 13px;
     letter-spacing: -0.7px;
     color: #858585;
-  }
 
-  &__hit {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-
-    svg {
-      width: 20px;
-      height: 20px;
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      float: right;
     }
   }
 }

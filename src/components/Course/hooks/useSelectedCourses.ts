@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PreCourse } from 'api/course/entity';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 
@@ -22,10 +22,12 @@ export const getCourseKey = (course: PreCourse) => {
 export default function useSelectedCourses() {
   const [selectedCourses, setSelectedCourses] = useState<PreCourse[]>(getStoredCourses);
 
-  const selectedCredits = selectedCourses.reduce((total, course) => {
-    const credit = Number(course.grades.split('-')[0]);
-    return Number.isNaN(credit) ? total : total + credit;
-  }, 0);
+  const selectedCredits = useMemo(() => {
+    return selectedCourses.reduce((total, course) => {
+      const credit = Number(course.grades.split('-')[0]);
+      return Number.isNaN(credit) ? total : total + credit;
+    }, 0);
+  }, [selectedCourses]);
 
   const hasTimeConflict = (candidate: PreCourse) =>
     selectedCourses.some((course) => course.class_time_raw.some((time) => candidate.class_time_raw.includes(time)));

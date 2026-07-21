@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-imports */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
@@ -51,7 +52,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
-  const verificationMessageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const {
     isRunning: isTimer,
@@ -65,24 +65,12 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     },
   });
 
-  const clearVerificationMessageTimer = () => {
-    if (verificationMessageTimerRef.current) {
-      clearTimeout(verificationMessageTimerRef.current);
-      verificationMessageTimerRef.current = null;
-    }
-  };
-
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
     onSuccess: (data: SmsSendResponse) => {
-      clearVerificationMessageTimer();
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       showVerification();
-      clearVerificationMessageTimer();
-      verificationMessageTimerRef.current = setTimeout(() => {
-        setVerificationMessage({ type: 'default', content: MESSAGES.VERIFICATION.DEFAULT });
-      }, 60000);
       setSmsSendCountData({
         total_count: data.total_count,
         remaining_count: data.remaining_count,
@@ -161,20 +149,21 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     });
   };
 
-  const resetVerificationState = () => {
-    clearVerificationMessageTimer();
+  const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
+
+  useEffect(() => {
     disableButton();
     stopTimer();
     setVerificationMessage(null);
     setPhoneMessage(null);
     setIncorrect();
-  };
-
-  const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
+  }, [phoneNumber]);
 
   useEffect(() => {
-    return () => clearVerificationMessageTimer();
-  }, []);
+    if (timerValue === 120) {
+      setVerificationMessage({ type: 'default', content: MESSAGES.VERIFICATION.DEFAULT });
+    }
+  }, [timerValue]);
 
   return (
     <div className={styles.container}>
@@ -219,12 +208,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                 render={({ field }) => (
                   <CustomInput
                     {...field}
-                    onChange={(e) => {
-                      if (e.target.value !== field.value) {
-                        resetVerificationState();
-                      }
-                      field.onChange(e);
-                    }}
                     placeholder="- 없이 번호를 입력해 주세요."
                     isDelete={!isVerified}
                     message={phoneMessage}

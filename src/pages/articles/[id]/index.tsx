@@ -1,10 +1,9 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import { getArticle, getArticles, getHotArticles } from 'api/articles';
-import { ArticleResponseWithNew, HotArticle } from 'api/articles/entity';
+import { getArticle, getArticles } from 'api/articles';
+import { ArticleResponseWithNew } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleContent from 'components/Articles/components/ArticleContent';
 import ArticleHeader from 'components/Articles/components/ArticleHeader';
-import MobileArticleDetailFooter from 'components/Articles/components/MobileArticleDetailFooter';
 import { isNewArticle } from 'components/Articles/utils/setArticleRegisteredDate';
 import { SSRLayout } from 'components/layout';
 import {
@@ -34,10 +33,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 };
 
-export const getStaticProps: GetStaticProps<
-  { article: ArticleResponseWithNew; hotArticles: HotArticle[] },
-  { id: string }
-> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{ article: ArticleResponseWithNew }, { id: string }> = async ({
+  params,
+}) => {
   const id = params?.id;
   if (!id) {
     return { notFound: true, revalidate: ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS };
@@ -45,7 +43,6 @@ export const getStaticProps: GetStaticProps<
 
   try {
     const article = await withStaticFetchRetry(() => getArticle(id));
-    const hotArticles = (await withStaticFetchRetry(() => getHotArticles()).catch(() => [])) ?? [];
     const serverTime = new Date();
 
     const articleWithNew: ArticleResponseWithNew = {
@@ -54,7 +51,7 @@ export const getStaticProps: GetStaticProps<
     };
 
     return {
-      props: { article: articleWithNew, hotArticles },
+      props: { article: articleWithNew },
       revalidate: ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS,
     };
   } catch (error) {
@@ -65,13 +62,7 @@ export const getStaticProps: GetStaticProps<
   }
 };
 
-export default function ArticlesDetailPage({
-  article,
-  hotArticles,
-}: {
-  article: ArticleResponseWithNew;
-  hotArticles?: HotArticle[];
-}) {
+export default function ArticlesDetailPage({ article }: { article: ArticleResponseWithNew }) {
   return (
     <ArticlesPageLayout>
       <ArticleHeader
@@ -83,7 +74,6 @@ export default function ArticlesDetailPage({
         isNew={article.isNew}
       />
       <ArticleContent content={article.content} attachments={article.attachments} />
-      <MobileArticleDetailFooter prevId={article.prev_id} nextId={article.next_id} hotArticles={hotArticles} />
     </ArticlesPageLayout>
   );
 }

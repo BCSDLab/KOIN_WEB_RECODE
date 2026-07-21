@@ -19,8 +19,6 @@ import {
   UpdateLostItemArticleRequestDTO,
   SearchLostItemArticleResponse,
   SearchLostItemArticleRequest,
-  SearchArticlesRequest,
-  ArticleHotKeywordResponse,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -59,34 +57,6 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
   path = '/articles/hot';
 
   response!: R;
-}
-
-export class GetArticlesHotKeyword<R extends ArticleHotKeywordResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/articles/hot/keyword';
-
-  params: { count: number };
-
-  response!: R;
-
-  constructor(count: number) {
-    this.params = { count };
-  }
-}
-
-export class SearchArticles<R extends ArticlesResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/articles/search';
-
-  params: SearchArticlesRequest;
-
-  response!: R;
-
-  constructor(params: SearchArticlesRequest) {
-    this.params = params;
-  }
 }
 
 export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implements APIRequest<R> {

@@ -119,8 +119,8 @@
     font-size: 18px;
     font-weight: 500;
     box-shadow:
-      0 1px 4px rgb(0 0 0 / 4%),
-      0 4px 10px rgb(0 0 0 / 8%);
+      0 1px 4px rgba(0 0 0 / 4%),
+      0 4px 10px rgba(0 0 0 / 8%);
 
     @include media.media-breakpoint(mobile) {
       height: 40px;
@@ -148,8 +148,8 @@
     font-weight: 600;
     line-height: 1.6;
     box-shadow:
-      0 1px 4px rgb(0 0 0 / 4%),
-      0 4px 10px rgb(0 0 0 / 8%);
+      0 1px 4px rgba(0 0 0 / 4%),
+      0 4px 10px rgba(0 0 0 / 8%);
 
     @include media.media-breakpoint(mobile) {
       width: 100%;

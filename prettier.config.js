@@ -15,12 +15,4 @@ export default {
   endOfLine: 'auto',
   embeddedLanguageFormatting: 'auto',
   singleAttributePerLine: false,
-  overrides: [
-    {
-      files: ['*.scss', '*.css'],
-      options: {
-        singleQuote: false,
-      },
-    },
-  ],
 };

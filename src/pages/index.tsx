@@ -5,15 +5,28 @@ import { articleQueries } from 'api/articles/queries';
 import { bannerQueries } from 'api/banner/queries';
 import { clubQueries } from 'api/club/queries';
 import { storeQueries } from 'api/store/queries';
-import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
-import HomePage from 'components/IndexComponents/HomePage';
-import HomeLayout from 'components/layout/HomeLayout';
+import {
+  createDefaultTimetableFrameList,
+  timetableQueries,
+  timetableQueryKeys,
+} from 'api/timetable/queries';
+import IndexArticles from 'components/IndexComponents/IndexArticles';
+import IndexBus from 'components/IndexComponents/IndexBus';
+import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
+import IndexCallvan from 'components/IndexComponents/IndexCallvan';
+import IndexLostItem from 'components/IndexComponents/IndexLostItem';
+import IndexStore from 'components/IndexComponents/IndexStore';
+import IndexTimetable from 'components/IndexComponents/IndexTimetable';
+import { SSRLayout } from 'components/layout';
+import Banner from 'components/ui/Banner';
+import UserInfoModal from 'components/ui/UserInfoModal';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import type { Semester } from 'api/timetable/entity';
+import styles from './IndexPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
@@ -104,10 +117,31 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   };
 });
 
-function Index(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return <HomePage {...props} />;
+function Index({
+  bannersList,
+  categories,
+  // hotClubInfo,
+  bannerCategoryId,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  return (
+    <main className={styles.template}>
+      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
+      <UserInfoModal />
+      <div className={styles['left-container']}>
+        <IndexStore categories={categories} />
+        <IndexBus />
+        <IndexCallvan />
+        <IndexLostItem />
+        <IndexArticles />
+      </div>
+      <div className={styles['right-container']}>
+        <IndexTimetable />
+        <IndexCafeteria />
+      </div>
+    </main>
+  );
 }
 
 export default Index;
 
-Index.getLayout = (page: React.ReactNode) => <HomeLayout>{page}</HomeLayout>;
+Index.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;

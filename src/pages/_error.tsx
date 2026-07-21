@@ -7,9 +7,7 @@ function CustomErrorComponent({ statusCode }: { statusCode: number }) {
 }
 
 CustomErrorComponent.getInitialProps = async (contextData: NextPageContext) => {
-  if (contextData.err) {
-    await Sentry.captureUnderscoreErrorException(contextData);
-  }
+  await Sentry.captureUnderscoreErrorException(contextData);
   return Error.getInitialProps(contextData);
 };
 

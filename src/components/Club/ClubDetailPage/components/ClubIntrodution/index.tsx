@@ -75,9 +75,12 @@ export default function ClubIntroduction({ isEdit, introduction, setIntroduction
     };
   }, [isEdit, imageHandler]);
 
-  const handleChange = (html: string) => {
-    if (isEdit) setIntroduction(html);
-  };
+  const handleChange = useCallback(
+    (html: string) => {
+      if (isEdit) setIntroduction(html);
+    },
+    [isEdit, setIntroduction],
+  );
 
   return (
     <div className={styles.layout}>

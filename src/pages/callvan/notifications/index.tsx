@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
@@ -65,10 +65,13 @@ export default function CallvanNotificationsPage() {
     onSuccess: () => setIsDeleteModalOpen(false),
   });
 
-  const handleCardClick = (id: number, isRead: boolean) => {
-    if (isRead) return;
-    markRead(id);
-  };
+  const handleCardClick = useCallback(
+    (id: number, isRead: boolean) => {
+      if (isRead) return;
+      markRead(id);
+    },
+    [markRead],
+  );
 
   if (mounted && !isMobile) {
     return null;

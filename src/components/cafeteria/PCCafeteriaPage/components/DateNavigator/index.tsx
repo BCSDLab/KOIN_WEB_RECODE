@@ -5,7 +5,7 @@ import InformationIcon from 'assets/svg/common/information/information-icon-grey
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
-import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './DateNavigator.module.scss';
 
@@ -40,11 +40,11 @@ const generateWeek = (today: Date) => {
 };
 
 export default function DateNavigator() {
-  const { date } = useCafeteriaParams();
+  const { currentDate, checkToday, checkPast, setPrevWeek, setNextWeek, setToday, setDate } = useDatePicker();
   const portalManager = useModalPortal();
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
 
-  const thisWeek = generateWeek(date.current());
+  const thisWeek = generateWeek(currentDate());
 
   const handleInformationClick = () => {
     portalManager.open(() => <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />);
@@ -54,21 +54,21 @@ export default function DateNavigator() {
     <div className={styles.container}>
       <div className={styles['date-wrapper']}>
         <div className={styles.date}>
-          <button className={styles.date__button} type="button" aria-label="이전 날짜" onClick={date.setPrevWeek}>
+          <button className={styles.date__button} type="button" aria-label="이전 날짜" onClick={setPrevWeek}>
             <LeftArrow />
           </button>
           <button
             className={cn({
               [styles.date__button]: true,
-              [styles['date__button--today']]: date.checkToday(date.current()),
+              [styles['date__button--today']]: checkToday(currentDate()),
             })}
             type="button"
             aria-label="오늘 날짜"
-            onClick={date.setToday}
+            onClick={setToday}
           >
             오늘
           </button>
-          <button className={styles.date__button} type="button" aria-label="다음 날짜" onClick={date.setNextWeek}>
+          <button className={styles.date__button} type="button" aria-label="다음 날짜" onClick={setNextWeek}>
             <RightArrow />
           </button>
         </div>
@@ -84,16 +84,16 @@ export default function DateNavigator() {
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
-              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === date.current().toDateString(),
+              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate().toDateString(),
             })}
             type="button"
-            onClick={() => date.set(dayInfo.date)}
+            onClick={() => setDate(dayInfo.date)}
           >
             <span
               className={cn({
                 [styles.week__day]: true,
-                [styles['week--today']]: date.checkToday(dayInfo.date),
-                [styles['week--past']]: date.checkPast(dayInfo.date),
+                [styles['week--today']]: checkToday(dayInfo.date),
+                [styles['week--past']]: checkPast(dayInfo.date),
               })}
             >
               {dayInfo.weekDay}
@@ -101,13 +101,13 @@ export default function DateNavigator() {
             <span
               className={cn({
                 [styles.week__date]: true,
-                [styles['week--today']]: date.checkToday(dayInfo.date),
-                [styles['week--past']]: date.checkPast(dayInfo.date),
+                [styles['week--today']]: checkToday(dayInfo.date),
+                [styles['week--past']]: checkPast(dayInfo.date),
               })}
             >
               {dayInfo.dateOfMonth}
             </span>
-            {date.checkToday(dayInfo.date) && <span className={styles['week__today-dot']} />}
+            {checkToday(dayInfo.date) && <span className={styles['week__today-dot']} />}
           </button>
         ))}
       </div>

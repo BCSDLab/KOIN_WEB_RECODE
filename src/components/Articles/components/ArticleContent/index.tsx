@@ -7,24 +7,10 @@ interface ArticleContentProps {
   attachments?: Attachment[];
 }
 
-const normalizeArticleContent = (content: string) => content
-  .replace(/<!doctype[^>]*>/gi, '')
-  .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, '')
-  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
-  .replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '')
-  .replace(/<\/?(?:html|body|meta|link|base)[^>]*>/gi, '')
-  .trim();
-
 export default function ArticleContent({ content, attachments }: ArticleContentProps) {
-  const normalizedContent = normalizeArticleContent(content);
-
   return (
     <div className={styles.content}>
-      <div
-        dangerouslySetInnerHTML={{ __html: normalizedContent }}
-        className={`toastui-editor-contents ${styles.viewer}`}
-      />
+      <div dangerouslySetInnerHTML={{ __html: content }} className="toastui-editor-contents" />
       {attachments && attachments.length > 0 && (
         <div className={styles.attachments}>
           <span className={styles.attachments__title}>첨부파일</span>

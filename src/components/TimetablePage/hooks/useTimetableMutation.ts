@@ -1,5 +1,12 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
+import {
+  AddTimetableCustomLecture,
+  Lecture,
+  MyLectureInfo,
+  TimetableCustomLecture,
+  TimetableRegularLecture,
+} from 'api/timetable/entity';
 import useToast from 'components/feedback/Toast/useToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -12,24 +19,15 @@ import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
 import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
 import useRollbackLecture from './useRollbackLecture';
-import type {
-  AddTimetableCustomLecture,
-  Lecture,
-  MyLectureInfo,
-  Semester,
-  TimetableCustomLecture,
-  TimetableRegularLecture,
-} from 'api/timetable/entity';
 
 type RemoveMyLectureProps = {
   clickedLecture: Lecture | MyLectureInfo | null;
   id: number;
 };
 
-export default function useTimetableMutation(timetableFrameId: number, semesterOverride?: Semester) {
+export default function useTimetableMutation(timetableFrameId: number) {
   const token = useTokenState();
-  const storedSemester = useSemester();
-  const semester = semesterOverride ?? storedSemester;
+  const semester = useSemester();
   const toast = useToast();
 
   const { mutate: mutateAddWithServerCustom } = useAddTimetableLectureCustom(token);

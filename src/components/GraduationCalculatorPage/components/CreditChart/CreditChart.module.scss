@@ -74,13 +74,13 @@
     align-items: flex-end;
     justify-content: center;
     border-radius: 12px 12px 0 0;
-    background: rgb(122 186 120 / 30%);
+    background: rgba(122 186 120 / 30%);
   }
 
   &__earned-credit {
     position: absolute;
     width: 100%;
-    background: rgb(122 186 120 / 70%);
+    background: rgba(122 186 120 / 70%);
     bottom: 0;
 
     &--full {

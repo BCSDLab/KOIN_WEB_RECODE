@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus, CALLVAN_LOCATION_LABEL } from 'api/callvan/entity';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  CallvanAuthor,
+  CallvanLocation,
+  CallvanSort,
+  CallvanStatus,
+  CALLVAN_LOCATION_LABEL,
+} from 'api/callvan/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
@@ -75,12 +81,12 @@ export default function CallvanFilterPanel({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const toggleStatus = (value: CallvanStatus) => {
+  const toggleStatus = useCallback((value: CallvanStatus) => {
     setLocalStatuses((prev) => {
       if (prev.includes(value)) return prev.filter((s) => s !== value);
       return [...prev, value];
     });
-  };
+  }, []);
 
   const toggleDeparture = (value: CallvanLocation) => {
     setLocalDepartures((prev) => {
@@ -88,7 +94,7 @@ export default function CallvanFilterPanel({
       const next = [...prev, value];
       return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
     });
-  };
+  }
 
   const toggleArrival = (value: CallvanLocation) => {
     setLocalArrivals((prev) => {
@@ -96,7 +102,7 @@ export default function CallvanFilterPanel({
       const next = [...prev, value];
       return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
     });
-  };
+  }
 
   const handleApply = () => {
     onApply({
@@ -185,7 +191,11 @@ export default function CallvanFilterPanel({
           <section className={styles.section}>
             <h3 className={styles.section__title}>모집 상태</h3>
             <div className={styles.section__badges}>
-              <StatusBadge label="전체" isActive={localStatuses.length === 0} onClick={() => setLocalStatuses([])} />
+              <StatusBadge
+                label="전체"
+                isActive={localStatuses.length === 0}
+                onClick={() => setLocalStatuses([])}
+              />
               {STATUS_OPTIONS.map((opt) => (
                 <StatusBadge
                   key={opt.value}
@@ -229,7 +239,11 @@ export default function CallvanFilterPanel({
               <span className={styles.section__description}>기타 장소는 검색창을 이용해주세요.</span>
             </div>
             <div className={styles.section__badges}>
-              <StatusBadge label="전체" isActive={localArrivals.length === 0} onClick={() => setLocalArrivals([])} />
+              <StatusBadge
+                label="전체"
+                isActive={localArrivals.length === 0}
+                onClick={() => setLocalArrivals([])}
+              />
               {CALLVAN_FILTER_LOCATIONS.map((loc) => (
                 <StatusBadge
                   key={loc}

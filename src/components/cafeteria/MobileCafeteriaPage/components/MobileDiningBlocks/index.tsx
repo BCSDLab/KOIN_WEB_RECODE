@@ -1,5 +1,5 @@
 import { Dining, DiningType } from 'api/dinings/entity';
-import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailImage from 'components/cafeteria/MobileCafeteriaPage/components/DetailImage';
 import MobileMealImage from 'components/cafeteria/MobileCafeteriaPage/components/MobileMealImage';
@@ -17,8 +17,8 @@ interface MobileDiningBlocksProps {
 export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { date } = useCafeteriaParams();
-  const { dinings } = useDinings(date.current());
+  const { currentDate } = useDatePicker();
+  const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const handleImageClick = (dining: Dining) => {

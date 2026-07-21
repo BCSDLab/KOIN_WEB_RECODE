@@ -8,10 +8,8 @@ import {
   getStoreBenefitCategory,
   getStoreBenefitList,
   getStoreCategories,
-  getStoreCounts,
   getStoreDetailInfo,
   getStoreDetailMenu,
-  getStoreEventCount,
   getStoreEventList,
   getStoreListV2,
 } from './index';
@@ -38,8 +36,6 @@ export function getStoreReviewViewerScope(token?: string): StoreReviewViewerScop
 export const storeQueryKeys = {
   all: ['store'] as const,
   categories: () => [...storeQueryKeys.all, 'categories'] as const,
-  counts: () => [...storeQueryKeys.all, 'counts'] as const,
-  eventCount: () => [...storeQueryKeys.all, 'event-count'] as const,
   listV2: ({ sorter, filter, query }: StoreListQueryParams) =>
     [...storeQueryKeys.all, 'list-v2', { sorter, filter, query: query ?? '' }] as const,
   allEvents: () => [...storeQueryKeys.all, 'all-events'] as const,
@@ -64,18 +60,6 @@ export const storeQueries = {
     queryOptions({
       queryKey: storeQueryKeys.categories(),
       queryFn: getStoreCategories,
-    }),
-
-  counts: () =>
-    queryOptions({
-      queryKey: storeQueryKeys.counts(),
-      queryFn: getStoreCounts,
-    }),
-
-  eventCount: () =>
-    queryOptions({
-      queryKey: storeQueryKeys.eventCount(),
-      queryFn: getStoreEventCount,
     }),
 
   listV2: ({ sorter, filter, query }: StoreListQueryParams) =>

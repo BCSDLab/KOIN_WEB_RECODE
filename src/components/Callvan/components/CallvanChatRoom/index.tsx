@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CallvanChatMessage } from 'api/callvan/entity';
@@ -112,13 +112,15 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
     }
   };
 
-  const senderColorMap = new Map<number, number>();
-
-  data.messages.forEach((message) => {
-    if (!message.is_mine && !senderColorMap.has(message.user_id)) {
-      senderColorMap.set(message.user_id, senderColorMap.size);
-    }
-  });
+  const senderColorMap = useMemo(() => {
+    const map = new Map<number, number>();
+    data.messages.forEach((msg) => {
+      if (!msg.is_mine && !map.has(msg.user_id)) {
+        map.set(msg.user_id, map.size);
+      }
+    });
+    return map;
+  }, [data.messages]);
 
   const messageGroups = groupMessagesByDate(data.messages);
 

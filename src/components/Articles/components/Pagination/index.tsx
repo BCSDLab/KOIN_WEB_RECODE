@@ -1,7 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import MobilePagination from 'components/Articles/components/MobilePagination';
 import usePagination from 'components/Articles/hooks/usePagination';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Pagination.module.scss';
 
 interface PaginationProps {
@@ -9,12 +7,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ totalPageNum }: PaginationProps) {
-  const isMobile = useMediaQuery();
   const { pages, currentPage, isFirst, isLast, movePage } = usePagination(totalPageNum);
-
-  if (isMobile) {
-    return <MobilePagination totalPageNum={totalPageNum} />;
-  }
 
   if (totalPageNum <= 0) return null;
 
@@ -36,7 +29,7 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
           type="button"
           onClick={() => movePage(pageNum)}
           className={cn({
-            [styles.pagination__number]: true,
+            [styles['pagination__number']]: true,
             [styles['pagination__number--selected']]: currentPage === pageNum,
           })}
           aria-current={currentPage === pageNum ? 'page' : undefined}

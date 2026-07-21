@@ -6,8 +6,6 @@ import {
   StoreDetailResponse,
   StoreDetailMenuResponse,
   StoreCategoriesResponse,
-  StoreCountsResponse,
-  StoreEventCountResponse,
   StoreBenefitCategoryResponse,
   AllStoreEventResponse,
   StoreEventListResponse,
@@ -105,14 +103,6 @@ export class StoreCategories<R extends StoreCategoriesResponse> implements APIRe
   }
 }
 
-export class StoreCounts<R extends StoreCountsResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  response!: R;
-
-  path = 'shops/count';
-}
-
 export class AllStoreEvent<R extends AllStoreEventResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
@@ -123,14 +113,6 @@ export class AllStoreEvent<R extends AllStoreEventResponse> implements APIReques
   constructor() {
     this.path = 'shops/events';
   }
-}
-
-export class StoreEventCount<R extends StoreEventCountResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  response!: R;
-
-  path = 'shops/events/count';
 }
 
 export class StoreEventList<R extends StoreEventListResponse> implements APIRequest<R> {

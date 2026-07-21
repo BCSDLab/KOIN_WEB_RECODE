@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRelateSearch } from 'api/store';
@@ -31,7 +31,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
     storeRef.current?.focus();
   }, []);
   const debounceTimeout = useRef<null | NodeJS.Timeout>(null);
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.trim();
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     debounceTimeout.current = setTimeout(async () => {
@@ -42,7 +42,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
       const data = await getRelateSearch(inputValue);
       setRelateSearchItems(data);
     }, 200);
-  }
+  }, []);
 
   const handleSearch = () => {
     const value = storeRef.current?.value ?? '';

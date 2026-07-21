@@ -4,7 +4,7 @@ import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
-import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import Suspense from 'components/ssr/SSRSuspense';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -27,8 +27,13 @@ const getWeekAgo = () => {
   return twoWeeksAgoSunday;
 };
 
-function PCCafeteriaComponent() {
-  const { date, diningType, setDiningType } = useCafeteriaParams();
+interface PCCafeteriaPageProps {
+  diningType: DiningType;
+  setDiningType: (diningType: DiningType) => void;
+}
+
+function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProps) {
+  const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const router = useRouter();
@@ -53,18 +58,18 @@ function PCCafeteriaComponent() {
   };
 
   const 지난주일요일 = getWeekAgo();
-  const isThisWeek = 지난주일요일 < date.current();
+  const isThisWeek = 지난주일요일 < currentDate();
 
   const formatDiningDate = () => {
-    if (date.checkToday(date.current())) {
+    if (checkToday(currentDate())) {
       return '오늘';
     }
 
-    if (date.checkTomorrow(date.current())) {
+    if (checkTomorrow(currentDate())) {
       return '내일';
     }
 
-    return DAYS[date.current().getDay()];
+    return DAYS[currentDate().getDay()];
   };
 
   useScrollToTop();
@@ -121,10 +126,10 @@ function PCCafeteriaComponent() {
   );
 }
 
-export default function PCCafeteriaPage() {
+export default function PCCafeteriaPage({ diningType, setDiningType }: PCCafeteriaPageProps) {
   return (
     <Suspense fallback={<div />}>
-      <PCCafeteriaComponent />
+      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} />
     </Suspense>
   );
 }

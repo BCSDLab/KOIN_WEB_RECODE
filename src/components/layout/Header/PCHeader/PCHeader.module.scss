@@ -127,12 +127,8 @@
     z-index: 6;
     padding-left: 135px;
     margin: 0 auto;
-    transition:
-      height 0.2s,
-      -webkit-transform 0.5s;
-    transition:
-      height 0.2s,
-      transform 0.5s;
+    transition: height 0.2s, -webkit-transform 0.5s;
+    transition: height 0.2s, transform 0.5s;
   }
 
   &__menu {

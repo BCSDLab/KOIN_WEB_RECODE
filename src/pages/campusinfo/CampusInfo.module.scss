@@ -78,7 +78,7 @@
   height: fit-content;
   width: 360px;
   overflow: hidden; // 긴 단어 왔을 시 줄바꿈
-  overflow-wrap: break-word;
+  word-wrap: break-word;
 
   @include media.media-breakpoint(mobile) {
     width: calc(100vw - 48px);

@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import useMount from 'utils/hooks/state/useMount';
 
 export interface Portal {
   close: () => void;
@@ -28,9 +27,8 @@ interface PortalProviderProps {
 
 const PortalProvider = function PortalProvider({ children }: PortalProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
-  const mounted = useMount();
+  const [mounted, setMounted] = React.useState(false);
   const [container, setContainer] = React.useState<Element | null>(null);
-  const portalContainer = container ?? (mounted && typeof document !== 'undefined' ? document.body : null);
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {
     const { onClose, appendTo } = options;
@@ -60,10 +58,17 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
     [open],
   );
 
+  React.useEffect(() => {
+    setMounted(true);
+    if (typeof document !== 'undefined') {
+      setContainer((prev) => prev ?? document.body);
+    }
+  }, []);
+
   return (
     <PortalContext.Provider value={portalOption}>
       {children}
-      {modalPortal && portalContainer ? ReactDOM.createPortal(modalPortal, portalContainer) : null}
+      {mounted && modalPortal && container ? ReactDOM.createPortal(modalPortal, container) : null}
     </PortalContext.Provider>
   );
 };

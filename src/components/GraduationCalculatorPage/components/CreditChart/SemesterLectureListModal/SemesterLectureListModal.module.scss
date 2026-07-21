@@ -42,7 +42,8 @@
   width: 369px;
   display: grid;
   grid-template-columns: 7fr 5fr;
-  gap: 12px 9px;
+  row-gap: 12px;
+  column-gap: 9px;
 
   &__first-row {
     font-family: Pretendard, sans-serif;

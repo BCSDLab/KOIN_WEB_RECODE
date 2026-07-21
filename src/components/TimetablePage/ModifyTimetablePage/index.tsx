@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import DefaultPage from './DefaultPage';
-import type { Semester } from 'api/timetable/entity';
 import styles from './ModifyTimetablePage.module.scss';
 
 const MobilePage = dynamic(
@@ -11,7 +10,7 @@ const MobilePage = dynamic(
   { ssr: true },
 );
 
-export default function ModifyTimetablePage({ id, semester }: { id?: string; semester: Semester }) {
+export default function ModifyTimetablePage({ id }: { id?: string }) {
   const isMobile = useMediaQuery();
   const timetableFrameId = id ? Number(id) : null;
   const router = useRouter();
@@ -30,7 +29,7 @@ export default function ModifyTimetablePage({ id, semester }: { id?: string; sem
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage timetableFrameId={timetableFrameId} semester={semester} />
+        <DefaultPage timetableFrameId={timetableFrameId} />
       ) : (
         <MobilePage timetableFrameId={timetableFrameId} />
       )}

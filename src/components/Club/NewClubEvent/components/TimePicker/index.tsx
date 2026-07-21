@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -12,11 +12,6 @@ interface TimePickerProps {
 }
 
 const ITEM_HEIGHT = 36;
-const BASE_HOURS = Array.from({ length: 24 }, (_, i) => i);
-const BASE_MINUTE = Array.from({ length: 60 }, (_, i) => i).filter((m) => m % 5 === 0);
-
-const HOURS = [101, 102, ...BASE_HOURS, 103, 104];
-const MINUTES = [101, 102, ...BASE_MINUTE, 103, 104];
 
 export default function TimePicker({ onChange, onClose, hour, minute }: TimePickerProps) {
   const [tempHour, setTempHour] = useState(hour);
@@ -24,10 +19,13 @@ export default function TimePicker({ onChange, onClose, hour, minute }: TimePick
 
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   useEscapeKeyDown({ onEscape: onClose });
-  const hours = HOURS;
-  const minutes = MINUTES;
+
+  const baseHours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
+  const baseMinutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i).filter((m) => m % 5 === 0), []);
 
   // 더미 데이터 추가 (101~104)
+  const hours = useMemo(() => [101, 102, ...baseHours, 103, 104], [baseHours]);
+  const minutes = useMemo(() => [101, 102, ...baseMinutes, 103, 104], [baseMinutes]);
 
   const hourRef = useRef<HTMLUListElement>(null);
   const minuteRef = useRef<HTMLUListElement>(null);

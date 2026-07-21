@@ -5,9 +5,7 @@ import {
   StoreDetailInfo,
   StoreDetailMenu,
   StoreCategories,
-  StoreCounts,
   AllStoreEvent,
-  StoreEventCount,
   StoreEventList,
   StoreBenefitList,
   StoreBenefitCategory,
@@ -32,11 +30,7 @@ export const getStoreBenefitCategory = APIClient.of(StoreBenefitCategory);
 
 export const getStoreCategories = APIClient.of(StoreCategories);
 
-export const getStoreCounts = APIClient.of(StoreCounts);
-
 export const getAllEvent = APIClient.of(AllStoreEvent);
-
-export const getStoreEventCount = APIClient.of(StoreEventCount);
 
 export const getStoreEventList = APIClient.of(StoreEventList);
 

@@ -12,7 +12,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Footer.module.scss';
 
-function Footer() {
+function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
@@ -21,10 +21,6 @@ function Footer() {
 
   const router = useRouter();
   const { pathname } = router; // 현재 URL의 경로
-
-  if (isMobile) {
-    return null;
-  }
 
   const logShortcut = (title: string) => {
     const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
@@ -72,22 +68,23 @@ function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__content}>
-        <ul className={styles.footer__services}>
-          {CATEGORY.flatMap((categoryInfo) => categoryInfo.submenu)
-            .slice(0, -4)
-            .filter((menu) => !menu.mobileOnly)
-            .map((submenuInfo) => (
-              <li className={styles.footer__service} key={submenuInfo.title}>
-                <Link
-                  href={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
-                  prefetch={false}
-                  onClick={(e) => handleClickMenu(e, submenuInfo.title)}
-                >
-                  {submenuInfo.title}
-                </Link>
-              </li>
-            ))}
-        </ul>
+        {!isMobile && (
+          <ul className={styles.footer__services}>
+            {CATEGORY.flatMap((categoryInfo) => categoryInfo.submenu)
+              .slice(0, -4).filter((menu) => !menu.mobileOnly)
+              .map((submenuInfo) => (
+                <li className={styles.footer__service} key={submenuInfo.title}>
+                  <Link
+                    href={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
+                    prefetch={false}
+                    onClick={(e) => handleClickMenu(e, submenuInfo.title)}
+                  >
+                    {submenuInfo.title}
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        )}
         <div className={styles.sitemap}>
           <Link className={styles.sitemap__logo} href={ROUTES.Main()}>
             <img
@@ -99,35 +96,63 @@ function Footer() {
               decoding="async"
             />
           </Link>
-
-          <ul className={styles.sitemap__content}>
-            <li className={styles.sitemap__link}>
-              <a href="https://forms.gle/qYw17r2kihThiJvj7" target="_blank" rel="noreferrer">
-                문의하기
-              </a>
-            </li>
-            <li className={styles.sitemap__link}>
-              <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">
-                BCSD Lab 바로가기
-              </a>
-            </li>
-            <li className={styles.sitemap__link}>
-              <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">
-                코리아텍 바로가기
-              </a>
-            </li>
-            <li className={styles.sitemap__link}>
-              <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">
-                아우누리 바로가기
-              </a>
-            </li>
-            <li className={styles.sitemap__link}>
-              <Link href={ROUTES.PrivatePolicy()} prefetch={false}>
-                개인정보 처리방침
-              </Link>
-            </li>
-          </ul>
-
+          {!isMobile ? (
+            <ul className={styles.sitemap__content}>
+              <li className={styles.sitemap__link}>
+                <a href="https://forms.gle/qYw17r2kihThiJvj7" target="_blank" rel="noreferrer">
+                  문의하기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">
+                  BCSD Lab 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">
+                  코리아텍 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">
+                  아우누리 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <Link href={ROUTES.PrivatePolicy()} prefetch={false}>
+                  개인정보 처리방침
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            <ul className={styles.sitemap__content}>
+              <li className={styles.sitemap__link}>
+                <a href="https://forms.gle/qYw17r2kihThiJvj7" target="_blank" rel="noreferrer">
+                  문의하기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">
+                  코리아텍 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">
+                  아우누리 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">
+                  BCSD Lab 바로가기
+                </a>
+              </li>
+              <li className={styles.sitemap__link}>
+                <Link href={ROUTES.PrivatePolicy()} prefetch={false}>
+                  개인정보 처리방침
+                </Link>
+              </li>
+            </ul>
+          )}
           <div className={styles['sitemap__icon-links']}>
             <a
               className={styles['sitemap__icon-link']}

@@ -8,22 +8,9 @@ function subscribe(callback: () => void) {
   return () => window.removeEventListener('storage', callback);
 }
 
-// getSnapshot은 참조가 동일해야 useSyncExternalStore가 무한 재렌더링을 일으키지 않으므로,
-// 원본 문자열이 바뀌지 않았다면 이전에 파싱한 값을 그대로 재사용합니다.
-const snapshotCache = new Map<string, { raw: string | null; value: unknown }>();
-
 function getSnapshot<T>(key: string, defaultValue: T): T {
   if (typeof window === 'undefined') return defaultValue;
-
-  const raw = isomorphicLocalStorage.getItem(key);
-  const cached = snapshotCache.get(key);
-  if (cached && cached.raw === raw) {
-    return cached.value as T;
-  }
-
-  const value = isomorphicLocalStorage.getJSONItem(key, defaultValue);
-  snapshotCache.set(key, { raw, value });
-  return value;
+  return isomorphicLocalStorage.getJSONItem(key, defaultValue);
 }
 
 export function useLocalStorage<T>(key: string, defaultValue: T) {

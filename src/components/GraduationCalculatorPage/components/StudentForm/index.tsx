@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
@@ -17,11 +17,9 @@ function StudentForm() {
   const [studentNumber, setStudentNumber] = useState<string>(academicInfo?.student_number ?? '');
   const [department, setDepartment] = useState<string>(academicInfo?.department ?? '');
   const [major, setMajor] = useState<string>(academicInfo?.major ?? '');
-  const majorOptionList =
-    deptMajorList
-      .find((deptMajor) => deptMajor.department === department)
-      ?.majors.map((majorName) => ({ label: majorName, value: majorName })) ??
-      [];
+  const [majorOptionList, setMajorOptionList] = useState<{ label: string; value: string }[]>([
+    { label: '', value: '' },
+  ]);
 
   const departmentOptionList = deptMajorList.map((deptMajor) => ({
     label: deptMajor.department,
@@ -32,6 +30,14 @@ function StudentForm() {
     setStudentNumber(e.target.value);
   };
 
+  const handleMajor = (dept: string) => {
+    const selectedDeptMajor = deptMajorList.find((deptMajor) => deptMajor.department === dept);
+    const majorsOption = selectedDeptMajor
+      ? selectedDeptMajor.majors.map((majors) => ({ label: majors, value: majors }))
+      : [];
+    setMajorOptionList(majorsOption);
+  };
+
   const handleDepartment = ({ target }: { target: { value: string } }) => {
     logger.actionEventClick({
       team: 'USER',
@@ -39,6 +45,7 @@ function StudentForm() {
       value: `학과 드롭다운_${target.value}`,
     });
     setDepartment(target.value);
+    handleMajor(target.value);
     setMajor('');
   };
 
@@ -53,6 +60,16 @@ function StudentForm() {
       major: major || undefined,
     });
   };
+
+  useEffect(() => {
+    if (academicInfo) {
+      setStudentNumber(academicInfo.student_number);
+      setDepartment(academicInfo.department);
+      handleMajor(academicInfo.department);
+      setMajor(academicInfo.major);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [academicInfo]);
 
   return (
     <form onSubmit={onSubmitForm} className={styles['student-form']}>

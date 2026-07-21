@@ -3,10 +3,6 @@
 .list {
   width: 100%;
 
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-
   &__link {
     width: 834px;
     height: 68px;
@@ -18,6 +14,15 @@
     &:hover {
       background: #f8fafb;
     }
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: 75px;
+      display: block;
+      border-bottom: 1px solid #ececec;
+      box-sizing: border-box;
+      padding: 16px 16px 14.5px;
+    }
   }
 
   &__id {
@@ -28,6 +33,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 
   &__author {
@@ -47,6 +56,22 @@
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.4;
+
+      @include media.media-breakpoint(mobile) {
+        display: inline;
+      }
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      font-size: 13px;
+      font-weight: normal;
+      line-height: 1.54;
+      letter-spacing: -0.7px;
+      color: #a1a1a1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -58,6 +83,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      font-size: 13px;
+      line-height: 1.54;
+      letter-spacing: -0.7px;
+      color: #a1a1a1;
+      float: right;
+      height: 50%;
+    }
   }
 
   &__views {
@@ -67,6 +102,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 
@@ -83,6 +122,13 @@
   text-overflow: ellipsis;
   margin-right: 10px;
 
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: 50%;
+    box-sizing: border-box;
+    display: block !important;
+  }
+
   &__container {
     display: flex;
     gap: 8px;
@@ -93,6 +139,10 @@
   &__header,
   &__container-header {
     font-weight: 600;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+    }
   }
 
   &__container-type {
@@ -112,6 +162,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.4;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+    }
   }
 
   &__new-tag {
@@ -119,5 +173,9 @@
     width: 14.5px;
     height: 15px;
     position: relative;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }

@@ -1,9 +1,8 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { LostItemArticlesRequest, SearchArticlesRequest, SearchLostItemArticleRequest } from './entity';
+import { LostItemArticlesRequest, SearchLostItemArticleRequest } from './entity';
 import {
   getArticle,
   getArticles,
-  getArticlesHotKeyword,
   getLostItemChatroomDetail,
   getLostItemChatroomList,
   getLostItemChatroomMessagesV2,
@@ -12,7 +11,6 @@ import {
   getLostItemSearch,
   getLostItemStat,
   getSingleLostItemArticle,
-  searchArticles,
 } from './index';
 
 type LostItemInfiniteListParams = Omit<LostItemArticlesRequest, 'page'>;
@@ -22,17 +20,12 @@ type LostItemSearchParams = Required<Pick<SearchLostItemArticleRequest, 'query'>
   limit: number;
 };
 
-type ArticlesSearchParams = Required<Pick<SearchArticlesRequest, 'query'>> & Pick<SearchArticlesRequest, 'boardId' | 'limit'>;
-
 export const articleQueryKeys = {
   all: ['articles'] as const,
   listRoot: ['articles', 'list'] as const,
-  list: (page: string, boardId?: number) => [...articleQueryKeys.listRoot, page, boardId ?? 4] as const,
+  list: (page: string) => [...articleQueryKeys.listRoot, page] as const,
   hot: ['articles', 'hot'] as const,
   detail: (id: string) => ['articles', 'detail', id] as const,
-  hotKeyword: (count: number) => ['articles', 'hotKeyword', count] as const,
-  searchRoot: ['articles', 'search'] as const,
-  search: (params: ArticlesSearchParams) => [...articleQueryKeys.searchRoot, params] as const,
   lostItemAll: ['lostItem'] as const,
   lostItemListRoot: ['lostItem', 'list'] as const,
   lostItemList: (params: LostItemArticlesRequest) => [...articleQueryKeys.lostItemListRoot, params] as const,
@@ -51,10 +44,10 @@ export const articleQueryKeys = {
 };
 
 export const articleQueries = {
-  list: (token: string, page: string, boardId?: number) =>
+  list: (token: string, page: string) =>
     queryOptions({
-      queryKey: articleQueryKeys.list(page, boardId),
-      queryFn: () => getArticles(token, page, boardId),
+      queryKey: articleQueryKeys.list(page),
+      queryFn: () => getArticles(token, page),
     }),
 
   hot: () =>
@@ -67,26 +60,6 @@ export const articleQueries = {
     queryOptions({
       queryKey: articleQueryKeys.detail(id),
       queryFn: () => getArticle(id),
-    }),
-
-  hotKeyword: (count: number) =>
-    queryOptions({
-      queryKey: articleQueryKeys.hotKeyword(count),
-      queryFn: () => getArticlesHotKeyword(count),
-    }),
-
-  search: (params: ArticlesSearchParams) =>
-    infiniteQueryOptions({
-      queryKey: articleQueryKeys.search(params),
-      initialPageParam: 1,
-      queryFn: ({ pageParam }) => searchArticles({ ...params, page: pageParam }),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.total_page > lastPage.current_page) {
-          return lastPage.current_page + 1;
-        }
-
-        return undefined;
-      },
     }),
 
   lostItemList: (token: string, params: LostItemArticlesRequest) =>

@@ -109,7 +109,7 @@
       display: none;
     }
 
-    @media (width >= 577px) {
+    @media (min-width: 577px) {
       &:hover {
         color: #f7941e;
       }
@@ -297,7 +297,7 @@
 }
 
 .store-none-open {
-  background-color: rgb(4 26 68 / 40%);
+  background-color: rgba(4 26 68 / 40%);
   backdrop-filter: blur(3px);
   border-radius: 5px;
   width: 100%;

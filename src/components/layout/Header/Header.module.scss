@@ -24,15 +24,6 @@
       border-radius: 0 0 20px 20px;
       box-shadow: 0 2px 4px 0 rgb(0 0 0 / 34%);
     }
-
-    &--new-club {
-      background-color: #fff;
-    }
-
-    &--mobile-light {
-      background-color: #fff;
-      color: #000;
-    }
   }
 
   &__content {
@@ -47,20 +38,8 @@
     }
   }
 
-  &__desktop {
-    display: contents;
-
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
-  &__mobile {
-    display: none;
-
-    @include media.media-breakpoint(mobile) {
-      display: contents;
-    }
+  &--new-club {
+    background-color: #fff;
   }
 }
 

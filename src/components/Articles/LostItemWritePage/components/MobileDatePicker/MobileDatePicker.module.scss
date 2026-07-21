@@ -61,7 +61,8 @@
 .column {
   flex: 1;
   height: 100%;
-  overflow: hidden auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     display: none;
