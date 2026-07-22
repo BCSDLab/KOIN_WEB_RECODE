@@ -99,6 +99,12 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: '교내 시설물 정보',
         event_category: 'click',
       },
+      '학교 부서 정보': {
+        team: 'CAMPUS',
+        event_label: 'header',
+        value: '학교 부서 정보',
+        event_category: 'click',
+      },
       쪽지: {
         team: 'CAMPUS',
         event_label: 'header',

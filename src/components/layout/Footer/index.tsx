@@ -37,6 +37,7 @@ function Footer() {
       복덕방: { team: 'BUSINESS', event_label: 'footer', value: '복덕방' },
       주변상점: { team: 'BUSINESS', event_label: 'footer', value: '주변상점' },
       '교내 시설물 정보': { team: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' },
+      '학교 부서 정보': { team: 'CAMPUS', event_label: 'footer', value: '학교 부서 정보' },
       '코인 사장님': { team: 'BUSINESS', event_label: 'footer', value: '코인 사장님' },
       쪽지: { team: 'CAMPUS', event_label: 'footer', value: '쪽지' },
       동아리: { team: 'CAMPUS', event_label: 'footer', value: '동아리' },

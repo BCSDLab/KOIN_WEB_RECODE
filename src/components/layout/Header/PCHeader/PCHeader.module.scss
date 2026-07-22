@@ -122,7 +122,8 @@
   &__content {
     display: flex;
     overflow: hidden;
-    width: calc(1132px - 135px);
+    width: fit-content;
+    max-width: calc(100% - 135px);
     height: 100%;
     z-index: 6;
     padding-left: 135px;
@@ -136,8 +137,9 @@
   }
 
   &__menu {
+    flex-shrink: 0;
     padding: 26px 0;
-    margin-right: 38px;
+    margin-right: 30px;
   }
 
   &__link {
@@ -149,6 +151,7 @@
     text-decoration: none;
     text-align: left;
     font-weight: 400;
+    white-space: nowrap;
 
     &:hover {
       font-weight: 800;

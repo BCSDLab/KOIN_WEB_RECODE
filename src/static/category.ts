@@ -13,6 +13,7 @@ export type SubmenuTitle =
   | '복덕방'
   | '주변상점'
   | '교내 시설물 정보'
+  | '학교 부서 정보'
   | '코인 사장님'
   | '리뷰 작성하기'
   | '리뷰 수정하기'
@@ -118,6 +119,13 @@ export const CATEGORY: Category[] = [
       {
         title: '교내 시설물 정보',
         link: ROUTES.CampusInfo(),
+        newFlag: false,
+        planFlag: false,
+        tag: null,
+      },
+      {
+        title: '학교 부서 정보',
+        link: ROUTES.Department(),
         newFlag: false,
         planFlag: false,
         tag: null,
