@@ -10,7 +10,7 @@
   width: calc(100% - 32px);
   grid-template-columns: repeat(1, 1fr);
   grid-auto-rows: 72px;
-  grid-gap: 14px 29px;
+  gap: 14px 29px;
 
   &__item {
     border-radius: 5px;
@@ -52,7 +52,7 @@
   &__title {
     text-align: left;
     text-overflow: ellipsis;
-    word-wrap: normal;
+    overflow-wrap: normal;
     overflow: hidden;
     width: auto;
     max-width: 360px;

@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { dehydrate, DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { coopshopQueries } from 'api/coopshop/queries';
-import { DiningType } from 'api/dinings/entity';
-import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
+import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
-import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
+import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { withCacheControl } from 'utils/ts/withCacheControl';
@@ -36,18 +34,17 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
 function Cafeteria() {
   const isMobile = useMediaQuery();
-  const [diningType, setDiningType] = useState<DiningType>(new DiningTime().getType());
-  const { currentDate } = useDatePicker();
+  const { date } = useCafeteriaParams();
 
   useScrollToTop();
 
   return (
     <div className={styles.page}>
-      <div className={styles.page__content} key={currentDate().toISOString()}>
+      <div className={styles.page__content} key={date.current().toISOString()}>
         {isMobile ? (
-          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
+          <MobileCafeteriaPage />
         ) : (
-          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
+          <PCCafeteriaPage />
         )}
       </div>
     </div>

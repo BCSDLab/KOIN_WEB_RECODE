@@ -93,7 +93,7 @@ export default function CallvanPageLayout({
     [router],
   );
 
-  const handleSearch = useCallback(() => {
+  const handleSearch = () => {
     router.replace({
       pathname: router.pathname,
       query: {
@@ -102,7 +102,7 @@ export default function CallvanPageLayout({
         page: undefined,
       },
     });
-  }, [router, title]);
+  };
 
   return (
     <div className={styles.layout}>

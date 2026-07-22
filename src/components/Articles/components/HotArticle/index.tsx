@@ -5,6 +5,8 @@ import { articleQueries } from 'api/articles/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMount from 'utils/hooks/state/useMount';
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [
@@ -32,27 +34,34 @@ const LINK_LIST = [
 
 export default function HotArticles() {
   const logger = useLogger();
-  const { data: hotArticles, isLoading } = useQuery(articleQueries.hot());
+  const mounted = useMount();
+  const isMobile = useMediaQuery();
+  const { data: hotArticles, isLoading } = useQuery({
+    ...articleQueries.hot(),
+    enabled: mounted && !isMobile,
+  });
 
-  if (isLoading || !hotArticles) {
-    return <LoadingSpinner size="80" />;
-  }
+  if (mounted && isMobile) return null;
 
   return (
     <aside className={styles['hot-article']}>
       <div className={styles['hot-article__list']}>
         <div className={styles['hot-article__title']}>가장 많이 본 게시물</div>
-        {hotArticles.map((article, index) => (
-          <Link
-            className={styles['hot-article__content']}
-            href={ROUTES.ArticlesDetail({ id: String(article.id) })}
-            key={article.id + article.board_id}
-            onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
-          >
-            <span className={styles['hot-article__rank']}>{index + 1}</span>
-            <span className={styles['hot-article__item']}>{article.title}</span>
-          </Link>
-        ))}
+        {!mounted || isLoading || !hotArticles ? (
+          <LoadingSpinner size="80" />
+        ) : (
+          hotArticles.map((article, index) => (
+            <Link
+              className={styles['hot-article__content']}
+              href={ROUTES.ArticlesDetail({ id: String(article.id) })}
+              key={article.id + article.board_id}
+              onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
+            >
+              <span className={styles['hot-article__rank']}>{index + 1}</span>
+              <span className={styles['hot-article__item']}>{article.title}</span>
+            </Link>
+          ))
+        )}
       </div>
       <div className={styles.link}>
         {LINK_LIST.map((link) => (

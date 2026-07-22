@@ -376,13 +376,11 @@
     width: fit-content;
     max-width: 360px;
     white-space: pre-wrap;
-    word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
-  overflow-wrap: break-word;
   white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .message-item--time {

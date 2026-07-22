@@ -107,6 +107,15 @@ export interface StoreCategoriesResponse extends APIResponse {
   shop_categories: StoreCategory[];
 }
 
+export interface StoreCountsResponse extends APIResponse {
+  total_count: number;
+  open_count: number;
+}
+
+export interface StoreEventCountResponse extends APIResponse {
+  count: number;
+}
+
 export interface StoreCategory {
   id: number;
   name: string;

@@ -12,14 +12,13 @@ import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import ROUTES from 'static/routes';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
-import { useSemester } from 'utils/zustand/semester';
+import type { Semester } from 'api/timetable/entity';
 import styles from './DefaultPage.module.scss';
 
-export default function DefaultPage({ timetableFrameId }: { timetableFrameId: number }) {
+export default function DefaultPage({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
   const router = useRouter();
   const navigate = router.push;
-  const semester = useSemester();
-  const { myLectures } = useMyLectures(Number(timetableFrameId));
+  const { myLectures } = useMyLectures(Number(timetableFrameId), semester);
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList?.filter((lecture) => lecture.code === tempLecture?.code) ?? [];
@@ -75,9 +74,9 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
             {modifyType === 'regular' ? (
-              <LectureList timetableFrameId={timetableFrameId} />
+              <LectureList timetableFrameId={timetableFrameId} semester={semester} />
             ) : (
-              <CustomLecture timetableFrameId={timetableFrameId} />
+              <CustomLecture timetableFrameId={timetableFrameId} semester={semester} />
             )}
           </div>
           <div className={styles.page__timetable}>
@@ -102,6 +101,7 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
             </div>
             <Timetable
               timetableFrameId={timetableFrameId}
+              semester={semester}
               similarSelectedLecture={similarSelectedLecture}
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={88.73}

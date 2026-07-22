@@ -12,7 +12,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
-import { useSemester } from 'utils/zustand/semester';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -53,7 +52,7 @@ function CurrentSemesterLectureList({
   const { data: userInfo } = useUser();
   const { data: lectureList } = useLectureList(currentSemester);
   const { updateTempLecture } = useTempLectureAction();
-  const { addMyLecture } = useTimetableMutation(timetableFrameId);
+  const { addMyLecture } = useTimetableMutation(timetableFrameId, currentSemester);
 
   const isOverlapping = (selected: LectureInfo, existing: LectureInfo) => {
     if (selected.day !== existing.day) {
@@ -104,6 +103,7 @@ function CurrentSemesterLectureList({
       })}
       myLectures={myLectures}
       selectedLecture={tempLecture ?? undefined}
+      semester={currentSemester}
       onClickRow={(clickedLecture) => ('lecture_id' in clickedLecture ? undefined : updateTempLecture(clickedLecture))}
       onDoubleClickRow={(clickedLecture) => {
         if ('lecture_id' in clickedLecture) {
@@ -155,7 +155,7 @@ function CurrentSemesterLectureList({
   );
 }
 
-function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId }: MyLectureListBoxProps) {
+function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId, semester }: MyLectureListBoxProps & { semester: Semester }) {
   return myLectures.length !== 0 ? (
     <LectureTable
       rowWidthList={rowWidthList}
@@ -166,22 +166,20 @@ function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId }: MyLect
       onClickRow={undefined}
       onDoubleClickRow={undefined}
       version="myLectureList"
+      semester={semester}
     />
   ) : (
     <div className={styles['empty-list']}>현재 등록된 강의가 없습니다. 강의를 추가해 시간표를 완성해 보세요!</div>
   );
 }
 
-function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
+function LectureList({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
   const logger = useLogger();
 
   const { onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef } = useSearch();
   const { value: departmentFilterValue, onChangeSelect: onChangeDeptSelect } = useSelect();
 
-  // 가장 최신연도와 월을 가져옴
-  const semester = useSemester();
-
-  const { myLectures } = useMyLectures(timetableFrameId);
+  const { myLectures } = useMyLectures(timetableFrameId, semester);
 
   const [isToggled, setIsToggled] = React.useState(false);
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
@@ -259,6 +257,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
           rowWidthList={widthInfo}
           myLectures={(myLectures ?? []) as MyLectureInfo[]}
           timetableFrameId={timetableFrameId}
+          semester={semester}
         />
       )}
       <div className={styles.page__foot}>

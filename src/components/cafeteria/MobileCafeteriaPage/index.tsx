@@ -8,6 +8,7 @@ import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
+import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
@@ -18,12 +19,9 @@ import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
-interface MobileCafeteriaPageProps {
-  diningType: DiningType;
-  setDiningType: (diningType: DiningType) => void;
-}
 
-export default function MobileCafeteriaPage({ diningType, setDiningType }: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage() {
+  const { diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();

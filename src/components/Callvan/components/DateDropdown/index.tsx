@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import ChevronDownIcon from 'assets/svg/Callvan/chevron-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -25,7 +25,7 @@ function ScrollColumn({ items, selectedIndex, onSelect }: ScrollColumnProps) {
     ref.current.scrollTo({ top: selectedIndex * ITEM_HEIGHT, behavior: 'smooth' });
   }, [selectedIndex]);
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = () => {
     if (!ref.current) return;
     isScrollingRef.current = true;
 
@@ -38,7 +38,7 @@ function ScrollColumn({ items, selectedIndex, onSelect }: ScrollColumnProps) {
       ref.current.scrollTo({ top: clamped * ITEM_HEIGHT, behavior: 'smooth' });
       isScrollingRef.current = false;
     }, 150);
-  }, [items.length, onSelect]);
+  };
 
   const handleItemClick = (index: number) => {
     onSelect(index);
@@ -46,11 +46,7 @@ function ScrollColumn({ items, selectedIndex, onSelect }: ScrollColumnProps) {
   };
 
   return (
-    <div
-      ref={ref}
-      className={styles['scroll-column']}
-      onScroll={handleScroll}
-    >
+    <div ref={ref} className={styles['scroll-column']} onScroll={handleScroll}>
       <div className={styles['scroll-column__padding']} />
       {items.map((item, i) => (
         <div
@@ -137,23 +133,18 @@ export default function DateDropdown({ selectedDate, onChange }: DateDropdownPro
       </button>
 
       {isOpen && (
-        <div className={styles.dropdown} style={{ '--container-height': `${containerHeight}px` } as React.CSSProperties}>
+        <div
+          className={styles.dropdown}
+          style={{ '--container-height': `${containerHeight}px` } as React.CSSProperties}
+        >
           <div className={styles.columns}>
             <ScrollColumn
               items={yearItems}
               selectedIndex={Math.max(0, yearIndex)}
               onSelect={(i) => setTempYear(years[i])}
             />
-            <ScrollColumn
-              items={monthItems}
-              selectedIndex={monthIndex}
-              onSelect={(i) => setTempMonth(i)}
-            />
-            <ScrollColumn
-              items={dayItems}
-              selectedIndex={dayIndex}
-              onSelect={(i) => setTempDay(i + 1)}
-            />
+            <ScrollColumn items={monthItems} selectedIndex={monthIndex} onSelect={(i) => setTempMonth(i)} />
+            <ScrollColumn items={dayItems} selectedIndex={dayIndex} onSelect={(i) => setTempDay(i + 1)} />
           </div>
 
           <div className={styles.divider} />

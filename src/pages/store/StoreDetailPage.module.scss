@@ -237,8 +237,7 @@
     display: flex;
     max-height: 255px;
     cursor: initial;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: scroll hidden;
     overflow: hidden;
     white-space: nowrap;
   }

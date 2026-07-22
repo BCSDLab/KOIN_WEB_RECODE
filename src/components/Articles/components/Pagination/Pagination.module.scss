@@ -8,12 +8,6 @@
   margin-top: 22px;
   justify-content: center;
 
-  @include media.media-breakpoint(mobile) {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
-
   &__move {
     border-radius: 0;
     padding: 7px 14px;
@@ -37,12 +31,6 @@
         color: white;
       }
     }
-
-    @include media.media-breakpoint(mobile) {
-      width: 73px;
-      height: 30px;
-      padding: 7px 10px;
-    }
   }
 
   &__number {
@@ -61,10 +49,6 @@
         background-color: #175c8e;
         color: white;
       }
-    }
-
-    @media (max-width: 576px) {
-      margin: 0 2px;
     }
 
     &--selected {

@@ -27,16 +27,71 @@
   }
 
   @include media.media-breakpoint(mobile) {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    padding: 16px 24px;
     font-size: 14px;
-    line-height: 1.71;
-    letter-spacing: -0.7px;
-    color: #252525;
-    min-height: 500px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: #000;
+    min-height: 0;
+    overflow: visible;
 
     & img {
       width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.viewer {
+  width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  &,
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  iframe,
+  object,
+  embed {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  table {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  a {
+    overflow-wrap: anywhere;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    &,
+    * {
+      min-width: 0 !important;
+    }
+
+    table {
+      display: block;
+      width: 100% !important;
+    }
+
+    img,
+    video,
+    iframe,
+    object,
+    embed {
+      width: auto !important;
     }
   }
 }
@@ -95,17 +150,45 @@
   }
 
   @include media.media-breakpoint(mobile) {
-    margin-top: 20px;
-    padding-top: 12px;
+    margin: 32px -24px 0;
+    padding: 16px 24px;
+    border-top: 0;
 
     &__title {
-      font-size: 13px;
-      margin-bottom: 10px;
+      color: #000;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
 
     &__link {
-      font-size: 13px;
-      padding: 6px 10px;
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 66px;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px 14px 24px;
+      background-color: #eee;
+      border-radius: 8px;
+      color: #4b4b4b;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.35;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        overflow: hidden;
+        /* stylelint-disable-next-line value-no-vendor-prefix */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
     }
   }
 }
