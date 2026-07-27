@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DepartmentContactCategory } from 'api/departmentContact/entity';
 import { departmentContactQueries } from 'api/departmentContact/queries';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
-import SearchIcon from 'assets/svg/common/purple-search.svg';
-import DepartmentCard from 'components/Department/DepartmentCard';
-import SearchEmptyState from 'components/Department/SearchEmptyState';
+import { formatUpdatedAt } from 'components/Department/formatUpdatedAt';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
-import styles from './CategoryDetail.module.scss';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import CategoryDetailDesktop from './CategoryDetailDesktop';
+import CategoryDetailMobile from './CategoryDetailMobile';
 
+const DEPARTMENT_INFO_UPDATED_AT_FALLBACK = '-';
 const SEARCH_DEBOUNCE_MS = 300;
 
 interface CategoryDetailPageProps {
@@ -18,6 +18,7 @@ interface CategoryDetailPageProps {
 
 export default function CategoryDetailPage({ category }: CategoryDetailPageProps) {
   const router = useRouter();
+  const isMobile = useMediaQuery();
   const initialKeyword = typeof router.query.keyword === 'string' ? router.query.keyword : '';
   const [searchValue, setSearchValue] = useState(initialKeyword);
   const [keyword, setKeyword] = useState(initialKeyword);
@@ -45,46 +46,16 @@ export default function CategoryDetailPage({ category }: CategoryDetailPageProps
     syncKeywordToUrl(value.trim());
   };
 
-  const departments = data?.departments ?? [];
+  const updatedAt = data?.updated_at ? formatUpdatedAt(data.updated_at) : DEPARTMENT_INFO_UPDATED_AT_FALLBACK;
 
-  return (
-    <div className={styles.page}>
-      <div className={styles.page__header}>
-        <button
-          type="button"
-          className={styles['page__back-button']}
-          onClick={() => router.back()}
-          aria-label="뒤로가기"
-        >
-          <ArrowBackIcon />
-        </button>
-        <h1 className={styles.page__title}>{data?.category_name ?? ''}</h1>
-        <div className={styles['page__spacer']} />
-      </div>
+  const viewProps = {
+    categoryName: data?.category_name ?? '',
+    searchValue,
+    onSearchChange: handleSearchChange,
+    departments: data?.departments ?? [],
+    isLoaded: !!data,
+    updatedAt,
+  };
 
-      <div className={styles.page__content}>
-        <div className={styles['page__search-pill']}>
-          <input
-            className={styles['page__search-input']}
-            type="text"
-            value={searchValue}
-            placeholder="검색어를 입력해주세요."
-            autoComplete="off"
-            onChange={(e) => handleSearchChange(e.target.value)}
-          />
-          <SearchIcon className={styles['page__search-icon']} aria-hidden />
-        </div>
-
-        {data && departments.length === 0 ? (
-          <SearchEmptyState />
-        ) : (
-          <div className={styles.list}>
-            {departments.map((department) => (
-              <DepartmentCard key={department.name} department={department} />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return isMobile ? <CategoryDetailMobile {...viewProps} /> : <CategoryDetailDesktop {...viewProps} />;
 }

@@ -87,7 +87,7 @@ const sections: CategorySection[] = [
         },
       },
       {
-        title: '학교 부서정보',
+        title: '학교 부서 정보',
         href: ROUTES.Department(),
         Icon: InfoIcon,
         logging: {

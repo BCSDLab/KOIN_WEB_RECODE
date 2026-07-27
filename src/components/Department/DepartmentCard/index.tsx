@@ -6,9 +6,10 @@ import styles from './DepartmentCard.module.scss';
 
 interface DepartmentCardProps {
   department: DepartmentContactDepartment;
+  className?: string;
 }
 
-export default function DepartmentCard({ department }: DepartmentCardProps) {
+export default function DepartmentCard({ department, className }: DepartmentCardProps) {
   const logger = useLogger();
 
   const copyPhoneNumber = async (phoneNumber: string) => {
@@ -17,13 +18,13 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'department_contact_copy',
-      value: department.name,
+      value: '전화번호 복사',
     });
   };
 
   if (!department.is_single_contact) {
     return (
-      <div className={styles.card}>
+      <div className={`${styles.card} ${className ?? ''}`}>
         <h2 className={styles.card__title}>{department.name}</h2>
         <div className={styles.table}>
           <div className={`${styles.table__row} ${styles['table__row--head']}`}>
@@ -44,7 +45,7 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
   const [contact] = department.contacts;
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${className ?? ''}`}>
       <h2 className={styles.card__title}>{department.name}</h2>
       <div className={styles.single}>
         <span className={styles.single__phone}>
