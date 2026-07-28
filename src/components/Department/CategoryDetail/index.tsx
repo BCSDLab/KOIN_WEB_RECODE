@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DepartmentContactCategory } from 'api/departmentContact/entity';
 import { departmentContactQueries } from 'api/departmentContact/queries';
 import { formatUpdatedAt } from 'components/Department/formatUpdatedAt';
+import { BUS_FEEDBACK_FORM } from 'static/bus';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import CategoryDetailDesktop from './CategoryDetailDesktop';
@@ -48,12 +49,17 @@ export default function CategoryDetailPage({ category }: CategoryDetailPageProps
 
   const updatedAt = data?.updated_at ? formatUpdatedAt(data.updated_at) : DEPARTMENT_INFO_UPDATED_AT_FALLBACK;
 
+  const handleFeedbackClick = () => {
+    window.open(BUS_FEEDBACK_FORM);
+  };
+
   const viewProps = {
     categoryName: data?.category_name ?? '',
     searchValue,
     onSearchChange: handleSearchChange,
     departments: data?.departments ?? [],
     isLoaded: !!data,
+    onFeedbackClick: handleFeedbackClick,
     updatedAt,
   };
 

@@ -6,5 +6,6 @@ export interface CategoryDetailViewProps {
   onSearchChange: (value: string) => void;
   departments: DepartmentContactDepartment[];
   isLoaded: boolean;
+  onFeedbackClick: () => void;
   updatedAt: string;
 }

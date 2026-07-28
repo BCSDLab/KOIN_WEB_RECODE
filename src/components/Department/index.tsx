@@ -9,6 +9,7 @@ import CircleEllipsisIcon from 'assets/svg/department/circle-ellipsis-icon.svg';
 import GlobalIcon from 'assets/svg/department/global-icon.svg';
 import SchoolIcon from 'assets/svg/department/school-icon.svg';
 import SuitIcon from 'assets/svg/department/suit-icon.svg';
+import { BUS_FEEDBACK_FORM } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -82,6 +83,10 @@ export default function DepartmentPage() {
     });
   };
 
+  const handleFeedbackClick = () => {
+    window.open(BUS_FEEDBACK_FORM);
+  };
+
   const isSearching = keyword.length > 0;
   const searchResultCategories = (data?.categories ?? []).filter(({ departments }) => departments.length > 0);
 
@@ -93,6 +98,7 @@ export default function DepartmentPage() {
     categories: DEPARTMENT_CATEGORIES,
     searchResultCategories,
     onCategoryClick: handleCategoryClick,
+    onFeedbackClick: handleFeedbackClick,
     updatedAt,
   };
 
