@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import SearchIcon from 'assets/svg/common/purple-search.svg';
+import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
 import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
@@ -12,6 +13,8 @@ export default function CategoryDetailMobile({
   onSearchChange,
   departments,
   isLoaded,
+  onFeedbackClick,
+  updatedAt,
 }: CategoryDetailViewProps) {
   const router = useRouter();
 
@@ -52,6 +55,14 @@ export default function CategoryDetailMobile({
             ))}
           </div>
         )}
+
+        <div className={styles.footer}>
+          <p className={styles.footer__updated}>업데이트일: {updatedAt}</p>
+          <button type="button" className={styles.footer__notice} onClick={onFeedbackClick}>
+            <AlertCircleIcon />
+            정보가 정확하지 않나요?
+          </button>
+        </div>
       </div>
     </div>
   );

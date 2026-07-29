@@ -200,10 +200,14 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    padding: 0;
+    border: none;
+    background: none;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     color: #cacaca;
     line-height: 1.6;
+    cursor: pointer;
 
     svg {
       width: 20px;

@@ -19,6 +19,7 @@ export default function DepartmentMobile({
   categories,
   searchResultCategories,
   onCategoryClick,
+  onFeedbackClick,
   updatedAt,
 }: DepartmentViewProps) {
   const router = useRouter();
@@ -99,10 +100,10 @@ export default function DepartmentMobile({
 
         <div className={styles.footer}>
           <p className={styles.footer__updated}>업데이트일: {updatedAt}</p>
-          <p className={styles.footer__notice}>
+          <button type="button" className={styles.footer__notice} onClick={onFeedbackClick}>
             <AlertCircleIcon />
             정보가 정확하지 않나요?
-          </p>
+          </button>
         </div>
       </div>
     </div>

@@ -17,5 +17,6 @@ export interface DepartmentViewProps {
   categories: DepartmentCategoryMenuItem[];
   searchResultCategories: DepartmentContactCategoryGroup[];
   onCategoryClick: (category: DepartmentContactCategory, title: string) => void;
+  onFeedbackClick: () => void;
   updatedAt: string;
 }
