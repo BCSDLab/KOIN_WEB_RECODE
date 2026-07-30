@@ -1,4 +1,12 @@
-import DOMPurify from 'isomorphic-dompurify';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+const getWindow = (): Window & typeof globalThis => {
+  if (typeof window !== 'undefined') return window;
+  return new JSDOM('').window as unknown as Window & typeof globalThis;
+};
+
+const DOMPurify = createDOMPurify(getWindow());
 
 const ALLOWED_TAGS = [
   'p', 'br', 'hr', 'div', 'span',
