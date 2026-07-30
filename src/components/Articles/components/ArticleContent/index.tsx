@@ -1,5 +1,6 @@
 import { Attachment } from 'api/articles/entity';
 import DownloadIcon from 'assets/svg/download-icon.svg';
+import { sanitizeHtml } from 'utils/ts/sanitize';
 import styles from './ArticleContent.module.scss';
 
 interface ArticleContentProps {
@@ -7,22 +8,13 @@ interface ArticleContentProps {
   attachments?: Attachment[];
 }
 
-const normalizeArticleContent = (content: string) => content
-  .replace(/<!doctype[^>]*>/gi, '')
-  .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, '')
-  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
-  .replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '')
-  .replace(/<\/?(?:html|body|meta|link|base)[^>]*>/gi, '')
-  .trim();
-
 export default function ArticleContent({ content, attachments }: ArticleContentProps) {
-  const normalizedContent = normalizeArticleContent(content);
+  const safeContent = sanitizeHtml(content);
 
   return (
     <div className={styles.content}>
       <div
-        dangerouslySetInnerHTML={{ __html: normalizedContent }}
+        dangerouslySetInnerHTML={{ __html: safeContent }}
         className={`toastui-editor-contents ${styles.viewer}`}
       />
       {attachments && attachments.length > 0 && (
