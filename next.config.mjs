@@ -2,7 +2,14 @@ import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: false,
-  webpack(config) {
+  webpack(config, { isServer }) {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        jsdom: false,
+      };
+    }
+
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
