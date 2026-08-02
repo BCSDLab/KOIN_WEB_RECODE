@@ -114,7 +114,8 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
 
-  const token = clientToken ?? serverToken ?? null;
+  // useTokenState()는 SSR에서 ''을 반환하므로 `??`로는 serverToken 폴백이 동작하지 않는다.
+  const token = clientToken || serverToken || null;
 
   const { searchParams, setParams: setSearchParams } = useParamsHandler();
 

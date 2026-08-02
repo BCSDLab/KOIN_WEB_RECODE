@@ -74,7 +74,8 @@ export default function CallvanNotificationsPage() {
     return null;
   }
 
-  const hasNotifications = notifications && notifications.length > 0;
+  // 알림 쿼리 키에 토큰이 들어가 SSR(token='')과 클라이언트가 다른 캐시를 본다.
+  const hasNotifications = mounted && notifications && notifications.length > 0;
 
   return (
     <div className={styles['notification-page']}>

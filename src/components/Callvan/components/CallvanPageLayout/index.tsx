@@ -11,6 +11,7 @@ import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './CallvanPageLayout.module.scss';
 
@@ -46,7 +47,9 @@ export default function CallvanPageLayout({
     enabled: !!token,
   });
 
-  const hasUnreadNotifications = notifications?.some((n) => !n.is_read) ?? false;
+  // 알림 쿼리 키에 토큰이 들어가 SSR(token='')과 클라이언트가 다른 캐시를 본다.
+  const isMounted = useMount();
+  const hasUnreadNotifications = isMounted && (notifications?.some((n) => !n.is_read) ?? false);
 
   const hasActiveFilter =
     statuses.length > 0 ||

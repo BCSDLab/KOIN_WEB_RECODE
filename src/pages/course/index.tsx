@@ -13,6 +13,7 @@ import CourseTable, {
 } from 'components/Course/components/CourseTable';
 import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
+import SSRSuspense from 'components/ssr/SSRSuspense';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -181,9 +182,11 @@ function CoursePage() {
 CoursePageWrapper.getLayout = (page: React.ReactNode) => page;
 
 export default function CoursePageWrapper() {
+  // 토큰(useTimetableFrameList)과 sessionStorage(useSelectedCourses)에 의존하므로
+  // SSRSuspense로 마운트 이후로 미룬다.
   return (
-    <Suspense fallback={<div className={styles.page}>로딩 중...</div>}>
+    <SSRSuspense fallback={<div className={styles.page}>로딩 중...</div>}>
       <CoursePage />
-    </Suspense>
+    </SSRSuspense>
   );
 }

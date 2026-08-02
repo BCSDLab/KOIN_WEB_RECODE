@@ -60,6 +60,19 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs['recommended-latest'].rules,
 
+      // SSR 안전성 (CLAUDE.md 규칙 4, 10)
+      'no-restricted-globals': [
+        'error',
+        {
+          name: 'localStorage',
+          message: 'SSR 안전을 위해 utils/ts/env 의 isomorphicLocalStorage 를 사용하세요.',
+        },
+        {
+          name: 'sessionStorage',
+          message: 'SSR 안전을 위해 utils/ts/env 의 isomorphicSessionStorage 를 사용하세요.',
+        },
+      ],
+
       'import/order': [
         'error',
         {
