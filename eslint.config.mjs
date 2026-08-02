@@ -61,6 +61,8 @@ export default [
       ...reactHooks.configs['recommended-latest'].rules,
 
       // SSR 안전성 (CLAUDE.md 규칙 4, 10)
+      // bare 참조는 no-restricted-globals 가, window/globalThis 경유는
+      // no-restricted-properties 가 잡는다. 둘 다 없으면 한쪽으로 우회된다.
       'no-restricted-globals': [
         'error',
         {
@@ -71,6 +73,21 @@ export default [
           name: 'sessionStorage',
           message: 'SSR 안전을 위해 utils/ts/env 의 isomorphicSessionStorage 를 사용하세요.',
         },
+      ],
+      'no-restricted-properties': [
+        'error',
+        ...['window', 'globalThis'].flatMap((object) => [
+          {
+            object,
+            property: 'localStorage',
+            message: 'SSR 안전을 위해 utils/ts/env 의 isomorphicLocalStorage 를 사용하세요.',
+          },
+          {
+            object,
+            property: 'sessionStorage',
+            message: 'SSR 안전을 위해 utils/ts/env 의 isomorphicSessionStorage 를 사용하세요.',
+          },
+        ]),
       ],
 
       'import/order': [
@@ -116,6 +133,15 @@ export default [
       'linebreak-style': 'off',
       'import/prefer-default-export': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    // isomorphicLocalStorage / isomorphicSessionStorage 의 구현체.
+    // 저장소에 직접 접근하는 유일한 정당한 지점이므로 SSR 안전성 규칙에서 제외한다.
+    files: ['src/utils/ts/env.ts'],
+    rules: {
+      'no-restricted-globals': 'off',
+      'no-restricted-properties': 'off',
     },
   },
 ];

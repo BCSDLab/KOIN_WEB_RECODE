@@ -75,7 +75,9 @@ export default function CallvanNotificationsPage() {
   }
 
   // 알림 쿼리 키에 토큰이 들어가 SSR(token='')과 클라이언트가 다른 캐시를 본다.
-  const hasNotifications = mounted && notifications && notifications.length > 0;
+  // 마운트 전에는 조회 결과를 알 수 없으므로 "알림 없음"과 구분한다.
+  const isResolved = mounted && notifications !== undefined;
+  const hasNotifications = isResolved && notifications.length > 0;
 
   return (
     <div className={styles['notification-page']}>
@@ -113,21 +115,22 @@ export default function CallvanNotificationsPage() {
       </div>
 
       <div className={styles['notification-page__content']}>
-        {!hasNotifications ? (
-          <NotificationEmptyState />
-        ) : (
-          <div className={styles['notification-page__list']}>
-            {notifications.map((notification, index) => (
-              <div key={notification.id}>
-                <NotificationCard
-                  notification={notification}
-                  onCardClick={() => handleCardClick(notification.id, notification.is_read)}
-                />
-                {index < notifications.length - 1 && <div className={styles['notification-page__divider']} />}
-              </div>
-            ))}
-          </div>
-        )}
+        {isResolved
+          && (hasNotifications ? (
+            <div className={styles['notification-page__list']}>
+              {notifications.map((notification, index) => (
+                <div key={notification.id}>
+                  <NotificationCard
+                    notification={notification}
+                    onCardClick={() => handleCardClick(notification.id, notification.is_read)}
+                  />
+                  {index < notifications.length - 1 && <div className={styles['notification-page__divider']} />}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <NotificationEmptyState />
+          ))}
       </div>
 
       {isDeleteModalOpen && (
