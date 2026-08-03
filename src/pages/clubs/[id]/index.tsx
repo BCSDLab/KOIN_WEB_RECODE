@@ -101,23 +101,30 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
       initialClubId: clubId,
       initialTab,
       initialEventId: numericEventId,
+      serverToken: token ?? null,
     },
   };
 });
 
 interface ClubDetailPageProps {
+  serverToken: string | null;
   initialClubId: number;
   initialTab: TabType;
   initialEventId: number;
 }
 
-export default function ClubDetailPage({ initialClubId, initialTab, initialEventId }: ClubDetailPageProps) {
+export default function ClubDetailPage({
+  initialClubId,
+  initialTab,
+  initialEventId,
+  serverToken,
+}: ClubDetailPageProps) {
   const router = useRouter();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
 
-  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
+  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId, serverToken);
   const { data: clubRecruitmentData } = useSuspenseQuery(clubQueries.recruitment(initialClubId));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();

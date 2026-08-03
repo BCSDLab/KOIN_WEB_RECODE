@@ -13,6 +13,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useMount from 'utils/hooks/state/useMount';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import styles from './IndexCafeteria.module.scss';
 
@@ -23,12 +24,16 @@ function IndexCafeteria() {
   const logger = useLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
 
+  // 응답이 공유 캐시되므로 서버가 렌더한 시각은 이 사용자의 시각이 아니다.
+  // 시각 파생 값은 마운트 이후에만 그린다.
+  const isMounted = useMount();
+  const diningType = isMounted ? diningTime.getType() : null;
+  const dayLabel = isMounted ? (diningTime.isTodayDining() ? '오늘' : '내일') : '';
+
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
 
-  const selectedDining = dinings.find(
-    (dining) => dining.place === selectedPlace && dining.type === diningTime.getType(),
-  );
+  const selectedDining = dinings.find((dining) => dining.place === selectedPlace && dining.type === diningType);
 
   const handleMoreClick = () => {
     logger.actionEventClick({
@@ -64,7 +69,7 @@ function IndexCafeteria() {
     <section className={styles.template}>
       <h2 className={styles.header}>
         <button type="button" className={styles.header__title} onClick={handleMoreClick}>
-          {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
+          {`${dayLabel} 식단`}
         </button>
         <button type="button" className={styles.header__more} onClick={handleMoreClick}>
           더보기
@@ -113,7 +118,7 @@ function IndexCafeteria() {
             </button>
           ))}
         </div>
-        <div className={styles.type}>{DINING_TYPE_MAP[diningTime.getType()]}</div>
+        <div className={styles.type}>{diningType ? DINING_TYPE_MAP[diningType] : ''}</div>
         <button
           type="button"
           className={cn({
@@ -124,7 +129,7 @@ function IndexCafeteria() {
         >
           {isMobile && (
             <div className={styles.menus__type}>
-              {DINING_TYPE_MAP[diningTime.getType()]}
+              {diningType ? DINING_TYPE_MAP[diningType] : ''}
               {selectedDining?.soldout_at && <span className={styles.menus__chip}>품절</span>}
             </div>
           )}

@@ -11,6 +11,7 @@ import ROUTES from 'static/routes';
 import { StorePageType } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import useMount from 'utils/hooks/state/useMount';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import styles from './DesktopStoreList.module.scss';
 
@@ -29,6 +30,11 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
   const { storeListData, storeType } = storeListProps;
   const logger = useLogger();
   const pickTopicJosa = getJosaPicker('은');
+
+  // getDayOfWeek()는 new Date()에 의존한다. 응답이 공유 캐시되므로 자정을 넘기면
+  // 서버는 어제 요일, 클라이언트는 오늘 요일을 그린다.
+  const isMounted = useMount();
+  const dayOfWeek = isMounted ? getDayOfWeek() : null;
 
   const { searchParams } = useParamsHandler();
   const { data: categories } = useSuspenseQuery(storeQueries.categories());
@@ -96,8 +102,9 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           <div className={styles['store-list__open-time']}>
             운영시간
             <span>
-              {store.open[getDayOfWeek()] &&
-                getOpenCloseTime(store.open[getDayOfWeek()].open_time, store.open[getDayOfWeek()].close_time)}
+              {dayOfWeek !== null &&
+                store.open[dayOfWeek] &&
+                getOpenCloseTime(store.open[dayOfWeek].open_time, store.open[dayOfWeek].close_time)}
             </span>
           </div>
           <div className={styles['store-item']}>

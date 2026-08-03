@@ -22,6 +22,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import {
   createQueryParser,
@@ -107,6 +108,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();
   const clientToken = useTokenState();
+  const isMounted = useMount();
   const router = useRouter();
   const navigate = (path: string) => {
     router.push(path);
@@ -114,7 +116,10 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
 
-  const token = clientToken ?? serverToken ?? null;
+  // useTokenState()는 SSR에서 ''을 반환하므로 `??`로는 serverToken 폴백이 동작하지 않는다.
+  // 하이드레이션 중에만 폴백하고, 마운트 이후에는 클라이언트 상태만 신뢰한다.
+  const hydrationFallbackToken = isMounted ? null : serverToken;
+  const token = clientToken || hydrationFallbackToken || null;
 
   const { searchParams, setParams: setSearchParams } = useParamsHandler();
 
