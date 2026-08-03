@@ -42,6 +42,12 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 7. **토스트:** `showToast(type, message)` 사용. `toast()` 직접 호출 금지.
 8. **iOS 브릿지:** `window.webkit` optional chaining 유지 (`src/utils/ts/iosBridge.ts`).
 9. **분석 로깅:** 주요 사용자 인터랙션마다 `useLogger()` 훅 포함.
+10. **SSR 렌더 결정성:** 렌더 결과는 **현재 시각·브라우저 전용 상태(쿠키/스토리지)·AB 배정**에 의존해선 안 된다. 서버 렌더와 하이드레이션 렌더가 갈리면 hydration mismatch가 난다.
+    - 시각·저장소 파생 값은 `useMount()` 게이트 뒤로 미루거나 `components/ssr/SSRSuspense`로 감싼다. 참조 구현: `IndexTimetable:79`, `PCCafeteriaPage`
+    - `/`·`/store` 등은 nginx가 60초 공유 캐시하므로(`proxy_cache_valid 200 60s`) **서버 시각을 props로 내리는 방식은 답이 아니다** — 캐시된 시각은 이 사용자의 시각이 아니다
+    - `useTokenState()`는 SSR에서 `''`을 반환한다. `??`가 아니라 `||`로 `serverToken` 폴백할 것
+    - 쿼리 키에 토큰이 들어가면(`clubQueryKeys.*`, `callvanQueryKeys.*`) SSR과 클라이언트가 다른 캐시를 본다
+    - 검증: 개발 모드에서 해당 페이지 접속 후 콘솔에 `Hydration failed` 메시지가 없는지 확인. 로그인/비로그인 양쪽을 볼 것
 
 ## PR 리뷰 규칙 (claude-code-action용)
 

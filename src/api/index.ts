@@ -6,6 +6,7 @@ export * as cafeteria from './cafeteria';
 export * as club from './club';
 export * as coopshop from './coopshop';
 export * as dept from './dept';
+export * as departmentContact from './departmentContact';
 export * as articles from './articles';
 export * as review from './review';
 export * as room from './room';

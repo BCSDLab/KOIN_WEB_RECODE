@@ -1,5 +1,4 @@
 import type { ComponentType, ReactNode, SVGProps } from 'react';
-import { Suspense } from 'react';
 import Link from 'next/link';
 import LoginIcon from 'assets/svg/common/login-icon.svg';
 import LogoutIcon from 'assets/svg/common/logout-icon.svg';
@@ -8,6 +7,7 @@ import UserIcon from 'assets/svg/common/user-2-icon.svg';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
 import HomeLayout from 'components/layout/HomeLayout';
 import { LoggedInTimetablePreview, ProfileTimetableGrid } from 'components/ProfilePage/TimetablePreview';
+import Suspense from 'components/ssr/SSRSuspense';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -184,6 +184,7 @@ function ProfilePageContent() {
 }
 
 function ProfilePage() {
+  // useUser()가 SSR에서는 항상 로그아웃으로 해소된다. Suspense는 SSRSuspense.
   return (
     <Suspense fallback={null}>
       <ProfilePageContent />

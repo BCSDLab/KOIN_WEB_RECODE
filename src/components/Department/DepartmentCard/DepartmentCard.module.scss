@@ -1,0 +1,92 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #000;
+    margin: 0;
+  }
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  border: 0.5px solid #e1e1e1;
+  border-radius: 20px;
+  overflow: hidden;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 31px;
+    padding: 0 16px;
+    border-bottom: 0.5px solid #e1e1e1;
+    font-size: 12px;
+    color: #727272;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--head {
+      font-size: 14px;
+      color: #4b4b4b;
+    }
+  }
+
+  &__task {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+  }
+
+  &__phone {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+  }
+}
+
+.single {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  &__phone {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #727272;
+  }
+
+  &__copy {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    color: #cacaca;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
