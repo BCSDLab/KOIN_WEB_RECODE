@@ -2,6 +2,7 @@ import type { BannersResponse } from 'api/banner/entity';
 import type { HotClubResponse } from 'api/club/entity';
 import type { DiningType } from 'api/dinings/entity';
 import type { StoreCategoriesResponse } from 'api/store/entity';
+import type { Semester } from 'api/timetable/entity';
 
 /**
  * 서버가 렌더 시점에 확정한 식단 정보.
@@ -25,4 +26,6 @@ export interface HomePageProps {
   serverDining: ServerDining;
   /** 서버 렌더 시각 (ISO). 시각 파생 렌더의 공통 기준값. */
   serverNow: string;
+  /** 서버가 확정한 학기. 클라이언트에서 다시 정하지 않는다. */
+  serverSemester: Semester;
 }

@@ -12,7 +12,7 @@ import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/util
 import HomePage from 'components/IndexComponents/HomePage';
 import HomeLayout from 'components/layout/HomeLayout';
 import { COOKIE_KEY } from 'static/url';
-import { getRecentSemester } from 'utils/timetable/semester';
+import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
@@ -82,6 +82,9 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   }
 
   const userSemester = mySemester?.semesters?.[0];
+  // 학기는 URL → 사용자 학기 → 날짜 폴백 순으로 서버가 확정한다. 클라이언트가 마운트 후
+  // 다시 정하면 쿼리 키가 바뀌어 시간표가 통째로 교체된다.
+  const serverSemester = resolveTimetableSemester(undefined, undefined, userSemester) ?? getRecentSemester();
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
@@ -122,6 +125,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
       categories,
       hotClubInfo,
       serverDining,
+      serverSemester,
       serverNow: serverNow.toISOString(),
       dehydratedState: dehydrate(queryClient),
     },
