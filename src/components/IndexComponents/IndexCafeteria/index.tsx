@@ -7,28 +7,31 @@ import Close from 'assets/svg/close-icon-grey.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useDinings from 'components/cafeteria/hooks/useDinings';
-import { DiningTime } from 'components/cafeteria/utils/time';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useMount from 'utils/hooks/state/useMount';
 import { isomorphicLocalStorage } from 'utils/ts/env';
+import type { ServerDining } from 'components/IndexComponents/HomePage/types';
 import styles from './IndexCafeteria.module.scss';
 
-function IndexCafeteria() {
-  const diningTime = new DiningTime();
+interface IndexCafeteriaProps {
+  serverDining: ServerDining;
+}
+
+/**
+ * 시각 파생 값은 서버가 확정한 것을 쓴다. `useMount()` 뒤로 미루면 React 경고는 사라지지만
+ * 서버가 그린 DOM이 하이드레이션 직후 매번 교체된다.
+ */
+function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { dinings } = useDinings(diningTime.generateDiningDate());
+  const { dinings } = useDinings(new Date(serverDining.date));
 
-  // 응답이 공유 캐시되므로 서버가 렌더한 시각은 이 사용자의 시각이 아니다.
-  // 시각 파생 값은 마운트 이후에만 그린다.
-  const isMounted = useMount();
-  const diningType = isMounted ? diningTime.getType() : null;
-  const dayLabel = isMounted ? (diningTime.isTodayDining() ? '오늘' : '내일') : '';
+  const diningType = serverDining.type;
+  const dayLabel = serverDining.dayLabel;
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -39,7 +42,7 @@ function IndexCafeteria() {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_menu_moveDetailView',
-      value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`,
+      value: `${dayLabel} 식단`,
     });
     router.push(ROUTES.Cafeteria());
   };

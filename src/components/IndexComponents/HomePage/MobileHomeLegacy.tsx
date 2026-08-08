@@ -10,7 +10,7 @@ import UserInfoModal from 'components/ui/UserInfoModal';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
-function MobileHomeLegacy({ bannersList, categories, bannerCategoryId }: HomePageProps) {
+function MobileHomeLegacy({ bannersList, categories, bannerCategoryId, serverDining, serverNow }: HomePageProps) {
   return (
     <main className={styles.template}>
       <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
@@ -20,11 +20,11 @@ function MobileHomeLegacy({ bannersList, categories, bannerCategoryId }: HomePag
         <IndexBus />
         <IndexCallvan />
         <IndexLostItem />
-        <IndexArticles />
+        <IndexArticles serverNow={serverNow} />
       </div>
       <div className={styles['right-container']}>
         <IndexTimetable />
-        <IndexCafeteria />
+        <IndexCafeteria serverDining={serverDining} />
       </div>
     </main>
   );

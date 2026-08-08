@@ -10,7 +10,7 @@ import UserInfoModal from 'components/ui/UserInfoModal';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
-function DesktopHome({ bannersList, categories, bannerCategoryId }: HomePageProps) {
+function DesktopHome({ bannersList, categories, bannerCategoryId, serverDining, serverNow }: HomePageProps) {
   return (
     <main className={styles.template}>
       <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
@@ -20,11 +20,11 @@ function DesktopHome({ bannersList, categories, bannerCategoryId }: HomePageProp
         <IndexBus />
         <IndexCallvan />
         <IndexLostItem />
-        <IndexArticles />
+        <IndexArticles serverNow={serverNow} />
       </div>
       <div className={styles['right-container']}>
         <IndexTimetable />
-        <IndexCafeteria />
+        <IndexCafeteria serverDining={serverDining} />
       </div>
     </main>
   );
