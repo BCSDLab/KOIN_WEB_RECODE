@@ -12,28 +12,28 @@ import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './BusRoutePage.module.scss';
 
+/** 버스 공지는 자주 바뀌지 않는다. */
+const BUS_NOTICE_REVALIDATE_SECONDS = 60 * 60;
+
 /**
- * 두 가지를 동시에 해결해야 해서 정적 생성이 아니라 SSR을 쓴다.
+ * 페이지에서 쓰는 suspense 쿼리를 모두 미리 받아 캐시에 넣는다.
  *
- * 1. suspense 쿼리 프리페치 — Layout이 페이지 전체를 `<Suspense fallback={null}>`로
- *    감싸고 있어, 하이드레이션 중 하나라도 서스펜드하면 서버가 그린 DOM 전체가 버려진다.
- * 2. 기기 판정 — `useMediaQuery`의 서버 스냅샷은 `serverRequest`에서 온다.
- *    정적 생성은 HTML이 하나뿐이라 빌드 시점에 기기를 알 수 없어 모바일이 전부 교체된다.
- *
- * 익명 응답은 `enablePublicCache()`로 nginx가 60초 캐시하고, 캐시 키가 기기별로 갈려 있어
- * (`$device_class`) 정적 생성 대비 손실이 크지 않다.
+ * Layout이 `<Suspense fallback={null}>{children}</Suspense>`로 페이지 전체를 감싸고 있어,
+ * 하이드레이션 중 하나라도 서스펜드하면 서버가 그린 DOM 전체가 버려지고 빈 화면을 거쳐
+ * 다시 그려진다(실측 파괴율 33%). 하나라도 빠지면 효과가 없으므로 전부 덮어야 한다.
  */
-export const getServerSideProps = withCacheControl(async (_context, cacheControl) => {
+export const getStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(busQueries.notice());
-  cacheControl.enablePublicCache();
 
-  return { props: { dehydratedState: dehydrate(queryClient) } };
-});
+  return {
+    props: { dehydratedState: dehydrate(queryClient) },
+    revalidate: BUS_NOTICE_REVALIDATE_SECONDS,
+  };
+};
 
 export default function BusRoutePage() {
   const isMobile = useMediaQuery();
