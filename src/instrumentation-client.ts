@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { maskSensitive } from 'utils/ts/maskSensitive';
 
 const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
 const isProduction = environment === 'production';
@@ -97,7 +98,8 @@ Sentry.init({
 
   beforeSendLog(log) {
     if (log.level === 'debug') return null;
-    return log;
+    // API가 인증 실패 응답에 토큰 원문을 실어 보내고, 그 메시지가 그대로 로그로 넘어온다.
+    return maskSensitive(log);
   },
 
   ignoreErrors: [
