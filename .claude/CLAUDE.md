@@ -4,7 +4,7 @@
 
 KOIN은 한국기술교육대학교(KOREATECH) 재학생을 위한 캠퍼스 서비스 웹앱이다. 시간표, 버스, 식당, 가게, 커뮤니티, 동아리, 분실물, 졸업 계산기를 제공한다.
 
-**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 20.11.1
+**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 24.14.1
 
 ## 주요 명령어
 
@@ -21,15 +21,15 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 
 ## 아키텍처 핵심 포인터
 
-| 영역 | 패턴 요약 | 위치 |
-|------|-----------|------|
-| 라우팅 | Pages Router, `ROUTES` 헬퍼 사용 | `src/static/routes.ts` |
-| API | `APIRequest<T>` 클래스 → `APIClient.of()` export | `src/api/[domain]/` |
-| 서버 상태 | React Query (`staleTime: 60000, retry: false`) | `src/api/[domain]/queries.ts` |
-| 클라이언트 상태 | Zustand (`State`/`Actions` 타입 분리) | `src/utils/zustand/` |
-| 스타일 | SCSS Modules + BEM, 데스크톱 우선 | `[Component].module.scss` |
-| 레이아웃 | SSR 페이지 → `SSRLayout`, 클라이언트 → `Layout` | `src/components/layout/` |
-| 내부 패키지 | `@bcsdlab/koin` (isKoinError, sendClientError), `@bcsdlab/utils` (cn, sha256) | 교체 금지 |
+| 영역            | 패턴 요약                                                                     | 위치                          |
+| --------------- | ----------------------------------------------------------------------------- | ----------------------------- |
+| 라우팅          | Pages Router, `ROUTES` 헬퍼 사용                                              | `src/static/routes.ts`        |
+| API             | `APIRequest<T>` 클래스 → `APIClient.of()` export                              | `src/api/[domain]/`           |
+| 서버 상태       | React Query (`staleTime: 60000, retry: false`)                                | `src/api/[domain]/queries.ts` |
+| 클라이언트 상태 | Zustand (`State`/`Actions` 타입 분리)                                         | `src/utils/zustand/`          |
+| 스타일          | SCSS Modules + BEM, 데스크톱 우선                                             | `[Component].module.scss`     |
+| 레이아웃        | SSR 페이지 → `SSRLayout`, 클라이언트 → `Layout`                               | `src/components/layout/`      |
+| 내부 패키지     | `@bcsdlab/koin` (isKoinError, sendClientError), `@bcsdlab/utils` (cn, sha256) | 교체 금지                     |
 
 ## 필수 준수 규칙
 
@@ -54,11 +54,13 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 리뷰 댓글은 **한국어**로 작성. 정확성 > 회귀 위험 > 보안 > 성능 > 스타일 순으로 검토.
 
 **출력 형식 (모든 발견에 적용):**
+
 - 심각도: `[P0]` (머지 차단) · `[P1]` (수정 필요) · `[P2]` (제안)
 - 위치: `file:line`
 - 영향과 최소 수정안
 
 **검토 제외:**
+
 - lint/import-order 포매팅 노이즈
 - 자동 생성 파일만 변경 (`src/generated/**`, `analytics.events.json`)
 - `@bcsdlab/koin`, `@bcsdlab/utils` 교체 제안
