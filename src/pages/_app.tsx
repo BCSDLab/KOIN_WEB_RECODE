@@ -13,6 +13,7 @@ import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { COOKIE_KEY } from 'static/url';
+import { ServerRequestProvider } from 'utils/context/serverRequest';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
@@ -142,12 +143,14 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
           {/* Google Analytics */}
           {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
-          <PortalProvider>
-            <Seo title={pageTitle} />
-            <AutoLogin />
-            {getLayout(<Component {...pageProps} />)}
-            <Toast />
-          </PortalProvider>
+          <ServerRequestProvider value={pageProps.serverRequest ?? null}>
+            <PortalProvider>
+              <Seo title={pageTitle} />
+              <AutoLogin />
+              {getLayout(<Component {...pageProps} />)}
+              <Toast />
+            </PortalProvider>
+          </ServerRequestProvider>
         </HydrationBoundary>
       </QueryClientProvider>
     </div>

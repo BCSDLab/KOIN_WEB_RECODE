@@ -39,7 +39,10 @@ export const useLogin = (state: IsAutoLogin) => {
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
       }
-      queryClient.invalidateQueries();
+      // invalidate는 데이터를 남긴 채 stale 표시만 하므로, 리페치가 끝나기 전까지
+      // 이전 사용자의 시간표·쪽지 같은 캐시가 그대로 렌더된다. 로그인은 client-side
+      // 이동이라(useLoginRedirect의 router.replace) 캐시가 살아남는다. 아예 비운다.
+      queryClient.clear();
       setCookie(COOKIE_KEY.AUTH_TOKEN, data.token, { domain });
       setCookie(COOKIE_KEY.AUTH_USER_TYPE, data.user_type, { domain });
       setToken(data.token);

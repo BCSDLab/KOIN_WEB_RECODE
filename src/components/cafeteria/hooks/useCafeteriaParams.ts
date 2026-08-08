@@ -16,6 +16,11 @@ export const useCafeteriaParams = () => {
 
   const date = {
     current: (): Date => (query[DATE_KEY] ? new Date(query[DATE_KEY] as string) : new Date()),
+    /**
+     * 날짜가 바뀔 때만 바뀌는 리마운트 키. `current()`는 date 파라미터가 없을 때 매 렌더
+     * 다른 밀리초를 반환하므로 key로 쓰면 서브트리가 매번 재생성된다.
+     */
+    key: (Array.isArray(query[DATE_KEY]) ? query[DATE_KEY][0] : query[DATE_KEY]) ?? 'today',
     checkToday: (d: Date) => today.toDateString() === d.toDateString(),
     checkTomorrow: (d: Date) => tomorrow.toDateString() === d.toDateString(),
     checkPast: (d: Date) => today > d,

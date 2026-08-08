@@ -62,3 +62,13 @@ export function getRecentSemester(): Semester {
     term: '1학기',
   };
 }
+
+/** 선택된 학기가 아직 선택 가능한 목록에 있는지. 없으면 목록의 첫 학기로 되돌려야 한다. */
+export function isSemesterInList(
+  semesterOptionList: { value: Semester }[],
+  semester: Semester,
+): boolean {
+  return semesterOptionList.some(
+    (option) => option.value.year === semester.year && option.value.term === semester.term,
+  );
+}

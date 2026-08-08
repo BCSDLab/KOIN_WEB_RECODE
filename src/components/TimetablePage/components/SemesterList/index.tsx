@@ -16,6 +16,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
@@ -119,12 +120,11 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     }
   };
 
+  // 저장된 학기가 더 이상 유효하지 않을 때만 되돌린다.
   React.useEffect(() => {
-    if (semesterOptionList.length > 0) {
-      if (!semesterOptionList.find((sem) => sem.value.year === semester.year && sem.value.term === semester.term)) {
-        updateSemester(semesterOptionList[0].value);
-      }
-    }
+    if (semesterOptionList.length === 0) return;
+    if (isSemesterInList(semesterOptionList, semester)) return;
+    updateSemester(semesterOptionList[0].value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [semesterOptionList]);
 

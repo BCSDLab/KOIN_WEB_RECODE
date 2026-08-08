@@ -6,6 +6,7 @@ import { getStoreDetailInfo } from 'api/store';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
+import { useServerRequest } from 'utils/context/serverRequest';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -75,8 +76,11 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const search = asPath.includes('?') ? `?${asPath.split('?')[1]}` : '';
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
   const mounted = useMount();
+  const serverRequest = useServerRequest();
 
-  const isLoggedin = mounted && !!token;
+  // 마운트 전에는 서버가 판정한 로그인 여부를 쓴다. 이게 없으면 서버는 항상 비로그인 UI를
+  // 그리고 클라이언트가 마운트 후 로그인 UI로 교체한다(a → button).
+  const isLoggedin = mounted ? !!token : (serverRequest?.isLoggedIn ?? false);
 
   const logShortcut = (title: string) => {
     const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
