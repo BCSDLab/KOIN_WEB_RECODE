@@ -13,6 +13,8 @@ import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { getDeviceClass } from 'utils/ts/serverRequestContext';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
 
 const DEFAULT_PARAMS: CallvanParams = {
@@ -38,7 +40,16 @@ function toCallvanApiParams(params: CallvanParams): Omit<CallvanListRequest, 'pa
   };
 }
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl<{
+  dehydratedState: ReturnType<typeof dehydrate>;
+  initialParams: CallvanParams;
+}>(async (context: GetServerSidePropsContext) => {
+  // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다. 클라이언트에서 판정하면
+  // 서버가 페이지 전체를 그린 뒤 마운트 직후 통째로 버리게 된다.
+  if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
+    return { redirect: { destination: ROUTES.Main(), permanent: false } };
+  }
+
   const queryClient = new QueryClient();
   const { token, query } = parseServerSideParams(context);
 
@@ -62,7 +73,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       initialParams: params,
     },
   };
-};
+});
 
 function useCallvanParams(initialParams: CallvanParams): CallvanParams {
   const router = useRouter();
@@ -78,6 +89,7 @@ export default function CallvanPage({ initialParams }: InferGetServerSidePropsTy
   const isMobile = useMediaQuery();
   const mounted = useMount();
 
+  // 서버가 이미 걸러내지만, 창 크기를 줄여 모바일 폭이 된 뒤 넓히는 경우를 위해 남긴다.
   useEffect(() => {
     if (mounted && !isMobile) {
       router.replace(ROUTES.Main());
@@ -85,10 +97,6 @@ export default function CallvanPage({ initialParams }: InferGetServerSidePropsTy
   }, [mounted, isMobile, router]);
 
   const params = useCallvanParams(initialParams);
-
-  if (mounted && !isMobile) {
-    return null;
-  }
 
   return <CallvanContent key={params.title} params={params} />;
 }
