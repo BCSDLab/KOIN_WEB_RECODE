@@ -16,6 +16,13 @@ export interface ServerRequestContext {
   token: string;
   /** 토큰과 함께 요청 엔드포인트를 결정한다. 빠뜨리면 잘못된 엔드포인트로 403이 난다. */
   userType: string;
+  /**
+   * 서버 렌더 시각(ISO). 시각 파생 렌더의 공통 기준값이다.
+   *
+   * 공유 캐시로 최대 60초 낡을 수 있으나, 클라이언트가 자기 기기 시계로 다시 계산해
+   * 매번 DOM을 갈아치우는 것보다 낫다.
+   */
+  now: string;
 }
 
 /**
@@ -47,5 +54,6 @@ export function getServerRequestContext(context: GetServerSidePropsContext): Ser
     isLoggedIn: Boolean(token),
     token,
     userType: context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] ?? '',
+    now: new Date().toISOString(),
   };
 }
