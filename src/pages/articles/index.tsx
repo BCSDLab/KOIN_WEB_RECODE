@@ -8,7 +8,7 @@ import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
 import MobileArticleSearchButton from 'components/Articles/components/MobileArticleSearchButton';
 import MobileArticleTabMenu from 'components/Articles/components/MobileArticleTabMenu';
 import Pagination from 'components/Articles/components/Pagination';
-import { selectArticlesWithNew } from 'components/Articles/utils/selectArticlesData';
+import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import HomeLayout from 'components/layout/HomeLayout';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -39,6 +39,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     props: {
       dehydratedState: dehydrate(queryClient),
       initialPage: pageNumber,
+      serverNow: new Date().toISOString(),
       initialBoardId: boardId,
     },
   };
@@ -62,7 +63,7 @@ function useBoardIdParams(initialBoardId: number) {
   return typeof boardId === 'string' ? Number(boardId) : initialBoardId;
 }
 
-export default function ArticleListPage({ initialPage, initialBoardId }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ArticleListPage({ initialPage, initialBoardId, serverNow }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const token = useTokenState();
   const paramsPage = usePageParams(initialPage);
   const boardId = useBoardIdParams(initialBoardId);
@@ -70,7 +71,7 @@ export default function ArticleListPage({ initialPage, initialBoardId }: InferGe
   const { data: articlesData } = useQuery({
     ...articleQueries.list(token, paramsPage, boardId),
     placeholderData: keepPreviousData,
-    select: selectArticlesWithNew,
+    select: createArticlesWithNewSelector(serverNow),
   });
 
   const articles = articlesData?.articles ?? [];

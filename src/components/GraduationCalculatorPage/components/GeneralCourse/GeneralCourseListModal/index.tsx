@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
-import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
+import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -16,7 +16,7 @@ export interface GeneralCourseListModalProps {
 
 function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalProps) {
   const token = useTokenState();
-  const semesters = useSemester();
+  const semesters = useAllSemesters();
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
     value: `${semesterInfo.year}년 ${semesterInfo.term}`,

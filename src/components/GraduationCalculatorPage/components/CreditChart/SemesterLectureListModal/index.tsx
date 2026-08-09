@@ -8,7 +8,7 @@ import SemesterCourseTable from 'components/GraduationCalculatorPage/components/
 import DeptListbox from 'components/TimetablePage/components/LectureList/DeptListbox';
 import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useSelect from 'components/TimetablePage/hooks/useSelect';
-import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
+import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -45,7 +45,7 @@ export default function SemesterLectureListModal({
   onClose: () => void;
   initialCourse: string;
 }) {
-  const semesters = useSemester();
+  const semesters = useAllSemesters();
   const token = useTokenState();
   const allMyLectures = useAllMyLectures(token);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });

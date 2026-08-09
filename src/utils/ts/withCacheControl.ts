@@ -4,6 +4,7 @@ import type {
   GetServerSidePropsResult,
   PreviewData,
 } from 'next';
+import { getServerRequestContext } from 'utils/ts/serverRequestContext';
 import type { ParsedUrlQuery } from 'node:querystring';
 
 export const PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300';
@@ -53,6 +54,13 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
     // 쿠키를 갱신하는 응답은 공용 캐시에 저장하면 안 되므로 private로 고정합니다.
     const cacheControl = shouldCachePublicResponse && !hasSetCookieHeader ? publicCacheControl : PRIVATE_SSR_CACHE_CONTROL;
     context.res.setHeader('Cache-Control', cacheControl);
+  }
+
+  // 서버만 아는 요청 정보(기기·로그인 여부)를 렌더 트리에 넘긴다. 이게 없으면 서버는
+  // "비로그인 데스크톱"으로 렌더하고 클라이언트가 마운트 후 그 DOM을 통째로 갈아치운다.
+  if ('props' in result) {
+    const props = await result.props;
+    return { ...result, props: { ...props, serverRequest: getServerRequestContext(context) } };
   }
 
   return result;
