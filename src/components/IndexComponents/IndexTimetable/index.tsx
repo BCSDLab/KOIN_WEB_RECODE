@@ -1,33 +1,34 @@
-﻿import { useEffect } from 'react';
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import TimetableGridPlaceholder from 'components/TimetablePage/components/TimetableGridPlaceholder';
-import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import type { Semester } from 'api/timetable/entity';
 import styles from './IndexTimetable.module.scss';
 
-export default function IndexTimeTable() {
-  const { updateSemester } = useSemesterAction();
-  const semesterOptionList = useSemesterOptionList();
+interface IndexTimeTableProps {
+  serverSemester: Semester;
+}
+
+/**
+ * 학기는 서버가 확정한 값을 그대로 쓴다.
+ *
+ * 이전에는 스토어의 날짜 파생 기본값(getRecentSemester)으로 렌더한 뒤 useEffect에서
+ * 사용자 학기로 바꿨다. 학기가 쿼리 키에 들어가므로 그 순간 시간표가 통째로 교체된다.
+ * 메인 화면이 전역 학기 스토어를 건드리던 부수효과도 함께 사라진다.
+ */
+export default function IndexTimeTable({ serverSemester }: IndexTimeTableProps) {
   const logger = useLogger();
-  const semester = useSemester();
+  const semester = serverSemester;
   const token = useTokenState();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
   const hasValidCurrentFrameId = isValidTimetableFrameId(currentFrameId);
-  const isClient = useMount();
-
-  useEffect(() => {
-    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
-  }, [semesterOptionList, updateSemester]);
 
   const renderPlaceholder = (
     <TimetableGridPlaceholder
@@ -76,7 +77,7 @@ export default function IndexTimeTable() {
             });
           }}
         >
-          {isClient ? renderTimetable : renderPlaceholder}
+          {renderTimetable}
         </Link>
       </ErrorBoundary>
     </div>
