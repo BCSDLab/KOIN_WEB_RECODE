@@ -42,12 +42,16 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 7. **토스트:** `showToast(type, message)` 사용. `toast()` 직접 호출 금지.
 8. **iOS 브릿지:** `window.webkit` optional chaining 유지 (`src/utils/ts/iosBridge.ts`).
 9. **분석 로깅:** 주요 사용자 인터랙션마다 `useLogger()` 훅 포함.
-10. **SSR 렌더 결정성:** 렌더 결과는 **현재 시각·브라우저 전용 상태(쿠키/스토리지)·AB 배정**에 의존해선 안 된다. 서버 렌더와 하이드레이션 렌더가 갈리면 hydration mismatch가 난다.
-    - 시각·저장소 파생 값은 `useMount()` 게이트 뒤로 미루거나 `components/ssr/SSRSuspense`로 감싼다. 참조 구현: `IndexTimetable:79`, `PCCafeteriaPage`
-    - `/`·`/store` 등은 nginx가 60초 공유 캐시하므로(`proxy_cache_valid 200 60s`) **서버 시각을 props로 내리는 방식은 답이 아니다** — 캐시된 시각은 이 사용자의 시각이 아니다
-    - `useTokenState()`는 SSR에서 `''`을 반환한다. `??`가 아니라 `||`로 `serverToken` 폴백할 것
-    - 쿼리 키에 토큰이 들어가면(`clubQueryKeys.*`, `callvanQueryKeys.*`) SSR과 클라이언트가 다른 캐시를 본다
-    - 검증: 개발 모드에서 해당 페이지 접속 후 콘솔에 `Hydration failed` 메시지가 없는지 확인. 로그인/비로그인 양쪽을 볼 것
+10. **SSR 렌더 결정성:** 서버 렌더와 하이드레이션 렌더가 갈리면 서버가 그린 DOM이 통째로 버려진다. **React는 이 경우 대부분 경고하지 않는다** — `key` 변경과 `useSyncExternalStore` 스냅샷 전환은 React 입장에선 정상 동작이다. 콘솔이 조용하다고 안전한 게 아니다.
+    - **원칙: 서버가 아는 것은 서버에서 렌더한다.** 요청에서 알 수 있는 값(기기·로그인 여부·토큰)은 `withCacheControl`이 `serverRequest`로 주입한다. `useServerRequest()`로 읽는다.
+    - **`useMount()` 게이트는 최후 수단이다.** React 경고는 없애지만 서버가 그린 DOM이 매 로드 교체되는 것은 그대로다. 서버가 값을 알 수 있으면 게이트가 아니라 주입으로 해결할 것
+    - 시각 파생 값(식사 시간대, "N일 전" 뱃지 등)은 **서버가 확정해 props로 내리고 클라이언트에서 재계산하지 않는다**. 클라이언트는 사용자 기기 시계·타임존을 쓰므로 KST 밖 사용자는 자정과 무관하게 상시 어긋난다. 공유 캐시로 최대 60초 낡을 수 있으나 경계 구간이 짧아 교체가 매번 일어나는 쪽보다 낫다
+    - 인증 상태는 SSR에 반영해도 안전하다. nginx가 인증 쿠키가 있으면 `proxy_cache_bypass`/`proxy_no_cache`로 캐시를 우회한다
+    - `useTokenState()`는 SSR에서 스토어가 `''`을 반환하므로 `serverRequest`로 폴백한다. `??`가 아니라 `||`를 쓸 것. **토큰만 넘기면 안 된다** — `userType`이 요청 엔드포인트를 결정하므로 빠뜨리면 403이 난다
+    - 쿼리 키에 토큰이 들어가면 SSR과 클라이언트가 다른 캐시를 본다
+    - `getServerSideProps`가 없는 페이지는 서버가 요청을 모른다. `serverRequest`가 `null`이므로 훅들이 기본값으로 동작한다
+    - 기기 분기는 `useMediaQuery`가 UA 판정값을 서버 스냅샷으로 쓴다. **UA 정규식이 nginx `$device_class`(`/etc/nginx/conf.d/proxy-cache.conf`)와 같아야 한다** — 한쪽만 바꾸면 캐시가 잘못 갈려 다른 기기용 HTML이 서빙된다
+    - 검증: 콘솔 확인만으로는 부족하다. `scripts/hydration/dom-diff.mjs`로 **DOM 파괴율**을 잴 것. 로그인/비로그인 × 데스크톱/모바일 4조합을 볼 것
 
 ## PR 리뷰 규칙 (claude-code-action용)
 
@@ -81,3 +85,4 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 |------|----------|------|------|
 | 2026-04-21 | 초기 구성 | 전체 | SonarCloud 품질 관리 + 기능 구현 자동화 파이프라인 |
 | 2026-04-21 | 전체 재작성 | CLAUDE.md | 영어→한국어, 스킬 중복 제거, 분량 축소 (224줄→80줄) |
+| 2026-08-08 | 규칙 10 재작성 | CLAUDE.md | useMount 게이트 권장 → 서버 주입 원칙으로 전환. 게이트가 하이드레이션 DOM 교체의 원인이었음 |

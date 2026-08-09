@@ -6,6 +6,7 @@ import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
+import { useServerRequest } from 'utils/context/serverRequest';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
 import styles from './LostItemList.module.scss';
@@ -27,13 +28,16 @@ const HEADER_ROW: HeaderRowInfo = {
 };
 
 export default function LostItemList({ articles }: LostItemListProps) {
+  // NEW 뱃지 기준일. 서버가 확정한 값이 있으면 그것을 쓴다(하이드레이션 일치).
+  const serverRequest = useServerRequest();
+  const referenceDate = serverRequest ? new Date(serverRequest.now) : null;
   const isMobile = useMediaQuery();
   const { logLostItemPostEntry } = useArticlesLogger();
 
   const handleReportedClick = () => showToast('error', '신고된 게시글은 볼 수 없습니다.');
 
   const getCommon = (article: LostItemArticleForGetDTO) => {
-    const [registeredDate, isNewArticle] = setArticleRegisteredDate(article.registered_at);
+    const [registeredDate, isNewArticle] = setArticleRegisteredDate(article.registered_at, referenceDate);
     const detailLink = ROUTES.LostItemDetail({ id: String(article.id) });
     const typeText = article.type === 'LOST' ? '분실물' : '습득물';
 

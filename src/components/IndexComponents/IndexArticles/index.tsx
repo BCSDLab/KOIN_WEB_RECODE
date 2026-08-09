@@ -3,17 +3,22 @@ import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import { selectArticlesWithNew } from 'components/Articles/utils/selectArticlesData';
+import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './IndexArticles.module.scss';
 
-export default function IndexArticles() {
+interface IndexArticlesProps {
+  /** NEW 뱃지 판정 기준 시각. 서버가 확정해 내려준다. */
+  serverNow: string;
+}
+
+export default function IndexArticles({ serverNow }: IndexArticlesProps) {
   const token = useTokenState();
   const { data: articlesData } = useQuery({
     ...articleQueries.list(token, '1'),
-    select: selectArticlesWithNew,
+    select: createArticlesWithNewSelector(serverNow),
   });
   const logger = useLogger();
 

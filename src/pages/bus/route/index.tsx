@@ -1,5 +1,7 @@
 import { Suspense, useState } from 'react';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
+import { busQueries } from 'api/bus/queries';
 import BusNotice from 'components/Bus/BusNotice';
 import BusGuide from 'components/Bus/BusRoutePage/components/BusGuide';
 import BusSearchOptions from 'components/Bus/BusRoutePage/components/BusSearchOptions';
@@ -11,6 +13,27 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './BusRoutePage.module.scss';
+
+/** 버스 공지는 자주 바뀌지 않는다. */
+const BUS_NOTICE_REVALIDATE_SECONDS = 60 * 60;
+
+/**
+ * 페이지에서 쓰는 suspense 쿼리를 모두 미리 받아 캐시에 넣는다.
+ *
+ * Layout이 `<Suspense fallback={null}>{children}</Suspense>`로 페이지 전체를 감싸고 있어,
+ * 하이드레이션 중 하나라도 서스펜드하면 서버가 그린 DOM 전체가 버려지고 빈 화면을 거쳐
+ * 다시 그려진다(실측 파괴율 33%). 하나라도 빠지면 효과가 없으므로 전부 덮어야 한다.
+ */
+export const getStaticProps = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(busQueries.notice());
+
+  return {
+    props: { dehydratedState: dehydrate(queryClient) },
+    revalidate: BUS_NOTICE_REVALIDATE_SECONDS,
+  };
+};
 
 export default function BusRoutePage() {
   const isMobile = useMediaQuery();

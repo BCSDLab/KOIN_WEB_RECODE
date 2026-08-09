@@ -17,9 +17,18 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { getDeviceClass } from 'utils/ts/serverRequestContext';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './CallvanNotifications.module.scss';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl<{
+  dehydratedState: ReturnType<typeof dehydrate>;
+}>(async (context: GetServerSidePropsContext) => {
+  // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다.
+  if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
+    return { redirect: { destination: ROUTES.Main(), permanent: false } };
+  }
+
   const queryClient = new QueryClient();
   const { token } = parseServerSideParams(context);
 
@@ -38,7 +47,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       dehydratedState: dehydrate(queryClient),
     },
   };
-};
+});
 
 export default function CallvanNotificationsPage() {
   const router = useRouter();
@@ -70,13 +79,9 @@ export default function CallvanNotificationsPage() {
     markRead(id);
   };
 
-  if (mounted && !isMobile) {
-    return null;
-  }
-
-  // 알림 쿼리 키에 토큰이 들어가 SSR(token='')과 클라이언트가 다른 캐시를 본다.
-  // 마운트 전에는 조회 결과를 알 수 없으므로 "알림 없음"과 구분한다.
-  const isResolved = mounted && notifications !== undefined;
+  // 서버 요청 컨텍스트로 토큰이 채워지므로 SSR도 실제 조회 결과를 갖는다.
+  // undefined는 아직 조회 전이라는 뜻이라 "알림 없음"과 구분한다.
+  const isResolved = notifications !== undefined;
   const hasNotifications = isResolved && notifications.length > 0;
 
   return (

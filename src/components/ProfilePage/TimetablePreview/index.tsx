@@ -7,6 +7,7 @@ import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFr
 import { BACKGROUND_COLOR, BORDER_TOP_COLOR } from 'static/timetable';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import styles from './TimetablePreview.module.scss';
 
@@ -72,9 +73,13 @@ export function LoggedInTimetablePreview() {
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
   const isClient = useMount();
 
+  // 저장된 학기가 더 이상 유효하지 않을 때만 되돌린다. 무조건 덮어쓰면 사용자가
+  // 시간표 페이지에서 고른 학기가 프로필을 열 때마다 지워진다.
   useEffect(() => {
-    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
-  }, [semesterOptionList, updateSemester]);
+    if (semesterOptionList.length === 0) return;
+    if (isSemesterInList(semesterOptionList, semester)) return;
+    updateSemester(semesterOptionList[0].value);
+  }, [semesterOptionList, semester, updateSemester]);
 
   if (!isClient || !isValidTimetableFrameId(currentFrameId)) {
     return <ProfileTimetableGrid />;
