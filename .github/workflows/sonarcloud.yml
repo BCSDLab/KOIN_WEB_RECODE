@@ -10,20 +10,24 @@ on:
       - main
       - develop
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
+          # Sonar 의 New Code 판정과 blame 에 전체 히스토리가 필요하다.
           fetch-depth: 0
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24.14.1'
-      - name: Install package
-        run: yarn
+      - uses: ./.github/actions/setup
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v5.0.0
+        uses: SonarSource/sonarqube-scan-action@v8.2.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
