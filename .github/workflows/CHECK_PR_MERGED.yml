@@ -1,41 +1,65 @@
+name: Check PR Merged
+
 on:
   pull_request:
     types: closed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # 머지된 head 브랜치 삭제
+  pull-requests: read
 
 jobs:
   check_pr_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    # 체크아웃하지 않는다(Zero-Install 캐시까지 200MB). 브랜치 삭제도 GitHub API 로 처리한다.
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Check PR Merged
-        id: check_pr_merged
+      - name: Send Slack Trigger
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          BODY=$(jq -n --arg pullRequestLink "$PR_URL" '{pullRequestLink: $pullRequestLink}')
+          curl -X POST https://api-slack.internal.bcsdlab.com/api/pr-merged/frontend \
+            -H 'Content-Type: application/json' \
+            -d "$BODY"
+
+      - name: Delete head branch
         uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prUrl = context.payload.pull_request.html_url ?? context.payload.pull_request._links.html.href;
-            core.setOutput('pullRequestLink', JSON.stringify(prUrl));
+            const pr = context.payload.pull_request;
 
-      - name: Send Slack Trigger
-        run: |
-          curl -X POST https://api-slack.internal.bcsdlab.com/api/pr-merged/frontend \
-          -H 'Content-Type: application/json' \
-          -d '{
-                "pullRequestLink": ${{ steps.check_pr_merged.outputs.pullRequestLink }}
-              }'
+            // fork PR 의 head.ref 는 fork 쪽 브랜치명이다. 그 이름으로 origin 을 지우면
+            // 원본 저장소의 동명 브랜치를 날린다.
+            if (pr.head.repo?.full_name !== pr.base.repo.full_name) {
+              core.info(`fork PR (${pr.head.repo?.full_name}) 이므로 브랜치를 삭제하지 않는다.`);
+              return;
+            }
 
-      - name: Get branch names
-        id: get_branch_name
-        run: |
-          baseBranch=${{ github.event.pull_request.base.ref }}
-          headBranch=${{ github.event.pull_request.head.ref }}
-          echo "::set-output name=baseBranch::${baseBranch}"
-          echo "::set-output name=headBranch::${headBranch}"
+            const branch = pr.head.ref;
+            const PROTECTED = ['main', 'develop'];
+            if (PROTECTED.includes(branch)) {
+              core.info(`보호 브랜치(${branch})는 삭제하지 않는다.`);
+              return;
+            }
 
-      - name: Delete Branch
-        if: ${{ steps.get_branch_name.outputs.headBranch != 'main' && steps.get_branch_name.outputs.headBranch != 'develop' }}
-        run: |
-          git checkout ${{ steps.get_branch_name.outputs.baseBranch }}
-          git push origin --delete ${{ steps.get_branch_name.outputs.headBranch }}
+            // 브랜치명을 셸에 넘기면 안 된다. git ref 규칙이 `;` `$` 백틱을 허용해서 임의 명령이 실행된다.
+            try {
+              await github.rest.git.deleteRef({
+                owner: pr.base.repo.owner.login,
+                repo: pr.base.repo.name,
+                ref: `heads/${branch}`,
+              });
+              core.info(`${branch} 삭제 완료`);
+            } catch (error) {
+              if (error.status === 422 || error.status === 404) {
+                core.info(`${branch} 는 이미 삭제된 상태다.`);
+                return;
+              }
+              throw error;
+            }
