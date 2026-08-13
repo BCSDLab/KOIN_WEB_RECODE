@@ -2,6 +2,7 @@ import type { ComponentType, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
 import BriefcaseIcon from 'assets/svg/category/briefcase-icon.svg';
 import CalendarIcon from 'assets/svg/category/calendar-icon.svg';
+import ChatIcon from 'assets/svg/category/chat-icon.svg';
 import DeliveryBoxIcon from 'assets/svg/category/delivery-box-icon.svg';
 import DishIcon from 'assets/svg/category/dish-icon.svg';
 import HomeIcon from 'assets/svg/category/home-icon.svg';
@@ -156,6 +157,16 @@ const sections: CategorySection[] = [
   {
     title: '기타',
     items: [
+      {
+        title: '쪽지',
+        href: ROUTES.LostItemChat(),
+        Icon: ChatIcon,
+        logging: {
+          team: 'CAMPUS',
+          event_label: 'category_etc',
+          value: '쪽지',
+        },
+      },
       {
         title: '복덕방',
         href: ROUTES.Room(),
