@@ -217,7 +217,7 @@ function LostItemChatPage({ token }: { token: string }) {
                     <div>차단하기</div>
                   </button>
                 </div>
-  
+
                 <div className={styles['message-container']} ref={chatContainerRef}>
                   {(messages ?? []).reduce((acc, message, index) => {
                     const messageDate = formatISODateToMonthAndDay(message.timestamp);
@@ -226,7 +226,7 @@ function LostItemChatPage({ token }: { token: string }) {
                     const prevTime = formatISODateToTime((messages ?? [])[index - 1]?.timestamp);
                     const isSenderChanged = message.user_id !== (messages ?? [])[index - 1]?.user_id;
                     const isMe = message.user_id === userInfo?.id;
-  
+
                     return acc.concat(
                       (index === 0 || messageDate !== prevDate) && (
                         <div key={`date-${index}`} className={styles['message-date-header']}>
