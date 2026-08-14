@@ -119,7 +119,9 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           {!isMain && isClubRoute && customTitle}
           {!isMain &&
             !isClubRoute &&
-            (CATEGORY.flatMap((c) => c.submenu).find((s) => pathname.startsWith(s.link))?.title ?? '')}
+            (CATEGORY.flatMap((c) => c.submenu)
+              .filter((s) => pathname.startsWith(s.link))
+              .sort((a, b) => b.link.length - a.link.length)[0]?.title ?? '')}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
           {pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 수정'}

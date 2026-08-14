@@ -20,9 +20,16 @@ interface UseChatPollingOptions {
   articleId: number | string | null;
   chatroomId: number | string | null;
   isOnline?: boolean;
+  autoSelectFirst?: boolean;
 }
 
-const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseChatPollingOptions) => {
+const useChatPolling = ({
+  token,
+  articleId,
+  chatroomId,
+  isOnline = true,
+  autoSelectFirst = true,
+}: UseChatPollingOptions) => {
   const queryClient = useQueryClient();
 
   const { data: chatroomList } = useSuspenseQuery({
@@ -32,8 +39,8 @@ const useChatPolling = ({ token, articleId, chatroomId, isOnline = true }: UseCh
     refetchIntervalInBackground: false,
   });
 
-  const defaultChatroomId = chatroomId ?? chatroomList?.[0]?.chat_room_id ?? null;
-  const defaultArticleId = articleId ?? chatroomList?.[0]?.article_id ?? null;
+  const defaultChatroomId = chatroomId ?? (autoSelectFirst ? chatroomList?.[0]?.chat_room_id : null) ?? null;
+  const defaultArticleId = articleId ?? (autoSelectFirst ? chatroomList?.[0]?.article_id : null) ?? null;
 
   const numericArticleId = defaultArticleId != null ? Number(defaultArticleId) : null;
   const numericChatroomId = defaultChatroomId != null ? Number(defaultChatroomId) : null;
