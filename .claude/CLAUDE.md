@@ -10,12 +10,16 @@ KOIN은 한국기술교육대학교(KOREATECH) 재학생을 위한 캠퍼스 서
 
 ```bash
 yarn start              # 개발 서버 (next dev)
-yarn build              # 타입 체크(tsc) + 프로덕션 빌드
+yarn start:serve        # 프로덕션 서버 (next start)
+yarn build              # 프로덕션 빌드 + sitemap 생성
+yarn typecheck          # tsc --noEmit
 yarn lint               # ESLint + Stylelint
 yarn lint:eslint        # ESLint (src/)
 yarn lint:stylelint     # Stylelint (src/**/*.scss)
 yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 ```
+
+테스트 스크립트와 Jest 스택은 없다. 테스트를 도입한다면 `next/jest` 로 새로 세팅할 것.
 
 **패키지 매니저:** Yarn 4만 사용. `npm install` 금지.
 
@@ -71,8 +75,10 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 
 ## 유효성 검사 정책
 
-- 기본: `yarn lint`
+- 기본: `yarn lint` + `yarn typecheck`
 - `yarn build` 실패는 환경 제약(API 접근 불가 등)이 원인일 수 있으므로, 변경 코드가 직접 원인이 아니면 비차단 처리.
+  - `.env`/`.env.local` 에 `NEXT_PUBLIC_API_PATH` 가 없으면 프리렌더가 `localhost:80` 으로 붙어 실패한다. 컴파일 통과 여부와 구분할 것.
+- 의존성을 건드렸다면 `yarn install` 후 `.pnp.cjs`, `.yarn/cache` 변경까지 커밋에 포함할 것 (Zero-Install).
 
 ## 하네스: KOIN AI 파이프라인
 
@@ -86,3 +92,4 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 | 2026-04-21 | 초기 구성 | 전체 | SonarCloud 품질 관리 + 기능 구현 자동화 파이프라인 |
 | 2026-04-21 | 전체 재작성 | CLAUDE.md | 영어→한국어, 스킬 중복 제거, 분량 축소 (224줄→80줄) |
 | 2026-08-08 | 규칙 10 재작성 | CLAUDE.md | useMount 게이트 권장 → 서버 주입 원칙으로 전환. 게이트가 하이드레이션 DOM 교체의 원인이었음 |
+| 2026-08-13 | 명령어·검증 정책 갱신 | CLAUDE.md | 무효 test 스크립트/Jest 스택 제거, typecheck 분리(빌드에서 tsc 이중 실행 제거), CI 정합성 정비 |

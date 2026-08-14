@@ -53,6 +53,10 @@ const nextConfig = {
     ];
   },
   images: {
+    // 이 값이 최적화 결과의 디스크 캐시 수명과 응답 Cache-Control 을 함께 결정한다.
+    // 기본값 60초로 두면 브라우저·nginx 캐시까지 60초로 묶인다.
+    // 업로드 URL 이 UUID 기반이라 불변이므로 길게 잡는다. URL 재사용 운영을 한다면 줄일 것.
+    minimumCacheTTL: 2678400, // 31일
     remotePatterns: [
       {
         protocol: 'https',

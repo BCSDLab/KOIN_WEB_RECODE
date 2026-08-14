@@ -49,7 +49,7 @@ function LectureTable({
   onDoubleClickRow,
   version,
   semester,
-}: LectureTableProps): JSX.Element {
+}: LectureTableProps) {
   const router = useRouter();
   const navigate = router.push;
   const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음

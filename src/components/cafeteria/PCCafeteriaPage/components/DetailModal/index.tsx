@@ -11,7 +11,7 @@ interface DetailModalProps {
   closeModal: () => void;
 }
 
-export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
+export default function DetailModal({ dining, closeModal }: DetailModalProps) {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
   useBodyScrollLock();

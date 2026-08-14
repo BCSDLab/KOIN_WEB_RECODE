@@ -1,0 +1,16 @@
+version: 2
+
+updates:
+  # npm 은 일부러 제외한다. Dependabot 은 package.json 과 yarn.lock 만 갱신하고
+  # .yarn/cache 의 zip 과 .pnp.cjs 는 재생성하지 못해서 Zero-Install 이 깨진 PR 이 열린다.
+  # npm 의존성은 `yarn up` 후 설치 결과까지 함께 커밋하는 방식으로 수동 관리한다.
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore'
+    labels:
+      - dependencies
