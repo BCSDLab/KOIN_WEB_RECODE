@@ -1,24 +1,16 @@
 {
   "reviewers": [
     {
-      "name": "김혜준",
-      "githubName": "hyejun0228"
-    },
-    {
-      "name": "조정원",
-      "githubName": "JeongWon-CHO"
-    },
-    {
-      "name": "김도훈",
-      "githubName": "dooohun"
-    },
-    {
       "name": "이준영",
       "githubName": "ff1451"
     },
     {
       "name": "박성주",
       "githubName": "ParkSungju01"
+    },
+    {
+      "name": "이지현",
+      "githubName": "jenna1030"
     }
   ]
 }
