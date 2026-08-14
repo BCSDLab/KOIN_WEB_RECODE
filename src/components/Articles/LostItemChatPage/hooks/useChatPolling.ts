@@ -39,8 +39,15 @@ const useChatPolling = ({
     refetchIntervalInBackground: false,
   });
 
-  const defaultChatroomId = chatroomId ?? (autoSelectFirst ? chatroomList?.[0]?.chat_room_id : null) ?? null;
-  const defaultArticleId = articleId ?? (autoSelectFirst ? chatroomList?.[0]?.article_id : null) ?? null;
+  const matchedRoom =
+    chatroomId != null
+      ? chatroomList?.find((room) => room.chat_room_id === Number(chatroomId))
+      : autoSelectFirst
+        ? chatroomList?.[0]
+        : undefined;
+
+  const defaultChatroomId = chatroomId ?? matchedRoom?.chat_room_id ?? null;
+  const defaultArticleId = articleId ?? matchedRoom?.article_id ?? null;
 
   const numericArticleId = defaultArticleId != null ? Number(defaultArticleId) : null;
   const numericChatroomId = defaultChatroomId != null ? Number(defaultChatroomId) : null;
