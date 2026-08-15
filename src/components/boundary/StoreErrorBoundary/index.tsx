@@ -13,6 +13,7 @@ interface Props {
 interface State {
   hasError: boolean;
   status?: number;
+  eventId?: string;
 }
 
 type AppError = Error | AxiosError<unknown, unknown>;
@@ -39,12 +40,15 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error: Error) {
     showToast('error', error.message);
-    Sentry.captureException(error);
+    const eventId = Sentry.captureException(error);
+    this.setState({ eventId });
   }
 
   render() {
     const { children, onErrorClick } = this.props;
-    const { hasError, status } = this.state;
+    const {
+      hasError, status, eventId,
+    } = this.state;
 
     if (hasError && status === 404) {
       return (
@@ -58,7 +62,12 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
     }
 
     if (hasError) {
-      return <div className={styles.container}>오류가 발생했습니다.</div>;
+      return (
+        <div className={styles.container}>
+          <p>오류가 발생했습니다.</p>
+          {eventId && <p className={styles.eventId}>문의 시 참조 코드: {eventId}</p>}
+        </div>
+      );
     }
 
     return children;

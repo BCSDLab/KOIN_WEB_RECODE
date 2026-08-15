@@ -14,9 +14,26 @@ interface KoinErrorLike {
 }
 
 function asKoinError(error: unknown): KoinErrorLike | null {
-  if (error == null || typeof error !== 'object') return null;
-  const candidate = error as KoinErrorLike;
-  return candidate.type === 'KOIN_ERROR' ? candidate : null;
+  if (error == null) return null;
+
+  if (typeof error === 'object') {
+    const candidate = error as KoinErrorLike;
+    if (candidate.type === 'KOIN_ERROR') return candidate;
+  }
+
+  // Next.js의 getProperError()가 _error.tsx의 getInitialProps 재전파 경로에서
+  // plain object KoinError를 new Error(JSON.stringify(koinError))로 감싼다.
+  // 이 경우 message가 KoinError의 JSON 문자열이라 위 object 체크로는 못 잡는다.
+  if (error instanceof Error) {
+    try {
+      const parsed = JSON.parse(error.message) as KoinErrorLike;
+      if (parsed?.type === 'KOIN_ERROR') return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
 
 Sentry.init({
