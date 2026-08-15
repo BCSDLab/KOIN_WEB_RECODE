@@ -47,6 +47,10 @@ function LostItemChatPage({ token }: { token: string }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
+  const chatroomIdParam = searchParams.get('chatroomId');
+  const showList = !isMobile || !chatroomIdParam;
+  const showDetail = !isMobile || !!chatroomIdParam;
+
   const {
     chatroomDetail,
     chatroomList,
@@ -57,8 +61,9 @@ function LostItemChatPage({ token }: { token: string }) {
   } = useChatPolling({
     token,
     articleId: searchParams.get('articleId'),
-    chatroomId: searchParams.get('chatroomId'),
+    chatroomId: chatroomIdParam,
     isOnline,
+    autoSelectFirst: showDetail,
   });
 
   const prevMessagesLengthRef = useRef(0);
@@ -126,10 +131,10 @@ function LostItemChatPage({ token }: { token: string }) {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>쪽지</h1>
+      {!isMobile && <h1 className={styles.title}>쪽지</h1>}
 
       <section className={styles['chat-container']}>
-        {!isMobile && (
+        {showList && (
           <div className={styles['chat-list']}>
             {chatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
             {chatroomList?.map(
@@ -165,7 +170,7 @@ function LostItemChatPage({ token }: { token: string }) {
                   <div className={styles['chat-list--item--content']}>
                     <div className={styles['chat-list--item--title']}>
                       <div>{article_title}</div>
-                      <div>{formatDate(last_message_at)}</div>
+                      <div className={styles['chat-list--item--date']}>{formatDate(last_message_at)}</div>
                     </div>
                     <div className={styles['chat-list--item--description']}>
                       <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
@@ -180,81 +185,58 @@ function LostItemChatPage({ token }: { token: string }) {
           </div>
         )}
 
-        <div className={styles['chat-view']}>
-          {!(chatroomDetail && messages) && (
-            <div className={styles.chat__empty}>
-              선택된 채팅방이 없습니다.
-              <br />
-              왼쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
-            </div>
-          )}
-          {chatroomDetail && messages && (
-            <>
-              <div className={styles['chat-view--header']}>
-                <div>
-                  {chatroomDetail.chat_partner_profile_image ? (
-                    <img
-                      src={chatroomDetail.chat_partner_profile_image}
-                      alt="분실물 이미지"
-                      className={styles['chat-list--item--profile']}
-                      onError={addErrorImage}
-                    />
-                  ) : (
-                    <div className={styles['chat-list--item--profile']}>
-                      <DefaultPhotoIcon />
-                    </div>
-                  )}
-                  <div className={styles['chat-view--title']}>{chatroomDetail.article_title}</div>
-                </div>
-                <button type="button" className={styles['chat-block']} onClick={openDeleteModal}>
-                  <BlockIcon />
-                  <div>차단하기</div>
-                </button>
+        {showDetail && (
+          <div className={styles['chat-view']}>
+            {!(chatroomDetail && messages) && (
+              <div className={styles.chat__empty}>
+                선택된 채팅방이 없습니다.
+                <br />
+                왼쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
               </div>
-
-              <div className={styles['message-container']} ref={chatContainerRef}>
-                {(messages ?? []).reduce((acc, message, index) => {
-                  const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                  const prevDate = formatISODateToMonthAndDay((messages ?? [])[index - 1]?.timestamp);
-                  const messageTime = formatISODateToTime(message.timestamp);
-                  const prevTime = formatISODateToTime((messages ?? [])[index - 1]?.timestamp);
-                  const isSenderChanged = message.user_id !== (messages ?? [])[index - 1]?.user_id;
-                  const isMe = message.user_id === userInfo?.id;
-
-                  return acc.concat(
-                    (index === 0 || messageDate !== prevDate) && (
-                      <div key={`date-${index}`} className={styles['message-date-header']}>
-                        {messageDate}
-                      </div>
-                    ),
-                    isMe ? (
-                      <div key={`msg-${index}`} className={styles['message-item__right']}>
-                        <span className={styles['message-item--time']}>{messageTime}</span>
-                        <span className={styles['message-item--content__right']}>
-                          {message.is_image && (
-                            <img
-                              src={message.content}
-                              alt="메세지 이미지"
-                              className={styles['message-item--content-image']}
-                            />
-                          )}
-                          {!message.is_image && message.content}
-                        </span>
-                      </div>
+            )}
+            {chatroomDetail && messages && (
+              <>
+                <div className={styles['chat-view--header']}>
+                  <div>
+                    {chatroomDetail.chat_partner_profile_image ? (
+                      <img
+                        src={chatroomDetail.chat_partner_profile_image}
+                        alt="분실물 이미지"
+                        className={styles['chat-list--item--profile']}
+                        onError={addErrorImage}
+                      />
                     ) : (
-                      <div key={`msg-${index}`} className={styles['message-item-container']}>
-                        {(isSenderChanged || messageTime !== prevTime) && (
-                          <div className={styles['message-item--header']}>
-                            <div className={styles['message-item--profile']}>
-                              <PersonIcon />
-                            </div>
-                            <div className={styles['message-item--name']}>
-                              {message.user_nickname || userInfo?.anonymous_nickname || '익명'}
-                            </div>
-                          </div>
-                        )}
-                        <div className={styles['message-item']}>
-                          <span className={styles['message-item--content']}>
+                      <div className={styles['chat-list--item--profile']}>
+                        <DefaultPhotoIcon />
+                      </div>
+                    )}
+                    <div className={styles['chat-view--title']}>{chatroomDetail.article_title}</div>
+                  </div>
+                  <button type="button" className={styles['chat-block']} onClick={openDeleteModal}>
+                    <BlockIcon />
+                    <div>차단하기</div>
+                  </button>
+                </div>
+
+                <div className={styles['message-container']} ref={chatContainerRef}>
+                  {(messages ?? []).reduce((acc, message, index) => {
+                    const messageDate = formatISODateToMonthAndDay(message.timestamp);
+                    const prevDate = formatISODateToMonthAndDay((messages ?? [])[index - 1]?.timestamp);
+                    const messageTime = formatISODateToTime(message.timestamp);
+                    const prevTime = formatISODateToTime((messages ?? [])[index - 1]?.timestamp);
+                    const isSenderChanged = message.user_id !== (messages ?? [])[index - 1]?.user_id;
+                    const isMe = message.user_id === userInfo?.id;
+
+                    return acc.concat(
+                      (index === 0 || messageDate !== prevDate) && (
+                        <div key={`date-${index}`} className={styles['message-date-header']}>
+                          {messageDate}
+                        </div>
+                      ),
+                      isMe ? (
+                        <div key={`msg-${index}`} className={styles['message-item__right']}>
+                          <span className={styles['message-item--time']}>{messageTime}</span>
+                          <span className={styles['message-item--content__right']}>
                             {message.is_image && (
                               <img
                                 src={message.content}
@@ -264,59 +246,84 @@ function LostItemChatPage({ token }: { token: string }) {
                             )}
                             {!message.is_image && message.content}
                           </span>
-                          <span className={styles['message-item--time']}>{messageTime}</span>
                         </div>
-                      </div>
-                    ),
-                  );
-                }, [] as React.ReactNode[])}
-              </div>
-              <div className={styles['chat-input-container-wrapper']}>
-                {!isOnline && (
-                  <div className={styles['offline-banner']}>오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.</div>
-                )}
-                <div className={styles['chat-input-container']}>
-                  <div className={styles['chat-input--photo']}>
-                    <label
-                      htmlFor="image-file"
-                      className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
-                    >
-                      <AddPhotoIcon />
-                      <input
-                        type="file"
-                        ref={imgRef}
-                        accept="image/*"
-                        id="image-file"
-                        multiple
-                        onChange={uploadImage}
-                        disabled={!isOnline}
-                        aria-label="사진 전송"
-                      />
-                    </label>
-                  </div>
-                  <textarea
-                    ref={textareaRef}
-                    className={styles['chat-input']}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={sendMessageToEnterKeyDown}
-                    placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
-                    disabled={!isOnline}
-                  />
-                  <button
-                    type="button"
-                    onClick={sendMessage}
-                    className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
-                    disabled={!isOnline}
-                    aria-label="문자 전송"
-                  >
-                    <SendIcon />
-                  </button>
+                      ) : (
+                        <div key={`msg-${index}`} className={styles['message-item-container']}>
+                          {(isSenderChanged || messageTime !== prevTime) && (
+                            <div className={styles['message-item--header']}>
+                              <div className={styles['message-item--profile']}>
+                                <PersonIcon />
+                              </div>
+                              <div className={styles['message-item--name']}>
+                                {message.user_nickname || userInfo?.anonymous_nickname || '익명'}
+                              </div>
+                            </div>
+                          )}
+                          <div className={styles['message-item']}>
+                            <span className={styles['message-item--content']}>
+                              {message.is_image && (
+                                <img
+                                  src={message.content}
+                                  alt="메세지 이미지"
+                                  className={styles['message-item--content-image']}
+                                />
+                              )}
+                              {!message.is_image && message.content}
+                            </span>
+                            <span className={styles['message-item--time']}>{messageTime}</span>
+                          </div>
+                        </div>
+                      ),
+                    );
+                  }, [] as React.ReactNode[])}
                 </div>
-              </div>
-            </>
-          )}
-        </div>
+                <div className={styles['chat-input-container-wrapper']}>
+                  {!isOnline && (
+                    <div className={styles['offline-banner']}>오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.</div>
+                  )}
+                  <div className={styles['chat-input-container']}>
+                    <div className={styles['chat-input--photo']}>
+                      <label
+                        htmlFor="image-file"
+                        className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
+                      >
+                        <AddPhotoIcon />
+                        <input
+                          type="file"
+                          ref={imgRef}
+                          accept="image/*"
+                          id="image-file"
+                          multiple
+                          onChange={uploadImage}
+                          disabled={!isOnline}
+                          aria-label="사진 전송"
+                        />
+                      </label>
+                    </div>
+                    <textarea
+                      ref={textareaRef}
+                      className={styles['chat-input']}
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={sendMessageToEnterKeyDown}
+                      placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
+                      disabled={!isOnline}
+                    />
+                    <button
+                      type="button"
+                      onClick={sendMessage}
+                      className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
+                      disabled={!isOnline}
+                      aria-label="문자 전송"
+                    >
+                      <SendIcon />
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </section>
 
       {isDeleteModalOpen && (
