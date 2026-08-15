@@ -10,7 +10,7 @@ const HYDRATION_ERROR_PATTERN = /Hydration failed|didn't match|Text content does
 interface KoinErrorLike {
   type?: string;
   status?: number;
-  code?: string;
+  code?: number;
 }
 
 function asKoinError(error: unknown): KoinErrorLike | null {
@@ -87,7 +87,7 @@ Sentry.init({
       // KoinError는 Error 인스턴스가 아니라 plain object다. 그대로 두면 Sentry가
       // "Object captured as exception with keys: ..." 로 묶어 서로 다른 에러가 한 이슈에
       // 뒤섞이고 스택도 남지 않는다. 상태 코드별로 그룹을 분리한다.
-      event.fingerprint = ['koin-error', String(koinError.status), koinError.code || 'no-code'];
+      event.fingerprint = ['koin-error', String(koinError.status), String(koinError.code ?? 'no-code')];
       event.exception?.values?.forEach((value) => {
         value.type = `KoinError(${koinError.status ?? 'unknown'})`;
       });

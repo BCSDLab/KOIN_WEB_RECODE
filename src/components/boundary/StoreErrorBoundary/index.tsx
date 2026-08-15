@@ -52,7 +52,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
     if (hasError && status === 404) {
       return (
-        <div className={styles.container}>
+        <div className={styles.container} role="alert">
           <h1>존재하지 않는 상점입니다.</h1>
           <button className={styles.button} type="button" onClick={onErrorClick}>
             상점 목록
@@ -63,7 +63,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
     if (hasError) {
       return (
-        <div className={styles.container}>
+        <div className={styles.container} role="alert">
           <p>오류가 발생했습니다.</p>
           {eventId && <p className={styles.eventId}>문의 시 참조 코드: {eventId}</p>}
         </div>

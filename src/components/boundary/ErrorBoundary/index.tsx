@@ -54,7 +54,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     const { hasError, eventId } = this.state;
     if (hasError) {
       return (
-        <div className={fallbackClassName}>
+        <div className={fallbackClassName} role="alert">
           Error
           {eventId && ` (참조 코드: ${eventId})`}
         </div>
