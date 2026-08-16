@@ -49,7 +49,7 @@ export class GetArticle<R extends ArticleResponse> implements APIRequest<R> {
   response!: R;
 
   constructor(id: string | undefined) {
-    this.path = `/articles/${id}`;
+    this.path = `/v2/articles/${id}`;
   }
 }
 
@@ -135,7 +135,7 @@ export class PostLostItemArticles<R extends LostItemArticlesPostResponseDTO> imp
   constructor(
     public authorization: string,
     public data: LostItemArticlesRequestDTO,
-  ) { }
+  ) {}
 }
 
 export class DeleteLostItemArticle<R extends LostItemResponse> implements APIRequest<R> {
@@ -198,7 +198,7 @@ export class GetLostItemChatroomList<R extends LostItemChatroomListResponse> imp
 
   auth = true;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
 export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse> implements APIRequest<R> {
@@ -219,8 +219,9 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
   }
 }
 
-export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
-  implements APIRequest<R> {
+export class GetLostItemChatroomDetailMessages<
+  R extends LostItemChatroomDetailMessagesResponse,
+> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;

@@ -58,8 +58,21 @@ export interface ArticleHotKeywordResponse {
   keywords: string[];
 }
 
+export type ArticleAiSummaryStatus = 'SUCCESS' | 'PENDING' | 'UNAVAILABLE';
+
+export interface ArticleAiSummaryItem {
+  icon: string;
+  text: string;
+}
+
+export interface ArticleAiSummary {
+  status: ArticleAiSummaryStatus;
+  items: ArticleAiSummaryItem[];
+}
+
 export interface ArticleResponse extends Article, APIResponse {
   content: string;
+  ai_summary: ArticleAiSummary;
   attachments: Attachment[];
   prev_id: number;
   next_id: number;
