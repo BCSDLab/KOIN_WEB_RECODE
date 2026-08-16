@@ -6,8 +6,13 @@ interface ArticleAiSummaryProps {
 }
 
 export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
+  const isMessageState = aiSummary.status !== 'SUCCESS';
+
   return (
-    <section className={styles.container} aria-labelledby="article-ai-summary-title">
+    <section
+      className={`${styles.container} ${isMessageState ? styles.messageContainer : ''}`}
+      aria-labelledby="article-ai-summary-title"
+    >
       <h2 id="article-ai-summary-title" className={styles.title}>
         AI 요약
       </h2>

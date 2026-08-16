@@ -4,14 +4,20 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
-  min-height: 176px;
+  min-height: 0;
   margin-top: 20px;
   margin-bottom: 4px;
-  padding-bottom: 20px;
+  padding: 0 20px 20px;
   border-bottom: 1px solid #10477a;
   text-align: left;
   user-select: text;
 }
+
+.messageContainer {
+  min-height: 176px;
+  padding-bottom: 0;
+}
+
 .title {
   margin: 0 0 15px;
   color: #175c8e;
