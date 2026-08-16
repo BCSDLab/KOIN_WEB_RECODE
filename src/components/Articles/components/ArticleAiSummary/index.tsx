@@ -1,3 +1,4 @@
+import AiSummaryIcon from 'assets/svg/Articles/ai-summary.svg';
 import type { ArticleAiSummary as ArticleAiSummaryData } from 'api/articles/entity';
 import styles from './ArticleAiSummary.module.scss';
 
@@ -13,9 +14,12 @@ export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
       className={`${styles.container} ${isMessageState ? styles.messageContainer : ''}`}
       aria-labelledby="article-ai-summary-title"
     >
-      <h2 id="article-ai-summary-title" className={styles.title}>
-        AI 요약
-      </h2>
+      <div className={styles.heading}>
+        <h2 id="article-ai-summary-title" className={styles.title}>
+          AI 요약
+        </h2>
+        <AiSummaryIcon className={styles.aiIcon} aria-hidden />
+      </div>
 
       {aiSummary.status === 'SUCCESS' && (
         <ul className={styles.list}>
@@ -30,7 +34,7 @@ export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
         </ul>
       )}
 
-      {aiSummary.status === 'PENDING' && <p className={styles.message}>요약중이에요...</p>}
+      {aiSummary.status === 'PENDING' && <p className={styles.message}>요약중...</p>}
 
       {aiSummary.status === 'UNAVAILABLE' && <p className={styles.message}>요약할 내용이 없어요.</p>}
     </section>

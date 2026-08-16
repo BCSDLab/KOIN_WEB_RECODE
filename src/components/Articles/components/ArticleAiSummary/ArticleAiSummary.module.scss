@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .container {
   position: relative;
   display: flex;
@@ -11,11 +13,29 @@
   border-bottom: 1px solid #10477a;
   text-align: left;
   user-select: text;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0;
+    padding: 12px 24px;
+    border-bottom: 6px solid #f5f5f5;
+  }
 }
 
 .messageContainer {
   min-height: 176px;
-  padding-bottom: 0;
+
+  @include media.media-breakpoint(mobile) {
+    min-height: 142px;
+  }
+}
+
+.heading {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
 }
 
 .title {
@@ -24,6 +44,24 @@
   font-size: 15px;
   font-weight: 500;
   line-height: 1;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0;
+    color: #600481;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+.aiIcon {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .list {
@@ -33,6 +71,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 22px;
+  }
 }
 
 .item {
@@ -45,11 +87,22 @@
   font-size: 15px;
   font-weight: 500;
   line-height: 1;
+
+  @include media.media-breakpoint(mobile) {
+    column-gap: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
 }
 
 .icon {
   display: block;
   line-height: 1;
+
+  @include media.media-breakpoint(mobile) {
+    line-height: 1.6;
+  }
 }
 
 .text {
@@ -70,4 +123,9 @@
   font-weight: 500;
   line-height: 1;
   text-align: center;
+
+  @include media.media-breakpoint(mobile) {
+    font-weight: 400;
+    line-height: 1.6;
+  }
 }
