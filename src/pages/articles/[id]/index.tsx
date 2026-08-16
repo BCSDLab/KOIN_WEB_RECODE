@@ -2,7 +2,6 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import { getArticle, getArticles, getHotArticles } from 'api/articles';
 import { ArticleResponseWithNew, HotArticle } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
-
 import ArticleAiSummary from 'components/Articles/components/ArticleAiSummary';
 import ArticleContent from 'components/Articles/components/ArticleContent';
 import ArticleHeader from 'components/Articles/components/ArticleHeader';
@@ -84,8 +83,7 @@ export default function ArticlesDetailPage({
         hit={article.hit}
         isNew={article.isNew}
       />
-      <ArticleAiSummary aiSummary={article.ai_summary} />
-
+      <ArticleAiSummary aiSummary={{ ...article.ai_summary }} />
       <ArticleContent content={article.content} attachments={article.attachments} />
       <MobileArticleDetailFooter prevId={article.prev_id} nextId={article.next_id} hotArticles={hotArticles} />
     </ArticlesPageLayout>
