@@ -8,11 +8,14 @@ interface ArticleAiSummaryProps {
 }
 
 export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
-  const isMessageState = aiSummary.status !== 'SUCCESS';
+  const isNonSuccessStatus = aiSummary.status !== 'SUCCESS';
 
   return (
     <section
-      className={cn({ [styles.container]: true, [styles['container--message']]: isMessageState })}
+      className={cn({
+        [styles.container]: true,
+        [styles['container--message']]: isNonSuccessStatus,
+      })}
       aria-labelledby="article-ai-summary-title"
     >
       <div className={styles.heading}>
@@ -35,9 +38,9 @@ export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
         </ul>
       )}
 
-      {aiSummary.status === 'PENDING' && <p className={styles.message}>요약중...</p>}
-
-      {aiSummary.status === 'UNAVAILABLE' && <p className={styles.message}>요약할 내용이 없어요.</p>}
+      {isNonSuccessStatus && (
+        <p className={styles.message}>{aiSummary.status === 'PENDING' ? '요약중...' : '요약할 내용이 없어요.'}</p>
+      )}
     </section>
   );
 }
