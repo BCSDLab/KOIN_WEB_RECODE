@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import AiSummaryIcon from 'assets/svg/Articles/ai-summary.svg';
 import type { ArticleAiSummary as ArticleAiSummaryData } from 'api/articles/entity';
 import styles from './ArticleAiSummary.module.scss';
@@ -11,7 +12,7 @@ export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
 
   return (
     <section
-      className={`${styles.container} ${isMessageState ? styles.messageContainer : ''}`}
+      className={cn({ [styles.container]: true, [styles.messageContainer]: isMessageState })}
       aria-labelledby="article-ai-summary-title"
     >
       <div className={styles.heading}>
