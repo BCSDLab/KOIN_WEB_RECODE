@@ -11,6 +11,7 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  eventId?: string;
 }
 
 interface AxiosErrorData {
@@ -44,14 +45,20 @@ export default class ErrorBoundary extends React.Component<Props, State> {
       : error.message;
     showToast('error', errorMessage);
     sendClientError(error);
-    Sentry.captureException(error);
+    const eventId = Sentry.captureException(error);
+    this.setState({ eventId });
   }
 
   render() {
     const { children, fallbackClassName } = this.props;
-    const { hasError } = this.state;
+    const { hasError, eventId } = this.state;
     if (hasError) {
-      return <div className={fallbackClassName}>Error</div>;
+      return (
+        <div className={fallbackClassName} role="alert">
+          Error
+          {eventId && ` (참조 코드: ${eventId})`}
+        </div>
+      );
     }
     return children;
   }
