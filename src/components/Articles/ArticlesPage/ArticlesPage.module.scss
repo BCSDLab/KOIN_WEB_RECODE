@@ -8,36 +8,6 @@
     width: 100%;
     margin-top: 0;
   }
-
-  &--detail {
-    width: 1437px;
-    margin-right: 0;
-    margin-left: calc((100% - 1136px) / 2);
-
-    .content {
-      width: 1042px;
-      margin-right: 14px;
-    }
-
-    .aside {
-      width: 381px;
-
-      > * {
-        width: 100%;
-      }
-    }
-
-    @include media.media-breakpoint(mobile) {
-      width: 100%;
-      margin-right: auto;
-      margin-left: auto;
-
-      .content {
-        width: 100%;
-        margin: 0;
-      }
-    }
-  }
 }
 
 .content {

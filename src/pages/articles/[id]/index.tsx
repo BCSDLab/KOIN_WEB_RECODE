@@ -74,7 +74,7 @@ export default function ArticlesDetailPage({
   hotArticles?: HotArticle[];
 }) {
   return (
-    <ArticlesPageLayout isDetailPage>
+    <ArticlesPageLayout>
       <ArticleHeader
         boardId={article.board_id}
         title={article.title}
