@@ -1,18 +1,13 @@
 @use "src/utils/scss/media" as media;
 
 .container {
-  position: relative;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
-  min-height: 0;
-  margin-top: 20px;
-  margin-bottom: 4px;
-  padding: 0 20px 20px;
+  margin: 24px 0;
+  padding: 0 0 36px;
   border-bottom: 1px solid #10477a;
-  text-align: left;
-  user-select: text;
 
   @include media.media-breakpoint(mobile) {
     margin: 0;
@@ -22,12 +17,10 @@
 }
 
 .messageContainer {
-  min-height: 176px;
-  padding-bottom: 0;
+  min-height: 257px;
 
   @include media.media-breakpoint(mobile) {
-    min-height: 142px;
-    padding-bottom: 12px;
+    min-height: 166px;
   }
 }
 
@@ -36,16 +29,16 @@
     display: flex;
     gap: 2px;
     align-items: center;
-    margin-bottom: 8px;
+    margin: 0 0 8px;
   }
 }
 
 .title {
-  margin: 0 0 15px;
+  margin: 0 0 12px;
   color: #175c8e;
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 500;
-  line-height: 1;
+  line-height: normal;
 
   @include media.media-breakpoint(mobile) {
     margin: 0;
@@ -69,7 +62,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 26px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -80,18 +73,12 @@
 }
 
 .item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 6px;
-  align-items: start;
-  margin: 0;
   color: #000;
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 500;
-  line-height: 1;
+  line-height: normal;
 
   @include media.media-breakpoint(mobile) {
-    column-gap: 4px;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.6;
@@ -99,34 +86,28 @@
 }
 
 .icon {
-  display: block;
-  line-height: 1;
+  margin: 0 6px 0 0;
 
   @include media.media-breakpoint(mobile) {
-    line-height: 1.6;
+    margin: 0 4px 0 0;
   }
 }
 
 .text {
-  min-width: 0;
   overflow-wrap: anywhere;
 }
 
 .message {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
+  margin: 68px 0 0;
   color: #727272;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
-  line-height: 1;
+  line-height: normal;
   text-align: center;
 
   @include media.media-breakpoint(mobile) {
+    margin: 32px 0 0;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.6;
   }
