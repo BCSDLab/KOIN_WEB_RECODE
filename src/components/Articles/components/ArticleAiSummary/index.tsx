@@ -12,24 +12,24 @@ export default function ArticleAiSummary({ aiSummary }: ArticleAiSummaryProps) {
 
   return (
     <section
-      className={cn({ [styles.container]: true, [styles.messageContainer]: isMessageState })}
+      className={cn({ [styles.container]: true, [styles['container--message']]: isMessageState })}
       aria-labelledby="article-ai-summary-title"
     >
       <div className={styles.heading}>
-        <h2 id="article-ai-summary-title" className={styles.title}>
+        <h2 id="article-ai-summary-title" className={styles.heading__title}>
           AI 요약
         </h2>
-        <AiSummaryIcon className={styles.aiIcon} aria-hidden />
+        <AiSummaryIcon className={styles['heading__ai-icon']} aria-hidden />
       </div>
 
       {aiSummary.status === 'SUCCESS' && (
         <ul className={styles.list}>
           {aiSummary.items.map((item) => (
-            <li key={`${item.icon}-${item.text}`} className={styles.item}>
-              <span className={styles.icon} aria-hidden>
+            <li key={`${item.icon}-${item.text}`} className={styles.list__item}>
+              <span className={styles.list__icon} aria-hidden>
                 {item.icon}
               </span>
-              <span className={styles.text}>{item.text}</span>
+              <span className={styles.list__text}>{item.text}</span>
             </li>
           ))}
         </ul>
