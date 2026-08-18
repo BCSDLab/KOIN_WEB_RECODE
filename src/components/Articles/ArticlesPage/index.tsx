@@ -22,13 +22,14 @@ export default function ArticlesPageLayout({ children, mobileTabMenu }: Articles
         {!isMobile && (
           <div className={styles.header}>
             <Link href={ROUTES.Articles()}>
-              <h1 className={styles.header__title}>공지사항</h1>
+              <h1 className={styles.header__title}>게시판</h1>
             </Link>
           </div>
         )}
         {mobileTabMenu}
         <div className={styles.listScroll}>{children}</div>
       </div>
+
       <div className={styles.aside}>
         <HotArticles />
       </div>
