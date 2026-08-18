@@ -8,9 +8,8 @@
 }
 
 .header {
-  border-top: 2px solid #175c8e;
+  border-top: 3px solid #10477a;
   border-bottom: 1px solid #175c8e;
-  width: 834px;
   height: 100%;
   box-sizing: border-box;
   text-align: left;
@@ -34,11 +33,10 @@
 
 .title {
   font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  letter-spacing: -1px;
-  color: #252525;
-  padding: 26px 20px 7px;
-  width: 794px;
+  font-size: 32px;
+  letter-spacing: 0;
+  color: #000;
+  padding: 23px 0 16px;
   overflow-wrap: break-word;
 
   @include media.media-breakpoint(mobile) {
@@ -57,7 +55,8 @@
   }
 
   &__board-id-desktop {
-    font-weight: 600;
+    margin-right: 12px;
+    font-weight: 500;
 
     @include media.media-breakpoint(mobile) {
       display: none;
@@ -103,7 +102,7 @@
 }
 
 .content {
-  padding: 0 20px 27px;
+  padding: 0 0 25px;
 
   @include media.media-breakpoint(mobile) {
     padding: 0;
@@ -112,6 +111,8 @@
 
   &__desktop {
     display: flex;
+    gap: 12px;
+    align-items: center;
 
     @include media.media-breakpoint(mobile) {
       display: none;
@@ -137,17 +138,16 @@
 
   &__author {
     font-family: Pretendard, sans-serif;
-    font-size: 13px;
-    letter-spacing: -0.7px;
+    font-size: 18px;
+    letter-spacing: 0;
     color: #175c8e;
-    margin-right: 16px;
   }
 
   &__registered-at {
     font-family: Pretendard, sans-serif;
-    font-size: 13px;
-    letter-spacing: -0.7px;
-    color: #858585;
+    font-size: 18px;
+    letter-spacing: 0;
+    color: #727272;
   }
 
   &__hit {

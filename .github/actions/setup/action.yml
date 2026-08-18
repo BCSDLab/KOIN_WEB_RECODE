@@ -1,0 +1,21 @@
+name: 'Setup Node & Yarn'
+description: 'Node 버전을 .nvmrc 에서 읽고 Zero-Install 무결성을 검증하며 의존성을 설치한다.'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version-file: '.nvmrc'
+        # cache: 'yarn' 은 일부러 쓰지 않는다. 캐시 폴더가 .yarn/cache 인데 이미 git 에 있어서
+        # actions/cache 가 200MB 를 매번 왕복하는 순손실이 된다.
+
+    - name: Install dependencies
+      # --immutable-cache 는 쓸 수 없다. 커밋된 .yarn/cache 에는 설치를 실행한 플랫폼의
+      # 바이너리만 들어 있어서(darwin-arm64) Linux 러너는 @next/swc-linux-x64-gnu 등을
+      # 매번 새로 받아야 하는데, 그 옵션이 캐시 추가를 금지해 설치가 실패한다.
+      # 쓰려면 .yarnrc.yml 에 supportedArchitectures 를 선언해 모든 플랫폼 바이너리를
+      # 커밋해야 하고, 저장소가 그만큼 커진다.
+      shell: bash
+      run: yarn install --immutable

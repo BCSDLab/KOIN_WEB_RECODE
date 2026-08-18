@@ -1,7 +1,8 @@
-import type { ComponentType, ReactNode, SVGProps } from 'react';
+import type { ComponentType, MouseEvent, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
 import BriefcaseIcon from 'assets/svg/category/briefcase-icon.svg';
 import CalendarIcon from 'assets/svg/category/calendar-icon.svg';
+import ChatIcon from 'assets/svg/category/chat-icon.svg';
 import DeliveryBoxIcon from 'assets/svg/category/delivery-box-icon.svg';
 import DishIcon from 'assets/svg/category/dish-icon.svg';
 import HomeIcon from 'assets/svg/category/home-icon.svg';
@@ -13,10 +14,14 @@ import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import RouteIcon from 'assets/svg/common/route-icon.svg';
 import HomeLayout from 'components/layout/HomeLayout';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './CategoryPage.module.scss';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -157,6 +162,16 @@ const sections: CategorySection[] = [
     title: '기타',
     items: [
       {
+        title: '채팅',
+        href: ROUTES.LostItemChat(),
+        Icon: ChatIcon,
+        logging: {
+          team: 'CAMPUS',
+          event_label: 'category_etc',
+          value: '채팅',
+        },
+      },
+      {
         title: '복덕방',
         href: ROUTES.Room(),
         Icon: HomeIcon,
@@ -192,9 +207,25 @@ function CategoryIconBox({ Icon }: { Icon?: IconComponent }) {
 
 function CategoryPage() {
   const logger = useLogger();
+  const token = useTokenState();
+  const portalManager = useModalPortal();
 
   const handleCategoryClick = (logging: CategoryLogging) => {
     logger.actionEventClick(logging);
+  };
+
+  const openLoginModal = () => {
+    portalManager.open((portalOption: Portal) => (
+      <LoginRequiredModal title="쪽지를 사용하기" description="로그인 후 이용해주세요." onClose={portalOption.close} />
+    ));
+  };
+
+  const handleMenuClick = (e: MouseEvent<HTMLAnchorElement>, item: CategoryItem) => {
+    handleCategoryClick(item.logging);
+    if (!token && item.href === ROUTES.LostItemChat()) {
+      e.preventDefault();
+      openLoginModal();
+    }
   };
 
   return (
@@ -217,17 +248,20 @@ function CategoryPage() {
             {title}
           </h2>
           <ul className={styles.menu}>
-            {items.map(({ title: itemTitle, href, Icon, logging }) => (
-              <li key={itemTitle}>
-                <Link href={href} className={styles.menu__link} onClick={() => handleCategoryClick(logging)}>
-                  <div className={styles.menu__content}>
-                    <CategoryIconBox Icon={Icon} />
-                    <span className={styles.menu__title}>{itemTitle}</span>
-                  </div>
-                  <ArrowRightIcon className={styles.chevron} aria-hidden />
-                </Link>
-              </li>
-            ))}
+            {items.map((item) => {
+              const { title: itemTitle, href, Icon } = item;
+              return (
+                <li key={itemTitle}>
+                  <Link href={href} className={styles.menu__link} onClick={(e) => handleMenuClick(e, item)}>
+                    <div className={styles.menu__content}>
+                      <CategoryIconBox Icon={Icon} />
+                      <span className={styles.menu__title}>{itemTitle}</span>
+                    </div>
+                    <ArrowRightIcon className={styles.chevron} aria-hidden />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))}

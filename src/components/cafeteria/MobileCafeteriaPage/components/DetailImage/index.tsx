@@ -10,7 +10,7 @@ interface DetailModalProps {
   close: () => void;
 }
 
-export default function DetailModal({ url, close }: DetailModalProps): JSX.Element {
+export default function DetailModal({ url, close }: DetailModalProps) {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
   useEscapeKeyDown({ onEscape: close });
   useBodyScrollLock();

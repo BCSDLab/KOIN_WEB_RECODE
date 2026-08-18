@@ -54,6 +54,8 @@
 }
 
 .listScroll {
+  width: 100%;
+
   @include media.media-breakpoint(mobile) {
     flex: 1 1 auto;
     min-height: 0;

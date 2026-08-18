@@ -1,28 +1,36 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
-
 name: lint-action
 
+# develop push 는 deploy.yml 의 verify job 이 배포 게이트로 검사하므로 여기서 제외한다.
+# main push 는 deploy.yml 이 트리거하지 않으므로 여기서 검사해야 한다.
 on:
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
       - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   ESLint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24.14.1'
-          registry-url: https://registry.npmjs.org/
-      - name: Install package
-        run: yarn
+      - uses: ./.github/actions/setup
       - name: Check lint
         run: yarn lint
+
+  TypeCheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Check types
+        run: yarn typecheck

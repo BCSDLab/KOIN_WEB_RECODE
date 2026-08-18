@@ -10,13 +10,30 @@ const BOT_PROBE_PATTERN = /\/(\.env|\.git|\.aws|wp-admin|wp-login|phpmyadmin|\.w
 interface KoinErrorLike {
   type?: string;
   status?: number;
-  code?: string;
+  code?: number;
 }
 
 function asKoinError(error: unknown): KoinErrorLike | null {
-  if (error == null || typeof error !== 'object') return null;
-  const candidate = error as KoinErrorLike;
-  return candidate.type === 'KOIN_ERROR' ? candidate : null;
+  if (error == null) return null;
+
+  if (typeof error === 'object') {
+    const candidate = error as KoinErrorLike;
+    if (candidate.type === 'KOIN_ERROR') return candidate;
+  }
+
+  // Next.js의 getProperError()가 _error.tsx의 getInitialProps 재전파 경로에서
+  // plain object KoinError를 new Error(JSON.stringify(koinError))로 감싼다.
+  // 이 경우 message가 KoinError의 JSON 문자열이라 위 object 체크로는 못 잡는다.
+  if (error instanceof Error) {
+    try {
+      const parsed = JSON.parse(error.message) as KoinErrorLike;
+      if (parsed?.type === 'KOIN_ERROR') return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
 
 Sentry.init({
@@ -36,7 +53,7 @@ Sentry.init({
       // KoinError는 Error 인스턴스가 아니라 plain object다. 그대로 두면 Sentry가
       // "Object captured as exception with keys: ..." 로 묶어 서로 다른 에러가 한 이슈에
       // 뒤섞이고 스택도 남지 않는다. 상태 코드별로 그룹을 분리한다.
-      event.fingerprint = ['koin-error', String(koinError.status), koinError.code || 'no-code'];
+      event.fingerprint = ['koin-error', String(koinError.status), String(koinError.code ?? 'no-code')];
       event.exception?.values?.forEach((value) => {
         value.type = `KoinError(${koinError.status ?? 'unknown'})`;
       });

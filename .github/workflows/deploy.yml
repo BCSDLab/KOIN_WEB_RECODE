@@ -10,29 +10,31 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: ${{ github.ref_name != 'main' }}
 
+permissions:
+  contents: read
+
+env:
+  DEPLOY_PORT: '22222'
+
 jobs:
-  lint:
+  verify:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '24.14.1'
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn
+      - uses: ./.github/actions/setup
 
       - name: Run lint
         run: yarn lint
 
+      - name: Check types
+        run: yarn typecheck
+
   build-and-deploy:
     needs:
-      - lint
+      - verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: ${{ github.ref_name == 'main' && 'production' || 'stage' }}
@@ -41,11 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '24.14.1'
-          cache: 'yarn'
+      - uses: ./.github/actions/setup
 
       - name: Set deploy config
         run: |
@@ -75,9 +73,6 @@ jobs:
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> .env
           echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT" >> .env
 
-      - name: Install dependencies
-        run: yarn
-
       - name: Build
         run: yarn build
         env:
@@ -87,20 +82,18 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           NEXT_PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
 
+      # 스모크 테스트가 실패하면 아카이브를 만들지 않으므로 배포로 넘어가지 않는다.
       - name: Create deploy package
+        run: scripts/deploy/create-package.sh "$ARCHIVE_NAME"
+
+      - name: Report archive size
         run: |
-          mkdir -p deploy-pkg
-          cp -r .next deploy-pkg/
-          cp -r public deploy-pkg/ 2>/dev/null || true
-          cp package.json deploy-pkg/
-          cp yarn.lock deploy-pkg/
-          cp .env deploy-pkg/
-          cp next.config.mjs deploy-pkg/
-          cp -r .yarn deploy-pkg/ 2>/dev/null || true
-          cp .pnp.* deploy-pkg/ 2>/dev/null || true
-          cp .yarnrc.yml deploy-pkg/ 2>/dev/null || true
-          tar -czf $ARCHIVE_NAME -C deploy-pkg .
-          rm -rf deploy-pkg
+          {
+            echo "### 배포 아카이브"
+            echo '```'
+            ls -lh "$ARCHIVE_NAME" | awk '{print $9, $5}'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.10.0
@@ -108,22 +101,40 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add SSH known hosts
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_HOST_KEY: ${{ secrets.DEPLOY_HOST_KEY }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p 22222 ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          if [ -n "$DEPLOY_HOST_KEY" ]; then
+            printf '%s\n' "$DEPLOY_HOST_KEY" >> ~/.ssh/known_hosts
+          else
+            # ssh-keyscan 은 최초 연결의 호스트 키를 무조건 신뢰한다(TOFU).
+            echo "::warning::DEPLOY_HOST_KEY 시크릿이 없어 ssh-keyscan 으로 대체한다. MITM 검증이 되지 않는다."
+            ssh-keyscan -p "$DEPLOY_PORT" "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          fi
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          scp -o ConnectTimeout=30 -P 22222 $ARCHIVE_NAME ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/ubuntu/koin/web/
-          ssh -o ConnectTimeout=30 -p 22222 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "bash -lc '$DEPLOY_SCRIPT'"
+          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/"
+          ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" "bash -lc '$DEPLOY_SCRIPT'"
 
   notify:
     needs: [build-and-deploy]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout reviewer list
         uses: actions/checkout@v7
+        with:
+          # reviewer.json 만 필요하다.
+          sparse-checkout: .github
+          sparse-checkout-cone-mode: true
 
       - name: Resolve actor name
         id: resolve_actor
@@ -131,28 +142,41 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const developers = JSON.parse(fs.readFileSync(`${{ github.workspace }}/.github/workflows/reviewer.json`));
-            const matched = developers.reviewers.find(p => p.githubName === '${{ github.actor }}');
-            core.setOutput('actorName', JSON.stringify(matched?.name ?? '${{ github.actor }}'));
+            const path = require('path');
+
+            const developers = JSON.parse(
+              fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, '.github/workflows/reviewer.json'), 'utf8'),
+            );
+            const matched = developers.reviewers.find((person) => person.githubName === context.actor);
+            core.setOutput('actorName', matched?.name ?? context.actor);
 
       - name: Send Slack Notification
+        env:
+          STATUS: ${{ needs.build-and-deploy.result }}
+          BRANCH: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+          ACTOR: ${{ steps.resolve_actor.outputs.actorName }}
+          # 셸에 직접 보간하면 커밋 메시지의 `$(...)` 가 러너에서 실행된다.
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          STATUS="${{ needs.build-and-deploy.result }}"
-          ENVIRONMENT=$([[ "${{ github.ref_name }}" == "main" ]] && echo "Production" || echo "Stage")
-          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1)
-          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          ACTOR=${{ steps.resolve_actor.outputs.actorName }}
+          if [ "$BRANCH" = "main" ]; then
+            ENVIRONMENT="Production"
+          else
+            ENVIRONMENT="Stage"
+          fi
+          COMMIT_TITLE=$(printf '%s\n' "$COMMIT_MSG" | head -n 1)
 
           BODY=$(jq -n \
             --arg status "$STATUS" \
             --arg environment "$ENVIRONMENT" \
-            --arg repository "${{ github.repository }}" \
-            --arg branch "${{ github.ref_name }}" \
+            --arg repository "$REPOSITORY" \
+            --arg branch "$BRANCH" \
             --arg actor "$ACTOR" \
-            --arg commitMessage "$COMMIT_MSG" \
+            --arg commitMessage "$COMMIT_TITLE" \
             --arg runUrl "$RUN_URL" \
             '{status: $status, environment: $environment, repository: $repository, branch: $branch, actor: $actor, commitMessage: $commitMessage, runUrl: $runUrl}')
 
           curl -X POST https://api-slack.internal.bcsdlab.com/api/deploy/frontend \
-          -H 'Content-Type: application/json' \
-          -d "$BODY"
+            -H 'Content-Type: application/json' \
+            -d "$BODY"
