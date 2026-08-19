@@ -1,5 +1,4 @@
 import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
 import {
   AddTimetableFrameRequest,
   AddTimetableLectureCustomRequest,
@@ -85,7 +84,6 @@ export const timetableMutations = {
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester() });
         await invalidateFrameList(queryClient, semester);
-        await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
       },
     }),
 
@@ -114,7 +112,6 @@ export const timetableMutations = {
         ),
       onSuccess: async (data, variables) => {
         queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetableFrameId), data);
-        await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
         await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.allLectures });
       },
     }),
@@ -133,7 +130,6 @@ export const timetableMutations = {
       mutationFn: (id: number) => deleteTimetableLecture(authorization, id),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lectureInfoAll });
-        await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
       },
     }),
 

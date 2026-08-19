@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* 푸터 로고/아이콘은 작은 정적 이미지라 Next/Image 최적화 이득이 작아 img 유지 */
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
@@ -18,9 +17,6 @@ function Footer() {
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
   const portalManager = useModalPortal();
   const token = useTokenState();
-
-  const router = useRouter();
-  const { pathname } = router; // 현재 URL의 경로
 
   if (isMobile) {
     return null;
@@ -45,14 +41,6 @@ function Footer() {
 
     if (loggingMap[title]) {
       logger.actionEventClick(loggingMap[title]);
-
-      if (String(pathname) === ROUTES.GraduationCalculator()) {
-        logger.actionEventClick({
-          team: 'USER',
-          event_label: 'graduation_calculator_back',
-          value: `탈출_푸터_${title}`,
-        });
-      }
     }
   };
 
