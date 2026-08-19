@@ -5,6 +5,7 @@ import { deptQueries } from 'api/dept/queries';
 import { Lecture, MyLectureInfo, SemesterCheckResponse, TimetableFrameListResponse } from 'api/timetable/entity';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import DownloadIcon from 'assets/svg/download-icon.svg';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
 import Curriculum from 'components/TimetablePage/components/Curriculum';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -28,6 +29,7 @@ interface MainTimetableLayoutProps {
   readonly myLectures: Lecture[] | MyLectureInfo[] | undefined;
   readonly onClickDownloadImage: (e: React.MouseEvent<HTMLButtonElement>) => void;
   readonly onClickEdit: () => void;
+  readonly onClickGraduation: () => void;
   readonly timetableContent: React.ReactNode;
   readonly footer?: React.ReactNode;
 }
@@ -54,6 +56,7 @@ function MainTimetableLayout({
   myLectures,
   onClickDownloadImage,
   onClickEdit,
+  onClickGraduation,
   timetableContent,
   footer,
 }: MainTimetableLayoutProps) {
@@ -63,6 +66,10 @@ function MainTimetableLayout({
         <div className={styles['page__total-grades']}>
           <TotalGrades myLectureList={myLectures} />
         </div>
+        <button type="button" className={styles.page__button} onClick={onClickGraduation}>
+          <GraduationIcon />
+          졸업학점 계산기
+        </button>
         {curriculum}
         <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
           <DownloadIcon />
@@ -84,6 +91,8 @@ function MainTimetableLayout({
 function InvalidMainTimetable() {
   const token = useTokenState();
   const semester = useSemester();
+  const logger = useLogger();
+  const router = useRouter();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const { data: mySemester } = useSemesterCheck(token);
@@ -103,6 +112,14 @@ function InvalidMainTimetable() {
       myLectures={[]}
       onClickDownloadImage={onClickDownloadImage}
       onClickEdit={onClickEdit}
+      onClickGraduation={() => {
+        router.push(ROUTES.GraduationCalculator());
+        logger.actionEventClick({
+          team: 'USER',
+          event_label: 'graduation_calculator',
+          value: '졸업학점 계산기',
+        });
+      }}
       timetableContent={<TimetableGridPlaceholder columnWidth={140} firstColumnWidth={70} rowHeight={33} totalHeight={700} />}
     />
   );
@@ -147,6 +164,14 @@ function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: n
       myLectures={myLectures}
       onClickDownloadImage={onClickDownloadImage}
       onClickEdit={onClickEdit}
+      onClickGraduation={() => {
+        router.push(ROUTES.GraduationCalculator());
+        logger.actionEventClick({
+          team: 'USER',
+          event_label: 'graduation_calculator',
+          value: '졸업학점 계산기',
+        });
+      }}
       timetableContent={
         <Timetable timetableFrameId={timetableFrameId} columnWidth={140} firstColumnWidth={70} rowHeight={33} totalHeight={700} />
       }

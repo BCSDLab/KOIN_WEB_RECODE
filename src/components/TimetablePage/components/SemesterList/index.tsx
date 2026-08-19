@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
@@ -28,6 +29,9 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const portalManager = useModalPortal();
   const semesterOptionList = useSemesterOptionList();
   const { updateSemester } = useSemesterAction();
+  const router = useRouter();
+  const { pathname } = router;
+  const isGraduationCalculatorMode = pathname.includes('/graduation');
 
   const [isOpenSemesterList, , closePopup, triggerPopup] = useBooleanState(false);
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
@@ -42,11 +46,19 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
 
   const onClickOption = (clickededSemester: Semester) => {
     updateSemester(clickededSemester);
-    logger.actionEventClick({
-      team: 'USER',
-      event_label: 'timetable',
-      value: `click_semester_${clickededSemester.year}${clickededSemester.term}`,
-    });
+    if (isGraduationCalculatorMode) {
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'graduation_calculator_semester',
+        value: `학기 드롭다운_${clickededSemester.year}${clickededSemester.term}`,
+      });
+    } else {
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'timetable',
+        value: `click_semester_${clickededSemester.year}${clickededSemester.term}`,
+      });
+    }
     closePopup();
   };
 
@@ -123,6 +135,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     <div
       className={cn({
         [styles.select]: true,
+        [styles['select--graduation']]: isGraduationCalculatorMode,
         [styles['select--opened']]: isOpenSemesterList,
       })}
       ref={isModalOpen ? null : containerRef}
@@ -134,6 +147,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
           [styles['select__trigger--no-option']]: semesterOptionList.length === 0,
+          [styles['select__trigger--graduation']]: isGraduationCalculatorMode,
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
@@ -149,6 +163,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
           <ul
             className={cn({
               [styles['select__content--list']]: true,
+              [styles['select__content--graduation']]: isGraduationCalculatorMode,
             })}
             role="listbox"
           >
