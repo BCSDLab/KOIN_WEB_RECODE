@@ -127,56 +127,9 @@ jobs:
   notify:
     needs: [build-and-deploy]
     if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout reviewer list
-        uses: actions/checkout@v7
-        with:
-          # reviewer.json 만 필요하다.
-          sparse-checkout: .github
-          sparse-checkout-cone-mode: true
-
-      - name: Resolve actor name
-        id: resolve_actor
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-
-            const developers = JSON.parse(
-              fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, '.github/workflows/reviewer.json'), 'utf8'),
-            );
-            const matched = developers.reviewers.find((person) => person.githubName === context.actor);
-            core.setOutput('actorName', matched?.name ?? context.actor);
-
-      - name: Send Slack Notification
-        env:
-          STATUS: ${{ needs.build-and-deploy.result }}
-          BRANCH: ${{ github.ref_name }}
-          REPOSITORY: ${{ github.repository }}
-          ACTOR: ${{ steps.resolve_actor.outputs.actorName }}
-          # 셸에 직접 보간하면 커밋 메시지의 `$(...)` 가 러너에서 실행된다.
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          if [ "$BRANCH" = "main" ]; then
-            ENVIRONMENT="Production"
-          else
-            ENVIRONMENT="Stage"
-          fi
-          COMMIT_TITLE=$(printf '%s\n' "$COMMIT_MSG" | head -n 1)
-
-          BODY=$(jq -n \
-            --arg status "$STATUS" \
-            --arg environment "$ENVIRONMENT" \
-            --arg repository "$REPOSITORY" \
-            --arg branch "$BRANCH" \
-            --arg actor "$ACTOR" \
-            --arg commitMessage "$COMMIT_TITLE" \
-            --arg runUrl "$RUN_URL" \
-            '{status: $status, environment: $environment, repository: $repository, branch: $branch, actor: $actor, commitMessage: $commitMessage, runUrl: $runUrl}')
-
-          curl -X POST https://api-slack.internal.bcsdlab.com/api/deploy/frontend \
-            -H 'Content-Type: application/json' \
-            -d "$BODY"
+    uses: BCSDLab/.github/.github/workflows/notify-deploy.yml@v1
+    with:
+      track: frontend
+      slack-endpoint: frontend
+      status: ${{ needs.build-and-deploy.result }}
+      environment: ${{ github.ref_name == 'main' && 'Production' || 'Stage' }}
