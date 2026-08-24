@@ -49,7 +49,7 @@ interface Props {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const { shops } = await withStaticFetchRetry(() => getStoreListV2('NONE', [], undefined));
+    const { shops } = await withStaticFetchRetry('store.paths', () => getStoreListV2('NONE', [], undefined));
 
     return {
       paths: shops.slice(0, STORE_HOT_PATH_LIMIT).map((shop) => ({
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ pa
   }
 
   try {
-    await withStaticFetchRetry(() =>
+    await withStaticFetchRetry('store.detail-page', () =>
       Promise.all([
         queryClient.fetchQuery(storeQueries.detail(storeId)),
         queryClient.fetchQuery(storeQueries.detailMenu(storeId)),
@@ -98,7 +98,7 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ pa
 
   try {
     // 이벤트/공지 탭 데이터는 부가 정보이므로 ISR 생성을 막지 않도록 분리합니다.
-    await withStaticFetchRetry(() => queryClient.fetchQuery(storeQueries.eventList(storeId)));
+    await withStaticFetchRetry('store.events', () => queryClient.fetchQuery(storeQueries.eventList(storeId)));
   } catch (error) {
     console.error(`[ISR] failed to prefetch optional store events for ${storeId}:`, error);
   }
