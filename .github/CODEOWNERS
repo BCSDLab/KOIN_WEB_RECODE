@@ -17,4 +17,3 @@
 /next.config.mjs @BCSDLab/track_frontend
 /.github/workflows/deploy.yml @BCSDLab/track_frontend
 /scripts/deploy/ @BCSDLab/track_frontend
-/docs/observability/ @BCSDLab/track_frontend
