@@ -128,6 +128,10 @@ jobs:
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/deploy.sh"
           ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" "bash -lc 'bash /home/ubuntu/koin/web/deploy.sh'"
 
+      # create-package.sh의 production focus가 devDependency인 @sentry/cli를 제외하므로 복원한다.
+      - name: Restore Sentry CLI
+        run: yarn install --immutable
+
       # 원격 배포와 health check가 모두 성공한 시점만 Sentry Deploy로 기록한다.
       - name: Record Sentry deploy
         env:
