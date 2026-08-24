@@ -1,0 +1,19 @@
+# KOIN Web의 현재 GitHub 조직 팀 slug를 사용한다.
+* @BCSDLab/track_frontend
+
+# 최근 Sentry 오류·성능 조사에서 우선 대응 대상으로 정한 영역
+/src/pages/articles/ @BCSDLab/track_frontend
+/src/components/Articles/ @BCSDLab/track_frontend
+/src/api/articles/ @BCSDLab/track_frontend
+/src/pages/lost-item/ @BCSDLab/track_frontend
+/src/pages/bus/ @BCSDLab/track_frontend
+/src/components/Bus/ @BCSDLab/track_frontend
+/src/pages/cafeteria/ @BCSDLab/track_frontend
+
+# 관측·배포 기반 코드
+/src/instrumentation.ts @BCSDLab/track_frontend
+/src/instrumentation-client.ts @BCSDLab/track_frontend
+/sentry.*.config.ts @BCSDLab/track_frontend
+/next.config.mjs @BCSDLab/track_frontend
+/.github/workflows/deploy.yml @BCSDLab/track_frontend
+/scripts/deploy/ @BCSDLab/track_frontend

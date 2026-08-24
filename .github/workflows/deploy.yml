@@ -50,11 +50,13 @@ jobs:
           if [ "${{ github.ref_name }}" = "main" ]; then
             echo "ARCHIVE_NAME=dist-production.tar.gz" >> $GITHUB_ENV
             echo "SENTRY_PROJECT=koin-prod" >> $GITHUB_ENV
-            echo "DEPLOY_SCRIPT=/usr/local/koin/production/deploy/deploy.sh" >> $GITHUB_ENV
+            echo "SENTRY_ENVIRONMENT=production" >> $GITHUB_ENV
+            echo "LOCAL_DEPLOY_SCRIPT=scripts/deploy/server/production-deploy.sh" >> $GITHUB_ENV
           else
             echo "ARCHIVE_NAME=dist.tar.gz" >> $GITHUB_ENV
             echo "SENTRY_PROJECT=koin-stage" >> $GITHUB_ENV
-            echo "DEPLOY_SCRIPT=/usr/local/koin/stage/deploy/deploy.sh" >> $GITHUB_ENV
+            echo "SENTRY_ENVIRONMENT=stage" >> $GITHUB_ENV
+            echo "LOCAL_DEPLOY_SCRIPT=scripts/deploy/server/stage-deploy.sh" >> $GITHUB_ENV
           fi
 
       - name: Create .env
@@ -72,6 +74,7 @@ jobs:
           echo "NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID" >> .env
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> .env
           echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT" >> .env
+          echo "NEXT_PUBLIC_SENTRY_RELEASE=${{ github.sha }}" >> .env
 
       - name: Build
         run: yarn build
@@ -121,8 +124,27 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
+          REMOTE_DEPLOY_SCRIPT="/home/ubuntu/koin/web/deploy-${SENTRY_ENVIRONMENT}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.sh"
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/"
-          ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" "bash -lc '$DEPLOY_SCRIPT'"
+          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_DEPLOY_SCRIPT"
+          ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
+            "bash -lc 'status=0; bash $REMOTE_DEPLOY_SCRIPT || status=\$?; rm -f $REMOTE_DEPLOY_SCRIPT; exit \$status'"
+
+      # create-package.sh의 production focus가 devDependency인 @sentry/cli를 제외하므로 복원한다.
+      - name: Restore Sentry CLI
+        run: yarn install --immutable
+
+      # 원격 배포와 health check가 모두 성공한 시점만 Sentry Deploy로 기록한다.
+      - name: Record Sentry deploy
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: bcsd
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: |
+          yarn sentry-cli releases deploys "$SENTRY_RELEASE" new \
+            --env "$SENTRY_ENVIRONMENT" \
+            --name "github-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+            --url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
   notify:
     needs: [build-and-deploy]

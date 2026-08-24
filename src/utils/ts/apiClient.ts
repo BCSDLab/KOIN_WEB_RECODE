@@ -1,4 +1,5 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
+import * as Sentry from '@sentry/nextjs';
 import { Refresh } from 'api/auth/APIDetail';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
@@ -14,6 +15,15 @@ import { isomorphicLocalStorage } from './env';
 import { saveTokensToNative } from './iosBridge';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
+
+function normalizeApiPath(path: string | undefined): string {
+  if (!path) return 'unknown';
+
+  return path
+    .split('?')[0]
+    .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
+    .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+}
 
 type Constructor<T> = new (...args: never[]) => T;
 
@@ -45,6 +55,8 @@ export default class APIClient {
   timeout: number = 20 * 1000;
 
   request<U extends APIResponse>(request: APIRequest<U>): Promise<U> {
+    const route = normalizeApiPath(request.path);
+
     return new Promise<U>((resolve, reject) => {
       axios
         .request({
@@ -60,7 +72,19 @@ export default class APIClient {
           responseType: 'json',
         })
         .then((data: AxiosResponse<U>) => {
-          const response = request.parse ? request.parse(data) : this.parse<U>(data);
+          const response = Sentry.startSpan(
+            {
+              name: `Parse API response: ${route}`,
+              op: 'koin.api.parse',
+              onlyIfParent: true,
+              attributes: {
+                'api.route': route,
+                'http.response.status_code': data.status,
+                'koin.response_shape': data.data == null ? 'null' : 'value',
+              },
+            },
+            () => (request.parse ? request.parse(data) : this.parse<U>(data)),
+          );
           resolve(response);
         })
         .catch(async (err: unknown) => {
@@ -74,16 +98,28 @@ export default class APIClient {
               const handledResponse = await this.errorMiddleware(err);
 
               if (handledResponse) {
-                const response = request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse);
+                const response = Sentry.startSpan(
+                  {
+                    name: `Parse retried API response: ${route}`,
+                    op: 'koin.api.parse',
+                    onlyIfParent: true,
+                    attributes: {
+                      'api.route': route,
+                      'api.retry': true,
+                      'http.response.status_code': handledResponse.status,
+                    },
+                  },
+                  () => (request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse)),
+                );
                 resolve(response);
                 return;
               }
             }
 
-            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
+            const apiError = this.createTracedKoinError(err as AxiosError<KoinError>, route);
             reject(apiError);
           } catch {
-            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
+            const apiError = this.createTracedKoinError(err as AxiosError<KoinError>, route);
             reject(apiError);
           }
         });
@@ -152,7 +188,16 @@ export default class APIClient {
       }
 
       // 재요청 실행 및 결과 반환
-      return await axios(originalRequest!);
+      const route = normalizeApiPath(originalRequest?.url);
+      return await Sentry.startSpan(
+        {
+          name: `Retry API request: ${route}`,
+          op: 'koin.api.retry',
+          onlyIfParent: true,
+          attributes: { 'api.route': route },
+        },
+        () => axios(originalRequest!),
+      );
     } catch (retryError) {
       return Promise.reject(retryError);
     }
@@ -174,7 +219,15 @@ export default class APIClient {
         const refreshToken = storage?.state?.refreshToken ?? null;
 
         if (refreshToken) {
-          await this.refreshAccessToken(refreshToken);
+          await Sentry.startSpan(
+            {
+              name: 'Refresh API access token',
+              op: 'koin.api.auth_refresh',
+              onlyIfParent: true,
+              attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+            },
+            () => this.refreshAccessToken(refreshToken),
+          );
           return await this.retryRequest(error);
         }
       } catch {
@@ -193,9 +246,18 @@ export default class APIClient {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
         try {
-          const response = await axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
-            headers: { Authorization: `Bearer ${currentToken}` },
-          });
+          const response = await Sentry.startSpan(
+            {
+              name: 'Revalidate API user type',
+              op: 'koin.api.user_revalidation',
+              onlyIfParent: true,
+              attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+            },
+            () =>
+              axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
+                headers: { Authorization: `Bearer ${currentToken}` },
+              }),
+          );
           useTokenStore.getState().setUserType(response.data.user_type);
           return await this.retryRequest(error);
         } catch {
@@ -232,6 +294,22 @@ export default class APIClient {
       type: 'AXIOS_ERROR',
       ...error,
     };
+  }
+
+  private createTracedKoinError(error: AxiosError<KoinError>, route: string): KoinError | CustomAxiosError {
+    return Sentry.startSpan(
+      {
+        name: `Convert API error: ${route}`,
+        op: 'koin.api.error_conversion',
+        onlyIfParent: true,
+        attributes: {
+          'api.route': route,
+          'http.response.status_code': error.response?.status ?? 'network',
+          'koin.response_shape': error.response?.data == null ? 'null' : 'value',
+        },
+      },
+      () => this.createKoinErrorFromAxiosError(error),
+    );
   }
 
   // Create headers
