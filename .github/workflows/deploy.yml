@@ -124,9 +124,11 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
+          REMOTE_DEPLOY_SCRIPT="/home/ubuntu/koin/web/deploy-${SENTRY_ENVIRONMENT}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.sh"
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/"
-          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/deploy.sh"
-          ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" "bash -lc 'bash /home/ubuntu/koin/web/deploy.sh'"
+          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_DEPLOY_SCRIPT"
+          ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
+            "bash -lc 'status=0; bash $REMOTE_DEPLOY_SCRIPT || status=\$?; rm -f $REMOTE_DEPLOY_SCRIPT; exit \$status'"
 
       # create-package.sh의 production focus가 devDependency인 @sentry/cli를 제외하므로 복원한다.
       - name: Restore Sentry CLI
