@@ -1,5 +1,4 @@
 import { isKoinError } from '@bcsdlab/koin';
-import * as Sentry from '@sentry/nextjs';
 
 export const ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS = 60 * 10;
 export const BUS_SHUTTLE_ISR_REVALIDATE_SECONDS = 60 * 30;
@@ -46,44 +45,12 @@ function isRetryableStaticFetchError(error: unknown): boolean {
   return true;
 }
 
-function getStaticFetchStatus(error: unknown): number | 'network' | 'unknown' {
-  if (isKoinError(error)) return error.status;
-
-  if (typeof error === 'object' && error !== null && hasAxiosErrorResponse(error)) {
-    return error.response?.status ?? 'network';
-  }
-
-  return 'unknown';
-}
-
-export async function withStaticFetchRetry<T>(resource: string, task: () => Promise<T>): Promise<T> {
+export async function withStaticFetchRetry<T>(task: () => Promise<T>): Promise<T> {
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= STATIC_FETCH_RETRY_ATTEMPTS; attempt += 1) {
     try {
-      return await Sentry.startSpan(
-        {
-          name: `ISR fetch: ${resource}`,
-          op: 'koin.isr.fetch',
-          onlyIfParent: true,
-          attributes: {
-            'isr.resource': resource,
-            'retry.attempt': attempt + 1,
-            'retry.max_attempts': STATIC_FETCH_RETRY_ATTEMPTS + 1,
-          },
-        },
-        async (span) => {
-          try {
-            const result = await task();
-            span.setAttribute('retry.result', 'success');
-            return result;
-          } catch (error) {
-            span.setAttribute('retry.result', 'error');
-            span.setAttribute('http.response.status_code', getStaticFetchStatus(error));
-            throw error;
-          }
-        },
-      );
+      return await task();
     } catch (error) {
       if (!isRetryableStaticFetchError(error)) {
         throw error;
@@ -95,23 +62,9 @@ export async function withStaticFetchRetry<T>(resource: string, task: () => Prom
         break;
       }
 
-      const delay = STATIC_FETCH_RETRY_DELAY_MS * (attempt + 1);
-      await Sentry.startSpan(
-        {
-          name: `ISR retry wait: ${resource}`,
-          op: 'koin.isr.retry_wait',
-          onlyIfParent: true,
-          attributes: {
-            'isr.resource': resource,
-            'retry.next_attempt': attempt + 2,
-            'retry.delay_ms': delay,
-          },
-        },
-        () =>
-          new Promise((resolve) => {
-            setTimeout(resolve, delay);
-          }),
-      );
+      await new Promise((resolve) => {
+        setTimeout(resolve, STATIC_FETCH_RETRY_DELAY_MS * (attempt + 1));
+      });
     }
   }
 

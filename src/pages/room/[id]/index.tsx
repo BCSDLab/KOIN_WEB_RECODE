@@ -25,7 +25,7 @@ interface RoomDetailPageProps {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const { lands } = await withStaticFetchRetry('room.paths', () => getRoomList());
+    const { lands } = await withStaticFetchRetry(() => getRoomList());
 
     return {
       paths: lands
@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps<RoomDetailPageProps, { id: string }>
   const queryClient = new QueryClient();
 
   try {
-    await withStaticFetchRetry('room.detail', () => queryClient.fetchQuery(roomQueries.detail(id)));
+    await withStaticFetchRetry(() => queryClient.fetchQuery(roomQueries.detail(id)));
   } catch (error) {
     if (isNotFoundKoinError(error)) {
       return { notFound: true, revalidate: ROOM_ISR_REVALIDATE_SECONDS };

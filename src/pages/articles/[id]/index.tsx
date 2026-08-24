@@ -1,5 +1,4 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import * as Sentry from '@sentry/nextjs';
 import { getArticle, getArticles, getHotArticles } from 'api/articles';
 import { ArticleResponseWithNew, HotArticle } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
@@ -18,7 +17,7 @@ import {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const { articles } = await withStaticFetchRetry('article.paths', () => getArticles('', '1'));
+    const { articles } = await withStaticFetchRetry(() => getArticles('', '1'));
 
     return {
       paths: articles.slice(0, ARTICLE_HOT_PATH_LIMIT).map((article) => ({
@@ -46,23 +45,14 @@ export const getStaticProps: GetStaticProps<
   }
 
   try {
-    const article = await withStaticFetchRetry('article.detail', () => getArticle(id));
-    const hotArticles =
-      (await withStaticFetchRetry('article.hot', () => getHotArticles()).catch(() => [])) ?? [];
+    const article = await withStaticFetchRetry(() => getArticle(id));
+    const hotArticles = (await withStaticFetchRetry(() => getHotArticles()).catch(() => [])) ?? [];
     const serverTime = new Date();
 
-    const articleWithNew = Sentry.startSpan(
-      {
-        name: 'Transform article detail',
-        op: 'koin.isr.transform',
-        onlyIfParent: true,
-        attributes: { 'isr.resource': 'article.detail' },
-      },
-      (): ArticleResponseWithNew => ({
-        ...article,
-        isNew: isNewArticle(article.registered_at, serverTime),
-      }),
-    );
+    const articleWithNew: ArticleResponseWithNew = {
+      ...article,
+      isNew: isNewArticle(article.registered_at, serverTime),
+    };
 
     return {
       props: { article: articleWithNew, hotArticles },

@@ -36,7 +36,7 @@ function asString(value: string | string[] | undefined): string | undefined {
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await withStaticFetchRetry('bus.shuttle-course', () =>
+  await withStaticFetchRetry(() =>
     queryClient.fetchQuery({
       ...busQueries.shuttleCourse(),
       staleTime: 1000 * 60 * 10,

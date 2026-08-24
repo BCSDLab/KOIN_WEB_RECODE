@@ -16,7 +16,7 @@ const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await withStaticFetchRetry('room.list', () => queryClient.fetchQuery(roomQueries.list()));
+  await withStaticFetchRetry(() => queryClient.fetchQuery(roomQueries.list()));
 
   return {
     props: {
