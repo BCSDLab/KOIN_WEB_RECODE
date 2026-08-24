@@ -90,7 +90,7 @@ for _ in $(seq 1 30); do
   if ! kill -0 "$SERVER_PID" 2>/dev/null; then
     break
   fi
-  if curl -s -o /dev/null "http://127.0.0.1:${SMOKE_PORT}/"; then
+  if curl -fsS -o /dev/null "http://127.0.0.1:${SMOKE_PORT}/api/health"; then
     booted=1
     break
   fi

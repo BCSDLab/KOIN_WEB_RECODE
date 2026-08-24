@@ -54,6 +54,12 @@ Sentry.init({
       // "Object captured as exception with keys: ..." 로 묶어 서로 다른 에러가 한 이슈에
       // 뒤섞이고 스택도 남지 않는다. 상태 코드별로 그룹을 분리한다.
       event.fingerprint = ['koin-error', String(koinError.status), String(koinError.code ?? 'no-code')];
+      event.tags = {
+        ...event.tags,
+        'koin.error_type': koinError.type ?? 'KOIN_ERROR',
+        'koin.error_status': String(koinError.status ?? 'unknown'),
+        'koin.error_code': String(koinError.code ?? 'no-code'),
+      };
       event.exception?.values?.forEach((value) => {
         value.type = `KoinError(${koinError.status ?? 'unknown'})`;
       });
