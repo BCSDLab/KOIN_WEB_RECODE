@@ -4,7 +4,7 @@ PORT=3001
 DEPLOY_DIR=/usr/local/koin/production
 TAR_FILE=/home/ubuntu/koin/web/dist-production.tar.gz
 SERVICE=koin-production.service
-HEALTH_URL="http://localhost:${PORT}/api/health"
+HEALTH_URL="http://localhost:${PORT}/api/health?environment=production"
 
 log() { echo "[deploy-prod $(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
 
