@@ -68,14 +68,13 @@ jobs:
           NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
           NEXT_PUBLIC_GTM_ID: ${{ secrets.NEXT_PUBLIC_GTM_ID }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-          NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_SENTRY_ENVIRONMENT }}
         run: |
           echo "NEXT_PUBLIC_API_PATH=$NEXT_PUBLIC_API_PATH" >> .env
           echo "NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID=$NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID" >> .env
           echo "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=$NEXT_PUBLIC_GOOGLE_ANALYTICS_ID" >> .env
           echo "NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID" >> .env
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> .env
-          echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT" >> .env
+          echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=$SENTRY_ENVIRONMENT" >> .env
           echo "NEXT_PUBLIC_SENTRY_RELEASE=${{ github.sha }}" >> .env
 
       - name: Build
@@ -138,14 +137,26 @@ jobs:
         env:
           EXPECTED_RELEASE: ${{ github.sha }}
         run: |
-          response="$(curl --fail --silent --show-error \
-            --retry 12 --retry-delay 5 --retry-all-errors \
-            "${PUBLIC_HEALTH_URL}?environment=${SENTRY_ENVIRONMENT}")"
-          jq -e \
-            --arg environment "$SENTRY_ENVIRONMENT" \
-            --arg release "$EXPECTED_RELEASE" \
-            '.status == "ok" and .environment == $environment and .release == $release' \
-            <<<"$response"
+          verified=0
+          for attempt in $(seq 1 12); do
+            if response="$(curl --fail --silent --show-error \
+              "${PUBLIC_HEALTH_URL}?environment=${SENTRY_ENVIRONMENT}")" \
+              && jq -e \
+                --arg environment "$SENTRY_ENVIRONMENT" \
+                --arg release "$EXPECTED_RELEASE" \
+                '.status == "ok" and .environment == $environment and .release == $release' \
+                <<<"$response" > /dev/null; then
+              verified=1
+              break
+            fi
+            echo "Public health response is not current yet (${attempt}/12)."
+            sleep 5
+          done
+
+          if [ "$verified" -ne 1 ]; then
+            echo "::error::Public health response did not match the deployed environment and release."
+            exit 1
+          fi
 
       # create-package.sh의 production focus가 devDependency인 @sentry/cli를 제외하므로 복원한다.
       - name: Restore Sentry CLI
