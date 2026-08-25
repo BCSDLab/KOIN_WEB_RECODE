@@ -36,11 +36,26 @@ function asKoinError(error: unknown): KoinErrorLike | null {
   return null;
 }
 
+function getTransactionKey(transaction: string | undefined): string | undefined {
+  if (!transaction) return undefined;
+  if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
+  if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+  return undefined;
+}
+
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   enabled: process.env.NODE_ENV === 'production',
   environment,
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
+
+  beforeSendTransaction(event) {
+    const transactionKey = getTransactionKey(event.transaction);
+    if (transactionKey) {
+      event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
+    }
+    return event;
+  },
 
   beforeSend(event, hint) {
     if (event.request?.url && BOT_PROBE_PATTERN.test(event.request.url)) return null;

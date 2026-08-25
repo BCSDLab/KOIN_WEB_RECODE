@@ -52,11 +52,13 @@ jobs:
             echo "SENTRY_PROJECT=koin-prod" >> $GITHUB_ENV
             echo "SENTRY_ENVIRONMENT=production" >> $GITHUB_ENV
             echo "LOCAL_DEPLOY_SCRIPT=scripts/deploy/server/production-deploy.sh" >> $GITHUB_ENV
+            echo "PUBLIC_HEALTH_URL=https://koreatech.in/api/health" >> $GITHUB_ENV
           else
             echo "ARCHIVE_NAME=dist.tar.gz" >> $GITHUB_ENV
             echo "SENTRY_PROJECT=koin-stage" >> $GITHUB_ENV
             echo "SENTRY_ENVIRONMENT=stage" >> $GITHUB_ENV
             echo "LOCAL_DEPLOY_SCRIPT=scripts/deploy/server/stage-deploy.sh" >> $GITHUB_ENV
+            echo "PUBLIC_HEALTH_URL=https://stage.koreatech.in/api/health" >> $GITHUB_ENV
           fi
 
       - name: Create .env
@@ -129,6 +131,21 @@ jobs:
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_DEPLOY_SCRIPT"
           ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
             "bash -lc 'status=0; bash $REMOTE_DEPLOY_SCRIPT || status=\$?; rm -f $REMOTE_DEPLOY_SCRIPT; exit \$status'"
+
+      # nginx까지 통과한 공개 endpoint가 방금 배포한 환경과 release를 반환하는지 확인한다.
+      # Sentry Uptime은 status code만 검사하므로 release SHA 검증은 배포 파이프라인이 담당한다.
+      - name: Verify public health response
+        env:
+          EXPECTED_RELEASE: ${{ github.sha }}
+        run: |
+          response="$(curl --fail --silent --show-error \
+            --retry 12 --retry-delay 5 --retry-all-errors \
+            "${PUBLIC_HEALTH_URL}?environment=${SENTRY_ENVIRONMENT}")"
+          jq -e \
+            --arg environment "$SENTRY_ENVIRONMENT" \
+            --arg release "$EXPECTED_RELEASE" \
+            '.status == "ok" and .environment == $environment and .release == $release' \
+            <<<"$response"
 
       # create-package.sh의 production focus가 devDependency인 @sentry/cli를 제외하므로 복원한다.
       - name: Restore Sentry CLI

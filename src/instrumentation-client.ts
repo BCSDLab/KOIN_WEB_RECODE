@@ -34,6 +34,13 @@ function normalizeRoute(pathname: string): string {
     .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
 }
 
+function getTransactionKey(transaction: string | undefined): string | undefined {
+  if (!transaction) return undefined;
+  if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
+  if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+  return undefined;
+}
+
 /**
  * 하이드레이션 실패 시 React가 출력하는 diff 전문을 경로별로 그룹핑해 보고한다.
  *
@@ -74,6 +81,14 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   environment,
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
+
+  beforeSendTransaction(event) {
+    const transactionKey = getTransactionKey(event.transaction);
+    if (transactionKey) {
+      event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
+    }
+    return event;
+  },
 
   beforeSend(event, hint) {
     const error = hint.originalException;
