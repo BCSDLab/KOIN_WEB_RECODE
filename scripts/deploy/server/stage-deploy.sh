@@ -4,7 +4,7 @@ PORT=3000
 DEPLOY_DIR=/usr/local/koin/stage
 TAR_FILE=/home/ubuntu/koin/web/dist.tar.gz
 SERVICE=koin-stage.service
-HEALTH_URL="http://localhost:${PORT}/"
+HEALTH_URL="http://localhost:${PORT}/api/health?environment=stage"
 
 log() { echo "[deploy-stage $(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
 

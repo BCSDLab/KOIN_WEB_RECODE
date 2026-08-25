@@ -36,11 +36,26 @@ function asKoinError(error: unknown): KoinErrorLike | null {
   return null;
 }
 
+function getTransactionKey(transaction: string | undefined): string | undefined {
+  if (!transaction) return undefined;
+  if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
+  if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+  return undefined;
+}
+
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   enabled: process.env.NODE_ENV === 'production',
   environment,
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
+
+  beforeSendTransaction(event) {
+    const transactionKey = getTransactionKey(event.transaction);
+    if (transactionKey) {
+      event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
+    }
+    return event;
+  },
 
   beforeSend(event, hint) {
     if (event.request?.url && BOT_PROBE_PATTERN.test(event.request.url)) return null;
@@ -54,6 +69,12 @@ Sentry.init({
       // "Object captured as exception with keys: ..." 로 묶어 서로 다른 에러가 한 이슈에
       // 뒤섞이고 스택도 남지 않는다. 상태 코드별로 그룹을 분리한다.
       event.fingerprint = ['koin-error', String(koinError.status), String(koinError.code ?? 'no-code')];
+      event.tags = {
+        ...event.tags,
+        'koin.error_type': koinError.type ?? 'KOIN_ERROR',
+        'koin.error_status': String(koinError.status ?? 'unknown'),
+        'koin.error_code': String(koinError.code ?? 'no-code'),
+      };
       event.exception?.values?.forEach((value) => {
         value.type = `KoinError(${koinError.status ?? 'unknown'})`;
       });

@@ -1,19 +1,22 @@
-# 서버 배포 스크립트 (참조 사본)
+# 서버 배포 스크립트
 
-이 디렉터리의 파일은 **배포 서버에서 실제로 실행되는 스크립트의 사본**이다.
-CI 가 이 파일을 사용하지는 않는다. 서버의 원본 경로는 다음과 같다.
+이 디렉터리의 환경별 스크립트를 CI가 배포 아카이브와 함께 서버의
+`/home/ubuntu/koin/web/deploy-<environment>-<run-id>-<attempt>.sh`로 업로드한 뒤 실행한다.
+환경과 workflow 실행별로 경로를 분리해 동시 배포가 서로의 스크립트를 덮어쓰지 않으며,
+실행 성공 여부와 관계없이 임시 스크립트를 제거한다. 따라서 저장소의 변경이 다음 배포부터
+실제 배포 절차에 반영된다.
 
-| 파일                    | 서버 경로                                      | 서비스                    | 포트 |
-| ----------------------- | ---------------------------------------------- | ------------------------- | ---- |
-| `stage-deploy.sh`       | `/usr/local/koin/stage/deploy/deploy.sh`       | `koin-stage.service`      | 3000 |
-| `production-deploy.sh`  | `/usr/local/koin/production/deploy/deploy.sh`  | `koin-production.service` | 3001 |
+| 파일 | 선택 환경 | 서비스 | 포트 |
+| --- | --- | --- | --- |
+| `stage-deploy.sh` | stage | `koin-stage.service` | 3000 |
+| `production-deploy.sh` | production | `koin-production.service` | 3001 |
 
-`deploy.yml` 의 마지막 단계가 SSH 로 이 스크립트를 실행한다.
+서버의 기존 `/usr/local/koin/<environment>/deploy/deploy.sh`는 호환용 사본이며 CI 실행 경로가 아니다.
 
 ## 왜 사본을 두는가
 
 이전까지 이 스크립트는 서버에만 있어서 누가 언제 무엇을 바꿨는지 추적할 수 없었다.
-배포 동작을 바꿀 때 리뷰 대상이 되도록 사본을 커밋한다.
+배포 동작을 바꿀 때 코드 리뷰와 실제 실행 내용이 일치하도록 저장소 파일을 CI가 직접 사용한다.
 
 ## 동작 요약
 
@@ -22,7 +25,26 @@ CI 가 이 파일을 사용하지는 않는다. 서버의 원본 경로는 다�
    청크와 manifest 가 무한히 누적된다
 3. 아카이브 추출 (`yarn install` 은 하지 않는다. PnP 맵과 캐시가 아카이브에 들어 있다)
 4. systemd 서비스 재시작
-5. 최대 30초 health check, 실패 시 journal 출력과 함께 비정상 종료
+5. 최대 30초 `/api/health` health check, 실패 시 journal 출력과 함께 비정상 종료
+
+배포 판정은 일반 페이지 `/`가 아니라 Next.js 프로세스가 직접 처리하는 `/api/health`를 사용한다.
+일반 페이지는 nginx의 60초 캐시 때문에 upstream이 중단돼도 잠시 200을 반환할 수 있기 때문이다.
+
+## 외부 health check
+
+Sentry Uptime에서도 같은 endpoint를 사용한다.
+
+| 환경 | URL | Next.js upstream | 참조 설정 |
+| --- | --- | --- | --- |
+| production | `https://koreatech.in/api/health` | `127.0.0.1:3001` | `production-nginx-health.conf` |
+| stage | `https://stage.koreatech.in/api/health` | `127.0.0.1:3000` | `stage-nginx-health.conf` |
+
+- 참조 설정의 exact-match `location = /api/health`를 각 도메인의 실제 `server` 블록에 반영한다.
+- `proxy_cache off`, `proxy_no_cache 1`, `proxy_cache_bypass 1`을 유지한다.
+- 적용 전 `sudo nginx -t`, 적용 후 `sudo systemctl reload nginx`를 실행한다.
+- 반복 호출에서 cache `HIT`나 `Age`가 없어야 한다.
+- upstream이 중단되면 nginx의 502/504를 그대로 반환해야 한다.
+- 응답은 liveness만 나타낸다. API·DB 같은 외부 의존성의 정상 여부는 별도 monitor로 확인한다.
 
 ## nginx 캐시 레이어
 
@@ -48,7 +70,8 @@ CI 가 이 파일을 사용하지는 않는다. 서버의 원본 경로는 다�
 
 ## 주의
 
-- **서버에서 스크립트나 nginx 설정을 수정했다면 이 문서도 함께 갱신할 것.** 자동 동기화는 없다.
+- 배포 스크립트는 서버에서 직접 수정하지 않고 이 디렉터리에서 변경한다.
+- nginx 설정은 아직 자동 배포하지 않으므로 서버에서 수정했다면 참조 설정과 이 문서도 함께 갱신한다.
 - `.next` 를 지우고 추출하므로 롤백은 이전 커밋 재배포로만 가능하다.
 - 아카이브 구성은 `scripts/deploy/create-package.sh` 가 담당한다. 두 스크립트의 전제가
   맞아야 한다 (예: 서버는 `yarn start:serve` 로 기동하므로 `.yarn/releases` 가 필요하다).

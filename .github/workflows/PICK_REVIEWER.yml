@@ -13,74 +13,9 @@ permissions:
   pull-requests: write # 리뷰어 지정
 
 jobs:
-  pick-random-reviewer:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout reviewer list
-        uses: actions/checkout@v7
-        with:
-          # reviewer.json 만 필요하다.
-          sparse-checkout: .github
-          sparse-checkout-cone-mode: true
-
-      - name: Pick random reviewer
-        id: pick_random_reviewer
-        uses: actions/github-script@v9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-
-            const developers = JSON.parse(
-              fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, '.github/workflows/reviewer.json'), 'utf8'),
-            );
-            const prCreator = context.payload.pull_request.user.login;
-            const prCreatorEntry = developers.reviewers.find((person) => person.githubName === prCreator);
-            const candidates = developers.reviewers.filter((person) => person.githubName !== prCreator);
-
-            if (candidates.length < 2) {
-              core.setFailed(`리뷰어 후보가 ${candidates.length}명이라 2명을 뽑을 수 없다.`);
-              return;
-            }
-
-            // 랜덤 2명 뽑기
-            function pickTwo(arr) {
-              const first = arr[Math.floor(Math.random() * arr.length)];
-              const rest = arr.filter((item) => item !== first);
-              const second = rest[Math.floor(Math.random() * rest.length)];
-              return [first, second];
-            }
-
-            const [reviewer1, reviewer2] = pickTwo(candidates);
-
-            core.setOutput('writer', prCreatorEntry?.name ?? prCreator);
-            core.setOutput('pullRequestLink', context.payload.pull_request.html_url);
-            core.setOutput('reviewer1Name', reviewer1.name);
-            core.setOutput('reviewer2Name', reviewer2.name);
-            core.setOutput('reviewer1GithubName', reviewer1.githubName);
-            core.setOutput('reviewer2GithubName', reviewer2.githubName);
-
-      - name: Add Reviewers
-        uses: madrapps/add-reviewers@v1
-        with:
-          reviewers: ${{ steps.pick_random_reviewer.outputs.reviewer1GithubName }},${{ steps.pick_random_reviewer.outputs.reviewer2GithubName }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Send Slack Trigger
-        env:
-          PR_URL: ${{ steps.pick_random_reviewer.outputs.pullRequestLink }}
-          WRITER: ${{ steps.pick_random_reviewer.outputs.writer }}
-          REVIEWER1: ${{ steps.pick_random_reviewer.outputs.reviewer1Name }}
-          REVIEWER2: ${{ steps.pick_random_reviewer.outputs.reviewer2Name }}
-        run: |
-          BODY=$(jq -n \
-            --arg pullRequestLink "$PR_URL" \
-            --arg writer "$WRITER" \
-            --arg reviewer1 "$REVIEWER1" \
-            --arg reviewer2 "$REVIEWER2" \
-            '{pullRequestLink: $pullRequestLink, writer: $writer, reviewers: [$reviewer1, $reviewer2]}')
-
-          curl -X POST https://api-slack.internal.bcsdlab.com/api/review-request/frontend \
-            -H 'Content-Type: application/json' \
-            -d "$BODY"
+  pick-reviewer:
+    uses: BCSDLab/.github/.github/workflows/pick-reviewer.yml@v1
+    with:
+      track: frontend
+      slack-endpoint: frontend
+    secrets: inherit
