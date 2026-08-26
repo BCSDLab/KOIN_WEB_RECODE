@@ -172,6 +172,16 @@ const sections: CategorySection[] = [
         },
       },
       {
+        title: '팀원 모집',
+        href: ROUTES.Team(),
+        Icon: UserAddIcon,
+        logging: {
+          team: 'CAMPUS',
+          event_label: 'category_etc',
+          value: '팀원 모집',
+        },
+      },
+      {
         title: '복덕방',
         href: ROUTES.Room(),
         Icon: HomeIcon,
