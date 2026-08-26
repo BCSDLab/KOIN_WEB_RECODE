@@ -145,5 +145,13 @@
     background-image: url("https://static.koreatech.in/assets/img/check.png");
     background-size: cover;
     margin-right: 8px;
+
+    @include media.media-breakpoint(mobile) {
+      background-color: #b611f5;
+      background-image: url("../../../../../assets/svg/white-check-icon.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: auto;
+    }
   }
 }
