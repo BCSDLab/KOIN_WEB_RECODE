@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
@@ -41,29 +42,39 @@ export default function TeamListPage() {
   const filteredRecruitments = MOCK_RECRUITMENTS.filter((recruitment) =>
     recruitment.title.toLowerCase().includes(searchKeyword.toLowerCase()),
   );
+
   return (
-    <main>
-      <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
+    <>
+      <Head>
+        <title>팀원 모집 | KOIN</title>
+        <meta name="description" content="한국기술교육대학교 팀원 모집 게시글을 확인하고 검색할 수 있습니다." />
+      </Head>
 
-      <p>전체({filteredRecruitments.length})</p>
+      <main>
+        <h1>팀원 모집</h1>
 
-      {filteredRecruitments.map((recruitment) => (
-        <RecruitmentCard
-          key={recruitment.id}
-          category={recruitment.category}
-          status={recruitment.status}
-          title={recruitment.title}
-          roles={recruitment.roles}
-          location={recruitment.location}
-          period={recruitment.period}
-          currentMemberCount={recruitment.currentMemberCount}
-          maxMemberCount={recruitment.maxMemberCount}
-        />
-      ))}
+        <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
-      <button type="button" className={styles.recruitButton}>
-        모집하기
-      </button>
-    </main>
+        <p>전체({filteredRecruitments.length})</p>
+
+        {filteredRecruitments.map((recruitment) => (
+          <RecruitmentCard
+            key={recruitment.id}
+            category={recruitment.category}
+            status={recruitment.status}
+            title={recruitment.title}
+            roles={recruitment.roles}
+            location={recruitment.location}
+            period={recruitment.period}
+            currentMemberCount={recruitment.currentMemberCount}
+            maxMemberCount={recruitment.maxMemberCount}
+          />
+        ))}
+
+        <button type="button" className={styles.recruitButton}>
+          모집하기
+        </button>
+      </main>
+    </>
   );
 }

@@ -7,7 +7,9 @@ export default function TeamDetailPage() {
         <title>팀원 모집 상세 | KOIN</title>
       </Head>
 
-      <main>팀원 모집 상세 페이지</main>
+      <main>
+        <h1>팀원 모집 상세 페이지</h1>
+      </main>
     </>
   );
 }

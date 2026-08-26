@@ -8,7 +8,8 @@ export default function TeamChatPage() {
       </Head>
 
       <main>
-        팀원 모집 채팅 페이지
+        <h1>팀원 모집 채팅 페이지</h1>
+
         <input aria-label="메시지 입력" placeholder="메시지 보내기" />
         <button type="button" disabled>
           전송

@@ -7,7 +7,9 @@ export default function TeamNotificationsPage() {
         <title>팀원 모집 알림 | KOIN</title>
       </Head>
 
-      <main>팀원 모집 알림 페이지</main>
+      <main>
+        <h1>팀원 모집 알림 페이지</h1>
+      </main>
     </>
   );
 }
