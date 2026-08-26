@@ -1,12 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Logo from 'assets/svg/Login/logo.svg';
+import MobileLogo from 'assets/svg/Login/mobile-logo.svg';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Auth.module.scss';
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-
+  const isMobile = useMediaQuery();
   return (
     <div className={styles.template}>
       {router.pathname === ROUTES.Auth() && (
@@ -23,13 +26,11 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
       <div className={styles.template__content}>
         {router.pathname === ROUTES.Auth() && (
           <Link className={styles.template__logo} href={ROUTES.Main()}>
-            <Image
-              className={styles.template__image}
-              src="https://static.koreatech.in/assets/img/logo_primary.png"
-              alt="main logo"
-              width={105}
-              height={58}
-            />
+            {!isMobile ? (
+              <Logo className={styles.template__image} width={107} height={60} aria-label="main logo" />
+            ) : (
+              <MobileLogo className={styles.template__image} width={117} height={111} aria-label="main logo" />
+            )}
           </Link>
         )}
         {children}

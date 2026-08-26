@@ -1,4 +1,4 @@
-import LogoIcon from 'assets/svg/Login/logo.svg';
+import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
 import type { UserType } from 'static/auth';
 import styles from './MobileUserTypeStep.module.scss';
 
@@ -14,14 +14,14 @@ function MobileUserTypeStep({ onSelectType }: MobileUserTypeStepProps) {
       </div>
       <div className={styles['button-container']}>
         <button
-          className={`${styles['button-container__button']} ${styles['button-container__button--orange']}`}
+          className={`${styles['button-container__button']} ${styles['button-container__button--purple']}`}
           type="button"
           onClick={() => onSelectType('학생')}
         >
           한국기술교육대학교 학생
         </button>
         <button
-          className={`${styles['button-container__button']} ${styles['button-container__button--blue']}`}
+          className={`${styles['button-container__button']} ${styles['button-container__button--white']}`}
           type="button"
           onClick={() => onSelectType('외부인')}
         >
