@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+}
+
+.searchButton {
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
