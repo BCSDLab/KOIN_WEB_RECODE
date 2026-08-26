@@ -5,11 +5,12 @@
   flex-direction: column;
   font-family: Pretendard, sans-serif;
   align-items: center;
-  gap: 36px;
+  gap: 80px;
   margin: 240px 0 300px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    gap: 36px;
     height: calc(100% - 40px);
     font-family: Pretendard, sans-serif;
     align-items: center;
