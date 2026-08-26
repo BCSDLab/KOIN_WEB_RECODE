@@ -1,3 +1,3 @@
-import TeamNotificationsPage from 'components/Team/TeamNotificationsPage';
-
-export default TeamNotificationsPage;
+export default function TeamNotificationsPage() {
+  return <main>알림 페이지</main>;
+}

@@ -1,3 +1,3 @@
-import TeamChatPage from 'components/Team/TeamChatPage';
-
-export default TeamChatPage;
+export default function TeamChatPage() {
+  return <main>팀원 모집 채팅 페이지</main>;
+}

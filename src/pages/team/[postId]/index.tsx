@@ -1,3 +1,3 @@
-import TeamDetailPage from 'components/Team/TeamDetailPage';
-
-export default TeamDetailPage;
+export default function TeamDetailPage() {
+  return <main>팀원 모집 상세 페이지</main>;
+}

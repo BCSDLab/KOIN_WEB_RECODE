@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import RecruitmentCard from 'components/Team/TeamListPage/components/RecruitmentCard';
-import TeamSearchBar from 'components/Team/TeamListPage/components/TeamSearchBar';
+import RecruitmentCard from 'components/Team/components/RecruitmentCard';
+import TeamSearchBar from 'components/Team/components/TeamSearchBar';
 
 import styles from './TeamListPage.module.scss';
 
@@ -41,9 +41,8 @@ export default function TeamListPage() {
   const filteredRecruitments = MOCK_RECRUITMENTS.filter((recruitment) =>
     recruitment.title.toLowerCase().includes(searchKeyword.toLowerCase()),
   );
-
   return (
-    <main className={styles.container}>
+    <main>
       <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
       <p>전체({filteredRecruitments.length})</p>
