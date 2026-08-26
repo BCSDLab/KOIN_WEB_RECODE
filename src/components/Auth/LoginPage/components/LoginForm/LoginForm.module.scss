@@ -28,9 +28,10 @@
       padding: 0;
       margin: 24px auto 0;
       height: 44px;
+      color: #b611f5;
       border-radius: 8px;
-      background-color: #175c8e;
-      border: 0;
+      background-color: #fff;
+      border: 1px solid #b611f5;
       font-size: 15px;
       font-weight: 500;
     }
@@ -39,7 +40,8 @@
   &__first-button {
     @include media.media-breakpoint(mobile) {
       margin: 36px auto 0;
-      background-color: #f7941e;
+      background-color: #b611f5;
+      color: #fff;
     }
   }
 }
@@ -78,11 +80,12 @@
   @include media.media-breakpoint(mobile) {
     width: 100%;
     height: 40px;
-    padding-left: 16px;
+    padding-left: 4px;
     border-width: 0 0 1px;
 
     &::placeholder {
       font-size: 14px;
+      color: #cacaca;
     }
   }
 }

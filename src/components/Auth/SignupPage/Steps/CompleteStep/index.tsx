@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import LogoIcon from 'assets/svg/Login/logo.svg';
+import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './CompleteStep.module.scss';
 
@@ -18,7 +18,7 @@ function CompleteStep() {
           <span className={styles.title}>회원가입이 완료되었습니다.</span>
           <div className={styles['button-container']}>
             <button
-              className={`${styles['button-container__button']} ${styles['button-container__button--orange']}`}
+              className={`${styles['button-container__button']} ${styles['button-container__button--purple']}`}
               type="button"
               onClick={() => {
                 router.push('/auth');
@@ -27,7 +27,7 @@ function CompleteStep() {
               로그인 바로가기
             </button>
             <button
-              className={`${styles['button-container__button']} ${styles['button-container__button--blue']}`}
+              className={`${styles['button-container__button']} ${styles['button-container__button--white']}`}
               type="button"
               onClick={() => router.push('/')}
             >

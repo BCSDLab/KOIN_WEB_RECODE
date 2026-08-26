@@ -42,7 +42,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    background-color: #175c8e;
+    background-color: #b611f5;
     color: #fff;
     font-size: 10px;
     font-weight: 400;
@@ -197,6 +197,10 @@
 
     &--warning {
       color: #f7941e;
+      
+      @include media.media-breakpoint(mobile) {
+        color: #b611f5;
+      }
     }
 
     &--default {

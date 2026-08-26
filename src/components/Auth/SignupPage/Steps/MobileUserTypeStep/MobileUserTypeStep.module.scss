@@ -44,15 +44,17 @@
       line-height: 160%;
     }
 
-    &--orange {
+    &--purple {
       @include media.media-breakpoint(mobile) {
-        background-color: #f7941e;
+        background-color: #b611f5;
       }
     }
 
-    &--blue {
+    &--white {
       @include media.media-breakpoint(mobile) {
-        background-color: #175c8e;
+        background-color: #fff;
+        color: #b611f5;
+        border: solid 1px #b611f5;
       }
     }
   }

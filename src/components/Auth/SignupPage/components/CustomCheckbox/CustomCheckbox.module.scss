@@ -24,7 +24,7 @@ $white-check-icon-path: "../../../../../assets/svg/white-check-icon.svg";
   @include svg-background($check-icon-path);
 
   &:checked {
-    background-color: #f7941e;
+    background-color: #b611f5;
     border: none;
 
     @include svg-background($white-check-icon-path);

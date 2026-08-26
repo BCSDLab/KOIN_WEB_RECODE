@@ -6,9 +6,11 @@ import ErrorIcon from 'assets/svg/Login/error.svg';
 import EyeCloseIcon from 'assets/svg/Login/eye-close.svg';
 import EyeOpenIcon from 'assets/svg/Login/eye-open.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
+import MobileWarningIcon from 'assets/svg/mobile-warning-icon.svg';
 import FormatTime from 'components/Auth/SignupPage/hooks/useFormatTime';
 import { useFormContext } from 'react-hook-form';
 import { UserType } from 'static/auth';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './CustomInput.module.scss';
 
@@ -57,6 +59,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
     ref,
   ) => {
     const { setValue } = useFormContext();
+    const isMobile = useMediaQuery();
     const [isPasswordVisible, , , togglePasswordVisible] = useBooleanState(false);
 
     const getInputType = (): 'text' | 'password' => {
@@ -138,7 +141,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           <div className={styles.messageWrapper}>
             {message.type === 'error' && <ErrorIcon />}
             {message.type === 'success' && <CorrectIcon />}
-            {message.type === 'warning' && <WarningIcon />}
+            {message.type === 'warning' && (isMobile ? <MobileWarningIcon /> : <WarningIcon />)}
             <p className={`${styles.messageWrapper__message} ${styles[`messageWrapper__message--${message.type}`]}`}>
               {message.content}
             </p>
