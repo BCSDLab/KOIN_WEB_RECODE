@@ -1,3 +1,13 @@
+import Head from 'next/head';
+
 export default function TeamNotificationsPage() {
-  return <main>알림 페이지</main>;
+  return (
+    <>
+      <Head>
+        <title>팀원 모집 알림 | KOIN</title>
+      </Head>
+
+      <main>팀원 모집 알림 페이지</main>
+    </>
+  );
 }
