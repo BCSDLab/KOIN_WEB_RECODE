@@ -1,13 +1,12 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
 import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import styles from './TeamProfilePage.module.scss';
 
 interface TeamRecruitmentProfileSummary {
@@ -46,7 +45,6 @@ const MOCK_PROFILE: TeamRecruitmentProfileSummary = {
 };
 
 function TeamProfilePage() {
-  const router = useRouter();
   const hasProfile = MOCK_HAS_PROFILE;
   const profile = MOCK_PROFILE;
 
@@ -58,18 +56,7 @@ function TeamProfilePage() {
       </Head>
 
       <div className={styles.page}>
-        <div className={styles.page__header}>
-          <button
-            type="button"
-            className={styles['page__back-button']}
-            onClick={() => router.back()}
-            aria-label="뒤로가기"
-          >
-            <ArrowBackIcon />
-          </button>
-          <h1 className={styles.page__title}>팀원 모집 프로필</h1>
-          <div className={styles['page__spacer']} />
-        </div>
+        <SubPageHeader title="팀원 모집 프로필" />
 
         <div className={styles.page__content}>
           {hasProfile ? (
