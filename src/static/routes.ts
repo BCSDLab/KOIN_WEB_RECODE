@@ -66,6 +66,7 @@ const ROUTES = {
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
+  TeamProfile: () => '/team/profile',
   TeamDetail: ({ postId }: { postId: string }) => `/team/${postId}`,
   TeamNotifications: () => '/team/notifications',
   TeamChat: ({ id }: { id: string }) => `/team/chat/${id}`,

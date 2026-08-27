@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
 import IconBox from 'components/ui/IconBox';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import type { DepartmentViewProps } from 'components/Department/types';
 import styles from './DepartmentMobile.module.scss';
@@ -22,22 +21,9 @@ export default function DepartmentMobile({
   onFeedbackClick,
   updatedAt,
 }: DepartmentViewProps) {
-  const router = useRouter();
-
   return (
     <div className={styles.page}>
-      <div className={styles.page__header}>
-        <button
-          type="button"
-          className={styles['page__back-button']}
-          onClick={() => router.back()}
-          aria-label="뒤로가기"
-        >
-          <ArrowBackIcon />
-        </button>
-        <h1 className={styles.page__title}>학교 부서 정보</h1>
-        <div className={styles['page__spacer']} />
-      </div>
+      <SubPageHeader title="학교 부서 정보" />
 
       <div className={styles.page__content}>
         <div className={styles['page__search-pill']}>

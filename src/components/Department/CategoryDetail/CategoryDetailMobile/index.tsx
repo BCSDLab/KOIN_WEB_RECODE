@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
 import styles from './CategoryDetailMobile.module.scss';
 
@@ -16,22 +15,9 @@ export default function CategoryDetailMobile({
   onFeedbackClick,
   updatedAt,
 }: CategoryDetailViewProps) {
-  const router = useRouter();
-
   return (
     <div className={styles.page}>
-      <div className={styles.page__header}>
-        <button
-          type="button"
-          className={styles['page__back-button']}
-          onClick={() => router.back()}
-          aria-label="뒤로가기"
-        >
-          <ArrowBackIcon />
-        </button>
-        <h1 className={styles.page__title}>{categoryName}</h1>
-        <div className={styles['page__spacer']} />
-      </div>
+      <SubPageHeader title={categoryName} />
 
       <div className={styles.page__content}>
         <div className={styles['page__search-pill']}>
