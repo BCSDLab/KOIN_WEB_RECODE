@@ -4,52 +4,16 @@ import Head from 'next/head';
 import { useQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
+import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
 import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import type {
-  TeamRecruitmentCategory,
-  TeamRecruitmentListRequest,
-  TeamRecruitmentMeetingType,
-  TeamRecruitmentStatus,
-} from 'api/team/entity';
+import type { TeamRecruitmentListRequest } from 'api/team/entity';
 
 import styles from './TeamListPage.module.scss';
-
-const CATEGORY_LABEL: Record<TeamRecruitmentCategory, string> = {
-  CONTEST: '공모전',
-  EXTERNAL_ACTIVITY: '대외활동',
-  STUDY: '스터디',
-  PROJECT: '프로젝트',
-  OTHER: '기타',
-};
-
-const MEETING_TYPE_LABEL: Record<TeamRecruitmentMeetingType, string> = {
-  ONLINE: '온라인',
-  OFFLINE: '오프라인',
-  MIXED: '온 · 오프라인',
-};
-
-const formatDate = (date: string) => date.replace(/-/g, '.');
-
-const formatRecruitmentStatus = (status: TeamRecruitmentStatus, dDay: number | null) => {
-  if (status === 'CLOSED' || status === 'DELETED') {
-    return '모집완료';
-  }
-
-  if (dDay === null) {
-    return '모집 중';
-  }
-
-  if (dDay <= 0) {
-    return 'D-Day';
-  }
-
-  return `D-${dDay}`;
-};
 
 export default function TeamListPage() {
   const token = useTokenState();
@@ -87,33 +51,28 @@ export default function TeamListPage() {
 
       {isMobile && <TeamListHeader />}
 
-      <main>
+      <main className={styles.page}>
         {!isMobile && <h1>팀원 모집</h1>}
         <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
         <p>전체({totalCount})</p>
 
-        {isLoading && <p>모집글을 불러오는 중입니다.</p>}
+        <div className={styles.content}>
+          {isLoading && <p>모집글을 불러오는 중입니다.</p>}
 
-        {isError && <p>모집글을 불러오지 못했습니다.</p>}
+          {!isLoading && (isError || recruitments.length === 0) && (
+            <div className={styles.empty}>
+              <EmptyRecruitment />
+              <p className={styles.empty__message}>
+                {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
+              </p>
+            </div>
+          )}
 
-        {!isLoading && !isError && recruitments.length === 0 && <p>조건에 맞는 모집글이 없어요.</p>}
-
-        {!isLoading &&
-          !isError &&
-          recruitments.map((recruitment) => (
-            <RecruitmentCard
-              key={recruitment.id}
-              category={CATEGORY_LABEL[recruitment.category]}
-              status={formatRecruitmentStatus(recruitment.status, recruitment.d_day)}
-              title={recruitment.title}
-              roles={recruitment.roles.map((role) => `${role.name} ${role.max_participants}명`)}
-              location={MEETING_TYPE_LABEL[recruitment.meeting_type]}
-              period={`${formatDate(recruitment.activity_start_date)} ~ ${formatDate(recruitment.activity_end_date)}`}
-              currentMemberCount={recruitment.current_participants}
-              maxMemberCount={recruitment.max_participants}
-            />
-          ))}
+          {!isLoading &&
+            !isError &&
+            recruitments.map((recruitment) => <RecruitmentCard key={recruitment.id} recruitment={recruitment} />)}
+        </div>
 
         <button type="button" className={styles.recruitButton}>
           모집하기
