@@ -9,8 +9,16 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 10px;
   padding: 0 24px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  // 고정된 모집하기 버튼(bottom 56px + height 43px)에 마지막 카드가 가려지지 않도록 확보
+  padding-bottom: 110px;
 }
 
 .empty {
@@ -38,11 +46,30 @@
   }
 }
 
-.recruitButton {
-  display: block;
-  margin: 24px 20px 24px auto;
-  padding: 12px 24px;
-  border: 0;
-  border-radius: 24px;
-  cursor: pointer;
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 56px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 126px;
+  height: 43px;
+  border-radius: 40px;
+  background: #c358fc;
+
+  &__label {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
 }

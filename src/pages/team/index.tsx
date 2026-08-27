@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
+import PencilIcon from 'assets/svg/Team/pencil.svg';
 import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
@@ -69,13 +70,18 @@ export default function TeamListPage() {
             </div>
           )}
 
-          {!isLoading &&
-            !isError &&
-            recruitments.map((recruitment) => <RecruitmentCard key={recruitment.id} recruitment={recruitment} />)}
+          {!isLoading && !isError && recruitments.length > 0 && (
+            <div className={styles.list}>
+              {recruitments.map((recruitment) => (
+                <RecruitmentCard key={recruitment.id} recruitment={recruitment} />
+              ))}
+            </div>
+          )}
         </div>
 
-        <button type="button" className={styles.recruitButton}>
-          모집하기
+        <button type="button" className={styles.fab}>
+          <span className={styles.fab__label}>모집하기</span>
+          <PencilIcon />
         </button>
       </main>
     </>
