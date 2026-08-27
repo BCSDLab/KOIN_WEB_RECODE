@@ -1,19 +1,40 @@
-import type { ReactNode } from 'react';
+import type { FunctionComponent, ReactNode, SVGProps } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
+import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
 import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
-import ProfileMenuCard from 'components/Team/components/ProfileMenuCard';
 import styles from './TeamProfilePage.module.scss';
 
 interface TeamRecruitmentProfileSummary {
   nickname: string;
   department: string;
   studentNumber: string;
+}
+
+interface MenuCardProps {
+  icon: FunctionComponent<SVGProps<SVGSVGElement>>;
+  title: string;
+  description: string;
+}
+
+function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
+  return (
+    <button type="button" className={styles.menuCard}>
+      <span className={styles.menuCard__icon}>
+        <Icon aria-hidden />
+      </span>
+      <span className={styles.menuCard__body}>
+        <span className={styles.menuCard__title}>{title}</span>
+        <span className={styles.menuCard__description}>{description}</span>
+      </span>
+      <ChevronRightIcon aria-hidden className={styles.menuCard__chevron} />
+    </button>
+  );
 }
 
 // TODO: /team-recruitment-profiles/me API 연동 후 React Query로 교체
@@ -81,12 +102,12 @@ function TeamProfilePage() {
           )}
 
           <div className={styles.menuList}>
-            <ProfileMenuCard
+            <MenuCard
               icon={NoteIcon}
               title={hasProfile ? '내가 작성한 모집글' : '내가 작성한 모집글 모아보기'}
               description="작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
             />
-            <ProfileMenuCard
+            <MenuCard
               icon={ListEndIcon}
               title={hasProfile ? '내가 지원한 모집글' : '내가 지원한 모집글 모아보기'}
               description="지원한 모집글과 지원 상태를 확인할 수 있어요."
