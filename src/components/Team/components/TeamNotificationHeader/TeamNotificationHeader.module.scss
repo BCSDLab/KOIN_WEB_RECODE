@@ -1,0 +1,82 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 53px;
+  padding: 8px 20px;
+  box-sizing: border-box;
+  background: #fff;
+
+  &__icon-button {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 160%;
+    white-space: nowrap;
+  }
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 98;
+    background: transparent;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    width: 121px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: #fafafa;
+    box-shadow:
+      0 2px 4px rgb(0 0 0 / 4%),
+      0 1px 1px rgb(0 0 0 / 2%);
+  }
+
+  &__dropdown-item {
+    padding: 8px;
+    color: #000;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    text-align: center;
+    white-space: nowrap;
+
+    // 아래 두 규칙은 '알림 전체 삭제' 항목용이다.
+    // API 명세가 아직 없어 항목 자체는 붙이지 않았고, 디자인 값만 먼저 넣어둔다.
+    & + & {
+      border-top: 1px solid #eee;
+    }
+
+    &--danger {
+      color: #ec2d30;
+    }
+  }
+}
