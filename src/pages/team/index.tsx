@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
+import FilterIcon from 'assets/svg/Team/filter.svg';
 import PencilIcon from 'assets/svg/Team/pencil.svg';
 import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
@@ -54,9 +55,17 @@ export default function TeamListPage() {
 
       <main className={styles.page}>
         {!isMobile && <h1>팀원 모집</h1>}
-        <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
-        <p>전체({totalCount})</p>
+        <div className={styles.searchRow}>
+          <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
+
+          <button type="button" className={styles.filterButton}>
+            <span className={styles.filterButton__label}>필터</span>
+            <FilterIcon />
+          </button>
+        </div>
+
+        <p className={styles.totalCount}>전체({totalCount})</p>
 
         <div className={styles.content}>
           {isLoading && <p>모집글을 불러오는 중입니다.</p>}

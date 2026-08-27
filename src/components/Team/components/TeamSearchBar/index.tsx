@@ -1,3 +1,5 @@
+import SearchIcon from 'assets/svg/Team/search.svg';
+
 import styles from './TeamSearchBar.module.scss';
 
 interface TeamSearchBarProps {
@@ -24,8 +26,8 @@ export default function TeamSearchBar({ value, onChange, onSearch }: TeamSearchB
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <button className={styles.searchButton} type="button" onClick={onSearch}>
-        검색
+      <button className={styles.searchButton} type="button" aria-label="검색" onClick={onSearch}>
+        <SearchIcon />
       </button>
     </div>
   );
