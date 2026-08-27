@@ -1,0 +1,66 @@
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+
+import { teamQueries } from 'api/team/queries';
+import ArrowBackIcon from 'assets/svg/Team/arrow-back.svg';
+import NotificationIcon from 'assets/svg/Team/notification.svg';
+import ProfileIcon from 'assets/svg/Team/profile.svg';
+import ROUTES from 'static/routes';
+import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
+
+import styles from './TeamListHeader.module.scss';
+
+export default function TeamListHeader() {
+  const router = useRouter();
+  const token = useTokenState();
+  const isMounted = useMount();
+
+  const { data: notificationData } = useQuery({
+    ...teamQueries.notifications(token ?? ''),
+    enabled: !!token,
+  });
+
+  const hasUnreadNotifications =
+    isMounted && (notificationData?.notifications.some((notification) => !notification.is_read) ?? false);
+
+  const handleBack = () => {
+    if (window.history.state?.idx === 0) {
+      router.push(ROUTES.Main());
+      return;
+    }
+
+    router.back();
+  };
+
+  return (
+    <header className={styles.header}>
+      <button type="button" className={styles['header__back-button']} aria-label="뒤로가기" onClick={handleBack}>
+        <ArrowBackIcon />
+      </button>
+
+      <h1 className={styles.header__title}>팀원 모집</h1>
+
+      <div className={styles.header__actions}>
+        <button
+          type="button"
+          className={styles['header__icon-button']}
+          aria-label="알림"
+          onClick={() => router.push(ROUTES.TeamNotifications())}
+        >
+          <NotificationIcon />
+          {hasUnreadNotifications && <span className={styles['header__notification-dot']} />}
+        </button>
+
+        <button
+          type="button"
+          className={styles['header__icon-button']}
+          aria-label="프로필"
+          onClick={() => router.push(ROUTES.Profile())}
+        >
+          <ProfileIcon />
+        </button>
+      </div>
+    </header>
+  );
+}

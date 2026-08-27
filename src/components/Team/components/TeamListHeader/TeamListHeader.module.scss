@@ -1,0 +1,54 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 53px;
+  padding: 8px 24px;
+  box-sizing: border-box;
+  background: #fff;
+
+  &__back-button,
+  &__icon-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 160%;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__notification-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b611f5;
+  }
+}

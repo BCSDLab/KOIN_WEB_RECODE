@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import type { TeamRecruitmentListRequest } from './entity';
-import { getTeamRecruitmentList } from './index';
+import type { TeamRecruitmentListRequest, TeamRecruitmentNotificationListRequest } from './entity';
+import { getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
 
 type TeamViewerScope = 'guest' | 'auth';
 
@@ -14,6 +14,11 @@ export const teamQueryKeys = {
 
   list: (params: TeamRecruitmentListRequest, token?: string | null) =>
     [...teamQueryKeys.listRoot, getViewerScope(token), params] as const,
+
+  notificationsRoot: ['team', 'notifications'] as const,
+
+  notifications: (token: string, params: TeamRecruitmentNotificationListRequest) =>
+    [...teamQueryKeys.notificationsRoot, token, params] as const,
 };
 
 export const teamQueries = {
@@ -21,5 +26,12 @@ export const teamQueries = {
     queryOptions({
       queryKey: teamQueryKeys.list(params, token),
       queryFn: () => getTeamRecruitmentList(token || undefined, params),
+    }),
+
+  notifications: (token: string, params: TeamRecruitmentNotificationListRequest = {}) =>
+    queryOptions({
+      queryKey: teamQueryKeys.notifications(token, params),
+      queryFn: () => getTeamRecruitmentNotifications(token, params),
+      staleTime: 60000,
     }),
 };

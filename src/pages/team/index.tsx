@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
+import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
+import TeamListHeader from 'components/Team/components/TeamListHeader';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import type {
   TeamRecruitmentCategory,
@@ -49,6 +53,7 @@ const formatRecruitmentStatus = (status: TeamRecruitmentStatus, dDay: number | n
 
 export default function TeamListPage() {
   const token = useTokenState();
+  const isMobile = useMediaQuery();
 
   const [searchTitle, setSearchTitle] = useState('');
   const [requestParams, setRequestParams] = useState<TeamRecruitmentListRequest>({
@@ -80,9 +85,10 @@ export default function TeamListPage() {
         <meta name="description" content="한국기술교육대학교 팀원 모집 게시글을 확인하고 검색할 수 있습니다." />
       </Head>
 
-      <main>
-        <h1>팀원 모집</h1>
+      {isMobile && <TeamListHeader />}
 
+      <main>
+        {!isMobile && <h1>팀원 모집</h1>}
         <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
         <p>전체({totalCount})</p>
@@ -116,3 +122,5 @@ export default function TeamListPage() {
     </>
   );
 }
+
+TeamListPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
