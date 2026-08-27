@@ -1,47 +1,77 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import { useQuery } from '@tanstack/react-query';
 
+import { teamQueries } from 'api/team/queries';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import type {
+  TeamRecruitmentCategory,
+  TeamRecruitmentListRequest,
+  TeamRecruitmentMeetingType,
+  TeamRecruitmentStatus,
+} from 'api/team/entity';
 
 import styles from './TeamListPage.module.scss';
 
-const MOCK_RECRUITMENTS = [
-  {
-    id: 1,
-    category: '공모전',
-    status: 'D-5',
-    title: 'AI 아이디어 공모전 팀원 모집',
-    roles: ['프론트엔드 1명', '백엔드 1명', '디자인 1명'],
-    location: '온라인',
-    period: '2026.08.27 ~ 2026.09.01',
-    currentMemberCount: 0,
-    maxMemberCount: 3,
-  },
-  {
-    id: 2,
-    category: '대외활동',
-    status: 'D-13',
-    title: '2026 대외활동 팀원 모집',
-    roles: [],
-    location: '온 · 오프라인',
-    period: '2026.08.27 ~ 2026.09.09',
-    currentMemberCount: 2,
-    maxMemberCount: 3,
-  },
-];
+const CATEGORY_LABEL: Record<TeamRecruitmentCategory, string> = {
+  CONTEST: '공모전',
+  EXTERNAL_ACTIVITY: '대외활동',
+  STUDY: '스터디',
+  PROJECT: '프로젝트',
+  OTHER: '기타',
+};
+
+const MEETING_TYPE_LABEL: Record<TeamRecruitmentMeetingType, string> = {
+  ONLINE: '온라인',
+  OFFLINE: '오프라인',
+  MIXED: '온 · 오프라인',
+};
+
+const formatDate = (date: string) => date.replace(/-/g, '.');
+
+const formatRecruitmentStatus = (status: TeamRecruitmentStatus, dDay: number | null) => {
+  if (status === 'CLOSED' || status === 'DELETED') {
+    return '모집완료';
+  }
+
+  if (dDay === null) {
+    return '모집 중';
+  }
+
+  if (dDay <= 0) {
+    return 'D-Day';
+  }
+
+  return `D-${dDay}`;
+};
 
 export default function TeamListPage() {
+  const token = useTokenState();
+
   const [searchTitle, setSearchTitle] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [requestParams, setRequestParams] = useState<TeamRecruitmentListRequest>({
+    status: 'ALL',
+    sort: 'LATEST_DESC',
+    page: 1,
+    limit: 10,
+  });
+
+  const { data, isLoading, isError } = useQuery(teamQueries.list(requestParams, token));
+
+  const recruitments = data?.recruitments ?? [];
+  const totalCount = data?.total_count ?? 0;
 
   const handleSearch = () => {
-    setSearchKeyword(searchTitle.trim());
-  };
+    const keyword = searchTitle.trim();
 
-  const filteredRecruitments = MOCK_RECRUITMENTS.filter((recruitment) =>
-    recruitment.title.toLowerCase().includes(searchKeyword.toLowerCase()),
-  );
+    setRequestParams((previous) => ({
+      ...previous,
+      keyword: keyword || undefined,
+      page: 1,
+    }));
+  };
 
   return (
     <>
@@ -55,21 +85,29 @@ export default function TeamListPage() {
 
         <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
-        <p>전체({filteredRecruitments.length})</p>
+        <p>전체({totalCount})</p>
 
-        {filteredRecruitments.map((recruitment) => (
-          <RecruitmentCard
-            key={recruitment.id}
-            category={recruitment.category}
-            status={recruitment.status}
-            title={recruitment.title}
-            roles={recruitment.roles}
-            location={recruitment.location}
-            period={recruitment.period}
-            currentMemberCount={recruitment.currentMemberCount}
-            maxMemberCount={recruitment.maxMemberCount}
-          />
-        ))}
+        {isLoading && <p>모집글을 불러오는 중입니다.</p>}
+
+        {isError && <p>모집글을 불러오지 못했습니다.</p>}
+
+        {!isLoading && !isError && recruitments.length === 0 && <p>조건에 맞는 모집글이 없어요.</p>}
+
+        {!isLoading &&
+          !isError &&
+          recruitments.map((recruitment) => (
+            <RecruitmentCard
+              key={recruitment.id}
+              category={CATEGORY_LABEL[recruitment.category]}
+              status={formatRecruitmentStatus(recruitment.status, recruitment.d_day)}
+              title={recruitment.title}
+              roles={recruitment.roles.map((role) => `${role.name} ${role.max_participants}명`)}
+              location={MEETING_TYPE_LABEL[recruitment.meeting_type]}
+              period={`${formatDate(recruitment.activity_start_date)} ~ ${formatDate(recruitment.activity_end_date)}`}
+              currentMemberCount={recruitment.current_participants}
+              maxMemberCount={recruitment.max_participants}
+            />
+          ))}
 
         <button type="button" className={styles.recruitButton}>
           모집하기
