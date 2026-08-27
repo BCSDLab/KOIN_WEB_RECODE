@@ -59,3 +59,32 @@ export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificati
     };
   }
 }
+
+export class PostTeamRecruitmentNotificationRead<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    notificationId: number,
+  ) {
+    this.path = `/team-recruitments/notifications/${notificationId}/read`;
+  }
+}
+
+export class PostTeamRecruitmentNotificationsMarkAllRead<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/team-recruitments/notifications/mark-all-read';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
