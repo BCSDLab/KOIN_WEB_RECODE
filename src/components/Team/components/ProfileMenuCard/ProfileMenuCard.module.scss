@@ -1,0 +1,58 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #f1f1f1;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 0.5px solid #cacaca;
+    border-radius: 300px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #0b0b0d;
+  }
+
+  &__description {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #727272;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+  }
+}
