@@ -102,6 +102,11 @@
       background-color: #e1e1e1;
       color: #4b4b4b;
       border: none;
+
+      @include media.media-breakpoint(mobile) {
+        background-color: #b611f5;
+        color: white;
+      }
     }
 
     &--input {
@@ -120,6 +125,9 @@
       margin-top: 8px;
       margin-left: 0;
       padding: 8px;
+      border: none;
+      background-color: #b611f5;
+      color: white;
     }
   }
 
@@ -133,23 +141,43 @@
 
     &:focus {
       outline: 1px solid #4590bb;
+
+      @include media.media-breakpoint(mobile) {
+        outline: 1px solid #b611f5;
+      }
     }
 
     &:focus ~ .container__check-button {
       background-color: #175c8e;
       color: #fff;
+
+      @include media.media-breakpoint(mobile) {
+        background-color: #b611f5;
+      }
     }
 
     &:focus ~ .container__check-button--input {
       background-color: #10477a;
       color: #fff;
+
+      @include media.media-breakpoint(mobile) {
+        background-color: #b611f5;
+      }
     }
 
     &--error {
       outline: 1px solid #f7941e;
 
+      @include media.media-breakpoint(mobile) {
+        outline: 1px solid #b611f5;
+      }
+
       &:focus {
         outline: 1px solid #4590bb;
+
+        @include media.media-breakpoint(mobile) {
+          outline: 1px solid #b611f5;
+        }
       }
     }
 
@@ -189,7 +217,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    color: #f7941e;
+    color: #b611f5;
     gap: 4px;
     margin-top: 6px;
     font-size: 14px;
