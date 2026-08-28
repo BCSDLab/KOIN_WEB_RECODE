@@ -28,7 +28,7 @@ export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> imple
       ...(keyword && { keyword }),
       ...(params.status && { status: params.status }),
       ...(params.categories?.length && { categories: params.categories }),
-      ...(params.meeting_type && { meeting_type: params.meeting_type }),
+      ...(params.meetingType && { meetingType: params.meetingType }),
       ...(params.sort && { sort: params.sort }),
       page: params.page ?? 1,
       limit: params.limit ?? 10,

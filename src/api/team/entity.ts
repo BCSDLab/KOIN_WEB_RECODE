@@ -17,7 +17,7 @@ export interface TeamRecruitmentListRequest {
   keyword?: string;
   status?: TeamRecruitmentStatusFilter;
   categories?: TeamRecruitmentCategory[];
-  meeting_type?: TeamRecruitmentMeetingType;
+  meetingType?: TeamRecruitmentMeetingType;
   sort?: TeamRecruitmentSort;
   page?: number;
   limit?: number;
