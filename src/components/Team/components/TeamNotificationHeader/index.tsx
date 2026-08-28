@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
 
 import ArrowBackIcon from 'assets/svg/Team/arrow-back.svg';
 import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
@@ -56,7 +57,7 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDele
         </button>
       )}
 
-      {isMenuOpen && (
+      {showMenu && isMenuOpen && (
         <>
           <button type="button" className={styles.header__overlay} aria-label="메뉴 닫기" onClick={closeMenu} />
 
@@ -67,7 +68,10 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDele
 
             <button
               type="button"
-              className={`${styles['header__dropdown-item']} ${styles['header__dropdown-item--danger']}`}
+              className={cn({
+                [styles['header__dropdown-item']]: true,
+                [styles['header__dropdown-item--danger']]: true,
+              })}
               onClick={handleDeleteAll}
             >
               알림 전체 삭제

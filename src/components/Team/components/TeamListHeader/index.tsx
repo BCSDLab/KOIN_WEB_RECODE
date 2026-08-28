@@ -17,7 +17,7 @@ export default function TeamListHeader() {
   const isMounted = useMount();
 
   const { data: notificationData } = useQuery({
-    ...teamQueries.notifications(token ?? ''),
+    ...teamQueries.notifications(token ?? '', { limit: 1 }),
     enabled: !!token,
   });
 
