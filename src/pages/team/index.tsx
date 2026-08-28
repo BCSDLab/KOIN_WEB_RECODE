@@ -62,7 +62,7 @@ export default function TeamListPage() {
       {isMobile && <TeamListHeader />}
 
       <main className={styles.page}>
-        {!isMobile && <h1>팀원 모집</h1>}
+        {!isMobile && <h1>팀원모집</h1>}
 
         <div className={styles.searchRow}>
           <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />

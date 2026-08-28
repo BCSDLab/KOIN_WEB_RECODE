@@ -45,7 +45,7 @@ export default function TeamListHeader() {
         <ArrowBackIcon />
       </button>
 
-      <h1 className={styles.header__title}>팀원 모집</h1>
+      <h1 className={styles.header__title}>팀원모집</h1>
 
       <div className={styles.header__actions}>
         <button

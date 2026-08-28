@@ -1,5 +1,3 @@
-// 읽음 / 안읽음 색 구분은 디자인이 나오면 &--read / &--unread 로 추가한다.
-// 콜밴은 제목 #000 → #727272, 아이콘 보라 → 회색으로 처리하고 있다.
 .card {
   display: flex;
   align-items: center;
@@ -60,5 +58,21 @@
     line-height: 160%;
     word-break: keep-all;
     overflow-wrap: break-word;
+  }
+
+  &--read {
+    .card__icon {
+      path[fill="#B611F5"] {
+        fill: #727272;
+      }
+
+      path[stroke="#B611F5"] {
+        stroke: #727272;
+      }
+    }
+
+    .card__title {
+      color: #727272;
+    }
   }
 }

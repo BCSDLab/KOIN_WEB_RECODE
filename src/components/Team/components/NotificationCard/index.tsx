@@ -1,3 +1,5 @@
+import { cn } from '@bcsdlab/utils';
+
 import ChatIcon from 'assets/svg/Team/chat.svg';
 import UserGroupIcon from 'assets/svg/Team/user-group.svg';
 import formatRelativeTime from 'components/Team/utils/formatRelativeTime';
@@ -14,7 +16,14 @@ interface NotificationCardProps {
 
 export default function NotificationCard({ notification, now, onClick }: NotificationCardProps) {
   return (
-    <button type="button" className={styles.card} onClick={() => onClick(notification)}>
+    <button
+      type="button"
+      className={cn({
+        [styles.card]: true,
+        [styles['card--read']]: notification.is_read,
+      })}
+      onClick={() => onClick(notification)}
+    >
       <span className={styles.card__icon}>
         {notification.type === 'NEW_CHAT_MESSAGE' ? <ChatIcon /> : <UserGroupIcon />}
       </span>
