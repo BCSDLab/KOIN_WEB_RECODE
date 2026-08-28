@@ -66,7 +66,17 @@ const ROUTES = {
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
+  TeamRecruitmentSearch: () => '/team/recruitment/search',
+  TeamRecruitmentNew: () => '/team/recruitment/new',
+  TeamRecruitmentApply: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/apply`,
+  TeamRecruitmentApplicants: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/applicants`,
+  TeamRecruitmentApplicantDetail: ({ postId, applicantId }: ROUTESParams<'postId' | 'applicantId'>) =>
+    `/team/recruitment/${postId}/applicants/${applicantId}`,
   TeamProfile: () => '/team/profile',
+  TeamProfileNew: () => '/team/profile/new',
+  TeamProfilePosts: () => '/team/profile/posts',
+  TeamProfileApplications: () => '/team/profile/applications',
+  // TeamDetail은 다른 작업자가 진행 중인 /team/${postId}를 그대로 유지. 그쪽 작업 완료 후 /team/recruitment/${postId}로 함께 정리 예정.
   TeamDetail: ({ postId }: { postId: string }) => `/team/${postId}`,
   TeamNotifications: () => '/team/notifications',
   TeamChat: ({ id }: { id: string }) => `/team/chat/${id}`,
