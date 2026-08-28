@@ -56,7 +56,7 @@ export default function TeamListHeader() {
           type="button"
           className={styles['header__icon-button']}
           aria-label="프로필"
-          onClick={() => router.push(ROUTES.Profile())}
+          onClick={() => router.push(ROUTES.TeamProfile())}
         >
           <ProfileIcon />
         </button>
