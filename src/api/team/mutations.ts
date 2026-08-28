@@ -10,14 +10,11 @@ import {
 const invalidateNotifications = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: teamQueryKeys.notificationsRoot });
 
-const markNotificationsStale = (queryClient: QueryClient) =>
-  queryClient.invalidateQueries({ queryKey: teamQueryKeys.notificationsRoot, refetchType: 'none' });
-
 export const teamMutations = {
   markNotificationRead: (queryClient: QueryClient, token: string) =>
     mutationOptions({
       mutationFn: (notificationId: number) => markTeamRecruitmentNotificationRead(token, notificationId),
-      onSuccess: () => markNotificationsStale(queryClient),
+      onSuccess: () => invalidateNotifications(queryClient),
     }),
 
   markAllNotificationsRead: (queryClient: QueryClient, token: string) =>
