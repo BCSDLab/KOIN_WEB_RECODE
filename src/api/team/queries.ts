@@ -44,7 +44,6 @@ export const teamQueries = {
       },
     }),
 
-  // 헤더 안 읽음 뱃지용. 1페이지만 필요해 무한스크롤과 분리해 둔다.
   notifications: (token: string, params: TeamRecruitmentNotificationListRequest = {}) =>
     queryOptions({
       queryKey: teamQueryKeys.notifications(token, params),

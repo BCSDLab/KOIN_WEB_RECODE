@@ -35,13 +35,15 @@ export default function TeamNotificationsPage() {
 
   const { mutate: markRead } = useMutation(teamMutations.markNotificationRead(queryClient, token ?? ''));
   const { mutate: markAllRead } = useMutation(teamMutations.markAllNotificationsRead(queryClient, token ?? ''));
+  const { mutate: deleteAllNotifications } = useMutation(
+    teamMutations.deleteAllNotifications(queryClient, token ?? ''),
+  );
 
   const handleNotificationClick = (notification: TeamRecruitmentNotification) => {
     if (!notification.is_read) {
       markRead(notification.id);
     }
 
-    // 지원자 관리
     if (
       notification.target_type === 'CHAT_ROOM' &&
       notification.recruitment_id !== null &&
@@ -62,7 +64,11 @@ export default function TeamNotificationsPage() {
         <title>팀원 모집 알림 | KOIN</title>
       </Head>
 
-      <TeamNotificationHeader showMenu={notifications.length > 0} onMarkAllRead={markAllRead} />
+      <TeamNotificationHeader
+        showMenu={notifications.length > 0}
+        onMarkAllRead={markAllRead}
+        onDeleteAll={deleteAllNotifications}
+      />
 
       <main className={styles.page}>
         {isLoading && <p className={styles.loading}>알림을 불러오는 중입니다.</p>}

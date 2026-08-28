@@ -21,8 +21,7 @@ export default function TeamListHeader() {
     enabled: !!token,
   });
 
-  const hasUnreadNotifications =
-    isMounted && (notificationData?.notifications.some((notification) => !notification.is_read) ?? false);
+  const hasUnreadNotifications = isMounted && (notificationData?.unread_count ?? 0) > 0;
 
   const handleBack = () => {
     if (window.history.state?.idx === 0) {

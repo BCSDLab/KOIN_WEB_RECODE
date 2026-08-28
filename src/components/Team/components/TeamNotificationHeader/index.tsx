@@ -10,9 +10,10 @@ import styles from './TeamNotificationHeader.module.scss';
 interface TeamNotificationHeaderProps {
   showMenu: boolean;
   onMarkAllRead: () => void;
+  onDeleteAll: () => void;
 }
 
-export default function TeamNotificationHeader({ showMenu, onMarkAllRead }: TeamNotificationHeaderProps) {
+export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDeleteAll }: TeamNotificationHeaderProps) {
   const router = useRouter();
   const [isMenuOpen, openMenu, closeMenu] = useBooleanState(false);
 
@@ -27,6 +28,11 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead }: Team
 
   const handleMarkAllRead = () => {
     onMarkAllRead();
+    closeMenu();
+  };
+
+  const handleDeleteAll = () => {
+    onDeleteAll();
     closeMenu();
   };
 
@@ -57,6 +63,14 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead }: Team
           <div className={styles.header__dropdown}>
             <button type="button" className={styles['header__dropdown-item']} onClick={handleMarkAllRead}>
               모두 읽음으로 표시
+            </button>
+
+            <button
+              type="button"
+              className={`${styles['header__dropdown-item']} ${styles['header__dropdown-item--danger']}`}
+              onClick={handleDeleteAll}
+            >
+              알림 전체 삭제
             </button>
           </div>
         </>

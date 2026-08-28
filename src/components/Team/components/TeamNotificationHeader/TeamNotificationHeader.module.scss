@@ -69,8 +69,6 @@
     text-align: center;
     white-space: nowrap;
 
-    // 아래 두 규칙은 '알림 전체 삭제' 항목용이다.
-    // API 명세가 아직 없어 항목 자체는 붙이지 않았고, 디자인 값만 먼저 넣어둔다.
     & + & {
       border-top: 1px solid #eee;
     }

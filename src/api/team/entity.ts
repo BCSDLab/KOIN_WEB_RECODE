@@ -63,11 +63,7 @@ export type TeamRecruitmentNotificationType =
   | 'RECRUITMENT_DELETED'
   | 'NEW_CHAT_MESSAGE';
 
-export type TeamRecruitmentNotificationTargetType =
-  | 'APPLICANT_MANAGEMENT'
-  | 'CHAT_ROOM'
-  | 'MY_APPLICATIONS'
-  | 'NONE';
+export type TeamRecruitmentNotificationTargetType = 'APPLICANT_MANAGEMENT' | 'CHAT_ROOM' | 'MY_APPLICATIONS' | 'NONE';
 
 export interface TeamRecruitmentNotificationListRequest {
   [key: string]: unknown;
@@ -80,6 +76,7 @@ export interface TeamRecruitmentNotification {
   type: TeamRecruitmentNotificationType;
   target_type: TeamRecruitmentNotificationTargetType;
   message_preview: string;
+  sender_nickname: string | null;
   is_read: boolean;
   created_at: string;
   recruitment_id: number | null;
@@ -89,6 +86,7 @@ export interface TeamRecruitmentNotification {
 
 export interface TeamRecruitmentNotificationListResponse extends APIResponse {
   notifications: TeamRecruitmentNotification[];
+  unread_count: number;
   total_count: number;
   current_count: number;
   total_page: number;

@@ -11,8 +11,15 @@ const NOTIFICATION_TITLE: Record<TeamRecruitmentNotificationType, string> = {
   APPLICATION_REJECTED: '팀원 모집 지원 거절',
   RECRUITMENT_CLOSED: '팀원 모집기간 종료',
   RECRUITMENT_DELETED: '팀원 모집글 삭제',
-  // 디자인은 '팀원모집 @@@님의 메세지'이지만 응답에 닉네임 필드가 없어 우선 고정 문구로 둠. API 요청예정
   NEW_CHAT_MESSAGE: '팀원 모집 새 메세지',
+};
+
+const getNotificationTitle = (notification: TeamRecruitmentNotification) => {
+  if (notification.type === 'NEW_CHAT_MESSAGE' && notification.sender_nickname) {
+    return `팀원모집 ${notification.sender_nickname}님의 메세지`;
+  }
+
+  return NOTIFICATION_TITLE[notification.type];
 };
 
 interface NotificationCardProps {
@@ -30,7 +37,7 @@ export default function NotificationCard({ notification, now, onClick }: Notific
 
       <span className={styles.card__body}>
         <span className={styles.card__heading}>
-          <span className={styles.card__title}>{NOTIFICATION_TITLE[notification.type]}</span>
+          <span className={styles.card__title}>{getNotificationTitle(notification)}</span>
           <span className={styles.card__time}>{now ? formatRelativeTime(notification.created_at, now) : ''}</span>
         </span>
 

@@ -88,3 +88,15 @@ export class PostTeamRecruitmentNotificationsMarkAllRead<R extends object> imple
 
   constructor(public authorization: string) {}
 }
+
+export class DeleteTeamRecruitmentNotifications<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = '/team-recruitments/notifications';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
