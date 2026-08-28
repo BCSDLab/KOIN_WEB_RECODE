@@ -128,6 +128,11 @@
       border: none;
       background-color: #b611f5;
       color: white;
+
+      &:hover,
+      &:active {
+        background-color: #980ac9;
+      }
     }
   }
 
