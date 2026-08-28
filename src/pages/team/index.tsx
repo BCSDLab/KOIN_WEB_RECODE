@@ -11,6 +11,7 @@ import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
@@ -23,6 +24,7 @@ type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 export default function TeamListPage() {
   const token = useTokenState();
   const isMobile = useMediaQuery();
+  const logger = useLogger();
 
   const [searchTitle, setSearchTitle] = useState('');
   const [requestParams, setRequestParams] = useState<TeamListFilter>({
@@ -41,6 +43,8 @@ export default function TeamListPage() {
 
   const handleSearch = () => {
     const keyword = searchTitle.trim();
+
+    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_search', value: keyword });
 
     setRequestParams((previous) => ({
       ...previous,

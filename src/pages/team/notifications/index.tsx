@@ -9,7 +9,9 @@ import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
 import Layout from 'components/layout';
 import NotificationCard from 'components/Team/components/NotificationCard';
 import TeamNotificationHeader from 'components/Team/components/TeamNotificationHeader';
+import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
@@ -22,6 +24,7 @@ export default function TeamNotificationsPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isMounted = useMount();
+  const logger = useLogger();
   const now = isMounted ? new Date() : null;
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
@@ -40,10 +43,17 @@ export default function TeamNotificationsPage() {
   );
 
   const handleNotificationClick = (notification: TeamRecruitmentNotification) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'notification_list',
+      value: getNotificationTitle(notification),
+    });
+
     if (!notification.is_read) {
       markRead(notification.id);
     }
 
+    // TODO: APPLICANT_MANAGEMENT · MY_APPLICATIONS 는 해당 화면 구현 후 라우팅을 연결한다.
     if (
       notification.target_type === 'CHAT_ROOM' &&
       notification.recruitment_id !== null &&

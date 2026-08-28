@@ -5,6 +5,7 @@ import CalendarIcon from 'assets/svg/Team/calendar.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import type {
   TeamRecruitmentCard as TeamRecruitment,
   TeamRecruitmentCategory,
@@ -58,11 +59,17 @@ const formatStatus = (recruitment: TeamRecruitment) => {
 };
 
 export default function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
+  const logger = useLogger();
+
   const isClosed = recruitment.status !== 'RECRUITING';
   const isFull = recruitment.current_participants >= recruitment.max_participants;
 
+  const handleClick = () => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_post_select', value: recruitment.title });
+  };
+
   return (
-    <Link href={ROUTES.TeamDetail({ postId: String(recruitment.id) })} className={styles.card}>
+    <Link href={ROUTES.TeamDetail({ postId: String(recruitment.id) })} className={styles.card} onClick={handleClick}>
       <div className={styles.card__header}>
         <span
           className={cn({
