@@ -35,8 +35,17 @@ export default function TeamNotificationsPage() {
     }
 
     // 지원자 관리
-    if (notification.target_type === 'CHAT_ROOM' && notification.chat_room_id !== null) {
-      router.push(ROUTES.TeamChat({ id: String(notification.chat_room_id) }));
+    if (
+      notification.target_type === 'CHAT_ROOM' &&
+      notification.recruitment_id !== null &&
+      notification.chat_room_id !== null
+    ) {
+      router.push(
+        ROUTES.TeamChat({
+          recruitmentId: String(notification.recruitment_id),
+          chatRoomId: String(notification.chat_room_id),
+        }),
+      );
     }
   };
 
