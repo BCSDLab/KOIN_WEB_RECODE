@@ -1,5 +1,6 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
@@ -7,6 +8,7 @@ import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
+import ROUTES from 'static/routes';
 import styles from './TeamProfilePage.module.scss';
 
 interface TeamRecruitmentProfileSummary {
@@ -45,6 +47,7 @@ const MOCK_PROFILE: TeamRecruitmentProfileSummary = {
 };
 
 function TeamProfilePage() {
+  const router = useRouter();
   const hasProfile = MOCK_HAS_PROFILE;
   const profile = MOCK_PROFILE;
 
@@ -70,7 +73,11 @@ function TeamProfilePage() {
                   <li>{profile.department}</li>
                   <li>{profile.studentNumber}</li>
                 </ul>
-                <button type="button" className={styles.summaryCard__button}>
+                <button
+                  type="button"
+                  className={styles.summaryCard__button}
+                  onClick={() => router.push(ROUTES.TeamProfileCreate())}
+                >
                   프로필 수정하기
                 </button>
               </div>
@@ -82,7 +89,11 @@ function TeamProfilePage() {
               <p className={styles.emptyCard__description}>
                 프로필을 작성하면 지원 시 더 빠르고 편리하게 활동할 수 있어요.
               </p>
-              <button type="button" className={styles.emptyCard__button}>
+              <button
+                type="button"
+                className={styles.emptyCard__button}
+                onClick={() => router.push(ROUTES.TeamProfileCreate())}
+              >
                 프로필 작성하기
               </button>
             </div>
