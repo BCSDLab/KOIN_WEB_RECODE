@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
@@ -13,26 +13,31 @@ import TeamListHeader from 'components/Team/components/TeamListHeader';
 import TeamSearchBar from 'components/Team/components/TeamSearchBar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
 
 import styles from './TeamListPage.module.scss';
+
+type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 
 export default function TeamListPage() {
   const token = useTokenState();
   const isMobile = useMediaQuery();
 
   const [searchTitle, setSearchTitle] = useState('');
-  const [requestParams, setRequestParams] = useState<TeamRecruitmentListRequest>({
+  const [requestParams, setRequestParams] = useState<TeamListFilter>({
     status: 'ALL',
     sort: 'LATEST_DESC',
-    page: 1,
-    limit: 10,
   });
 
-  const { data, isLoading, isError } = useQuery(teamQueries.list(requestParams, token));
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+    teamQueries.infiniteList(requestParams, token),
+  );
 
-  const recruitments = data?.recruitments ?? [];
-  const totalCount = data?.total_count ?? 0;
+  const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
+  const totalCount = data?.pages[0]?.total_count ?? 0;
+
+  const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
   const handleSearch = () => {
     const keyword = searchTitle.trim();
@@ -40,7 +45,6 @@ export default function TeamListPage() {
     setRequestParams((previous) => ({
       ...previous,
       keyword: keyword || undefined,
-      page: 1,
     }));
   };
 
@@ -84,6 +88,10 @@ export default function TeamListPage() {
               {recruitments.map((recruitment) => (
                 <RecruitmentCard key={recruitment.id} recruitment={recruitment} />
               ))}
+
+              {isFetchingNextPage && <p className={styles.loadingIndicator}>모집글을 불러오는 중입니다.</p>}
+
+              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
             </div>
           )}
         </div>

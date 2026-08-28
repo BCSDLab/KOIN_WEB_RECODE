@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
@@ -12,6 +12,7 @@ import TeamNotificationHeader from 'components/Team/components/TeamNotificationH
 import ROUTES from 'static/routes';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import type { TeamRecruitmentNotification } from 'api/team/entity';
 
 import styles from './TeamNotificationsPage.module.scss';
@@ -23,8 +24,14 @@ export default function TeamNotificationsPage() {
   const isMounted = useMount();
   const now = isMounted ? new Date() : null;
 
-  const { data, isLoading, isError } = useQuery({ ...teamQueries.notifications(token ?? ''), enabled: !!token });
-  const notifications = data?.notifications ?? [];
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    ...teamQueries.infiniteNotifications(token ?? ''),
+    enabled: !!token,
+  });
+
+  const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
+
+  const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
   const { mutate: markRead } = useMutation(teamMutations.markNotificationRead(queryClient, token ?? ''));
   const { mutate: markAllRead } = useMutation(teamMutations.markAllNotificationsRead(queryClient, token ?? ''));
@@ -83,6 +90,10 @@ export default function TeamNotificationsPage() {
                   onClick={handleNotificationClick}
                 />
               ))}
+
+              {isFetchingNextPage && <p className={styles.loading}>알림을 불러오는 중입니다.</p>}
+
+              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
             </div>
 
             <p className={styles.footnote}>14일이 지난 알림은 자동으로 삭제됩니다.</p>
