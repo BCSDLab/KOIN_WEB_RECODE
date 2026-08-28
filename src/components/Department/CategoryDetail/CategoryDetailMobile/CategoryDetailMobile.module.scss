@@ -6,51 +6,6 @@
   min-height: 100dvh;
   background: #f8f8fa;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    flex-shrink: 0;
-    position: relative;
-  }
-
-  &__back-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1;
-    width: 24px;
-    height: 24px;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-  }
-
-  &__title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.6;
-    color: #000;
-    margin: 0;
-  }
-
-  &__spacer {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-
   &__content {
     flex: 1;
     box-sizing: border-box;
