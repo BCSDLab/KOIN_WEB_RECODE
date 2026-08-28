@@ -2,6 +2,7 @@ import { TeamRecruitmentFormState, TeamRecruitmentProgressType } from './types';
 
 export function createInitialTeamRecruitmentForm(): TeamRecruitmentFormState {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
 
@@ -11,7 +12,7 @@ export function createInitialTeamRecruitmentForm(): TeamRecruitmentFormState {
     progressType: 'ONLINE',
     activityStartDate: today,
     activityEndDate: tomorrow,
-    deadlineDate: today,
+    deadlineDate: new Date(today),
     isRoleUnified: false,
     roles: [],
     unifiedMemberCount: 1,
