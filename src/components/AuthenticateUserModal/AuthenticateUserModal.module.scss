@@ -98,17 +98,6 @@
     margin-left: 8px;
     cursor: pointer;
 
-    &--error {
-      background-color: #e1e1e1;
-      color: #4b4b4b;
-      border: none;
-
-      @include media.media-breakpoint(mobile) {
-        background-color: #b611f5;
-        color: white;
-      }
-    }
-
     &--input {
       background-color: #10477a;
       color: #fff;
@@ -134,6 +123,22 @@
         background-color: #980ac9;
       }
     }
+
+    &--error {
+      background-color: #e1e1e1;
+      color: #4b4b4b;
+      border: none;
+
+      @include media.media-breakpoint(mobile) {
+        background-color: #e1e1e1;
+        color: #4b4b4b;
+
+        &:hover,
+        &:active {
+          background-color: #e1e1e1;
+        }
+      }
+    }
   }
 
   &__password-input {
@@ -152,7 +157,7 @@
       }
     }
 
-    &:focus ~ .container__check-button {
+    &:focus ~ .container__check-button:not(.container__check-button--error) {
       background-color: #175c8e;
       color: #fff;
 
