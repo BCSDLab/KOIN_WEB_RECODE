@@ -1,7 +1,8 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-
+import mergeChatMessages from './mergeChatMessages';
 import type {
   MyTeamRecruitmentApplicationListRequest,
+  TeamChatMessageListResponse,
   TeamChatMessageListRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
@@ -117,6 +118,11 @@ export const teamQueries = {
           ...params,
         }),
       staleTime: 0,
-      refetchInterval: TEAM_CHAT_POLLING_INTERVAL,
+      refetchInterval: params.beforeMessageId || params.afterMessageId ? false : TEAM_CHAT_POLLING_INTERVAL,
+      structuralSharing: (previousMessages, currentMessages) =>
+        mergeChatMessages(
+          Array.isArray(previousMessages) ? (previousMessages as TeamChatMessageListResponse) : [],
+          Array.isArray(currentMessages) ? (currentMessages as TeamChatMessageListResponse) : [],
+        ),
     }),
 };

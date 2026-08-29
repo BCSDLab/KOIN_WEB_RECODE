@@ -20,7 +20,11 @@ export default function TeamChatPage() {
       {!!recruitmentId && !!chatRoomId && (
         <ErrorBoundary fallbackClassName={styles.error}>
           <Suspense fallback={null}>
-            <TeamChatRoom recruitmentId={recruitmentId} chatRoomId={chatRoomId} />
+            <TeamChatRoom
+              key={`${recruitmentId}-${chatRoomId}`}
+              recruitmentId={recruitmentId}
+              chatRoomId={chatRoomId}
+            />
           </Suspense>
         </ErrorBoundary>
       )}
