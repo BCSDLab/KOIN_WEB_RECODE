@@ -5,7 +5,12 @@ import type {
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
 } from './entity';
-import { getMyTeamRecruitmentApplications, getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
+import {
+  getMyTeamRecruitmentApplications,
+  getTeamRecruitmentDetail,
+  getTeamRecruitmentList,
+  getTeamRecruitmentNotifications,
+} from './index';
 
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
@@ -19,6 +24,9 @@ export type TeamRecruitmentInfiniteListRequest = Omit<TeamRecruitmentListRequest
 
 export const teamQueryKeys = {
   all: ['team'] as const,
+  detailRoot: ['team', 'detail'] as const,
+  detail: (recruitmentId: number, token?: string | null) =>
+    [...teamQueryKeys.detailRoot, recruitmentId, getViewerScope(token)] as const,
   listRoot: ['team', 'list'] as const,
   infiniteList: (params: TeamRecruitmentInfiniteListRequest, token?: string | null) =>
     [...teamQueryKeys.listRoot, 'infinite', getViewerScope(token), params] as const,
@@ -32,6 +40,12 @@ export const teamQueryKeys = {
 };
 
 export const teamQueries = {
+  detail: (recruitmentId: number, token?: string | null) =>
+    queryOptions({
+      queryKey: teamQueryKeys.detail(recruitmentId, token),
+      queryFn: () => getTeamRecruitmentDetail(token || undefined, recruitmentId),
+    }),
+
   infiniteList: (params: TeamRecruitmentInfiniteListRequest = {}, token?: string | null) =>
     infiniteQueryOptions({
       queryKey: teamQueryKeys.infiniteList(params, token),

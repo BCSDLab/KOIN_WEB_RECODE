@@ -55,6 +55,36 @@ export interface TeamRecruitmentListResponse extends APIResponse {
   current_page: number;
 }
 
+export type TeamRecruitmentApplyBlockReason =
+  | 'LOGIN_REQUIRED'
+  | 'PROFILE_REQUIRED'
+  | 'OWN_RECRUITMENT'
+  | 'RECRUITMENT_CLOSED'
+  | 'DEADLINE_PASSED'
+  | 'ROLE_CLOSED'
+  | 'ALREADY_APPLIED'
+  | 'RECRUITMENT_DELETED';
+
+export interface TeamRecruitmentApplicationSummary {
+  application_id: number;
+  status: TeamApplicationStatus;
+}
+
+export interface TeamRecruitmentDetailResponse extends APIResponse, TeamRecruitmentCard {
+  author_nickname: string;
+  description: string;
+  related_url: string | null;
+  qualification: string | null;
+  created_at: string;
+  is_author: boolean;
+  can_apply: boolean;
+  apply_block_reason: TeamRecruitmentApplyBlockReason | null;
+  application: TeamRecruitmentApplicationSummary | null;
+  can_manage_applicants: boolean;
+  team_chat_available: boolean;
+  team_chat_room_id: number | null;
+}
+
 export type TeamRecruitmentNotificationType =
   | 'NEW_APPLICATION'
   | 'APPLICATION_ACCEPTED'

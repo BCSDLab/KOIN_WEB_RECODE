@@ -3,11 +3,29 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
+  TeamRecruitmentDetailResponse,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
   TeamRecruitmentNotificationListResponse,
 } from './entity';
+
+export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor(
+    public authorization: string | undefined,
+    recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
 
 export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
