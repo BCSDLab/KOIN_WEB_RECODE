@@ -18,7 +18,7 @@ const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
 const TEAM_MY_APPLICATIONS_LIMIT = 10;
 
-export const TEAM_CHAT_MESSAGE_LIMIT = 100;
+export const TEAM_CHAT_MESSAGE_LIMIT = 50;
 
 export const TEAM_CHAT_POLLING_INTERVAL = 3000;
 
@@ -117,5 +117,6 @@ export const teamQueries = {
           ...params,
         }),
       staleTime: 0,
+      refetchInterval: TEAM_CHAT_POLLING_INTERVAL,
     }),
 };

@@ -1,0 +1,165 @@
+.chatRoom {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #fff;
+
+  &__memberCount {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+    color: #4b4b4b;
+    font-size: 12px;
+    line-height: 160%;
+    white-space: nowrap;
+
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+
+      path {
+        stroke: currentcolor;
+      }
+    }
+
+    &--full {
+      color: #b611f5;
+    }
+  }
+
+  &__messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  &__empty {
+    padding: 24px 0;
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+    text-align: center;
+  }
+
+  &__dateChip {
+    display: flex;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+
+  &__dateLabel {
+    padding: 4px 12px;
+    border-radius: 16px;
+    background-color: #f5f5f5;
+    color: #4b4b4b;
+    font-size: 12px;
+    line-height: 160%;
+
+    &--today {
+      color: #980ac9;
+    }
+  }
+
+  &__messageRow {
+    &--mine {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 8px 24px;
+    }
+
+    &--others {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+  }
+
+  &__messageGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 24px;
+
+    &--consecutive {
+      gap: 0;
+      padding-top: 0;
+    }
+  }
+
+  &__sender {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__senderName {
+    overflow: hidden;
+    color: #4b4b4b;
+    font-size: 12px;
+    line-height: 160%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__bubble {
+    max-width: 220px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    color: #000;
+    font-size: 12px;
+    line-height: 160%;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  &__imageBubble {
+    display: flex;
+    max-width: 220px;
+    overflow: hidden;
+    border-radius: 8px;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    white-space: nowrap;
+
+    &--mine {
+      align-items: flex-end;
+    }
+  }
+
+  &__unreadCount {
+    color: #1f1f1f;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__time {
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+  }
+}
