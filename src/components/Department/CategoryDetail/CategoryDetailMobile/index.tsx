@@ -1,7 +1,7 @@
-import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
+import SearchBar from 'components/ui/SearchBar';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
 import styles from './CategoryDetailMobile.module.scss';
@@ -20,17 +20,7 @@ export default function CategoryDetailMobile({
       <SubPageHeader title={categoryName} />
 
       <div className={styles.page__content}>
-        <div className={styles['page__search-pill']}>
-          <input
-            className={styles['page__search-input']}
-            type="text"
-            value={searchValue}
-            placeholder="검색어를 입력해주세요."
-            autoComplete="off"
-            onChange={(e) => onSearchChange(e.target.value)}
-          />
-          <SearchIcon className={styles['page__search-icon']} aria-hidden />
-        </div>
+        <SearchBar value={searchValue} onChange={onSearchChange} label={`${categoryName} 부서 검색`} />
 
         {isLoaded && departments.length === 0 ? (
           <SearchEmptyState />

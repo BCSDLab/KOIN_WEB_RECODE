@@ -67,9 +67,10 @@ const ROUTES = {
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
   TeamProfile: () => '/team/profile',
-  TeamDetail: ({ postId }: { postId: string }) => `/team/${postId}`,
+  TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
   TeamNotifications: () => '/team/notifications',
-  TeamChat: ({ id }: { id: string }) => `/team/chat/${id}`,
+  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
+    `/team/chat/${recruitmentId}/${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
