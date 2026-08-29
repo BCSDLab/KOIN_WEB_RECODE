@@ -11,18 +11,21 @@ import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 import styles from './TeamProfilePage.module.scss';
 
 interface MenuCardProps {
   icon: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
+  onCardClick: () => void;
 }
 
-function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
+function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps) {
   return (
-    <button type="button" className={styles.menuCard}>
+    <button type="button" className={styles.menuCard} onClick={onCardClick}>
       <span className={styles.menuCard__icon}>
         <Icon aria-hidden />
       </span>
@@ -38,11 +41,52 @@ function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
 function TeamProfilePage() {
   const router = useRouter();
   const token = useTokenState();
+  const logger = useLogger();
   const { data: profile } = useQuery({
     ...teamRecruitmentProfileQueries.me(token),
     enabled: !!token,
   });
   const hasProfile = Boolean(profile);
+
+  const handleModifyClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_modify',
+      value: '프로필 수정하기',
+    });
+    router.push(ROUTES.TeamProfileEdit());
+  };
+
+  const handleCreateClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_create',
+      value: '프로필 작성하기',
+    });
+    router.push(ROUTES.TeamProfileCreate());
+  };
+
+  const handleCreatedRecruitmentsClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_created',
+      value: '내가 작성한 모집글',
+    });
+    showToast('warning', '준비 중인 기능입니다.');
+  };
+
+  const handleAppliedRecruitmentsClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_applied',
+      value: '내가 지원한 모집글',
+    });
+    showToast('warning', '준비 중인 기능입니다.');
+  };
 
   return (
     <>
@@ -66,11 +110,7 @@ function TeamProfilePage() {
                   <li>{profile.department}</li>
                   <li>{profile.student_number}</li>
                 </ul>
-                <button
-                  type="button"
-                  className={styles.summaryCard__button}
-                  onClick={() => router.push(ROUTES.TeamProfileEdit())}
-                >
+                <button type="button" className={styles.summaryCard__button} onClick={handleModifyClick}>
                   프로필 수정하기
                 </button>
               </div>
@@ -82,11 +122,7 @@ function TeamProfilePage() {
               <p className={styles.emptyCard__description}>
                 프로필을 작성하면 지원 시 더 빠르고 편리하게 활동할 수 있어요.
               </p>
-              <button
-                type="button"
-                className={styles.emptyCard__button}
-                onClick={() => router.push(ROUTES.TeamProfileCreate())}
-              >
+              <button type="button" className={styles.emptyCard__button} onClick={handleCreateClick}>
                 프로필 작성하기
               </button>
             </div>
@@ -97,11 +133,13 @@ function TeamProfilePage() {
               icon={NoteIcon}
               title={hasProfile ? '내가 작성한 모집글' : '내가 작성한 모집글 모아보기'}
               description="작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
+              onCardClick={handleCreatedRecruitmentsClick}
             />
             <MenuCard
               icon={ListEndIcon}
               title={hasProfile ? '내가 지원한 모집글' : '내가 지원한 모집글 모아보기'}
               description="지원한 모집글과 지원 상태를 확인할 수 있어요."
+              onCardClick={handleAppliedRecruitmentsClick}
             />
           </div>
         </div>

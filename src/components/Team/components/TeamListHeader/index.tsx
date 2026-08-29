@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
-
 import { teamQueries } from 'api/team/queries';
 import ArrowBackIcon from 'assets/svg/Team/arrow-back.svg';
 import NotificationIcon from 'assets/svg/Team/notification.svg';
@@ -9,6 +8,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { redirectToLogin } from 'utils/ts/auth';
 import styles from './TeamListHeader.module.scss';
 
 export default function TeamListHeader() {
@@ -38,6 +38,16 @@ export default function TeamListHeader() {
     router.push(ROUTES.TeamNotifications());
   };
 
+  const handleProfileClick = () => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_profile', value: '프로필' });
+
+    if (!token) {
+      redirectToLogin();
+      return;
+    }
+    router.push(ROUTES.TeamProfile());
+  };
+
   return (
     <header className={styles.header}>
       <button type="button" className={styles['header__back-button']} aria-label="뒤로가기" onClick={handleBack}>
@@ -61,7 +71,7 @@ export default function TeamListHeader() {
           type="button"
           className={styles['header__icon-button']}
           aria-label="프로필"
-          onClick={() => router.push(ROUTES.TeamProfile())}
+          onClick={handleProfileClick}
         >
           <ProfileIcon />
         </button>
