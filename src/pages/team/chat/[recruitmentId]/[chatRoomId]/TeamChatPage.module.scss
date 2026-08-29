@@ -1,0 +1,47 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.memberCount {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  color: #4b4b4b;
+  font-size: 12px;
+  line-height: 160%;
+  white-space: nowrap;
+
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+
+    path {
+      stroke: currentcolor;
+    }
+  }
+
+  &--full {
+    color: #b611f5;
+  }
+}
+
+.messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.status {
+  padding: 24px 0;
+  color: #727272;
+  font-size: 12px;
+  line-height: 160%;
+  text-align: center;
+}
