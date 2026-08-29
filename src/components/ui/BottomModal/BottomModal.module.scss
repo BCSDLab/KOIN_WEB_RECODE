@@ -18,6 +18,17 @@
   border-radius: 32px 32px 0 0;
   box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
   outline: none;
+  animation: slide-up 0.25s ease-out;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 .header {
