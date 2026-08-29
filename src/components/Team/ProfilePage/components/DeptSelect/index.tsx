@@ -44,6 +44,7 @@ export default function DeptSelect({
         className={cn({
           [styles.deptSelect__trigger]: true,
           [styles['deptSelect__trigger--opened']]: isOpen,
+          [styles['deptSelect__trigger--selected']]: Boolean(selectedOption),
         })}
         aria-expanded={isOpen}
         aria-haspopup="listbox"

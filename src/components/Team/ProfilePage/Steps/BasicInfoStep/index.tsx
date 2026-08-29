@@ -1,6 +1,6 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { getUserAcademicInfo } from 'api/auth';
+import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
 import DeptSelect from 'components/Team/ProfilePage/components/DeptSelect';
 import FormField from 'components/Team/ProfilePage/components/FormField';
@@ -24,7 +24,7 @@ const loggingTitle = {
 export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
   const { actionEventClick } = useLogger();
   const token = useTokenState();
-  const { control, register, setValue, trigger } = useFormContext<ProfileFormValues>();
+  const { control, register, setValue, trigger, getValues } = useFormContext<ProfileFormValues>();
   const { errors } = useFormState({ control });
 
   const nickname = useWatch({ control, name: 'nickname' }) ?? '';
@@ -66,13 +66,34 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     loadUserInfo();
   };
 
+  const { mutate: saveAcademicInfo, isPending: isSaving } = useMutation({
+    mutationFn: (data: { department: string; studentNumber: string }) =>
+      updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
+    onSuccess: () => {
+      // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
+      actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
+      onNext();
+    },
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
+      } else {
+        showToast('error', '학적 정보 수정에 실패했습니다.');
+      }
+    },
+  });
+
   const handleNext = async () => {
     const isValid = await trigger(['nickname', 'department', 'studentNumber']);
     if (!isValid) return;
 
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
-    onNext();
+    if (!token) {
+      showToast('warning', '로그인 후 이용해주세요.');
+      return;
+    }
+
+    const { department, studentNumber } = getValues();
+    saveAcademicInfo({ department, studentNumber });
   };
 
   return (
@@ -146,7 +167,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
       </div>
 
       <div className={styles.step__footer}>
-        <button type="button" className={styles.step__submit} onClick={handleNext}>
+        <button type="button" className={styles.step__submit} onClick={handleNext} disabled={isSaving}>
           다음
         </button>
       </div>

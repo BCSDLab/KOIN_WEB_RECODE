@@ -93,18 +93,33 @@ export default function ApplicationStep({ onBack, onSubmit, isSubmitting }: Appl
           currentLength={introduction.length}
           error={errors.introduction?.message}
         >
-          {(controlClassName) => (
-            <textarea
-              className={controlClassName}
-              placeholder="자기소개를 작성해주세요."
-              maxLength={1000}
-              rows={6}
-              {...register('introduction', {
-                required: '자기소개를 작성해주세요.',
-                maxLength: { value: 1000, message: '자기소개는 1000자 이내로 입력해주세요.' },
-              })}
-            />
-          )}
+          {(controlClassName) => {
+            const { ref: introductionRef, ...introductionField } = register('introduction', {
+              required: '자기소개를 작성해주세요.',
+              maxLength: { value: 1000, message: '자기소개는 1000자 이내로 입력해주세요.' },
+            });
+            return (
+              <textarea
+                className={controlClassName}
+                placeholder="자기소개를 작성해주세요."
+                maxLength={1000}
+                rows={6}
+                ref={(el) => {
+                  introductionRef(el);
+                  if (el) {
+                    el.style.height = 'auto';
+                    el.style.height = `${el.scrollHeight}px`;
+                  }
+                }}
+                onInput={(e) => {
+                  const el = e.currentTarget;
+                  el.style.height = 'auto';
+                  el.style.height = `${el.scrollHeight}px`;
+                }}
+                {...introductionField}
+              />
+            );
+          }}
         </FormField>
       </div>
 

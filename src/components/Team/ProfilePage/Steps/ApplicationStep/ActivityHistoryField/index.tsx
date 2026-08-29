@@ -103,9 +103,10 @@ export default function ActivityHistoryField() {
 
   return (
     <div className={styles.activity}>
-      <span className={styles.activity__label}>활동 이력</span>
-      <p className={styles.activity__description}>공모전, 대외활동, 자치단체 등 활동 이력을 작성해주세요.</p>
-
+      <div className={styles.activity__head}>
+        <span className={styles.activity__label}>활동 이력</span>
+        <p className={styles.activity__description}>공모전, 대외활동, 자치단체 등 활동 이력을 작성해주세요.</p>
+      </div>
       <ul className={styles.activity__list}>
         {fields.map((field, index) => {
           const activity = activities[index];
@@ -208,13 +209,30 @@ export default function ActivityHistoryField() {
                   </span>
                   <span className={styles.draftCard__counter}>{activity?.content?.length ?? 0}/1000</span>
                 </div>
-                <textarea
-                  className={styles.draftCard__textarea}
-                  placeholder="활동 내용을 간단히 작성해주세요."
-                  maxLength={1000}
-                  rows={4}
-                  {...register(`activities.${index}.content` as const)}
-                />
+                {(() => {
+                  const { ref: contentRef, ...contentField } = register(`activities.${index}.content` as const);
+                  return (
+                    <textarea
+                      className={styles.draftCard__textarea}
+                      placeholder="활동 내용을 간단히 작성해주세요."
+                      maxLength={1000}
+                      rows={4}
+                      ref={(el) => {
+                        contentRef(el);
+                        if (el) {
+                          el.style.height = 'auto';
+                          el.style.height = `${el.scrollHeight}px`;
+                        }
+                      }}
+                      onInput={(e) => {
+                        const el = e.currentTarget;
+                        el.style.height = 'auto';
+                        el.style.height = `${el.scrollHeight}px`;
+                      }}
+                      {...contentField}
+                    />
+                  );
+                })()}
               </div>
 
               <button type="button" className={styles.draftCard__done} onClick={() => handleDone(index)}>

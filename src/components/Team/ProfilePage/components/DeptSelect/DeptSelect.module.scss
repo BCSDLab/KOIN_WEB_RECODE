@@ -14,8 +14,7 @@
     border-radius: 16px;
     background: #fff;
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.6;
     color: #727272;
     outline: none;
     text-align: left;
@@ -23,19 +22,21 @@
 
     svg {
       flex-shrink: 0;
-      width: 24px;
-      height: 24px;
       transition: transform 0.2s ease;
     }
 
     &--opened svg {
       transform: rotate(180deg);
     }
+
+    &--selected {
+      color: #0b0b0d;
+    }
   }
 
   &__list {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 12px);
     left: 0;
     z-index: 10;
     display: flex;
@@ -43,8 +44,6 @@
     gap: 12px;
     box-sizing: border-box;
     width: 100%;
-
-    /* 디자인 목업엔 스크롤이 없지만 학과 목록이 길어 실사용상 스크롤이 필요하다. */
     max-height: 280px;
     margin: 0;
     padding: 16px 12px;
@@ -58,9 +57,7 @@
   &__option {
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #0b0b0d;
+    line-height: 1.6;
     cursor: pointer;
 
     &:hover {

@@ -38,8 +38,8 @@ export default function TagInput({
     <div className={styles.tagInput}>
       <div className={styles.tagInput__head}>
         <span className={styles.tagInput__label}>{label}</span>
+        <p className={styles.tagInput__description}>{description}</p>
       </div>
-      <p className={styles.tagInput__description}>{description}</p>
 
       {fields.length > 0 && (
         <ul className={styles.tagInput__list}>
@@ -52,12 +52,7 @@ export default function TagInput({
                 maxLength={30}
                 {...register(`skills.${index}.value` as const)}
               />
-              <button
-                type="button"
-                className={styles.tagInput__remove}
-                onClick={() => handleRemove(index)}
-                aria-label={`${label} ${index + 1} 삭제`}
-              >
+              <button type="button" onClick={() => handleRemove(index)} aria-label={`${label} ${index + 1} 삭제`}>
                 <XIcon aria-hidden />
               </button>
             </li>

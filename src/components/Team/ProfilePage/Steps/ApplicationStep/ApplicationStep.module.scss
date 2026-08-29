@@ -25,26 +25,28 @@
 
   &__back {
     flex: 1;
-    padding: 14px 0;
+    padding: 0 24px;
+    height: 48px;
     border: 0.5px solid #b611f5;
     border-radius: 16px;
     background: #fff;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.6;
     color: #b611f5;
     cursor: pointer;
   }
 
   &__submit {
     flex: 1;
-    padding: 14px 0;
+    padding: 0 24px;
     border: none;
+    height: 48px;
     border-radius: 16px;
     background: #b611f5;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.6;
     color: #fff;
     cursor: pointer;
 
