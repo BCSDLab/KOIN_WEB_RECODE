@@ -14,6 +14,8 @@ interface DeptSelectProps {
   value: string | null;
   placeholder?: string;
   onChange: (event: { target: { value: string } }) => void;
+  id?: string;
+  ariaDescribedBy?: string;
 }
 
 export default function DeptSelect({
@@ -21,6 +23,8 @@ export default function DeptSelect({
   value,
   placeholder = '선택해주세요.',
   onChange,
+  id,
+  ariaDescribedBy,
 }: DeptSelectProps) {
   const [isOpen, , closeMenu, triggerOpen] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeMenu });
@@ -41,6 +45,7 @@ export default function DeptSelect({
     <div ref={containerRef} className={styles.deptSelect}>
       <button
         type="button"
+        id={id}
         className={cn({
           [styles.deptSelect__trigger]: true,
           [styles['deptSelect__trigger--opened']]: isOpen,
@@ -48,6 +53,7 @@ export default function DeptSelect({
         })}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
+        aria-describedby={ariaDescribedBy}
         onClick={handleTriggerClick}
       >
         {selectedOption?.label ?? placeholder}

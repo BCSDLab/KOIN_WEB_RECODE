@@ -1,5 +1,12 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import styles from './FormField.module.scss';
+
+interface FormFieldChildProps {
+  controlId: string;
+  controlClassName: string;
+  ariaDescribedBy?: string;
+  ariaInvalid: boolean;
+}
 
 interface FormFieldProps {
   label: string;
@@ -8,8 +15,8 @@ interface FormFieldProps {
   maxLength?: number;
   currentLength?: number;
   error?: string;
-  /** 실제 input/textarea를 렌더한다. 인자로 전달되는 className을 컨트롤에 적용한다. */
-  children: (controlClassName: string) => ReactNode;
+  /** 실제 input/textarea를 렌더한다. 라벨·오류와 연결할 속성을 인자로 전달받는다. */
+  children: (props: FormFieldChildProps) => ReactNode;
 }
 
 export default function FormField({
@@ -21,13 +28,16 @@ export default function FormField({
   error,
   children,
 }: FormFieldProps) {
+  const controlId = useId();
+  const errorId = `${controlId}-error`;
+
   return (
     <div className={styles.field}>
       <div className={styles.field__head}>
-        <span className={styles.field__label}>
+        <label className={styles.field__label} htmlFor={controlId}>
           {label}
           {required && <span className={styles['field__required']}>*</span>}
-        </span>
+        </label>
         {maxLength !== undefined && (
           <span className={styles.field__counter}>
             {Math.min(currentLength, maxLength)}/{maxLength}
@@ -35,8 +45,17 @@ export default function FormField({
         )}
       </div>
       {description && <p className={styles.field__description}>{description}</p>}
-      {children(styles.field__control)}
-      {error && <p className={styles.field__error}>{error}</p>}
+      {children({
+        controlId,
+        controlClassName: styles.field__control,
+        ariaDescribedBy: error ? errorId : undefined,
+        ariaInvalid: Boolean(error),
+      })}
+      {error && (
+        <p className={styles.field__error} id={errorId}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

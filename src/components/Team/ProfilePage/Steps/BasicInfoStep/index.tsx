@@ -120,12 +120,15 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           currentLength={nickname.length}
           error={errors.nickname?.message}
         >
-          {(controlClassName) => (
+          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
             <input
+              id={controlId}
               type="text"
               className={controlClassName}
               placeholder="닉네임을 입력해주세요."
               maxLength={20}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid}
               {...register('nickname', {
                 required: '닉네임을 입력해주세요.',
                 maxLength: { value: 20, message: '닉네임은 20자 이내로 입력해주세요.' },
@@ -135,17 +138,19 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         </FormField>
 
         <FormField label="학과 · 학부" required error={errors.department?.message}>
-          {() => (
+          {({ controlId, ariaDescribedBy }) => (
             <Controller
               control={control}
               name="department"
               rules={{ required: '학과 · 학부를 선택해주세요.' }}
               render={({ field }) => (
                 <DeptSelect
+                  id={controlId}
                   options={deptOptionList}
                   value={field.value || null}
                   placeholder="학과 · 학부를 선택해주세요."
                   onChange={(event) => field.onChange(event.target.value)}
+                  ariaDescribedBy={ariaDescribedBy}
                 />
               )}
             />
@@ -153,13 +158,16 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         </FormField>
 
         <FormField label="학번" required error={errors.studentNumber?.message}>
-          {(controlClassName) => (
+          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
             <input
+              id={controlId}
               type="text"
               inputMode="numeric"
               className={controlClassName}
               placeholder="학번을 작성해주세요."
               maxLength={10}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid}
               {...register('studentNumber', { required: '학번을 작성해주세요.' })}
             />
           )}
