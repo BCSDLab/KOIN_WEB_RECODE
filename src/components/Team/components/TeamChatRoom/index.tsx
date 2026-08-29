@@ -12,6 +12,7 @@ import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDa
 import SubPageHeader from 'components/ui/SubPageHeader';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import showToast from 'utils/ts/showToast';
 import type { TeamChatMessage } from 'api/team/entity';
 import styles from './TeamChatRoom.module.scss';
@@ -30,6 +31,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const { data: user } = useUser();
   const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(token, recruitmentId, chatRoomId));
   const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(token, recruitmentId, chatRoomId));
+  const { uploadFile, isPending: isUploading } = useUploadFile();
   const [previousMessages, setPreviousMessages] = useState<TeamChatMessage[]>([]);
   const [hasPreviousMessages, setHasPreviousMessages] = useState(messages.length >= TEAM_CHAT_MESSAGE_LIMIT);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -113,8 +115,14 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
 
   const handleSend = (content: string) => sendMessage({ content, is_image: false });
 
-  // TODO: UploadDomain 에 TEAM_RECRUITMENT 를 추가하고 useUploadFile 로 연결한다.
-  const handleImageSelect = () => showToast('warning', '이미지 전송은 준비 중입니다.');
+  const handleImageSelect = async (file: File) => {
+    try {
+      const { file_url } = await uploadFile({ domain: 'TEAM_RECRUITMENT', file });
+      if (file_url) {
+        sendMessage({ content: file_url, is_image: true });
+      }
+    } catch {}
+  };
 
   return (
     <div className={styles.chatRoom}>
@@ -216,7 +224,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
         <div ref={messagesEndRef} />
       </div>
       <TeamChatSendBar
-        disabled={isReadOnly || isSending}
+        disabled={isReadOnly || isSending || isUploading}
         placeholder={isReadOnly ? '종료된 채팅방입니다' : undefined}
         onSend={handleSend}
         onImageSelect={handleImageSelect}
