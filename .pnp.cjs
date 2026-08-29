@@ -30,6 +30,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@bcsdlab/utils", "npm:0.0.15"],\
+          ["@hookform/resolvers", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1"],\
           ["@next/eslint-plugin-next", "npm:15.5.23"],\
           ["@next/third-parties", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.2"],\
           ["@notionhq/client", "npm:5.9.0"],\
@@ -88,6 +89,7 @@ const RAW_RUNTIME_STATE =
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
           ["typescript-eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.46.2"],\
+          ["zod", "npm:4.5.2"],\
           ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
         ],\
         "linkType": "SOFT"\
@@ -3009,6 +3011,125 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@hookform/resolvers", [\
+      ["npm:5.9.1", {\
+        "packageLocation": "./.yarn/cache/@hookform-resolvers-npm-5.9.1-34b8f4e2d2-b334b50a9d.zip/node_modules/@hookform/resolvers/",\
+        "packageDependencies": [\
+          ["@hookform/resolvers", "npm:5.9.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1", {\
+        "packageLocation": "./.yarn/__virtual__/@hookform-resolvers-virtual-459eb036f2/0/cache/@hookform-resolvers-npm-5.9.1-34b8f4e2d2-b334b50a9d.zip/node_modules/@hookform/resolvers/",\
+        "packageDependencies": [\
+          ["@hookform/resolvers", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1"],\
+          ["@sinclair/typebox", null],\
+          ["@standard-schema/spec", null],\
+          ["@standard-schema/utils", "npm:0.3.0"],\
+          ["@types/ajv", null],\
+          ["@types/ajv-errors", null],\
+          ["@types/ajv-formats", null],\
+          ["@types/arktype", null],\
+          ["@types/ata-validator", null],\
+          ["@types/class-transformer", null],\
+          ["@types/class-validator", null],\
+          ["@types/computed-types", null],\
+          ["@types/effect", null],\
+          ["@types/fluentvalidation-ts", null],\
+          ["@types/fp-ts", null],\
+          ["@types/io-ts", null],\
+          ["@types/joi", null],\
+          ["@types/nope-validator", null],\
+          ["@types/react-hook-form", null],\
+          ["@types/sinclair__typebox", null],\
+          ["@types/standard-schema__spec", null],\
+          ["@types/superstruct", null],\
+          ["@types/typanion", null],\
+          ["@types/typeschema__main", null],\
+          ["@types/valibot", null],\
+          ["@types/vest", null],\
+          ["@types/vinejs__vine", null],\
+          ["@types/yup", null],\
+          ["@types/zod", null],\
+          ["@typeschema/main", null],\
+          ["@vinejs/vine", null],\
+          ["ajv", null],\
+          ["ajv-errors", null],\
+          ["ajv-formats", null],\
+          ["arktype", null],\
+          ["ata-validator", null],\
+          ["class-transformer", null],\
+          ["class-validator", null],\
+          ["computed-types", null],\
+          ["effect", null],\
+          ["fluentvalidation-ts", null],\
+          ["fp-ts", null],\
+          ["io-ts", null],\
+          ["joi", null],\
+          ["nope-validator", null],\
+          ["react-hook-form", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.60.0"],\
+          ["superstruct", null],\
+          ["typanion", null],\
+          ["valibot", null],\
+          ["vest", null],\
+          ["yup", null],\
+          ["zod", "npm:4.5.2"]\
+        ],\
+        "packagePeers": [\
+          "@sinclair/typebox",\
+          "@standard-schema/spec",\
+          "@types/ajv-errors",\
+          "@types/ajv-formats",\
+          "@types/ajv",\
+          "@types/arktype",\
+          "@types/ata-validator",\
+          "@types/class-transformer",\
+          "@types/class-validator",\
+          "@types/computed-types",\
+          "@types/effect",\
+          "@types/fluentvalidation-ts",\
+          "@types/fp-ts",\
+          "@types/io-ts",\
+          "@types/joi",\
+          "@types/nope-validator",\
+          "@types/react-hook-form",\
+          "@types/sinclair__typebox",\
+          "@types/standard-schema__spec",\
+          "@types/superstruct",\
+          "@types/typanion",\
+          "@types/typeschema__main",\
+          "@types/valibot",\
+          "@types/vest",\
+          "@types/vinejs__vine",\
+          "@types/yup",\
+          "@types/zod",\
+          "@typeschema/main",\
+          "@vinejs/vine",\
+          "ajv-errors",\
+          "ajv-formats",\
+          "ajv",\
+          "arktype",\
+          "ata-validator",\
+          "class-transformer",\
+          "class-validator",\
+          "computed-types",\
+          "effect",\
+          "fluentvalidation-ts",\
+          "fp-ts",\
+          "io-ts",\
+          "joi",\
+          "nope-validator",\
+          "react-hook-form",\
+          "superstruct",\
+          "typanion",\
+          "valibot",\
+          "vest",\
+          "yup",\
+          "zod"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@humanfs/core", [\
       ["npm:0.19.1", {\
         "packageLocation": "./.yarn/cache/@humanfs-core-npm-0.19.1-e2e7aaeb6e-270d936be4.zip/node_modules/@humanfs/core/",\
@@ -5183,6 +5304,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@sindresorhus-merge-streams-npm-4.0.0-28e7c03ac1-16551c787f.zip/node_modules/@sindresorhus/merge-streams/",\
         "packageDependencies": [\
           ["@sindresorhus/merge-streams", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@standard-schema/utils", [\
+      ["npm:0.3.0", {\
+        "packageLocation": "./.yarn/cache/@standard-schema-utils-npm-0.3.0-37537c524c-7084f875d3.zip/node_modules/@standard-schema/utils/",\
+        "packageDependencies": [\
+          ["@standard-schema/utils", "npm:0.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9794,6 +9924,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@bcsdlab/utils", "npm:0.0.15"],\
+          ["@hookform/resolvers", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1"],\
           ["@next/eslint-plugin-next", "npm:15.5.23"],\
           ["@next/third-parties", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.2"],\
           ["@notionhq/client", "npm:5.9.0"],\
@@ -9852,6 +9983,7 @@ const RAW_RUNTIME_STATE =
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
           ["typescript-eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.46.2"],\
+          ["zod", "npm:4.5.2"],\
           ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
         ],\
         "linkType": "SOFT"\
@@ -13206,6 +13338,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/zod-npm-4.1.12-8e1ffc4d68-c5f04e6ac3.zip/node_modules/zod/",\
         "packageDependencies": [\
           ["zod", "npm:4.1.12"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.5.2", {\
+        "packageLocation": "./.yarn/cache/zod-npm-4.5.2-7c6c5798b6-7c650d571a.zip/node_modules/zod/",\
+        "packageDependencies": [\
+          ["zod", "npm:4.5.2"]\
         ],\
         "linkType": "HARD"\
       }]\
