@@ -1,6 +1,8 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
 import {
+  MyTeamRecruitmentApplicationListRequest,
+  MyTeamRecruitmentApplicationListResponse,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
@@ -54,6 +56,32 @@ export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificati
     params: TeamRecruitmentNotificationListRequest = {},
   ) {
     this.params = {
+      page: params.page ?? 1,
+      limit: params.limit ?? 10,
+    };
+  }
+}
+
+export class GetMyTeamRecruitmentApplications<R extends MyTeamRecruitmentApplicationListResponse>
+  implements APIRequest<R>
+{
+  method = HTTP_METHOD.GET;
+
+  path = '/team-recruitments/me/applications';
+
+  response!: R;
+
+  auth = true;
+
+  params: MyTeamRecruitmentApplicationListRequest;
+
+  constructor(
+    public authorization: string,
+    params: MyTeamRecruitmentApplicationListRequest = {},
+  ) {
+    this.params = {
+      ...(params.statuses?.length && { statuses: params.statuses }),
+      ...(params.sort && { sort: params.sort }),
       page: params.page ?? 1,
       limit: params.limit ?? 10,
     };
