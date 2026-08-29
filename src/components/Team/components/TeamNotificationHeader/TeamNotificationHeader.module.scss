@@ -1,15 +1,5 @@
-.header {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 53px;
-  padding: 8px 20px;
-  box-sizing: border-box;
-  background: #fff;
-
-  &__icon-button {
+.menu {
+  &__button {
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -23,18 +13,6 @@
     }
   }
 
-  &__title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: 0;
-    transform: translate(-50%, -50%);
-    color: #000;
-    font-weight: 600;
-    line-height: 160%;
-    white-space: nowrap;
-  }
-
   &__overlay {
     position: fixed;
     inset: 0;
@@ -45,7 +23,7 @@
   &__dropdown {
     position: absolute;
     top: 100%;
-    right: 20px;
+    right: 24px;
     z-index: 99;
     display: flex;
     flex-direction: column;
@@ -59,7 +37,7 @@
       0 1px 1px rgb(0 0 0 / 2%);
   }
 
-  &__dropdown-item {
+  &__item {
     padding: 8px;
     color: #000;
     font-size: 12px;

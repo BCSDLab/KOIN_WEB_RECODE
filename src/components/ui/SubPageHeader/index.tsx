@@ -1,26 +1,34 @@
+import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+import ROUTES from 'static/routes';
 import styles from './SubPageHeader.module.scss';
 
 interface SubPageHeaderProps {
   title: string;
+  fallbackPath?: string;
+  rightAction?: ReactNode;
 }
 
-export default function SubPageHeader({ title }: SubPageHeaderProps) {
+export default function SubPageHeader({ title, fallbackPath = ROUTES.Main(), rightAction }: SubPageHeaderProps) {
   const router = useRouter();
+
+  const handleBack = () => {
+    if (window.history.state?.idx === 0) {
+      router.push(fallbackPath);
+      return;
+    }
+
+    router.back();
+  };
 
   return (
     <div className={styles.header}>
-      <button
-        type="button"
-        className={styles['header__back-button']}
-        onClick={() => router.back()}
-        aria-label="뒤로가기"
-      >
+      <button type="button" className={styles['header__back-button']} onClick={handleBack} aria-label="뒤로가기">
         <ArrowBackIcon />
       </button>
       <h1 className={styles.header__title}>{title}</h1>
-      <div className={styles['header__spacer']} />
+      {rightAction ?? <div className={styles.header__spacer} />}
     </div>
   );
 }
