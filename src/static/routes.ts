@@ -67,6 +67,8 @@ const ROUTES = {
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
   TeamProfile: () => '/team/profile',
+  TeamProfileCreate: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/create${step ? `?step=${encodeURIComponent(step)}` : ''}`,
   TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
   TeamNotifications: () => '/team/notifications',
   TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
