@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 
 import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
@@ -21,6 +22,7 @@ export default function TeamNotificationHeader({
   isMarkAllReadPending,
   isDeleteAllPending,
 }: TeamNotificationHeaderProps) {
+  const router = useRouter();
   const [isMenuOpen, openMenu, closeMenu] = useBooleanState(false);
 
   const handleMarkAllRead = () => {
@@ -76,5 +78,11 @@ export default function TeamNotificationHeader({
     </>
   );
 
-  return <SubPageHeader title="알림" fallbackPath={ROUTES.Team()} rightAction={showMenu ? menu : undefined} />;
+  return (
+    <SubPageHeader
+      title="알림"
+      onBack={() => router.replace(ROUTES.Team())}
+      rightAction={showMenu ? menu : undefined}
+    />
+  );
 }

@@ -1,21 +1,20 @@
 import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
-import ROUTES from 'static/routes';
 import styles from './SubPageHeader.module.scss';
 
 interface SubPageHeaderProps {
   title: string;
-  fallbackPath?: string;
+  onBack?: () => void;
   rightAction?: ReactNode;
 }
 
-export default function SubPageHeader({ title, fallbackPath = ROUTES.Main(), rightAction }: SubPageHeaderProps) {
+export default function SubPageHeader({ title, onBack, rightAction }: SubPageHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
-    if (window.history.length <= 1) {
-      router.push(fallbackPath);
+    if (onBack) {
+      onBack();
       return;
     }
 
