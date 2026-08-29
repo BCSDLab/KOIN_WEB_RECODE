@@ -84,6 +84,10 @@ export default function ActivityHistoryField() {
       showToast('warning', '활동 종료일을 선택하거나 진행 중을 선택해주세요.');
       return;
     }
+    if (!activity.isOngoing && activity.endDate && activity.endDate < activity.startDate) {
+      showToast('warning', '활동 종료일은 시작일 이후로 선택해주세요.');
+      return;
+    }
 
     // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
     actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.DONE, value: '완료' });
