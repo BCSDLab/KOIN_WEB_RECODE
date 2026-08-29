@@ -15,6 +15,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
 
 import styles from './TeamListPage.module.scss';
@@ -52,6 +53,10 @@ export default function TeamListPage() {
     }));
   };
 
+  const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
+
+  const handleRecruitClick = () => showToast('warning', '모집글 작성 기능은 준비 중입니다.');
+
   return (
     <>
       <Head>
@@ -67,7 +72,7 @@ export default function TeamListPage() {
         <div className={styles.searchRow}>
           <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
 
-          <button type="button" className={styles.filterButton}>
+          <button type="button" className={styles.filterButton} onClick={handleFilterClick}>
             <span className={styles.filterButton__label}>필터</span>
             <FilterIcon />
           </button>
@@ -100,7 +105,7 @@ export default function TeamListPage() {
           )}
         </div>
 
-        <button type="button" className={styles.fab}>
+        <button type="button" className={styles.fab} onClick={handleRecruitClick}>
           <span className={styles.fab__label}>모집하기</span>
           <PencilIcon />
         </button>
