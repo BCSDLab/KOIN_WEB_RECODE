@@ -10,7 +10,7 @@ import PencilIcon from 'assets/svg/Team/pencil.svg';
 import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
-import TeamSearchBar from 'components/Team/components/TeamSearchBar';
+import SearchBar from 'components/ui/SearchBar';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -69,7 +69,13 @@ export default function TeamListPage() {
         {!isMobile && <h1>팀원모집</h1>}
 
         <div className={styles.searchRow}>
-          <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
+          <SearchBar
+            value={searchTitle}
+            onChange={setSearchTitle}
+            onSearch={handleSearch}
+            label="팀원 모집 검색"
+            size="small"
+          />
 
           <button type="button" className={styles.filterButton} onClick={handleFilterClick}>
             <span className={styles.filterButton__label}>필터</span>
