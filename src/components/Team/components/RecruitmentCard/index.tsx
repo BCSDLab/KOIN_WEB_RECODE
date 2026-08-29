@@ -4,6 +4,7 @@ import { cn } from '@bcsdlab/utils';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
+import formatRecruitmentStatus from 'components/Team/utils/formatRecruitmentStatus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import type {
@@ -11,7 +12,6 @@ import type {
   TeamRecruitmentCategory,
   TeamRecruitmentMeetingType,
 } from 'api/team/entity';
-
 import styles from './RecruitmentCard.module.scss';
 
 interface RecruitmentCardProps {
@@ -42,22 +42,6 @@ const MEETING_TYPE_LABEL: Record<TeamRecruitmentMeetingType, string> = {
 
 const formatDate = (date: string) => date.replaceAll('-', '.');
 
-const formatStatus = (recruitment: TeamRecruitment) => {
-  if (recruitment.status !== 'RECRUITING') {
-    return '모집완료';
-  }
-
-  if (recruitment.d_day === null) {
-    return '모집 중';
-  }
-
-  if (recruitment.d_day <= 0) {
-    return 'D-Day';
-  }
-
-  return `D-${recruitment.d_day}`;
-};
-
 export default function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
   const logger = useLogger();
 
@@ -86,7 +70,7 @@ export default function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
             [styles['card__status--closed']]: isClosed,
           })}
         >
-          {formatStatus(recruitment)}
+          {formatRecruitmentStatus(recruitment.status, recruitment.d_day)}
         </span>
       </div>
 

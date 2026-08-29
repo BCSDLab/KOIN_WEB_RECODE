@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
-import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
+import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
 import PencilIcon from 'assets/svg/Team/pencil.svg';
 import Layout from 'components/layout';
@@ -17,7 +17,6 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
-
 import styles from './TeamListPage.module.scss';
 
 type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;

@@ -1,5 +1,4 @@
 import SearchIcon from 'assets/svg/Team/search.svg';
-
 import styles from './TeamSearchBar.module.scss';
 
 interface TeamSearchBarProps {

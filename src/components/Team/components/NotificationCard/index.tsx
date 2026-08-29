@@ -5,16 +5,15 @@ import UserGroupIcon from 'assets/svg/Team/user-group.svg';
 import formatRelativeTime from 'components/Team/utils/formatRelativeTime';
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
 import type { TeamRecruitmentNotification } from 'api/team/entity';
-
 import styles from './NotificationCard.module.scss';
 
 interface NotificationCardProps {
   notification: TeamRecruitmentNotification;
   now: Date | null;
-  onClick: (notification: TeamRecruitmentNotification) => void;
+  onNotificationClick: (notification: TeamRecruitmentNotification) => void;
 }
 
-export default function NotificationCard({ notification, now, onClick }: NotificationCardProps) {
+export default function NotificationCard({ notification, now, onNotificationClick }: NotificationCardProps) {
   return (
     <button
       type="button"
@@ -22,7 +21,7 @@ export default function NotificationCard({ notification, now, onClick }: Notific
         [styles.card]: true,
         [styles['card--read']]: notification.is_read,
       })}
-      onClick={() => onClick(notification)}
+      onClick={() => onNotificationClick(notification)}
     >
       <span className={styles.card__icon}>
         {notification.type === 'NEW_CHAT_MESSAGE' ? <ChatIcon /> : <UserGroupIcon />}

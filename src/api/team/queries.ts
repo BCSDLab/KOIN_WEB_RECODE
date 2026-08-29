@@ -14,17 +14,12 @@ export type TeamRecruitmentInfiniteListRequest = Omit<TeamRecruitmentListRequest
 
 export const teamQueryKeys = {
   all: ['team'] as const,
-
   listRoot: ['team', 'list'] as const,
-
   infiniteList: (params: TeamRecruitmentInfiniteListRequest, token?: string | null) =>
     [...teamQueryKeys.listRoot, 'infinite', getViewerScope(token), params] as const,
-
   notificationsRoot: ['team', 'notifications'] as const,
-
   notifications: (token: string, params: TeamRecruitmentNotificationListRequest) =>
     [...teamQueryKeys.notificationsRoot, token, params] as const,
-
   infiniteNotifications: (token: string) => [...teamQueryKeys.notificationsRoot, 'infinite', token] as const,
 };
 

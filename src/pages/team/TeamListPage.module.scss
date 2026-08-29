@@ -29,7 +29,6 @@
   &__label {
     color: #4b4b4b;
     font-size: 12px;
-    font-weight: 400;
     line-height: 160%;
   }
 
@@ -45,7 +44,6 @@
   padding: 0 22px 12px;
   color: #727272;
   font-size: 12px;
-  font-weight: 400;
   line-height: 160%;
 }
 
@@ -80,9 +78,7 @@
     width: 195px;
     margin: 0;
     color: #727272;
-    font-family: Pretendard, sans-serif;
     font-size: 14px;
-    font-weight: 400;
     line-height: 160%;
     text-align: center;
   }
@@ -92,7 +88,6 @@
   position: fixed;
   right: 22px;
   bottom: 56px;
-  z-index: 99;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,7 +116,6 @@
   padding: 16px 0;
   color: #a8a8a8;
   font-size: 14px;
-  font-weight: 400;
   line-height: 160%;
   text-align: center;
 }

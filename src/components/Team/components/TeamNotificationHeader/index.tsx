@@ -5,7 +5,6 @@ import ArrowBackIcon from 'assets/svg/Team/arrow-back.svg';
 import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-
 import styles from './TeamNotificationHeader.module.scss';
 
 interface TeamNotificationHeaderProps {

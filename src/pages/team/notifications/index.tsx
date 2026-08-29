@@ -6,7 +6,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
-import EmptyRecruitment from 'assets/svg/Team/empty-recruitment.svg';
+import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import Layout from 'components/layout';
 import NotificationCard from 'components/Team/components/NotificationCard';
 import TeamNotificationHeader from 'components/Team/components/TeamNotificationHeader';
@@ -18,7 +18,6 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentNotification } from 'api/team/entity';
-
 import styles from './TeamNotificationsPage.module.scss';
 
 export default function TeamNotificationsPage() {
@@ -121,7 +120,7 @@ export default function TeamNotificationsPage() {
                   key={notification.id}
                   notification={notification}
                   now={now}
-                  onClick={handleNotificationClick}
+                  onNotificationClick={handleNotificationClick}
                 />
               ))}
 

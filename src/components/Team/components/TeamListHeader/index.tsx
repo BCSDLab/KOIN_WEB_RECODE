@@ -9,7 +9,6 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
-
 import styles from './TeamListHeader.module.scss';
 
 export default function TeamListHeader() {

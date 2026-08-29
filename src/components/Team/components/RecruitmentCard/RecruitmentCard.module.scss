@@ -25,7 +25,6 @@
   &__category {
     padding: 1px 8px;
     border-radius: 100px;
-    font-family: Pretendard, sans-serif;
     font-size: 10px;
     font-weight: 500;
     line-height: 160%;
@@ -58,7 +57,6 @@
 
   &__status {
     color: #f04452;
-    font-family: Pretendard, sans-serif;
     font-size: 10px;
     font-weight: 500;
     line-height: 160%;
@@ -72,8 +70,6 @@
     margin: 0;
     overflow: hidden;
     color: #1f1f1f;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
     font-weight: 600;
     line-height: 160%;
     text-overflow: ellipsis;
@@ -92,9 +88,7 @@
     border-radius: 12px;
     background: #f2f2f2;
     color: #727272;
-    font-family: Pretendard, sans-serif;
     font-size: 10px;
-    font-weight: 400;
     line-height: 160%;
     white-space: nowrap;
   }
@@ -111,9 +105,7 @@
       align-items: center;
       gap: 3px;
       min-width: 0;
-      font-family: Pretendard, sans-serif;
       font-size: 10px;
-      font-weight: 400;
       line-height: 160%;
       white-space: nowrap;
 
