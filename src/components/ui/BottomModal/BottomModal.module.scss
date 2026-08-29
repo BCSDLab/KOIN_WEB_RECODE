@@ -31,6 +31,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    animation: none;
+  }
+}
+
 .header {
   padding: 12px 32px;
 }

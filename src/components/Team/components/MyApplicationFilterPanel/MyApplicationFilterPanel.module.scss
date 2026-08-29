@@ -27,6 +27,11 @@
   outline: none;
   -webkit-tap-highlight-color: transparent;
 
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
   svg {
     width: 24px;
     height: 24px;
@@ -64,6 +69,11 @@
   outline: none;
   -webkit-tap-highlight-color: transparent;
 
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
   svg {
     width: 16px;
     height: 16px;
@@ -87,6 +97,11 @@
 
   &:hover {
     background: #980ac9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
   }
 }
 
