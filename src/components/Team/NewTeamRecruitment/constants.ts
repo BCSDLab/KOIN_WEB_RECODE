@@ -1,26 +1,4 @@
-import { TeamRecruitmentFormState, TeamRecruitmentProgressType } from './types';
-
-export function createInitialTeamRecruitmentForm(): TeamRecruitmentFormState {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-
-  return {
-    category: null,
-    title: '',
-    progressType: 'ONLINE',
-    activityStartDate: today,
-    activityEndDate: tomorrow,
-    deadlineDate: new Date(today),
-    isRoleUnified: false,
-    roles: [],
-    unifiedMemberCount: 1,
-    description: '',
-    relatedUrl: '',
-    qualification: '',
-  };
-}
+import { TeamRecruitmentProgressType } from './types';
 
 export const TEAM_RECRUITMENT_CATEGORY_OPTIONS = [
   { label: '공모전', value: '공모전' },

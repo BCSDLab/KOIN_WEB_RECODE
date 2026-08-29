@@ -5,7 +5,6 @@
   flex-direction: column;
   min-height: 100vh;
   background: #f8f8fa;
-  padding-bottom: 84px;
 
   * {
     box-sizing: border-box;
@@ -101,9 +100,6 @@
 }
 
 .submit-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
   background: #f8f8fa;

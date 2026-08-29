@@ -1,6 +1,6 @@
-import { cn } from '@bcsdlab/utils';
 import DatePickerModal from 'components/ui/DatePickerModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { getYyyyMmDd } from 'utils/ts/calendar';
 import styles from './ScheduleField.module.scss';
 
 interface ScheduleFieldProps {
@@ -13,11 +13,7 @@ interface ScheduleFieldProps {
 }
 
 function formatDotDate(date: Date | null) {
-  if (!date) return '';
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
+  return date ? getYyyyMmDd(date, '.') : '';
 }
 
 export default function ScheduleField({
@@ -52,11 +48,7 @@ export default function ScheduleField({
         </div>
         <div className={styles.schedule__item}>
           <span className={styles.schedule__label}>마감일</span>
-          <button
-            type="button"
-            className={cn({ [styles.schedule__date]: true, [styles['schedule__date--single']]: true })}
-            onClick={openDeadlineCalendar}
-          >
+          <button type="button" className={styles.schedule__date} onClick={openDeadlineCalendar}>
             {formatDotDate(deadlineDate)}
           </button>
         </div>

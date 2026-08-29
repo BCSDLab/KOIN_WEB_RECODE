@@ -1,6 +1,27 @@
 import { useRef, useState } from 'react';
-import { createInitialTeamRecruitmentForm } from 'components/Team/NewTeamRecruitment/constants';
 import { TeamRecruitmentFormState, TeamRecruitmentProgressType } from 'components/Team/NewTeamRecruitment/types';
+
+function createInitialTeamRecruitmentForm(): TeamRecruitmentFormState {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  return {
+    category: null,
+    title: '',
+    progressType: 'ONLINE',
+    activityStartDate: today,
+    activityEndDate: tomorrow,
+    deadlineDate: new Date(today),
+    isRoleUnified: false,
+    roles: [],
+    unifiedMemberCount: 1,
+    description: '',
+    relatedUrl: '',
+    qualification: '',
+  };
+}
 
 export default function useTeamRecruitmentForm() {
   const roleIdCounter = useRef(0);

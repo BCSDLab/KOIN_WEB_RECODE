@@ -1,3 +1,12 @@
+@mixin modal-button-base {
+  flex: 1;
+  height: 44px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .modal-background {
   position: fixed;
   top: 0;
@@ -38,27 +47,19 @@
 
   &__button {
     &--cancel {
-      flex: 1;
-      height: 44px;
-      border-radius: 8px;
+      @include modal-button-base;
+
       border: 1px solid #d3d3d3;
       background: #fff;
       color: #4b4b4b;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
     }
 
     &--confirm {
-      flex: 1;
-      height: 44px;
-      border-radius: 8px;
+      @include modal-button-base;
+
       border: none;
       background: #b611f5;
       color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
     }
   }
 }
