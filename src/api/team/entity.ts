@@ -92,3 +92,36 @@ export interface TeamRecruitmentNotificationListResponse extends APIResponse {
   total_page: number;
   current_page: number;
 }
+
+export type TeamApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+
+export interface TeamApplicationRole {
+  id: number;
+  name: string;
+}
+
+export interface MyTeamRecruitmentApplication {
+  application_id: number;
+  status: TeamApplicationStatus;
+  team_chat_available: boolean;
+  team_chat_room_id: number | null;
+  direct_chat_room_id: number | null;
+  role: TeamApplicationRole | null;
+  recruitment: TeamRecruitmentCard;
+}
+
+export interface MyTeamRecruitmentApplicationListRequest {
+  [key: string]: unknown;
+  statuses?: TeamApplicationStatus[];
+  sort?: TeamRecruitmentSort;
+  page?: number;
+  limit?: number;
+}
+
+export interface MyTeamRecruitmentApplicationListResponse extends APIResponse {
+  applications: MyTeamRecruitmentApplication[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
