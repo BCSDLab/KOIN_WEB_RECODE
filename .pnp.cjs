@@ -47,7 +47,7 @@ const RAW_RUNTIME_STATE =
           ["axios", "npm:0.33.0"],\
           ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
-          ["dompurify", "npm:3.4.12"],\
+          ["dompurify", "npm:3.4.13"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
           ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -7354,11 +7354,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["dompurify", [\
-      ["npm:3.4.12", {\
-        "packageLocation": "./.yarn/cache/dompurify-npm-3.4.12-9e2dc63475-f826b68920.zip/node_modules/dompurify/",\
+      ["npm:3.4.13", {\
+        "packageLocation": "./.yarn/cache/dompurify-npm-3.4.13-71386e31f7-0db0a309a8.zip/node_modules/dompurify/",\
         "packageDependencies": [\
           ["@types/trusted-types", "npm:2.0.7"],\
-          ["dompurify", "npm:3.4.12"]\
+          ["dompurify", "npm:3.4.13"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9811,7 +9811,7 @@ const RAW_RUNTIME_STATE =
           ["axios", "npm:0.33.0"],\
           ["babel-plugin-react-compiler", "npm:1.0.0"],\
           ["dayjs", "npm:1.11.12"],\
-          ["dompurify", "npm:3.4.12"],\
+          ["dompurify", "npm:3.4.13"],\
           ["dotenv", "npm:17.2.3"],\
           ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
           ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
