@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
