@@ -257,7 +257,7 @@ export default function ActivityHistoryField() {
           const rawDate = targetActivity?.[openDatePicker.field];
           return (
             <DatePickerModal
-              selectedDate={rawDate ? new Date(rawDate) : new Date()}
+              selectedDate={rawDate ? new Date(`${rawDate}T00:00:00`) : new Date()}
               onChange={handleDateSelect(openDatePicker.index, openDatePicker.field)}
               onClose={() => setOpenDatePicker(null)}
             />
