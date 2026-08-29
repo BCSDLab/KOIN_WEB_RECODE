@@ -1,0 +1,58 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 24px;
+  width: 100%;
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 24px;
+  }
+
+  &__footer {
+    display: flex;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: auto;
+    padding: 16px 24px 24px;
+  }
+
+  &__back {
+    flex: 1;
+    padding: 0 24px;
+    height: 48px;
+    border: 0.5px solid #b611f5;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #b611f5;
+    cursor: pointer;
+  }
+
+  &__submit {
+    flex: 1;
+    padding: 0 24px;
+    border: none;
+    height: 48px;
+    border-radius: 16px;
+    background: #b611f5;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      background: #cacaca;
+      cursor: default;
+    }
+  }
+}

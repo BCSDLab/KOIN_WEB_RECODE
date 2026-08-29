@@ -1,47 +1,60 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import Head from 'next/head';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { teamQueries } from 'api/team/queries';
+import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
+import FilterIcon from 'assets/svg/Team/filter.svg';
+import PencilIcon from 'assets/svg/Team/pencil.svg';
+import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
-import TeamSearchBar from 'components/Team/components/TeamSearchBar';
-
+import TeamListHeader from 'components/Team/components/TeamListHeader';
+import SearchBar from 'components/ui/SearchBar';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import showToast from 'utils/ts/showToast';
+import type { TeamRecruitmentListRequest } from 'api/team/entity';
 import styles from './TeamListPage.module.scss';
 
-const MOCK_RECRUITMENTS = [
-  {
-    id: 1,
-    category: '공모전',
-    status: 'D-5',
-    title: 'AI 아이디어 공모전 팀원 모집',
-    roles: ['프론트엔드 1명', '백엔드 1명', '디자인 1명'],
-    location: '온라인',
-    period: '2026.08.27 ~ 2026.09.01',
-    currentMemberCount: 0,
-    maxMemberCount: 3,
-  },
-  {
-    id: 2,
-    category: '대외활동',
-    status: 'D-13',
-    title: '2026 대외활동 팀원 모집',
-    roles: [],
-    location: '온 · 오프라인',
-    period: '2026.08.27 ~ 2026.09.09',
-    currentMemberCount: 2,
-    maxMemberCount: 3,
-  },
-];
+type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 
 export default function TeamListPage() {
+  const token = useTokenState();
+  const isMobile = useMediaQuery();
+  const logger = useLogger();
+
   const [searchTitle, setSearchTitle] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [requestParams, setRequestParams] = useState<TeamListFilter>({
+    status: 'ALL',
+    sort: 'LATEST_DESC',
+  });
+
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+    teamQueries.infiniteList(requestParams, token),
+  );
+
+  const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
+  const totalCount = data?.pages[0]?.total_count ?? 0;
+
+  const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
   const handleSearch = () => {
-    setSearchKeyword(searchTitle.trim());
+    const keyword = searchTitle.trim();
+
+    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_search', value: keyword });
+
+    setRequestParams((previous) => ({
+      ...previous,
+      keyword: keyword || undefined,
+    }));
   };
 
-  const filteredRecruitments = MOCK_RECRUITMENTS.filter((recruitment) =>
-    recruitment.title.toLowerCase().includes(searchKeyword.toLowerCase()),
-  );
+  const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
+
+  const handleRecruitClick = () => showToast('warning', '모집글 작성 기능은 준비 중입니다.');
 
   return (
     <>
@@ -50,31 +63,64 @@ export default function TeamListPage() {
         <meta name="description" content="한국기술교육대학교 팀원 모집 게시글을 확인하고 검색할 수 있습니다." />
       </Head>
 
-      <main>
-        <h1>팀원 모집</h1>
+      {isMobile && <TeamListHeader />}
 
-        <TeamSearchBar value={searchTitle} onChange={setSearchTitle} onSearch={handleSearch} />
+      <main className={styles.page}>
+        {!isMobile && <h1>팀원모집</h1>}
 
-        <p>전체({filteredRecruitments.length})</p>
-
-        {filteredRecruitments.map((recruitment) => (
-          <RecruitmentCard
-            key={recruitment.id}
-            category={recruitment.category}
-            status={recruitment.status}
-            title={recruitment.title}
-            roles={recruitment.roles}
-            location={recruitment.location}
-            period={recruitment.period}
-            currentMemberCount={recruitment.currentMemberCount}
-            maxMemberCount={recruitment.maxMemberCount}
+        <div className={styles.searchRow}>
+          <SearchBar
+            value={searchTitle}
+            onChange={setSearchTitle}
+            onSearch={handleSearch}
+            label="팀원 모집 검색"
+            size="small"
           />
-        ))}
 
-        <button type="button" className={styles.recruitButton}>
-          모집하기
+          <button type="button" className={styles.filterButton} onClick={handleFilterClick}>
+            <span className={styles.filterButton__label}>필터</span>
+            <FilterIcon />
+          </button>
+        </div>
+
+        <p className={styles.totalCount}>전체({totalCount})</p>
+
+        <div className={styles.content}>
+          {isLoading && <p>모집글을 불러오는 중입니다.</p>}
+
+          {!isLoading && (isError || recruitments.length === 0) && (
+            <div className={styles.empty}>
+              <EmptyRecruitment />
+              <p className={styles.empty__message}>
+                {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
+              </p>
+            </div>
+          )}
+
+          {!isLoading && !isError && recruitments.length > 0 && (
+            <div className={styles.list}>
+              {recruitments.map((recruitment) => (
+                <RecruitmentCard
+                  key={recruitment.id}
+                  recruitment={recruitment}
+                  eventLabel="team_recruitment_post_select"
+                />
+              ))}
+
+              {isFetchingNextPage && <p className={styles.loadingIndicator}>모집글을 불러오는 중입니다.</p>}
+
+              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+            </div>
+          )}
+        </div>
+
+        <button type="button" className={styles.fab} onClick={handleRecruitClick}>
+          <span className={styles.fab__label}>모집하기</span>
+          <PencilIcon />
         </button>
       </main>
     </>
   );
 }
+
+TeamListPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;

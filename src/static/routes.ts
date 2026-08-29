@@ -73,13 +73,15 @@ const ROUTES = {
   TeamRecruitmentApplicantDetail: ({ postId, applicantId }: ROUTESParams<'postId' | 'applicantId'>) =>
     `/team/recruitment/${postId}/applicants/${applicantId}`,
   TeamProfile: () => '/team/profile',
-  TeamProfileNew: () => '/team/profile/new',
-  TeamProfilePosts: () => '/team/profile/posts',
-  TeamProfileApplications: () => '/team/profile/applications',
-  // TeamDetail은 다른 작업자가 진행 중인 /team/${postId}를 그대로 유지. 그쪽 작업 완료 후 /team/recruitment/${postId}로 함께 정리 예정.
-  TeamDetail: ({ postId }: { postId: string }) => `/team/${postId}`,
+  TeamProfileCreate: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/create${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamProfileEdit: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/edit${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
   TeamNotifications: () => '/team/notifications',
-  TeamChat: ({ id }: { id: string }) => `/team/chat/${id}`,
+  TeamMyApplications: () => '/team/my-applications',
+  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
+    `/team/chat/${recruitmentId}/${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',

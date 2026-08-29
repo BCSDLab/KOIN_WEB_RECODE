@@ -1,0 +1,55 @@
+.searchBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 40px;
+  background: #fff;
+
+  &:focus-within {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
+  &--small {
+    height: 36px;
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    color: #000;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 160%;
+    outline: none;
+
+    &::placeholder {
+      color: #727272;
+    }
+  }
+
+  &__button {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 21px;
+    height: 21px;
+  }
+}
