@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -27,6 +28,7 @@ export default function TeamNotificationsPage() {
   const isMounted = useMount();
   const logger = useLogger();
   const now = isMounted ? new Date() : null;
+  const pendingNotificationIdsRef = useRef(new Set<number>());
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     ...teamQueries.infiniteNotifications(token ?? ''),
@@ -37,9 +39,15 @@ export default function TeamNotificationsPage() {
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
-  const { mutate: markRead, isPending: isMarkReadPending } = useMutation({
+  const { mutate: markRead } = useMutation({
     ...teamMutations.markNotificationRead(queryClient, token ?? ''),
+    onMutate: (notificationId) => {
+      pendingNotificationIdsRef.current.add(notificationId);
+    },
     onError: () => showToast('error', '알림을 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
+    onSettled: (_data, _error, notificationId) => {
+      pendingNotificationIdsRef.current.delete(notificationId);
+    },
   });
   const { mutate: markAllRead, isPending: isMarkAllReadPending } = useMutation({
     ...teamMutations.markAllNotificationsRead(queryClient, token ?? ''),
@@ -57,7 +65,7 @@ export default function TeamNotificationsPage() {
       value: getNotificationTitle(notification),
     });
 
-    if (!notification.is_read && !isMarkReadPending) {
+    if (!notification.is_read && !pendingNotificationIdsRef.current.has(notification.id)) {
       markRead(notification.id);
     }
 
