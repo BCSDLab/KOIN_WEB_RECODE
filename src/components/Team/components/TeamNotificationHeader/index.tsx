@@ -12,9 +12,17 @@ interface TeamNotificationHeaderProps {
   showMenu: boolean;
   onMarkAllRead: () => void;
   onDeleteAll: () => void;
+  isMarkAllReadPending: boolean;
+  isDeleteAllPending: boolean;
 }
 
-export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDeleteAll }: TeamNotificationHeaderProps) {
+export default function TeamNotificationHeader({
+  showMenu,
+  onMarkAllRead,
+  onDeleteAll,
+  isMarkAllReadPending,
+  isDeleteAllPending,
+}: TeamNotificationHeaderProps) {
   const router = useRouter();
   const [isMenuOpen, openMenu, closeMenu] = useBooleanState(false);
 
@@ -62,7 +70,12 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDele
           <button type="button" className={styles.header__overlay} aria-label="메뉴 닫기" onClick={closeMenu} />
 
           <div className={styles.header__dropdown}>
-            <button type="button" className={styles['header__dropdown-item']} onClick={handleMarkAllRead}>
+            <button
+              type="button"
+              className={styles['header__dropdown-item']}
+              disabled={isMarkAllReadPending}
+              onClick={handleMarkAllRead}
+            >
               모두 읽음으로 표시
             </button>
 
@@ -72,6 +85,7 @@ export default function TeamNotificationHeader({ showMenu, onMarkAllRead, onDele
                 [styles['header__dropdown-item']]: true,
                 [styles['header__dropdown-item--danger']]: true,
               })}
+              disabled={isDeleteAllPending}
               onClick={handleDeleteAll}
             >
               알림 전체 삭제

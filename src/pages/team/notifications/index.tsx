@@ -15,6 +15,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentNotification } from 'api/team/entity';
 
 import styles from './TeamNotificationsPage.module.scss';
@@ -36,11 +37,18 @@ export default function TeamNotificationsPage() {
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
-  const { mutate: markRead } = useMutation(teamMutations.markNotificationRead(queryClient, token ?? ''));
-  const { mutate: markAllRead } = useMutation(teamMutations.markAllNotificationsRead(queryClient, token ?? ''));
-  const { mutate: deleteAllNotifications } = useMutation(
-    teamMutations.deleteAllNotifications(queryClient, token ?? ''),
-  );
+  const { mutate: markRead, isPending: isMarkReadPending } = useMutation({
+    ...teamMutations.markNotificationRead(queryClient, token ?? ''),
+    onError: () => showToast('error', '알림을 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
+  });
+  const { mutate: markAllRead, isPending: isMarkAllReadPending } = useMutation({
+    ...teamMutations.markAllNotificationsRead(queryClient, token ?? ''),
+    onError: () => showToast('error', '알림을 모두 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
+  });
+  const { mutate: deleteAllNotifications, isPending: isDeleteAllPending } = useMutation({
+    ...teamMutations.deleteAllNotifications(queryClient, token ?? ''),
+    onError: () => showToast('error', '알림을 모두 삭제하지 못했어요. 다시 시도해 주세요.'),
+  });
 
   const handleNotificationClick = (notification: TeamRecruitmentNotification) => {
     logger.actionEventClick({
@@ -49,7 +57,7 @@ export default function TeamNotificationsPage() {
       value: getNotificationTitle(notification),
     });
 
-    if (!notification.is_read) {
+    if (!notification.is_read && !isMarkReadPending) {
       markRead(notification.id);
     }
 
@@ -78,6 +86,8 @@ export default function TeamNotificationsPage() {
         showMenu={notifications.length > 0}
         onMarkAllRead={markAllRead}
         onDeleteAll={deleteAllNotifications}
+        isMarkAllReadPending={isMarkAllReadPending}
+        isDeleteAllPending={isDeleteAllPending}
       />
 
       <main className={styles.page}>
