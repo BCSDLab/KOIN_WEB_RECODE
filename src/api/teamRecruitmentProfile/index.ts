@@ -1,4 +1,5 @@
 import APIClient from 'utils/ts/apiClient';
-import { CreateTeamRecruitmentProfile } from './APIDetail';
+import { TeamRecruitmentProfileDetail, UpsertTeamRecruitmentProfile } from './APIDetail';
 
-export const createTeamRecruitmentProfile = APIClient.of(CreateTeamRecruitmentProfile);
+export const getTeamRecruitmentProfile = APIClient.of(TeamRecruitmentProfileDetail);
+export const upsertTeamRecruitmentProfile = APIClient.of(UpsertTeamRecruitmentProfile);

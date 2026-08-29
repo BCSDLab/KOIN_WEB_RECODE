@@ -69,6 +69,8 @@ const ROUTES = {
   TeamProfile: () => '/team/profile',
   TeamProfileCreate: ({ step }: ROUTESParams<'step'> = {}) =>
     `/team/profile/create${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamProfileEdit: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/edit${step ? `?step=${encodeURIComponent(step)}` : ''}`,
   TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
   TeamNotifications: () => '/team/notifications',
   TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>

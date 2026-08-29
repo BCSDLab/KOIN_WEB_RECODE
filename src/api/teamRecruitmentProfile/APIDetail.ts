@@ -1,21 +1,32 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { CreateTeamRecruitmentProfileRequest, CreateTeamRecruitmentProfileResponse } from './entity';
+import { TeamRecruitmentProfileResponse, UpsertTeamRecruitmentProfileRequest } from './entity';
 
-export class CreateTeamRecruitmentProfile<R extends CreateTeamRecruitmentProfileResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
+export class TeamRecruitmentProfileDetail<R extends TeamRecruitmentProfileResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
 
-  // TODO: 진입점 페이지의 `/team-recruitment-profiles/me` 목업 주석에서 유추한 가정치. API 명세 확정 후 검증 필요
-  path = '/team-recruitment-profiles';
+  path = '/team-recruitment-profiles/me';
 
   response!: R;
 
-  data: CreateTeamRecruitmentProfileRequest;
+  auth = true;
+
+  constructor(public authorization: string) {}
+}
+
+export class UpsertTeamRecruitmentProfile<R extends TeamRecruitmentProfileResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/team-recruitment-profiles/me';
+
+  response!: R;
+
+  data: UpsertTeamRecruitmentProfileRequest;
 
   auth = true;
 
   constructor(
     public authorization: string,
-    data: CreateTeamRecruitmentProfileRequest,
+    data: UpsertTeamRecruitmentProfileRequest,
   ) {
     this.data = data;
   }
