@@ -1,21 +1,43 @@
 import { isKoinError } from '@bcsdlab/koin';
-import { useMutation } from '@tanstack/react-query';
-import { createTeamRecruitmentProfile } from 'api/teamRecruitmentProfile';
-import { CreateTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
+import { queryOptions, useMutation } from '@tanstack/react-query';
+import { getTeamRecruitmentProfile, upsertTeamRecruitmentProfile } from 'api/teamRecruitmentProfile';
+import { TeamRecruitmentProfileResponse, UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
-interface UseCreateTeamRecruitmentProfileMutationOptions {
+export const teamRecruitmentProfileQueryKeys = {
+  all: ['team-recruitment-profile'] as const,
+  me: (token: string) => [...teamRecruitmentProfileQueryKeys.all, 'me', token] as const,
+};
+
+export const teamRecruitmentProfileQueries = {
+  me: (token: string) =>
+    queryOptions<TeamRecruitmentProfileResponse | null>({
+      queryKey: teamRecruitmentProfileQueryKeys.me(token),
+      queryFn: async () => {
+        try {
+          return await getTeamRecruitmentProfile(token);
+        } catch (error) {
+          if (isKoinError(error) && error.status === 404) {
+            return null;
+          }
+          throw error;
+        }
+      },
+    }),
+};
+
+interface UseUpsertTeamRecruitmentProfileMutationOptions {
   onSuccess?: () => void;
 }
 
-export const useCreateTeamRecruitmentProfileMutation = ({
+export const useUpsertTeamRecruitmentProfileMutation = ({
   onSuccess,
-}: UseCreateTeamRecruitmentProfileMutationOptions = {}) => {
+}: UseUpsertTeamRecruitmentProfileMutationOptions = {}) => {
   const token = useTokenState();
 
   return useMutation({
-    mutationFn: (data: CreateTeamRecruitmentProfileRequest) => createTeamRecruitmentProfile(token, data),
+    mutationFn: (data: UpsertTeamRecruitmentProfileRequest) => upsertTeamRecruitmentProfile(token, data),
     onSuccess: () => {
       onSuccess?.();
     },

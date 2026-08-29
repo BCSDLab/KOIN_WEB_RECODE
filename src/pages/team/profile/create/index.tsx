@@ -11,7 +11,7 @@ function TeamProfileCreatePage() {
         <meta name="description" content="팀원 모집 프로필을 작성할 수 있습니다." />
       </Head>
 
-      <TeamProfileForm />
+      <TeamProfileForm mode="create" />
     </>
   );
 }

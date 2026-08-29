@@ -1,22 +1,39 @@
-// TODO: API 명세 확정 후 필드/경로 검증 필요
 import { APIResponse } from 'interfaces/APIResponse';
 
-export type TeamRecruitmentActivityRequest = {
+export type TeamRecruitmentProfileActivity = {
+  id: number;
   title: string;
-  start_date: string;
-  end_date: string | null;
+  started_at: string;
+  ended_at: string | null;
   is_ongoing: boolean;
-  content: string;
+  description: string;
 };
 
-export type CreateTeamRecruitmentProfileRequest = {
-  nickname: string;
+export type TeamRecruitmentProfileActivityInput = {
+  title: string;
+  started_at: string;
+  ended_at: string | null;
+  is_ongoing: boolean;
+  description: string;
+};
+
+export interface TeamRecruitmentProfileResponse extends APIResponse {
+  profile_nickname: string;
   department: string;
+  major: string | null;
   student_number: string;
   preferred_role: string;
   skills: string[];
-  activities: TeamRecruitmentActivityRequest[];
-  introduction: string;
+  activities: TeamRecruitmentProfileActivity[];
+  self_introduction: string;
+}
+
+export type UpsertTeamRecruitmentProfileRequest = {
+  profile_nickname: string;
+  preferred_role: string;
+  skills: string[];
+  activities: TeamRecruitmentProfileActivityInput[];
+  self_introduction: string;
 };
 
-export type CreateTeamRecruitmentProfileResponse = APIResponse;
+export type UpsertTeamRecruitmentProfileResponse = TeamRecruitmentProfileResponse;

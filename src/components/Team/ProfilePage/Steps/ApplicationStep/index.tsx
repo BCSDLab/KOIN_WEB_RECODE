@@ -11,6 +11,7 @@ interface ApplicationStepProps {
   onBack: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
+  submitLabel: string;
 }
 
 const loggingTitle = {
@@ -19,7 +20,7 @@ const loggingTitle = {
   SAVE: 'team_profile_save',
 };
 
-export default function ApplicationStep({ onBack, onSubmit, isSubmitting }: ApplicationStepProps) {
+export default function ApplicationStep({ onBack, onSubmit, isSubmitting, submitLabel }: ApplicationStepProps) {
   const { actionEventClick } = useLogger();
   const { control, register } = useFormContext<ProfileFormValues>();
   const { errors } = useFormState({ control });
@@ -134,7 +135,7 @@ export default function ApplicationStep({ onBack, onSubmit, isSubmitting }: Appl
           이전
         </button>
         <button type="button" className={styles.step__submit} onClick={handleSave} disabled={isSubmitting}>
-          저장
+          {submitLabel}
         </button>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
@@ -9,13 +11,8 @@ import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './TeamProfilePage.module.scss';
-
-interface TeamRecruitmentProfileSummary {
-  nickname: string;
-  department: string;
-  studentNumber: string;
-}
 
 interface MenuCardProps {
   icon: FunctionComponent<SVGProps<SVGSVGElement>>;
@@ -38,18 +35,14 @@ function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
   );
 }
 
-// TODO: /team-recruitment-profiles/me API 연동 후 React Query로 교체
-const MOCK_HAS_PROFILE = true;
-const MOCK_PROFILE: TeamRecruitmentProfileSummary = {
-  nickname: 'BCSD',
-  department: '컴퓨터공학부',
-  studentNumber: '2023100000',
-};
-
 function TeamProfilePage() {
   const router = useRouter();
-  const hasProfile = MOCK_HAS_PROFILE;
-  const profile = MOCK_PROFILE;
+  const token = useTokenState();
+  const { data: profile } = useQuery({
+    ...teamRecruitmentProfileQueries.me(token),
+    enabled: !!token,
+  });
+  const hasProfile = Boolean(profile);
 
   return (
     <>
@@ -62,21 +55,21 @@ function TeamProfilePage() {
         <SubPageHeader title="팀원 모집 프로필" />
 
         <div className={styles.page__content}>
-          {hasProfile ? (
+          {profile ? (
             <div className={styles.summaryCard}>
               <span className={styles.summaryCard__avatar}>
                 <UserIcon aria-hidden />
               </span>
               <div className={styles.summaryCard__body}>
-                <p className={styles.summaryCard__nickname}>{profile.nickname}</p>
+                <p className={styles.summaryCard__nickname}>{profile.profile_nickname}</p>
                 <ul className={styles.summaryCard__meta}>
                   <li>{profile.department}</li>
-                  <li>{profile.studentNumber}</li>
+                  <li>{profile.student_number}</li>
                 </ul>
                 <button
                   type="button"
                   className={styles.summaryCard__button}
-                  onClick={() => router.push(ROUTES.TeamProfileCreate())}
+                  onClick={() => router.push(ROUTES.TeamProfileEdit())}
                 >
                   프로필 수정하기
                 </button>
