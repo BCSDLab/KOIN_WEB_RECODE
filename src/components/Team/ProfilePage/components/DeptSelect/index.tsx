@@ -60,6 +60,7 @@ export default function DeptSelect({
             <li
               key={option.value}
               role="option"
+              tabIndex={0}
               aria-selected={option.value === value}
               className={styles.deptSelect__option}
               onClick={() => handleOptionClick(option.value)}
