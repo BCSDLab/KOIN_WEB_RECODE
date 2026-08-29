@@ -18,11 +18,12 @@ interface MenuCardProps {
   icon: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
+  onCardClick?: () => void;
 }
 
-function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
+function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps) {
   return (
-    <button type="button" className={styles.menuCard}>
+    <button type="button" className={styles.menuCard} onClick={onCardClick}>
       <span className={styles.menuCard__icon}>
         <Icon aria-hidden />
       </span>
@@ -102,6 +103,7 @@ function TeamProfilePage() {
               icon={ListEndIcon}
               title={hasProfile ? '내가 지원한 모집글' : '내가 지원한 모집글 모아보기'}
               description="지원한 모집글과 지원 상태를 확인할 수 있어요."
+              onCardClick={() => router.push(ROUTES.TeamMyApplications())}
             />
           </div>
         </div>

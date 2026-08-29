@@ -1,10 +1,15 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-import type { TeamRecruitmentListRequest, TeamRecruitmentNotificationListRequest } from './entity';
-import { getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
+import type {
+  MyTeamRecruitmentApplicationListRequest,
+  TeamRecruitmentListRequest,
+  TeamRecruitmentNotificationListRequest,
+} from './entity';
+import { getMyTeamRecruitmentApplications, getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
 
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
+const TEAM_MY_APPLICATIONS_LIMIT = 10;
 
 type TeamViewerScope = 'guest' | 'auth';
 
@@ -21,6 +26,9 @@ export const teamQueryKeys = {
   notifications: (token: string, params: TeamRecruitmentNotificationListRequest) =>
     [...teamQueryKeys.notificationsRoot, token, params] as const,
   infiniteNotifications: (token: string) => [...teamQueryKeys.notificationsRoot, 'infinite', token] as const,
+  myApplicationsRoot: ['team', 'my-applications'] as const,
+  infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
+    [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
 };
 
 export const teamQueries = {
@@ -43,7 +51,6 @@ export const teamQueries = {
     queryOptions({
       queryKey: teamQueryKeys.notifications(token, params),
       queryFn: () => getTeamRecruitmentNotifications(token, params),
-      staleTime: 60000,
     }),
 
   infiniteNotifications: (token: string) =>
@@ -59,6 +66,20 @@ export const teamQueries = {
 
         return undefined;
       },
-      staleTime: 60000,
+    }),
+
+  infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest = {}) =>
+    infiniteQueryOptions({
+      queryKey: teamQueryKeys.infiniteMyApplications(token, params),
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getMyTeamRecruitmentApplications(token, { ...params, page: pageParam, limit: TEAM_MY_APPLICATIONS_LIMIT }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.current_page < lastPage.total_page) {
+          return lastPage.current_page + 1;
+        }
+
+        return undefined;
+      },
     }),
 };
