@@ -110,12 +110,12 @@ One pattern only:
 {type}/#{issue-number}/{english-kebab-case}
 ```
 
-`{type}` is one of `feature`, `fix`, `refactor`, `test`, `docs`, `chore` (use `chore` for both `deploy` and `setting` work types). The description segment is in **English**, kebab-case, concise.
+`{type}` is one of `feat`, `fix`, `refactor`, `test`, `docs`, `chore` (use `chore` for both `deploy` and `setting` work types). The description segment is in **English**, kebab-case, concise.
 
 Examples:
 
 ```text
-feature/#1328/team-recruitment-profile-entry
+feat/#1328/team-recruitment-profile-entry
 fix/#1324/graduation-calculator-entry-removal
 chore/#1319/sentry-koin-error-dedup
 ```
