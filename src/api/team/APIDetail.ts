@@ -3,11 +3,19 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
+  TeamChatDirectRoomResponse,
+  TeamChatMessage,
+  TeamChatMessageListRequest,
+  TeamChatMessageListResponse,
+  TeamChatMessageSendRequest,
+  TeamChatRoomResponse,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
   TeamRecruitmentNotificationListResponse,
 } from './entity';
+
+const TEAM_CHAT_MESSAGE_DEFAULT_LIMIT = 100;
 
 export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -127,4 +135,89 @@ export class DeleteTeamRecruitmentNotifications<R extends object> implements API
   auth = true;
 
   constructor(public authorization: string) {}
+}
+
+export class GetTeamRecruitmentChatRoom<R extends TeamChatRoomResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    chatRoomId: number,
+  ) {
+    this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}`;
+  }
+}
+
+export class GetTeamRecruitmentChatMessages<R extends TeamChatMessageListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  params: TeamChatMessageListRequest;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    chatRoomId: number,
+    params: TeamChatMessageListRequest = {},
+  ) {
+    this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
+
+    this.params = {
+      ...(params.afterMessageId && { afterMessageId: params.afterMessageId }),
+      ...(params.beforeMessageId && { beforeMessageId: params.beforeMessageId }),
+      limit: params.limit ?? TEAM_CHAT_MESSAGE_DEFAULT_LIMIT,
+    };
+  }
+}
+
+export class PostTeamRecruitmentChatMessage<R extends TeamChatMessage> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  data: TeamChatMessageSendRequest;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    chatRoomId: number,
+    data: TeamChatMessageSendRequest,
+  ) {
+    this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
+    this.data = data;
+  }
+}
+
+export class PostTeamRecruitmentDirectChatRoom<R extends TeamChatDirectRoomResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    applicationId: number,
+  ) {
+    this.path = `/chatroom/team-recruitment/${recruitmentId}/applications/${applicationId}/direct`;
+  }
 }

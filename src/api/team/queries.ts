@@ -2,14 +2,25 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import type {
   MyTeamRecruitmentApplicationListRequest,
+  TeamChatMessageListRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
 } from './entity';
-import { getMyTeamRecruitmentApplications, getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
+import {
+  getMyTeamRecruitmentApplications,
+  getTeamRecruitmentChatMessages,
+  getTeamRecruitmentChatRoom,
+  getTeamRecruitmentList,
+  getTeamRecruitmentNotifications,
+} from './index';
 
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
 const TEAM_MY_APPLICATIONS_LIMIT = 10;
+
+export const TEAM_CHAT_MESSAGE_LIMIT = 100;
+
+export const TEAM_CHAT_POLLING_INTERVAL = 3000;
 
 type TeamViewerScope = 'guest' | 'auth';
 
@@ -29,6 +40,13 @@ export const teamQueryKeys = {
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
+  chatRoot: ['team', 'chat'] as const,
+  chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
+    [...teamQueryKeys.chatRoot, 'room', token, recruitmentId, chatRoomId] as const,
+  chatMessagesRoot: (token: string, recruitmentId: number, chatRoomId: number) =>
+    [...teamQueryKeys.chatRoot, 'messages', token, recruitmentId, chatRoomId] as const,
+  chatMessages: (token: string, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest) =>
+    [...teamQueryKeys.chatMessagesRoot(token, recruitmentId, chatRoomId), params] as const,
 };
 
 export const teamQueries = {
@@ -81,5 +99,23 @@ export const teamQueries = {
 
         return undefined;
       },
+    }),
+
+  chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
+    queryOptions({
+      queryKey: teamQueryKeys.chatRoom(token, recruitmentId, chatRoomId),
+      queryFn: () => getTeamRecruitmentChatRoom(token, recruitmentId, chatRoomId),
+      staleTime: 60000,
+    }),
+
+  chatMessages: (token: string, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest = {}) =>
+    queryOptions({
+      queryKey: teamQueryKeys.chatMessages(token, recruitmentId, chatRoomId, params),
+      queryFn: () =>
+        getTeamRecruitmentChatMessages(token, recruitmentId, chatRoomId, {
+          limit: TEAM_CHAT_MESSAGE_LIMIT,
+          ...params,
+        }),
+      staleTime: 0,
     }),
 };
