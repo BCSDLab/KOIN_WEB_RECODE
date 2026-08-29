@@ -1,5 +1,3 @@
-import { TeamRecruitmentProgressType } from './types';
-
 export const TEAM_RECRUITMENT_CATEGORY_OPTIONS = [
   { label: '공모전', value: '공모전' },
   { label: '대외활동', value: '대외활동' },
@@ -8,7 +6,9 @@ export const TEAM_RECRUITMENT_CATEGORY_OPTIONS = [
   { label: '기타', value: '기타' },
 ] as const;
 
-export const TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL: Record<TeamRecruitmentProgressType, string> = {
+export const TEAM_RECRUITMENT_PROGRESS_TYPES = ['ONLINE', 'OFFLINE', 'HYBRID'] as const;
+
+export const TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL: Record<(typeof TEAM_RECRUITMENT_PROGRESS_TYPES)[number], string> = {
   ONLINE: '온라인',
   OFFLINE: '오프라인',
   HYBRID: '온 · 오프라인',

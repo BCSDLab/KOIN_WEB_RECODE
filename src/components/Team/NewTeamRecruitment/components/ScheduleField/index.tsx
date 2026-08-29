@@ -1,29 +1,19 @@
+import { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
+import { Control, Controller } from 'react-hook-form';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import styles from './ScheduleField.module.scss';
 
 interface ScheduleFieldProps {
-  activityStartDate: Date | null;
-  activityEndDate: Date | null;
-  deadlineDate: Date | null;
-  onActivityStartDateChange: (date: Date) => void;
-  onActivityEndDateChange: (date: Date) => void;
-  onDeadlineDateChange: (date: Date) => void;
+  control: Control<TeamRecruitmentFormValues>;
 }
 
 function formatDotDate(date: Date | null) {
   return date ? getYyyyMmDd(date, '.') : '';
 }
 
-export default function ScheduleField({
-  activityStartDate,
-  activityEndDate,
-  deadlineDate,
-  onActivityStartDateChange,
-  onActivityEndDateChange,
-  onDeadlineDateChange,
-}: ScheduleFieldProps) {
+export default function ScheduleField({ control }: ScheduleFieldProps) {
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
   const [isDeadlineCalendarOpen, openDeadlineCalendar, closeDeadlineCalendar] = useBooleanState(false);
@@ -37,44 +27,67 @@ export default function ScheduleField({
         <div className={styles.schedule__item}>
           <span className={styles.schedule__label}>활동기간</span>
           <div className={styles.schedule__range}>
-            <button type="button" className={styles.schedule__date} onClick={openStartCalendar}>
-              {formatDotDate(activityStartDate)}
-            </button>
+            <Controller
+              control={control}
+              name="activityStartDate"
+              render={({ field }) => (
+                <>
+                  <button type="button" className={styles.schedule__date} onClick={openStartCalendar}>
+                    {formatDotDate(field.value)}
+                  </button>
+                  {isStartCalendarOpen && (
+                    <DatePickerModal
+                      selectedDate={field.value ?? new Date()}
+                      onChange={field.onChange}
+                      onClose={closeStartCalendar}
+                    />
+                  )}
+                </>
+              )}
+            />
             <span className={styles.schedule__separator}>-</span>
-            <button type="button" className={styles.schedule__date} onClick={openEndCalendar}>
-              {formatDotDate(activityEndDate)}
-            </button>
+            <Controller
+              control={control}
+              name="activityEndDate"
+              render={({ field }) => (
+                <>
+                  <button type="button" className={styles.schedule__date} onClick={openEndCalendar}>
+                    {formatDotDate(field.value)}
+                  </button>
+                  {isEndCalendarOpen && (
+                    <DatePickerModal
+                      selectedDate={field.value ?? new Date()}
+                      onChange={field.onChange}
+                      onClose={closeEndCalendar}
+                    />
+                  )}
+                </>
+              )}
+            />
           </div>
         </div>
         <div className={styles.schedule__item}>
           <span className={styles.schedule__label}>마감일</span>
-          <button type="button" className={styles.schedule__date} onClick={openDeadlineCalendar}>
-            {formatDotDate(deadlineDate)}
-          </button>
+          <Controller
+            control={control}
+            name="deadlineDate"
+            render={({ field }) => (
+              <>
+                <button type="button" className={styles.schedule__date} onClick={openDeadlineCalendar}>
+                  {formatDotDate(field.value)}
+                </button>
+                {isDeadlineCalendarOpen && (
+                  <DatePickerModal
+                    selectedDate={field.value ?? new Date()}
+                    onChange={field.onChange}
+                    onClose={closeDeadlineCalendar}
+                  />
+                )}
+              </>
+            )}
+          />
         </div>
       </div>
-
-      {isStartCalendarOpen && (
-        <DatePickerModal
-          selectedDate={activityStartDate ?? new Date()}
-          onChange={onActivityStartDateChange}
-          onClose={closeStartCalendar}
-        />
-      )}
-      {isEndCalendarOpen && (
-        <DatePickerModal
-          selectedDate={activityEndDate ?? new Date()}
-          onChange={onActivityEndDateChange}
-          onClose={closeEndCalendar}
-        />
-      )}
-      {isDeadlineCalendarOpen && (
-        <DatePickerModal
-          selectedDate={deadlineDate ?? new Date()}
-          onChange={onDeadlineDateChange}
-          onClose={closeDeadlineCalendar}
-        />
-      )}
     </div>
   );
 }
