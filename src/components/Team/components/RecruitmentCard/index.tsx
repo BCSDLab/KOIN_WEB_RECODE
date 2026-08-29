@@ -17,19 +17,48 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import type { TeamRecruitmentCard as TeamRecruitment } from 'api/team/entity';
 import styles from './RecruitmentCard.module.scss';
 
+interface RecruitmentBadgesProps {
+  category: TeamRecruitment['category'];
+  status: TeamRecruitment['status'];
+  dDay: TeamRecruitment['d_day'];
+}
+
+export function RecruitmentBadges({ category, status, dDay }: RecruitmentBadgesProps) {
+  const isClosed = status !== 'RECRUITING';
+
+  return (
+    <span className={styles.card__badges}>
+      <span
+        className={cn({
+          [styles.card__category]: true,
+          [styles[CATEGORY_CLASS[category]]]: true,
+        })}
+      >
+        {CATEGORY_LABEL[category]}
+      </span>
+
+      <span
+        className={cn({
+          [styles.card__status]: true,
+          [styles['card__status--closed']]: isClosed,
+        })}
+      >
+        {formatRecruitmentStatus(status, dDay)}
+      </span>
+    </span>
+  );
+}
+
 interface RecruitmentCardProps {
   recruitment: TeamRecruitment;
   eventLabel?: string;
-  /** 헤더 우측에 배치할 요소. 예: 내가 지원한 모집글 목록의 지원 상태 뱃지 */
   rightSlot?: ReactNode;
-  /** 정보 행 우측에 배치할 요소. 예: 내가 지원한 모집글 목록의 채팅 버튼 */
   footerAction?: ReactNode;
 }
 
 export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, footerAction }: RecruitmentCardProps) {
   const logger = useLogger();
 
-  const isClosed = recruitment.status !== 'RECRUITING';
   const isFull = recruitment.current_participants >= recruitment.max_participants;
 
   const handleClick = () => {
@@ -47,25 +76,7 @@ export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, fo
       />
 
       <div className={styles.card__header}>
-        <span className={styles.card__badges}>
-          <span
-            className={cn({
-              [styles.card__category]: true,
-              [styles[CATEGORY_CLASS[recruitment.category]]]: true,
-            })}
-          >
-            {CATEGORY_LABEL[recruitment.category]}
-          </span>
-
-          <span
-            className={cn({
-              [styles.card__status]: true,
-              [styles['card__status--closed']]: isClosed,
-            })}
-          >
-            {formatRecruitmentStatus(recruitment.status, recruitment.d_day)}
-          </span>
-        </span>
+        <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
 
         {rightSlot}
       </div>
