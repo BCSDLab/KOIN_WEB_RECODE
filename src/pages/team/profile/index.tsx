@@ -1,5 +1,6 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
@@ -7,6 +8,7 @@ import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
+import ROUTES from 'static/routes';
 import styles from './TeamProfilePage.module.scss';
 
 interface TeamRecruitmentProfileSummary {
@@ -19,11 +21,12 @@ interface MenuCardProps {
   icon: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
+  onCardClick?: () => void;
 }
 
-function MenuCard({ icon: Icon, title, description }: MenuCardProps) {
+function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps) {
   return (
-    <button type="button" className={styles.menuCard}>
+    <button type="button" className={styles.menuCard} onClick={onCardClick}>
       <span className={styles.menuCard__icon}>
         <Icon aria-hidden />
       </span>
@@ -45,6 +48,7 @@ const MOCK_PROFILE: TeamRecruitmentProfileSummary = {
 };
 
 function TeamProfilePage() {
+  const router = useRouter();
   const hasProfile = MOCK_HAS_PROFILE;
   const profile = MOCK_PROFILE;
 
@@ -98,6 +102,7 @@ function TeamProfilePage() {
               icon={ListEndIcon}
               title={hasProfile ? '내가 지원한 모집글' : '내가 지원한 모집글 모아보기'}
               description="지원한 모집글과 지원 상태를 확인할 수 있어요."
+              onCardClick={() => router.push(ROUTES.TeamMyApplications())}
             />
           </div>
         </div>

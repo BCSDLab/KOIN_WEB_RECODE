@@ -68,7 +68,7 @@ export default function TeamNotificationsPage() {
       markRead(notification.id);
     }
 
-    // TODO: APPLICANT_MANAGEMENT · MY_APPLICATIONS 는 해당 화면 구현 후 라우팅을 연결한다.
+    // TODO: APPLICANT_MANAGEMENT는 지원자 관리 화면 구현 후 라우팅을 연결한다.
     if (
       notification.target_type === 'CHAT_ROOM' &&
       notification.recruitment_id !== null &&
@@ -80,6 +80,11 @@ export default function TeamNotificationsPage() {
           chatRoomId: String(notification.chat_room_id),
         }),
       );
+      return;
+    }
+
+    if (notification.target_type === 'MY_APPLICATIONS') {
+      router.push(ROUTES.TeamMyApplications());
     }
   };
 
