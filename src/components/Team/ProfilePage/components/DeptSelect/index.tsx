@@ -15,6 +15,7 @@ interface DeptSelectProps {
   placeholder?: string;
   onChange: (event: { target: { value: string } }) => void;
   id?: string;
+  disabled?: boolean;
   ariaDescribedBy?: string;
 }
 
@@ -24,6 +25,7 @@ export default function DeptSelect({
   placeholder = '선택해주세요.',
   onChange,
   id,
+  disabled = false,
   ariaDescribedBy,
 }: DeptSelectProps) {
   const [isOpen, , closeMenu, triggerOpen] = useBooleanState(false);
@@ -54,6 +56,7 @@ export default function DeptSelect({
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-describedby={ariaDescribedBy}
+        disabled={disabled}
         onClick={handleTriggerClick}
       >
         {selectedOption?.label ?? placeholder}

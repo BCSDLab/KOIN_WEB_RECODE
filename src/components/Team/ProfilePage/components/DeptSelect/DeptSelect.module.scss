@@ -32,6 +32,12 @@
     &--selected {
       color: #0b0b0d;
     }
+
+    &:disabled {
+      background: #f8f8fa;
+      color: #cacaca;
+      cursor: not-allowed;
+    }
   }
 
   &__list {

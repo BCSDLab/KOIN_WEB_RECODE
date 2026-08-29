@@ -150,6 +150,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                   value={field.value || null}
                   placeholder="학과 · 학부를 선택해주세요."
                   onChange={(event) => field.onChange(event.target.value)}
+                  disabled={isSaving}
                   ariaDescribedBy={ariaDescribedBy}
                 />
               )}
@@ -166,6 +167,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
               className={controlClassName}
               placeholder="학번을 작성해주세요."
               maxLength={10}
+              disabled={isSaving}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid}
               {...register('studentNumber', { required: '학번을 작성해주세요.' })}
