@@ -100,7 +100,11 @@ export default function TeamListPage() {
           {!isLoading && !isError && recruitments.length > 0 && (
             <div className={styles.list}>
               {recruitments.map((recruitment) => (
-                <RecruitmentCard key={recruitment.id} recruitment={recruitment} />
+                <RecruitmentCard
+                  key={recruitment.id}
+                  recruitment={recruitment}
+                  eventLabel="team_recruitment_post_select"
+                />
               ))}
 
               {isFetchingNextPage && <p className={styles.loadingIndicator}>모집글을 불러오는 중입니다.</p>}
