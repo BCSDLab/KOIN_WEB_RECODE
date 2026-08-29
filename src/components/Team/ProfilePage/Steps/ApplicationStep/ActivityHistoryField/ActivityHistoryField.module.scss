@@ -290,6 +290,11 @@
     transform: translate(-50%, -50%);
   }
 
+  &__checkboxInput:focus-visible ~ &__radioIcon::before {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
   &__textarea {
     box-sizing: border-box;
     width: 100%;
