@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -10,9 +11,21 @@
   background: #fff;
   color: #1f1f1f;
 
-  &:focus-visible {
-    outline: 2px solid #b611f5;
-    outline-offset: 2px;
+  &__overlayLink {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
+  }
+
+  &__action {
+    position: relative;
+    z-index: 2;
   }
 
   &__header {

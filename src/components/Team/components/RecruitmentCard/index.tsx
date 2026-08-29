@@ -38,7 +38,14 @@ export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, fo
   };
 
   return (
-    <Link href={ROUTES.TeamDetail({ postId: String(recruitment.id) })} className={styles.card} onClick={handleClick}>
+    <div className={styles.card}>
+      <Link
+        href={ROUTES.TeamDetail({ postId: String(recruitment.id) })}
+        className={styles.card__overlayLink}
+        onClick={handleClick}
+        aria-label={recruitment.title}
+      />
+
       <div className={styles.card__header}>
         <span className={styles.card__badges}>
           <span
@@ -99,8 +106,8 @@ export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, fo
           </span>
         </div>
 
-        {footerAction}
+        {footerAction && <div className={styles.card__action}>{footerAction}</div>}
       </div>
-    </Link>
+    </div>
   );
 }
