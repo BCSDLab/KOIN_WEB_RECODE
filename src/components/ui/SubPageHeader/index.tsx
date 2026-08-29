@@ -9,9 +9,16 @@ interface SubPageHeaderProps {
   onBack?: () => void;
   rightAction?: ReactNode;
   className?: string;
+  size?: 'small' | 'medium';
 }
 
-export default function SubPageHeader({ title, onBack, rightAction, className }: SubPageHeaderProps) {
+export default function SubPageHeader({
+  title,
+  onBack,
+  rightAction,
+  className,
+  size = 'small',
+}: SubPageHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
@@ -28,7 +35,14 @@ export default function SubPageHeader({ title, onBack, rightAction, className }:
       <button type="button" className={styles['header__back-button']} onClick={handleBack} aria-label="뒤로가기">
         <ArrowBackIcon />
       </button>
-      <h1 className={styles.header__title}>{title}</h1>
+      <h1
+        className={cn({
+          [styles.header__title]: true,
+          [styles['header__title--medium']]: size === 'medium',
+        })}
+      >
+        {title}
+      </h1>
       {rightAction ?? <div className={styles.header__spacer} />}
     </div>
   );

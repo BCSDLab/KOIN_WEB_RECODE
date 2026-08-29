@@ -28,11 +28,20 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    max-width: calc(100% - 144px);
+    overflow: hidden;
     font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #000;
     margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--medium {
+      font-size: 18px;
+      font-weight: 500;
+    }
   }
 
   &__spacer {
