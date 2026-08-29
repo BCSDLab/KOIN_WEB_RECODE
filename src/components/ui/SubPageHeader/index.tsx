@@ -14,7 +14,7 @@ export default function SubPageHeader({ title, fallbackPath = ROUTES.Main(), rig
   const router = useRouter();
 
   const handleBack = () => {
-    if (window.history.state?.idx === 0) {
+    if (window.history.length <= 1) {
       router.push(fallbackPath);
       return;
     }
