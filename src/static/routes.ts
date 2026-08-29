@@ -66,6 +66,12 @@ const ROUTES = {
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
+  TeamRecruitmentSearch: () => '/team/recruitment/search',
+  TeamRecruitmentNew: () => '/team/recruitment/new',
+  TeamRecruitmentApply: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/apply`,
+  TeamRecruitmentApplicants: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/applicants`,
+  TeamRecruitmentApplicantDetail: ({ postId, applicantId }: ROUTESParams<'postId' | 'applicantId'>) =>
+    `/team/recruitment/${postId}/applicants/${applicantId}`,
   TeamProfile: () => '/team/profile',
   TeamProfileCreate: ({ step }: ROUTESParams<'step'> = {}) =>
     `/team/profile/create${step ? `?step=${encodeURIComponent(step)}` : ''}`,

@@ -67,7 +67,7 @@ export function Selector({
       </button>
 
       {isOpen && (
-        <ul
+        <div
           className={cn({
             [styles['select__contents-list']]: true,
             [styles['select__contents-list--opened']]: isOpen,
@@ -77,7 +77,8 @@ export function Selector({
           style={{ maxHeight: `${dropDownMaxHeight}px` }}
         >
           {options.map((option) => (
-            <li
+            <button
+              type="button"
               role="option"
               key={option.value}
               className={cn({
@@ -85,17 +86,11 @@ export function Selector({
               })}
               aria-selected={option.value === value}
               onClick={() => handleOptionClick(option.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleOptionClick(option.value);
-                  e.preventDefault();
-                }
-              }}
             >
               {option.label}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

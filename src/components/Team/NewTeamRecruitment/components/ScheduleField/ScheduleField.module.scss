@@ -1,0 +1,53 @@
+@use "src/utils/scss/field-label" as field-label;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+
+  &__label {
+    @include field-label.label;
+  }
+}
+
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+  }
+
+  &__range {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__separator {
+    font-size: 16px;
+    font-weight: 600;
+    color: #727272;
+  }
+
+  &__date {
+    width: 147px;
+    height: 35px;
+    border: none;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 12px;
+    color: #4b4b4b;
+    cursor: pointer;
+  }
+}
