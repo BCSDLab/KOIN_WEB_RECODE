@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
-import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
+import DatePickerModal from 'components/ui/DatePickerModal';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getYyyyMmDd } from 'utils/ts/calendar';
