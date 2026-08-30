@@ -330,7 +330,7 @@ export default function RecruitmentDetail() {
       />
 
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
-      {router.isReady && (!isValidRecruitmentId || isError) && (
+      {router.isReady && !data && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
       )}
       {data && <DetailContent recruitment={data} />}

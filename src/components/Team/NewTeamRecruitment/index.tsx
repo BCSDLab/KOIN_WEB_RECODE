@@ -80,7 +80,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
     });
 
     if (!onSubmit) {
-      // To Do: 모집글 작성 API 연결
+      // TODO: 모집글 작성 담당 PR에서 작성 API를 연결한다.
       closeConfirmModal();
       return;
     }
