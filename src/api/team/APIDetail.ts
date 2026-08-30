@@ -5,6 +5,7 @@ import {
   MyCreatedTeamRecruitmentListResponse,
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
+  TeamRecruitmentDetailResponse,
   TeamChatDirectRoomResponse,
   TeamChatMessage,
   TeamChatMessageListRequest,
@@ -17,7 +18,60 @@ import {
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
   TeamRecruitmentNotificationListResponse,
+  TeamRecruitmentUpdateRequest,
 } from './entity';
+
+export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor(
+    public authorization: string | undefined,
+    recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
+
+export class DeleteTeamRecruitment<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
+
+export class PutTeamRecruitment<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    public data: TeamRecruitmentUpdateRequest,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
 
 const TEAM_CHAT_MESSAGE_DEFAULT_LIMIT = 100;
 

@@ -1,9 +1,11 @@
 import APIClient from 'utils/ts/apiClient';
 
 import {
+  DeleteTeamRecruitment,
   DeleteTeamRecruitmentNotifications,
   GetMyCreatedTeamRecruitments,
   GetMyTeamRecruitmentApplications,
+  GetTeamRecruitmentDetail,
   GetTeamRecruitmentChatMessages,
   GetTeamRecruitmentChatRoom,
   GetTeamRecruitmentApplicants,
@@ -13,9 +15,13 @@ import {
   PostTeamRecruitmentDirectChatRoom,
   PostTeamRecruitmentNotificationRead,
   PostTeamRecruitmentNotificationsMarkAllRead,
+  PutTeamRecruitment,
   PutCloseTeamRecruitment,
 } from './APIDetail';
 
+export const deleteTeamRecruitment = APIClient.of(DeleteTeamRecruitment);
+export const getTeamRecruitmentDetail = APIClient.of(GetTeamRecruitmentDetail);
+export const updateTeamRecruitment = APIClient.of(PutTeamRecruitment);
 export const getTeamRecruitmentList = APIClient.of(GetTeamRecruitmentList);
 export const getMyTeamRecruitmentApplications = APIClient.of(GetMyTeamRecruitmentApplications);
 export const getTeamRecruitmentApplicants = APIClient.of(GetTeamRecruitmentApplicants);

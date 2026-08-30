@@ -70,7 +70,6 @@ export default function TeamListPage() {
       redirectToLogin(router.asPath);
       return;
     }
-
     router.push(ROUTES.TeamRecruitmentNew());
   };
 

@@ -55,6 +55,65 @@ export interface TeamRecruitmentListResponse extends APIResponse {
   current_page: number;
 }
 
+export type TeamRecruitmentApplyBlockReason =
+  | 'LOGIN_REQUIRED'
+  | 'PROFILE_REQUIRED'
+  | 'OWN_RECRUITMENT'
+  | 'RECRUITMENT_CLOSED'
+  | 'DEADLINE_PASSED'
+  | 'ROLE_CLOSED'
+  | 'ALREADY_APPLIED'
+  | 'RECRUITMENT_DELETED';
+
+export interface TeamRecruitmentApplicationSummary {
+  application_id: number;
+  status: TeamApplicationStatus;
+}
+
+export interface TeamRecruitmentDetailResponse extends APIResponse, TeamRecruitmentCard {
+  author_nickname: string;
+  description: string;
+  related_url: string | null;
+  qualification: string | null;
+  created_at: string;
+  is_author: boolean;
+  can_apply: boolean;
+  apply_block_reason: TeamRecruitmentApplyBlockReason | null;
+  application: TeamRecruitmentApplicationSummary | null;
+  can_manage_applicants: boolean;
+  team_chat_available: boolean;
+  team_chat_room_id: number | null;
+}
+
+interface TeamRecruitmentUpdateBaseRequest {
+  category: TeamRecruitmentCategory;
+  title: string;
+  meeting_type: TeamRecruitmentMeetingType;
+  activity_start_date: string;
+  activity_end_date: string;
+  deadline_date: string;
+  description: string;
+  related_url: string | null;
+  qualification: string | null;
+}
+
+export interface TeamRecruitmentUpdateRole {
+  id?: number;
+  name: string;
+  max_participants: number;
+}
+
+export type TeamRecruitmentUpdateRequest =
+  | (TeamRecruitmentUpdateBaseRequest & {
+      recruitment_type: 'ROLE_BASED';
+      roles: TeamRecruitmentUpdateRole[];
+    })
+  | (TeamRecruitmentUpdateBaseRequest & {
+      recruitment_type: 'GENERAL';
+      max_participants: number;
+      roles: [];
+    });
+
 export type TeamRecruitmentNotificationType =
   | 'NEW_APPLICATION'
   | 'APPLICATION_ACCEPTED'

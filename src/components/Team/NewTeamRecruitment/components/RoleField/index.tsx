@@ -3,6 +3,7 @@ import MinusIcon from 'assets/svg/Team/minus-sign.svg';
 import PlusIcon from 'assets/svg/Team/plus.svg';
 import DeleteIcon from 'assets/svg/Team/x.svg';
 import {
+  TEAM_RECRUITMENT_MAX_MEMBER_COUNT,
   TEAM_RECRUITMENT_MAX_ROLE_COUNT,
   TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH,
 } from 'components/Team/NewTeamRecruitment/constants';
@@ -13,17 +14,20 @@ import styles from './RoleField.module.scss';
 
 interface RoleFieldProps {
   control: Control<TeamRecruitmentFormValues>;
+  eventLabel: string;
 }
 
-export default function RoleField({ control }: RoleFieldProps) {
+export default function RoleField({ control, eventLabel }: RoleFieldProps) {
   const logger = useLogger();
-  const { fields, append, remove } = useFieldArray({ control, name: 'roles' });
+  const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
   const isRoleUnified = useWatch({ control, name: 'isRoleUnified' });
+  const roles = useWatch({ control, name: 'roles' });
+  const totalMemberCount = roles.reduce((sum, role) => sum + role.memberCount, 0);
   const isAddDisabled = isRoleUnified || fields.length >= TEAM_RECRUITMENT_MAX_ROLE_COUNT;
 
   const handleAddRole = () => {
     if (isAddDisabled) return;
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit_role', value: '역할 추가' });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: eventLabel, value: '역할 추가' });
     append({ name: '', memberCount: 1 });
   };
 
@@ -61,7 +65,7 @@ export default function RoleField({ control }: RoleFieldProps) {
               onChange={() => {
                 logger.actionEventClick({
                   team: 'CAMPUS',
-                  event_label: 'team_recruitment_recruit_role',
+                  event_label: eventLabel,
                   value: '역할 구분 없이 모집하기',
                 });
                 field.onChange(!field.value);
@@ -88,7 +92,12 @@ export default function RoleField({ control }: RoleFieldProps) {
                 <MinusIcon />
               </button>
               <span>{field.value}</span>
-              <button type="button" aria-label="인원수 증가" onClick={() => field.onChange(field.value + 1)}>
+              <button
+                type="button"
+                aria-label="인원수 증가"
+                disabled={field.value >= TEAM_RECRUITMENT_MAX_MEMBER_COUNT}
+                onClick={() => field.onChange(field.value + 1)}
+              >
                 <PlusIcon />
               </button>
             </div>
@@ -96,7 +105,7 @@ export default function RoleField({ control }: RoleFieldProps) {
         />
       ) : (
         fields.map((roleField, index) => (
-          <div key={roleField.id} className={styles.field__row}>
+          <div key={roleField.fieldId} className={styles.field__row}>
             <Controller
               control={control}
               name={`roles.${index}.name`}
@@ -129,7 +138,12 @@ export default function RoleField({ control }: RoleFieldProps) {
                     <MinusIcon />
                   </button>
                   <span>{field.value}</span>
-                  <button type="button" aria-label="인원수 증가" onClick={() => field.onChange(field.value + 1)}>
+                  <button
+                    type="button"
+                    aria-label="인원수 증가"
+                    disabled={totalMemberCount >= TEAM_RECRUITMENT_MAX_MEMBER_COUNT}
+                    onClick={() => field.onChange(field.value + 1)}
+                  >
                     <PlusIcon />
                   </button>
                 </div>
