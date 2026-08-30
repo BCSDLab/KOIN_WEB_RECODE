@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import mergeChatMessages from 'api/team/mergeChatMessages';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
@@ -14,6 +13,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import showToast from 'utils/ts/showToast';
+import mergeChatMessages from 'utils/ts/teamChatMessages';
 import type { TeamChatMessage } from 'api/team/entity';
 import styles from './TeamChatRoom.module.scss';
 

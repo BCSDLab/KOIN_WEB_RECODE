@@ -1,4 +1,4 @@
-import type { TeamChatMessage } from './entity';
+import type { TeamChatMessage } from 'api/team/entity';
 
 export default function mergeChatMessages(...messageLists: TeamChatMessage[][]) {
   const messageMap = new Map<number, TeamChatMessage>();
