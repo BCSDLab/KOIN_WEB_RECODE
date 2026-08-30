@@ -2,11 +2,14 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { mutationOptions, QueryClient } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
 import { teamQueryKeys } from './queries';
+import type { TeamChatMessageSendRequest } from './entity';
 import {
+  createTeamRecruitmentDirectChatRoom,
   closeTeamRecruitment,
   deleteAllTeamRecruitmentNotifications,
   markAllTeamRecruitmentNotificationsRead,
   markTeamRecruitmentNotificationRead,
+  sendTeamRecruitmentChatMessage,
 } from './index';
 
 const invalidateNotifications = (queryClient: QueryClient) =>
@@ -29,6 +32,21 @@ export const teamMutations = {
     mutationOptions({
       mutationFn: () => deleteAllTeamRecruitmentNotifications(token),
       onSuccess: () => invalidateNotifications(queryClient),
+    }),
+
+  sendChatMessage: (queryClient: QueryClient, token: string, recruitmentId: number, chatRoomId: number) =>
+    mutationOptions({
+      mutationFn: (data: TeamChatMessageSendRequest) =>
+        sendTeamRecruitmentChatMessage(token, recruitmentId, chatRoomId, data),
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: teamQueryKeys.chatMessagesRoot(token, recruitmentId, chatRoomId),
+        }),
+    }),
+
+  createDirectChatRoom: (token: string, recruitmentId: number) =>
+    mutationOptions({
+      mutationFn: (applicationId: number) => createTeamRecruitmentDirectChatRoom(token, recruitmentId, applicationId),
     }),
 
   closeRecruitment: (queryClient: QueryClient, token: string) =>

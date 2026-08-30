@@ -4,9 +4,13 @@ import {
   DeleteTeamRecruitmentNotifications,
   GetMyCreatedTeamRecruitments,
   GetMyTeamRecruitmentApplications,
+  GetTeamRecruitmentChatMessages,
+  GetTeamRecruitmentChatRoom,
   GetTeamRecruitmentApplicants,
   GetTeamRecruitmentList,
   GetTeamRecruitmentNotifications,
+  PostTeamRecruitmentChatMessage,
+  PostTeamRecruitmentDirectChatRoom,
   PostTeamRecruitmentNotificationRead,
   PostTeamRecruitmentNotificationsMarkAllRead,
   PutCloseTeamRecruitment,
@@ -19,5 +23,9 @@ export const getTeamRecruitmentNotifications = APIClient.of(GetTeamRecruitmentNo
 export const markTeamRecruitmentNotificationRead = APIClient.of(PostTeamRecruitmentNotificationRead);
 export const markAllTeamRecruitmentNotificationsRead = APIClient.of(PostTeamRecruitmentNotificationsMarkAllRead);
 export const deleteAllTeamRecruitmentNotifications = APIClient.of(DeleteTeamRecruitmentNotifications);
+export const getTeamRecruitmentChatRoom = APIClient.of(GetTeamRecruitmentChatRoom);
+export const getTeamRecruitmentChatMessages = APIClient.of(GetTeamRecruitmentChatMessages);
+export const sendTeamRecruitmentChatMessage = APIClient.of(PostTeamRecruitmentChatMessage);
+export const createTeamRecruitmentDirectChatRoom = APIClient.of(PostTeamRecruitmentDirectChatRoom);
 export const getMyCreatedTeamRecruitments = APIClient.of(GetMyCreatedTeamRecruitments);
 export const closeTeamRecruitment = APIClient.of(PutCloseTeamRecruitment);

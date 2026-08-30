@@ -126,6 +126,57 @@ export interface MyTeamRecruitmentApplicationListResponse extends APIResponse {
   current_page: number;
 }
 
+export type TeamChatRoomType = 'TEAM' | 'DIRECT';
+
+export type TeamChatRoomStatus = 'ACTIVE' | 'READ_ONLY';
+
+export interface TeamChatCounterpart {
+  id: number;
+  nickname: string;
+}
+
+export interface TeamChatRoomResponse extends APIResponse {
+  chat_room_id: number;
+  room_name: string;
+  room_type: TeamChatRoomType;
+  status: TeamChatRoomStatus;
+  member_count: number;
+  max_member_count: number;
+  counterpart: TeamChatCounterpart | null;
+}
+
+export interface TeamChatDirectRoomResponse extends APIResponse {
+  chat_room_id: number;
+  room_name: string;
+  room_type: 'DIRECT';
+  status: TeamChatRoomStatus;
+  counterpart: TeamChatCounterpart;
+}
+
+export interface TeamChatMessage {
+  message_id: number;
+  user_id: number;
+  user_nickname: string;
+  content: string;
+  timestamp: string;
+  is_image: boolean;
+  unread_count: number;
+}
+
+export type TeamChatMessageListResponse = TeamChatMessage[];
+
+export interface TeamChatMessageListRequest {
+  [key: string]: unknown;
+  afterMessageId?: number;
+  beforeMessageId?: number;
+  limit?: number;
+}
+
+export interface TeamChatMessageSendRequest {
+  content: string;
+  is_image: boolean;
+}
+
 export interface TeamRecruitmentApplicantManagementRecruitment extends TeamRecruitmentCard {
   team_chat_available: boolean;
   team_chat_room_id: number | null;
