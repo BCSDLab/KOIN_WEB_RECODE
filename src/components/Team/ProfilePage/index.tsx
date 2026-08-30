@@ -27,10 +27,19 @@ interface TeamProfileFormProps {
 
 const MODE_TEXT: Record<
   TeamProfileFormMode,
-  { title: string; submitLabel: string; confirmMessage: string; confirmLabel: string; successMessage: string }
+  {
+    title: string;
+    // 데스크탑 페이지 타이틀(Figma 기준). 모바일 앱바 타이틀(title)은 기존 문구를 유지한다.
+    desktopTitle: string;
+    submitLabel: string;
+    confirmMessage: string;
+    confirmLabel: string;
+    successMessage: string;
+  }
 > = {
   create: {
     title: '팀원 모집 프로필 작성',
+    desktopTitle: '프로필 작성',
     submitLabel: '저장',
     confirmMessage: '프로필을 저장하시겠어요?',
     confirmLabel: '저장하기',
@@ -38,6 +47,7 @@ const MODE_TEXT: Record<
   },
   edit: {
     title: '팀원 모집 프로필 수정',
+    desktopTitle: '프로필 수정',
     submitLabel: '수정하기',
     confirmMessage: '프로필을 수정하시겠어요?',
     confirmLabel: '수정하기',
@@ -189,7 +199,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
         <div className={styles.mobileHeader}>
           <SubPageHeader title={MODE_TEXT[mode].title} />
         </div>
-        <h1 className={styles.title}>{MODE_TEXT[mode].title}</h1>
+        <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>
 
         <FormProvider {...methods}>
           <Suspense fallback={<LoadingSpinner size="50px" />}>
