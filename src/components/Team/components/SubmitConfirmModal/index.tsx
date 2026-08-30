@@ -19,8 +19,12 @@ export default function SubmitConfirmModal({
   onConfirm,
   onCancel,
 }: SubmitConfirmModalProps) {
-  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: onCancel });
-  useEscapeKeyDown({ onEscape: onCancel });
+  const handleDismiss = () => {
+    if (!isSubmitting) onCancel();
+  };
+
+  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleDismiss });
+  useEscapeKeyDown({ onEscape: handleDismiss });
 
   return (
     <div className={styles.background} ref={backgroundRef}>

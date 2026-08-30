@@ -1,0 +1,40 @@
+@use "src/utils/scss/field-label" as field-label;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+
+  &__label {
+    @include field-label.label;
+  }
+
+  &__dropdown {
+    button {
+      height: 40px;
+      padding: 8px 12px;
+      border-radius: 16px;
+      background-color: #fff;
+      color: #000;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    ul {
+      border-radius: 16px;
+      background-color: #fff;
+    }
+
+    li {
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #000;
+      background-color: #fff;
+
+      &[aria-selected='true'] {
+        color: #b611f5;
+      }
+    }
+  }
+}

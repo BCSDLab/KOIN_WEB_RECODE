@@ -1,36 +1,39 @@
 import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
 import TagInput from 'components/Team/ProfilePage/components/TagInput';
-import { PROFILE_STEPS, type ProfileFormValues } from 'components/Team/ProfilePage/types';
+import { PROFILE_STEPS, type ProfileFormValues, type TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ActivityHistoryField from './ActivityHistoryField';
 import styles from './ApplicationStep.module.scss';
 
 interface ApplicationStepProps {
+  mode: TeamProfileFormMode;
   onBack: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
   submitLabel: string;
 }
 
-const loggingTitle = {
-  SKILL_ADD: 'team_profile_skill_add',
-  SKILL_REMOVE: 'team_profile_skill_remove',
-  SAVE: 'team_profile_save',
-};
+// Notion 로깅 명세의 event_label이 'edit'가 아닌 'modify'를 쓴다.
+const LOG_MODE: Record<TeamProfileFormMode, 'create' | 'modify'> = { create: 'create', edit: 'modify' };
 
-export default function ApplicationStep({ onBack, onSubmit, isSubmitting, submitLabel }: ApplicationStepProps) {
+export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, submitLabel }: ApplicationStepProps) {
   const { actionEventClick } = useLogger();
   const { control, register } = useFormContext<ProfileFormValues>();
   const { errors } = useFormState({ control });
+  const logMode = LOG_MODE[mode];
 
   const preferredRole = useWatch({ control, name: 'preferredRole' }) ?? '';
   const introduction = useWatch({ control, name: 'introduction' }) ?? '';
 
   const handleSave = () => {
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.SAVE, value: '저장' });
+    actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: `team_recruitment_profile_${logMode}_submit`,
+      value: submitLabel,
+    });
     onSubmit();
   };
 
@@ -64,31 +67,22 @@ export default function ApplicationStep({ onBack, onSubmit, isSubmitting, submit
         </FormField>
 
         <TagInput
+          mode={mode}
           label="보유기술 / 자격증"
           description="기술 / 자격증은 항목별로 하나씩 작성해주세요."
           addButtonLabel="기술 / 자격증 추가"
           placeholder="기술 / 자격증을 작성해주세요."
           onAppend={() =>
-            // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
             actionEventClick({
-              team: 'TEAM',
+              team: 'CAMPUS',
               event_category: 'click',
-              event_label: loggingTitle.SKILL_ADD,
+              event_label: `team_recruitment_profile_${logMode}_skill_add`,
               value: '기술 / 자격증 추가',
-            })
-          }
-          onRemove={(value) =>
-            // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-            actionEventClick({
-              team: 'TEAM',
-              event_category: 'click',
-              event_label: loggingTitle.SKILL_REMOVE,
-              value,
             })
           }
         />
 
-        <ActivityHistoryField />
+        <ActivityHistoryField mode={mode} />
 
         <FormField
           label="자기소개"

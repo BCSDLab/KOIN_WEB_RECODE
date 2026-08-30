@@ -5,7 +5,7 @@ import { deptQueries } from 'api/dept/queries';
 import DeptSelect from 'components/Team/ProfilePage/components/DeptSelect';
 import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
-import { PROFILE_STEPS, type ProfileFormValues } from 'components/Team/ProfilePage/types';
+import { PROFILE_STEPS, type ProfileFormValues, type TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -13,19 +13,30 @@ import showToast from 'utils/ts/showToast';
 import styles from './BasicInfoStep.module.scss';
 
 interface BasicInfoStepProps {
+  mode: TeamProfileFormMode;
   onNext: () => void;
 }
 
-const loggingTitle = {
-  LOAD_USER_INFO: 'team_profile_load_user_info',
-  NEXT: 'team_profile_basic_info_next',
+const LOGGING_TITLE: Record<TeamProfileFormMode, { LOAD_USER_INFO: string; MAJOR_SELECT: string; NEXT: string }> = {
+  create: {
+    LOAD_USER_INFO: 'team_recruitment_profile_create_load',
+    MAJOR_SELECT: 'team_recruitment_profile_create_major',
+    NEXT: 'team_recruitment_profile_create_next',
+  },
+  edit: {
+    LOAD_USER_INFO: 'team_recruitment_profile_modify_load',
+    MAJOR_SELECT: 'team_recruitment_profile_modify_major_select',
+    NEXT: 'team_recruitment_profile_modify_next',
+  },
 };
 
-export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
-  const { actionEventClick } = useLogger();
+export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
   const token = useTokenState();
+  const { actionEventClick } = useLogger();
   const { control, register, setValue, trigger, getValues } = useFormContext<ProfileFormValues>();
   const { errors } = useFormState({ control });
+
+  const loggingTitle = LOGGING_TITLE[mode];
 
   const nickname = useWatch({ control, name: 'nickname' }) ?? '';
 
@@ -38,7 +49,6 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
       setValue('nickname', data.nickname ?? '', { shouldValidate: true });
       setValue('studentNumber', data.student_number ?? '', { shouldValidate: true });
 
-      // 학과 select의 옵션과 정확히 일치할 때만 채운다. 일치하지 않으면 값만 세팅되고 화면엔 placeholder가 남아 혼란스럽다.
       const isKnownDept = deptOptionList.some((option) => option.value === data.department);
       if (isKnownDept) {
         setValue('department', data.department, { shouldValidate: true });
@@ -56,8 +66,12 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
   });
 
   const handleLoadUserInfo = () => {
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.LOAD_USER_INFO, value: '' });
+    actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: loggingTitle.LOAD_USER_INFO,
+      value: '회원정보 불러오기',
+    });
 
     if (!token) {
       showToast('warning', '로그인 후 이용해주세요.');
@@ -70,8 +84,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     mutationFn: (data: { department: string; studentNumber: string }) =>
       updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
     onSuccess: () => {
-      // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-      actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
+      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
       onNext();
     },
     onError: (error) => {
@@ -149,7 +162,15 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                   options={deptOptionList}
                   value={field.value || null}
                   placeholder="학과 · 학부를 선택해주세요."
-                  onChange={(event) => field.onChange(event.target.value)}
+                  onChange={(event) => {
+                    field.onChange(event.target.value);
+                    actionEventClick({
+                      team: 'CAMPUS',
+                      event_category: 'click',
+                      event_label: loggingTitle.MAJOR_SELECT,
+                      value: event.target.value,
+                    });
+                  }}
                   disabled={isSaving}
                   ariaDescribedBy={ariaDescribedBy}
                 />

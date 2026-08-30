@@ -1,30 +1,50 @@
-import { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
-import { teamRecruitmentProfileQueries, useUpsertTeamRecruitmentProfileMutation } from 'api/teamRecruitmentProfile/queries';
+import {
+  teamRecruitmentProfileQueries,
+  useUpsertTeamRecruitmentProfileMutation,
+} from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import useProfileStep from './hooks/useProfileStep';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
-import { PROFILE_STEPS, type ProfileFormValues, type ProfileStepTitle } from './types';
+import { PROFILE_STEPS, type ProfileFormValues, type ProfileStepTitle, type TeamProfileFormMode } from './types';
 import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import styles from './ProfilePage.module.scss';
-
-export type TeamProfileFormMode = 'create' | 'edit';
 
 interface TeamProfileFormProps {
   mode: TeamProfileFormMode;
 }
 
-const MODE_TEXT: Record<TeamProfileFormMode, { title: string; submitLabel: string; successMessage: string }> = {
-  create: { title: '팀원 모집 프로필 작성', submitLabel: '저장', successMessage: '프로필이 저장되었습니다.' },
-  edit: { title: '팀원 모집 프로필 수정', submitLabel: '수정하기', successMessage: '프로필이 수정되었습니다.' },
+const MODE_TEXT: Record<
+  TeamProfileFormMode,
+  { title: string; submitLabel: string; confirmMessage: string; confirmLabel: string; successMessage: string }
+> = {
+  create: {
+    title: '팀원 모집 프로필 작성',
+    submitLabel: '저장',
+    confirmMessage: '프로필을 저장하시겠어요?',
+    confirmLabel: '저장하기',
+    successMessage: '프로필이 저장되었습니다.',
+  },
+  edit: {
+    title: '팀원 모집 프로필 수정',
+    submitLabel: '수정하기',
+    confirmMessage: '프로필을 수정하시겠어요?',
+    confirmLabel: '수정하기',
+    successMessage: '프로필이 수정되었습니다.',
+  },
 };
+
+const LOG_MODE: Record<TeamProfileFormMode, 'create' | 'modify'> = { create: 'create', edit: 'modify' };
 
 const toRequestBody = (values: ProfileFormValues): UpsertTeamRecruitmentProfileRequest => ({
   profile_nickname: values.nickname.trim(),
@@ -44,8 +64,16 @@ const toRequestBody = (values: ProfileFormValues): UpsertTeamRecruitmentProfileR
 export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const router = useRouter();
   const token = useTokenState();
+  const { actionEventClick } = useLogger();
   const isEditMode = mode === 'edit';
-  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(PROFILE_STEPS, '기본 정보');
+  const buildStepHref = (step: ProfileStepTitle) =>
+    isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
+  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(
+    PROFILE_STEPS,
+    '기본 정보',
+    buildStepHref,
+  );
+  const [pendingValues, setPendingValues] = useState<ProfileFormValues | null>(null);
 
   const methods = useForm<ProfileFormValues>({
     mode: 'onChange',
@@ -82,6 +110,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
         isOngoing: activity.is_ongoing,
         content: activity.description,
         status: 'saved',
+        hasBeenSaved: true,
       })),
       introduction: existingProfile.self_introduction,
     });
@@ -89,7 +118,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
 
   const { mutate: upsertProfile, isPending } = useUpsertTeamRecruitmentProfileMutation({
     onSuccess: () => {
-      // TODO: 완료 모달/오버레이 디자인 확정 후 교체
+      setPendingValues(null);
       showToast('success', MODE_TEXT[mode].successMessage);
       router.push(ROUTES.TeamProfile());
     },
@@ -109,13 +138,14 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     }
   }, [isReady, currentStep, methods, goToFirstStep]);
 
-  const handleSubmit = methods.handleSubmit(
+  // 저장/수정 버튼은 검증만 통과시키고, 실제 upsert는 확인 모달에서 승인해야 실행된다.
+  const handleRequestSubmit = methods.handleSubmit(
     (values) => {
       if (values.activities.some((activity) => activity.status === 'draft')) {
         showToast('warning', '작성 중인 활동 이력을 완료해주세요.');
         return;
       }
-      upsertProfile(toRequestBody(values));
+      setPendingValues(values);
     },
     (errors) => {
       // 1단계 필드가 비어 있으면 에러가 화면에 보이지 않으므로 1단계로 되돌린다.
@@ -128,6 +158,27 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     },
   );
 
+  const handleConfirmSubmit = () => {
+    if (!pendingValues) return;
+    actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'result',
+      event_label: `team_recruitment_profile_${LOG_MODE[mode]}_submit_confirm`,
+      value: MODE_TEXT[mode].confirmLabel,
+    });
+    upsertProfile(toRequestBody(pendingValues));
+  };
+
+  const handleCancelSubmit = () => {
+    actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: `team_recruitment_profile_${LOG_MODE[mode]}_submit_cancel`,
+      value: '취소하기',
+    });
+    setPendingValues(null);
+  };
+
   return (
     <div className={styles.container}>
       <SubPageHeader title={MODE_TEXT[mode].title} />
@@ -135,17 +186,28 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
       <FormProvider {...methods}>
         <Suspense fallback={<LoadingSpinner size="50px" />}>
           {currentStep === '기본 정보' ? (
-            <BasicInfoStep onNext={() => nextStep('지원서 작성')} />
+            <BasicInfoStep mode={mode} onNext={() => nextStep('지원서 작성')} />
           ) : (
             <ApplicationStep
+              mode={mode}
               onBack={goBack}
-              onSubmit={handleSubmit}
+              onSubmit={handleRequestSubmit}
               isSubmitting={isPending}
               submitLabel={MODE_TEXT[mode].submitLabel}
             />
           )}
         </Suspense>
       </FormProvider>
+
+      {pendingValues && (
+        <SubmitConfirmModal
+          message={MODE_TEXT[mode].confirmMessage}
+          confirmLabel={MODE_TEXT[mode].confirmLabel}
+          isSubmitting={isPending}
+          onConfirm={handleConfirmSubmit}
+          onCancel={handleCancelSubmit}
+        />
+      )}
     </div>
   );
 }

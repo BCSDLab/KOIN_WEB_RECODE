@@ -1,19 +1,33 @@
 import { useState } from 'react';
+import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
-import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
+import DatePickerModal from 'components/ui/DatePickerModal';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
-import type { ProfileFormValues } from 'components/Team/ProfilePage/types';
+import type { ProfileFormValues, TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import styles from './ActivityHistoryField.module.scss';
 
-const loggingTitle = {
-  ADD: 'team_profile_activity_add',
-  DONE: 'team_profile_activity_done',
-  EDIT: 'team_profile_activity_edit',
-  REMOVE: 'team_profile_activity_remove',
-};
+interface ActivityHistoryFieldProps {
+  mode: TeamProfileFormMode;
+}
+
+const LOGGING_TITLE: Record<TeamProfileFormMode, { ADD: string; EDIT: string; NEW_DONE: string; MODIFY_DONE: string }> =
+  {
+    create: {
+      ADD: 'team_recruitment_profile_create_activity_add',
+      EDIT: 'team_recruitment_profile_create_activity_modify',
+      NEW_DONE: 'team_recruitment_profile_create_activity_add_complete',
+      MODIFY_DONE: 'team_recruitment_profile_create_activity_modify_complete',
+    },
+    edit: {
+      ADD: 'team_recruitment_profile_modify_activity_add',
+      EDIT: 'team_recruitment_profile_modify_activity_modify',
+      NEW_DONE: 'team_recruitment_profile_modify_activity_complete',
+      MODIFY_DONE: 'team_recruitment_profile_modify_activity_modify_complete',
+    },
+  };
 
 type ActivityDateField = 'startDate' | 'endDate';
 
@@ -30,16 +44,21 @@ const createActivityId = () => {
   return `activity-${Date.now()}-${activitySequence}`;
 };
 
-export default function ActivityHistoryField() {
+export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps) {
   const { actionEventClick } = useLogger();
   const { control, register, getValues, setValue } = useFormContext<ProfileFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: 'activities' });
   const activities = useWatch({ control, name: 'activities' }) ?? [];
   const [openDatePicker, setOpenDatePicker] = useState<OpenDatePicker | null>(null);
+  const loggingTitle = LOGGING_TITLE[mode];
 
   const handleAppend = () => {
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.ADD, value: '활동 이력 추가' });
+    actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: loggingTitle.ADD,
+      value: '활동 이력 추가',
+    });
     append({
       id: createActivityId(),
       title: '',
@@ -48,20 +67,17 @@ export default function ActivityHistoryField() {
       isOngoing: false,
       content: '',
       status: 'draft',
+      hasBeenSaved: false,
     });
   };
 
   const handleRemove = (index: number) => {
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.REMOVE, value: '삭제' });
-    // 삭제로 인덱스가 밀리면 열려 있던 날짜 선택 모달이 엉뚱한 항목을 가리킬 수 있어 항상 닫는다.
     setOpenDatePicker(null);
     remove(index);
   };
 
   const handleEdit = (index: number) => {
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.EDIT, value: '수정' });
+    actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.EDIT, value: '수정' });
     setValue(`activities.${index}.status`, 'draft');
   };
 
@@ -89,9 +105,18 @@ export default function ActivityHistoryField() {
       return;
     }
 
-    // TODO: 팀원모집 도메인 로깅 team 값 컨벤션 확인 필요
-    actionEventClick({ team: 'TEAM', event_category: 'click', event_label: loggingTitle.DONE, value: '완료' });
+    if (activity.hasBeenSaved) {
+      actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: loggingTitle.MODIFY_DONE,
+        value: '수정하기',
+      });
+    } else {
+      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.NEW_DONE, value: '완료' });
+    }
     setValue(`activities.${index}.status`, 'saved');
+    setValue(`activities.${index}.hasBeenSaved`, true);
   };
 
   const handleToggleOngoing = (index: number, checked: boolean) => {
@@ -122,9 +147,20 @@ export default function ActivityHistoryField() {
                 <div className={styles.savedCard__head}>
                   <span className={styles.savedCard__title}>{activity.title}</span>
                   <div className={styles.savedCard__actions}>
-                    <button type="button" className={styles.savedCard__edit} onClick={() => handleEdit(index)}>
-                      수정
-                    </button>
+                    {mode === 'edit' ? (
+                      <button
+                        type="button"
+                        className={styles.savedCard__editIcon}
+                        onClick={() => handleEdit(index)}
+                        aria-label="활동 이력 수정"
+                      >
+                        <PencilLineIcon aria-hidden />
+                      </button>
+                    ) : (
+                      <button type="button" className={styles.savedCard__edit} onClick={() => handleEdit(index)}>
+                        수정
+                      </button>
+                    )}
                     <button
                       type="button"
                       className={styles.savedCard__remove}
@@ -240,7 +276,7 @@ export default function ActivityHistoryField() {
               </div>
 
               <button type="button" className={styles.draftCard__done} onClick={() => handleDone(index)}>
-                완료
+                {activity?.hasBeenSaved ? '수정하기' : '완료'}
               </button>
             </li>
           );
