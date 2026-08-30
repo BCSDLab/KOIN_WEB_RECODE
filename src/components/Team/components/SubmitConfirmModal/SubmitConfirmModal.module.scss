@@ -1,0 +1,94 @@
+.background {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000026;
+  z-index: 10;
+}
+
+.modal {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 311px;
+  border-radius: 8px;
+  z-index: 11;
+  background-color: #fff;
+  padding: 24px 32px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  &__message {
+    width: 100%;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #4b4b4b;
+    text-align: center;
+  }
+
+  &__description {
+    width: 100%;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8e8e8e;
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  &__cancel {
+    box-sizing: border-box;
+    flex: 1;
+    height: 44px;
+    border: 1px solid #8e8e8e;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #4b4b4b;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  &__confirm {
+    flex: 1;
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    background: #b611f5;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      background: #cacaca;
+      cursor: default;
+    }
+  }
+}

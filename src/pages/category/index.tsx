@@ -9,6 +9,7 @@ import HomeIcon from 'assets/svg/category/home-icon.svg';
 import InfoIcon from 'assets/svg/category/info-icon.svg';
 import PermanentJobIcon from 'assets/svg/category/permanent-job-icon.svg';
 import StoreIcon from 'assets/svg/category/store-icon.svg';
+import TeamIcon from 'assets/svg/category/team-icon.svg';
 import UserAddIcon from 'assets/svg/category/user-add-icon.svg';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
@@ -54,14 +55,15 @@ interface CategorySection {
 
 const quickMenus: CategoryItem[] = [
   {
-    title: '시간표',
-    description: '내 강의 정보 확인하기',
-    href: ROUTES.Timetable(),
-    Icon: CalendarIcon,
+    title: '팀원 모집',
+    description: '교내 활동 팀원 구하기',
+    href: ROUTES.Team(),
+    Icon: TeamIcon,
     logging: {
-      team: 'USER',
-      event_label: 'category_timetable',
-      value: '시간표',
+      // TODO: 퀵카드로 승격되면서 전용 event_label이 필요함 - Notion 로깅 스펙 확인 후 교체
+      team: 'CAMPUS',
+      event_label: 'category_etc',
+      value: '팀원 모집',
     },
   },
   {
@@ -121,6 +123,16 @@ const sections: CategorySection[] = [
           value: '주변상점',
         },
       },
+      {
+        title: '시간표',
+        href: ROUTES.Timetable(),
+        Icon: CalendarIcon,
+        logging: {
+          team: 'USER',
+          event_label: 'category_campus',
+          value: '시간표',
+        },
+      },
     ],
   },
   {
@@ -169,16 +181,6 @@ const sections: CategorySection[] = [
           team: 'CAMPUS',
           event_label: 'category_etc',
           value: '채팅',
-        },
-      },
-      {
-        title: '팀원 모집',
-        href: ROUTES.Team(),
-        Icon: UserAddIcon,
-        logging: {
-          team: 'CAMPUS',
-          event_label: 'category_etc',
-          value: '팀원 모집',
         },
       },
       {

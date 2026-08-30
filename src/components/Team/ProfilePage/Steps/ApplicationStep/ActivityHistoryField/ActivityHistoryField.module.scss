@@ -85,6 +85,12 @@
     cursor: pointer;
   }
 
+  &__editIcon {
+    display: inline-flex;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
   &__remove {
     display: inline-flex;
     flex-shrink: 0;

@@ -6,7 +6,7 @@ import ROUTES from 'static/routes';
  * 팀원 모집 프로필 작성 폼의 스텝을 URL 쿼리(`?step=`)로 관리한다.
  * `SignupPage/hooks/useStep`과 동일한 패턴이지만 라우트가 `ROUTES.AuthSignup`에 하드코딩되어 있어 재사용할 수 없다.
  */
-function useProfileStep<T extends string>(steps: T[], defaultStep: T) {
+function useProfileStep<T extends string>(steps: T[], defaultStep: T, buildStepHref: (step: T) => string) {
   const router = useRouter();
   const { step } = router.query as { step?: T };
 
@@ -14,7 +14,7 @@ function useProfileStep<T extends string>(steps: T[], defaultStep: T) {
 
   const nextStep = useCallback(
     (next: T, options?: { replace: boolean }) => {
-      const href = ROUTES.TeamProfileCreate({ step: next });
+      const href = buildStepHref(next);
 
       if (options?.replace) {
         router.replace(href);
@@ -22,7 +22,7 @@ function useProfileStep<T extends string>(steps: T[], defaultStep: T) {
       }
       router.push(href);
     },
-    [router],
+    [router, buildStepHref],
   );
 
   const goBack = useCallback(() => {
