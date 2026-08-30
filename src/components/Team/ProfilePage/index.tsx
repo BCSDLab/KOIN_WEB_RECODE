@@ -185,23 +185,28 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
 
   return (
     <div className={styles.container}>
-      <SubPageHeader title={MODE_TEXT[mode].title} />
+      <div className={styles.page}>
+        <div className={styles.mobileHeader}>
+          <SubPageHeader title={MODE_TEXT[mode].title} />
+        </div>
+        <h1 className={styles.title}>{MODE_TEXT[mode].title}</h1>
 
-      <FormProvider {...methods}>
-        <Suspense fallback={<LoadingSpinner size="50px" />}>
-          {currentStep === '기본 정보' ? (
-            <BasicInfoStep mode={mode} onNext={() => nextStep('지원서 작성')} />
-          ) : (
-            <ApplicationStep
-              mode={mode}
-              onBack={goBack}
-              onSubmit={handleRequestSubmit}
-              isSubmitting={isPending}
-              submitLabel={MODE_TEXT[mode].submitLabel}
-            />
-          )}
-        </Suspense>
-      </FormProvider>
+        <FormProvider {...methods}>
+          <Suspense fallback={<LoadingSpinner size="50px" />}>
+            {currentStep === '기본 정보' ? (
+              <BasicInfoStep mode={mode} onNext={() => nextStep('지원서 작성')} />
+            ) : (
+              <ApplicationStep
+                mode={mode}
+                onBack={goBack}
+                onSubmit={handleRequestSubmit}
+                isSubmitting={isPending}
+                submitLabel={MODE_TEXT[mode].submitLabel}
+              />
+            )}
+          </Suspense>
+        </FormProvider>
+      </div>
 
       {pendingValues && (
         <SubmitConfirmModal

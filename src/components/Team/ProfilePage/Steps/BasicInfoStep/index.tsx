@@ -113,9 +113,10 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
 
   return (
     <div className={styles.step}>
-      <StepIndicator steps={PROFILE_STEPS} currentIndex={0} />
+      <div className={styles.step__fields}>
+        <StepIndicator steps={PROFILE_STEPS} currentIndex={0} />
 
-      <div className={styles.step__body}>
+        <div className={styles.step__body}>
         <div className={styles.loadInfo}>
           <div className={styles.loadInfo__head}>
             <span className={styles.loadInfo__title}>
@@ -197,6 +198,7 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
             />
           )}
         </FormField>
+        </div>
       </div>
 
       <div className={styles.step__footer}>
