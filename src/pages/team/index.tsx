@@ -62,10 +62,10 @@ export default function TeamListPage() {
 
   const requestParams = useMemo<TeamRecruitmentInfiniteListRequest>(
     () => ({
-      ...(searchKeyword && { keyword: searchKeyword }),
+      keyword: searchKeyword,
       status: appliedFilter.status,
-      ...(appliedFilter.categories.length > 0 && { categories: appliedFilter.categories }),
-      ...(appliedFilter.meetingType && { meetingType: appliedFilter.meetingType }),
+      categories: appliedFilter.categories,
+      meetingType: appliedFilter.meetingType,
       sort: appliedFilter.sort,
     }),
     [appliedFilter, searchKeyword],
