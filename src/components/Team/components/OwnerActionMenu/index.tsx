@@ -1,5 +1,8 @@
+import { cn } from '@bcsdlab/utils';
+
 import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './OwnerActionMenu.module.scss';
 
 interface OwnerActionMenuProps {
@@ -9,6 +12,7 @@ interface OwnerActionMenuProps {
 
 export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuProps) {
   const [isMenuOpen, openMenu, closeMenu] = useBooleanState(false);
+  useEscapeKeyDown({ onEscape: closeMenu });
 
   const handleEdit = () => {
     closeMenu();
@@ -43,7 +47,10 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
             </button>
             <button
               type="button"
-              className={`${styles.menu__item} ${styles['menu__item--danger']}`}
+              className={cn({
+                [styles.menu__item]: true,
+                [styles['menu__item--danger']]: true,
+              })}
               role="menuitem"
               onClick={handleDelete}
             >

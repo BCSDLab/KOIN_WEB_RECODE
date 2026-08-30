@@ -3,6 +3,7 @@ import MinusIcon from 'assets/svg/Team/minus-sign.svg';
 import PlusIcon from 'assets/svg/Team/plus.svg';
 import DeleteIcon from 'assets/svg/Team/x.svg';
 import {
+  TEAM_RECRUITMENT_MAX_MEMBER_COUNT,
   TEAM_RECRUITMENT_MAX_ROLE_COUNT,
   TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH,
 } from 'components/Team/NewTeamRecruitment/constants';
@@ -19,6 +20,8 @@ export default function RoleField({ control }: RoleFieldProps) {
   const logger = useLogger();
   const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
   const isRoleUnified = useWatch({ control, name: 'isRoleUnified' });
+  const roles = useWatch({ control, name: 'roles' });
+  const totalMemberCount = roles.reduce((sum, role) => sum + role.memberCount, 0);
   const isAddDisabled = isRoleUnified || fields.length >= TEAM_RECRUITMENT_MAX_ROLE_COUNT;
 
   const handleAddRole = () => {
@@ -88,7 +91,12 @@ export default function RoleField({ control }: RoleFieldProps) {
                 <MinusIcon />
               </button>
               <span>{field.value}</span>
-              <button type="button" aria-label="인원수 증가" onClick={() => field.onChange(field.value + 1)}>
+              <button
+                type="button"
+                aria-label="인원수 증가"
+                disabled={field.value >= TEAM_RECRUITMENT_MAX_MEMBER_COUNT}
+                onClick={() => field.onChange(field.value + 1)}
+              >
                 <PlusIcon />
               </button>
             </div>
@@ -129,7 +137,12 @@ export default function RoleField({ control }: RoleFieldProps) {
                     <MinusIcon />
                   </button>
                   <span>{field.value}</span>
-                  <button type="button" aria-label="인원수 증가" onClick={() => field.onChange(field.value + 1)}>
+                  <button
+                    type="button"
+                    aria-label="인원수 증가"
+                    disabled={totalMemberCount >= TEAM_RECRUITMENT_MAX_MEMBER_COUNT}
+                    onClick={() => field.onChange(field.value + 1)}
+                  >
                     <PlusIcon />
                   </button>
                 </div>

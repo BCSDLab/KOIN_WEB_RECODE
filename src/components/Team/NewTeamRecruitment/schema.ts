@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH,
+  TEAM_RECRUITMENT_MAX_MEMBER_COUNT,
   TEAM_RECRUITMENT_MAX_ROLE_COUNT,
   TEAM_RECRUITMENT_PROGRESS_TYPES,
   TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH,
@@ -12,7 +13,7 @@ export const teamRecruitmentProgressTypeSchema = z.enum(TEAM_RECRUITMENT_PROGRES
 export const teamRecruitmentRoleSchema = z.object({
   id: z.number().optional(),
   name: z.string(),
-  memberCount: z.number().min(1).max(10),
+  memberCount: z.number().min(1).max(TEAM_RECRUITMENT_MAX_MEMBER_COUNT),
 });
 
 export const teamRecruitmentFormSchema = z
@@ -25,7 +26,7 @@ export const teamRecruitmentFormSchema = z
     deadlineDate: z.date().nullable(),
     isRoleUnified: z.boolean(),
     roles: z.array(teamRecruitmentRoleSchema).max(TEAM_RECRUITMENT_MAX_ROLE_COUNT),
-    unifiedMemberCount: z.number().min(1).max(10),
+    unifiedMemberCount: z.number().min(1).max(TEAM_RECRUITMENT_MAX_MEMBER_COUNT),
     description: z.string().max(TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH),
     relatedUrl: z.string(),
     qualification: z.string().max(TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH),
@@ -74,8 +75,14 @@ export const teamRecruitmentFormSchema = z
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할을 추가해주세요.' });
       } else if (data.roles.some((role) => role.name.trim() === '')) {
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할명을 입력해주세요.' });
-      } else if (data.roles.reduce((sum, role) => sum + role.memberCount, 0) > 10) {
-        ctx.addIssue({ code: 'custom', path: ['roles'], message: '전체 모집 인원은 10명 이하여야 합니다.' });
+      } else if (
+        data.roles.reduce((sum, role) => sum + role.memberCount, 0) > TEAM_RECRUITMENT_MAX_MEMBER_COUNT
+      ) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['roles'],
+          message: `전체 모집 인원은 ${TEAM_RECRUITMENT_MAX_MEMBER_COUNT}명 이하여야 합니다.`,
+        });
       }
     }
 

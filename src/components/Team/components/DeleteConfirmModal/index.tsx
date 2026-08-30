@@ -10,9 +10,12 @@ interface DeleteConfirmModalProps {
 }
 
 export default function DeleteConfirmModal({ isPending, onCancel, onConfirm }: DeleteConfirmModalProps) {
-  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: onCancel });
+  const handleCancel = () => {
+    if (!isPending) onCancel();
+  };
+  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleCancel });
 
-  useEscapeKeyDown({ onEscape: onCancel });
+  useEscapeKeyDown({ onEscape: handleCancel });
   useBodyScrollLock();
 
   return (
@@ -28,7 +31,7 @@ export default function DeleteConfirmModal({ isPending, onCancel, onConfirm }: D
           해당 모집글을 삭제하시겠습니까?
         </p>
         <div className={styles.modal__buttons}>
-          <button type="button" className={styles['modal__button--cancel']} disabled={isPending} onClick={onCancel}>
+          <button type="button" className={styles['modal__button--cancel']} disabled={isPending} onClick={handleCancel}>
             취소하기
           </button>
           <button type="button" className={styles['modal__button--confirm']} disabled={isPending} onClick={onConfirm}>
