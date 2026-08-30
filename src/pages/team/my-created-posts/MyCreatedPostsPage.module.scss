@@ -1,25 +1,77 @@
+@use "src/utils/scss/media" as media;
+
+.mobileHeader {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+  }
+}
+
 .header {
   background: #f8f8fa;
 }
 
 .page {
   display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 64px 24px 96px;
+  background: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+    padding: 0;
+    min-height: calc(100dvh - 56px);
+    background: #f8f8fa;
+  }
+}
+
+.inner {
+  display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - 56px);
-  background: #f8f8fa;
+  gap: 60px;
+  width: 100%;
+  max-width: 1136px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 0;
+    max-width: none;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: normal;
+  color: #175c8e;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
 }
 
 .summaryRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 22px 12px;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 20px 22px 12px;
+  }
 }
 
 .totalCount {
   color: #727272;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.6;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 12px;
+  }
 }
 
 .filterButton {
@@ -28,16 +80,30 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  width: 76px;
-  height: 36px;
-  border-radius: 40px;
+  height: 42px;
+  padding: 12px 24px;
+  border: 1px solid #175c8e;
+  border-radius: 8px;
   background: #fff;
   cursor: pointer;
 
+  @include media.media-breakpoint(mobile) {
+    width: 76px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 40px;
+  }
+
   &__label {
-    color: #4b4b4b;
-    font-size: 12px;
+    color: #175c8e;
+    font-size: 14px;
     line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      color: #4b4b4b;
+      font-size: 12px;
+    }
   }
 }
 
@@ -45,7 +111,10 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 0 22px;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 0 22px;
+  }
 }
 
 .list {
@@ -61,32 +130,80 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 20px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 12px;
+  }
 
   svg {
-    width: 98px;
-    height: 75px;
+    display: none;
+
+    @include media.media-breakpoint(mobile) {
+      display: block;
+      width: 98px;
+      height: 75px;
+    }
   }
 
   &__text {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 12px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 2px;
+    }
   }
 
   &__title {
-    font-weight: 500;
-    line-height: 1.6;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: normal;
+    color: #000;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
   }
 
   &__subtitle {
-    color: #4b4b4b;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
     line-height: 1.6;
+    color: #727272;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      font-weight: 400;
+      color: #4b4b4b;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 42px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #175c8e;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 
+// 모바일: 카드 하단 별도 행에 배치되는 전체폭 액션 버튼(actionSlot).
 .actionButton {
   display: flex;
   flex: 1;
@@ -103,6 +220,30 @@
   cursor: pointer;
 }
 
+// 데스크탑: 카드 상단 행(rightSlot)에 뱃지와 나란히 배치되는 액션 버튼 묶음.
+.desktopActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.desktopActionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 33px;
+  padding: 6px 16px;
+  border: 1px solid #175c8e;
+  border-radius: 8px;
+  background: #fff;
+  color: #175c8e;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 .chatButton {
   position: relative;
   z-index: 2;
@@ -111,6 +252,24 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  svg {
+    width: 35px;
+    height: 35px;
+
+    path {
+      stroke: #175c8e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 24px;
+      height: 24px;
+
+      path {
+        stroke: #b611f5;
+      }
+    }
+  }
 }
 
 .scrollTrigger {
