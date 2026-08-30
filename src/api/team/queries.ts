@@ -3,12 +3,14 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import type {
   MyCreatedTeamRecruitmentListRequest,
   MyTeamRecruitmentApplicationListRequest,
+  TeamRecruitmentApplicantListRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
 } from './entity';
 import {
   getMyCreatedTeamRecruitments,
   getMyTeamRecruitmentApplications,
+  getTeamRecruitmentApplicants,
   getTeamRecruitmentList,
   getTeamRecruitmentNotifications,
 } from './index';
@@ -36,6 +38,8 @@ export const teamQueryKeys = {
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
+    ['team', 'recruitment', recruitmentId, 'applicants', token, params] as const,
   myCreatedRoot: ['team', 'my-created'] as const,
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
     [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
@@ -91,6 +95,12 @@ export const teamQueries = {
 
         return undefined;
       },
+    }),
+
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest = {}) =>
+    queryOptions({
+      queryKey: teamQueryKeys.applicants(recruitmentId, token, params),
+      queryFn: () => getTeamRecruitmentApplicants(token, recruitmentId, params),
     }),
 
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest = {}) =>
