@@ -16,7 +16,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { redirectToLogin } from 'utils/ts/auth';
-import showToast from 'utils/ts/showToast';
 import styles from './TeamProfilePage.module.scss';
 
 interface MenuCardProps {
@@ -97,7 +96,7 @@ function TeamProfilePage() {
       event_label: 'team_recruitment_profile_applied',
       value: '내가 지원한 모집글',
     });
-    showToast('warning', '준비 중인 기능입니다.');
+    router.push(ROUTES.TeamMyApplications());
   };
 
   return (

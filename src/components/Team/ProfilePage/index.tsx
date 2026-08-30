@@ -7,6 +7,7 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
+import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
@@ -65,6 +66,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const router = useRouter();
   const token = useTokenState();
   const { actionEventClick } = useLogger();
+  const { isAuthReady } = useTeamAuthGuard();
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
@@ -178,6 +180,10 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     });
     setPendingValues(null);
   };
+
+  // 인증 확인 전 렌더를 막는다. 게이트는 반드시 이 컴포넌트의 모든 훅 호출 뒤,
+  // return 직전에 두어야 렌더마다 훅 개수가 달라지지 않는다.
+  if (!isAuthReady) return null;
 
   return (
     <div className={styles.container}>

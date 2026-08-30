@@ -116,3 +116,14 @@
 .scrollTrigger {
   height: 1px;
 }
+
+.errorFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 22px;
+  color: #727272;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}

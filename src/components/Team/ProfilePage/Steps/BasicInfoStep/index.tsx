@@ -1,4 +1,4 @@
-import { isKoinError } from '@bcsdlab/koin';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
@@ -59,9 +59,10 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '회원정보를 불러오지 못했습니다.');
-      } else {
-        showToast('error', '회원정보를 불러오지 못했습니다.');
+        return;
       }
+      showToast('error', '회원정보를 불러오지 못했습니다.');
+      sendClientError(error);
     },
   });
 
@@ -90,9 +91,10 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
-      } else {
-        showToast('error', '학적 정보 수정에 실패했습니다.');
+        return;
       }
+      showToast('error', '학적 정보 수정에 실패했습니다.');
+      sendClientError(error);
     },
   });
 
