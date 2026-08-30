@@ -181,8 +181,6 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     setPendingValues(null);
   };
 
-  // 인증 확인 전 렌더를 막는다. 게이트는 반드시 이 컴포넌트의 모든 훅 호출 뒤,
-  // return 직전에 두어야 렌더마다 훅 개수가 달라지지 않는다.
   if (!isAuthReady) return null;
 
   return (

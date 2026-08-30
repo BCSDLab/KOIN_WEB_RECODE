@@ -40,7 +40,6 @@ export const useUpsertTeamRecruitmentProfileMutation = ({
   return useMutation({
     mutationFn: (data: UpsertTeamRecruitmentProfileRequest) => upsertTeamRecruitmentProfile(token, data),
     onSuccess: () => {
-      // 저장 직후 프로필 화면으로 돌아가도 staleTime(60초) 동안 갱신 전 캐시를 보지 않도록 먼저 무효화한다.
       queryClient.invalidateQueries({ queryKey: teamRecruitmentProfileQueryKeys.me(token) });
       onSuccess?.();
     },

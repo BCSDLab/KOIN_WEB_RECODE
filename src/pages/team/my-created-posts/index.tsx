@@ -247,7 +247,6 @@ export default function MyCreatedPostsPage() {
       />
 
       <main className={styles.page}>
-        {/* ErrorBoundary에 리셋 경로가 없으므로, 필터가 바뀌면 key로 리마운트해 폴백에 갇히지 않게 한다. */}
         <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
           <Suspense fallback={<LoadingSpinner size="50px" />}>
             <CreatedPostsListSection

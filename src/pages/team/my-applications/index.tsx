@@ -161,9 +161,6 @@ export default function MyApplicationsPage() {
       );
     };
 
-  // 인증 확인 전 렌더를 막는다: ApplicationsListSection의 useSuspenseInfiniteQuery는 enabled 옵션이 없어
-  // 렌더 게이트 외에는 빈 토큰 요청을 막을 방법이 없다.
-  // 게이트는 반드시 이 컴포넌트의 모든 훅 호출 뒤에 두어야 훅 개수가 렌더마다 달라지지 않는다.
   if (!isAuthReady) return null;
 
   return (
@@ -180,7 +177,6 @@ export default function MyApplicationsPage() {
       />
 
       <main className={styles.page}>
-        {/* ErrorBoundary에 리셋 경로가 없으므로, 필터가 바뀌면 key로 리마운트해 폴백에 갇히지 않게 한다. */}
         <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
           <Suspense fallback={<LoadingSpinner size="50px" />}>
             <ApplicationsListSection
