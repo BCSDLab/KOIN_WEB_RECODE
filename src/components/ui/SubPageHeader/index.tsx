@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import styles from './SubPageHeader.module.scss';
+
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 interface SubPageHeaderProps {
   title: string;
@@ -25,7 +27,7 @@ export default function SubPageHeader({
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const rightActionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const header = headerRef.current;
     const backButton = backButtonRef.current;
     const rightActionContainer = rightActionRef.current;
