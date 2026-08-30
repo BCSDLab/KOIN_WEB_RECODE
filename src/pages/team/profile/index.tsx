@@ -98,6 +98,7 @@ function TeamProfilePage() {
               icon={NoteIcon}
               title={hasProfile ? '내가 작성한 모집글' : '내가 작성한 모집글 모아보기'}
               description="작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
+              onCardClick={() => router.push(ROUTES.TeamMyCreatedPosts())}
             />
             <MenuCard
               icon={ListEndIcon}
