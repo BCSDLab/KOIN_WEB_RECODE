@@ -14,9 +14,10 @@ import styles from './RoleField.module.scss';
 
 interface RoleFieldProps {
   control: Control<TeamRecruitmentFormValues>;
+  eventLabel: string;
 }
 
-export default function RoleField({ control }: RoleFieldProps) {
+export default function RoleField({ control, eventLabel }: RoleFieldProps) {
   const logger = useLogger();
   const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
   const isRoleUnified = useWatch({ control, name: 'isRoleUnified' });
@@ -26,7 +27,7 @@ export default function RoleField({ control }: RoleFieldProps) {
 
   const handleAddRole = () => {
     if (isAddDisabled) return;
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit_role', value: '역할 추가' });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: eventLabel, value: '역할 추가' });
     append({ name: '', memberCount: 1 });
   };
 
@@ -64,7 +65,7 @@ export default function RoleField({ control }: RoleFieldProps) {
               onChange={() => {
                 logger.actionEventClick({
                   team: 'CAMPUS',
-                  event_label: 'team_recruitment_recruit_role',
+                  event_label: eventLabel,
                   value: '역할 구분 없이 모집하기',
                 });
                 field.onChange(!field.value);

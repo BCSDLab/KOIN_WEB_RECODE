@@ -4,11 +4,12 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CategoryField.module.scss';
 
 interface CategoryFieldProps {
+  eventLabel: string;
   value: string | null;
   onChange: (value: string) => void;
 }
 
-export default function CategoryField({ value, onChange }: CategoryFieldProps) {
+export default function CategoryField({ eventLabel, value, onChange }: CategoryFieldProps) {
   const logger = useLogger();
 
   return (
@@ -24,7 +25,7 @@ export default function CategoryField({ value, onChange }: CategoryFieldProps) {
           onChange={(e) => {
             logger.actionEventClick({
               team: 'CAMPUS',
-              event_label: 'team_recruitment_recruit_category',
+              event_label: eventLabel,
               value: e.target.value,
             });
             onChange(e.target.value);

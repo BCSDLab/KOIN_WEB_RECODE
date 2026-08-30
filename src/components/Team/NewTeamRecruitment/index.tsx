@@ -42,7 +42,6 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
   const headerTitle = isEditMode ? '모집글 수정' : '모집글 작성';
   const submitLabel = isEditMode ? '수정 완료' : '등록하기';
   const confirmLabel = isEditMode ? '수정하기' : '등록하기';
-  const eventPrefix = isEditMode ? 'team_recruitment_edit' : 'team_recruitment_recruit';
 
   const title = useWatch({ control, name: 'title' });
   const description = useWatch({ control, name: 'description' });
@@ -53,20 +52,32 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmitClick = handleSubmit((values) => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit`, value: submitLabel });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: isEditMode ? 'team_recruitment_post_edit_submit' : 'team_recruitment_recruit_submit',
+      value: submitLabel,
+    });
     setPendingValues(values);
     openConfirmModal();
   });
 
   const handleCancelConfirm = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit_cancel`, value: '취소하기' });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: isEditMode ? 'team_recruitment_post_edit_submit_cancel' : 'team_recruitment_recruit_submit_cancel',
+      value: '취소하기',
+    });
     closeConfirmModal();
   };
 
   const handleConfirmSubmit = async () => {
     if (!pendingValues || isSubmitting) return;
 
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit_confirm`, value: confirmLabel });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: isEditMode ? 'team_recruitment_post_edit_submit_confirm' : 'team_recruitment_recruit_submit_confirm',
+      value: confirmLabel,
+    });
 
     if (!onSubmit) {
       // To Do: 모집글 작성 API 연결
@@ -93,7 +104,13 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
         <Controller
           control={control}
           name="category"
-          render={({ field }) => <CategoryField value={field.value} onChange={field.onChange} />}
+          render={({ field }) => (
+            <CategoryField
+              eventLabel={isEditMode ? 'team_recruitment_post_edit_category' : 'team_recruitment_recruit_category'}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
 
         <div className={styles.form__item}>
@@ -138,8 +155,10 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
                       onClick={() => {
                         logger.actionEventClick({
                           team: 'CAMPUS',
-                          event_label: 'team_recruitment_recruit_method',
-                          value: TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type],
+                          event_label: isEditMode
+                            ? 'team_recruitment_post_edit_method'
+                            : 'team_recruitment_recruit_method',
+                          value: TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type].replaceAll(' ', ''),
                         });
                         field.onChange(type);
                       }}
@@ -156,7 +175,10 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
 
         <ScheduleField control={control} />
 
-        <RoleField control={control} />
+        <RoleField
+          control={control}
+          eventLabel={isEditMode ? 'team_recruitment_post_edit_role' : 'team_recruitment_recruit_role'}
+        />
 
         <div className={styles.form__item}>
           <div className={styles['form__item-header']}>
@@ -228,6 +250,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           description={`해당 모집글을 ${isEditMode ? '수정' : '등록'}하시겠습니까?`}
           isPending={isSubmitting}
           onCancel={handleCancelConfirm}
+          onClose={closeConfirmModal}
           onConfirm={handleConfirmSubmit}
         />
       )}

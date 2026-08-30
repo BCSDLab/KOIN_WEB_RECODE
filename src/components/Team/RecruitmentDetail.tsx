@@ -93,11 +93,21 @@ function DetailContent({ recruitment }: DetailContentProps) {
         ];
 
   const handleActionClick = () => {
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'team_recruitment_detail_action',
-      value: primaryAction.label,
-    });
+    if (primaryAction.type === 'apply' || primaryAction.type === 'login' || primaryAction.type === 'profile') {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: 'team_recruitment_post_apply',
+        value: recruitment.title,
+      });
+    }
+
+    if (primaryAction.type === 'manage') {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: 'team_recruitment_post_applicant_check',
+        value: recruitment.title,
+      });
+    }
 
     if (primaryAction.type === 'login') {
       openLoginModal();
@@ -251,6 +261,7 @@ function DetailContent({ recruitment }: DetailContentProps) {
 export default function RecruitmentDetail() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const logger = useLogger();
   const token = useTokenState();
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
@@ -265,12 +276,40 @@ export default function RecruitmentDetail() {
   );
 
   const handleEdit = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_edit',
+      value: '편집하기',
+    });
     router.push(ROUTES.TeamRecruitmentEdit({ postId: String(recruitmentId) }));
+  };
+
+  const handleDeleteClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete',
+      value: '삭제하기',
+    });
+    openDeleteModal();
+  };
+
+  const handleDeleteCancel = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete_cancel',
+      value: '취소하기',
+    });
+    closeDeleteModal();
   };
 
   const handleDeleteConfirm = () => {
     if (!isValidRecruitmentId) return;
 
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete_confirm',
+      value: '삭제하기',
+    });
     deleteRecruitment(recruitmentId, {
       onSuccess: () => {
         closeDeleteModal();
@@ -286,7 +325,7 @@ export default function RecruitmentDetail() {
       <SubPageHeader
         title="팀원 모집"
         rightAction={
-          data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={openDeleteModal} /> : undefined
+          data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined
         }
       />
 
@@ -299,7 +338,8 @@ export default function RecruitmentDetail() {
       {data?.is_author && isDeleteModalOpen && (
         <DeleteConfirmModal
           isPending={isDeletePending}
-          onCancel={closeDeleteModal}
+          onCancel={handleDeleteCancel}
+          onClose={closeDeleteModal}
           onConfirm={handleDeleteConfirm}
         />
       )}

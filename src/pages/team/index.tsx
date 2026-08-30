@@ -58,8 +58,8 @@ export default function TeamListPage() {
   const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
 
   const handleRecruitClick = () => {
-    router.push(ROUTES.TeamRecruitmentNew());
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit', value: '모집하기' });
+    router.push(ROUTES.TeamRecruitmentNew());
   };
 
   return (

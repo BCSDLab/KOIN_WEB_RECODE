@@ -6,16 +6,20 @@ import styles from './DeleteConfirmModal.module.scss';
 interface DeleteConfirmModalProps {
   isPending: boolean;
   onCancel: () => void;
+  onClose: () => void;
   onConfirm: () => void;
 }
 
-export default function DeleteConfirmModal({ isPending, onCancel, onConfirm }: DeleteConfirmModalProps) {
+export default function DeleteConfirmModal({ isPending, onCancel, onClose, onConfirm }: DeleteConfirmModalProps) {
+  const handleClose = () => {
+    if (!isPending) onClose();
+  };
   const handleCancel = () => {
     if (!isPending) onCancel();
   };
-  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleCancel });
+  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
 
-  useEscapeKeyDown({ onEscape: handleCancel });
+  useEscapeKeyDown({ onEscape: handleClose });
   useBodyScrollLock();
 
   return (

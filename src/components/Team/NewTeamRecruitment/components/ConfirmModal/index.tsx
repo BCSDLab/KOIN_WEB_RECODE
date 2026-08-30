@@ -8,6 +8,7 @@ interface ConfirmModalProps {
   description?: string;
   isPending?: boolean;
   onCancel: () => void;
+  onClose: () => void;
   onConfirm: () => void;
 }
 
@@ -16,14 +17,18 @@ export default function ConfirmModal({
   description = '해당 모집글을 등록하시겠습니까?',
   isPending = false,
   onCancel,
+  onClose,
   onConfirm,
 }: ConfirmModalProps) {
+  const handleClose = () => {
+    if (!isPending) onClose();
+  };
   const handleCancel = () => {
     if (!isPending) onCancel();
   };
-  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleCancel });
+  const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
 
-  useEscapeKeyDown({ onEscape: handleCancel });
+  useEscapeKeyDown({ onEscape: handleClose });
   useBodyScrollLock();
 
   return (
