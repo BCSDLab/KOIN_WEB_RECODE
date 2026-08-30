@@ -7,6 +7,7 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
+import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
@@ -65,6 +66,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const router = useRouter();
   const token = useTokenState();
   const { actionEventClick } = useLogger();
+  const { isAuthReady } = useTeamAuthGuard();
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
@@ -178,6 +180,8 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     });
     setPendingValues(null);
   };
+
+  if (!isAuthReady) return null;
 
   return (
     <div className={styles.container}>

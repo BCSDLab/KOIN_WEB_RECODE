@@ -8,6 +8,8 @@ import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import MyCreatedPostFilterPanel from 'components/Team/components/MyCreatedPostFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
@@ -245,15 +247,17 @@ export default function MyCreatedPostsPage() {
       />
 
       <main className={styles.page}>
-        <Suspense fallback={null}>
-          <CreatedPostsListSection
-            requestParams={requestParams}
-            onFilterOpen={openFilter}
-            onApplicantClick={handleApplicantClick}
-            onCloseClick={handleCloseClick}
-            onChatClick={handleChatClick}
-          />
-        </Suspense>
+        <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <Suspense fallback={<LoadingSpinner size="50px" />}>
+            <CreatedPostsListSection
+              requestParams={requestParams}
+              onFilterOpen={openFilter}
+              onApplicantClick={handleApplicantClick}
+              onCloseClick={handleCloseClick}
+              onChatClick={handleChatClick}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       {isFilterOpen && (
