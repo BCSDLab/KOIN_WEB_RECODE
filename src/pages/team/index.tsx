@@ -186,7 +186,11 @@ export default function TeamListPage() {
         <p className={styles.totalCount}>전체({totalCount})</p>
 
         <div className={styles.content}>
-          {isLoading && <p>모집글을 불러오는 중입니다.</p>}
+          {isLoading && (
+            <p className={styles.loadingState} role="status">
+              모집글을 불러오는 중입니다.
+            </p>
+          )}
 
           {!isLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>

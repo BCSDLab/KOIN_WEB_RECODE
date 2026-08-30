@@ -83,6 +83,18 @@
   padding: 0 22px;
 }
 
+.loadingState {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: #727272;
+  font-size: 14px;
+  line-height: 160%;
+  text-align: center;
+}
+
 .list {
   display: flex;
   flex-direction: column;
