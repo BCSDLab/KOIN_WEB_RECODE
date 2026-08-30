@@ -74,6 +74,7 @@ const ROUTES = {
   TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
   TeamNotifications: () => '/team/notifications',
   TeamMyApplications: () => '/team/my-applications',
+  TeamMyCreatedPosts: () => '/team/my-created-posts',
   TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
     `/team/chat/${recruitmentId}/${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
