@@ -1,6 +1,8 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
 import {
+  MyCreatedTeamRecruitmentListRequest,
+  MyCreatedTeamRecruitmentListResponse,
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
   TeamRecruitmentApplicantListRequest,
@@ -154,4 +156,47 @@ export class DeleteTeamRecruitmentNotifications<R extends object> implements API
   auth = true;
 
   constructor(public authorization: string) {}
+}
+
+export class GetMyCreatedTeamRecruitments<R extends MyCreatedTeamRecruitmentListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/team-recruitments/me/created';
+
+  response!: R;
+
+  auth = true;
+
+  params: MyCreatedTeamRecruitmentListRequest;
+
+  constructor(
+    public authorization: string,
+    params: MyCreatedTeamRecruitmentListRequest = {},
+  ) {
+    this.params = {
+      ...(params.status && { status: params.status }),
+      ...(params.sort && { sort: params.sort }),
+      page: params.page ?? 1,
+      limit: params.limit ?? 10,
+    };
+  }
+}
+
+// 204 No Content — 요청 바디·응답 바디 모두 없음.
+// PostTeamRecruitmentNotificationRead와 동일한 path-in-constructor 패턴을 따른다.
+export class PutCloseTeamRecruitment<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}/close`;
+  }
 }

@@ -1,12 +1,14 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import type {
+  MyCreatedTeamRecruitmentListRequest,
   MyTeamRecruitmentApplicationListRequest,
   TeamRecruitmentApplicantListRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
 } from './entity';
 import {
+  getMyCreatedTeamRecruitments,
   getMyTeamRecruitmentApplications,
   getTeamRecruitmentApplicants,
   getTeamRecruitmentList,
@@ -16,6 +18,7 @@ import {
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
 const TEAM_MY_APPLICATIONS_LIMIT = 10;
+const TEAM_MY_CREATED_LIMIT = 10;
 
 type TeamViewerScope = 'guest' | 'auth';
 
@@ -37,6 +40,9 @@ export const teamQueryKeys = {
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
   applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
     ['team', 'recruitment', recruitmentId, 'applicants', token, params] as const,
+  myCreatedRoot: ['team', 'my-created'] as const,
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
+    [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
 };
 
 export const teamQueries = {
@@ -95,5 +101,20 @@ export const teamQueries = {
     queryOptions({
       queryKey: teamQueryKeys.applicants(recruitmentId, token, params),
       queryFn: () => getTeamRecruitmentApplicants(token, recruitmentId, params),
+    }),
+
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest = {}) =>
+    infiniteQueryOptions({
+      queryKey: teamQueryKeys.infiniteMyCreated(token, params),
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getMyCreatedTeamRecruitments(token, { ...params, page: pageParam, limit: TEAM_MY_CREATED_LIMIT }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.current_page < lastPage.total_page) {
+          return lastPage.current_page + 1;
+        }
+
+        return undefined;
+      },
     }),
 };
