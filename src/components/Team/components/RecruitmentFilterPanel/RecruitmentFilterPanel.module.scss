@@ -1,0 +1,102 @@
+.panel {
+  max-height: 85vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  color: #b611f5;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.sectionBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+}
+
+.resetButton,
+.applyButton {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resetButton {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b611f5;
+  background: #fff;
+  color: #b611f5;
+
+  svg {
+    width: 20px;
+    height: 20px;
+
+    path {
+      fill: #b611f5;
+    }
+  }
+}
+
+.applyButton {
+  flex: 2;
+  border: none;
+  background: #b611f5;
+  color: #fff;
+}
