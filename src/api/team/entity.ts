@@ -175,6 +175,7 @@ export interface TeamChatMessageListRequest {
 export interface TeamChatMessageSendRequest {
   content: string;
   is_image: boolean;
+}
 
 export interface TeamRecruitmentApplicantManagementRecruitment extends TeamRecruitmentCard {
   team_chat_available: boolean;
