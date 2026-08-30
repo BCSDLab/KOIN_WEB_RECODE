@@ -68,7 +68,6 @@ export default function TeamNotificationsPage() {
       markRead(notification.id);
     }
 
-    // TODO: APPLICANT_MANAGEMENT는 지원자 관리 화면 구현 후 라우팅을 연결한다.
     if (
       notification.target_type === 'CHAT_ROOM' &&
       notification.recruitment_id !== null &&
@@ -85,6 +84,11 @@ export default function TeamNotificationsPage() {
 
     if (notification.target_type === 'MY_APPLICATIONS') {
       router.push(ROUTES.TeamMyApplications());
+      return;
+    }
+
+    if (notification.target_type === 'APPLICANT_MANAGEMENT' && notification.recruitment_id !== null) {
+      router.push(ROUTES.TeamRecruitmentApplicants({ postId: String(notification.recruitment_id) }));
     }
   };
 

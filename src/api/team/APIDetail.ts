@@ -11,6 +11,8 @@ import {
   TeamChatMessageListResponse,
   TeamChatMessageSendRequest,
   TeamChatRoomResponse,
+  TeamRecruitmentApplicantListRequest,
+  TeamRecruitmentApplicantListResponse,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
@@ -48,9 +50,9 @@ export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> imple
   }
 }
 
-export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificationListResponse>
-  implements APIRequest<R>
-{
+export class GetTeamRecruitmentNotifications<
+  R extends TeamRecruitmentNotificationListResponse,
+> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/team-recruitments/notifications';
@@ -72,9 +74,9 @@ export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificati
   }
 }
 
-export class GetMyTeamRecruitmentApplications<R extends MyTeamRecruitmentApplicationListResponse>
-  implements APIRequest<R>
-{
+export class GetMyTeamRecruitmentApplications<
+  R extends MyTeamRecruitmentApplicationListResponse,
+> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/team-recruitments/me/applications';
@@ -92,6 +94,31 @@ export class GetMyTeamRecruitmentApplications<R extends MyTeamRecruitmentApplica
     this.params = {
       ...(params.statuses?.length && { statuses: params.statuses }),
       ...(params.sort && { sort: params.sort }),
+      page: params.page ?? 1,
+      limit: params.limit ?? 10,
+    };
+  }
+}
+
+export class GetTeamRecruitmentApplicants<R extends TeamRecruitmentApplicantListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  params: TeamRecruitmentApplicantListRequest;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: string,
+    params: TeamRecruitmentApplicantListRequest = {},
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}/applications`;
+    this.params = {
+      ...(params.statuses?.length && { statuses: params.statuses }),
       page: params.page ?? 1,
       limit: params.limit ?? 10,
     };

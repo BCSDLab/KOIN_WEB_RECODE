@@ -1,0 +1,93 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #fff;
+
+  &__avatar {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid #cacaca;
+    width: 45px;
+    height: 45px;
+    border-radius: 300px;
+    background: #fff;
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__nameRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__name {
+    color: #0b0b0d;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 160%;
+  }
+
+  &__status {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 160%;
+
+    &--pending {
+      color: #727272;
+    }
+
+    &--accepted {
+      color: #980ac9;
+    }
+
+    &--rejected {
+      color: #ec2d30;
+    }
+  }
+
+  &__chat {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    overflow: hidden;
+    color: #727272;
+    font-size: 11px;
+    line-height: 160%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__role {
+    color: #b611f5;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+
+    path {
+      fill: #000;
+    }
+  }
+}
