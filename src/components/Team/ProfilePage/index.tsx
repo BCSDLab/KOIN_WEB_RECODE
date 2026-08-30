@@ -6,13 +6,13 @@ import {
   useUpsertTeamRecruitmentProfileMutation,
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import SubmitConfirmModal from './components/SubmitConfirmModal';
 import useProfileStep from './hooks/useProfileStep';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';

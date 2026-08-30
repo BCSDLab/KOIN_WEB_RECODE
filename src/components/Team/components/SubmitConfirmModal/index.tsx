@@ -4,6 +4,7 @@ import styles from './SubmitConfirmModal.module.scss';
 
 interface SubmitConfirmModalProps {
   message: string;
+  description?: string;
   confirmLabel: string;
   isSubmitting: boolean;
   onConfirm: () => void;
@@ -12,6 +13,7 @@ interface SubmitConfirmModalProps {
 
 export default function SubmitConfirmModal({
   message,
+  description,
   confirmLabel,
   isSubmitting,
   onConfirm,
@@ -27,7 +29,10 @@ export default function SubmitConfirmModal({
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal} ref={containerRef}>
-        <p className={styles.modal__message}>{message}</p>
+        <div className={styles.modal__text}>
+          <p className={styles.modal__message}>{message}</p>
+          {description && <p className={styles.modal__description}>{description}</p>}
+        </div>
         <div className={styles.modal__buttons}>
           <button type="button" className={styles.modal__cancel} onClick={onCancel} disabled={isSubmitting}>
             취소하기

@@ -87,7 +87,7 @@ function TeamProfilePage() {
       event_label: 'team_recruitment_profile_created',
       value: '내가 작성한 모집글',
     });
-    showToast('warning', '준비 중인 기능입니다.');
+    router.push(ROUTES.TeamMyCreatedPosts());
   };
 
   const handleAppliedRecruitmentsClick = () => {
