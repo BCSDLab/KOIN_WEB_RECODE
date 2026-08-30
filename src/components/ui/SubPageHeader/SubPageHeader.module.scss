@@ -1,10 +1,11 @@
 .header {
-  display: flex;
+  --header-side-width: 24px;
+
+  display: grid;
+  grid-template-columns: var(--header-side-width) minmax(0, 1fr) var(--header-side-width);
   align-items: center;
-  justify-content: space-between;
   padding: 16px 24px;
   flex-shrink: 0;
-  position: relative;
 
   &__back-button {
     display: flex;
@@ -14,7 +15,6 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1;
     width: 24px;
     height: 24px;
 
@@ -25,10 +25,7 @@
   }
 
   &__title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: calc(100% - 144px);
+    width: 100%;
     overflow: hidden;
     font-size: 16px;
     font-weight: 600;
@@ -42,6 +39,12 @@
       font-size: 18px;
       font-weight: 500;
     }
+  }
+
+  &__right-action {
+    display: flex;
+    justify-self: end;
+    width: max-content;
   }
 
   &__spacer {
