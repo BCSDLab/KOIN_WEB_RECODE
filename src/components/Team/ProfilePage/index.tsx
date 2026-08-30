@@ -66,7 +66,13 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const token = useTokenState();
   const { actionEventClick } = useLogger();
   const isEditMode = mode === 'edit';
-  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(PROFILE_STEPS, '기본 정보');
+  const buildStepHref = (step: ProfileStepTitle) =>
+    isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
+  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(
+    PROFILE_STEPS,
+    '기본 정보',
+    buildStepHref,
+  );
   const [pendingValues, setPendingValues] = useState<ProfileFormValues | null>(null);
 
   const methods = useForm<ProfileFormValues>({

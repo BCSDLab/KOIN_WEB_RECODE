@@ -1,4 +1,5 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +13,9 @@ import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { redirectToLogin } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
 import styles from './TeamProfilePage.module.scss';
 
@@ -41,12 +44,21 @@ function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps
 function TeamProfilePage() {
   const router = useRouter();
   const token = useTokenState();
+  const mounted = useMount();
   const logger = useLogger();
   const { data: profile } = useQuery({
     ...teamRecruitmentProfileQueries.me(token),
     enabled: !!token,
   });
   const hasProfile = Boolean(profile);
+
+  useEffect(() => {
+    if (mounted && !token) {
+      redirectToLogin(router.asPath);
+    }
+  }, [mounted, token, router.asPath]);
+
+  if (!mounted || !token) return null;
 
   const handleModifyClick = () => {
     logger.actionEventClick({
