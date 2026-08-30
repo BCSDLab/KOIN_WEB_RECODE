@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import mergeChatMessages from 'api/team/mergeChatMessages';
@@ -44,7 +44,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     ...teamMutations.sendChatMessage(queryClient, token, recruitmentId, chatRoomId),
     onError: () => showToast('error', '메시지를 보내지 못했어요. 다시 시도해 주세요.'),
   });
-  const mergedMessages = useMemo(() => mergeChatMessages(previousMessages, messages), [previousMessages, messages]);
+  const mergedMessages = mergeChatMessages(previousMessages, messages);
   const oldestMessageId = mergedMessages[0]?.message_id;
   const lastMessageId = mergedMessages[mergedMessages.length - 1]?.message_id;
 
