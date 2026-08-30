@@ -45,7 +45,7 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
         <>
           <button type="button" className={styles.menu__overlay} aria-label="메뉴 닫기" onClick={closeMenu} />
 
-          <div className={styles.menu__dropdown} role="menu">
+          <div className={styles.menu__dropdown} role="menu" aria-label="모집글 메뉴">
             <button type="button" className={styles.menu__item} role="menuitem" onClick={handleEdit}>
               편집하기
             </button>
