@@ -9,9 +9,12 @@ import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import MyApplicationFilterPanel from 'components/Team/components/MyApplicationFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
+import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
@@ -124,6 +127,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
 export default function MyApplicationsPage() {
   const logger = useLogger();
   const router = useRouter();
+  const { isAuthReady } = useTeamAuthGuard();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
   const [requestParams, setRequestParams] = useState<MyTeamRecruitmentApplicationListRequest>({
@@ -157,6 +161,8 @@ export default function MyApplicationsPage() {
       );
     };
 
+  if (!isAuthReady) return null;
+
   return (
     <>
       <Head>
@@ -171,9 +177,15 @@ export default function MyApplicationsPage() {
       />
 
       <main className={styles.page}>
-        <Suspense fallback={null}>
-          <ApplicationsListSection requestParams={requestParams} onFilterOpen={openFilter} onChatClick={handleChatClick} />
-        </Suspense>
+        <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <Suspense fallback={<LoadingSpinner size="50px" />}>
+            <ApplicationsListSection
+              requestParams={requestParams}
+              onFilterOpen={openFilter}
+              onChatClick={handleChatClick}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       {isFilterOpen && (

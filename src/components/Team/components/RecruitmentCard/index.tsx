@@ -54,9 +54,17 @@ interface RecruitmentCardProps {
   eventLabel?: string;
   rightSlot?: ReactNode;
   footerAction?: ReactNode;
+  /** footer 아래 별도 행에 배치할 요소. 예: 내가 작성한 모집글 목록의 지원자 관리/모집 마감 버튼 */
+  actionSlot?: ReactNode;
 }
 
-export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, footerAction }: RecruitmentCardProps) {
+export default function RecruitmentCard({
+  recruitment,
+  eventLabel,
+  rightSlot,
+  footerAction,
+  actionSlot,
+}: RecruitmentCardProps) {
   const logger = useLogger();
 
   const isFull = recruitment.current_participants >= recruitment.max_participants;
@@ -119,6 +127,8 @@ export default function RecruitmentCard({ recruitment, eventLabel, rightSlot, fo
 
         {footerAction && <div className={styles.card__action}>{footerAction}</div>}
       </div>
+
+      {actionSlot && <div className={styles.card__actions}>{actionSlot}</div>}
     </div>
   );
 }

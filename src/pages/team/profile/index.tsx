@@ -1,4 +1,5 @@
 import type { FunctionComponent, ReactNode, SVGProps } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
@@ -11,14 +12,17 @@ import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import Layout from 'components/layout';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { redirectToLogin } from 'utils/ts/auth';
 import styles from './TeamProfilePage.module.scss';
 
 interface MenuCardProps {
   icon: FunctionComponent<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
-  onCardClick?: () => void;
+  onCardClick: () => void;
 }
 
 function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps) {
@@ -39,11 +43,61 @@ function MenuCard({ icon: Icon, title, description, onCardClick }: MenuCardProps
 function TeamProfilePage() {
   const router = useRouter();
   const token = useTokenState();
+  const mounted = useMount();
+  const logger = useLogger();
   const { data: profile } = useQuery({
     ...teamRecruitmentProfileQueries.me(token),
     enabled: !!token,
   });
   const hasProfile = Boolean(profile);
+
+  useEffect(() => {
+    if (mounted && !token) {
+      redirectToLogin(router.asPath);
+    }
+  }, [mounted, token, router.asPath]);
+
+  if (!mounted || !token) return null;
+
+  const handleModifyClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_modify',
+      value: '프로필 수정하기',
+    });
+    router.push(ROUTES.TeamProfileEdit());
+  };
+
+  const handleCreateClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_create',
+      value: '프로필 작성하기',
+    });
+    router.push(ROUTES.TeamProfileCreate());
+  };
+
+  const handleCreatedRecruitmentsClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_created',
+      value: '내가 작성한 모집글',
+    });
+    router.push(ROUTES.TeamMyCreatedPosts());
+  };
+
+  const handleAppliedRecruitmentsClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_profile_applied',
+      value: '내가 지원한 모집글',
+    });
+    router.push(ROUTES.TeamMyApplications());
+  };
 
   return (
     <>
@@ -67,11 +121,7 @@ function TeamProfilePage() {
                   <li>{profile.department}</li>
                   <li>{profile.student_number}</li>
                 </ul>
-                <button
-                  type="button"
-                  className={styles.summaryCard__button}
-                  onClick={() => router.push(ROUTES.TeamProfileEdit())}
-                >
+                <button type="button" className={styles.summaryCard__button} onClick={handleModifyClick}>
                   프로필 수정하기
                 </button>
               </div>
@@ -83,11 +133,7 @@ function TeamProfilePage() {
               <p className={styles.emptyCard__description}>
                 프로필을 작성하면 지원 시 더 빠르고 편리하게 활동할 수 있어요.
               </p>
-              <button
-                type="button"
-                className={styles.emptyCard__button}
-                onClick={() => router.push(ROUTES.TeamProfileCreate())}
-              >
+              <button type="button" className={styles.emptyCard__button} onClick={handleCreateClick}>
                 프로필 작성하기
               </button>
             </div>
@@ -98,12 +144,13 @@ function TeamProfilePage() {
               icon={NoteIcon}
               title={hasProfile ? '내가 작성한 모집글' : '내가 작성한 모집글 모아보기'}
               description="작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
+              onCardClick={handleCreatedRecruitmentsClick}
             />
             <MenuCard
               icon={ListEndIcon}
               title={hasProfile ? '내가 지원한 모집글' : '내가 지원한 모집글 모아보기'}
               description="지원한 모집글과 지원 상태를 확인할 수 있어요."
-              onCardClick={() => router.push(ROUTES.TeamMyApplications())}
+              onCardClick={handleAppliedRecruitmentsClick}
             />
           </div>
         </div>

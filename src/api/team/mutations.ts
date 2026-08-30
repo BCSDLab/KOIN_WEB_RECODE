@@ -1,8 +1,10 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { mutationOptions, QueryClient } from '@tanstack/react-query';
-
+import showToast from 'utils/ts/showToast';
 import { teamQueryKeys } from './queries';
 import type { TeamRecruitmentUpdateRequest } from './entity';
 import {
+  closeTeamRecruitment,
   deleteAllTeamRecruitmentNotifications,
   deleteTeamRecruitment,
   markAllTeamRecruitmentNotificationsRead,
@@ -48,5 +50,21 @@ export const teamMutations = {
     mutationOptions({
       mutationFn: () => deleteAllTeamRecruitmentNotifications(token),
       onSuccess: () => invalidateNotifications(queryClient),
+    }),
+
+  closeRecruitment: (queryClient: QueryClient, token: string) =>
+    mutationOptions({
+      mutationFn: (recruitmentId: number) => closeTeamRecruitment(token, recruitmentId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.myCreatedRoot });
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.listRoot });
+      },
+      onError: (error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message);
+          return;
+        }
+        sendClientError(error);
+      },
     }),
 };

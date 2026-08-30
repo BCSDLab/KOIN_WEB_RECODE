@@ -17,6 +17,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { redirectToLogin } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
 import styles from './TeamListPage.module.scss';
@@ -58,7 +59,17 @@ export default function TeamListPage() {
   const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
 
   const handleRecruitClick = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit', value: '모집하기' });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_recruit',
+      value: '모집하기',
+    });
+
+    if (!token) {
+      redirectToLogin(router.asPath);
+      return;
+    }
     router.push(ROUTES.TeamRecruitmentNew());
   };
 
