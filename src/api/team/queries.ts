@@ -1,6 +1,7 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 import type {
+  MyCreatedTeamRecruitmentListRequest,
   MyTeamRecruitmentApplicationListRequest,
   TeamChatMessageListResponse,
   TeamChatMessageListRequest,
@@ -8,6 +9,7 @@ import type {
   TeamRecruitmentNotificationListRequest,
 } from './entity';
 import {
+  getMyCreatedTeamRecruitments,
   getMyTeamRecruitmentApplications,
   getTeamRecruitmentChatMessages,
   getTeamRecruitmentChatRoom,
@@ -18,6 +20,7 @@ import {
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
 const TEAM_MY_APPLICATIONS_LIMIT = 10;
+const TEAM_MY_CREATED_LIMIT = 10;
 
 export const TEAM_CHAT_MESSAGE_LIMIT = 100;
 
@@ -41,6 +44,9 @@ export const teamQueryKeys = {
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
+  myCreatedRoot: ['team', 'my-created'] as const,
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
+    [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
   chatRoot: ['team', 'chat'] as const,
   chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
     [...teamQueryKeys.chatRoot, 'room', token, recruitmentId, chatRoomId] as const,
@@ -93,6 +99,21 @@ export const teamQueries = {
       initialPageParam: 1,
       queryFn: ({ pageParam }) =>
         getMyTeamRecruitmentApplications(token, { ...params, page: pageParam, limit: TEAM_MY_APPLICATIONS_LIMIT }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.current_page < lastPage.total_page) {
+          return lastPage.current_page + 1;
+        }
+
+        return undefined;
+      },
+    }),
+
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest = {}) =>
+    infiniteQueryOptions({
+      queryKey: teamQueryKeys.infiniteMyCreated(token, params),
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getMyCreatedTeamRecruitments(token, { ...params, page: pageParam, limit: TEAM_MY_CREATED_LIMIT }),
       getNextPageParam: (lastPage) => {
         if (lastPage.current_page < lastPage.total_page) {
           return lastPage.current_page + 1;

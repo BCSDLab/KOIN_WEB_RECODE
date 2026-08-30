@@ -1,0 +1,120 @@
+.panel {
+  max-height: 85vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #b611f5;
+  line-height: 1.6;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+}
+
+.resetButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 98px;
+  height: 48px;
+  border-radius: 20px;
+  border: 1px solid #cacaca;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  color: #4b4b4b;
+  flex-shrink: 0;
+  white-space: nowrap;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.applyButton {
+  flex: 1;
+  height: 48px;
+  border-radius: 20px;
+  border: none;
+  background: #b611f5;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.6;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: #980ac9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #b611f5;
+    outline-offset: 2px;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.sectionBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}

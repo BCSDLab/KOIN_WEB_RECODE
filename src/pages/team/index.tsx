@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { teamQueries } from 'api/team/queries';
@@ -11,10 +12,12 @@ import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
 import SearchBar from 'components/ui/SearchBar';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { redirectToLogin } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
 import styles from './TeamListPage.module.scss';
@@ -22,6 +25,7 @@ import styles from './TeamListPage.module.scss';
 type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 
 export default function TeamListPage() {
+  const router = useRouter();
   const token = useTokenState();
   const isMobile = useMediaQuery();
   const logger = useLogger();
@@ -54,7 +58,21 @@ export default function TeamListPage() {
 
   const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
 
-  const handleRecruitClick = () => showToast('warning', '모집글 작성 기능은 준비 중입니다.');
+  const handleRecruitClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_recruit',
+      value: '모집하기',
+    });
+
+    if (!token) {
+      redirectToLogin(router.asPath);
+      return;
+    }
+
+    router.push(ROUTES.TeamRecruitmentNew());
+  };
 
   return (
     <>

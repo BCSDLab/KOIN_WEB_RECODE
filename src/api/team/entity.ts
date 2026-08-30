@@ -176,3 +176,26 @@ export interface TeamChatMessageSendRequest {
   content: string;
   is_image: boolean;
 }
+
+export interface MyCreatedTeamRecruitment extends TeamRecruitmentCard {
+  applicant_count: number;
+  can_close: boolean;
+  team_chat_available: boolean;
+  team_chat_room_id: number | null;
+}
+
+export interface MyCreatedTeamRecruitmentListRequest {
+  [key: string]: unknown;
+  status?: TeamRecruitmentStatusFilter;
+  sort?: TeamRecruitmentSort;
+  page?: number;
+  limit?: number;
+}
+
+export interface MyCreatedTeamRecruitmentListResponse extends APIResponse {
+  recruitments: MyCreatedTeamRecruitment[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
