@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 
 import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
@@ -11,6 +12,7 @@ interface OwnerActionMenuProps {
 }
 
 export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuProps) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const [isMenuOpen, openMenu, closeMenu] = useBooleanState(false);
   useEscapeKeyDown({ onEscape: closeMenu });
 
@@ -20,6 +22,7 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
   };
 
   const handleDelete = () => {
+    triggerRef.current?.focus();
     closeMenu();
     onDelete();
   };
@@ -27,6 +30,7 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         className={styles.menu__button}
         aria-label="모집글 메뉴"
