@@ -52,6 +52,11 @@
     outline: none;
     resize: none;
 
+    &:focus-visible {
+      outline: 2px solid #b611f5;
+      outline-offset: 2px;
+    }
+
     &::placeholder {
       color: #727272;
     }
