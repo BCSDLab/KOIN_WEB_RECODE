@@ -27,6 +27,23 @@ export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> i
   }
 }
 
+export class DeleteTeamRecruitment<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
+
 export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 

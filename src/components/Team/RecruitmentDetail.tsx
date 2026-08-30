@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
 import ClockIcon from 'assets/svg/Team/clock.svg';
@@ -7,6 +8,8 @@ import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import ProfileIcon from 'assets/svg/Team/profile.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import DeleteConfirmModal from 'components/Team/components/DeleteConfirmModal';
+import OwnerActionMenu from 'components/Team/components/OwnerActionMenu';
 import { RecruitmentBadges } from 'components/Team/components/RecruitmentCard';
 import { formatRecruitmentDate, MEETING_TYPE_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import SubPageHeader from 'components/ui/SubPageHeader';
@@ -14,6 +17,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
 import styles from './RecruitmentDetail.module.scss';
 
@@ -28,7 +32,7 @@ interface PrimaryAction {
 
 const getPrimaryAction = (recruitment: TeamRecruitmentDetailResponse): PrimaryAction => {
   if (recruitment.is_author || recruitment.can_manage_applicants) {
-    return { type: 'manage', label: '지원자 관리하기' };
+    return { type: 'manage', label: '지원자 확인하기' };
   }
 
   if (recruitment.team_chat_available && recruitment.team_chat_room_id !== null) {
@@ -246,7 +250,9 @@ function DetailContent({ recruitment }: DetailContentProps) {
 
 export default function RecruitmentDetail() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const token = useTokenState();
+  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
@@ -254,16 +260,49 @@ export default function RecruitmentDetail() {
     ...teamQueries.detail(recruitmentId, token),
     enabled: router.isReady && isValidRecruitmentId,
   });
+  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(
+    teamMutations.deleteRecruitment(queryClient, token ?? ''),
+  );
+
+  const handleEdit = () => {
+    showToast('warning', '모집글 수정 기능은 준비 중입니다.');
+  };
+
+  const handleDeleteConfirm = () => {
+    if (!isValidRecruitmentId) return;
+
+    deleteRecruitment(recruitmentId, {
+      onSuccess: () => {
+        closeDeleteModal();
+        showToast('success', '모집글이 삭제되었습니다.');
+        router.replace(ROUTES.Team());
+      },
+      onError: () => showToast('error', '모집글을 삭제하지 못했어요. 다시 시도해 주세요.'),
+    });
+  };
 
   return (
     <div className={styles.page}>
-      <SubPageHeader title="팀원 모집" />
+      <SubPageHeader
+        title="팀원 모집"
+        rightAction={
+          data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={openDeleteModal} /> : undefined
+        }
+      />
 
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
       {router.isReady && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
       )}
       {data && <DetailContent recruitment={data} />}
+
+      {data?.is_author && isDeleteModalOpen && (
+        <DeleteConfirmModal
+          isPending={isDeletePending}
+          onCancel={closeDeleteModal}
+          onConfirm={handleDeleteConfirm}
+        />
+      )}
     </div>
   );
 }

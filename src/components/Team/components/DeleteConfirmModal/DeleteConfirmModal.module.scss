@@ -1,0 +1,65 @@
+@mixin modal-button-base {
+  flex: 1;
+  height: 44px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 160%;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 50%);
+}
+
+.modal {
+  width: 301px;
+  max-width: calc(100% - 48px);
+  padding: 24px 32px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #fff;
+
+  &__text {
+    margin: 0 0 24px;
+    color: #4b4b4b;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 160%;
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__button {
+    &--cancel {
+      @include modal-button-base;
+
+      border: 1px solid #8e8e8e;
+      background: #fff;
+      color: #4b4b4b;
+    }
+
+    &--confirm {
+      @include modal-button-base;
+
+      border: 0;
+      background: #b611f5;
+      color: #fff;
+    }
+  }
+}
