@@ -1,4 +1,4 @@
-import { ComponentType } from 'react';
+import { ComponentType, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import ComputerIcon from 'assets/svg/Team/computer.svg';
 import KeyframesDoubleIcon from 'assets/svg/Team/keyframes-double.svg';
@@ -19,6 +19,7 @@ import {
 } from './constants';
 import useTeamRecruitmentForm from './hooks/useTeamRecruitmentForm';
 import { TeamRecruitmentProgressType } from './types';
+import type { TeamRecruitmentFormValues } from './schema';
 import styles from './NewTeamRecruitment.module.scss';
 
 const PROGRESS_TYPE_ICON: Record<TeamRecruitmentProgressType, ComponentType> = {
@@ -27,36 +28,66 @@ const PROGRESS_TYPE_ICON: Record<TeamRecruitmentProgressType, ComponentType> = {
   HYBRID: KeyframesDoubleIcon,
 };
 
-export default function NewTeamRecruitment() {
+interface NewTeamRecruitmentProps {
+  initialValues?: TeamRecruitmentFormValues;
+  mode?: 'create' | 'edit';
+  onSubmit?: (values: TeamRecruitmentFormValues) => Promise<void>;
+}
+
+export default function NewTeamRecruitment({ initialValues, mode = 'create', onSubmit }: NewTeamRecruitmentProps) {
   const logger = useLogger();
-  const form = useTeamRecruitmentForm();
+  const form = useTeamRecruitmentForm(initialValues);
   const { control, register, formState, handleSubmit } = form;
+  const isEditMode = mode === 'edit';
+  const headerTitle = isEditMode ? '모집글 수정' : '모집글 작성';
+  const submitLabel = isEditMode ? '수정 완료' : '등록하기';
+  const confirmLabel = isEditMode ? '수정하기' : '등록하기';
+  const eventPrefix = isEditMode ? 'team_recruitment_edit' : 'team_recruitment_recruit';
 
   const title = useWatch({ control, name: 'title' });
   const description = useWatch({ control, name: 'description' });
   const qualification = useWatch({ control, name: 'qualification' });
 
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useBooleanState(false);
+  const [pendingValues, setPendingValues] = useState<TeamRecruitmentFormValues | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmitClick = handleSubmit(() => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit_submit', value: '등록하기' });
+  const handleSubmitClick = handleSubmit((values) => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit`, value: submitLabel });
+    setPendingValues(values);
     openConfirmModal();
   });
 
   const handleCancelConfirm = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit_submit_cancel', value: '취소하기' });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit_cancel`, value: '취소하기' });
     closeConfirmModal();
   };
 
-  const handleConfirmRegister = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_recruit_submit_confirm', value: '등록하기' });
-    // To Do: API 연결
-    closeConfirmModal();
+  const handleConfirmSubmit = async () => {
+    if (!pendingValues || isSubmitting) return;
+
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${eventPrefix}_submit_confirm`, value: confirmLabel });
+
+    if (!onSubmit) {
+      // To Do: 모집글 작성 API 연결
+      closeConfirmModal();
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await onSubmit(pendingValues);
+      closeConfirmModal();
+    } catch {
+      return;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className={styles.page}>
-      <SubPageHeader title="모집글 작성" />
+      <SubPageHeader title={headerTitle} />
 
       <div className={styles.form}>
         <Controller
@@ -182,16 +213,24 @@ export default function NewTeamRecruitment() {
           type="button"
           className={cn({
             [styles['submit-button']]: true,
-            [styles['submit-button--disabled']]: !formState.isValid,
+            [styles['submit-button--disabled']]: !formState.isValid || isSubmitting,
           })}
-          disabled={!formState.isValid}
+          disabled={!formState.isValid || isSubmitting}
           onClick={handleSubmitClick}
         >
-          등록하기
+          {submitLabel}
         </button>
       </div>
 
-      {isConfirmModalOpen && <ConfirmModal onCancel={handleCancelConfirm} onConfirm={handleConfirmRegister} />}
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          confirmLabel={confirmLabel}
+          description={`해당 모집글을 ${isEditMode ? '수정' : '등록'}하시겠습니까?`}
+          isPending={isSubmitting}
+          onCancel={handleCancelConfirm}
+          onConfirm={handleConfirmSubmit}
+        />
+      )}
     </div>
   );
 }

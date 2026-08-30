@@ -1,11 +1,13 @@
 import { mutationOptions, QueryClient } from '@tanstack/react-query';
 
 import { teamQueryKeys } from './queries';
+import type { TeamRecruitmentUpdateRequest } from './entity';
 import {
   deleteAllTeamRecruitmentNotifications,
   deleteTeamRecruitment,
   markAllTeamRecruitmentNotificationsRead,
   markTeamRecruitmentNotificationRead,
+  updateTeamRecruitment,
 } from './index';
 
 const invalidateRecruitmentList = (queryClient: QueryClient) =>
@@ -19,6 +21,15 @@ export const teamMutations = {
     mutationOptions({
       mutationFn: (recruitmentId: number) => deleteTeamRecruitment(token, recruitmentId),
       onSuccess: () => invalidateRecruitmentList(queryClient),
+    }),
+
+  updateRecruitment: (queryClient: QueryClient, token: string, recruitmentId: number) =>
+    mutationOptions({
+      mutationFn: (data: TeamRecruitmentUpdateRequest) => updateTeamRecruitment(token, recruitmentId, data),
+      onSuccess: async (recruitment) => {
+        queryClient.setQueryData(teamQueryKeys.detail(recruitmentId, token), recruitment);
+        await invalidateRecruitmentList(queryClient);
+      },
     }),
 
   markNotificationRead: (queryClient: QueryClient, token: string) =>

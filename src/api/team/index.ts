@@ -9,10 +9,12 @@ import {
   GetTeamRecruitmentNotifications,
   PostTeamRecruitmentNotificationRead,
   PostTeamRecruitmentNotificationsMarkAllRead,
+  PutTeamRecruitment,
 } from './APIDetail';
 
 export const deleteTeamRecruitment = APIClient.of(DeleteTeamRecruitment);
 export const getTeamRecruitmentDetail = APIClient.of(GetTeamRecruitmentDetail);
+export const updateTeamRecruitment = APIClient.of(PutTeamRecruitment);
 export const getTeamRecruitmentList = APIClient.of(GetTeamRecruitmentList);
 export const getMyTeamRecruitmentApplications = APIClient.of(GetMyTeamRecruitmentApplications);
 export const getTeamRecruitmentNotifications = APIClient.of(GetTeamRecruitmentNotifications);

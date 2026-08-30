@@ -3,8 +3,14 @@
   height: 44px;
   border-radius: 8px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 160%;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
 .modal-background {
@@ -23,7 +29,7 @@
 .modal {
   width: 301px;
   max-width: calc(100% - 48px);
-  border-radius: 12px;
+  border-radius: 8px;
   background: #fff;
   padding: 24px 32px;
   box-sizing: border-box;
@@ -35,7 +41,8 @@
   &__text {
     font-size: 15px;
     font-weight: 500;
-    color: #191919;
+    line-height: 160%;
+    color: #4b4b4b;
     text-align: center;
     margin: 0 0 24px;
   }
@@ -49,7 +56,7 @@
     &--cancel {
       @include modal-button-base;
 
-      border: 1px solid #d3d3d3;
+      border: 1px solid #8e8e8e;
       background: #fff;
       color: #4b4b4b;
     }

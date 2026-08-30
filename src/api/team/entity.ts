@@ -85,6 +85,35 @@ export interface TeamRecruitmentDetailResponse extends APIResponse, TeamRecruitm
   team_chat_room_id: number | null;
 }
 
+interface TeamRecruitmentUpdateBaseRequest {
+  category: TeamRecruitmentCategory;
+  title: string;
+  meeting_type: TeamRecruitmentMeetingType;
+  activity_start_date: string;
+  activity_end_date: string;
+  deadline_date: string;
+  description: string;
+  related_url: string | null;
+  qualification: string | null;
+}
+
+export interface TeamRecruitmentUpdateRole {
+  id?: number;
+  name: string;
+  max_participants: number;
+}
+
+export type TeamRecruitmentUpdateRequest =
+  | (TeamRecruitmentUpdateBaseRequest & {
+      recruitment_type: 'ROLE_BASED';
+      roles: TeamRecruitmentUpdateRole[];
+    })
+  | (TeamRecruitmentUpdateBaseRequest & {
+      recruitment_type: 'GENERAL';
+      max_participants: number;
+      roles: [];
+    });
+
 export type TeamRecruitmentNotificationType =
   | 'NEW_APPLICATION'
   | 'APPLICATION_ACCEPTED'

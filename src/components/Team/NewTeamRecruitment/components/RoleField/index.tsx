@@ -17,7 +17,7 @@ interface RoleFieldProps {
 
 export default function RoleField({ control }: RoleFieldProps) {
   const logger = useLogger();
-  const { fields, append, remove } = useFieldArray({ control, name: 'roles' });
+  const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
   const isRoleUnified = useWatch({ control, name: 'isRoleUnified' });
   const isAddDisabled = isRoleUnified || fields.length >= TEAM_RECRUITMENT_MAX_ROLE_COUNT;
 
@@ -96,7 +96,7 @@ export default function RoleField({ control }: RoleFieldProps) {
         />
       ) : (
         fields.map((roleField, index) => (
-          <div key={roleField.id} className={styles.field__row}>
+          <div key={roleField.fieldId} className={styles.field__row}>
             <Controller
               control={control}
               name={`roles.${index}.name`}

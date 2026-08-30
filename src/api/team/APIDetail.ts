@@ -8,6 +8,7 @@ import {
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
   TeamRecruitmentNotificationListResponse,
+  TeamRecruitmentUpdateRequest,
 } from './entity';
 
 export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
@@ -39,6 +40,24 @@ export class DeleteTeamRecruitment<R extends object> implements APIRequest<R> {
   constructor(
     public authorization: string,
     recruitmentId: number,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}`;
+  }
+}
+
+export class PutTeamRecruitment<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    public data: TeamRecruitmentUpdateRequest,
   ) {
     this.path = `/team-recruitments/${recruitmentId}`;
   }

@@ -10,8 +10,9 @@ import {
 export const teamRecruitmentProgressTypeSchema = z.enum(TEAM_RECRUITMENT_PROGRESS_TYPES);
 
 export const teamRecruitmentRoleSchema = z.object({
+  id: z.number().optional(),
   name: z.string(),
-  memberCount: z.number().min(1),
+  memberCount: z.number().min(1).max(10),
 });
 
 export const teamRecruitmentFormSchema = z
@@ -24,7 +25,7 @@ export const teamRecruitmentFormSchema = z
     deadlineDate: z.date().nullable(),
     isRoleUnified: z.boolean(),
     roles: z.array(teamRecruitmentRoleSchema).max(TEAM_RECRUITMENT_MAX_ROLE_COUNT),
-    unifiedMemberCount: z.number().min(1),
+    unifiedMemberCount: z.number().min(1).max(10),
     description: z.string().max(TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH),
     relatedUrl: z.string(),
     qualification: z.string().max(TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH),
@@ -73,11 +74,24 @@ export const teamRecruitmentFormSchema = z
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할을 추가해주세요.' });
       } else if (data.roles.some((role) => role.name.trim() === '')) {
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할명을 입력해주세요.' });
+      } else if (data.roles.reduce((sum, role) => sum + role.memberCount, 0) > 10) {
+        ctx.addIssue({ code: 'custom', path: ['roles'], message: '전체 모집 인원은 10명 이하여야 합니다.' });
       }
     }
 
     if (data.description.trim() === '') {
       ctx.addIssue({ code: 'custom', path: ['description'], message: '모집 소개를 입력해주세요.' });
+    }
+
+    if (data.relatedUrl.trim() !== '') {
+      try {
+        const relatedUrl = new URL(data.relatedUrl);
+        if (relatedUrl.protocol !== 'https:') {
+          ctx.addIssue({ code: 'custom', path: ['relatedUrl'], message: 'https://로 시작하는 URL을 입력해주세요.' });
+        }
+      } catch {
+        ctx.addIssue({ code: 'custom', path: ['relatedUrl'], message: 'https://로 시작하는 URL을 입력해주세요.' });
+      }
     }
   });
 

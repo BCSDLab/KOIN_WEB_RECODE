@@ -24,10 +24,10 @@ function createInitialTeamRecruitmentForm(): TeamRecruitmentFormValues {
   };
 }
 
-export default function useTeamRecruitmentForm() {
+export default function useTeamRecruitmentForm(defaultValues?: TeamRecruitmentFormValues) {
   return useForm<TeamRecruitmentFormValues>({
     resolver: zodResolver(teamRecruitmentFormSchema),
     mode: 'onChange',
-    defaultValues: createInitialTeamRecruitmentForm(),
+    defaultValues: defaultValues ?? createInitialTeamRecruitmentForm(),
   });
 }

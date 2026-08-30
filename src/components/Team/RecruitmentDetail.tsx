@@ -265,7 +265,7 @@ export default function RecruitmentDetail() {
   );
 
   const handleEdit = () => {
-    showToast('warning', '모집글 수정 기능은 준비 중입니다.');
+    router.push(ROUTES.TeamRecruitmentEdit({ postId: String(recruitmentId) }));
   };
 
   const handleDeleteConfirm = () => {
