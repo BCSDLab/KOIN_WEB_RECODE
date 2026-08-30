@@ -17,6 +17,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { redirectToLogin } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentListRequest } from 'api/team/entity';
 import styles from './TeamListPage.module.scss';
@@ -64,6 +65,12 @@ export default function TeamListPage() {
       event_label: 'team_recruitment_recruit',
       value: '모집하기',
     });
+
+    if (!token) {
+      redirectToLogin(router.asPath);
+      return;
+    }
+
     router.push(ROUTES.TeamRecruitmentNew());
   };
 
