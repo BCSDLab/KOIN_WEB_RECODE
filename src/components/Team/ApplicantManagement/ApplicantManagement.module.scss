@@ -1,0 +1,92 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 56px);
+  background: #f8f8fa;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
+}
+
+.error {
+  margin: 48px 0;
+  color: #727272;
+  font-size: 14px;
+  line-height: 160%;
+  text-align: center;
+}
+
+.recruitmentStatus {
+  flex-shrink: 0;
+  color: #b611f5;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 160%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &--empty {
+    flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__title {
+    color: #000;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 160%;
+  }
+
+  &__count {
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0 0;
+  gap: 12px;
+
+  svg {
+    width: 95px;
+    height: 75px;
+  }
+
+  &__title {
+    color: #000;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__subtitle {
+    color: #4b4b4b;
+    font-size: 14px;
+    line-height: 160%;
+    text-align: center;
+  }
+}

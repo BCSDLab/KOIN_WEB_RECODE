@@ -2,10 +2,16 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import type {
   MyTeamRecruitmentApplicationListRequest,
+  TeamRecruitmentApplicantListRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentNotificationListRequest,
 } from './entity';
-import { getMyTeamRecruitmentApplications, getTeamRecruitmentList, getTeamRecruitmentNotifications } from './index';
+import {
+  getMyTeamRecruitmentApplications,
+  getTeamRecruitmentApplicants,
+  getTeamRecruitmentList,
+  getTeamRecruitmentNotifications,
+} from './index';
 
 const TEAM_LIST_LIMIT = 10;
 const TEAM_NOTIFICATION_LIMIT = 10;
@@ -29,6 +35,8 @@ export const teamQueryKeys = {
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
+    ['team', 'recruitment', recruitmentId, 'applicants', token, params] as const,
 };
 
 export const teamQueries = {
@@ -81,5 +89,11 @@ export const teamQueries = {
 
         return undefined;
       },
+    }),
+
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest = {}) =>
+    queryOptions({
+      queryKey: teamQueryKeys.applicants(recruitmentId, token, params),
+      queryFn: () => getTeamRecruitmentApplicants(token, recruitmentId, params),
     }),
 };

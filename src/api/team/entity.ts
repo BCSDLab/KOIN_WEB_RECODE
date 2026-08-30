@@ -125,3 +125,34 @@ export interface MyTeamRecruitmentApplicationListResponse extends APIResponse {
   total_page: number;
   current_page: number;
 }
+
+export interface TeamRecruitmentApplicantManagementRecruitment extends TeamRecruitmentCard {
+  team_chat_available: boolean;
+  team_chat_room_id: number | null;
+}
+
+export interface TeamRecruitmentApplicant {
+  application_id: number;
+  nickname: string;
+  department: string;
+  student_year: number;
+  role: TeamApplicationRole | null;
+  status: TeamApplicationStatus;
+  can_open_direct_chat: boolean;
+}
+
+export interface TeamRecruitmentApplicantListRequest {
+  [key: string]: unknown;
+  statuses?: TeamApplicationStatus[];
+  page?: number;
+  limit?: number;
+}
+
+export interface TeamRecruitmentApplicantListResponse extends APIResponse {
+  recruitment: TeamRecruitmentApplicantManagementRecruitment;
+  applications: TeamRecruitmentApplicant[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
