@@ -3,6 +3,7 @@ import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
 import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import type {
   TeamRecruitmentCategory,
   TeamRecruitmentMeetingType,
@@ -83,6 +84,7 @@ function RecruitmentFilterPanelContent({
   filter,
   onApply,
 }: Omit<RecruitmentFilterPanelProps, 'isOpen'>) {
+  const logger = useLogger();
   const [draftFilter, setDraftFilter] = useState<TeamRecruitmentFilter>(() => copyFilter(filter));
 
   useEffect(() => {
@@ -94,7 +96,26 @@ function RecruitmentFilterPanelContent({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  const handleToggleCategory = (category: TeamRecruitmentCategory) => {
+  const logFilterEvent = (eventLabel: string, value: string) => {
+    logger.actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: eventLabel, value });
+  };
+
+  const handleSelectStatus = (status: TeamRecruitmentStatusFilter, label: string) => {
+    setDraftFilter((prev) => ({ ...prev, status }));
+    logFilterEvent('team_recruitment_filter_status', label);
+  };
+
+  const handleSelectSort = (sort: TeamRecruitmentSort, label: string) => {
+    setDraftFilter((prev) => ({ ...prev, sort }));
+    logFilterEvent('team_recruitment_filter_sort', label);
+  };
+
+  const handleSelectAllCategories = () => {
+    setDraftFilter((prev) => ({ ...prev, categories: [] }));
+    logFilterEvent('team_recruitment_filter_category', '전체');
+  };
+
+  const handleToggleCategory = (category: TeamRecruitmentCategory, label: string) => {
     setDraftFilter((prev) => {
       const categories = prev.categories.includes(category)
         ? prev.categories.filter((item) => item !== category)
@@ -105,15 +126,23 @@ function RecruitmentFilterPanelContent({
         categories: categories.length === TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS.length ? [] : categories,
       };
     });
+    logFilterEvent('team_recruitment_filter_category', label);
+  };
+
+  const handleSelectMeetingType = (meetingType: TeamRecruitmentMeetingType | undefined, label: string) => {
+    setDraftFilter((prev) => ({ ...prev, meetingType }));
+    logFilterEvent('team_recruitment_filter_method', label);
   };
 
   const handleReset = () => {
     setDraftFilter(copyFilter(DEFAULT_TEAM_RECRUITMENT_FILTER));
+    logFilterEvent('team_recruitment_filter_reset', '초기화');
   };
 
   const handleApply = () => {
     onApply(copyFilter(draftFilter));
     onClose();
+    logFilterEvent('team_recruitment_filter_apply', '적용하기');
   };
 
   return (
@@ -134,7 +163,7 @@ function RecruitmentFilterPanelContent({
                 key={option.value}
                 label={option.label}
                 isActive={draftFilter.status === option.value}
-                onClick={() => setDraftFilter((prev) => ({ ...prev, status: option.value }))}
+                onClick={() => handleSelectStatus(option.value, option.label)}
               />
             ))}
           </div>
@@ -148,7 +177,7 @@ function RecruitmentFilterPanelContent({
                 key={option.value}
                 label={option.label}
                 isActive={draftFilter.sort === option.value}
-                onClick={() => setDraftFilter((prev) => ({ ...prev, sort: option.value }))}
+                onClick={() => handleSelectSort(option.value, option.label)}
               />
             ))}
           </div>
@@ -160,14 +189,14 @@ function RecruitmentFilterPanelContent({
             <StatusBadge
               label="전체"
               isActive={draftFilter.categories.length === 0}
-              onClick={() => setDraftFilter((prev) => ({ ...prev, categories: [] }))}
+              onClick={handleSelectAllCategories}
             />
             {TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
                 isActive={draftFilter.categories.includes(option.value)}
-                onClick={() => handleToggleCategory(option.value)}
+                onClick={() => handleToggleCategory(option.value, option.label)}
               />
             ))}
           </div>
@@ -179,14 +208,14 @@ function RecruitmentFilterPanelContent({
             <StatusBadge
               label="전체"
               isActive={draftFilter.meetingType === undefined}
-              onClick={() => setDraftFilter((prev) => ({ ...prev, meetingType: undefined }))}
+              onClick={() => handleSelectMeetingType(undefined, '전체')}
             />
             {TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
                 isActive={draftFilter.meetingType === option.value}
-                onClick={() => setDraftFilter((prev) => ({ ...prev, meetingType: option.value }))}
+                onClick={() => handleSelectMeetingType(option.value, option.label)}
               />
             ))}
           </div>

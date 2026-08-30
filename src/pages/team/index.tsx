@@ -83,8 +83,23 @@ export default function TeamListPage() {
   const handleSearch = () => {
     const keyword = searchTitle.trim();
 
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_search', value: keyword });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_search',
+      value: keyword,
+    });
     setSearchKeyword(keyword || undefined);
+  };
+
+  const handleFilterClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'team_recruitment_filter',
+      value: '필터',
+    });
+    setIsFilterOpen(true);
   };
 
   const handleFilterApply = (filter: TeamRecruitmentFilter) => {
@@ -136,7 +151,7 @@ export default function TeamListPage() {
           <button
             type="button"
             className={styles.filterButton}
-            onClick={() => setIsFilterOpen(true)}
+            onClick={handleFilterClick}
             aria-haspopup="dialog"
             aria-expanded={isFilterOpen}
           >
