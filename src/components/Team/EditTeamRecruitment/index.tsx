@@ -144,5 +144,12 @@ export default function EditTeamRecruitment() {
     return <p className={styles.state}>모집글을 수정할 권한이 없습니다.</p>;
   }
 
-  return <NewTeamRecruitment mode="edit" initialValues={toFormValues(data)} onSubmit={handleSubmit} />;
+  return (
+    <NewTeamRecruitment
+      key={recruitmentId}
+      mode="edit"
+      initialValues={toFormValues(data)}
+      onSubmit={handleSubmit}
+    />
+  );
 }
