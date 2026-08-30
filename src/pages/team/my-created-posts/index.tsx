@@ -16,6 +16,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
@@ -143,6 +144,7 @@ export default function MyCreatedPostsPage() {
   const logger = useLogger();
   const router = useRouter();
   const token = useTokenState();
+  const mounted = useMount();
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
@@ -155,6 +157,10 @@ export default function MyCreatedPostsPage() {
   const { mutate: closeRecruitment, isPending: isClosing } = useMutation(
     teamMutations.closeRecruitment(queryClient, token),
   );
+
+  // 인증 확인 전 렌더를 막는다: useAuthGuard의 리다이렉트는 useEffect에서 일어나므로
+  // requireAuth만으로는 첫 렌더에서 CreatedPostsListSection의 API 요청(빈 토큰)을 막지 못한다.
+  if (!mounted || !token) return null;
 
   const handleApplyFilter = (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => {
     setRequestParams(filter);
@@ -275,3 +281,4 @@ export default function MyCreatedPostsPage() {
 }
 
 MyCreatedPostsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+MyCreatedPostsPage.requireAuth = true;
