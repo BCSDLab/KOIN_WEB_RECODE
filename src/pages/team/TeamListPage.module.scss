@@ -39,6 +39,35 @@
   }
 }
 
+.appliedFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 22px 12px;
+}
+
+.appliedFilterChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 40px;
+  background: #c358fc;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .totalCount {
   margin: 0;
   padding: 0 22px 12px;

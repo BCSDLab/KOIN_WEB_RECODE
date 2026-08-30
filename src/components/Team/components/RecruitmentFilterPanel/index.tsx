@@ -11,18 +11,18 @@ import type {
 } from 'api/team/entity';
 import styles from './RecruitmentFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
   { value: 'ALL', label: '전체' },
   { value: 'RECRUITING', label: '모집 중' },
   { value: 'CLOSED', label: '모집 완료' },
 ];
 
-const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
 
-const CATEGORY_OPTIONS: { value: TeamRecruitmentCategory; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: { value: TeamRecruitmentCategory; label: string }[] = [
   { value: 'CONTEST', label: '공모전' },
   { value: 'EXTERNAL_ACTIVITY', label: '대외활동' },
   { value: 'STUDY', label: '스터디' },
@@ -30,7 +30,10 @@ const CATEGORY_OPTIONS: { value: TeamRecruitmentCategory; label: string }[] = [
   { value: 'OTHER', label: '기타' },
 ];
 
-const MEETING_TYPE_OPTIONS: { value: TeamRecruitmentMeetingType; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS: {
+  value: TeamRecruitmentMeetingType;
+  label: string;
+}[] = [
   { value: 'ONLINE', label: '온라인' },
   { value: 'OFFLINE', label: '오프라인' },
   { value: 'MIXED', label: '온·오프라인' },
@@ -99,7 +102,7 @@ function RecruitmentFilterPanelContent({
 
       return {
         ...prev,
-        categories: categories.length === CATEGORY_OPTIONS.length ? [] : categories,
+        categories: categories.length === TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS.length ? [] : categories,
       };
     });
   };
@@ -126,7 +129,7 @@ function RecruitmentFilterPanelContent({
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>모집 상태</h3>
           <div className={styles.sectionBadges}>
-            {STATUS_OPTIONS.map((option) => (
+            {TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
@@ -140,7 +143,7 @@ function RecruitmentFilterPanelContent({
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>정렬</h3>
           <div className={styles.sectionBadges}>
-            {SORT_OPTIONS.map((option) => (
+            {TEAM_RECRUITMENT_FILTER_SORT_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
@@ -159,7 +162,7 @@ function RecruitmentFilterPanelContent({
               isActive={draftFilter.categories.length === 0}
               onClick={() => setDraftFilter((prev) => ({ ...prev, categories: [] }))}
             />
-            {CATEGORY_OPTIONS.map((option) => (
+            {TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
@@ -178,7 +181,7 @@ function RecruitmentFilterPanelContent({
               isActive={draftFilter.meetingType === undefined}
               onClick={() => setDraftFilter((prev) => ({ ...prev, meetingType: undefined }))}
             />
-            {MEETING_TYPE_OPTIONS.map((option) => (
+            {TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
                 label={option.label}
