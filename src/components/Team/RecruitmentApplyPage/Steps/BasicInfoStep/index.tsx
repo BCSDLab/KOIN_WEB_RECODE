@@ -1,25 +1,24 @@
-import { useState } from 'react';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
-import XIcon from 'assets/svg/Team/x-icon.svg';
 import DeptSelect from 'components/Team/ProfilePage/components/DeptSelect';
 import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
-import ActivityHistoryModal from 'components/Team/RecruitmentApplyPage/components/ActivityHistoryModal';
+import ActivityHistoryField from 'components/Team/RecruitmentApplyPage/components/ActivityHistoryField';
 import SkillTagInput from 'components/Team/RecruitmentApplyPage/components/SkillTagInput';
 import {
   APPLY_INTRODUCTION_MAX_LENGTH,
   APPLY_NICKNAME_MAX_LENGTH,
+  APPLY_PREFERRED_ROLE_MAX_LENGTH,
 } from 'components/Team/RecruitmentApplyPage/schema';
 import { APPLY_STEPS } from 'components/Team/RecruitmentApplyPage/types';
-import { Controller, useFieldArray, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import type { ApplicationFormValues, ApplyActivityValue } from 'components/Team/RecruitmentApplyPage/types';
+import type { ApplicationFormValues } from 'components/Team/RecruitmentApplyPage/types';
 import styles from './BasicInfoStep.module.scss';
 
 interface BasicInfoStepProps {
@@ -30,24 +29,18 @@ const LOGGING_TITLE = {
   LOAD_USER_INFO: 'team_recruitment_apply_load',
   MAJOR_SELECT: 'team_recruitment_apply_major_select',
   SKILL_ADD: 'team_recruitment_apply_skill_add',
-  ACTIVITY_ADD: 'team_recruitment_apply_activity_add',
-  ACTIVITY_MODIFY: 'team_recruitment_apply_activity_modify',
   NEXT: 'team_recruitment_apply_next',
 };
-
-type ActivityModalState = { mode: 'create' } | { mode: 'edit'; index: number };
 
 export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
   const token = useTokenState();
   const { actionEventClick } = useLogger();
   const { control, register, setValue, trigger, getValues } = useFormContext<ApplicationFormValues>();
   const { errors } = useFormState({ control });
-  const [activityModal, setActivityModal] = useState<ActivityModalState | null>(null);
 
   const nickname = useWatch({ control, name: 'nickname' }) ?? '';
+  const preferredRole = useWatch({ control, name: 'preferredRole' }) ?? '';
   const introduction = useWatch({ control, name: 'introduction' }) ?? '';
-  const activities = useWatch({ control, name: 'activities' }) ?? [];
-  const { fields, append, remove, update } = useFieldArray({ control, name: 'activities' });
 
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
   const deptOptionList = deptList.map((dept) => ({ label: dept.name, value: dept.name }));
@@ -107,40 +100,18 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     },
   });
 
-  const handleAddActivity = () => {
-    actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: LOGGING_TITLE.ACTIVITY_ADD,
-      value: '활동 이력 추가',
-    });
-    setActivityModal({ mode: 'create' });
-  };
-
-  const handleEditActivity = (index: number) => {
-    actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: LOGGING_TITLE.ACTIVITY_MODIFY,
-      value: '수정',
-    });
-    setActivityModal({ mode: 'edit', index });
-  };
-
-  const handleActivitySubmit = (activity: ApplyActivityValue) => {
-    if (activityModal?.mode === 'edit') {
-      update(activityModal.index, activity);
-    } else {
-      append(activity);
-    }
-    setActivityModal(null);
-  };
-
   const handleNext = async () => {
+    const activities = getValues('activities');
+    if (activities.some((activity) => activity.status === 'draft')) {
+      showToast('warning', '작성 중인 활동 이력을 완료해주세요.');
+      return;
+    }
+
     const isValid = await trigger([
       'nickname',
       'department',
       'studentNumber',
+      'preferredRole',
       'skills',
       'activities',
       'introduction',
@@ -161,9 +132,10 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
 
   return (
     <div className={styles.step}>
-      <StepIndicator steps={APPLY_STEPS} currentIndex={0} />
+      <div className={styles.step__fields}>
+        <StepIndicator steps={APPLY_STEPS} currentIndex={0} />
 
-      <div className={styles.step__body}>
+        <div className={styles.step__body}>
         <div className={styles.loadInfo}>
           <div className={styles.loadInfo__head}>
             <span className={styles.loadInfo__title}>
@@ -243,11 +215,35 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           )}
         </FormField>
 
+        <FormField
+          label="선호 역할"
+          required
+          maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
+          currentLength={preferredRole.length}
+          error={errors.preferredRole?.message}
+        >
+          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
+            <input
+              id={controlId}
+              type="text"
+              className={controlClassName}
+              placeholder="선호 역할을 작성해주세요. ex) 프론트엔드, 기획, 디자인 등"
+              maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid}
+              {...register('preferredRole')}
+            />
+          )}
+        </FormField>
+        </div>
+
+        <div className={styles.step__extra}>
         <SkillTagInput
           label="보유기술 / 자격증"
           description="기술 / 자격증은 항목별로 하나씩 작성해주세요."
           addButtonLabel="기술 / 자격증 추가"
           placeholder="기술 / 자격증을 작성해주세요."
+          error={errors.skills?.message}
           onAppend={() =>
             actionEventClick({
               team: 'CAMPUS',
@@ -258,56 +254,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           }
         />
 
-        <div className={styles.activity}>
-          <div className={styles.activity__head}>
-            <span className={styles.activity__label}>활동 이력</span>
-            <p className={styles.activity__description}>공모전, 대외활동, 자치단체 등 활동 이력을 작성해주세요.</p>
-          </div>
-
-          {fields.length > 0 && (
-            <ul className={styles.activity__list}>
-              {fields.map((field, index) => {
-                const activity = activities[index];
-                if (!activity) return null;
-
-                return (
-                  <li key={field.id} className={styles.activityCard}>
-                    <div className={styles.activityCard__head}>
-                      <span className={styles.activityCard__title}>{activity.title}</span>
-                      <div className={styles.activityCard__actions}>
-                        <button
-                          type="button"
-                          className={styles.activityCard__edit}
-                          onClick={() => handleEditActivity(index)}
-                        >
-                          수정
-                        </button>
-                        <button
-                          type="button"
-                          className={styles.activityCard__remove}
-                          onClick={() => remove(index)}
-                          aria-label="활동 이력 삭제"
-                        >
-                          <XIcon aria-hidden />
-                        </button>
-                      </div>
-                    </div>
-                    <dl className={styles.activityCard__meta}>
-                      <dt>활동 기간</dt>
-                      <dd>{`${activity.startDate} ~ ${activity.isOngoing ? '진행 중' : (activity.endDate ?? '')}`}</dd>
-                      <dt>활동 내용</dt>
-                      <dd>{activity.content}</dd>
-                    </dl>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-
-          <button type="button" className={styles.activity__add} onClick={handleAddActivity}>
-            활동 이력 추가
-          </button>
-        </div>
+        <ActivityHistoryField />
 
         <FormField
           label="자기소개"
@@ -348,6 +295,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             );
           }}
         </FormField>
+        </div>
       </div>
 
       <div className={styles.step__footer}>
@@ -355,14 +303,6 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           다음
         </button>
       </div>
-
-      {activityModal && (
-        <ActivityHistoryModal
-          initialValue={activityModal.mode === 'edit' ? (activities[activityModal.index] ?? null) : null}
-          onSubmit={handleActivitySubmit}
-          onClose={() => setActivityModal(null)}
-        />
-      )}
     </div>
   );
 }

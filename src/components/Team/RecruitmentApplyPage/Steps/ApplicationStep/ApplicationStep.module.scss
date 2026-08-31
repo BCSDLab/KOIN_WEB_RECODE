@@ -1,58 +1,113 @@
+@use "src/utils/scss/media" as media;
+
 .step {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 24px;
+  gap: 60px;
   width: 100%;
 
-  &__body {
+  @include media.media-breakpoint(mobile) {
+    gap: 24px;
+  }
+
+  &__fields {
     display: flex;
     flex-direction: column;
+    gap: 40px;
+    width: 100%;
+
+    @include media.media-breakpoint(mobile) {
+      display: contents;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     box-sizing: border-box;
     width: 100%;
-    padding: 0 24px;
+
+    // 지원 역할 선택과 지원 동기는 나란히, 참여 가능 시간은 마지막 줄에서 전체 폭을 차지한다.
+    > *:last-child {
+      grid-column: 1 / -1;
+    }
+
+    // 역할 구분이 없는 모집글은 지원 동기 · 참여 가능 시간 모두 전체 폭을 차지한다.
+    &--noRoles > * {
+      grid-column: 1 / -1;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      padding: 0 24px;
+    }
   }
 
   &__footer {
     display: flex;
-    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
     box-sizing: border-box;
     width: 100%;
     margin-top: auto;
-    padding: 16px 24px 24px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 12px;
+      padding: 16px 24px 24px;
+    }
   }
 
   &__back {
-    flex: 1;
     padding: 0 24px;
     height: 48px;
-    border: 0.5px solid #b611f5;
-    border-radius: 16px;
-    background: #fff;
-    font-size: 15px;
-    font-weight: 600;
+    border: none;
+    background: none;
+    font-size: 16px;
+    font-weight: 500;
     line-height: 1.6;
-    color: #b611f5;
+    color: #727272;
     cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      flex: 1;
+      border: 0.5px solid #b611f5;
+      border-radius: 16px;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      color: #b611f5;
+    }
   }
 
   &__submit {
-    flex: 1;
-    padding: 0 24px;
-    border: none;
+    box-sizing: border-box;
     height: 48px;
-    border-radius: 16px;
-    background: #b611f5;
-    font-size: 15px;
+    padding: 10px 64px;
+    border: none;
+    border-radius: 8px;
+    background: #175c8e;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #fff;
+    white-space: nowrap;
     cursor: pointer;
 
     &:disabled {
       background: #cacaca;
       cursor: default;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      flex: 1;
+      padding: 0 24px;
+      border-radius: 16px;
+      background: #b611f5;
+      font-size: 15px;
     }
   }
 }
@@ -70,6 +125,7 @@
   }
 
   &__label {
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #0b0b0d;
@@ -77,7 +133,11 @@
 
   &__required {
     margin-left: 2px;
-    color: #b611f5;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      color: #b611f5;
+    }
   }
 
   &__list {
@@ -89,7 +149,7 @@
 
   &__empty {
     padding: 12px;
-    border-radius: 16px;
+    border-radius: 8px;
     background: #fff;
     font-size: 12px;
     line-height: 1.6;
@@ -100,7 +160,11 @@
     margin: 0;
     font-size: 12px;
     line-height: 1.6;
-    color: #b611f5;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      color: #b611f5;
+    }
   }
 }
 
@@ -111,18 +175,27 @@
   box-sizing: border-box;
   width: 100%;
   padding: 12px;
-  border: 1px solid transparent;
-  border-radius: 16px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
   background: #fff;
   cursor: pointer;
 
   &--selected {
-    border-color: #b611f5;
+    border-color: #175c8e;
   }
 
   &--closed {
     background: #eee;
     cursor: default;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    border: 1px solid transparent;
+    border-radius: 16px;
+
+    &--selected {
+      border-color: #b611f5;
+    }
   }
 
   &__input {
@@ -147,20 +220,32 @@
   }
 
   &__input:checked ~ &__icon {
-    border-color: #b611f5;
+    border-color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      border-color: #b611f5;
+    }
   }
 
   &__input:checked ~ &__icon::after {
     width: 8px;
     height: 8px;
     border-radius: 100px;
-    background: #b611f5;
+    background: #175c8e;
     content: "";
+
+    @include media.media-breakpoint(mobile) {
+      background: #b611f5;
+    }
   }
 
   &__input:focus-visible ~ &__icon {
-    outline: 2px solid #b611f5;
+    outline: 2px solid #175c8e;
     outline-offset: 2px;
+
+    @include media.media-breakpoint(mobile) {
+      outline-color: #b611f5;
+    }
   }
 
   &__input:disabled ~ &__name {

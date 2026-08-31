@@ -1,42 +1,114 @@
+@use "src/utils/scss/media" as media;
+
 .step {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 24px;
+  gap: 60px;
   width: 100%;
 
-  &__body {
+  @include media.media-breakpoint(mobile) {
+    gap: 24px;
+  }
+
+  &__fields {
     display: flex;
     flex-direction: column;
+    gap: 40px;
+    width: 100%;
+
+    @include media.media-breakpoint(mobile) {
+      display: contents;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     box-sizing: border-box;
     width: 100%;
-    padding: 0 24px;
+
+    // 코인 회원정보 불러오기(1)는 전체 폭을 차지하고, 닉네임·학과(2~3)와 학번·선호 역할(4~5)은 각각 나란히 배치한다.
+    > *:nth-child(1) {
+      grid-column: 1 / -1;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      padding: 0 24px;
+    }
+  }
+
+  &__extra {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    box-sizing: border-box;
+    width: 100%;
+
+    // 보유기술(1)·활동 이력(2)은 왼쪽 열에 쌓고, 자기소개(3)는 오른쪽 열에서 그 두 행 높이만큼 이어진다.
+    > *:nth-child(1) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    > *:nth-child(2) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    > *:nth-child(3) {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      padding: 0 24px;
+    }
   }
 
   &__footer {
     box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
     width: 100%;
     margin-top: auto;
-    padding: 16px 24px 24px;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 16px 24px 24px;
+    }
   }
 
   &__submit {
     box-sizing: border-box;
-    width: 100%;
     height: 48px;
+    padding: 10px 64px;
     border: none;
-    border-radius: 16px;
-    background: #b611f5;
-    font-size: 15px;
+    border-radius: 8px;
+    background: #175c8e;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #fff;
+    white-space: nowrap;
     cursor: pointer;
 
     &:disabled {
       background: #cacaca;
       cursor: default;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: 48px;
+      padding: 0;
+      border-radius: 16px;
+      background: #b611f5;
+      font-size: 15px;
     }
   }
 }
@@ -55,12 +127,17 @@
   }
 
   &__title {
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #000;
 
     &--highlight {
-      color: #b611f5;
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        color: #b611f5;
+      }
     }
   }
 
@@ -73,18 +150,24 @@
   &__button {
     width: 100%;
     height: 40px;
-    border: 0.5px solid #b611f5;
-    border-radius: 16px;
+    border: 0.5px solid #175c8e;
+    border-radius: 8px;
     background: #fff;
     font-size: 14px;
     line-height: 1.6;
-    color: #b611f5;
+    color: #175c8e;
     cursor: pointer;
 
     &:disabled {
       border-color: #cacaca;
       color: #cacaca;
       cursor: default;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      border: 0.5px solid #b611f5;
+      border-radius: 16px;
+      color: #b611f5;
     }
   }
 }
@@ -102,6 +185,7 @@
   }
 
   &__label {
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
   }
@@ -123,13 +207,19 @@
     box-sizing: border-box;
     width: 100%;
     height: 40px;
-    border: 0.5px solid #b611f5;
-    border-radius: 16px;
+    border: 0.5px solid #175c8e;
+    border-radius: 8px;
     background: #fff;
     font-size: 14px;
     line-height: 1.6;
-    color: #b611f5;
+    color: #175c8e;
     cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      border: 0.5px solid #b611f5;
+      border-radius: 16px;
+      color: #b611f5;
+    }
   }
 }
 
@@ -140,8 +230,14 @@
   box-sizing: border-box;
   width: 100%;
   padding: 12px;
-  border-radius: 16px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
   background: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    border: none;
+    border-radius: 16px;
+  }
 
   &__head {
     display: flex;
@@ -170,13 +266,18 @@
     flex-shrink: 0;
     box-sizing: border-box;
     padding: 2px 8px;
-    border: 0.5px solid #b611f5;
+    border: 0.5px solid #175c8e;
     border-radius: 16px;
     background: #fff;
     font-size: 10px;
     line-height: 1.6;
-    color: #b811f5;
+    color: #175c8e;
     cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      border: 0.5px solid #b611f5;
+      color: #b811f5;
+    }
   }
 
   &__remove {
