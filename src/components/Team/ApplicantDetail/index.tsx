@@ -8,11 +8,13 @@ import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
+import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+import ActivityHistoryDetailModal from './components/ActivityHistoryDetailModal';
 import ActivityHistoryList from './components/ActivityHistoryList';
 import ApplicantActionBar from './components/ApplicantActionBar';
 import ApplicantProfileHeader from './components/ApplicantProfileHeader';
@@ -62,6 +64,12 @@ export default function ApplicantDetail() {
     enabled: !!token && !!recruitmentId && !!applicationId,
   });
 
+  const recruitmentIdNumber = Number(recruitmentId);
+  const { data: recruitment } = useQuery({
+    ...teamQueries.detail(recruitmentIdNumber, token),
+    enabled: !!token && !!recruitmentId,
+  });
+
   const { mutate: decideApplication, isPending: isDeciding } = useMutation(
     teamMutations.decideApplication(queryClient, token, recruitmentId),
   );
@@ -71,6 +79,7 @@ export default function ApplicantDetail() {
   );
 
   const [decisionAction, setDecisionAction] = useState<TeamRecruitmentApplicationDecision | null>(null);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
 
   const handleRejectClick = () => {
     logger.actionEventClick({
@@ -137,16 +146,18 @@ export default function ApplicantDetail() {
 
   return (
     <>
-      <SubPageHeader
-        title="지원자 상세"
-        className={styles.header}
-        rightAction={
-          <div className={styles.header__actions}>
-            <NotificationIcon aria-hidden />
-            <ThreeDotsIcon aria-hidden />
-          </div>
-        }
-      />
+      <div className={styles.mobileHeader}>
+        <SubPageHeader
+          title="지원자 상세"
+          className={styles.header}
+          rightAction={
+            <div className={styles.header__actions}>
+              <NotificationIcon aria-hidden />
+              <ThreeDotsIcon aria-hidden />
+            </div>
+          }
+        />
+      </div>
 
       <div className={styles.page}>
         <div className={styles.content}>
@@ -156,18 +167,31 @@ export default function ApplicantDetail() {
 
           {!isLoading && data && (
             <>
+              <div className={styles.desktopTitle}>
+                <h1 className={styles.desktopTitle__heading}>지원자 상세</h1>
+                {recruitment && (
+                  <div className={styles.desktopTitle__context}>
+                    <span className={styles.desktopTitle__category}>{CATEGORY_LABEL[recruitment.category]}</span>
+                    <span className={styles.desktopTitle__recruitment}>{recruitment.title}</span>
+                  </div>
+                )}
+              </div>
+
               <ApplicantProfileHeader
                 nickname={data.profile_snapshot.nickname}
                 status={data.status}
                 role={data.role}
                 department={data.profile_snapshot.department}
                 studentYear={data.profile_snapshot.student_year}
+                canOpenDirectChat={data.can_open_direct_chat}
+                isChatPending={isCreatingChat}
+                onChatClick={handleChatClick}
               />
 
               <h2 className={styles.page__sectionTitle}>기본 정보</h2>
 
               <div className={styles.skills}>
-                <span className={styles.skills__label}>보유기술</span>
+                <span className={styles.skills__label}>보유기술 및 자격증</span>
                 <div className={styles.skills__list}>
                   {data.profile_snapshot.skills.map((skill) => (
                     <span key={skill} className={styles.skills__chip}>
@@ -177,19 +201,23 @@ export default function ApplicantDetail() {
                 </div>
               </div>
 
-              <ActivityHistoryList activities={data.profile_snapshot.activities} />
+              <ActivityHistoryList
+                activities={data.profile_snapshot.activities}
+                onMoreClick={() => setIsActivityModalOpen(true)}
+                className={styles.activitySection}
+              />
 
-              <DetailInfoSection label="자기소개">
+              <DetailInfoSection label="자기소개" className={styles.selfIntroductionSection}>
                 <p className={styles.text}>{data.profile_snapshot.self_introduction}</p>
               </DetailInfoSection>
 
               <h2 className={styles.page__sectionTitle}>지원 내용</h2>
 
-              <DetailInfoSection label="지원 동기">
+              <DetailInfoSection label="지원 동기" className={styles.motivationSection}>
                 <p className={styles.text}>{data.motivation}</p>
               </DetailInfoSection>
 
-              <DetailInfoSection label="활동 가능 시간">
+              <DetailInfoSection label="참여 가능 시간" className={styles.availabilitySection}>
                 <p className={styles.text}>{data.availability}</p>
               </DetailInfoSection>
             </>
@@ -217,6 +245,13 @@ export default function ApplicantDetail() {
           isSubmitting={isDeciding}
           onConfirm={handleDecisionConfirm}
           onCancel={handleDecisionCancel}
+        />
+      )}
+
+      {isActivityModalOpen && data && (
+        <ActivityHistoryDetailModal
+          activities={data.profile_snapshot.activities}
+          onClose={() => setIsActivityModalOpen(false)}
         />
       )}
     </>

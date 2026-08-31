@@ -1,69 +1,137 @@
+@use "src/utils/scss/media" as media;
+
 .list {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
 
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+  }
+
   &__label {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 16px;
     line-height: 1.6;
     color: #000;
   }
 
-  &__box {
+  &__more {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #727272;
+    cursor: pointer;
+
+    svg {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__box {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
     box-sizing: border-box;
     width: 100%;
-    border-radius: 16px;
-    background: #f8f8fa;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
     list-style: none;
   }
 
   &__empty {
+    grid-column: 1 / -1;
     margin: 0;
     color: #727272;
     font-size: 13px;
     line-height: 1.6;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    &__label {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    &__more {
+      font-size: 12px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &__box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-radius: 16px;
+      background: #f8f8fa;
+    }
   }
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   box-sizing: border-box;
-  width: 100%;
+  min-width: 0;
   padding: 12px;
-  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
   background: #fff;
 
   &__title {
+    overflow: hidden;
     font-weight: 600;
     font-size: 14px;
     line-height: 1.6;
     color: #000;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__meta {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4px 12px;
+    grid-template-columns: 45px minmax(0, 1fr);
+    gap: 4px 8px;
     margin: 0;
 
     dt {
       color: #727272;
       font-size: 12px;
       line-height: 1.6;
+      white-space: nowrap;
     }
 
     dd {
+      min-width: 0;
       margin: 0;
       color: #000;
       font-size: 12px;
       line-height: 1.6;
+      overflow-wrap: break-word;
     }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    border: 0;
+    border-radius: 12px;
   }
 }

@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import ApplicantChatIcon from 'assets/svg/Team/applicant-chat.svg';
 import ProfileAvatarIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
 import type { TeamApplicationRole, TeamApplicationStatus } from 'api/team/entity';
@@ -18,6 +19,9 @@ interface ApplicantProfileHeaderProps {
   role: TeamApplicationRole | null;
   department: string;
   studentYear: number;
+  canOpenDirectChat?: boolean;
+  isChatPending?: boolean;
+  onChatClick?: () => void;
 }
 
 export default function ApplicantProfileHeader({
@@ -26,6 +30,9 @@ export default function ApplicantProfileHeader({
   role,
   department,
   studentYear,
+  canOpenDirectChat = false,
+  isChatPending = false,
+  onChatClick,
 }: ApplicantProfileHeaderProps) {
   return (
     <div className={styles.header}>
@@ -36,6 +43,17 @@ export default function ApplicantProfileHeader({
       <div className={styles.header__body}>
         <div className={styles.header__nameRow}>
           <span className={styles.header__name}>{nickname}</span>
+          {status === 'ACCEPTED' && canOpenDirectChat && (
+            <button
+              type="button"
+              className={styles.header__chat}
+              onClick={onChatClick}
+              disabled={isChatPending}
+              aria-label="지원자와 채팅하기"
+            >
+              <ApplicantChatIcon aria-hidden />
+            </button>
+          )}
           <span className={cn({ [styles.header__status]: true, [styles[STATUS_CLASS[status]]]: true })}>
             {formatApplicationStatus(status)}
           </span>
