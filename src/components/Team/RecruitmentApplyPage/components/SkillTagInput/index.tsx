@@ -9,6 +9,7 @@ interface SkillTagInputProps {
   description: string;
   addButtonLabel: string;
   placeholder: string;
+  error?: string;
   onAppend?: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function SkillTagInput({
   description,
   addButtonLabel,
   placeholder,
+  error,
   onAppend,
 }: SkillTagInputProps) {
   const { control, register } = useFormContext<ApplicationFormValues>();
@@ -61,6 +63,8 @@ export default function SkillTagInput({
       <button type="button" className={styles.tagInput__add} onClick={handleAppend}>
         {addButtonLabel}
       </button>
+
+      {error && <p className={styles.tagInput__error}>{error}</p>}
     </div>
   );
 }
