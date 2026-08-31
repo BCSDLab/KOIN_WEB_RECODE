@@ -53,12 +53,28 @@
   }
 }
 
+.summaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+
+  @include media.media-breakpoint(mobile) {
+    display: contents;
+  }
+}
+
 .summary {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  padding-bottom: 20px;
+
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+  }
 
   &__title {
     margin: 0;
@@ -69,12 +85,37 @@
   }
 
   @include media.media-breakpoint(mobile) {
-    padding-bottom: 0;
+    &--inline {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
     &__title {
       font-size: 18px;
       font-weight: 600;
     }
+  }
+}
+
+.manageButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 10px 64px;
+  border: 0;
+  border-radius: 8px;
+  background: #175c8e;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 160%;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
   }
 }
 
@@ -292,9 +333,25 @@
   }
 }
 
+@mixin owner-action-button {
+  height: 48px;
+  padding: 10px 64px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 160%;
+  cursor: pointer;
+}
+
 .action {
   display: flex;
   margin-top: 68px;
+
+  &--mobileOnly {
+    display: none;
+  }
 
   &__button {
     width: 216px;
@@ -322,6 +379,10 @@
     padding: 12px 32px calc(12px + env(safe-area-inset-bottom));
     background: #f8f8fa;
 
+    &--mobileOnly {
+      display: block;
+    }
+
     &__button {
       width: 100%;
       padding: 0;
@@ -333,6 +394,28 @@
         background: #d3d3d3;
       }
     }
+  }
+}
+
+.ownerActions {
+  display: flex;
+  gap: 20px;
+  margin-top: 68px;
+
+  &__edit {
+    @include owner-action-button;
+
+    background: #727272;
+  }
+
+  &__delete {
+    @include owner-action-button;
+
+    background: #f64c4c;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
   }
 }
 

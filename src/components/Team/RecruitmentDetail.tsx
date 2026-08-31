@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { cn } from '@bcsdlab/utils';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
@@ -70,15 +71,18 @@ const getPrimaryAction = (recruitment: TeamRecruitmentDetailResponse): PrimaryAc
 
 interface DetailContentProps {
   recruitment: TeamRecruitmentDetailResponse;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-function DetailContent({ recruitment }: DetailContentProps) {
+function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
   const router = useRouter();
   const logger = useLogger();
   const [isLoginModalOpen, openLoginModal, closeLoginModal] = useBooleanState(false);
   const primaryAction = getPrimaryAction(recruitment);
   const isActionDisabled = primaryAction.type === 'disabled';
   const isClosed = recruitment.status !== 'RECRUITING';
+  const canManage = recruitment.is_author || recruitment.can_manage_applicants;
   const roles =
     recruitment.roles.length > 0
       ? recruitment.roles
@@ -91,6 +95,15 @@ function DetailContent({ recruitment }: DetailContentProps) {
             is_closed: isClosed,
           },
         ];
+
+  const handleManageClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_applicant_check',
+      value: recruitment.title,
+    });
+    router.push(ROUTES.TeamRecruitmentApplicants({ postId: String(recruitment.id) }));
+  };
 
   const handleActionClick = () => {
     if (primaryAction.type === 'apply' || primaryAction.type === 'login' || primaryAction.type === 'profile') {
@@ -143,10 +156,17 @@ function DetailContent({ recruitment }: DetailContentProps) {
     <>
       <main className={styles.content}>
         <h1 className={styles.title}>모집글 상세</h1>
-        <section className={styles.summary}>
-          <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
-          <h2 className={styles.summary__title}>{recruitment.title}</h2>
-        </section>
+        <div className={styles.summaryRow}>
+          <section className={cn({ [styles.summary]: true, [styles['summary--inline']]: canManage })}>
+            <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
+            <h2 className={styles.summary__title}>{recruitment.title}</h2>
+          </section>
+          {canManage && (
+            <button type="button" className={styles.manageButton} onClick={handleManageClick}>
+              지원자 관리
+            </button>
+          )}
+        </div>
         <div className={styles.divider} />
         <div className={styles.body}>
           <div className={styles.body__main}>
@@ -241,11 +261,21 @@ function DetailContent({ recruitment }: DetailContentProps) {
           </aside>
         </div>
       </main>
-      <div className={styles.action}>
+      <div className={cn({ [styles.action]: true, [styles['action--mobileOnly']]: canManage })}>
         <button type="button" className={styles.action__button} disabled={isActionDisabled} onClick={handleActionClick}>
           {primaryAction.label}
         </button>
       </div>
+      {recruitment.is_author && (
+        <div className={styles.ownerActions}>
+          <button type="button" className={styles.ownerActions__edit} onClick={onEdit}>
+            수정
+          </button>
+          <button type="button" className={styles.ownerActions__delete} onClick={onDelete}>
+            삭제
+          </button>
+        </div>
+      )}
       {isLoginModalOpen && (
         <LoginRequiredModal
           title="팀원 모집에 지원하기"
@@ -333,7 +363,7 @@ export default function RecruitmentDetail() {
       {router.isReady && !data && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
       )}
-      {data && <DetailContent recruitment={data} />}
+      {data && <DetailContent recruitment={data} onEdit={handleEdit} onDelete={handleDeleteClick} />}
 
       {data?.is_author && isDeleteModalOpen && (
         <DeleteConfirmModal
