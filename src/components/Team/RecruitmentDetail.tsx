@@ -23,7 +23,7 @@ import styles from './RecruitmentDetail.module.scss';
 
 const formatCreatedAt = (createdAt: string) => formatRecruitmentDate(createdAt.split(' ')[0]);
 
-type PrimaryActionType = 'apply' | 'profile' | 'login' | 'chat' | 'manage' | 'disabled';
+type PrimaryActionType = 'apply' | 'login' | 'chat' | 'manage' | 'disabled';
 
 interface PrimaryAction {
   type: PrimaryActionType;
@@ -49,16 +49,12 @@ const getPrimaryAction = (recruitment: TeamRecruitmentDetailResponse): PrimaryAc
     return { type: 'disabled', label: '모집 마감' };
   }
 
-  if (recruitment.can_apply) {
+  if (recruitment.can_apply || recruitment.apply_block_reason === 'PROFILE_REQUIRED') {
     return { type: 'apply', label: '지원하기' };
   }
 
   if (recruitment.apply_block_reason === 'LOGIN_REQUIRED') {
     return { type: 'login', label: '지원하기' };
-  }
-
-  if (recruitment.apply_block_reason === 'PROFILE_REQUIRED') {
-    return { type: 'profile', label: '지원하기' };
   }
 
   if (recruitment.application || recruitment.apply_block_reason === 'ALREADY_APPLIED') {
@@ -93,7 +89,7 @@ function DetailContent({ recruitment }: DetailContentProps) {
         ];
 
   const handleActionClick = () => {
-    if (primaryAction.type === 'apply' || primaryAction.type === 'login' || primaryAction.type === 'profile') {
+    if (primaryAction.type === 'apply' || primaryAction.type === 'login') {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_label: 'team_recruitment_post_apply',
@@ -111,11 +107,6 @@ function DetailContent({ recruitment }: DetailContentProps) {
 
     if (primaryAction.type === 'login') {
       openLoginModal();
-      return;
-    }
-
-    if (primaryAction.type === 'profile') {
-      router.push(ROUTES.TeamProfileCreate());
       return;
     }
 
@@ -324,9 +315,7 @@ export default function RecruitmentDetail() {
     <div className={styles.page}>
       <SubPageHeader
         title="팀원 모집"
-        rightAction={
-          data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined
-        }
+        rightAction={data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined}
       />
 
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
