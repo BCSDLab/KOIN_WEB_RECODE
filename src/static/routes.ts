@@ -68,6 +68,7 @@ const ROUTES = {
   Team: () => '/team',
   TeamRecruitmentSearch: () => '/team/recruitment/search',
   TeamRecruitmentNew: () => '/team/recruitment/new',
+  TeamRecruitmentEdit: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/edit`,
   TeamRecruitmentApply: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/apply`,
   TeamRecruitmentApplicants: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/applicants`,
   TeamRecruitmentApplicantDetail: ({ postId, applicantId }: ROUTESParams<'postId' | 'applicantId'>) =>
