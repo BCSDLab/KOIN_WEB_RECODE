@@ -9,6 +9,7 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -65,6 +66,10 @@ export default function ApplicantDetail() {
     teamMutations.decideApplication(queryClient, token, recruitmentId),
   );
 
+  const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
+    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
+  );
+
   const [decisionAction, setDecisionAction] = useState<TeamRecruitmentApplicationDecision | null>(null);
 
   const handleRejectClick = () => {
@@ -83,6 +88,19 @@ export default function ApplicantDetail() {
       value: '승인하기',
     });
     setDecisionAction('ACCEPTED');
+  };
+
+  const handleChatClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_created_post_applicant_chat',
+      value: '채팅',
+    });
+    createDirectChatRoom(Number(applicationId), {
+      onSuccess: (chatRoom) => {
+        router.push(ROUTES.TeamChat({ recruitmentId, chatRoomId: String(chatRoom.chat_room_id) }));
+      },
+    });
   };
 
   const handleDecisionCancel = () => {
@@ -184,8 +202,10 @@ export default function ApplicantDetail() {
             canDecide={data.can_decide}
             canOpenDirectChat={data.can_open_direct_chat}
             isSubmitting={isDeciding}
+            isChatPending={isCreatingChat}
             onReject={handleRejectClick}
             onAccept={handleAcceptClick}
+            onChatClick={handleChatClick}
           />
         )}
       </div>

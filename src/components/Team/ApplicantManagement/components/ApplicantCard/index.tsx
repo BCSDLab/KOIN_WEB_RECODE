@@ -1,12 +1,15 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import { useMutation } from '@tanstack/react-query';
+import { teamMutations } from 'api/team/mutations';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ProfileAvatarIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import showToast from 'utils/ts/showToast';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import type { TeamRecruitmentApplicant } from 'api/team/entity';
 import styles from './ApplicantCard.module.scss';
 
@@ -24,9 +27,15 @@ interface ApplicantCardProps {
 }
 
 export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCardProps) {
+  const router = useRouter();
+  const token = useTokenState();
   const logger = useLogger();
   const { nickname, department, student_year: studentYear, role, status, can_open_direct_chat: canOpenDirectChat } =
     applicant;
+
+  const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
+    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
+  );
 
   const handleCardClick = () => {
     logger.actionEventClick({
@@ -42,8 +51,11 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
       event_label: 'team_recruitment_created_post_applicant_chat',
       value: '채팅',
     });
-    // TODO: 다이렉트 채팅방 개설/조회 API 연결 후 실제 채팅방으로 라우팅하도록 교체
-    showToast('warning', '준비 중인 기능입니다.');
+    createDirectChatRoom(applicant.application_id, {
+      onSuccess: (chatRoom) => {
+        router.push(ROUTES.TeamChat({ recruitmentId, chatRoomId: String(chatRoom.chat_room_id) }));
+      },
+    });
   };
 
   return (
@@ -69,7 +81,13 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
             · {formatApplicationStatus(status)}
           </span>
           {canOpenDirectChat && (
-            <button type="button" className={styles.card__chat} onClick={handleChatClick} aria-label="지원자와 채팅하기">
+            <button
+              type="button"
+              className={styles.card__chat}
+              onClick={handleChatClick}
+              disabled={isCreatingChat}
+              aria-label="지원자와 채팅하기"
+            >
               <ChatBubbleIcon aria-hidden />
             </button>
           )}

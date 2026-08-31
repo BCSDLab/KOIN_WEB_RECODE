@@ -72,6 +72,13 @@ export const teamMutations = {
   createDirectChatRoom: (token: string, recruitmentId: number) =>
     mutationOptions({
       mutationFn: (applicationId: number) => createTeamRecruitmentDirectChatRoom(token, recruitmentId, applicationId),
+      onError: (error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message);
+          return;
+        }
+        sendClientError(error);
+      },
     }),
 
   closeRecruitment: (queryClient: QueryClient, token: string) =>

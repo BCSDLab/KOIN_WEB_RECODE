@@ -1,6 +1,4 @@
 import ChatBubbleIcon from 'assets/svg/Team/accept-chat.svg';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import showToast from 'utils/ts/showToast';
 import type { TeamApplicationStatus } from 'api/team/entity';
 import styles from './ApplicantActionBar.module.scss';
 
@@ -9,8 +7,10 @@ interface ApplicantActionBarProps {
   canDecide: boolean;
   canOpenDirectChat: boolean;
   isSubmitting: boolean;
+  isChatPending: boolean;
   onReject: () => void;
   onAccept: () => void;
+  onChatClick: () => void;
 }
 
 export default function ApplicantActionBar({
@@ -18,20 +18,11 @@ export default function ApplicantActionBar({
   canDecide,
   canOpenDirectChat,
   isSubmitting,
+  isChatPending,
   onReject,
   onAccept,
+  onChatClick,
 }: ApplicantActionBarProps) {
-  const logger = useLogger();
-
-  const handleChatClick = () => {
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'team_recruitment_created_post_applicant_chat',
-      value: '채팅',
-    });
-    showToast('warning', '준비 중인 기능입니다.');
-  };
-
   if (canDecide) {
     return (
       <div className={styles.bar}>
@@ -52,7 +43,13 @@ export default function ApplicantActionBar({
           승인된 지원자
         </button>
         {canOpenDirectChat && (
-          <button type="button" className={styles.bar__chat} onClick={handleChatClick} aria-label="지원자와 채팅하기">
+          <button
+            type="button"
+            className={styles.bar__chat}
+            onClick={onChatClick}
+            disabled={isChatPending}
+            aria-label="지원자와 채팅하기"
+          >
             <ChatBubbleIcon aria-hidden />
           </button>
         )}
