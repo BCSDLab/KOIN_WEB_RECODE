@@ -78,7 +78,7 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
       >
         <div className={styles.modal__contents}>
           <p id="delete-recruitment-title" className={styles.modal__text}>
-            모집글을 삭제하시겠습니까?
+            해당 모집글을 삭제하시겠습니까?
           </p>
           <p className={styles.modal__description}>삭제한 모집글은 다시 복구할 수 없습니다.</p>
         </div>
