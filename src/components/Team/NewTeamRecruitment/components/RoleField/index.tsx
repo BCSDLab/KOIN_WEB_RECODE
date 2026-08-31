@@ -160,6 +160,16 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
           </div>
         ))
       )}
+
+      <button
+        type="button"
+        className={styles['field__add-button--full']}
+        onClick={handleAddRole}
+        disabled={isAddDisabled}
+      >
+        역할 추가
+        <PlusIcon />
+      </button>
     </div>
   );
 }
