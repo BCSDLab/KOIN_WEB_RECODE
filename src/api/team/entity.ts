@@ -114,6 +114,10 @@ export type TeamRecruitmentUpdateRequest =
       roles: [];
     });
 
+export interface TeamRecruitmentCreateResponse extends APIResponse {
+  id: number;
+}
+
 export type TeamRecruitmentNotificationType =
   | 'NEW_APPLICATION'
   | 'APPLICATION_ACCEPTED'

@@ -32,7 +32,7 @@ const PROGRESS_TYPE_ICON: Record<TeamRecruitmentProgressType, ComponentType> = {
 interface NewTeamRecruitmentProps {
   initialValues?: TeamRecruitmentFormValues;
   mode?: 'create' | 'edit';
-  onSubmit?: (values: TeamRecruitmentFormValues) => Promise<void>;
+  onSubmit: (values: TeamRecruitmentFormValues) => Promise<void>;
 }
 
 export default function NewTeamRecruitment({ initialValues, mode = 'create', onSubmit }: NewTeamRecruitmentProps) {
@@ -80,12 +80,6 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
       event_label: isEditMode ? 'team_recruitment_post_edit_submit_confirm' : 'team_recruitment_recruit_submit_confirm',
       value: confirmLabel,
     });
-
-    if (!onSubmit) {
-      // TODO: 모집글 작성 담당 PR에서 작성 API를 연결한다.
-      closeConfirmModal();
-      return;
-    }
 
     setIsSubmitting(true);
     try {

@@ -9,6 +9,7 @@ import type {
   TeamRecruitmentUpdateRequest,
 } from './entity';
 import {
+  createTeamRecruitment,
   createTeamRecruitmentDirectChatRoom,
   closeTeamRecruitment,
   deleteAllTeamRecruitmentNotifications,
@@ -28,6 +29,15 @@ const invalidateNotifications = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: teamQueryKeys.notificationsRoot });
 
 export const teamMutations = {
+  createRecruitment: (queryClient: QueryClient, token: string) =>
+    mutationOptions({
+      mutationFn: (data: TeamRecruitmentUpdateRequest) => createTeamRecruitment(token, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.myCreatedRoot });
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.listRoot });
+      },
+    }),
+
   deleteRecruitment: (queryClient: QueryClient, token: string) =>
     mutationOptions({
       mutationFn: (recruitmentId: number) => deleteTeamRecruitment(token, recruitmentId),
