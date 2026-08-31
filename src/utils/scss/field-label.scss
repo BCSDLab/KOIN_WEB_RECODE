@@ -1,8 +1,14 @@
+@use "src/utils/scss/media" as media;
+
 @mixin label {
   font-weight: 600;
   color: #000;
 
   &-required {
-    color: #b611f5;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      color: #b611f5;
+    }
   }
 }

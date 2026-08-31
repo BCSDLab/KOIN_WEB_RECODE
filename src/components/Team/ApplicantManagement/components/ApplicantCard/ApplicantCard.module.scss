@@ -1,18 +1,27 @@
+@use "src/utils/scss/media" as media;
+
 .card {
   position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 16px 20px;
+  padding: 24px;
   box-sizing: border-box;
+  border: 1px solid #e1e1e1;
   border-radius: 16px;
   background: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 16px 20px;
+    border: none;
+  }
 
   &__overlayLink {
     position: absolute;
     inset: 0;
     z-index: 1;
+    border-radius: inherit;
   }
 
   &__avatar {
@@ -22,14 +31,32 @@
     align-items: center;
     justify-content: center;
     border: 0.5px solid #cacaca;
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     border-radius: 300px;
     background: #fff;
 
     svg {
-      width: 28px;
-      height: 28px;
+      width: 35px;
+      height: 35px;
+
+      path {
+        stroke: #175c8e;
+      }
+
+      @include media.media-breakpoint(mobile) {
+        width: 28px;
+        height: 28px;
+
+        path {
+          stroke: #980ac9;
+        }
+      }
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 45px;
+      height: 45px;
     }
   }
 
@@ -37,34 +64,62 @@
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     min-width: 0;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 4px;
+    }
   }
 
   &__nameRow {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
+
+    @include media.media-breakpoint(mobile) {
+      justify-content: flex-start;
+    }
   }
 
   &__name {
     color: #0b0b0d;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+    }
+  }
+
+  &__trailing {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 20px;
   }
 
   &__status {
     font-weight: 500;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 13px;
+    }
 
     &--pending {
       color: #727272;
     }
 
     &--accepted {
-      color: #980ac9;
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        color: #980ac9;
+      }
     }
 
     &--rejected {
@@ -77,19 +132,45 @@
     z-index: 2;
     display: inline-flex;
     flex-shrink: 0;
+
+    svg {
+      width: 35px;
+      height: 35px;
+
+      path {
+        stroke: #175c8e;
+      }
+
+      @include media.media-breakpoint(mobile) {
+        width: 24px;
+        height: 24px;
+
+        path {
+          stroke: #b611f5;
+        }
+      }
+    }
   }
 
   &__meta {
     overflow: hidden;
     color: #727272;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 160%;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 11px;
+    }
   }
 
   &__role {
-    color: #b611f5;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      color: #b611f5;
+    }
   }
 
   &__chevron {

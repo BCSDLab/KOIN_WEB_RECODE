@@ -23,7 +23,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import showToast from 'utils/ts/showToast';
 import type {
   MyCreatedTeamRecruitment,
   MyCreatedTeamRecruitmentListRequest,
@@ -217,8 +216,7 @@ export default function MyCreatedPostsPage() {
       value: recruitment.title,
     });
 
-    // TODO: 지원자 관리 화면 구현 전까지 준비 중 토스트로 대체한다. src/pages/team/notifications/index.tsx의 동일 TODO 참고.
-    showToast('warning', '지원자 관리 기능은 준비 중입니다.');
+    router.push(ROUTES.TeamRecruitmentApplicants({ postId: String(recruitment.id) }));
   };
 
   const handleCloseClick = (recruitment: MyCreatedTeamRecruitment) => {

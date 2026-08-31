@@ -5,21 +5,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 0;
 
   &__label {
     @include field-label.label;
-
-    &-required {
-      color: #175c8e;
-    }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    padding: 12px 0;
-
-    &__label-required {
-      color: #b611f5;
-    }
   }
 }
 
@@ -27,9 +16,14 @@
   display: flex;
   gap: 24px;
 
+  @include media.media-breakpoint(mobile) {
+    flex-direction: column;
+    gap: 12px;
+  }
+
   &__item {
-    display: flex;
     flex: 1;
+    display: flex;
     flex-direction: column;
     gap: 4px;
   }
@@ -54,27 +48,21 @@
 
   &__date {
     flex: 1;
-    height: 35px;
+    min-width: 0;
+    width: 100%;
+    height: 40px;
     border: 1px solid #e1e1e1;
     border-radius: 8px;
     background: #fff;
-    color: #4b4b4b;
     font-size: 12px;
+    color: #4b4b4b;
     cursor: pointer;
-  }
 
-  @include media.media-breakpoint(mobile) {
-    flex-direction: column;
-    gap: 12px;
-
-    &__item {
-      gap: 8px;
-    }
-
-    &__date {
+    @include media.media-breakpoint(mobile) {
       flex: none;
       width: 147px;
-      border: 0;
+      height: 35px;
+      border: 1px solid transparent;
       border-radius: 16px;
     }
   }

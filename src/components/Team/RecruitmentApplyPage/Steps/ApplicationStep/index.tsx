@@ -42,12 +42,15 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
     onSubmit();
   };
 
+  const hasRoles = roles.length > 0;
+
   return (
     <div className={styles.step}>
-      <StepIndicator steps={APPLY_STEPS} currentIndex={1} />
+      <div className={styles.step__fields}>
+        <StepIndicator steps={APPLY_STEPS} currentIndex={1} />
 
-      <div className={styles.step__body}>
-        {roles.length > 0 && (
+        <div className={cn({ [styles.step__body]: true, [styles['step__body--noRoles']]: !hasRoles })}>
+        {hasRoles && (
           <div className={styles.roles}>
             <div className={styles.roles__head}>
               <span className={styles.roles__label}>
@@ -158,6 +161,7 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
             />
           )}
         </FormField>
+        </div>
       </div>
 
       <div className={styles.step__footer}>
