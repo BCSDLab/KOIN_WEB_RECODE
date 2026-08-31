@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import { teamQueries, type TeamRecruitmentInfiniteListRequest } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -27,6 +28,8 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin } from 'utils/ts/auth';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './TeamListPage.module.scss';
 
 interface AppliedFilterChipProps {
@@ -46,6 +49,45 @@ function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
 const getFilterLabel = <T extends string>(options: { value: T; label: string }[], value: T) =>
   options.find((option) => option.value === value)?.label ?? value;
 
+const INITIAL_FILTER: TeamRecruitmentFilter = {
+  ...DEFAULT_TEAM_RECRUITMENT_FILTER,
+  categories: [],
+};
+
+/**
+ * 서버와 클라이언트가 동일한 쿼리 키를 만들도록 요청 파라미터를 한 곳에서 생성한다.
+ *
+ * `undefined` 값은 넣지 않고 키 자체를 생략한다. `getServerSideProps`가 반환하는 props는
+ * JSON 직렬화가 가능해야 하는데, dehydrate된 쿼리 키에 `undefined`가 들어 있으면
+ * Next.js가 "`undefined` cannot be serialized as JSON" 런타임 에러를 낸다.
+ */
+const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): TeamRecruitmentInfiniteListRequest => ({
+  status: filter.status,
+  categories: filter.categories,
+  sort: filter.sort,
+  ...(keyword ? { keyword } : {}),
+  ...(filter.meetingType ? { meetingType: filter.meetingType } : {}),
+});
+
+const INITIAL_REQUEST_PARAMS = createRequestParams(INITIAL_FILTER);
+
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+  const { token } = parseServerSideParams(context);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, token));
+
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+});
+
 export default function TeamListPage() {
   const router = useRouter();
   const token = useTokenState();
@@ -55,18 +97,9 @@ export default function TeamListPage() {
   const [searchTitle, setSearchTitle] = useState('');
   const [searchKeyword, setSearchKeyword] = useState<string>();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [appliedFilter, setAppliedFilter] = useState<TeamRecruitmentFilter>(() => ({
-    ...DEFAULT_TEAM_RECRUITMENT_FILTER,
-    categories: [],
-  }));
+  const [appliedFilter, setAppliedFilter] = useState<TeamRecruitmentFilter>(() => ({ ...INITIAL_FILTER }));
 
-  const requestParams: TeamRecruitmentInfiniteListRequest = {
-    keyword: searchKeyword,
-    status: appliedFilter.status,
-    categories: appliedFilter.categories,
-    meetingType: appliedFilter.meetingType,
-    sort: appliedFilter.sort,
-  };
+  const requestParams = createRequestParams(appliedFilter, searchKeyword);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     teamQueries.infiniteList(requestParams, token),

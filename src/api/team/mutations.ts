@@ -2,7 +2,11 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { mutationOptions, QueryClient } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
 import { teamQueryKeys } from './queries';
-import type { TeamChatMessageSendRequest, TeamRecruitmentUpdateRequest } from './entity';
+import type {
+  TeamChatMessageSendRequest,
+  TeamRecruitmentApplicationDecision,
+  TeamRecruitmentUpdateRequest,
+} from './entity';
 import {
   createTeamRecruitmentDirectChatRoom,
   closeTeamRecruitment,
@@ -10,6 +14,7 @@ import {
   deleteTeamRecruitment,
   markAllTeamRecruitmentNotificationsRead,
   markTeamRecruitmentNotificationRead,
+  updateTeamRecruitmentApplicationStatus,
   updateTeamRecruitment,
   sendTeamRecruitmentChatMessage,
 } from './index';
@@ -67,6 +72,13 @@ export const teamMutations = {
   createDirectChatRoom: (token: string, recruitmentId: number) =>
     mutationOptions({
       mutationFn: (applicationId: number) => createTeamRecruitmentDirectChatRoom(token, recruitmentId, applicationId),
+      onError: (error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message);
+          return;
+        }
+        sendClientError(error);
+      },
     }),
 
   closeRecruitment: (queryClient: QueryClient, token: string) =>
@@ -75,6 +87,27 @@ export const teamMutations = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: teamQueryKeys.myCreatedRoot });
         queryClient.invalidateQueries({ queryKey: teamQueryKeys.listRoot });
+      },
+      onError: (error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message);
+          return;
+        }
+        sendClientError(error);
+      },
+    }),
+
+  decideApplication: (queryClient: QueryClient, token: string, recruitmentId: string) =>
+    mutationOptions({
+      mutationFn: ({
+        applicationId,
+        status,
+      }: {
+        applicationId: string;
+        status: TeamRecruitmentApplicationDecision;
+      }) => updateTeamRecruitmentApplicationStatus(token, recruitmentId, applicationId, { status }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.applicantsRoot(recruitmentId) });
       },
       onError: (error) => {
         if (isKoinError(error)) {
