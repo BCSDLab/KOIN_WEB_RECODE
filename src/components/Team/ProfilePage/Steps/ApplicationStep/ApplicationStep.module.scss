@@ -1,58 +1,125 @@
+@use "src/utils/scss/media" as media;
+
 .step {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 24px;
+  gap: 60px;
   width: 100%;
 
-  &__body {
+  @include media.media-breakpoint(mobile) {
+    gap: 24px;
+  }
+
+  &__fields {
     display: flex;
     flex-direction: column;
+    gap: 40px;
+    width: 100%;
+
+    @include media.media-breakpoint(mobile) {
+      display: contents;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     box-sizing: border-box;
     width: 100%;
-    padding: 0 24px;
+
+    // 선호 역할(1)은 전체 폭, 보유기술(2)·활동 이력(3)은 왼쪽 열에 쌓고
+    // 자기소개(4)는 오른쪽 열에서 그 두 행 높이만큼 이어진다.
+    > *:nth-child(1) {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    > *:nth-child(2) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    > *:nth-child(3) {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    > *:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2 / 4;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      padding: 0 24px;
+    }
   }
 
   &__footer {
     display: flex;
-    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
     box-sizing: border-box;
     width: 100%;
     margin-top: auto;
-    padding: 16px 24px 24px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 12px;
+      padding: 16px 24px 24px;
+    }
   }
 
   &__back {
-    flex: 1;
     padding: 0 24px;
     height: 48px;
-    border: 0.5px solid #b611f5;
-    border-radius: 16px;
-    background: #fff;
-    font-size: 15px;
-    font-weight: 600;
+    border: none;
+    background: none;
+    font-size: 16px;
+    font-weight: 500;
     line-height: 1.6;
-    color: #b611f5;
+    color: #727272;
     cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      flex: 1;
+      border: 0.5px solid #b611f5;
+      border-radius: 16px;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      color: #b611f5;
+    }
   }
 
   &__submit {
-    flex: 1;
-    padding: 0 24px;
-    border: none;
+    box-sizing: border-box;
     height: 48px;
-    border-radius: 16px;
-    background: #b611f5;
-    font-size: 15px;
+    padding: 10px 64px;
+    border: none;
+    border-radius: 8px;
+    background: #175c8e;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.6;
     color: #fff;
+    white-space: nowrap;
     cursor: pointer;
 
     &:disabled {
       background: #cacaca;
       cursor: default;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      flex: 1;
+      padding: 0 24px;
+      border-radius: 16px;
+      background: #b611f5;
+      font-size: 15px;
     }
   }
 }

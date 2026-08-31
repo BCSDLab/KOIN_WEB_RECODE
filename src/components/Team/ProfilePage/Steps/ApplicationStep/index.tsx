@@ -39,9 +39,10 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
 
   return (
     <div className={styles.step}>
-      <StepIndicator steps={PROFILE_STEPS} currentIndex={1} />
+      <div className={styles.step__fields}>
+        <StepIndicator steps={PROFILE_STEPS} currentIndex={1} />
 
-      <div className={styles.step__body}>
+        <div className={styles.step__body}>
         <FormField
           label="선호 역할"
           required
@@ -122,6 +123,7 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
             );
           }}
         </FormField>
+        </div>
       </div>
 
       <div className={styles.step__footer}>
