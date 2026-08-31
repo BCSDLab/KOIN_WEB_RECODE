@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const APPLY_NICKNAME_MAX_LENGTH = 20;
+export const APPLY_PREFERRED_ROLE_MAX_LENGTH = 20;
 export const APPLY_SKILL_MAX_LENGTH = 30;
 export const APPLY_ACTIVITY_TITLE_MAX_LENGTH = 50;
 export const APPLY_ACTIVITY_CONTENT_MAX_LENGTH = 1000;
@@ -15,12 +16,16 @@ export const applyActivitySchema = z.object({
   endDate: z.string().nullable(),
   isOngoing: z.boolean(),
   content: z.string(),
+  // 활동 이력은 모달 없이 카드 안에서 바로 작성/수정한다. 'draft'인 동안은 입력 폼이 펼쳐진 상태다.
+  status: z.enum(['draft', 'saved']),
+  hasBeenSaved: z.boolean(),
 });
 
 const applicationFormBaseSchema = z.object({
   nickname: z.string(),
   department: z.string(),
   studentNumber: z.string(),
+  preferredRole: z.string(),
   skills: z.array(z.object({ value: z.string() })),
   activities: z.array(applyActivitySchema),
   introduction: z.string(),
@@ -47,6 +52,16 @@ export const createApplicationFormSchema = (isGeneralRecruitment: boolean) =>
 
     if (data.studentNumber.trim() === '') {
       ctx.addIssue({ code: 'custom', path: ['studentNumber'], message: '학번을 작성해주세요.' });
+    }
+
+    if (data.preferredRole.trim() === '') {
+      ctx.addIssue({ code: 'custom', path: ['preferredRole'], message: '선호 역할을 작성해주세요.' });
+    } else if (data.preferredRole.trim().length > APPLY_PREFERRED_ROLE_MAX_LENGTH) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['preferredRole'],
+        message: `선호 역할은 ${APPLY_PREFERRED_ROLE_MAX_LENGTH}자 이내로 입력해주세요.`,
+      });
     }
 
     const skillValues = data.skills.map((skill) => skill.value.trim());

@@ -31,12 +31,9 @@ const LOGGING_TITLE = {
   SUBMIT_CANCEL: 'team_recruitment_apply_submit_cancel',
 };
 
-const toProfileRequestBody = (
-  values: ApplicationFormValues,
-  preferredRole: string,
-): UpsertTeamRecruitmentProfileRequest => ({
+const toProfileRequestBody = (values: ApplicationFormValues): UpsertTeamRecruitmentProfileRequest => ({
   profile_nickname: values.nickname.trim(),
-  preferred_role: preferredRole,
+  preferred_role: values.preferredRole.trim(),
   skills: values.skills.map((skill) => skill.value.trim()).filter((skill) => skill.length > 0),
   activities: values.activities.map((activity) => ({
     title: activity.title.trim(),
@@ -98,6 +95,7 @@ export default function RecruitmentApplyPage() {
       nickname: '',
       department: '',
       studentNumber: '',
+      preferredRole: '',
       skills: [],
       activities: [],
       introduction: '',
@@ -115,6 +113,7 @@ export default function RecruitmentApplyPage() {
       nickname: existingProfile.profile_nickname,
       department: existingProfile.department,
       studentNumber: existingProfile.student_number,
+      preferredRole: existingProfile.preferred_role,
       skills: existingProfile.skills.map((skill) => ({ value: skill })),
       activities: existingProfile.activities.map((activity) => ({
         id: String(activity.id),
@@ -123,6 +122,8 @@ export default function RecruitmentApplyPage() {
         endDate: activity.ended_at,
         isOngoing: activity.is_ongoing,
         content: activity.description,
+        status: 'saved',
+        hasBeenSaved: true,
       })),
       introduction: existingProfile.self_introduction,
     });
@@ -151,7 +152,14 @@ export default function RecruitmentApplyPage() {
   const handleRequestSubmit = methods.handleSubmit(
     (values) => setPendingValues(values),
     (errors) => {
-      if (errors.nickname || errors.department || errors.studentNumber || errors.activities || errors.introduction) {
+      if (
+        errors.nickname ||
+        errors.department ||
+        errors.studentNumber ||
+        errors.preferredRole ||
+        errors.activities ||
+        errors.introduction
+      ) {
         showToast('warning', '기본 정보를 먼저 입력해주세요.');
         goToFirstStep();
         return;
@@ -163,20 +171,15 @@ export default function RecruitmentApplyPage() {
   const handleConfirmSubmit = () => {
     if (!pendingValues || !recruitment) return;
 
-    let roleId: number | null;
-    let preferredRole: string;
+    let roleId: number | null = null;
 
-    if (isGeneralRecruitment) {
-      roleId = null;
-      preferredRole = existingProfile?.preferred_role ?? '';
-    } else {
+    if (!isGeneralRecruitment) {
       const selectedRole = recruitment.roles.find((role) => role.id === pendingValues.roleId);
       if (!selectedRole) {
         showToast('warning', '지원 역할을 다시 선택해주세요.');
         return;
       }
       roleId = selectedRole.id;
-      preferredRole = selectedRole.name;
     }
 
     actionEventClick({
@@ -186,7 +189,7 @@ export default function RecruitmentApplyPage() {
       value: '지원하기',
     });
 
-    upsertProfile(toProfileRequestBody(pendingValues, preferredRole), {
+    upsertProfile(toProfileRequestBody(pendingValues), {
       onSuccess: () => {
         submitApplication(
           {
@@ -220,43 +223,48 @@ export default function RecruitmentApplyPage() {
 
   return (
     <div className={styles.container}>
-      <SubPageHeader title="팀원 모집 지원" />
-
-      {(!router.isReady || isRecruitmentLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
-
-      {router.isReady && !recruitment && (!isValidRecruitmentId || isRecruitmentError) && (
-        <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
-      )}
-
-      {recruitment && !canApply && (
-        <div className={styles.blocked}>
-          <p className={styles.blocked__message}>지원할 수 없는 모집글이에요.</p>
-          <Link className={styles.blocked__link} href={ROUTES.TeamDetail({ postId: String(postId) })}>
-            모집글로 돌아가기
-          </Link>
+      <div className={styles.page}>
+        <div className={styles.mobileHeader}>
+          <SubPageHeader title="팀원 모집 지원" />
         </div>
-      )}
+        <h1 className={styles.title}>팀원 모집 지원</h1>
 
-      {recruitment && canApply && (
-        <FormProvider {...methods}>
-          <Suspense fallback={<LoadingSpinner size="50px" />}>
-            {currentStep === '기본 정보' ? (
-              <BasicInfoStep onNext={() => nextStep('지원서 작성')} />
-            ) : (
-              <ApplicationStep
-                roles={recruitment.roles}
-                onBack={goBack}
-                onSubmit={handleRequestSubmit}
-                isSubmitting={isSubmitting}
-              />
-            )}
-          </Suspense>
-        </FormProvider>
-      )}
+        {(!router.isReady || isRecruitmentLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
+
+        {router.isReady && !recruitment && (!isValidRecruitmentId || isRecruitmentError) && (
+          <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
+        )}
+
+        {recruitment && !canApply && (
+          <div className={styles.blocked}>
+            <p className={styles.blocked__message}>지원할 수 없는 모집글이에요.</p>
+            <Link className={styles.blocked__link} href={ROUTES.TeamDetail({ postId: String(postId) })}>
+              모집글로 돌아가기
+            </Link>
+          </div>
+        )}
+
+        {recruitment && canApply && (
+          <FormProvider {...methods}>
+            <Suspense fallback={<LoadingSpinner size="50px" />}>
+              {currentStep === '기본 정보' ? (
+                <BasicInfoStep onNext={() => nextStep('지원서 작성')} />
+              ) : (
+                <ApplicationStep
+                  roles={recruitment.roles}
+                  onBack={goBack}
+                  onSubmit={handleRequestSubmit}
+                  isSubmitting={isSubmitting}
+                />
+              )}
+            </Suspense>
+          </FormProvider>
+        )}
+      </div>
 
       {pendingValues && (
         <SubmitConfirmModal
-          message="지원서를 제출하시겠어요?"
+          message="해당 팀원 모집에 지원하시겠습니까?"
           confirmLabel="지원하기"
           isSubmitting={isSubmitting}
           onConfirm={handleConfirmSubmit}
