@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import Layout from 'components/layout';
-import NewTeamRecruitment from 'components/Team/NewTeamRecruitment';
+import CreateTeamRecruitment from 'components/Team/CreateTeamRecruitment';
 
 function TeamRecruitmentNewPage() {
   return (
@@ -11,7 +11,7 @@ function TeamRecruitmentNewPage() {
         <meta name="description" content="팀원 모집글을 작성할 수 있습니다." />
       </Head>
 
-      <NewTeamRecruitment />
+      <CreateTeamRecruitment />
     </>
   );
 }

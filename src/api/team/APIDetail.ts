@@ -18,12 +18,32 @@ import {
   TeamRecruitmentApplicantListRequest,
   TeamRecruitmentApplicantListResponse,
   TeamRecruitmentApplicationStatusUpdateRequest,
+  TeamRecruitmentCreateResponse,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
   TeamRecruitmentNotificationListResponse,
   TeamRecruitmentUpdateRequest,
 } from './entity';
+
+export class PostTeamRecruitment<R extends TeamRecruitmentCreateResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/team-recruitments';
+
+  response!: R;
+
+  auth = true;
+
+  data: TeamRecruitmentUpdateRequest;
+
+  constructor(
+    public authorization: string,
+    data: TeamRecruitmentUpdateRequest,
+  ) {
+    this.data = data;
+  }
+}
 
 export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

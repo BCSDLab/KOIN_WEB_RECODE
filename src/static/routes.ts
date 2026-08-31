@@ -66,7 +66,6 @@ const ROUTES = {
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
   Team: () => '/team',
-  TeamRecruitmentSearch: () => '/team/recruitment/search',
   TeamRecruitmentNew: () => '/team/recruitment/new',
   TeamRecruitmentEdit: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/edit`,
   TeamRecruitmentApply: ({ postId, step }: ROUTESParams<'postId' | 'step'>) =>
