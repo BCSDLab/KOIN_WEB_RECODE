@@ -1,15 +1,72 @@
+@use "utils/scss/media.scss" as media;
+
 .page {
+  position: relative;
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - 53px);
-  background: #f8f8fa;
+  width: 1136px;
+  min-height: 1079px;
+  margin: 0 auto;
+  padding: 60px 0 98px;
+  box-sizing: border-box;
+  background: #fff;
+
+  h1 {
+    margin: 0 0 60px;
+    color: #175c8e;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    position: static;
+    width: 100%;
+    min-height: calc(100dvh - 53px);
+    margin: 0;
+    padding: 0;
+    background: #f8f8fa;
+  }
 }
 
 .searchRow {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 20px 22px 12px;
+  width: 785px;
+  margin-bottom: 12px;
+
+  > :first-child {
+    flex: none;
+    width: 700px;
+    height: 42px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+
+    button,
+    svg {
+      display: none;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: auto;
+    margin-bottom: 0;
+    padding: 20px 22px 12px;
+
+    > :first-child {
+      flex: 1;
+      width: auto;
+      height: 36px;
+      border: 0;
+      border-radius: 40px;
+
+      button,
+      svg {
+        display: flex;
+      }
+    }
+  }
 }
 
 .filterButton {
@@ -17,25 +74,42 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  width: 76px;
-  height: 36px;
+  width: 73px;
+  height: 42px;
   padding: 0;
-  border: 0;
-  border-radius: 40px;
+  border: 1px solid #175c8e;
+  border-radius: 8px;
   background: #fff;
   cursor: pointer;
 
   &__label {
-    color: #4b4b4b;
-    font-size: 12px;
+    color: #175c8e;
+    font-size: 14px;
     line-height: 160%;
   }
 
   svg {
-    width: 21px;
-    height: 21px;
-    flex-shrink: 0;
+    display: none;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    gap: 4px;
+    width: 76px;
+    height: 36px;
+    border: 0;
+    border-radius: 40px;
+
+    &__label {
+      color: #4b4b4b;
+      font-size: 12px;
+    }
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+      width: 21px;
+      height: 21px;
+    }
   }
 }
 
@@ -43,18 +117,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 0 22px 12px;
+  margin-bottom: 12px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-bottom: 0;
+    padding: 0 22px 12px;
+  }
 }
 
 .appliedFilterChip {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   height: 30px;
   padding: 0 12px;
   border: 0;
-  border-radius: 40px;
-  background: #c358fc;
+  border-radius: 8px;
+  background: #175c8e;
   color: #fff;
   font-size: 12px;
   font-weight: 500;
@@ -66,21 +146,33 @@
     width: 16px;
     height: 16px;
   }
+
+  @include media.media-breakpoint(mobile) {
+    border-radius: 40px;
+    background: #c358fc;
+  }
 }
 
 .totalCount {
-  margin: 0;
-  padding: 0 22px 12px;
+  margin: 0 0 12px;
   color: #727272;
   font-size: 12px;
   line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0;
+    padding: 0 22px 12px;
+  }
 }
 
 .content {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 0 22px;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 0 22px;
+  }
 }
 
 .loadingState {
@@ -98,8 +190,12 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-bottom: 110px;
+  gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 10px;
+    padding-bottom: 110px;
+  }
 }
 
 .empty {
@@ -108,47 +204,153 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 20px;
 
   svg {
+    display: none;
     width: 98px;
     height: 75px;
   }
 
-  &__message {
-    width: 195px;
-    margin: 0;
-    color: #727272;
-    font-size: 14px;
-    line-height: 160%;
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
     text-align: center;
   }
-}
 
-.fab {
-  position: fixed;
-  right: 22px;
-  bottom: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 126px;
-  height: 43px;
-  border-radius: 40px;
-  background: #c358fc;
-
-  &__label {
-    color: #fff;
-    font-size: 16px;
+  &__message {
+    margin: 0;
+    color: #4b4b4b;
+    font-size: 18px;
     font-weight: 600;
     line-height: 160%;
   }
 
+  &__description {
+    margin: 0;
+    color: #727272;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__recruitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 24px;
+    border-radius: 8px;
+    background: #175c8e;
+    color: #fff;
+    font-size: 14px;
+    line-height: 160%;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    gap: 12px;
+
+    svg {
+      display: block;
+    }
+
+    &__text {
+      gap: 0;
+    }
+
+    &__message {
+      width: 195px;
+      color: #727272;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    &__description,
+    &__recruitButton {
+      display: none;
+    }
+  }
+}
+
+.actions {
+  position: absolute;
+  top: 158px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  @include media.media-breakpoint(mobile) {
+    display: contents;
+  }
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  border: 1px solid #175c8e;
+  border-radius: 8px;
+  background: #fff;
+  color: #175c8e;
+  font-size: 14px;
+  line-height: 160%;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.fab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #175c8e;
+  white-space: nowrap;
+
+  &__label {
+    color: #fff;
+    font-size: 14px;
+    line-height: 160%;
+  }
+
   svg {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
+    display: none;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    position: fixed;
+    right: 22px;
+    bottom: 56px;
+    gap: 4px;
+    width: 126px;
+    height: 43px;
+    padding: 0;
+    border-radius: 40px;
+    background: #c358fc;
+
+    &__label {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+    }
   }
 }
 

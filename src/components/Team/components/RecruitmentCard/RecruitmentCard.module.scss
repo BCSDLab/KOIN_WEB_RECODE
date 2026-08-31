@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  min-height: 109px;
+  min-height: 110px;
   padding: 16px 20px;
   box-sizing: border-box;
   border: 1px solid #e1e1e1;
@@ -15,7 +15,8 @@
   color: #1f1f1f;
 
   @include media.media-breakpoint(mobile) {
-    border: none;
+    min-height: 109px;
+    border: 0;
   }
 
   &__overlayLink {
@@ -102,6 +103,7 @@
   }
 
   &__title {
+    margin: 0;
     overflow: hidden;
     color: #1f1f1f;
     font-size: 16px;

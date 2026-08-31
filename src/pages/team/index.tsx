@@ -140,6 +140,20 @@ export default function TeamListPage() {
     appliedFilter.meetingType !== DEFAULT_TEAM_RECRUITMENT_FILTER.meetingType ||
     appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort;
 
+  const handleProfileClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_profile',
+      value: '내 프로필',
+    });
+
+    if (!token) {
+      redirectToLogin(router.asPath);
+      return;
+    }
+    router.push(ROUTES.TeamProfile());
+  };
+
   const handleRecruitClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
@@ -237,9 +251,21 @@ export default function TeamListPage() {
           {!isLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>
               <EmptyRecruitment />
-              <p className={styles.empty__message}>
-                {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
-              </p>
+              <div className={styles.empty__text}>
+                <p className={styles.empty__message}>
+                  {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
+                </p>
+                {!isError && (
+                  <p className={styles.empty__description}>
+                    직접 모집글을 작성하여 팀원을 모집해보세요.
+                  </p>
+                )}
+              </div>
+              {!isError && (
+                <button type="button" className={styles.empty__recruitButton} onClick={handleRecruitClick}>
+                  모집글 작성
+                </button>
+              )}
             </div>
           )}
 
@@ -260,10 +286,16 @@ export default function TeamListPage() {
           )}
         </div>
 
-        <button type="button" className={styles.fab} onClick={handleRecruitClick}>
-          <span className={styles.fab__label}>모집하기</span>
-          <PencilIcon />
-        </button>
+        <div className={styles.actions}>
+          <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
+            내 프로필
+          </button>
+
+          <button type="button" className={styles.fab} onClick={handleRecruitClick}>
+            <span className={styles.fab__label}>{isMobile ? '모집하기' : '모집글 작성'}</span>
+            <PencilIcon />
+          </button>
+        </div>
       </main>
 
       <RecruitmentFilterPanel
