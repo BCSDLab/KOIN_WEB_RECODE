@@ -140,6 +140,20 @@ export default function TeamListPage() {
     appliedFilter.meetingType !== DEFAULT_TEAM_RECRUITMENT_FILTER.meetingType ||
     appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort;
 
+  const handleProfileClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_profile',
+      value: '내 프로필',
+    });
+
+    if (!token) {
+      redirectToLogin(router.asPath);
+      return;
+    }
+    router.push(ROUTES.TeamProfile());
+  };
+
   const handleRecruitClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
@@ -164,8 +178,6 @@ export default function TeamListPage() {
       {isMobile && <TeamListHeader />}
 
       <main className={styles.page}>
-        {!isMobile && <h1>팀원모집</h1>}
-
         <div className={styles.searchRow}>
           <SearchBar
             value={searchTitle}
@@ -185,6 +197,17 @@ export default function TeamListPage() {
             <span className={styles.filterButton__label}>필터</span>
             <FilterIcon />
           </button>
+
+          <div className={styles.actions}>
+            <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
+              내 프로필
+            </button>
+
+            <button type="button" className={styles.fab} onClick={handleRecruitClick}>
+              <span className={styles.fab__label}>{isMobile ? '모집하기' : '모집글 작성'}</span>
+              <PencilIcon />
+            </button>
+          </div>
         </div>
 
         {hasAppliedFilter && (
@@ -260,10 +283,6 @@ export default function TeamListPage() {
           )}
         </div>
 
-        <button type="button" className={styles.fab} onClick={handleRecruitClick}>
-          <span className={styles.fab__label}>모집하기</span>
-          <PencilIcon />
-        </button>
       </main>
 
       <RecruitmentFilterPanel
