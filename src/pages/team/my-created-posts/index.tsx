@@ -1,6 +1,7 @@
 import { Suspense, useState } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
@@ -17,6 +18,7 @@ import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -47,6 +49,7 @@ function CreatedPostsListSection({
 }: CreatedPostsListSectionProps) {
   const logger = useLogger();
   const token = useTokenState();
+  const isMobile = useMediaQuery();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
     teamQueries.infiniteMyCreated(token, requestParams),
   );
@@ -96,43 +99,82 @@ function CreatedPostsListSection({
               <p className={styles.empty__title}>작성한 모집글이 없어요.</p>
               <p className={styles.empty__subtitle}>직접 모집글을 작성하여 팀원을 모집해보세요.</p>
             </div>
+            <Link href={ROUTES.TeamRecruitmentNew()} className={styles.empty__button}>
+              모집글 작성하기
+            </Link>
           </div>
         )}
 
         {recruitments.length > 0 && (
           <div className={styles.list}>
-            {recruitments.map((recruitment) => (
-              <RecruitmentCard
-                key={recruitment.id}
-                recruitment={recruitment}
-                rightSlot={
-                  recruitment.team_chat_available &&
-                  recruitment.team_chat_room_id !== null && (
-                    <button
-                      type="button"
-                      className={styles.chatButton}
-                      aria-label="팀 채팅방으로 이동"
-                      onClick={onChatClick(recruitment)}
-                    >
-                      <ChatIcon />
-                    </button>
-                  )
-                }
-                actionSlot={
-                  <>
-                    <button type="button" className={styles.actionButton} onClick={handleApplicantClick(recruitment)}>
-                      지원자 관리
-                    </button>
+            {recruitments.map((recruitment) => {
+              const canChat = recruitment.team_chat_available && recruitment.team_chat_room_id !== null;
+              const chatButton = canChat && (
+                <button
+                  type="button"
+                  className={styles.chatButton}
+                  aria-label="팀 채팅방으로 이동"
+                  onClick={onChatClick(recruitment)}
+                >
+                  <ChatIcon />
+                </button>
+              );
 
-                    {recruitment.can_close && (
-                      <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
-                        모집 마감
-                      </button>
-                    )}
-                  </>
-                }
-              />
-            ))}
+              // 데스크탑은 뱃지와 같은 상단 행에 관리 버튼·채팅 버튼을 함께 배치하고(rightSlot),
+              // 모바일은 채팅 버튼만 상단에 두고 관리 버튼은 카드 하단 별도 행(actionSlot)에 배치한다.
+              return (
+                <RecruitmentCard
+                  key={recruitment.id}
+                  recruitment={recruitment}
+                  rightSlot={
+                    isMobile ? (
+                      chatButton
+                    ) : (
+                      <div className={styles.desktopActions}>
+                        <button
+                          type="button"
+                          className={styles.desktopActionButton}
+                          onClick={handleApplicantClick(recruitment)}
+                        >
+                          지원자 관리
+                        </button>
+
+                        {recruitment.can_close && (
+                          <button
+                            type="button"
+                            className={styles.desktopActionButton}
+                            onClick={handleCloseClick(recruitment)}
+                          >
+                            모집마감
+                          </button>
+                        )}
+
+                        {chatButton}
+                      </div>
+                    )
+                  }
+                  actionSlot={
+                    isMobile && (
+                      <>
+                        <button
+                          type="button"
+                          className={styles.actionButton}
+                          onClick={handleApplicantClick(recruitment)}
+                        >
+                          지원자 관리
+                        </button>
+
+                        {recruitment.can_close && (
+                          <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
+                            모집 마감
+                          </button>
+                        )}
+                      </>
+                    )
+                  }
+                />
+              );
+            })}
 
             <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
           </div>
@@ -240,24 +282,30 @@ export default function MyCreatedPostsPage() {
         <meta name="description" content="내가 작성한 팀원 모집 게시글과 지원자 현황을 확인할 수 있습니다." />
       </Head>
 
-      <SubPageHeader
-        title="내가 작성한 모집글"
-        onBack={() => router.replace(ROUTES.TeamProfile())}
-        className={styles.header}
-      />
+      <div className={styles.mobileHeader}>
+        <SubPageHeader
+          title="내가 작성한 모집글"
+          onBack={() => router.replace(ROUTES.TeamProfile())}
+          className={styles.header}
+        />
+      </div>
 
       <main className={styles.page}>
-        <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
-          <Suspense fallback={<LoadingSpinner size="50px" />}>
-            <CreatedPostsListSection
-              requestParams={requestParams}
-              onFilterOpen={openFilter}
-              onApplicantClick={handleApplicantClick}
-              onCloseClick={handleCloseClick}
-              onChatClick={handleChatClick}
-            />
-          </Suspense>
-        </ErrorBoundary>
+        <div className={styles.inner}>
+          <h1 className={styles.title}>내가 작성한 모집글</h1>
+
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+            <Suspense fallback={<LoadingSpinner size="50px" />}>
+              <CreatedPostsListSection
+                requestParams={requestParams}
+                onFilterOpen={openFilter}
+                onApplicantClick={handleApplicantClick}
+                onCloseClick={handleCloseClick}
+                onChatClick={handleChatClick}
+              />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </main>
 
       {isFilterOpen && (

@@ -73,7 +73,13 @@ export default function RecruitmentFilterPanel({
   onApply,
 }: RecruitmentFilterPanelProps) {
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} className={styles.panel} aria-label="모집글 필터">
+    <BottomModal
+      isOpen={isOpen}
+      onClose={onClose}
+      className={styles.panel}
+      backdropClassName={styles.backdrop}
+      aria-label="모집글 필터"
+    >
       <RecruitmentFilterPanelContent filter={filter} onClose={onClose} onApply={onApply} />
     </BottomModal>
   );

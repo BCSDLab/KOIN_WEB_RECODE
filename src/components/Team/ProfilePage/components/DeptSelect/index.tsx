@@ -17,6 +17,7 @@ interface DeptSelectProps {
   id?: string;
   disabled?: boolean;
   ariaDescribedBy?: string;
+  className?: string;
 }
 
 export default function DeptSelect({
@@ -27,6 +28,7 @@ export default function DeptSelect({
   id,
   disabled = false,
   ariaDescribedBy,
+  className,
 }: DeptSelectProps) {
   const [isOpen, , closeMenu, triggerOpen] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeMenu });
@@ -52,6 +54,7 @@ export default function DeptSelect({
           [styles.deptSelect__trigger]: true,
           [styles['deptSelect__trigger--opened']]: isOpen,
           [styles['deptSelect__trigger--selected']]: Boolean(selectedOption),
+          [className ?? '']: !!className,
         })}
         aria-expanded={isOpen}
         aria-haspopup="listbox"

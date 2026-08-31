@@ -1,0 +1,226 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 24px;
+  width: 100%;
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 24px;
+  }
+
+  &__footer {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: auto;
+    padding: 16px 24px 24px;
+  }
+
+  &__submit {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 16px;
+    background: #b611f5;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      background: #cacaca;
+      cursor: default;
+    }
+  }
+}
+
+.loadInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__title {
+    font-weight: 600;
+    line-height: 1.6;
+    color: #000;
+
+    &--highlight {
+      color: #b611f5;
+    }
+  }
+
+  &__description {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #727272;
+  }
+
+  &__button {
+    width: 100%;
+    height: 40px;
+    border: 0.5px solid #b611f5;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b611f5;
+    cursor: pointer;
+
+    &:disabled {
+      border-color: #cacaca;
+      color: #cacaca;
+      cursor: default;
+    }
+  }
+}
+
+.activity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__label {
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__description {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #727272;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+  }
+
+  &__add {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    border: 0.5px solid #b611f5;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b611f5;
+    cursor: pointer;
+  }
+}
+
+.activityCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__title {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__edit {
+    display: inline-flex;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    padding: 2px 8px;
+    border: 0.5px solid #b611f5;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 10px;
+    line-height: 1.6;
+    color: #b811f5;
+    cursor: pointer;
+  }
+
+  &__remove {
+    display: inline-flex;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 12px 8px;
+    margin: 0;
+
+    dt {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #727272;
+      white-space: nowrap;
+    }
+
+    dd {
+      font-size: 12px;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+  }
+}
+
+.grayInput {
+  color: #727272;
+
+  &::placeholder {
+    color: #727272;
+  }
+}
+
+// DeptSelect가 선택된 값에 색을 진하게 덮어써서 !important로 강제한다.
+.grayDropdown {
+  color: #727272 !important;
+}
+
+// 기존 프로필 프리필(reset())은 onInput을 안 거쳐서 자동 높이 조절 JS가 안 붙는다.
+// min-height로 여유를 둬서 긴 자기소개가 프리필돼도 잘려 보이지 않게 한다.
+.introductionControl {
+  min-height: 200px;
+}

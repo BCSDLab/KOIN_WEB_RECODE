@@ -1,15 +1,23 @@
+@use "src/utils/scss/media" as media;
+
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  min-height: 109px;
+  min-height: 110px;
   padding: 16px 20px;
   box-sizing: border-box;
+  border: 1px solid #e1e1e1;
   border-radius: 16px;
   background: #fff;
   color: #1f1f1f;
+
+  @include media.media-breakpoint(mobile) {
+    min-height: 109px;
+    border: 0;
+  }
 
   &__overlayLink {
     position: absolute;
@@ -86,13 +94,19 @@
     color: #ec2d30;
 
     &--closed {
-      color: #b611f5;
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        color: #b611f5;
+      }
     }
   }
 
   &__title {
+    margin: 0;
     overflow: hidden;
     color: #1f1f1f;
+    font-size: 16px;
     font-weight: 600;
     line-height: 160%;
     text-overflow: ellipsis;
@@ -146,7 +160,11 @@
       }
 
       &--full {
-        color: #b611f5;
+        color: #175c8e;
+
+        @include media.media-breakpoint(mobile) {
+          color: #b611f5;
+        }
       }
     }
   }

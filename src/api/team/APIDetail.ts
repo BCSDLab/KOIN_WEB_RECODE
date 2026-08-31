@@ -5,6 +5,8 @@ import {
   MyCreatedTeamRecruitmentListResponse,
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
+  PostTeamRecruitmentApplicationRequest,
+  PostTeamRecruitmentApplicationResponse,
   TeamRecruitmentApplicantDetailResponse,
   TeamRecruitmentDetailResponse,
   TeamChatDirectRoomResponse,
@@ -331,8 +333,6 @@ export class PostTeamRecruitmentDirectChatRoom<R extends TeamChatDirectRoomRespo
   }
 }
 
-// 204 No Content — 요청 바디·응답 바디 모두 없음.
-// PostTeamRecruitmentNotificationRead와 동일한 path-in-constructor 패턴을 따른다.
 export class PutCloseTeamRecruitment<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
@@ -367,6 +367,29 @@ export class GetTeamRecruitmentApplicantDetail<R extends TeamRecruitmentApplican
     applicationId: string,
   ) {
     this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}`;
+  }
+}
+
+export class PostTeamRecruitmentApplication<R extends PostTeamRecruitmentApplicationResponse>
+  implements APIRequest<R>
+{
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  data: PostTeamRecruitmentApplicationRequest;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: number,
+    data: PostTeamRecruitmentApplicationRequest,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}/applications`;
+    this.data = data;
   }
 }
 

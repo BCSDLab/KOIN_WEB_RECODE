@@ -11,6 +11,14 @@
   box-sizing: border-box;
   background: #fff;
 
+  h1 {
+    margin: 0 0 60px;
+    color: #175c8e;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
   @include media.media-breakpoint(mobile) {
     position: static;
     width: 100%;
@@ -19,6 +27,16 @@
     padding: 0;
     background: #f8f8fa;
   }
+}
+
+.title {
+  margin: 0;
+  padding: 20px 22px 0;
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
 }
 
 .searchRow {

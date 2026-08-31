@@ -288,6 +288,20 @@ export interface TeamRecruitmentApplicantDetailResponse extends APIResponse {
   can_open_direct_chat: boolean;
 }
 
+export interface PostTeamRecruitmentApplicationRequest {
+  role_id: number | null;
+  motivation: string;
+  availability: string;
+}
+
+export interface PostTeamRecruitmentApplicationResponse extends APIResponse {
+  application_id: number;
+  recruitment_id: number;
+  status: TeamApplicationStatus;
+  role: TeamApplicationRole;
+  created_at: string;
+}
+
 export type TeamRecruitmentApplicationDecision = Extract<TeamApplicationStatus, 'ACCEPTED' | 'REJECTED'>;
 
 export interface TeamRecruitmentApplicationStatusUpdateRequest {
