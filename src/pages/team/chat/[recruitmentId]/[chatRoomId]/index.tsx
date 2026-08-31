@@ -18,23 +18,28 @@ export default function TeamChatPage() {
       <Head>
         <title>팀원 모집 채팅 | KOIN</title>
       </Head>
-      {!!recruitmentId && !!chatRoomId && (
-        <ErrorBoundary fallbackClassName={styles.error}>
-          <Suspense
-            fallback={
-              <div className={styles.loading} role="status" aria-label="채팅방을 불러오는 중입니다.">
-                <LoadingSpinner size="50px" />
-              </div>
-            }
-          >
-            <TeamChatRoom
-              key={`${recruitmentId}-${chatRoomId}`}
-              recruitmentId={recruitmentId}
-              chatRoomId={chatRoomId}
-            />
-          </Suspense>
-        </ErrorBoundary>
-      )}
+      <main className={styles.page}>
+        <h1 className={styles.page__title}>팀원모집</h1>
+        <div className={styles.page__content}>
+          {!!recruitmentId && !!chatRoomId && (
+            <ErrorBoundary fallbackClassName={styles.error}>
+              <Suspense
+                fallback={
+                  <div className={styles.loading} role="status" aria-label="채팅방을 불러오는 중입니다.">
+                    <LoadingSpinner size="50px" />
+                  </div>
+                }
+              >
+                <TeamChatRoom
+                  key={`${recruitmentId}-${chatRoomId}`}
+                  recruitmentId={recruitmentId}
+                  chatRoomId={chatRoomId}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </div>
+      </main>
     </>
   );
 }
