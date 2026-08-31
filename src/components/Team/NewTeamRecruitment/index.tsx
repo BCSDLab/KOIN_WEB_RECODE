@@ -3,12 +3,13 @@ import { cn } from '@bcsdlab/utils';
 import ComputerIcon from 'assets/svg/Team/computer.svg';
 import KeyframesDoubleIcon from 'assets/svg/Team/keyframes-double.svg';
 import UserGroupIcon from 'assets/svg/Team/user-group-02.svg';
+import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { Controller, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CategoryField from './components/CategoryField';
-import ConfirmModal from './components/ConfirmModal';
 import RoleField from './components/RoleField';
 import ScheduleField from './components/ScheduleField';
 import {
@@ -36,6 +37,7 @@ interface NewTeamRecruitmentProps {
 
 export default function NewTeamRecruitment({ initialValues, mode = 'create', onSubmit }: NewTeamRecruitmentProps) {
   const logger = useLogger();
+  const isMobile = useMediaQuery();
   const form = useTeamRecruitmentForm(initialValues);
   const { control, register, formState, handleSubmit } = form;
   const isEditMode = mode === 'edit';
@@ -96,161 +98,207 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
     }
   };
 
+  const categoryField = (
+    <Controller
+      control={control}
+      name="category"
+      render={({ field }) => (
+        <CategoryField
+          eventLabel={isEditMode ? 'team_recruitment_post_edit_category' : 'team_recruitment_recruit_category'}
+          value={field.value}
+          onChange={field.onChange}
+        />
+      )}
+    />
+  );
+
+  const titleField = (
+    <div className={styles.form__item}>
+      <div className={styles['form__item-header']}>
+        <label className={styles.form__label} htmlFor="team-recruitment-title">
+          제목 <span className={styles['form__label-required']}>*</span>
+        </label>
+        <span className={styles.form__counter}>
+          {title.length}/{TEAM_RECRUITMENT_TITLE_MAX_LENGTH}
+        </span>
+      </div>
+      <input
+        id="team-recruitment-title"
+        type="text"
+        className={styles.form__input}
+        placeholder="제목을 입력해주세요."
+        maxLength={TEAM_RECRUITMENT_TITLE_MAX_LENGTH}
+        {...register('title')}
+      />
+    </div>
+  );
+
+  const progressTypeField = (
+    <div className={styles.form__item}>
+      <div className={styles.form__label}>
+        진행방식 <span className={styles['form__label-required']}>*</span>
+      </div>
+      <Controller
+        control={control}
+        name="progressType"
+        render={({ field }) => (
+          <div className={styles['progress-type']}>
+            {(Object.keys(TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL) as TeamRecruitmentProgressType[]).map((type) => {
+              const Icon = PROGRESS_TYPE_ICON[type];
+              const isSelected = field.value === type;
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  className={cn({
+                    [styles['progress-type__button']]: true,
+                    [styles['progress-type__button--selected']]: isSelected,
+                  })}
+                  onClick={() => {
+                    logger.actionEventClick({
+                      team: 'CAMPUS',
+                      event_label: isEditMode
+                        ? 'team_recruitment_post_edit_method'
+                        : 'team_recruitment_recruit_method',
+                      value: TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type].replaceAll(' ', ''),
+                    });
+                    field.onChange(type);
+                  }}
+                >
+                  <Icon />
+                  {TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type]}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      />
+    </div>
+  );
+
+  const scheduleField = <ScheduleField control={control} />;
+
+  const roleField = (
+    <RoleField
+      control={control}
+      eventLabel={isEditMode ? 'team_recruitment_post_edit_role' : 'team_recruitment_recruit_role'}
+    />
+  );
+
+  const descriptionField = (
+    <div className={styles.form__item}>
+      <div className={styles['form__item-header']}>
+        <label className={styles.form__label} htmlFor="team-recruitment-description">
+          모집 소개 <span className={styles['form__label-required']}>*</span>
+        </label>
+        <span className={styles.form__counter}>
+          {description.length}/{TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH}
+        </span>
+      </div>
+      <textarea
+        id="team-recruitment-description"
+        className={styles.form__textarea}
+        placeholder="소개를 작성해주세요."
+        maxLength={TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH}
+        {...register('description')}
+      />
+    </div>
+  );
+
+  const qualificationField = (
+    <div className={styles.form__item}>
+      <div className={styles['form__item-header']}>
+        <label className={styles.form__label} htmlFor="team-recruitment-qualification">
+          지원 자격
+        </label>
+        <span className={styles.form__counter}>
+          {qualification.length}/{TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH}
+        </span>
+      </div>
+      <textarea
+        id="team-recruitment-qualification"
+        className={styles.form__textarea}
+        placeholder="지원 자격 또는 우대사항을 작성해주세요."
+        maxLength={TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH}
+        {...register('qualification')}
+      />
+    </div>
+  );
+
+  const urlField = (
+    <div className={cn({ [styles.form__item]: true, [styles['form__item--url']]: true })}>
+      <label className={styles.form__label} htmlFor="team-recruitment-url">
+        관련 URL
+      </label>
+      <input
+        id="team-recruitment-url"
+        type="text"
+        className={cn({ [styles.form__input]: true, [styles['form__input--url']]: true })}
+        placeholder="공모전/대외활동 등 모집글 관련 URL을 작성해주세요."
+        {...register('relatedUrl')}
+      />
+    </div>
+  );
+
   return (
     <div className={styles.page}>
-      <SubPageHeader title={headerTitle} />
-
-      <div className={styles.form}>
-        <Controller
-          control={control}
-          name="category"
-          render={({ field }) => (
-            <CategoryField
-              eventLabel={isEditMode ? 'team_recruitment_post_edit_category' : 'team_recruitment_recruit_category'}
-              value={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
-
-        <div className={styles.form__item}>
-          <div className={styles['form__item-header']}>
-            <label className={styles.form__label} htmlFor="team-recruitment-title">
-              제목 <span className={styles['form__label-required']}>*</span>
-            </label>
-            <span className={styles.form__counter}>
-              {title.length}/{TEAM_RECRUITMENT_TITLE_MAX_LENGTH}
-            </span>
-          </div>
-          <input
-            id="team-recruitment-title"
-            type="text"
-            className={styles.form__input}
-            placeholder="제목을 입력해주세요."
-            maxLength={TEAM_RECRUITMENT_TITLE_MAX_LENGTH}
-            {...register('title')}
-          />
+      <div className={styles.inner}>
+        <div className={styles.mobileHeader}>
+          <SubPageHeader title={headerTitle} className={styles.header} />
         </div>
+        <h1 className={styles.title}>{headerTitle}</h1>
 
-        <div className={styles.form__item}>
-          <div className={styles.form__label}>
-            진행방식 <span className={styles['form__label-required']}>*</span>
-          </div>
-          <Controller
-            control={control}
-            name="progressType"
-            render={({ field }) => (
-              <div className={styles['progress-type']}>
-                {(Object.keys(TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL) as TeamRecruitmentProgressType[]).map((type) => {
-                  const Icon = PROGRESS_TYPE_ICON[type];
-                  const isSelected = field.value === type;
-                  return (
-                    <button
-                      key={type}
-                      type="button"
-                      className={cn({
-                        [styles['progress-type__button']]: true,
-                        [styles['progress-type__button--selected']]: isSelected,
-                      })}
-                      onClick={() => {
-                        logger.actionEventClick({
-                          team: 'CAMPUS',
-                          event_label: isEditMode
-                            ? 'team_recruitment_post_edit_method'
-                            : 'team_recruitment_recruit_method',
-                          value: TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type].replaceAll(' ', ''),
-                        });
-                        field.onChange(type);
-                      }}
-                    >
-                      <Icon />
-                      {TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type]}
-                    </button>
-                  );
-                })}
+        <div className={styles.form}>
+          {isMobile ? (
+            <>
+              {categoryField}
+              {titleField}
+              {progressTypeField}
+              {scheduleField}
+              {roleField}
+              {descriptionField}
+              {urlField}
+              {qualificationField}
+            </>
+          ) : (
+            <>
+              <div className={styles.row}>
+                {categoryField}
+                {progressTypeField}
               </div>
-            )}
-          />
+              {titleField}
+              {scheduleField}
+              {roleField}
+              <div className={styles.row}>
+                {descriptionField}
+                {qualificationField}
+              </div>
+              {urlField}
+            </>
+          )}
         </div>
 
-        <ScheduleField control={control} />
-
-        <RoleField
-          control={control}
-          eventLabel={isEditMode ? 'team_recruitment_post_edit_role' : 'team_recruitment_recruit_role'}
-        />
-
-        <div className={styles.form__item}>
-          <div className={styles['form__item-header']}>
-            <label className={styles.form__label} htmlFor="team-recruitment-description">
-              모집 소개 <span className={styles['form__label-required']}>*</span>
-            </label>
-            <span className={styles.form__counter}>
-              {description.length}/{TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH}
-            </span>
-          </div>
-          <textarea
-            id="team-recruitment-description"
-            className={styles.form__textarea}
-            placeholder="소개를 작성해주세요."
-            maxLength={TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH}
-            {...register('description')}
-          />
+        <div className={styles['submit-container']}>
+          <button
+            type="button"
+            className={cn({
+              [styles['submit-button']]: true,
+              [styles['submit-button--disabled']]: !formState.isValid || isSubmitting,
+            })}
+            disabled={!formState.isValid || isSubmitting}
+            onClick={handleSubmitClick}
+          >
+            {submitLabel}
+          </button>
         </div>
-
-        <div className={styles.form__item}>
-          <label className={styles.form__label} htmlFor="team-recruitment-url">
-            관련 URL
-          </label>
-          <input
-            id="team-recruitment-url"
-            type="text"
-            className={styles.form__input}
-            placeholder="공모전/대외활동 등 모집글 관련 URL을 작성해주세요."
-            {...register('relatedUrl')}
-          />
-        </div>
-
-        <div className={styles.form__item}>
-          <div className={styles['form__item-header']}>
-            <label className={styles.form__label} htmlFor="team-recruitment-qualification">
-              지원 자격
-            </label>
-            <span className={styles.form__counter}>
-              {qualification.length}/{TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH}
-            </span>
-          </div>
-          <textarea
-            id="team-recruitment-qualification"
-            className={styles.form__textarea}
-            placeholder="지원 자격 또는 우대사항을 작성해주세요."
-            maxLength={TEAM_RECRUITMENT_QUALIFICATION_MAX_LENGTH}
-            {...register('qualification')}
-          />
-        </div>
-      </div>
-
-      <div className={styles['submit-container']}>
-        <button
-          type="button"
-          className={cn({
-            [styles['submit-button']]: true,
-            [styles['submit-button--disabled']]: !formState.isValid || isSubmitting,
-          })}
-          disabled={!formState.isValid || isSubmitting}
-          onClick={handleSubmitClick}
-        >
-          {submitLabel}
-        </button>
       </div>
 
       {isConfirmModalOpen && (
-        <ConfirmModal
+        <SubmitConfirmModal
+          message={`해당 모집글을 ${isEditMode ? '수정' : '등록'}하시겠습니까?`}
           confirmLabel={confirmLabel}
-          description={`해당 모집글을 ${isEditMode ? '수정' : '등록'}하시겠습니까?`}
-          isPending={isSubmitting}
+          isSubmitting={isSubmitting}
           onCancel={handleCancelConfirm}
-          onClose={closeConfirmModal}
           onConfirm={handleConfirmSubmit}
         />
       )}
