@@ -3,6 +3,7 @@ import { mutationOptions, QueryClient } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
 import { teamQueryKeys } from './queries';
 import type {
+  PostTeamRecruitmentApplicationRequest,
   TeamChatMessageSendRequest,
   TeamRecruitmentApplicationDecision,
   TeamRecruitmentUpdateRequest,
@@ -14,6 +15,7 @@ import {
   deleteTeamRecruitment,
   markAllTeamRecruitmentNotificationsRead,
   markTeamRecruitmentNotificationRead,
+  submitTeamRecruitmentApplication,
   updateTeamRecruitmentApplicationStatus,
   updateTeamRecruitment,
   sendTeamRecruitmentChatMessage,
@@ -93,6 +95,24 @@ export const teamMutations = {
           showToast('error', error.message);
           return;
         }
+        sendClientError(error);
+      },
+    }),
+
+  submitApplication: (queryClient: QueryClient, token: string, recruitmentId: number) =>
+    mutationOptions({
+      mutationFn: (data: PostTeamRecruitmentApplicationRequest) =>
+        submitTeamRecruitmentApplication(token, recruitmentId, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.myApplicationsRoot });
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.detailRoot });
+      },
+      onError: (error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message || '지원서 제출에 실패했습니다.');
+          return;
+        }
+        showToast('error', '지원서 제출에 실패했습니다.');
         sendClientError(error);
       },
     }),
