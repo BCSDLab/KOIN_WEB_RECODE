@@ -118,7 +118,6 @@ export default function TeamListPage() {
       event_label: 'team_recruitment_search',
       value: keyword,
     });
-
     setSearchKeyword(keyword || undefined);
   };
 
@@ -128,7 +127,6 @@ export default function TeamListPage() {
       event_label: 'team_recruitment_filter',
       value: '필터',
     });
-
     setIsFilterOpen(true);
   };
 
@@ -153,7 +151,6 @@ export default function TeamListPage() {
       redirectToLogin(router.asPath);
       return;
     }
-
     router.push(ROUTES.TeamRecruitmentNew());
   };
 
@@ -195,24 +192,14 @@ export default function TeamListPage() {
             {appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS, appliedFilter.status)}
-                onRemove={() =>
-                  setAppliedFilter((previous) => ({
-                    ...previous,
-                    status: 'ALL',
-                  }))
-                }
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, status: 'ALL' }))}
               />
             )}
 
             {appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_SORT_OPTIONS, appliedFilter.sort)}
-                onRemove={() =>
-                  setAppliedFilter((previous) => ({
-                    ...previous,
-                    sort: 'LATEST_DESC',
-                  }))
-                }
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, sort: 'LATEST_DESC' }))}
               />
             )}
 
@@ -232,12 +219,7 @@ export default function TeamListPage() {
             {appliedFilter.meetingType && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS, appliedFilter.meetingType)}
-                onRemove={() =>
-                  setAppliedFilter((previous) => ({
-                    ...previous,
-                    meetingType: undefined,
-                  }))
-                }
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, meetingType: undefined }))}
               />
             )}
           </div>
@@ -255,7 +237,6 @@ export default function TeamListPage() {
           {!isLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>
               <EmptyRecruitment />
-
               <p className={styles.empty__message}>
                 {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
               </p>
