@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import { teamQueries, type TeamRecruitmentInfiniteListRequest } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -24,10 +25,11 @@ import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin } from 'utils/ts/auth';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './TeamListPage.module.scss';
 
 interface AppliedFilterChipProps {
@@ -47,28 +49,57 @@ function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
 const getFilterLabel = <T extends string>(options: { value: T; label: string }[], value: T) =>
   options.find((option) => option.value === value)?.label ?? value;
 
+const INITIAL_FILTER: TeamRecruitmentFilter = {
+  ...DEFAULT_TEAM_RECRUITMENT_FILTER,
+  categories: [],
+};
+
+/**
+ * 서버와 클라이언트가 동일한 쿼리 키를 만들도록 요청 파라미터를 한 곳에서 생성한다.
+ *
+ * `undefined` 값은 넣지 않고 키 자체를 생략한다. `getServerSideProps`가 반환하는 props는
+ * JSON 직렬화가 가능해야 하는데, dehydrate된 쿼리 키에 `undefined`가 들어 있으면
+ * Next.js가 "`undefined` cannot be serialized as JSON" 런타임 에러를 낸다.
+ */
+const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): TeamRecruitmentInfiniteListRequest => ({
+  status: filter.status,
+  categories: filter.categories,
+  sort: filter.sort,
+  ...(keyword ? { keyword } : {}),
+  ...(filter.meetingType ? { meetingType: filter.meetingType } : {}),
+});
+
+const INITIAL_REQUEST_PARAMS = createRequestParams(INITIAL_FILTER);
+
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+  const { token } = parseServerSideParams(context);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, token));
+
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+});
+
 export default function TeamListPage() {
   const router = useRouter();
   const token = useTokenState();
   const isMobile = useMediaQuery();
-  const isMounted = useMount();
   const logger = useLogger();
 
   const [searchTitle, setSearchTitle] = useState('');
   const [searchKeyword, setSearchKeyword] = useState<string>();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [appliedFilter, setAppliedFilter] = useState<TeamRecruitmentFilter>(() => ({
-    ...DEFAULT_TEAM_RECRUITMENT_FILTER,
-    categories: [],
-  }));
+  const [appliedFilter, setAppliedFilter] = useState<TeamRecruitmentFilter>(() => ({ ...INITIAL_FILTER }));
 
-  const requestParams: TeamRecruitmentInfiniteListRequest = {
-    keyword: searchKeyword,
-    status: appliedFilter.status,
-    categories: appliedFilter.categories,
-    meetingType: appliedFilter.meetingType,
-    sort: appliedFilter.sort,
-  };
+  const requestParams = createRequestParams(appliedFilter, searchKeyword);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     teamQueries.infiniteList(requestParams, token),
@@ -76,7 +107,6 @@ export default function TeamListPage() {
 
   const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
   const totalCount = data?.pages[0]?.total_count ?? 0;
-  const isInitialLoading = !isMounted || isLoading;
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
@@ -88,6 +118,7 @@ export default function TeamListPage() {
       event_label: 'team_recruitment_search',
       value: keyword,
     });
+
     setSearchKeyword(keyword || undefined);
   };
 
@@ -97,6 +128,7 @@ export default function TeamListPage() {
       event_label: 'team_recruitment_filter',
       value: '필터',
     });
+
     setIsFilterOpen(true);
   };
 
@@ -121,6 +153,7 @@ export default function TeamListPage() {
       redirectToLogin(router.asPath);
       return;
     }
+
     router.push(ROUTES.TeamRecruitmentNew());
   };
 
@@ -162,14 +195,24 @@ export default function TeamListPage() {
             {appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS, appliedFilter.status)}
-                onRemove={() => setAppliedFilter((previous) => ({ ...previous, status: 'ALL' }))}
+                onRemove={() =>
+                  setAppliedFilter((previous) => ({
+                    ...previous,
+                    status: 'ALL',
+                  }))
+                }
               />
             )}
 
             {appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_SORT_OPTIONS, appliedFilter.sort)}
-                onRemove={() => setAppliedFilter((previous) => ({ ...previous, sort: 'LATEST_DESC' }))}
+                onRemove={() =>
+                  setAppliedFilter((previous) => ({
+                    ...previous,
+                    sort: 'LATEST_DESC',
+                  }))
+                }
               />
             )}
 
@@ -189,31 +232,37 @@ export default function TeamListPage() {
             {appliedFilter.meetingType && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS, appliedFilter.meetingType)}
-                onRemove={() => setAppliedFilter((previous) => ({ ...previous, meetingType: undefined }))}
+                onRemove={() =>
+                  setAppliedFilter((previous) => ({
+                    ...previous,
+                    meetingType: undefined,
+                  }))
+                }
               />
             )}
           </div>
         )}
 
-        <p className={styles.totalCount}>전체({isMounted ? totalCount : 0})</p>
+        <p className={styles.totalCount}>전체({totalCount})</p>
 
         <div className={styles.content}>
-          {isInitialLoading && (
+          {isLoading && (
             <p className={styles.loadingState} role="status">
               모집글을 불러오는 중입니다.
             </p>
           )}
 
-          {!isInitialLoading && (isError || recruitments.length === 0) && (
+          {!isLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>
               <EmptyRecruitment />
+
               <p className={styles.empty__message}>
                 {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
               </p>
             </div>
           )}
 
-          {!isInitialLoading && !isError && recruitments.length > 0 && (
+          {!isLoading && !isError && recruitments.length > 0 && (
             <div className={styles.list}>
               {recruitments.map((recruitment) => (
                 <RecruitmentCard
