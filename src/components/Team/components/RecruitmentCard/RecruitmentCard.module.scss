@@ -1,4 +1,4 @@
-@use "utils/scss/media.scss" as media;
+@use "src/utils/scss/media" as media;
 
 .card {
   position: relative;
@@ -94,7 +94,11 @@
     color: #ec2d30;
 
     &--closed {
-      color: #b611f5;
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        color: #b611f5;
+      }
     }
   }
 
@@ -102,6 +106,7 @@
     margin: 0;
     overflow: hidden;
     color: #1f1f1f;
+    font-size: 16px;
     font-weight: 600;
     line-height: 160%;
     text-overflow: ellipsis;
@@ -155,7 +160,11 @@
       }
 
       &--full {
-        color: #b611f5;
+        color: #175c8e;
+
+        @include media.media-breakpoint(mobile) {
+          color: #b611f5;
+        }
       }
     }
   }
