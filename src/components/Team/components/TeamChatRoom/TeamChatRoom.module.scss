@@ -1,9 +1,148 @@
+@use "src/utils/scss/media" as media;
+
+.chat {
+  display: grid;
+  grid-template-columns: 384px minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  &__sidebar {
+    height: 100%;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    border-left: 1px solid #eee;
+    background: #fff;
+  }
+
+  &__roomItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 24px;
+    background: #f5f5f5;
+  }
+
+  &__roomAvatar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: #fafafa;
+
+    svg {
+      width: 32px;
+      height: 32px;
+
+      > rect {
+        stroke: #10477a;
+      }
+
+      > g path {
+        fill: #10477a;
+      }
+
+      > path {
+        stroke: #10477a;
+      }
+    }
+  }
+
+  &__roomContent {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  &__roomHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__roomName {
+    overflow: hidden;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 160%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__roomTime {
+    flex-shrink: 0;
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__roomPreview {
+    overflow: hidden;
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+    height: 100dvh;
+
+    &__sidebar {
+      display: none;
+    }
+  }
+}
+
 .chatRoom {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
+  min-width: 0;
+  height: 100%;
   overflow: hidden;
-  background-color: #fff;
+  border: 1px solid #eee;
+  background-color: #fafafa;
+
+  &__mobileHeader {
+    display: none;
+  }
+
+  &__desktopHeader {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 83px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+
+    h2 {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      color: #1f1f1f;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: normal;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 
   &__memberCount {
     display: flex;
@@ -26,13 +165,14 @@
     }
 
     &--full {
-      color: #b611f5;
+      color: #175c8e;
     }
   }
 
   &__messages {
     display: flex;
     flex: 1;
+    min-height: 0;
     flex-direction: column;
     overflow-y: auto;
   }
@@ -48,19 +188,20 @@
   &__dateChip {
     display: flex;
     justify-content: center;
-    padding: 12px 24px;
+    padding: 16px 24px;
   }
 
   &__dateLabel {
     padding: 4px 12px;
     border-radius: 16px;
-    background-color: #f5f5f5;
-    color: #4b4b4b;
-    font-size: 12px;
+    background-color: #eee;
+    color: #10477a;
+    font-size: 14px;
+    font-weight: 500;
     line-height: 160%;
 
     &--today {
-      color: #980ac9;
+      color: #10477a;
     }
   }
 
@@ -102,6 +243,18 @@
       flex-shrink: 0;
       width: 32px;
       height: 32px;
+
+      > rect {
+        stroke: #10477a;
+      }
+
+      > g path {
+        fill: #10477a;
+      }
+
+      > path {
+        stroke: #10477a;
+      }
     }
   }
 
@@ -115,20 +268,27 @@
   }
 
   &__bubble {
-    max-width: 220px;
+    max-width: 360px;
     padding: 8px 12px;
     border-radius: 8px;
-    background-color: #f5f5f5;
     color: #000;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 160%;
     white-space: pre-wrap;
     overflow-wrap: break-word;
+
+    &--mine {
+      background-color: rgb(245 245 245 / 80%);
+    }
+
+    &--others {
+      background-color: #f1f8ff;
+    }
   }
 
   &__imageBubble {
     display: flex;
-    max-width: 220px;
+    max-width: 360px;
     overflow: hidden;
     border-radius: 8px;
 
@@ -161,5 +321,67 @@
     color: #727272;
     font-size: 12px;
     line-height: 160%;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    height: 100dvh;
+    border: 0;
+    background-color: #fff;
+
+    &__mobileHeader {
+      display: block;
+    }
+
+    &__desktopHeader {
+      display: none;
+    }
+
+    &__memberCount--full {
+      color: #b611f5;
+    }
+
+    &__dateChip {
+      padding: 12px 24px;
+    }
+
+    &__dateLabel {
+      background-color: #f5f5f5;
+      color: #4b4b4b;
+      font-size: 12px;
+      font-weight: 400;
+
+      &--today {
+        color: #980ac9;
+      }
+    }
+
+    &__bubble {
+      max-width: 220px;
+      background-color: #f5f5f5;
+      font-size: 12px;
+
+      &--mine,
+      &--others {
+        background-color: #f5f5f5;
+      }
+    }
+
+    &__imageBubble {
+      max-width: 220px;
+    }
+
+    &__sender svg {
+      > rect {
+        stroke: #c969fc;
+      }
+
+      > g path {
+        fill: #c969fc;
+      }
+
+      > path {
+        stroke: #c969fc;
+      }
+    }
   }
 }
