@@ -22,7 +22,8 @@
   background: #fff;
 
   @include media.media-breakpoint(mobile) {
-    display: block;
+    flex-direction: column;
+    justify-content: flex-start;
     padding: 0;
     min-height: calc(100dvh - 56px);
     background: #f8f8fa;
@@ -37,6 +38,7 @@
   max-width: 1136px;
 
   @include media.media-breakpoint(mobile) {
+    flex: 1;
     gap: 0;
     max-width: none;
   }
@@ -93,6 +95,15 @@
     padding: 0;
     border: none;
     border-radius: 40px;
+  }
+
+  // 데스크탑 Figma 디자인은 텍스트만 있는 버튼이라 필터 아이콘을 쓰지 않는다.
+  svg {
+    display: none;
+
+    @include media.media-breakpoint(mobile) {
+      display: block;
+    }
   }
 
   &__label {
