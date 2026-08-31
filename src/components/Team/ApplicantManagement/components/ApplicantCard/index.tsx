@@ -9,6 +9,7 @@ import ProfileAvatarIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import type { TeamRecruitmentApplicant } from 'api/team/entity';
 import styles from './ApplicantCard.module.scss';
@@ -30,6 +31,7 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
   const router = useRouter();
   const token = useTokenState();
   const logger = useLogger();
+  const isMobile = useMediaQuery();
   const { nickname, department, student_year: studentYear, role, status, can_open_direct_chat: canOpenDirectChat } =
     applicant;
 
@@ -58,6 +60,25 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
     });
   };
 
+  const chatButton = canOpenDirectChat && (
+    <button
+      type="button"
+      className={styles.card__chat}
+      onClick={handleChatClick}
+      disabled={isCreatingChat}
+      aria-label="지원자와 채팅하기"
+    >
+      <ChatBubbleIcon aria-hidden />
+    </button>
+  );
+
+  const statusLabel = (
+    <span className={cn({ [styles.card__status]: true, [styles[STATUS_CLASS[status]]]: true })}>
+      {isMobile && '· '}
+      {formatApplicationStatus(status)}
+    </span>
+  );
+
   return (
     <div className={styles.card}>
       <Link
@@ -77,19 +98,17 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
       <div className={styles.card__body}>
         <div className={styles.card__nameRow}>
           <span className={styles.card__name}>{nickname}님</span>
-          <span className={cn({ [styles.card__status]: true, [styles[STATUS_CLASS[status]]]: true })}>
-            · {formatApplicationStatus(status)}
-          </span>
-          {canOpenDirectChat && (
-            <button
-              type="button"
-              className={styles.card__chat}
-              onClick={handleChatClick}
-              disabled={isCreatingChat}
-              aria-label="지원자와 채팅하기"
-            >
-              <ChatBubbleIcon aria-hidden />
-            </button>
+
+          {isMobile ? (
+            <>
+              {statusLabel}
+              {chatButton}
+            </>
+          ) : (
+            <div className={styles.card__trailing}>
+              {chatButton}
+              {statusLabel}
+            </div>
           )}
         </div>
 
@@ -103,7 +122,7 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
         </p>
       </div>
 
-      <ChevronRightIcon className={styles.card__chevron} aria-hidden />
+      {isMobile && <ChevronRightIcon className={styles.card__chevron} aria-hidden />}
     </div>
   );
 }
