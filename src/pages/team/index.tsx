@@ -4,12 +4,21 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { teamQueries } from 'api/team/queries';
+import { teamQueries, type TeamRecruitmentInfiniteListRequest } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
 import PencilIcon from 'assets/svg/Team/pencil.svg';
+import XIcon from 'assets/svg/Team/x.svg';
 import Layout from 'components/layout';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
+import RecruitmentFilterPanel, {
+  DEFAULT_TEAM_RECRUITMENT_FILTER,
+  TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS,
+  TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS,
+  TEAM_RECRUITMENT_FILTER_SORT_OPTIONS,
+  TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS,
+  type TeamRecruitmentFilter,
+} from 'components/Team/components/RecruitmentFilterPanel';
 import TeamListHeader from 'components/Team/components/TeamListHeader';
 import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
@@ -18,11 +27,24 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin } from 'utils/ts/auth';
-import showToast from 'utils/ts/showToast';
-import type { TeamRecruitmentListRequest } from 'api/team/entity';
 import styles from './TeamListPage.module.scss';
 
-type TeamListFilter = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
+interface AppliedFilterChipProps {
+  label: string;
+  onRemove: () => void;
+}
+
+function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
+  return (
+    <button type="button" className={styles.appliedFilterChip} onClick={onRemove} aria-label={`${label} 필터 해제`}>
+      <span>{label}</span>
+      <XIcon aria-hidden />
+    </button>
+  );
+}
+
+const getFilterLabel = <T extends string>(options: { value: T; label: string }[], value: T) =>
+  options.find((option) => option.value === value)?.label ?? value;
 
 export default function TeamListPage() {
   const router = useRouter();
@@ -31,10 +53,20 @@ export default function TeamListPage() {
   const logger = useLogger();
 
   const [searchTitle, setSearchTitle] = useState('');
-  const [requestParams, setRequestParams] = useState<TeamListFilter>({
-    status: 'ALL',
-    sort: 'LATEST_DESC',
-  });
+  const [searchKeyword, setSearchKeyword] = useState<string>();
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [appliedFilter, setAppliedFilter] = useState<TeamRecruitmentFilter>(() => ({
+    ...DEFAULT_TEAM_RECRUITMENT_FILTER,
+    categories: [],
+  }));
+
+  const requestParams: TeamRecruitmentInfiniteListRequest = {
+    keyword: searchKeyword,
+    status: appliedFilter.status,
+    categories: appliedFilter.categories,
+    meetingType: appliedFilter.meetingType,
+    sort: appliedFilter.sort,
+  };
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     teamQueries.infiniteList(requestParams, token),
@@ -48,20 +80,36 @@ export default function TeamListPage() {
   const handleSearch = () => {
     const keyword = searchTitle.trim();
 
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_search', value: keyword });
-
-    setRequestParams((previous) => ({
-      ...previous,
-      keyword: keyword || undefined,
-    }));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_search',
+      value: keyword,
+    });
+    setSearchKeyword(keyword || undefined);
   };
 
-  const handleFilterClick = () => showToast('warning', '필터 기능은 준비 중입니다.');
+  const handleFilterClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_filter',
+      value: '필터',
+    });
+    setIsFilterOpen(true);
+  };
+
+  const handleFilterApply = (filter: TeamRecruitmentFilter) => {
+    setAppliedFilter(filter);
+  };
+
+  const hasAppliedFilter =
+    appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status ||
+    appliedFilter.categories.length > 0 ||
+    appliedFilter.meetingType !== DEFAULT_TEAM_RECRUITMENT_FILTER.meetingType ||
+    appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort;
 
   const handleRecruitClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'team_recruitment_recruit',
       value: '모집하기',
     });
@@ -94,16 +142,64 @@ export default function TeamListPage() {
             size="small"
           />
 
-          <button type="button" className={styles.filterButton} onClick={handleFilterClick}>
+          <button
+            type="button"
+            className={styles.filterButton}
+            onClick={handleFilterClick}
+            aria-haspopup="dialog"
+            aria-expanded={isFilterOpen}
+          >
             <span className={styles.filterButton__label}>필터</span>
             <FilterIcon />
           </button>
         </div>
 
+        {hasAppliedFilter && (
+          <div className={styles.appliedFilters}>
+            {appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status && (
+              <AppliedFilterChip
+                label={getFilterLabel(TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS, appliedFilter.status)}
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, status: 'ALL' }))}
+              />
+            )}
+
+            {appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort && (
+              <AppliedFilterChip
+                label={getFilterLabel(TEAM_RECRUITMENT_FILTER_SORT_OPTIONS, appliedFilter.sort)}
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, sort: 'LATEST_DESC' }))}
+              />
+            )}
+
+            {appliedFilter.categories.map((category) => (
+              <AppliedFilterChip
+                key={category}
+                label={getFilterLabel(TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS, category)}
+                onRemove={() =>
+                  setAppliedFilter((previous) => ({
+                    ...previous,
+                    categories: previous.categories.filter((item) => item !== category),
+                  }))
+                }
+              />
+            ))}
+
+            {appliedFilter.meetingType && (
+              <AppliedFilterChip
+                label={getFilterLabel(TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS, appliedFilter.meetingType)}
+                onRemove={() => setAppliedFilter((previous) => ({ ...previous, meetingType: undefined }))}
+              />
+            )}
+          </div>
+        )}
+
         <p className={styles.totalCount}>전체({totalCount})</p>
 
         <div className={styles.content}>
-          {isLoading && <p>모집글을 불러오는 중입니다.</p>}
+          {isLoading && (
+            <p className={styles.loadingState} role="status">
+              모집글을 불러오는 중입니다.
+            </p>
+          )}
 
           {!isLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>
@@ -136,6 +232,13 @@ export default function TeamListPage() {
           <PencilIcon />
         </button>
       </main>
+
+      <RecruitmentFilterPanel
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        filter={appliedFilter}
+        onApply={handleFilterApply}
+      />
     </>
   );
 }
