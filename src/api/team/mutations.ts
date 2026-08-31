@@ -129,13 +129,8 @@ export const teamMutations = {
 
   decideApplication: (queryClient: QueryClient, token: string, recruitmentId: string) =>
     mutationOptions({
-      mutationFn: ({
-        applicationId,
-        status,
-      }: {
-        applicationId: string;
-        status: TeamRecruitmentApplicationDecision;
-      }) => updateTeamRecruitmentApplicationStatus(token, recruitmentId, applicationId, { status }),
+      mutationFn: ({ applicationId, status }: { applicationId: string; status: TeamRecruitmentApplicationDecision }) =>
+        updateTeamRecruitmentApplicationStatus(token, recruitmentId, applicationId, { status }),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: teamQueryKeys.applicantsRoot(recruitmentId) });
       },

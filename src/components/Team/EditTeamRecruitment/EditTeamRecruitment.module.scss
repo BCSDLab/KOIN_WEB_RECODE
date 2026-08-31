@@ -1,13 +1,21 @@
+@use "src/utils/scss/media" as media;
+
 .state {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 576px;
-  min-height: 100dvh;
+  width: 1136px;
+  min-height: 600px;
   margin: 0 auto;
-  background: #f8f8fa;
+  background: #fff;
   color: #727272;
   font-size: 14px;
   line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    max-width: 576px;
+    min-height: 100dvh;
+    background: #f8f8fa;
+  }
 }

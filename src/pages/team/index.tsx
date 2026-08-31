@@ -199,6 +199,17 @@ export default function TeamListPage() {
             <span className={styles.filterButton__label}>필터</span>
             <FilterIcon />
           </button>
+
+          <div className={styles.actions}>
+            <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
+              내 프로필
+            </button>
+
+            <button type="button" className={styles.fab} onClick={handleRecruitClick}>
+              <span className={styles.fab__label}>{isMobile ? '모집하기' : '모집글 작성'}</span>
+              <PencilIcon />
+            </button>
+          </div>
         </div>
 
         {hasAppliedFilter && (
@@ -284,17 +295,6 @@ export default function TeamListPage() {
               <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
             </div>
           )}
-        </div>
-
-        <div className={styles.actions}>
-          <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
-            내 프로필
-          </button>
-
-          <button type="button" className={styles.fab} onClick={handleRecruitClick}>
-            <span className={styles.fab__label}>{isMobile ? '모집하기' : '모집글 작성'}</span>
-            <PencilIcon />
-          </button>
         </div>
       </main>
 

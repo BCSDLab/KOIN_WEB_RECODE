@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 785px;
+  width: 100%;
   margin-bottom: 12px;
 
   > :first-child {
@@ -285,12 +285,10 @@
 }
 
 .actions {
-  position: absolute;
-  top: 158px;
-  right: 0;
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: auto;
 
   @include media.media-breakpoint(mobile) {
     display: contents;

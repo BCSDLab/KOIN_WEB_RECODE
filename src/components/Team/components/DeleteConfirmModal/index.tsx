@@ -35,7 +35,7 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
     const handleTabKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab' || !modalElement) return;
 
-      const focusableButtons = [cancelButtonRef.current, confirmButtonRef.current].filter(
+      const focusableButtons = [confirmButtonRef.current, cancelButtonRef.current].filter(
         (button): button is HTMLButtonElement => button !== null && !button.disabled,
       );
 
@@ -76,19 +76,13 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
         aria-labelledby="delete-recruitment-title"
         tabIndex={-1}
       >
-        <p id="delete-recruitment-title" className={styles.modal__text}>
-          해당 모집글을 삭제하시겠습니까?
-        </p>
+        <div className={styles.modal__contents}>
+          <p id="delete-recruitment-title" className={styles.modal__text}>
+            해당 모집글을 삭제하시겠습니까?
+          </p>
+          <p className={styles.modal__description}>삭제한 모집글은 다시 복구할 수 없습니다.</p>
+        </div>
         <div className={styles.modal__buttons}>
-          <button
-            ref={cancelButtonRef}
-            type="button"
-            className={styles['modal__button--cancel']}
-            disabled={isPending}
-            onClick={handleCancel}
-          >
-            취소하기
-          </button>
           <button
             ref={confirmButtonRef}
             type="button"
@@ -97,6 +91,15 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
             onClick={onConfirm}
           >
             삭제하기
+          </button>
+          <button
+            ref={cancelButtonRef}
+            type="button"
+            className={styles['modal__button--cancel']}
+            disabled={isPending}
+            onClick={handleCancel}
+          >
+            취소하기
           </button>
         </div>
       </div>
