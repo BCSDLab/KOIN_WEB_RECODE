@@ -10,6 +10,7 @@ import type {
 import {
   getMyCreatedTeamRecruitments,
   getMyTeamRecruitmentApplications,
+  getTeamRecruitmentApplicantDetail,
   getTeamRecruitmentApplicants,
   getTeamRecruitmentList,
   getTeamRecruitmentNotifications,
@@ -38,8 +39,11 @@ export const teamQueryKeys = {
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
+  applicantsRoot: (recruitmentId: string) => ['team', 'recruitment', recruitmentId, 'applicants'] as const,
   applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
-    ['team', 'recruitment', recruitmentId, 'applicants', token, params] as const,
+    [...teamQueryKeys.applicantsRoot(recruitmentId), token, params] as const,
+  applicantDetail: (recruitmentId: string, applicationId: string, token: string) =>
+    [...teamQueryKeys.applicantsRoot(recruitmentId), 'detail', applicationId, token] as const,
   myCreatedRoot: ['team', 'my-created'] as const,
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
     [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
@@ -101,6 +105,12 @@ export const teamQueries = {
     queryOptions({
       queryKey: teamQueryKeys.applicants(recruitmentId, token, params),
       queryFn: () => getTeamRecruitmentApplicants(token, recruitmentId, params),
+    }),
+
+  applicantDetail: (recruitmentId: string, applicationId: string, token: string) =>
+    queryOptions({
+      queryKey: teamQueryKeys.applicantDetail(recruitmentId, applicationId, token),
+      queryFn: () => getTeamRecruitmentApplicantDetail(token, recruitmentId, applicationId),
     }),
 
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest = {}) =>

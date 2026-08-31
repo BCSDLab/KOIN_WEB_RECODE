@@ -148,6 +148,42 @@ export interface TeamRecruitmentApplicantListRequest {
   limit?: number;
 }
 
+export interface TeamApplicationActivity {
+  id: number;
+  title: string;
+  started_at: string;
+  ended_at: string | null;
+  is_ongoing: boolean;
+  description: string;
+}
+
+export interface TeamApplicationProfileSnapshot {
+  nickname: string;
+  department: string;
+  student_year: number;
+  preferred_role: string;
+  skills: string[];
+  activities: TeamApplicationActivity[];
+  self_introduction: string;
+}
+
+export interface TeamRecruitmentApplicantDetailResponse extends APIResponse {
+  application_id: number;
+  status: TeamApplicationStatus;
+  profile_snapshot: TeamApplicationProfileSnapshot;
+  motivation: string;
+  availability: string;
+  role: TeamApplicationRole | null;
+  can_decide: boolean;
+  can_open_direct_chat: boolean;
+}
+
+export type TeamRecruitmentApplicationDecision = Extract<TeamApplicationStatus, 'ACCEPTED' | 'REJECTED'>;
+
+export interface TeamRecruitmentApplicationStatusUpdateRequest {
+  status: TeamRecruitmentApplicationDecision;
+}
+
 export interface TeamRecruitmentApplicantListResponse extends APIResponse {
   recruitment: TeamRecruitmentApplicantManagementRecruitment;
   applications: TeamRecruitmentApplicant[];

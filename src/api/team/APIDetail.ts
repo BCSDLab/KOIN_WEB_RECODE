@@ -5,8 +5,10 @@ import {
   MyCreatedTeamRecruitmentListResponse,
   MyTeamRecruitmentApplicationListRequest,
   MyTeamRecruitmentApplicationListResponse,
+  TeamRecruitmentApplicantDetailResponse,
   TeamRecruitmentApplicantListRequest,
   TeamRecruitmentApplicantListResponse,
+  TeamRecruitmentApplicationStatusUpdateRequest,
   TeamRecruitmentListRequest,
   TeamRecruitmentListResponse,
   TeamRecruitmentNotificationListRequest,
@@ -198,5 +200,47 @@ export class PutCloseTeamRecruitment<R extends object> implements APIRequest<R> 
     recruitmentId: number,
   ) {
     this.path = `/team-recruitments/${recruitmentId}/close`;
+  }
+}
+
+export class GetTeamRecruitmentApplicantDetail<R extends TeamRecruitmentApplicantDetailResponse>
+  implements APIRequest<R>
+{
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: string,
+    applicationId: string,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}`;
+  }
+}
+
+export class PutTeamRecruitmentApplicationStatus<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  data: TeamRecruitmentApplicationStatusUpdateRequest;
+
+  constructor(
+    public authorization: string,
+    recruitmentId: string,
+    applicationId: string,
+    data: TeamRecruitmentApplicationStatusUpdateRequest,
+  ) {
+    this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}/status`;
+    this.data = data;
   }
 }
