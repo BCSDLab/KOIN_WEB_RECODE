@@ -1,18 +1,36 @@
+@use "utils/scss/media.scss" as media;
+
+.backdrop {
+  background: transparent;
+}
+
 .panel {
-  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  width: 390px;
+  height: 558px;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgb(0 0 0 / 7%);
+  animation: none;
 }
 
 .header {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
+  height: 66px;
+  padding: 12px 32px;
+  box-sizing: border-box;
 }
 
 .headerTitle {
-  color: #b611f5;
+  color: #175c8e;
   font-size: 18px;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 160%;
 }
 
 .closeButton {
@@ -22,9 +40,14 @@
   width: 32px;
   height: 32px;
   padding: 0;
-  border: none;
+  border: 0;
   background: none;
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #175c8e;
+    outline-offset: 2px;
+  }
 
   svg {
     width: 24px;
@@ -34,10 +57,11 @@
 
 .content {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 16px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 12px 32px 0;
+  overflow-y: auto;
 }
 
 .section {
@@ -51,18 +75,29 @@
   color: #000;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 160%;
 }
 
 .sectionBadges {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
+
+  > button {
+    &:hover,
+    &[aria-pressed="true"] {
+      border-color: #175c8e;
+      background: #fff;
+      color: #175c8e;
+    }
+  }
 }
 
 .footer {
   display: flex;
+  flex-shrink: 0;
   gap: 12px;
+  padding: 32px 32px 12px;
 }
 
 .resetButton,
@@ -71,32 +106,118 @@
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
+  line-height: 160%;
   cursor: pointer;
 }
 
 .resetButton {
   display: flex;
-  flex: 1;
-  gap: 8px;
+  flex: 0 0 98px;
   align-items: center;
   justify-content: center;
-  border: 1px solid #b611f5;
+  gap: 8px;
+  border: 1px solid #cacaca;
   background: #fff;
-  color: #b611f5;
+  color: #4b4b4b;
 
   svg {
-    width: 20px;
-    height: 20px;
-
-    path {
-      fill: #b611f5;
-    }
+    width: 16px;
+    height: 16px;
   }
 }
 
 .applyButton {
-  flex: 2;
-  border: none;
-  background: #b611f5;
+  flex: 1;
+  border: 0;
+  background: #175c8e;
   color: #fff;
+
+  &:hover {
+    background: #134f7a;
+  }
+}
+
+@keyframes filter-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@include media.media-breakpoint(mobile) {
+  .backdrop {
+    background: rgb(0 0 0 / 70%);
+  }
+
+  .panel {
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    margin: 0;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
+    animation: filter-slide-up 0.25s ease-out;
+  }
+
+  .header {
+    height: auto;
+  }
+
+  .headerTitle {
+    color: #b611f5;
+  }
+
+  .closeButton:focus-visible {
+    outline-color: #b611f5;
+  }
+
+  .content {
+    flex: initial;
+    padding: 12px 32px;
+  }
+
+  .sectionBadges > button {
+    &:hover,
+    &[aria-pressed="true"] {
+      border-color: #b611f5;
+      color: #b611f5;
+    }
+  }
+
+  .footer {
+    padding: 16px 32px;
+  }
+
+  .resetButton {
+    flex: 1;
+    border-color: #b611f5;
+    color: #b611f5;
+
+    svg {
+      width: 20px;
+      height: 20px;
+
+      path {
+        fill: #b611f5;
+      }
+    }
+  }
+
+  .applyButton {
+    flex: 2;
+    background: #b611f5;
+
+    &:hover {
+      background: #980ac9;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
 }

@@ -8,9 +8,17 @@ type BottomModalProps = HTMLAttributes<HTMLDivElement> & {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  backdropClassName?: string;
 };
 
-export default function BottomModal({ isOpen, onClose, children, className, ...rest }: BottomModalProps) {
+export default function BottomModal({
+  isOpen,
+  onClose,
+  children,
+  className,
+  backdropClassName,
+  ...rest
+}: BottomModalProps) {
   useScrollLock(isOpen);
 
   const { containerRef, backgroundRef } = useOutsideClick<HTMLDivElement>({
@@ -24,7 +32,7 @@ export default function BottomModal({ isOpen, onClose, children, className, ...r
 
   return (
     <Portal>
-      <div ref={backgroundRef} className={styles.backdrop}>
+      <div ref={backgroundRef} className={[styles.backdrop, backdropClassName].filter(Boolean).join(' ')}>
         <div
           ref={containerRef}
           className={[styles.modal, className].filter(Boolean).join(' ')}
