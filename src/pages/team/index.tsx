@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -60,16 +60,13 @@ export default function TeamListPage() {
     categories: [],
   }));
 
-  const requestParams = useMemo<TeamRecruitmentInfiniteListRequest>(
-    () => ({
-      keyword: searchKeyword,
-      status: appliedFilter.status,
-      categories: appliedFilter.categories,
-      meetingType: appliedFilter.meetingType,
-      sort: appliedFilter.sort,
-    }),
-    [appliedFilter, searchKeyword],
-  );
+  const requestParams: TeamRecruitmentInfiniteListRequest = {
+    keyword: searchKeyword,
+    status: appliedFilter.status,
+    categories: appliedFilter.categories,
+    meetingType: appliedFilter.meetingType,
+    sort: appliedFilter.sort,
+  };
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
     teamQueries.infiniteList(requestParams, token),
@@ -85,7 +82,6 @@ export default function TeamListPage() {
 
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'team_recruitment_search',
       value: keyword,
     });
@@ -95,7 +91,6 @@ export default function TeamListPage() {
   const handleFilterClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'team_recruitment_filter',
       value: '필터',
     });
@@ -115,7 +110,6 @@ export default function TeamListPage() {
   const handleRecruitClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'team_recruitment_recruit',
       value: '모집하기',
     });

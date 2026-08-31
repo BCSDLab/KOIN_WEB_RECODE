@@ -97,7 +97,7 @@ function RecruitmentFilterPanelContent({
   }, [onClose]);
 
   const logFilterEvent = (eventLabel: string, value: string) => {
-    logger.actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: eventLabel, value });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: eventLabel, value });
   };
 
   const handleSelectStatus = (status: TeamRecruitmentStatusFilter, label: string) => {
