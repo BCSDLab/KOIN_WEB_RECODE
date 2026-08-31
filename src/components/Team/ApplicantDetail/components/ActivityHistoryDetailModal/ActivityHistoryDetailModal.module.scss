@@ -1,0 +1,137 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #00000026;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(1124px, calc(100% - 48px));
+  max-height: calc(100dvh - 76px);
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 8px 32px #00000014,
+    0 2px 20px #0000000a;
+
+  &__header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    min-height: 66px;
+    padding: 12px 32px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #175c8e;
+  }
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px 30px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 40px;
+    list-style: none;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+
+  &__title {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #000;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: 45px minmax(0, 1fr);
+    gap: 4px 8px;
+    margin: 0;
+
+    dt,
+    dd {
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    dt {
+      color: #727272;
+      white-space: nowrap;
+    }
+
+    dd {
+      margin: 0;
+      color: #000;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+@include media.media-breakpoint(mobile) {
+  .modal {
+    width: calc(100% - 32px);
+    max-height: calc(100dvh - 32px);
+
+    &__header {
+      min-height: 56px;
+      padding: 12px 20px;
+    }
+
+    &__title {
+      font-size: 16px;
+    }
+
+    &__list {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 20px;
+    }
+  }
+}

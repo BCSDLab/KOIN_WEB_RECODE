@@ -1,9 +1,12 @@
+import ActivityMoreIcon from 'assets/svg/Team/activity-more.svg';
 import { formatRecruitmentDate } from 'components/Team/utils/recruitmentDisplay';
 import type { TeamApplicationActivity } from 'api/team/entity';
 import styles from './ActivityHistoryList.module.scss';
 
 interface ActivityHistoryListProps {
   activities: TeamApplicationActivity[];
+  onMoreClick: () => void;
+  className?: string;
 }
 
 const formatPeriod = (activity: TeamApplicationActivity) => {
@@ -11,10 +14,21 @@ const formatPeriod = (activity: TeamApplicationActivity) => {
   return `${formatRecruitmentDate(activity.started_at)} - ${endLabel}`;
 };
 
-export default function ActivityHistoryList({ activities }: ActivityHistoryListProps) {
+export default function ActivityHistoryList({ activities, onMoreClick, className }: ActivityHistoryListProps) {
+  const hasMoreActivities = activities.length >= 3;
+  const visibleActivities = hasMoreActivities ? activities.slice(0, 3) : activities;
+
   return (
-    <div className={styles.list}>
-      <span className={styles.list__label}>활동 이력</span>
+    <div className={`${styles.list} ${className ?? ''}`}>
+      <div className={styles.list__head}>
+        <span className={styles.list__label}>활동 이력</span>
+        {hasMoreActivities && (
+          <button type="button" className={styles.list__more} onClick={onMoreClick}>
+            <ActivityMoreIcon aria-hidden />
+            <span>더보기</span>
+          </button>
+        )}
+      </div>
 
       {activities.length === 0 ? (
         <div className={styles.list__box}>
@@ -22,7 +36,7 @@ export default function ActivityHistoryList({ activities }: ActivityHistoryListP
         </div>
       ) : (
         <ul className={styles.list__box}>
-          {activities.map((activity) => (
+          {visibleActivities.map((activity) => (
             <li key={activity.id} className={styles.card}>
               <span className={styles.card__title}>{activity.title}</span>
 

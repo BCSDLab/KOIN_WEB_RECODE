@@ -1,25 +1,48 @@
+@use "src/utils/scss/media" as media;
+
 .section {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
 
   &__label {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 16px;
     line-height: 1.6;
     color: #000;
   }
 
   &__box {
     box-sizing: border-box;
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
     min-height: 40px;
     padding: 8px 12px;
-    border-radius: 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
     background: #fff;
     font-size: 14px;
     line-height: 1.6;
-    color: #727272;
+    color: #000;
+  }
+}
+
+@include media.media-breakpoint(mobile) {
+  .section {
+    width: 100%;
+
+    &__label {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    &__box {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      color: #727272;
+    }
   }
 }
