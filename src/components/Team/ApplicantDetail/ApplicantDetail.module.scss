@@ -1,0 +1,78 @@
+.header {
+  background: #f8f8fa;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 56px);
+  background: #f8f8fa;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 20px;
+}
+
+.error {
+  margin: 48px 0;
+  color: #727272;
+  font-size: 14px;
+  line-height: 160%;
+  text-align: center;
+}
+
+.page__sectionTitle {
+  font-weight: 600;
+  line-height: 1.6;
+  color: #000;
+}
+
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &__label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__chip {
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #727272;
+  }
+}
+
+.text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}

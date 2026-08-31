@@ -79,7 +79,11 @@ export default function ApplicantManagement() {
                 ) : (
                   <div className={styles.list__items}>
                     {data.applications.map((applicant) => (
-                      <ApplicantCard key={applicant.application_id} applicant={applicant} />
+                      <ApplicantCard
+                        key={applicant.application_id}
+                        applicant={applicant}
+                        recruitmentId={recruitmentId}
+                      />
                     ))}
                   </div>
                 )}
