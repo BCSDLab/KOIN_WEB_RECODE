@@ -24,6 +24,7 @@ import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin } from 'utils/ts/auth';
@@ -50,6 +51,7 @@ export default function TeamListPage() {
   const router = useRouter();
   const token = useTokenState();
   const isMobile = useMediaQuery();
+  const isMounted = useMount();
   const logger = useLogger();
 
   const [searchTitle, setSearchTitle] = useState('');
@@ -74,6 +76,7 @@ export default function TeamListPage() {
 
   const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
   const totalCount = data?.pages[0]?.total_count ?? 0;
+  const isInitialLoading = !isMounted || isLoading;
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
@@ -192,16 +195,16 @@ export default function TeamListPage() {
           </div>
         )}
 
-        <p className={styles.totalCount}>전체({totalCount})</p>
+        <p className={styles.totalCount}>전체({isMounted ? totalCount : 0})</p>
 
         <div className={styles.content}>
-          {isLoading && (
+          {isInitialLoading && (
             <p className={styles.loadingState} role="status">
               모집글을 불러오는 중입니다.
             </p>
           )}
 
-          {!isLoading && (isError || recruitments.length === 0) && (
+          {!isInitialLoading && (isError || recruitments.length === 0) && (
             <div className={styles.empty}>
               <EmptyRecruitment />
               <p className={styles.empty__message}>
@@ -210,7 +213,7 @@ export default function TeamListPage() {
             </div>
           )}
 
-          {!isLoading && !isError && recruitments.length > 0 && (
+          {!isInitialLoading && !isError && recruitments.length > 0 && (
             <div className={styles.list}>
               {recruitments.map((recruitment) => (
                 <RecruitmentCard
