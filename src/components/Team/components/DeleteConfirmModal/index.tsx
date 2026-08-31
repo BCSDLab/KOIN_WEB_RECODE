@@ -35,7 +35,7 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
     const handleTabKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab' || !modalElement) return;
 
-      const focusableButtons = [cancelButtonRef.current, confirmButtonRef.current].filter(
+      const focusableButtons = [confirmButtonRef.current, cancelButtonRef.current].filter(
         (button): button is HTMLButtonElement => button !== null && !button.disabled,
       );
 
