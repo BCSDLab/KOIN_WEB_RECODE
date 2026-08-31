@@ -98,22 +98,27 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
 
   return (
     <div className={styles.page}>
-      <SubPageHeader title={headerTitle} />
+      <div className={styles.mobileHeader}>
+        <SubPageHeader title={headerTitle} />
+      </div>
+      <h1 className={styles.page__title}>{headerTitle}</h1>
 
       <div className={styles.form}>
-        <Controller
-          control={control}
-          name="category"
-          render={({ field }) => (
-            <CategoryField
-              eventLabel={isEditMode ? 'team_recruitment_post_edit_category' : 'team_recruitment_recruit_category'}
-              value={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
+        <div className={styles.form__category}>
+          <Controller
+            control={control}
+            name="category"
+            render={({ field }) => (
+              <CategoryField
+                eventLabel={isEditMode ? 'team_recruitment_post_edit_category' : 'team_recruitment_recruit_category'}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </div>
 
-        <div className={styles.form__item}>
+        <div className={cn({ [styles.form__item]: true, [styles['form__item--title']]: true })}>
           <div className={styles['form__item-header']}>
             <label className={styles.form__label} htmlFor="team-recruitment-title">
               제목 <span className={styles['form__label-required']}>*</span>
@@ -132,7 +137,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           />
         </div>
 
-        <div className={styles.form__item}>
+        <div className={cn({ [styles.form__item]: true, [styles['form__item--progress']]: true })}>
           <div className={styles.form__label}>
             진행방식 <span className={styles['form__label-required']}>*</span>
           </div>
@@ -173,14 +178,18 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           />
         </div>
 
-        <ScheduleField control={control} />
+        <div className={styles.form__schedule}>
+          <ScheduleField control={control} />
+        </div>
 
-        <RoleField
-          control={control}
-          eventLabel={isEditMode ? 'team_recruitment_post_edit_role' : 'team_recruitment_recruit_role'}
-        />
+        <div className={styles.form__role}>
+          <RoleField
+            control={control}
+            eventLabel={isEditMode ? 'team_recruitment_post_edit_role' : 'team_recruitment_recruit_role'}
+          />
+        </div>
 
-        <div className={styles.form__item}>
+        <div className={cn({ [styles.form__item]: true, [styles['form__item--description']]: true })}>
           <div className={styles['form__item-header']}>
             <label className={styles.form__label} htmlFor="team-recruitment-description">
               모집 소개 <span className={styles['form__label-required']}>*</span>
@@ -198,7 +207,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           />
         </div>
 
-        <div className={styles.form__item}>
+        <div className={cn({ [styles.form__item]: true, [styles['form__item--url']]: true })}>
           <label className={styles.form__label} htmlFor="team-recruitment-url">
             관련 URL
           </label>
@@ -211,7 +220,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           />
         </div>
 
-        <div className={styles.form__item}>
+        <div className={cn({ [styles.form__item]: true, [styles['form__item--qualification']]: true })}>
           <div className={styles['form__item-header']}>
             <label className={styles.form__label} htmlFor="team-recruitment-qualification">
               지원 자격
@@ -240,14 +249,15 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           disabled={!formState.isValid || isSubmitting}
           onClick={handleSubmitClick}
         >
-          {submitLabel}
+          <span className={styles['submit-button__desktop-label']}>{confirmLabel}</span>
+          <span className={styles['submit-button__mobile-label']}>{submitLabel}</span>
         </button>
       </div>
 
       {isConfirmModalOpen && (
         <ConfirmModal
           confirmLabel={confirmLabel}
-          description={`해당 모집글을 ${isEditMode ? '수정' : '등록'}하시겠습니까?`}
+          description={isEditMode ? '모집글을 수정하시겠습니까?' : '해당 모집글을 등록하시겠습니까?'}
           isPending={isSubmitting}
           onCancel={handleCancelConfirm}
           onClose={closeConfirmModal}

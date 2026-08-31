@@ -1,29 +1,97 @@
 @use "src/utils/scss/field-label" as field-label;
+@use "src/utils/scss/media" as media;
 
 .page {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 576px;
-  min-height: 100dvh;
+  gap: 60px;
+  width: 1136px;
   margin: 0 auto;
-  background: #f8f8fa;
+  padding: 64px 0 98px;
+  background: #fff;
 
   * {
     box-sizing: border-box;
   }
+
+  &__title {
+    margin: 0;
+    color: #175c8e;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    gap: 0;
+    width: 100%;
+    max-width: 576px;
+    min-height: 100dvh;
+    padding: 0;
+    background: #f8f8fa;
+
+    &__title {
+      display: none;
+    }
+  }
+}
+
+.mobileHeader {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+  }
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 24px 24px;
+  display: grid;
+  grid-template-areas:
+    "category progress"
+    "title title"
+    "schedule schedule"
+    "role role"
+    "description qualification"
+    "url .";
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+
+  &__category {
+    grid-area: category;
+  }
+
+  &__schedule {
+    grid-area: schedule;
+  }
+
+  &__role {
+    grid-area: role;
+  }
 
   &__item {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 12px 0;
+
+    &--title {
+      grid-area: title;
+    }
+
+    &--progress {
+      grid-area: progress;
+    }
+
+    &--description {
+      grid-area: description;
+    }
+
+    &--qualification {
+      grid-area: qualification;
+    }
+
+    &--url {
+      grid-area: url;
+    }
 
     &-header {
       display: flex;
@@ -34,6 +102,10 @@
 
   &__label {
     @include field-label.label;
+
+    &-required {
+      color: #175c8e;
+    }
   }
 
   &__counter {
@@ -44,20 +116,21 @@
   &__input,
   &__textarea {
     width: 100%;
-    border: none;
-    border-radius: 16px;
+    padding: 8px 12px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
     background: #fff;
-    padding: 9px 12px;
-    font-size: 14px;
     color: #000;
     font-family: inherit;
+    font-size: 14px;
+    line-height: 160%;
 
     &::placeholder {
       color: #727272;
     }
 
     &:focus {
-      outline: 1.5px solid #b611f5;
+      outline: 1.5px solid #175c8e;
     }
   }
 
@@ -66,8 +139,44 @@
   }
 
   &__textarea {
-    min-height: 151px;
+    height: 151px;
     resize: none;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 24px 24px;
+
+    &__category,
+    &__schedule,
+    &__role {
+      display: contents;
+    }
+
+    &__item {
+      padding: 12px 0;
+    }
+
+    &__label-required {
+      color: #b611f5;
+    }
+
+    &__input,
+    &__textarea {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 16px;
+
+      &:focus {
+        outline-color: #b611f5;
+      }
+    }
+
+    &__textarea {
+      min-height: 151px;
+    }
   }
 }
 
@@ -82,9 +191,9 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 63px;
-    border-radius: 16px;
-    border: none;
+    height: 66px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
     background: #fff;
     color: #4b4b4b;
     font-size: 12px;
@@ -96,32 +205,69 @@
     }
 
     &--selected {
-      background: #b611f5;
+      border-color: #175c8e;
+      background: #175c8e;
       color: #fff;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    &__button {
+      height: 63px;
+      border: 0;
+      border-radius: 16px;
+
+      &--selected {
+        background: #b611f5;
+      }
     }
   }
 }
 
 .submit-container {
-  width: 100%;
-  padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
-  background: #f8f8fa;
-  box-shadow: 0 -1px 8px rgb(0 0 0 / 6%);
+  display: flex;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
+    background: #f8f8fa;
+    box-shadow: 0 -1px 8px rgb(0 0 0 / 6%);
+  }
 }
 
 .submit-button {
-  width: 100%;
   height: 48px;
-  border: none;
+  padding: 10px 64px;
+  border: 0;
   border-radius: 16px;
-  background: #b611f5;
+  background: #175c8e;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
+  line-height: 160%;
   cursor: pointer;
+
+  &__mobile-label {
+    display: none;
+  }
 
   &--disabled {
     background: #d3d3d3;
     cursor: not-allowed;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding: 0;
+    background: #b611f5;
+    font-size: 15px;
+
+    &__desktop-label {
+      display: none;
+    }
+
+    &__mobile-label {
+      display: inline;
+    }
   }
 }

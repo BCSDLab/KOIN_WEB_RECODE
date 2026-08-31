@@ -1,39 +1,108 @@
 @use "src/utils/scss/field-label" as field-label;
+@use "src/utils/scss/media" as media;
 
 .field {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px 0;
 
   &__label {
     @include field-label.label;
+
+    &-required {
+      color: #175c8e;
+    }
   }
 
   &__dropdown {
-    button {
+    > div > button {
       height: 40px;
       padding: 8px 12px;
-      border-radius: 16px;
+      border: 1px solid #e1e1e1;
+      border-radius: 8px;
       background-color: #fff;
       color: #000;
-      font-size: 14px;
       font-family: inherit;
+      font-size: 14px;
     }
 
-    ul {
-      border-radius: 16px;
+    > div > div {
+      overflow: hidden;
+      border-radius: 8px;
       background-color: #fff;
     }
 
-    li {
+    > div > div > button {
+      height: auto;
       padding: 10px 12px;
+      border: 1px solid #e1e1e1;
+      border-radius: 0;
       font-size: 14px;
       color: #000;
       background-color: #fff;
+
+      &:first-child {
+        border-radius: 8px 8px 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 8px 8px;
+      }
+
+      &:not(:first-child) {
+        border-top: 0;
+      }
+
+      &:hover {
+        border-radius: 0;
+      }
+
+      &:first-child:hover {
+        border-radius: 8px 8px 0 0;
+      }
+
+      &:last-child:hover {
+        border-radius: 0 0 8px 8px;
+      }
 
       &[aria-selected='true'] {
-        color: #b611f5;
+        color: #175c8e;
+      }
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    padding: 12px 0;
+
+    &__label-required {
+      color: #b611f5;
+    }
+
+    &__dropdown {
+      > div > button {
+        border: 0;
+        border-radius: 16px;
+      }
+
+      > div > div {
+        border-radius: 16px;
+      }
+
+      > div > div > button {
+        border: 0;
+        border-radius: 5px;
+
+        &:first-child,
+        &:last-child,
+        &:hover,
+        &:first-child:hover,
+        &:last-child:hover {
+          border-radius: 5px;
+        }
+
+        &[aria-selected='true'] {
+          color: #b611f5;
+        }
       }
     }
   }
