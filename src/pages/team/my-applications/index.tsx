@@ -170,22 +170,28 @@ export default function MyApplicationsPage() {
         <meta name="description" content="내가 지원한 팀원 모집 게시글과 지원 상태를 확인할 수 있습니다." />
       </Head>
 
-      <SubPageHeader
-        title="내가 지원한 모집글"
-        onBack={() => router.replace(ROUTES.TeamProfile())}
-        className={styles.header}
-      />
+      <div className={styles.mobileHeader}>
+        <SubPageHeader
+          title="내가 지원한 모집글"
+          onBack={() => router.replace(ROUTES.TeamProfile())}
+          className={styles.header}
+        />
+      </div>
 
       <main className={styles.page}>
-        <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
-          <Suspense fallback={<LoadingSpinner size="50px" />}>
-            <ApplicationsListSection
-              requestParams={requestParams}
-              onFilterOpen={openFilter}
-              onChatClick={handleChatClick}
-            />
-          </Suspense>
-        </ErrorBoundary>
+        <div className={styles.inner}>
+          <h1 className={styles.title}>내가 지원한 모집글</h1>
+
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+            <Suspense fallback={<LoadingSpinner size="50px" />}>
+              <ApplicationsListSection
+                requestParams={requestParams}
+                onFilterOpen={openFilter}
+                onChatClick={handleChatClick}
+              />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </main>
 
       {isFilterOpen && (
