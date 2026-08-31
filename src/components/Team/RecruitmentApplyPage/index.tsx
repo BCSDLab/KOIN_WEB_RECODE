@@ -168,7 +168,7 @@ export default function RecruitmentApplyPage() {
 
     if (isGeneralRecruitment) {
       roleId = null;
-      preferredRole = existingProfile?.preferred_role ?? '전체';
+      preferredRole = existingProfile?.preferred_role ?? '';
     } else {
       const selectedRole = recruitment.roles.find((role) => role.id === pendingValues.roleId);
       if (!selectedRole) {
