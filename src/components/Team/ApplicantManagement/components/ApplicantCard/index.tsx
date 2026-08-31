@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import { cn } from '@bcsdlab/utils';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ProfileAvatarIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import showToast from 'utils/ts/showToast';
 import type { TeamRecruitmentApplicant } from 'api/team/entity';
@@ -18,21 +20,44 @@ const formatStudentYear = (studentYear: number) => `${String(studentYear).slice(
 
 interface ApplicantCardProps {
   applicant: TeamRecruitmentApplicant;
+  recruitmentId: string;
 }
 
-export default function ApplicantCard({ applicant }: ApplicantCardProps) {
+export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCardProps) {
   const logger = useLogger();
   const { nickname, department, student_year: studentYear, role, status, can_open_direct_chat: canOpenDirectChat } =
     applicant;
 
+  const handleCardClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_created_post_applicant_select',
+      value: '지원자 선택',
+    });
+  };
+
   const handleChatClick = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_applicant_chat', value: nickname });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_created_post_applicant_chat',
+      value: '채팅',
+    });
     // TODO: 다이렉트 채팅방 개설/조회 API 연결 후 실제 채팅방으로 라우팅하도록 교체
     showToast('warning', '준비 중인 기능입니다.');
   };
 
   return (
     <div className={styles.card}>
+      <Link
+        href={ROUTES.TeamRecruitmentApplicantDetail({
+          postId: recruitmentId,
+          applicantId: String(applicant.application_id),
+        })}
+        className={styles.card__overlayLink}
+        onClick={handleCardClick}
+        aria-label={`${nickname}님 지원자 상세 보기`}
+      />
+
       <div className={styles.card__avatar}>
         <ProfileAvatarIcon />
       </div>
