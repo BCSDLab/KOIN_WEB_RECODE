@@ -89,4 +89,17 @@ const ROUTES = {
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
 };
 
+type RouteFn = (params: Record<string, string | undefined>) => string;
+
+// 로그인 없이 URL 직접 접근이 불가능해야 하는 라우트
+export const PROTECTED_ROUTES: RouteFn[] = [
+  ROUTES.TeamRecruitmentNew,
+  ROUTES.TeamRecruitmentApply,
+  ROUTES.TeamProfile,
+  ROUTES.TeamProfileCreate,
+  ROUTES.TeamProfileEdit,
+  ROUTES.TeamMyApplications,
+  ROUTES.TeamMyCreatedPosts,
+];
+
 export default ROUTES;

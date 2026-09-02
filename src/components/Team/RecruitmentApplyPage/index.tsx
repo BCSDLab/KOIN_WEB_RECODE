@@ -11,7 +11,6 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import useApplyStep from 'components/Team/RecruitmentApplyPage/hooks/useApplyStep';
 import { createApplicationFormSchema } from 'components/Team/RecruitmentApplyPage/schema';
 import SubPageHeader from 'components/ui/SubPageHeader';
@@ -50,7 +49,6 @@ export default function RecruitmentApplyPage() {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { actionEventClick } = useLogger();
-  const { isAuthReady } = useTeamAuthGuard();
   const [pendingValues, setPendingValues] = useState<ApplicationFormValues | null>(null);
 
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
@@ -218,8 +216,6 @@ export default function RecruitmentApplyPage() {
     });
     setPendingValues(null);
   };
-
-  if (!isAuthReady) return null;
 
   return (
     <div className={styles.container}>
