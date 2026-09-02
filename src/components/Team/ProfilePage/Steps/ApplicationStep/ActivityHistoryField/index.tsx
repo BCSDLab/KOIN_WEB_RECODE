@@ -1,12 +1,8 @@
-import { useState } from 'react';
 import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
+import useActivityHistoryField from 'components/Team/hooks/useActivityHistoryField';
 import DatePickerModal from 'components/ui/DatePickerModal';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { getYyyyMmDd } from 'utils/ts/calendar';
-import showToast from 'utils/ts/showToast';
-import type { ProfileFormValues, TeamProfileFormMode } from 'components/Team/ProfilePage/types';
+import type { TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import styles from './ActivityHistoryField.module.scss';
 
 interface ActivityHistoryFieldProps {
@@ -29,106 +25,30 @@ const LOGGING_TITLE: Record<TeamProfileFormMode, { ADD: string; EDIT: string; NE
     },
   };
 
-type ActivityDateField = 'startDate' | 'endDate';
-
-interface OpenDatePicker {
-  index: number;
-  field: ActivityDateField;
-}
-
-let activitySequence = 0;
-
-// crypto.randomUUID는 보안 컨텍스트가 아니면 undefined라 개발/스테이징 http 환경에서 터진다.
-const createActivityId = () => {
-  activitySequence += 1;
-  return `activity-${Date.now()}-${activitySequence}`;
-};
-
 export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps) {
-  const { actionEventClick } = useLogger();
-  const { control, register, getValues, setValue } = useFormContext<ProfileFormValues>();
-  const { fields, append, remove } = useFieldArray({ control, name: 'activities' });
-  const activities = useWatch({ control, name: 'activities' }) ?? [];
-  const [openDatePicker, setOpenDatePicker] = useState<OpenDatePicker | null>(null);
   const loggingTitle = LOGGING_TITLE[mode];
 
-  const handleAppend = () => {
-    actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: loggingTitle.ADD,
-      value: '활동 이력 추가',
-    });
-    append({
-      id: createActivityId(),
-      title: '',
-      startDate: '',
-      endDate: null,
-      isOngoing: false,
-      content: '',
-      status: 'draft',
-      hasBeenSaved: false,
-    });
-  };
-
-  const handleRemove = (index: number) => {
-    setOpenDatePicker(null);
-    remove(index);
-  };
-
-  const handleEdit = (index: number) => {
-    actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.EDIT, value: '수정' });
-    setValue(`activities.${index}.status`, 'draft');
-  };
-
-  const handleDone = (index: number) => {
-    const activity = getValues(`activities.${index}`);
-
-    if (!activity.title.trim()) {
-      showToast('warning', '활동명을 작성해주세요.');
-      return;
-    }
-    if (!activity.content.trim()) {
-      showToast('warning', '활동 내용을 작성해주세요.');
-      return;
-    }
-    if (!activity.startDate) {
-      showToast('warning', '활동 시작일을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && !activity.endDate) {
-      showToast('warning', '활동 종료일을 선택하거나 진행 중을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && activity.endDate && activity.endDate < activity.startDate) {
-      showToast('warning', '활동 종료일은 시작일 이후로 선택해주세요.');
-      return;
-    }
-
-    if (activity.hasBeenSaved) {
-      actionEventClick({
-        team: 'CAMPUS',
-        event_category: 'click',
-        event_label: loggingTitle.MODIFY_DONE,
-        value: '수정하기',
-      });
-    } else {
-      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.NEW_DONE, value: '완료' });
-    }
-    setValue(`activities.${index}.status`, 'saved');
-    setValue(`activities.${index}.hasBeenSaved`, true);
-  };
-
-  const handleToggleOngoing = (index: number, checked: boolean) => {
-    setValue(`activities.${index}.isOngoing`, checked);
-    if (checked) {
-      setValue(`activities.${index}.endDate`, null);
-    }
-  };
-
-  const handleDateSelect = (index: number, field: ActivityDateField) => (date: Date) => {
-    setValue(`activities.${index}.${field}`, getYyyyMmDd(date));
-  };
+  const {
+    fields,
+    activities,
+    register,
+    openDatePicker,
+    handleAppend,
+    handleRemove,
+    handleEdit,
+    handleDone,
+    handleToggleOngoing,
+    handleDateSelect,
+    handleOpenDatePicker,
+    handleCloseDatePicker,
+  } = useActivityHistoryField({
+    ADD: loggingTitle.ADD,
+    EDIT: loggingTitle.EDIT,
+    getDoneEvent: (hasBeenSaved) =>
+      hasBeenSaved
+        ? { eventLabel: loggingTitle.MODIFY_DONE, value: '수정하기' }
+        : { eventLabel: loggingTitle.NEW_DONE, value: '완료' },
+  });
 
   return (
     <div className={styles.activity}>
@@ -215,7 +135,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                     <button
                       type="button"
                       className={styles.draftCard__dateControl}
-                      onClick={() => setOpenDatePicker({ index, field: 'startDate' })}
+                      onClick={() => handleOpenDatePicker(index, 'startDate')}
                     >
                       {activity?.startDate ? activity.startDate.replaceAll('-', '.') : '시작일'}
                     </button>
@@ -224,7 +144,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                       type="button"
                       className={styles.draftCard__dateControl}
                       disabled={isOngoing}
-                      onClick={() => setOpenDatePicker({ index, field: 'endDate' })}
+                      onClick={() => handleOpenDatePicker(index, 'endDate')}
                     >
                       {activity?.endDate ? activity.endDate.replaceAll('-', '.') : '종료일'}
                     </button>
@@ -295,7 +215,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
             <DatePickerModal
               selectedDate={rawDate ? new Date(`${rawDate}T00:00:00`) : new Date()}
               onChange={handleDateSelect(openDatePicker.index, openDatePicker.field)}
-              onClose={() => setOpenDatePicker(null)}
+              onClose={handleCloseDatePicker}
             />
           );
         })()}

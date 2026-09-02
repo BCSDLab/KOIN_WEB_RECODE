@@ -1,8 +1,5 @@
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
-import { deptQueries } from 'api/dept/queries';
+import useAcademicInfoStep from 'components/Team/hooks/useAcademicInfoStep';
 import DeptSelect from 'components/Team/ProfilePage/components/DeptSelect';
 import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
@@ -16,7 +13,6 @@ import {
 import { APPLY_STEPS } from 'components/Team/RecruitmentApplyPage/types';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import type { ApplicationFormValues } from 'components/Team/RecruitmentApplyPage/types';
 import styles from './BasicInfoStep.module.scss';
@@ -33,72 +29,16 @@ const LOGGING_TITLE = {
 };
 
 export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
-  const token = useTokenState();
   const { actionEventClick } = useLogger();
-  const { control, register, setValue, trigger, getValues } = useFormContext<ApplicationFormValues>();
+  const { control, register, trigger, getValues } = useFormContext<ApplicationFormValues>();
   const { errors } = useFormState({ control });
 
   const nickname = useWatch({ control, name: 'nickname' }) ?? '';
   const preferredRole = useWatch({ control, name: 'preferredRole' }) ?? '';
   const introduction = useWatch({ control, name: 'introduction' }) ?? '';
 
-  const { data: deptList } = useSuspenseQuery(deptQueries.list());
-  const deptOptionList = deptList.map((dept) => ({ label: dept.name, value: dept.name }));
-
-  const { mutate: loadUserInfo, isPending } = useMutation({
-    mutationFn: () => getUserAcademicInfo(token),
-    onSuccess: (data) => {
-      setValue('nickname', data.nickname ?? '', { shouldValidate: true });
-      setValue('studentNumber', data.student_number ?? '', { shouldValidate: true });
-
-      const isKnownDept = deptOptionList.some((option) => option.value === data.department);
-      if (isKnownDept) {
-        setValue('department', data.department, { shouldValidate: true });
-      }
-
-      showToast('success', '회원정보를 불러왔습니다.');
-    },
-    onError: (error) => {
-      if (isKoinError(error)) {
-        showToast('error', error.message || '회원정보를 불러오지 못했습니다.');
-        return;
-      }
-      showToast('error', '회원정보를 불러오지 못했습니다.');
-      sendClientError(error);
-    },
-  });
-
-  const handleLoadUserInfo = () => {
-    actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: LOGGING_TITLE.LOAD_USER_INFO,
-      value: '회원정보 불러오기',
-    });
-
-    if (!token) {
-      showToast('warning', '로그인 후 이용해주세요.');
-      return;
-    }
-    loadUserInfo();
-  };
-
-  const { mutate: saveAcademicInfo, isPending: isSaving } = useMutation({
-    mutationFn: (data: { department: string; studentNumber: string }) =>
-      updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
-    onSuccess: () => {
-      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: LOGGING_TITLE.NEXT, value: '다음' });
-      onNext();
-    },
-    onError: (error) => {
-      if (isKoinError(error)) {
-        showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
-        return;
-      }
-      showToast('error', '학적 정보 수정에 실패했습니다.');
-      sendClientError(error);
-    },
-  });
+  const { deptOptionList, isLoadingUserInfo, isSaving, handleLoadUserInfo, handleSaveAcademicInfo, handleMajorSelect } =
+    useAcademicInfoStep(LOGGING_TITLE, onNext);
 
   const handleNext = async () => {
     const activities = getValues('activities');
@@ -121,13 +61,8 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
       return;
     }
 
-    if (!token) {
-      showToast('warning', '로그인 후 이용해주세요.');
-      return;
-    }
-
     const { department, studentNumber } = getValues();
-    saveAcademicInfo({ department, studentNumber });
+    handleSaveAcademicInfo({ department, studentNumber });
   };
 
   return (
@@ -136,165 +71,165 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         <StepIndicator steps={APPLY_STEPS} currentIndex={0} />
 
         <div className={styles.step__body}>
-        <div className={styles.loadInfo}>
-          <div className={styles.loadInfo__head}>
-            <span className={styles.loadInfo__title}>
-              <span className={styles['loadInfo__title--highlight']}>코인</span> 회원정보 불러오기
-            </span>
-            <span className={styles.loadInfo__description}>닉네임, 학과(학부), 학번</span>
+          <div className={styles.loadInfo}>
+            <div className={styles.loadInfo__head}>
+              <span className={styles.loadInfo__title}>
+                <span className={styles['loadInfo__title--highlight']}>코인</span> 회원정보 불러오기
+              </span>
+              <span className={styles.loadInfo__description}>닉네임, 학과(학부), 학번</span>
+            </div>
+            <button
+              type="button"
+              className={styles.loadInfo__button}
+              onClick={handleLoadUserInfo}
+              disabled={isLoadingUserInfo}
+            >
+              회원정보 불러오기
+            </button>
           </div>
-          <button type="button" className={styles.loadInfo__button} onClick={handleLoadUserInfo} disabled={isPending}>
-            회원정보 불러오기
-          </button>
-        </div>
 
-        <FormField
-          label="닉네임"
-          required
-          maxLength={APPLY_NICKNAME_MAX_LENGTH}
-          currentLength={nickname.length}
-          error={errors.nickname?.message}
-        >
-          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
-            <input
-              id={controlId}
-              type="text"
-              className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
-              placeholder="닉네임을 입력해주세요."
-              maxLength={APPLY_NICKNAME_MAX_LENGTH}
-              aria-describedby={ariaDescribedBy}
-              aria-invalid={ariaInvalid}
-              {...register('nickname')}
-            />
-          )}
-        </FormField>
+          <FormField
+            label="닉네임"
+            required
+            maxLength={APPLY_NICKNAME_MAX_LENGTH}
+            currentLength={nickname.length}
+            error={errors.nickname?.message}
+          >
+            {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
+              <input
+                id={controlId}
+                type="text"
+                className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
+                placeholder="닉네임을 입력해주세요."
+                maxLength={APPLY_NICKNAME_MAX_LENGTH}
+                aria-describedby={ariaDescribedBy}
+                aria-invalid={ariaInvalid}
+                {...register('nickname')}
+              />
+            )}
+          </FormField>
 
-        <FormField label="학과 · 학부" required error={errors.department?.message}>
-          {({ controlId, ariaDescribedBy }) => (
-            <Controller
-              control={control}
-              name="department"
-              render={({ field }) => (
-                <DeptSelect
-                  id={controlId}
-                  options={deptOptionList}
-                  value={field.value || null}
-                  placeholder="학과 · 학부를 선택해주세요."
-                  onChange={(event) => {
-                    field.onChange(event.target.value);
-                    actionEventClick({
-                      team: 'CAMPUS',
-                      event_category: 'click',
-                      event_label: LOGGING_TITLE.MAJOR_SELECT,
-                      value: event.target.value,
-                    });
-                  }}
-                  disabled={isSaving}
-                  ariaDescribedBy={ariaDescribedBy}
-                  className={styles.grayDropdown}
-                />
-              )}
-            />
-          )}
-        </FormField>
+          <FormField label="학과 · 학부" required error={errors.department?.message}>
+            {({ controlId, ariaDescribedBy }) => (
+              <Controller
+                control={control}
+                name="department"
+                render={({ field }) => (
+                  <DeptSelect
+                    id={controlId}
+                    options={deptOptionList}
+                    value={field.value || null}
+                    placeholder="학과 · 학부를 선택해주세요."
+                    onChange={(event) => {
+                      field.onChange(event.target.value);
+                      handleMajorSelect(event.target.value);
+                    }}
+                    disabled={isSaving}
+                    ariaDescribedBy={ariaDescribedBy}
+                    className={styles.grayDropdown}
+                  />
+                )}
+              />
+            )}
+          </FormField>
 
-        <FormField label="학번" required error={errors.studentNumber?.message}>
-          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
-            <input
-              id={controlId}
-              type="text"
-              inputMode="numeric"
-              className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
-              placeholder="학번을 작성해주세요."
-              maxLength={10}
-              disabled={isSaving}
-              aria-describedby={ariaDescribedBy}
-              aria-invalid={ariaInvalid}
-              {...register('studentNumber')}
-            />
-          )}
-        </FormField>
+          <FormField label="학번" required error={errors.studentNumber?.message}>
+            {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
+              <input
+                id={controlId}
+                type="text"
+                inputMode="numeric"
+                className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
+                placeholder="학번을 작성해주세요."
+                maxLength={10}
+                disabled={isSaving}
+                aria-describedby={ariaDescribedBy}
+                aria-invalid={ariaInvalid}
+                {...register('studentNumber')}
+              />
+            )}
+          </FormField>
 
-        <FormField
-          label="선호 역할"
-          required
-          maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
-          currentLength={preferredRole.length}
-          error={errors.preferredRole?.message}
-        >
-          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
-            <input
-              id={controlId}
-              type="text"
-              className={controlClassName}
-              placeholder="선호 역할을 작성해주세요. ex) 프론트엔드, 기획, 디자인 등"
-              maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
-              aria-describedby={ariaDescribedBy}
-              aria-invalid={ariaInvalid}
-              {...register('preferredRole')}
-            />
-          )}
-        </FormField>
+          <FormField
+            label="선호 역할"
+            required
+            maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
+            currentLength={preferredRole.length}
+            error={errors.preferredRole?.message}
+          >
+            {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
+              <input
+                id={controlId}
+                type="text"
+                className={controlClassName}
+                placeholder="선호 역할을 작성해주세요. ex) 프론트엔드, 기획, 디자인 등"
+                maxLength={APPLY_PREFERRED_ROLE_MAX_LENGTH}
+                aria-describedby={ariaDescribedBy}
+                aria-invalid={ariaInvalid}
+                {...register('preferredRole')}
+              />
+            )}
+          </FormField>
         </div>
 
         <div className={styles.step__extra}>
-        <SkillTagInput
-          label="보유기술 / 자격증"
-          description="기술 / 자격증은 항목별로 하나씩 작성해주세요."
-          addButtonLabel="기술 / 자격증 추가"
-          placeholder="기술 / 자격증을 작성해주세요."
-          error={errors.skills?.message}
-          onAppend={() =>
-            actionEventClick({
-              team: 'CAMPUS',
-              event_category: 'click',
-              event_label: LOGGING_TITLE.SKILL_ADD,
-              value: '기술 / 자격증 추가',
-            })
-          }
-        />
+          <SkillTagInput
+            label="보유기술 / 자격증"
+            description="기술 / 자격증은 항목별로 하나씩 작성해주세요."
+            addButtonLabel="기술 / 자격증 추가"
+            placeholder="기술 / 자격증을 작성해주세요."
+            error={errors.skills?.message}
+            onAppend={() =>
+              actionEventClick({
+                team: 'CAMPUS',
+                event_category: 'click',
+                event_label: LOGGING_TITLE.SKILL_ADD,
+                value: '기술 / 자격증 추가',
+              })
+            }
+          />
 
-        <ActivityHistoryField />
+          <ActivityHistoryField />
 
-        <FormField
-          label="자기소개"
-          required
-          maxLength={APPLY_INTRODUCTION_MAX_LENGTH}
-          currentLength={introduction.length}
-          error={errors.introduction?.message}
-        >
-          {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => {
-            const { ref: introductionRef, ...introductionField } = register('introduction');
-            return (
-              <textarea
-                id={controlId}
-                className={cn({
-                  [controlClassName]: true,
-                  [styles.grayInput]: true,
-                  [styles.introductionControl]: true,
-                })}
-                placeholder="자기소개를 작성해주세요."
-                maxLength={APPLY_INTRODUCTION_MAX_LENGTH}
-                rows={6}
-                aria-describedby={ariaDescribedBy}
-                aria-invalid={ariaInvalid}
-                ref={(el) => {
-                  introductionRef(el);
-                  if (el) {
+          <FormField
+            label="자기소개"
+            required
+            maxLength={APPLY_INTRODUCTION_MAX_LENGTH}
+            currentLength={introduction.length}
+            error={errors.introduction?.message}
+          >
+            {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => {
+              const { ref: introductionRef, ...introductionField } = register('introduction');
+              return (
+                <textarea
+                  id={controlId}
+                  className={cn({
+                    [controlClassName]: true,
+                    [styles.grayInput]: true,
+                    [styles.introductionControl]: true,
+                  })}
+                  placeholder="자기소개를 작성해주세요."
+                  maxLength={APPLY_INTRODUCTION_MAX_LENGTH}
+                  rows={6}
+                  aria-describedby={ariaDescribedBy}
+                  aria-invalid={ariaInvalid}
+                  ref={(el) => {
+                    introductionRef(el);
+                    if (el) {
+                      el.style.height = 'auto';
+                      el.style.height = `${el.scrollHeight}px`;
+                    }
+                  }}
+                  onInput={(e) => {
+                    const el = e.currentTarget;
                     el.style.height = 'auto';
                     el.style.height = `${el.scrollHeight}px`;
-                  }
-                }}
-                onInput={(e) => {
-                  const el = e.currentTarget;
-                  el.style.height = 'auto';
-                  el.style.height = `${el.scrollHeight}px`;
-                }}
-                {...introductionField}
-              />
-            );
-          }}
-        </FormField>
+                  }}
+                  {...introductionField}
+                />
+              );
+            }}
+          </FormField>
         </div>
       </div>
 
