@@ -8,13 +8,13 @@ import {
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
+import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import useProfileStep from './hooks/useProfileStep';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
 import { PROFILE_STEPS, type ProfileFormValues, type ProfileStepTitle, type TeamProfileFormMode } from './types';
@@ -80,10 +80,12 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
-  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(
+  const onExitFirstStep = useCallback(() => router.push(ROUTES.TeamProfile()), [router]);
+  const { currentStep, nextStep, goBack, isReady } = useTeamFormStep<ProfileStepTitle>(
     PROFILE_STEPS,
     '기본 정보',
     buildStepHref,
+    onExitFirstStep,
   );
   const [pendingValues, setPendingValues] = useState<ProfileFormValues | null>(null);
 

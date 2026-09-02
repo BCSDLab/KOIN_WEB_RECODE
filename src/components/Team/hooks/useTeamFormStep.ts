@@ -1,12 +1,16 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
-import ROUTES from 'static/routes';
 
 /**
- * 팀원 모집 프로필 작성 폼의 스텝을 URL 쿼리(`?step=`)로 관리한다.
- * `SignupPage/hooks/useStep`과 동일한 패턴이지만 라우트가 `ROUTES.AuthSignup`에 하드코딩되어 있어 재사용할 수 없다.
+ * 팀원 모집 프로필/지원서 작성 폼의 스텝을 URL 쿼리(`?step=`)로 관리한다.
+ * 첫 스텝에서 뒤로 갈 때 어디로 나갈지는 페이지마다 다르므로 `onExitFirstStep`으로 주입받는다.
  */
-function useProfileStep<T extends string>(steps: T[], defaultStep: T, buildStepHref: (step: T) => string) {
+function useTeamFormStep<T extends string>(
+  steps: T[],
+  defaultStep: T,
+  buildStepHref: (step: T) => string,
+  onExitFirstStep: () => void,
+) {
   const router = useRouter();
   const { step } = router.query as { step?: T };
 
@@ -32,8 +36,8 @@ function useProfileStep<T extends string>(steps: T[], defaultStep: T, buildStepH
       nextStep(steps[currentIndex - 1]);
       return;
     }
-    router.push(ROUTES.TeamProfile());
-  }, [steps, currentStep, nextStep, router]);
+    onExitFirstStep();
+  }, [steps, currentStep, nextStep, onExitFirstStep]);
 
   return {
     currentStep,
@@ -43,4 +47,4 @@ function useProfileStep<T extends string>(steps: T[], defaultStep: T, buildStepH
   };
 }
 
-export default useProfileStep;
+export default useTeamFormStep;

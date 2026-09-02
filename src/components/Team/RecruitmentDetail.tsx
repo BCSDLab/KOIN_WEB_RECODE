@@ -92,7 +92,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
           },
         ];
 
-  const handleManageClick = () => {
+  const navigateToApplicantManagement = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'team_recruitment_post_applicant_check',
@@ -110,14 +110,6 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
       });
     }
 
-    if (primaryAction.type === 'manage') {
-      logger.actionEventClick({
-        team: 'CAMPUS',
-        event_label: 'team_recruitment_post_applicant_check',
-        value: recruitment.title,
-      });
-    }
-
     if (primaryAction.type === 'login') {
       openLoginModal();
       return;
@@ -129,7 +121,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     }
 
     if (primaryAction.type === 'manage') {
-      router.push(ROUTES.TeamRecruitmentApplicants({ postId: String(recruitment.id) }));
+      navigateToApplicantManagement();
       return;
     }
 
@@ -153,7 +145,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
             <h2 className={styles.summary__title}>{recruitment.title}</h2>
           </section>
           {canManage && (
-            <button type="button" className={styles.manageButton} onClick={handleManageClick}>
+            <button type="button" className={styles.manageButton} onClick={navigateToApplicantManagement}>
               지원자 관리
             </button>
           )}
