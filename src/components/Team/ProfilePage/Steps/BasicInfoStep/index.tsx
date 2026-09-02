@@ -145,10 +145,7 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
               maxLength={20}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid}
-              {...register('nickname', {
-                required: '닉네임을 입력해주세요.',
-                maxLength: { value: 20, message: '닉네임은 20자 이내로 입력해주세요.' },
-              })}
+              {...register('nickname')}
             />
           )}
         </FormField>
@@ -158,7 +155,6 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
             <Controller
               control={control}
               name="department"
-              rules={{ required: '학과 · 학부를 선택해주세요.' }}
               render={({ field }) => (
                 <DeptSelect
                   id={controlId}
@@ -194,7 +190,7 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
               disabled={isSaving}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid}
-              {...register('studentNumber', { required: '학번을 작성해주세요.' })}
+              {...register('studentNumber')}
             />
           )}
         </FormField>

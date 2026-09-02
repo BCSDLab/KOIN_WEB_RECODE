@@ -1,13 +1,12 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
 } from 'api/teamRecruitmentProfile/queries';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
@@ -15,10 +14,14 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import useProfileStep from './hooks/useProfileStep';
+import { profileFormSchema, type ProfileFormValues } from './schema';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
-import { PROFILE_STEPS, type ProfileFormValues, type ProfileStepTitle, type TeamProfileFormMode } from './types';
-import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
+import { PROFILE_STEPS, type ProfileStepTitle, type TeamProfileFormMode } from './types';
+import type {
+  TeamRecruitmentProfileResponse,
+  UpsertTeamRecruitmentProfileRequest,
+} from 'api/teamRecruitmentProfile/entity';
 import styles from './ProfilePage.module.scss';
 
 interface TeamProfileFormProps {
@@ -29,7 +32,6 @@ const MODE_TEXT: Record<
   TeamProfileFormMode,
   {
     title: string;
-    // 데스크탑 페이지 타이틀(Figma 기준). 모바일 앱바 타이틀(title)은 기존 문구를 유지한다.
     desktopTitle: string;
     submitLabel: string;
     confirmMessage: string;
@@ -57,6 +59,39 @@ const MODE_TEXT: Record<
 
 const LOG_MODE: Record<TeamProfileFormMode, 'create' | 'modify'> = { create: 'create', edit: 'modify' };
 
+const EMPTY_DEFAULT_VALUES: ProfileFormValues = {
+  nickname: '',
+  department: '',
+  studentNumber: '',
+  preferredRole: '',
+  skills: [],
+  activities: [],
+  introduction: '',
+};
+
+function toDefaultValues(profile: TeamRecruitmentProfileResponse | null): ProfileFormValues {
+  if (!profile) return EMPTY_DEFAULT_VALUES;
+
+  return {
+    nickname: profile.profile_nickname,
+    department: profile.department,
+    studentNumber: profile.student_number,
+    preferredRole: profile.preferred_role,
+    skills: profile.skills.map((skill) => ({ value: skill })),
+    activities: profile.activities.map((activity) => ({
+      id: String(activity.id),
+      title: activity.title,
+      startDate: activity.started_at,
+      endDate: activity.ended_at,
+      isOngoing: activity.is_ongoing,
+      content: activity.description,
+      status: 'saved' as const,
+      hasBeenSaved: true,
+    })),
+    introduction: profile.self_introduction,
+  };
+}
+
 const toRequestBody = (values: ProfileFormValues): UpsertTeamRecruitmentProfileRequest => ({
   profile_nickname: values.nickname.trim(),
   preferred_role: values.preferredRole.trim(),
@@ -72,11 +107,16 @@ const toRequestBody = (values: ProfileFormValues): UpsertTeamRecruitmentProfileR
   self_introduction: values.introduction.trim(),
 });
 
-export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
+interface ProfileFormBodyProps {
+  mode: TeamProfileFormMode;
+  defaultValues: ProfileFormValues;
+}
+
+// create/edit가 공유하는 실제 폼 UI·제출 로직. defaultValues는 호출부(생성은 빈 값, 수정은 서버에서
+// prefetch된 기존 프로필)가 이미 확정한 값을 그대로 받으므로, 여기서는 데이터 출처를 신경 쓰지 않는다.
+function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const router = useRouter();
-  const token = useTokenState();
   const { actionEventClick } = useLogger();
-  const { isAuthReady } = useTeamAuthGuard();
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
@@ -88,45 +128,10 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const [pendingValues, setPendingValues] = useState<ProfileFormValues | null>(null);
 
   const methods = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
     mode: 'onChange',
-    defaultValues: {
-      nickname: '',
-      department: '',
-      studentNumber: '',
-      preferredRole: '',
-      skills: [],
-      activities: [],
-      introduction: '',
-    },
+    defaultValues,
   });
-
-  const { data: existingProfile } = useQuery({
-    ...teamRecruitmentProfileQueries.me(token),
-    enabled: isEditMode && !!token,
-  });
-
-  useEffect(() => {
-    if (!existingProfile) return;
-
-    methods.reset({
-      nickname: existingProfile.profile_nickname,
-      department: existingProfile.department,
-      studentNumber: existingProfile.student_number,
-      preferredRole: existingProfile.preferred_role,
-      skills: existingProfile.skills.map((skill) => ({ value: skill })),
-      activities: existingProfile.activities.map((activity) => ({
-        id: String(activity.id),
-        title: activity.title,
-        startDate: activity.started_at,
-        endDate: activity.ended_at,
-        isOngoing: activity.is_ongoing,
-        content: activity.description,
-        status: 'saved',
-        hasBeenSaved: true,
-      })),
-      introduction: existingProfile.self_introduction,
-    });
-  }, [existingProfile, methods]);
 
   const { mutate: upsertProfile, isPending } = useUpsertTeamRecruitmentProfileMutation({
     onSuccess: () => {
@@ -151,14 +156,10 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   }, [isReady, currentStep, methods, goToFirstStep]);
 
   // 저장/수정 버튼은 검증만 통과시키고, 실제 upsert는 확인 모달에서 승인해야 실행된다.
+  // 작성 중인(draft) 활동 이력이 남아있으면 안 된다는 규칙은 profileFormSchema의 superRefine이 검증하므로,
+  // 이 콜백이 호출된 시점엔 이미 통과된 상태다.
   const handleRequestSubmit = methods.handleSubmit(
-    (values) => {
-      if (values.activities.some((activity) => activity.status === 'draft')) {
-        showToast('warning', '작성 중인 활동 이력을 완료해주세요.');
-        return;
-      }
-      setPendingValues(values);
-    },
+    (values) => setPendingValues(values),
     (errors) => {
       // 1단계 필드가 비어 있으면 에러가 화면에 보이지 않으므로 1단계로 되돌린다.
       if (errors.nickname || errors.department || errors.studentNumber) {
@@ -166,7 +167,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
         goToFirstStep();
         return;
       }
-      showToast('warning', '필수 항목을 모두 작성해주세요.');
+      showToast('warning', errors.activities?.message ?? '필수 항목을 모두 작성해주세요.');
     },
   );
 
@@ -184,14 +185,11 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   const handleCancelSubmit = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: `team_recruitment_profile_${LOG_MODE[mode]}_submit_cancel`,
       value: '취소하기',
     });
     setPendingValues(null);
   };
-
-  if (!isAuthReady) return null;
 
   return (
     <div className={styles.container}>
@@ -202,7 +200,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
         <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>
 
         <FormProvider {...methods}>
-          <Suspense fallback={<LoadingSpinner size="50px" />}>
+          <Suspense fallback={null}>
             {currentStep === '기본 정보' ? (
               <BasicInfoStep mode={mode} onNext={() => nextStep('지원서 작성')} />
             ) : (
@@ -228,5 +226,24 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
         />
       )}
     </div>
+  );
+}
+
+export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
+  const token = useTokenState();
+  const isEditMode = mode === 'edit';
+
+  // _app.tsx의 QueryClient는 SSR 중 모든 쿼리를 기본적으로 enabled:false로 끈다(전역 기본값).
+  // useSuspenseQuery는 enabled를 지원하지 않아 이 기본값을 개별적으로 못 덮어써서 서버에서 빈 데이터로
+  // 취급되므로, 여기서는 enabled를 명시할 수 있는 일반 useQuery를 쓴다. edit/index.tsx의
+  // getServerSideProps가 이미 이 쿼리를 prefetch+dehydrate해뒀으므로, 서버·클라이언트 모두 첫 렌더부터
+  // 캐시에서 동기적으로 값을 읽는다 — "빈 폼으로 시작했다가 나중에 채워지는" 창 자체가 없다.
+  const { data: existingProfile } = useQuery({
+    ...teamRecruitmentProfileQueries.me(token),
+    enabled: isEditMode && !!token,
+  });
+
+  return (
+    <ProfileFormBody mode={mode} defaultValues={isEditMode ? toDefaultValues(existingProfile ?? null) : EMPTY_DEFAULT_VALUES} />
   );
 }

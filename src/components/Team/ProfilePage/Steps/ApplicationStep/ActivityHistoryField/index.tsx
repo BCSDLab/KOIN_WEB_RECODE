@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
+import { savedActivitySchema } from 'components/Team/ProfilePage/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -84,24 +85,9 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
   const handleDone = (index: number) => {
     const activity = getValues(`activities.${index}`);
 
-    if (!activity.title.trim()) {
-      showToast('warning', '활동명을 작성해주세요.');
-      return;
-    }
-    if (!activity.content.trim()) {
-      showToast('warning', '활동 내용을 작성해주세요.');
-      return;
-    }
-    if (!activity.startDate) {
-      showToast('warning', '활동 시작일을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && !activity.endDate) {
-      showToast('warning', '활동 종료일을 선택하거나 진행 중을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && activity.endDate && activity.endDate < activity.startDate) {
-      showToast('warning', '활동 종료일은 시작일 이후로 선택해주세요.');
+    const result = savedActivitySchema.safeParse({ ...activity, status: 'saved' });
+    if (!result.success) {
+      showToast('warning', result.error.issues[0].message);
       return;
     }
 
