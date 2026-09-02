@@ -7,13 +7,13 @@ import {
   useUpsertTeamRecruitmentProfileMutation,
 } from 'api/teamRecruitmentProfile/queries';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
+import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import useProfileStep from './hooks/useProfileStep';
 import { profileFormSchema, type ProfileFormValues } from './schema';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
@@ -120,10 +120,12 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
-  const { currentStep, nextStep, goBack, isReady } = useProfileStep<ProfileStepTitle>(
+  const onExitFirstStep = useCallback(() => router.push(ROUTES.TeamProfile()), [router]);
+  const { currentStep, nextStep, goBack, isReady } = useTeamFormStep<ProfileStepTitle>(
     PROFILE_STEPS,
     '기본 정보',
     buildStepHref,
+    onExitFirstStep,
   );
   const [pendingValues, setPendingValues] = useState<ProfileFormValues | null>(null);
 

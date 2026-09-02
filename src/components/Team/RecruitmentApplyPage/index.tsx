@@ -11,7 +11,7 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import useApplyStep from 'components/Team/RecruitmentApplyPage/hooks/useApplyStep';
+import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import { createApplicationFormSchema } from 'components/Team/RecruitmentApplyPage/schema';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -59,11 +59,15 @@ export default function RecruitmentApplyPage() {
     (step: ApplyStepTitle) => ROUTES.TeamRecruitmentApply({ postId: String(postId), step }),
     [postId],
   );
-  const { currentStep, nextStep, goBack, isReady } = useApplyStep<ApplyStepTitle>(
+  const onExitFirstStep = useCallback(
+    () => router.push(ROUTES.TeamDetail({ postId: String(postId) })),
+    [router, postId],
+  );
+  const { currentStep, nextStep, goBack, isReady } = useTeamFormStep<ApplyStepTitle>(
     APPLY_STEPS,
     '기본 정보',
     buildStepHref,
-    String(postId),
+    onExitFirstStep,
   );
 
   const {
