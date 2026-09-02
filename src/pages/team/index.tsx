@@ -144,7 +144,7 @@ export default function TeamListPage() {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'team_recruitment_profile',
-      value: '내 프로필',
+      value: '프로필',
     });
 
     if (!token) {
