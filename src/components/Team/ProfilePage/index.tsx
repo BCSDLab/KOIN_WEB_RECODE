@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
@@ -120,7 +120,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const isEditMode = mode === 'edit';
   const buildStepHref = (step: ProfileStepTitle) =>
     isEditMode ? ROUTES.TeamProfileEdit({ step }) : ROUTES.TeamProfileCreate({ step });
-  const onExitFirstStep = useCallback(() => router.push(ROUTES.TeamProfile()), [router]);
+  const onExitFirstStep = () => router.push(ROUTES.TeamProfile());
   const { currentStep, nextStep, goBack, isReady } = useTeamFormStep<ProfileStepTitle>(
     PROFILE_STEPS,
     '기본 정보',
@@ -143,9 +143,9 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
     },
   });
 
-  const goToFirstStep = useCallback(() => {
+  const goToFirstStep = () => {
     nextStep('기본 정보', { replace: true });
-  }, [nextStep]);
+  };
 
   useEffect(() => {
     if (!isReady || currentStep !== '지원서 작성') return;
