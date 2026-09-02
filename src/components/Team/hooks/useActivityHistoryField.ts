@@ -79,12 +79,10 @@ export default function useActivityHistoryField(loggingTitle: ActivityHistoryLog
   const handleDone = (index: number) => {
     const activity = getValues(`activities.${index}`);
 
+    // 검증 순서(제목→날짜→내용)는 두 페이지 중 하나로 통일한 것. 순서에 따라 여러 필드가
+    // 비었을 때 어떤 경고 토스트가 먼저 뜨는지만 달라지고, 최종 검증 결과는 동일하다.
     if (!activity.title.trim()) {
       showToast('warning', '활동명을 작성해주세요.');
-      return;
-    }
-    if (!activity.content.trim()) {
-      showToast('warning', '활동 내용을 작성해주세요.');
       return;
     }
     if (!activity.startDate) {
@@ -97,6 +95,10 @@ export default function useActivityHistoryField(loggingTitle: ActivityHistoryLog
     }
     if (!activity.isOngoing && activity.endDate && activity.endDate < activity.startDate) {
       showToast('warning', '활동 종료일은 시작일 이후로 선택해주세요.');
+      return;
+    }
+    if (!activity.content.trim()) {
+      showToast('warning', '활동 내용을 작성해주세요.');
       return;
     }
 
