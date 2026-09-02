@@ -121,6 +121,12 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: '동아리',
         event_category: 'click',
       },
+      '팀원 모집': {
+        team: 'CAMPUS',
+        event_label: 'header',
+        value: '팀원 모집',
+        event_category: 'click',
+      },
     };
 
     if (loggingMap[title]) {

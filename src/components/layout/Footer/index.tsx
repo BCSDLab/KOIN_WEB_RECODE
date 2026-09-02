@@ -41,6 +41,7 @@ function Footer() {
       '코인 사장님': { team: 'BUSINESS', event_label: 'footer', value: '코인 사장님' },
       쪽지: { team: 'CAMPUS', event_label: 'footer', value: '쪽지' },
       동아리: { team: 'CAMPUS', event_label: 'footer', value: '동아리' },
+      '팀원 모집': { team: 'CAMPUS', event_label: 'footer', value: '팀원 모집' },
     };
 
     if (loggingMap[title]) {
