@@ -8,6 +8,14 @@
   }
 }
 
+.desktopOnly {
+  @include media.desktop-only;
+}
+
+.mobileOnly {
+  @include media.mobile-only;
+}
+
 .header {
   background: #f8f8fa;
 }

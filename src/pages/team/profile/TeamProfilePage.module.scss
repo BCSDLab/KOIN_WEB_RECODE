@@ -1,0 +1,9 @@
+@use "utils/scss/media.scss" as media;
+
+.desktopOnly {
+  @include media.desktop-only;
+}
+
+.mobileOnly {
+  @include media.mobile-only;
+}

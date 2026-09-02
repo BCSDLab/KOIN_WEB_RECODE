@@ -11,3 +11,22 @@ $media: (
     }
   }
 }
+
+// 데스크톱/모바일용 컴포넌트를 모두 렌더한 뒤 이 믹스인으로 하나만 숨긴다.
+// 서버가 기기를 몰라도(SSR 없이도) 첫 렌더부터 최종 레이아웃과 같으므로,
+// JS로 기기를 판정해 컴포넌트 트리를 통째로 스왑할 때 생기는 CLS를 피할 수 있다.
+@mixin desktop-only {
+  display: block;
+
+  @include media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+@mixin mobile-only {
+  display: none;
+
+  @include media-breakpoint(mobile) {
+    display: block;
+  }
+}
