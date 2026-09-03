@@ -175,7 +175,7 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
     if (!pendingValues) return;
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'result',
+      event_category: mode === 'create' ? 'click' : 'result',
       event_label: `team_recruitment_profile_${PROFILE_LOG_MODE[mode]}_submit_confirm`,
       value: MODE_TEXT[mode].confirmLabel,
     });
