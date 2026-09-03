@@ -28,11 +28,19 @@ import styles from './CategoryPage.module.scss';
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 type CategoryLoggingTeam = 'USER' | 'CAMPUS' | 'BUSINESS';
 type CategoryEventLabel =
+  | 'category_team_recruitment'
+  | 'category_lost_and_found'
+  | 'category_facility'
+  | 'category_department'
+  | 'category_dining'
+  | 'category_nearby_store'
   | 'category_timetable'
-  | 'category_lost_property'
-  | 'category_campus'
+  | 'category_bus_timetable'
   | 'category_transportation'
-  | 'category_etc';
+  | 'category_callvan_recruitment'
+  | 'category_chat'
+  | 'category_room'
+  | 'category_koin_for_business';
 
 interface CategoryLogging {
   team: CategoryLoggingTeam;
@@ -60,9 +68,8 @@ const quickMenus: CategoryItem[] = [
     href: ROUTES.Team(),
     Icon: TeamIcon,
     logging: {
-      // TODO: 퀵카드로 승격되면서 전용 event_label이 필요함 - Notion 로깅 스펙 확인 후 교체
       team: 'CAMPUS',
-      event_label: 'category_etc',
+      event_label: 'category_team_recruitment',
       value: '팀원 모집',
     },
   },
@@ -73,7 +80,7 @@ const quickMenus: CategoryItem[] = [
     Icon: DeliveryBoxIcon,
     logging: {
       team: 'CAMPUS',
-      event_label: 'category_lost_property',
+      event_label: 'category_lost_and_found',
       value: '분실물',
     },
   },
@@ -89,7 +96,7 @@ const sections: CategorySection[] = [
         Icon: PermanentJobIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_campus',
+          event_label: 'category_facility',
           value: '교내 시설물 정보',
         },
       },
@@ -99,8 +106,8 @@ const sections: CategorySection[] = [
         Icon: InfoIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_campus',
-          value: '학교 부서정보',
+          event_label: 'category_department',
+          value: '학교 부서 정보',
         },
       },
       {
@@ -109,7 +116,7 @@ const sections: CategorySection[] = [
         Icon: DishIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_campus',
+          event_label: 'category_dining',
           value: '식단',
         },
       },
@@ -119,7 +126,7 @@ const sections: CategorySection[] = [
         Icon: StoreIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_campus',
+          event_label: 'category_nearby_store',
           value: '주변상점',
         },
       },
@@ -129,7 +136,7 @@ const sections: CategorySection[] = [
         Icon: CalendarIcon,
         logging: {
           team: 'USER',
-          event_label: 'category_campus',
+          event_label: 'category_timetable',
           value: '시간표',
         },
       },
@@ -144,7 +151,7 @@ const sections: CategorySection[] = [
         Icon: BusTimeIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_transportation',
+          event_label: 'category_bus_timetable',
           value: '버스 시간표',
         },
       },
@@ -164,7 +171,7 @@ const sections: CategorySection[] = [
         Icon: UserAddIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_transportation',
+          event_label: 'category_callvan_recruitment',
           value: '콜밴팟 모집',
         },
       },
@@ -179,7 +186,7 @@ const sections: CategorySection[] = [
         Icon: ChatIcon,
         logging: {
           team: 'CAMPUS',
-          event_label: 'category_etc',
+          event_label: 'category_chat',
           value: '채팅',
         },
       },
@@ -189,7 +196,7 @@ const sections: CategorySection[] = [
         Icon: HomeIcon,
         logging: {
           team: 'BUSINESS',
-          event_label: 'category_etc',
+          event_label: 'category_room',
           value: '복덕방',
         },
       },
@@ -199,7 +206,7 @@ const sections: CategorySection[] = [
         Icon: BriefcaseIcon,
         logging: {
           team: 'BUSINESS',
-          event_label: 'category_etc',
+          event_label: 'category_koin_for_business',
           value: '코인 for Business',
         },
       },
