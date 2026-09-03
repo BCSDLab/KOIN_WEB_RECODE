@@ -34,7 +34,6 @@ interface ActivityHistoryLoggingTitle {
 
 let activitySequence = 0;
 
-// crypto.randomUUID는 보안 컨텍스트가 아니면 undefined라 개발/스테이징 http 환경에서 터진다.
 const createActivityId = () => {
   activitySequence += 1;
   return `activity-${Date.now()}-${activitySequence}`;
