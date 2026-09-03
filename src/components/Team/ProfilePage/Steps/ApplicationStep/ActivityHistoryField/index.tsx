@@ -29,11 +29,11 @@ const LOGGING_TITLE: Record<TeamProfileFormMode, { ADD: string; EDIT: string; NE
 export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps) {
   const loggingTitle = LOGGING_TITLE[mode];
 
-  // saved로 확정하기 전 검증은 ProfilePage 전체와 같은 스키마(savedActivitySchema)를 재사용한다 —
-  // 폼 제출 시 검증과 "완료" 버튼 검증이 서로 다른 기준을 갖지 않도록.
   const validateActivity = (activity: ActivityValue) => {
     const result = savedActivitySchema.safeParse({ ...activity, status: 'saved' });
-    return result.success ? { success: true as const } : { success: false as const, message: result.error.issues[0].message };
+    return result.success
+      ? { success: true as const }
+      : { success: false as const, message: result.error.issues[0].message };
   };
 
   const {

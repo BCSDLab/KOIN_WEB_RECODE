@@ -14,11 +14,11 @@ const LOGGING_TITLE = {
   DONE: 'team_recruitment_apply_activity_modify_complete',
 };
 
-// saved로 확정하기 전 검증은 지원서 스키마와 같은 규칙(savedApplyActivitySchema)을 재사용한다 —
-// 폼 제출 시 검증과 "완료" 버튼 검증이 서로 다른 기준을 갖지 않도록.
 const validateActivity = (activity: ActivityValue) => {
   const result = savedApplyActivitySchema.safeParse({ ...activity, status: 'saved' });
-  return result.success ? { success: true as const } : { success: false as const, message: result.error.issues[0].message };
+  return result.success
+    ? { success: true as const }
+    : { success: false as const, message: result.error.issues[0].message };
 };
 
 export default function ActivityHistoryField() {

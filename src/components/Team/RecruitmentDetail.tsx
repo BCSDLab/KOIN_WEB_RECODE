@@ -31,9 +31,6 @@ interface PrimaryAction {
   label: string;
 }
 
-// 우선순위 순서대로 평가한다 — 먼저 맞는 조건이 이긴다. 조건마다 서로 다른 필드(상태/권한/차단사유)가
-// 겹쳐서 하나의 결과로 수렴하므로(예: '지원하기'는 can_apply나 PROFILE_REQUIRED 둘 중 하나면 됨),
-// 이 겹치는 관계가 그대로 드러나는 if-early-return이 lookup map/규칙 배열보다 정직하다.
 const getPrimaryAction = (recruitment: TeamRecruitmentDetailResponse): PrimaryAction => {
   if (recruitment.is_author || recruitment.can_manage_applicants) {
     return { type: 'manage', label: '지원자 확인하기' };

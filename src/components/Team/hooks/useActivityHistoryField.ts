@@ -55,10 +55,10 @@ export default function useActivityHistoryField(
   const handleAppend = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.ADD,
       value: '활동 이력 추가',
     });
+
     append({
       id: createActivityId(),
       title: '',
