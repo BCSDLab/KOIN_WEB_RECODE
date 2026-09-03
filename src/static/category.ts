@@ -19,7 +19,8 @@ export type SubmenuTitle =
   | '리뷰 수정하기'
   | '리뷰 신고하기'
   | '전화 주문 혜택'
-  | '쪽지';
+  | '쪽지'
+  | '팀원 모집';
 
 export interface Submenu {
   title: SubmenuTitle;
@@ -143,6 +144,13 @@ export const CATEGORY: Category[] = [
         title: '쪽지',
         link: ROUTES.LostItemChat(),
         newFlag: false,
+        planFlag: false,
+        tag: null,
+      },
+      {
+        title: '팀원 모집',
+        link: ROUTES.Team(),
+        newFlag: true,
         planFlag: false,
         tag: null,
       },
