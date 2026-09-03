@@ -54,13 +54,7 @@ const INITIAL_FILTER: TeamRecruitmentFilter = {
   categories: [],
 };
 
-/**
- * 서버와 클라이언트가 동일한 쿼리 키를 만들도록 요청 파라미터를 한 곳에서 생성한다.
- *
- * `undefined` 값은 넣지 않고 키 자체를 생략한다. `getServerSideProps`가 반환하는 props는
- * JSON 직렬화가 가능해야 하는데, dehydrate된 쿼리 키에 `undefined`가 들어 있으면
- * Next.js가 "`undefined` cannot be serialized as JSON" 런타임 에러를 낸다.
- */
+// SSR 직렬화 오류를 막고 쿼리 키를 일치시키기 위해 undefined 값을 제외한다.
 const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): TeamRecruitmentInfiniteListRequest => ({
   status: filter.status,
   categories: filter.categories,
@@ -144,7 +138,7 @@ export default function TeamListPage() {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'team_recruitment_profile',
-      value: '내 프로필',
+      value: '프로필',
     });
 
     if (!token) {
