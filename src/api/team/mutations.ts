@@ -75,10 +75,12 @@ export const teamMutations = {
     mutationOptions({
       mutationFn: (data: TeamChatMessageSendRequest) =>
         sendTeamRecruitmentChatMessage(token, recruitmentId, chatRoomId, data),
-      onSuccess: () =>
+      onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: teamQueryKeys.chatMessagesRoot(token, recruitmentId, chatRoomId),
-        }),
+        });
+        queryClient.invalidateQueries({ queryKey: teamQueryKeys.chatRoomList(token) });
+      },
     }),
 
   createDirectChatRoom: (token: string, recruitmentId: number) =>

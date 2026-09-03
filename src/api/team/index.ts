@@ -9,6 +9,7 @@ import {
   GetTeamRecruitmentDetail,
   GetTeamRecruitmentChatMessages,
   GetTeamRecruitmentChatRoom,
+  GetTeamRecruitmentChatRoomList,
   GetTeamRecruitmentApplicants,
   GetTeamRecruitmentList,
   GetTeamRecruitmentNotifications,
@@ -37,6 +38,7 @@ export const markTeamRecruitmentNotificationRead = APIClient.of(PostTeamRecruitm
 export const markAllTeamRecruitmentNotificationsRead = APIClient.of(PostTeamRecruitmentNotificationsMarkAllRead);
 export const deleteAllTeamRecruitmentNotifications = APIClient.of(DeleteTeamRecruitmentNotifications);
 export const getTeamRecruitmentChatRoom = APIClient.of(GetTeamRecruitmentChatRoom);
+export const getTeamRecruitmentChatRoomList = APIClient.of(GetTeamRecruitmentChatRoomList);
 export const getTeamRecruitmentChatMessages = APIClient.of(GetTeamRecruitmentChatMessages);
 export const sendTeamRecruitmentChatMessage = APIClient.of(PostTeamRecruitmentChatMessage);
 export const createTeamRecruitmentDirectChatRoom = APIClient.of(PostTeamRecruitmentDirectChatRoom);
