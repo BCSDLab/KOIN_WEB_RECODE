@@ -1,6 +1,7 @@
 import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
 import TagInput from 'components/Team/ProfilePage/components/TagInput';
+import { PROFILE_LOG_MODE } from 'components/Team/ProfilePage/constants';
 import { PROFILE_STEPS, type ProfileFormValues, type TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -15,14 +16,11 @@ interface ApplicationStepProps {
   submitLabel: string;
 }
 
-// Notion 로깅 명세의 event_label이 'edit'가 아닌 'modify'를 쓴다.
-const LOG_MODE: Record<TeamProfileFormMode, 'create' | 'modify'> = { create: 'create', edit: 'modify' };
-
 export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, submitLabel }: ApplicationStepProps) {
   const { actionEventClick } = useLogger();
   const { control, register } = useFormContext<ProfileFormValues>();
   const { errors } = useFormState({ control });
-  const logMode = LOG_MODE[mode];
+  const logMode = PROFILE_LOG_MODE[mode];
 
   const preferredRole = useWatch({ control, name: 'preferredRole' }) ?? '';
   const introduction = useWatch({ control, name: 'introduction' }) ?? '';
