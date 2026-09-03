@@ -14,6 +14,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+import { PROFILE_LOG_MODE } from './constants';
 import { profileFormSchema, type ProfileFormValues } from './schema';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
@@ -56,8 +57,6 @@ const MODE_TEXT: Record<
     successMessage: '프로필이 수정되었습니다.',
   },
 };
-
-const LOG_MODE: Record<TeamProfileFormMode, 'create' | 'modify'> = { create: 'create', edit: 'modify' };
 
 const EMPTY_DEFAULT_VALUES: ProfileFormValues = {
   nickname: '',
@@ -177,8 +176,8 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
     if (!pendingValues) return;
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'result',
-      event_label: `team_recruitment_profile_${LOG_MODE[mode]}_submit_confirm`,
+      event_category: mode === 'create' ? 'click' : 'result',
+      event_label: `team_recruitment_profile_${PROFILE_LOG_MODE[mode]}_submit_confirm`,
       value: MODE_TEXT[mode].confirmLabel,
     });
     upsertProfile(toRequestBody(pendingValues));
@@ -187,7 +186,8 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const handleCancelSubmit = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_label: `team_recruitment_profile_${LOG_MODE[mode]}_submit_cancel`,
+      event_category: 'click',
+      event_label: `team_recruitment_profile_${PROFILE_LOG_MODE[mode]}_submit_cancel`,
       value: '취소하기',
     });
     setPendingValues(null);
