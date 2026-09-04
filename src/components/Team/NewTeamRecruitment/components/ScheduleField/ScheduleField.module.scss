@@ -38,6 +38,13 @@
     display: flex;
     align-items: center;
     gap: 20px;
+
+    @include media.media-breakpoint(mobile) {
+      > .schedule__date {
+        flex: 1;
+        width: auto;
+      }
+    }
   }
 
   &__separator {
@@ -60,7 +67,7 @@
 
     @include media.media-breakpoint(mobile) {
       flex: none;
-      width: 147px;
+      width: calc((100% - 45px) / 2);
       height: 35px;
       border: 1px solid transparent;
       border-radius: 16px;
