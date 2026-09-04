@@ -14,6 +14,7 @@ import {
   TeamChatMessageListRequest,
   TeamChatMessageListResponse,
   TeamChatMessageSendRequest,
+  TeamChatRoomListResponse,
   TeamChatRoomResponse,
   TeamRecruitmentApplicantListRequest,
   TeamRecruitmentApplicantListResponse,
@@ -284,6 +285,18 @@ export class GetTeamRecruitmentChatRoom<R extends TeamChatRoomResponse> implemen
   ) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}`;
   }
+}
+
+export class GetTeamRecruitmentChatRoomList<R extends TeamChatRoomListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/chatroom/team-recruitment';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
 }
 
 export class GetTeamRecruitmentChatMessages<R extends TeamChatMessageListResponse> implements APIRequest<R> {

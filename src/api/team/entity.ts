@@ -193,6 +193,23 @@ export type TeamChatRoomType = 'TEAM' | 'DIRECT';
 
 export type TeamChatRoomStatus = 'ACTIVE' | 'READ_ONLY';
 
+export interface TeamChatRoomListItem {
+  recruitment_id: number;
+  chat_room_id: number;
+  room_name: string;
+  room_type: TeamChatRoomType;
+  status: TeamChatRoomStatus;
+  counterpart_id: number | null;
+  counterpart_nickname: string | null;
+  last_message_id: number | null;
+  last_message_content: string | null;
+  last_message_at: string | null;
+  last_message_is_image: boolean | null;
+  unread_message_count: number;
+}
+
+export type TeamChatRoomListResponse = TeamChatRoomListItem[];
+
 export interface TeamChatCounterpart {
   id: number;
   nickname: string;

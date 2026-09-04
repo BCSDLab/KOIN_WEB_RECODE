@@ -15,6 +15,7 @@ import {
   getTeamRecruitmentApplicantDetail,
   getTeamRecruitmentChatMessages,
   getTeamRecruitmentChatRoom,
+  getTeamRecruitmentChatRoomList,
   getTeamRecruitmentApplicants,
   getTeamRecruitmentDetail,
   getTeamRecruitmentList,
@@ -28,7 +29,7 @@ const TEAM_MY_CREATED_LIMIT = 10;
 
 export const TEAM_CHAT_MESSAGE_LIMIT = 100;
 
-export const TEAM_CHAT_POLLING_INTERVAL = 3000;
+export const TEAM_CHAT_POLLING_INTERVAL = 1000;
 
 type TeamViewerScope = 'guest' | 'auth';
 
@@ -60,6 +61,7 @@ export const teamQueryKeys = {
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
     [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
   chatRoot: ['team', 'chat'] as const,
+  chatRoomList: (token: string) => [...teamQueryKeys.chatRoot, 'rooms', token] as const,
   chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
     [...teamQueryKeys.chatRoot, 'room', token, recruitmentId, chatRoomId] as const,
   chatMessagesRoot: (token: string, recruitmentId: number, chatRoomId: number) =>
@@ -151,6 +153,14 @@ export const teamQueries = {
 
         return undefined;
       },
+    }),
+
+  chatRoomList: (token: string) =>
+    queryOptions({
+      queryKey: teamQueryKeys.chatRoomList(token),
+      queryFn: () => getTeamRecruitmentChatRoomList(token),
+      staleTime: 0,
+      refetchInterval: TEAM_CHAT_POLLING_INTERVAL,
     }),
 
   chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
