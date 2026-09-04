@@ -29,7 +29,7 @@ const TEAM_MY_CREATED_LIMIT = 10;
 
 export const TEAM_CHAT_MESSAGE_LIMIT = 100;
 
-export const TEAM_CHAT_POLLING_INTERVAL = 3000;
+export const TEAM_CHAT_POLLING_INTERVAL = 1000;
 
 type TeamViewerScope = 'guest' | 'auth';
 
