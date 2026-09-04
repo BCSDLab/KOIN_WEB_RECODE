@@ -43,6 +43,7 @@
   }
 
   &__right-action {
+    position: relative;
     display: flex;
     justify-self: end;
     width: max-content;

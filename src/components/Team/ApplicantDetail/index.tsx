@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
-import NotificationIcon from 'assets/svg/Team/notification.svg';
-import ThreeDotsIcon from 'assets/svg/Team/three-dots.svg';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
@@ -147,16 +145,7 @@ export default function ApplicantDetail() {
   return (
     <>
       <div className={styles.mobileHeader}>
-        <SubPageHeader
-          title="지원자 상세"
-          className={styles.header}
-          rightAction={
-            <div className={styles.header__actions}>
-              <NotificationIcon aria-hidden />
-              <ThreeDotsIcon aria-hidden />
-            </div>
-          }
-        />
+        <SubPageHeader title="지원자 상세" className={styles.header} />
       </div>
 
       <div className={styles.page}>

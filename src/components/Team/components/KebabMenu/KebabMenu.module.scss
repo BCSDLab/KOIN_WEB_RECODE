@@ -26,11 +26,12 @@
   &__dropdown {
     position: absolute;
     top: 100%;
-    right: 24px;
+    right: 0;
     z-index: 99;
     display: flex;
     flex-direction: column;
-    width: 105px;
+    width: max-content;
+    min-width: 105px;
     padding: 0 4px;
     box-sizing: border-box;
     border-radius: 8px;
@@ -41,7 +42,6 @@
   }
 
   &__item {
-    width: 100%;
     padding: 8px 12px;
     color: #000;
     font-size: 12px;
@@ -50,7 +50,7 @@
     white-space: nowrap;
 
     & + & {
-      border-top: 0.5px solid #eee;
+      border-top: 1px solid #eee;
     }
 
     &--danger {
