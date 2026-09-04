@@ -4,8 +4,8 @@ import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
-import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
+import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import WebChatIcon from 'assets/svg/Team/web_chat.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
@@ -30,7 +30,7 @@ const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
 const getChatRoomPreview = (room: TeamChatRoomListItem) => {
-  if (!room.last_message_id) return '아직 대화가 없습니다.';
+  if (!room.last_message_id) return '';
   if (room.last_message_is_image) return '사진을 보냈습니다.';
   return room.last_message_content ?? '';
 };
@@ -198,7 +198,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
           {memberCount}
         </div>
         <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
-          {mergedMessages.length === 0 && <p className={styles.chatRoom__empty}>아직 대화가 없습니다.</p>}
           {messageGroups.map((group) => (
             <div key={group.date}>
               <div className={styles.chatRoom__dateChip}>
