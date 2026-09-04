@@ -26,6 +26,10 @@ interface TeamChatRoomProps {
   chatRoomId: number;
 }
 
+interface ChatRoomSidebarListProps extends TeamChatRoomProps {
+  chatRooms: TeamChatRoomListItem[];
+}
+
 const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
@@ -33,6 +37,44 @@ const getChatRoomPreview = (room: TeamChatRoomListItem) => {
   if (room.last_message_is_image) return '사진을 보냈습니다.';
   return room.last_message_content ?? '';
 };
+
+function ChatRoomSidebarList({ chatRooms, recruitmentId, chatRoomId }: ChatRoomSidebarListProps) {
+  if (chatRooms.length === 0) {
+    return <p className={styles.chat__empty}>채팅방이 없습니다.</p>;
+  }
+
+  return chatRooms.map((room) => {
+    const isCurrentRoom = room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId;
+    const preview = getChatRoomPreview(room);
+
+    return (
+      <Link
+        key={`${room.recruitment_id}-${room.chat_room_id}`}
+        href={ROUTES.TeamChat({ recruitmentId: String(room.recruitment_id), chatRoomId: String(room.chat_room_id) })}
+        className={cn({ [styles.chat__roomItem]: true, [styles['chat__roomItem--active']]: isCurrentRoom })}
+        aria-current={isCurrentRoom ? 'page' : undefined}
+      >
+        <span className={styles.chat__roomAvatar} aria-hidden="true">
+          <DefaultPhotoIcon />
+        </span>
+        <span className={styles.chat__roomContent}>
+          <span className={styles.chat__roomHeader}>
+            <span className={styles.chat__roomName}>{room.room_name}</span>
+            {room.last_message_at && (
+              <span className={styles.chat__roomTime}>{formatChatRoomListTime(room.last_message_at)}</span>
+            )}
+          </span>
+          <span className={styles.chat__roomPreviewRow}>
+            <span className={styles.chat__roomPreview}>{preview}</span>
+            {room.unread_message_count > 0 && (
+              <span className={styles.chat__unreadCount}>{room.unread_message_count}</span>
+            )}
+          </span>
+        </span>
+      </Link>
+    );
+  });
+}
 
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {
   const token = useTokenState();
@@ -148,44 +190,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   return (
     <div className={styles.chat}>
       <aside className={styles.chat__sidebar} aria-label="채팅방 목록">
-        {chatRooms.length === 0 && <p className={styles.chat__empty}>채팅방이 없습니다.</p>}
-        {chatRooms.map((room) => {
-          const isCurrentRoom = room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId;
-          const preview = getChatRoomPreview(room);
-
-          return (
-            <Link
-              key={`${room.recruitment_id}-${room.chat_room_id}`}
-              href={ROUTES.TeamChat({
-                recruitmentId: String(room.recruitment_id),
-                chatRoomId: String(room.chat_room_id),
-              })}
-              className={cn({
-                [styles.chat__roomItem]: true,
-                [styles['chat__roomItem--active']]: isCurrentRoom,
-              })}
-              aria-current={isCurrentRoom ? 'page' : undefined}
-            >
-              <span className={styles.chat__roomAvatar} aria-hidden="true">
-                <DefaultPhotoIcon />
-              </span>
-              <span className={styles.chat__roomContent}>
-                <span className={styles.chat__roomHeader}>
-                  <span className={styles.chat__roomName}>{room.room_name}</span>
-                  {room.last_message_at && (
-                    <span className={styles.chat__roomTime}>{formatChatRoomListTime(room.last_message_at)}</span>
-                  )}
-                </span>
-                <span className={styles.chat__roomPreviewRow}>
-                  <span className={styles.chat__roomPreview}>{preview}</span>
-                  {room.unread_message_count > 0 && (
-                    <span className={styles.chat__unreadCount}>{room.unread_message_count}</span>
-                  )}
-                </span>
-              </span>
-            </Link>
-          );
-        })}
+        <ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />
       </aside>
 
       <section className={styles.chatRoom}>
