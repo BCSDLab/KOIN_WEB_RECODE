@@ -30,7 +30,6 @@ const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
 const getChatRoomPreview = (room: TeamChatRoomListItem) => {
-  if (!room.last_message_id) return '';
   if (room.last_message_is_image) return '사진을 보냈습니다.';
   return room.last_message_content ?? '';
 };
