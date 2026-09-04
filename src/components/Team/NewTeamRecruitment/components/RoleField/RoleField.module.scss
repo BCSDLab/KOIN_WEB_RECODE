@@ -148,12 +148,9 @@
     align-items: center;
     gap: 20px;
 
-    @include media.media-breakpoint(mobile) {
-      gap: 8px;
-    }
-
     &-name {
       flex: 0 1 692px;
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: 8px;
