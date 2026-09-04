@@ -1,3 +1,4 @@
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SubmitConfirmModal.module.scss';
@@ -19,12 +20,24 @@ export default function SubmitConfirmModal({
   onConfirm,
   onCancel,
 }: SubmitConfirmModalProps) {
+  const isMobile = useMediaQuery();
   const handleDismiss = () => {
     if (!isSubmitting) onCancel();
   };
 
   const { containerRef, backgroundRef } = useOutsideClick({ onOutsideClick: handleDismiss });
   useEscapeKeyDown({ onEscape: handleDismiss });
+
+  const cancelButton = (
+    <button type="button" className={styles.modal__cancel} onClick={onCancel} disabled={isSubmitting}>
+      취소하기
+    </button>
+  );
+  const confirmButton = (
+    <button type="button" className={styles.modal__confirm} onClick={onConfirm} disabled={isSubmitting}>
+      {confirmLabel}
+    </button>
+  );
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -34,12 +47,8 @@ export default function SubmitConfirmModal({
           {description && <p className={styles.modal__description}>{description}</p>}
         </div>
         <div className={styles.modal__buttons}>
-          <button type="button" className={styles.modal__cancel} onClick={onCancel} disabled={isSubmitting}>
-            취소하기
-          </button>
-          <button type="button" className={styles.modal__confirm} onClick={onConfirm} disabled={isSubmitting}>
-            {confirmLabel}
-          </button>
+          {isMobile ? cancelButton : confirmButton}
+          {isMobile ? confirmButton : cancelButton}
         </div>
       </div>
     </div>

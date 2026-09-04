@@ -30,7 +30,7 @@
   @include media.media-breakpoint(mobile) {
     gap: 24px;
     justify-content: center;
-    width: 311px;
+    width: 301px;
     padding: 24px 32px;
     border-radius: 8px;
     box-shadow: none;
@@ -88,12 +88,16 @@
     @include media.media-breakpoint(mobile) {
       flex-direction: row;
       align-items: flex-start;
+
+      > button {
+        flex: none;
+        width: calc((100% - 8px) / 2);
+      }
     }
   }
 
   &__cancel {
     box-sizing: border-box;
-    order: 2;
     padding: 4px 12px;
     border: none;
     border-radius: 4px;
@@ -109,8 +113,6 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      order: 0;
-      flex: 1;
       height: 44px;
       border: 1px solid #8e8e8e;
       border-radius: 8px;
@@ -123,7 +125,6 @@
 
   &__confirm {
     box-sizing: border-box;
-    order: 1;
     width: 100%;
     height: 50px;
     border: none;
@@ -141,9 +142,6 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      order: 0;
-      flex: 1;
-      width: auto;
       height: 44px;
       border-radius: 8px;
       background: #b611f5;

@@ -28,7 +28,7 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
   };
 
   return (
-    <>
+    <div className={styles.menu}>
       <button
         ref={triggerRef}
         type="button"
@@ -63,6 +63,6 @@ export default function OwnerActionMenu({ onEdit, onDelete }: OwnerActionMenuPro
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
