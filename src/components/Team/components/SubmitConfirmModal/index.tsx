@@ -38,6 +38,7 @@ export default function SubmitConfirmModal({
       {confirmLabel}
     </button>
   );
+  const [firstButton, secondButton] = isMobile ? [cancelButton, confirmButton] : [confirmButton, cancelButton];
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -47,8 +48,8 @@ export default function SubmitConfirmModal({
           {description && <p className={styles.modal__description}>{description}</p>}
         </div>
         <div className={styles.modal__buttons}>
-          {isMobile ? cancelButton : confirmButton}
-          {isMobile ? confirmButton : cancelButton}
+          {firstButton}
+          {secondButton}
         </div>
       </div>
     </div>
