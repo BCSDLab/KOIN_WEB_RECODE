@@ -53,19 +53,12 @@ export const teamRecruitmentFormSchema = z
     if (!data.deadlineDate) {
       ctx.addIssue({ code: 'custom', path: ['deadlineDate'], message: '마감일을 선택해주세요.' });
     }
-    if (data.activityStartDate && data.activityEndDate && data.deadlineDate) {
+    if (data.activityStartDate && data.activityEndDate) {
       if (data.activityEndDate.getTime() < data.activityStartDate.getTime()) {
         ctx.addIssue({
           code: 'custom',
           path: ['activityEndDate'],
           message: '활동 종료일은 시작일 이후여야 합니다.',
-        });
-      }
-      if (data.deadlineDate.getTime() > data.activityStartDate.getTime()) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['deadlineDate'],
-          message: '마감일은 활동 시작일 이전이어야 합니다.',
         });
       }
     }
