@@ -41,12 +41,8 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     useAcademicInfoStep(LOGGING_TITLE, onNext);
 
   const handleNext = async () => {
-    const activities = getValues('activities');
-    if (activities.some((activity) => activity.status === 'draft')) {
-      showToast('warning', '작성 중인 활동 이력을 완료해주세요.');
-      return;
-    }
-
+    // 작성 중인(draft) 활동 이력이 남아있으면 안 된다는 규칙은 스키마의 superRefine이 검증하므로,
+    // 여기서는 trigger 결과만 보면 된다.
     const isValid = await trigger([
       'nickname',
       'department',
@@ -57,7 +53,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
       'introduction',
     ]);
     if (!isValid) {
-      showToast('warning', '필수 항목을 모두 작성해주세요.');
+      showToast('warning', errors.activities?.message ?? '필수 항목을 모두 작성해주세요.');
       return;
     }
 

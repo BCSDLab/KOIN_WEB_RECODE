@@ -10,7 +10,6 @@ import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import MyCreatedPostFilterPanel from 'components/Team/components/MyCreatedPostFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
@@ -18,9 +17,7 @@ import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import type {
@@ -48,7 +45,6 @@ function CreatedPostsListSection({
 }: CreatedPostsListSectionProps) {
   const logger = useLogger();
   const token = useTokenState();
-  const isMobile = useMediaQuery();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
     teamQueries.infiniteMyCreated(token, requestParams),
   );
@@ -121,55 +117,55 @@ function CreatedPostsListSection({
 
               // 데스크탑은 뱃지와 같은 상단 행에 관리 버튼·채팅 버튼을 함께 배치하고(rightSlot),
               // 모바일은 채팅 버튼만 상단에 두고 관리 버튼은 카드 하단 별도 행(actionSlot)에 배치한다.
+              // 둘 다 항상 렌더하고 CSS로만 하나를 숨겨, 기기 판정에 따라 컴포넌트가 스왑되며 생기는 CLS를 피한다.
               return (
                 <RecruitmentCard
                   key={recruitment.id}
                   recruitment={recruitment}
                   rightSlot={
-                    isMobile ? (
-                      chatButton
-                    ) : (
-                      <div className={styles.desktopActions}>
-                        <button
-                          type="button"
-                          className={styles.desktopActionButton}
-                          onClick={handleApplicantClick(recruitment)}
-                        >
-                          지원자 관리
-                        </button>
-
-                        {recruitment.can_close && (
+                    <>
+                      <div className={styles.mobileOnly}>{chatButton}</div>
+                      <div className={styles.desktopOnly}>
+                        <div className={styles.desktopActions}>
                           <button
                             type="button"
                             className={styles.desktopActionButton}
-                            onClick={handleCloseClick(recruitment)}
+                            onClick={handleApplicantClick(recruitment)}
                           >
-                            모집마감
+                            지원자 관리
                           </button>
-                        )}
 
-                        {chatButton}
+                          {recruitment.can_close && (
+                            <button
+                              type="button"
+                              className={styles.desktopActionButton}
+                              onClick={handleCloseClick(recruitment)}
+                            >
+                              모집마감
+                            </button>
+                          )}
+
+                          {chatButton}
+                        </div>
                       </div>
-                    )
+                    </>
                   }
                   actionSlot={
-                    isMobile && (
-                      <>
-                        <button
-                          type="button"
-                          className={styles.actionButton}
-                          onClick={handleApplicantClick(recruitment)}
-                        >
-                          지원자 관리
-                        </button>
+                    <div className={styles.mobileOnly}>
+                      <button
+                        type="button"
+                        className={styles.actionButton}
+                        onClick={handleApplicantClick(recruitment)}
+                      >
+                        지원자 관리
+                      </button>
 
-                        {recruitment.can_close && (
-                          <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
-                            모집 마감
-                          </button>
-                        )}
-                      </>
-                    )
+                      {recruitment.can_close && (
+                        <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
+                          모집 마감
+                        </button>
+                      )}
+                    </div>
                   }
                 />
               );
@@ -187,7 +183,6 @@ export default function MyCreatedPostsPage() {
   const logger = useLogger();
   const router = useRouter();
   const token = useTokenState();
-  const mounted = useMount();
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
@@ -200,10 +195,6 @@ export default function MyCreatedPostsPage() {
   const { mutate: closeRecruitment, isPending: isClosing } = useMutation(
     teamMutations.closeRecruitment(queryClient, token),
   );
-
-  // 인증 확인 전 렌더를 막는다: useAuthGuard의 리다이렉트는 useEffect에서 일어나므로
-  // requireAuth만으로는 첫 렌더에서 CreatedPostsListSection의 API 요청(빈 토큰)을 막지 못한다.
-  if (!mounted || !token) return null;
 
   const handleApplyFilter = (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => {
     setRequestParams(filter);
@@ -293,7 +284,7 @@ export default function MyCreatedPostsPage() {
           <h1 className={styles.title}>내가 작성한 모집글</h1>
 
           <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
-            <Suspense fallback={<LoadingSpinner size="50px" />}>
+            <Suspense fallback={null}>
               <CreatedPostsListSection
                 requestParams={requestParams}
                 onFilterOpen={openFilter}
@@ -331,4 +322,3 @@ export default function MyCreatedPostsPage() {
 }
 
 MyCreatedPostsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
-MyCreatedPostsPage.requireAuth = true;

@@ -89,4 +89,23 @@ const ROUTES = {
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ROUTES 함수마다 params 타입이 달라 목록 원소 타입을 any로 통일한다.
+type RouteFn = (params: any) => string;
+
+// 로그인 없이 URL 직접 접근이 불가능해야 하는 라우트
+export const PROTECTED_ROUTES: RouteFn[] = [
+  ROUTES.TeamRecruitmentNew,
+  ROUTES.TeamRecruitmentEdit,
+  ROUTES.TeamRecruitmentApply,
+  ROUTES.TeamRecruitmentApplicants,
+  ROUTES.TeamRecruitmentApplicantDetail,
+  ROUTES.TeamProfile,
+  ROUTES.TeamProfileCreate,
+  ROUTES.TeamProfileEdit,
+  ROUTES.TeamNotifications,
+  ROUTES.TeamMyApplications,
+  ROUTES.TeamMyCreatedPosts,
+  ROUTES.TeamChat,
+];
+
 export default ROUTES;

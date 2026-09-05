@@ -1,6 +1,7 @@
 import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
-import useActivityHistoryField from 'components/Team/hooks/useActivityHistoryField';
+import useActivityHistoryField, { type ActivityValue } from 'components/Team/hooks/useActivityHistoryField';
+import { savedActivitySchema } from 'components/Team/ProfilePage/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
 import type { TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import styles from './ActivityHistoryField.module.scss';
@@ -28,6 +29,13 @@ const LOGGING_TITLE: Record<TeamProfileFormMode, { ADD: string; EDIT: string; NE
 export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps) {
   const loggingTitle = LOGGING_TITLE[mode];
 
+  const validateActivity = (activity: ActivityValue) => {
+    const result = savedActivitySchema.safeParse({ ...activity, status: 'saved' });
+    return result.success
+      ? { success: true as const }
+      : { success: false as const, message: result.error.issues[0].message };
+  };
+
   const {
     fields,
     activities,
@@ -41,14 +49,17 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
     handleDateSelect,
     handleOpenDatePicker,
     handleCloseDatePicker,
-  } = useActivityHistoryField({
-    ADD: loggingTitle.ADD,
-    EDIT: loggingTitle.EDIT,
-    getDoneEvent: (hasBeenSaved) =>
-      hasBeenSaved
-        ? { eventLabel: loggingTitle.MODIFY_DONE, value: '수정하기' }
-        : { eventLabel: loggingTitle.NEW_DONE, value: '완료' },
-  });
+  } = useActivityHistoryField(
+    {
+      ADD: loggingTitle.ADD,
+      EDIT: loggingTitle.EDIT,
+      getDoneEvent: (hasBeenSaved) =>
+        hasBeenSaved
+          ? { eventLabel: loggingTitle.MODIFY_DONE, value: '수정하기' }
+          : { eventLabel: loggingTitle.NEW_DONE, value: '완료' },
+    },
+    validateActivity,
+  );
 
   return (
     <div className={styles.activity}>
