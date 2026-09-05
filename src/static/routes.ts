@@ -82,7 +82,7 @@ const ROUTES = {
   TeamNotifications: () => '/team/notifications',
   TeamMyApplications: () => '/team/my-applications',
   TeamMyCreatedPosts: () => '/team/my-created-posts',
-  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
+  TeamChat: ({ recruitmentId, chatRoomId }: ROUTESParams<'recruitmentId' | 'chatRoomId'>) =>
     `/team/chat/${recruitmentId}/${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
@@ -94,12 +94,17 @@ type RouteFn = (params: Record<string, string | undefined>) => string;
 // 로그인 없이 URL 직접 접근이 불가능해야 하는 라우트
 export const PROTECTED_ROUTES: RouteFn[] = [
   ROUTES.TeamRecruitmentNew,
+  ROUTES.TeamRecruitmentEdit,
   ROUTES.TeamRecruitmentApply,
+  ROUTES.TeamRecruitmentApplicants,
+  ROUTES.TeamRecruitmentApplicantDetail,
   ROUTES.TeamProfile,
   ROUTES.TeamProfileCreate,
   ROUTES.TeamProfileEdit,
+  ROUTES.TeamNotifications,
   ROUTES.TeamMyApplications,
   ROUTES.TeamMyCreatedPosts,
+  ROUTES.TeamChat,
 ];
 
 export default ROUTES;

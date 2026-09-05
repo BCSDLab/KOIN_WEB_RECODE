@@ -1,3 +1,4 @@
+import isValidCalendarDate from 'components/Team/utils/isValidCalendarDate';
 import { z } from 'zod';
 
 export const APPLY_NICKNAME_MAX_LENGTH = 20;
@@ -33,13 +34,20 @@ export const savedApplyActivitySchema = z
     status: z.literal('saved'),
     title: z.string().trim().min(1, '활동명을 작성해주세요.'),
     content: z.string().trim().min(1, '활동 내용을 작성해주세요.'),
-    startDate: z.string().min(1, '활동 시작일을 선택해주세요.'),
+    startDate: z
+      .string()
+      .min(1, '활동 시작일을 선택해주세요.')
+      .refine(isValidCalendarDate, '활동 시작일이 올바르지 않습니다.'),
   })
   .superRefine((activity, context) => {
     if (activity.isOngoing) return;
 
     if (!activity.endDate) {
       context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일을 선택하거나 진행 중을 선택해주세요.' });
+      return;
+    }
+    if (!isValidCalendarDate(activity.endDate)) {
+      context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일이 올바르지 않습니다.' });
       return;
     }
     if (activity.endDate < activity.startDate) {
