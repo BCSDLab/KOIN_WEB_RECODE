@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
@@ -11,6 +10,7 @@ import WebChatIcon from 'assets/svg/Team/web_chat.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import formatChatTime, { formatChatRoomListTime } from 'components/Team/utils/formatChatTime';
 import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDate';
+import { ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -39,41 +39,42 @@ const getChatRoomPreview = (room: TeamChatRoomListItem) => {
 };
 
 function ChatRoomSidebarList({ chatRooms, recruitmentId, chatRoomId }: ChatRoomSidebarListProps) {
-  if (chatRooms.length === 0) {
-    return <p className={styles.chat__empty}>채팅방이 없습니다.</p>;
-  }
+  const items = chatRooms.map((room) => ({
+    key: `${room.recruitment_id}-${room.chat_room_id}`,
+    href: ROUTES.TeamChat({
+      recruitmentId: String(room.recruitment_id),
+      chatRoomId: String(room.chat_room_id),
+    }),
+    title: room.room_name,
+    timeLabel: room.last_message_at ? formatChatRoomListTime(room.last_message_at) : undefined,
+    preview: getChatRoomPreview(room),
+    unreadCount: room.unread_message_count,
+    avatar: <DefaultPhotoIcon />,
+    avatarAriaHidden: true,
+    isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
+  }));
 
-  return chatRooms.map((room) => {
-    const isCurrentRoom = room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId;
-    const preview = getChatRoomPreview(room);
-
-    return (
-      <Link
-        key={`${room.recruitment_id}-${room.chat_room_id}`}
-        href={ROUTES.TeamChat({ recruitmentId: String(room.recruitment_id), chatRoomId: String(room.chat_room_id) })}
-        className={cn({ [styles.chat__roomItem]: true, [styles['chat__roomItem--active']]: isCurrentRoom })}
-        aria-current={isCurrentRoom ? 'page' : undefined}
-      >
-        <span className={styles.chat__roomAvatar} aria-hidden="true">
-          <DefaultPhotoIcon />
-        </span>
-        <span className={styles.chat__roomContent}>
-          <span className={styles.chat__roomHeader}>
-            <span className={styles.chat__roomName}>{room.room_name}</span>
-            {room.last_message_at && (
-              <span className={styles.chat__roomTime}>{formatChatRoomListTime(room.last_message_at)}</span>
-            )}
-          </span>
-          <span className={styles.chat__roomPreviewRow}>
-            <span className={styles.chat__roomPreview}>{preview}</span>
-            {room.unread_message_count > 0 && (
-              <span className={styles.chat__unreadCount}>{room.unread_message_count}</span>
-            )}
-          </span>
-        </span>
-      </Link>
-    );
-  });
+  return (
+    <ChatRoomList
+      items={items}
+      classNames={{
+        item: styles.chat__roomItem,
+        activeItem: styles['chat__roomItem--active'],
+        avatar: styles.chat__roomAvatar,
+        content: styles.chat__roomContent,
+        header: styles.chat__roomHeader,
+        title: styles.chat__roomName,
+        time: styles.chat__roomTime,
+        previewRow: styles.chat__roomPreviewRow,
+        preview: styles.chat__roomPreview,
+        unreadCount: styles.chat__unreadCount,
+        empty: styles.chat__empty,
+      }}
+      emptyContent="채팅방이 없습니다."
+      contentElement="span"
+      emptyElement="p"
+    />
+  );
 }
 
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {

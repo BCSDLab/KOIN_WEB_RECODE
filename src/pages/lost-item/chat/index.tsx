@@ -4,7 +4,6 @@
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
 import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
@@ -21,6 +20,7 @@ import {
   formatISODateToMonthAndDay,
   formatISODateToTime,
 } from 'components/Articles/LostItemChatPage/utils/date';
+import { ChatRoomList } from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -129,6 +129,36 @@ function LostItemChatPage({ token }: { token: string }) {
     }
   }, [inputValue]);
 
+  const chatRoomItems = (chatroomList ?? []).map(
+    ({
+      article_id,
+      chat_room_id,
+      article_title,
+      last_message_at,
+      lost_item_image_url,
+      recent_message_content,
+      unread_message_count,
+    }) => ({
+      key: `${chat_room_id}-${article_id}`,
+      href: `${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`,
+      title: article_title,
+      timeLabel: formatDate(last_message_at),
+      preview: recent_message_content,
+      unreadCount: unread_message_count,
+      avatar: lost_item_image_url ? (
+        <img
+          src={lost_item_image_url}
+          alt="분실물 이미지"
+          className={styles['chat-list--item--image']}
+          onError={addErrorImage}
+        />
+      ) : (
+        <DefaultPhotoIcon />
+      ),
+      onClick: logMessageListSelcetClick,
+    }),
+  );
+
   return (
     <div className={styles.container}>
       {!isMobile && <h1 className={styles.title}>쪽지</h1>}
@@ -136,52 +166,21 @@ function LostItemChatPage({ token }: { token: string }) {
       <section className={styles['chat-container']}>
         {showList && (
           <div className={styles['chat-list']}>
-            {chatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
-            {chatroomList?.map(
-              ({
-                article_id,
-                chat_room_id,
-                article_title,
-                last_message_at,
-                lost_item_image_url,
-                recent_message_content,
-                unread_message_count,
-              }) => (
-                <Link
-                  key={`${chat_room_id}-${article_id}`}
-                  href={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
-                  className={styles['chat-list--item']}
-                  onClick={() => logMessageListSelcetClick()}
-                >
-                  {lost_item_image_url ? (
-                    <div className={styles['chat-list--item--profile']}>
-                      <img
-                        src={lost_item_image_url}
-                        alt="분실물 이미지"
-                        className={styles['chat-list--item--image']}
-                        onError={addErrorImage}
-                      />
-                    </div>
-                  ) : (
-                    <div className={styles['chat-list--item--profile']}>
-                      <DefaultPhotoIcon />
-                    </div>
-                  )}
-                  <div className={styles['chat-list--item--content']}>
-                    <div className={styles['chat-list--item--title']}>
-                      <div>{article_title}</div>
-                      <div className={styles['chat-list--item--date']}>{formatDate(last_message_at)}</div>
-                    </div>
-                    <div className={styles['chat-list--item--description']}>
-                      <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
-                      {unread_message_count !== 0 && (
-                        <div className={styles['chat-list--message-count']}>{unread_message_count}</div>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              ),
-            )}
+            <ChatRoomList
+              items={chatRoomItems}
+              classNames={{
+                item: styles['chat-list--item'],
+                avatar: styles['chat-list--item--profile'],
+                content: styles['chat-list--item--content'],
+                header: styles['chat-list--item--title'],
+                time: styles['chat-list--item--date'],
+                previewRow: styles['chat-list--item--description'],
+                preview: styles['chat-list--preview-content'],
+                unreadCount: styles['chat-list--message-count'],
+                empty: styles.chat__empty,
+              }}
+              emptyContent="채팅방이 없습니다.🧐"
+            />
           </div>
         )}
 
