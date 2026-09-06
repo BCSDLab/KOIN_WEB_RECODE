@@ -81,9 +81,7 @@ function LostItemChatPage({ token }: { token: string }) {
       }
 
       const imageUrlList = await saveImgFile();
-      if (imageUrlList && imageUrlList.length === 1) {
-        sendChatMessage({ content: imageUrlList[0], isImage: true });
-      }
+      imageUrlList.forEach((imageUrl) => sendChatMessage({ content: imageUrl, isImage: true }));
     } catch (error) {
       if (error instanceof UploadError) {
         showToast('error', error.message);
@@ -161,7 +159,7 @@ function LostItemChatPage({ token }: { token: string }) {
       imageAlt: '메세지 이미지',
       timeLabel,
       showSender,
-      senderName: message.user_nickname || userInfo?.anonymous_nickname || '익명',
+      senderName: message.user_nickname || '익명',
       senderAvatar: (
         <div className={styles['message-item--profile']}>
           <PersonIcon />
