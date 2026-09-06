@@ -134,7 +134,7 @@ export function ChatRoomList({
   emptyElement: EmptyElement = 'div',
 }: ChatRoomListProps) {
   if (items.length === 0) {
-    return <EmptyElement className={joinClassNames(styles.roomEmpty, classNames.empty)}>{emptyContent}</EmptyElement>;
+    return <EmptyElement className={joinClassNames(styles.roomList__empty, classNames.empty)}>{emptyContent}</EmptyElement>;
   }
 
   return items.map((item) => (
@@ -142,35 +142,35 @@ export function ChatRoomList({
       key={item.key}
       href={item.href}
       className={joinClassNames(
-        styles.roomItem,
+        styles.roomList__item,
         classNames.item,
-        item.isActive && styles.roomItemActive,
+        item.isActive && styles['roomList__item--active'],
         item.isActive && classNames.activeItem,
       )}
       aria-current={item.isActive ? 'page' : undefined}
       onClick={item.onClick}
     >
       <ContentElement
-        className={joinClassNames(styles.roomAvatar, classNames.avatar)}
+        className={joinClassNames(styles.roomList__avatar, classNames.avatar)}
         aria-hidden={item.avatarAriaHidden}
       >
         {item.avatar}
       </ContentElement>
-      <ContentElement className={joinClassNames(styles.roomContent, classNames.content)}>
-        <ContentElement className={joinClassNames(styles.roomHeader, classNames.header)}>
-          <ContentElement className={joinClassNames(styles.roomTitle, classNames.title)}>{item.title}</ContentElement>
+      <ContentElement className={joinClassNames(styles.roomList__content, classNames.content)}>
+        <ContentElement className={joinClassNames(styles.roomList__header, classNames.header)}>
+          <ContentElement className={joinClassNames(styles.roomList__title, classNames.title)}>{item.title}</ContentElement>
           {item.timeLabel && (
-            <ContentElement className={joinClassNames(styles.roomTime, classNames.time)}>
+            <ContentElement className={joinClassNames(styles.roomList__time, classNames.time)}>
               {item.timeLabel}
             </ContentElement>
           )}
         </ContentElement>
-        <ContentElement className={joinClassNames(styles.roomPreviewRow, classNames.previewRow)}>
-          <ContentElement className={joinClassNames(styles.roomPreview, classNames.preview)}>
+        <ContentElement className={joinClassNames(styles.roomList__previewRow, classNames.previewRow)}>
+          <ContentElement className={joinClassNames(styles.roomList__preview, classNames.preview)}>
             {item.preview}
           </ContentElement>
           {item.unreadCount > 0 && (
-            <ContentElement className={joinClassNames(styles.roomUnreadCount, classNames.unreadCount)}>
+            <ContentElement className={joinClassNames(styles.roomList__unreadCount, classNames.unreadCount)}>
               {item.unreadCount}
             </ContentElement>
           )}
@@ -190,9 +190,9 @@ export function ChatMessageList({
 }: ChatMessageListProps) {
   const renderMessage = (message: ChatMessageListItem) => {
     let bubbleClassName = message.isMine
-      ? joinClassNames(styles.bubble, styles.bubbleMine, classNames.bubbleMine)
-      : joinClassNames(styles.bubble, styles.bubbleOthers, classNames.bubbleOthers);
-    if (message.isImage) bubbleClassName = joinClassNames(styles.imageBubble, classNames.imageBubble);
+      ? joinClassNames(styles.messageList__bubble, styles['messageList__bubble--mine'], classNames.bubbleMine)
+      : joinClassNames(styles.messageList__bubble, styles['messageList__bubble--other'], classNames.bubbleOthers);
+    if (message.isImage) bubbleClassName = joinClassNames(styles.messageList__imageBubble, classNames.imageBubble);
 
     const bubble = (
       <BubbleElement className={bubbleClassName}>
@@ -201,7 +201,7 @@ export function ChatMessageList({
           <img
             src={message.content}
             alt={message.imageAlt}
-            className={joinClassNames(styles.image, classNames.image)}
+            className={joinClassNames(styles.messageList__image, classNames.image)}
           />
         ) : (
           message.content
@@ -212,19 +212,19 @@ export function ChatMessageList({
     const metaContent = (
       <>
         {(message.unreadCount ?? 0) > 0 && (
-          <span className={joinClassNames(styles.messageUnreadCount, classNames.unreadCount)}>
+          <span className={joinClassNames(styles.messageList__unreadCount, classNames.unreadCount)}>
             {message.unreadCount}
           </span>
         )}
-        <span className={joinClassNames(styles.time, classNames.time)}>{message.timeLabel}</span>
+        <span className={joinClassNames(styles.messageList__time, classNames.time)}>{message.timeLabel}</span>
       </>
     );
     const meta = (
       <div
         className={joinClassNames(
-          styles.meta,
+          styles.messageList__meta,
           classNames.meta,
-          message.isMine && styles.metaMine,
+          message.isMine && styles['messageList__meta--mine'],
           message.isMine && classNames.metaMine,
         )}
       >
@@ -236,7 +236,7 @@ export function ChatMessageList({
       return (
         <div
           key={message.key}
-          className={joinClassNames(styles.mineRow, classNames.mineRow)}
+          className={joinClassNames(styles.messageList__item, styles['messageList__item--mine'], classNames.mineRow)}
           data-message-id={message.messageId}
         >
           {meta}
@@ -249,22 +249,23 @@ export function ChatMessageList({
       <div
         key={message.key}
         className={joinClassNames(
-          styles.otherGroup,
+          styles.messageList__item,
+          styles['messageList__item--other'],
           classNames.otherGroup,
-          !message.showSender && styles.otherGroupConsecutive,
+          !message.showSender && styles['messageList__item--consecutive'],
           !message.showSender && classNames.otherGroupConsecutive,
         )}
         data-message-id={message.messageId}
       >
         {message.showSender && (
-          <div className={joinClassNames(styles.sender, classNames.sender)}>
+          <div className={joinClassNames(styles.messageList__sender, classNames.sender)}>
             {message.senderAvatar}
-            <SenderNameElement className={joinClassNames(styles.senderName, classNames.senderName)}>
+            <SenderNameElement className={joinClassNames(styles.messageList__senderName, classNames.senderName)}>
               {message.senderName}
             </SenderNameElement>
           </div>
         )}
-        <div className={joinClassNames(styles.otherRow, classNames.otherRow)}>
+        <div className={joinClassNames(styles.messageList__row, classNames.otherRow)}>
           {bubble}
           {meta}
         </div>
@@ -274,12 +275,12 @@ export function ChatMessageList({
 
   return groups.map((group) => {
     const dateLabel = (
-      <DateLabelElement className={joinClassNames(styles.dateLabel, classNames.dateLabel)}>
+      <DateLabelElement className={joinClassNames(styles.messageList__dateLabel, classNames.dateLabel)}>
         {group.dateLabel}
       </DateLabelElement>
     );
     const dateHeader = (
-      <div className={joinClassNames(styles.dateContainer, classNames.dateContainer)}>{dateLabel}</div>
+      <div className={joinClassNames(styles.messageList__date, classNames.dateContainer)}>{dateLabel}</div>
     );
     const groupContent = (
       <>
@@ -350,20 +351,20 @@ export function ChatMessageInput({
       type="file"
       accept="image/*"
       multiple={imageInputMultiple}
-      className={joinClassNames(styles.fileInput, classNames.fileInput)}
+      className={joinClassNames(styles.messageInput__file, classNames.fileInput)}
       onChange={onImageChange}
       disabled={disabled}
       aria-label={fileInputAriaLabel}
     />
   );
   const imageControlClassName = joinClassNames(
-    styles.imageControl,
+    styles.messageInput__imageButton,
     classNames.imageControl,
     disabled && classNames.imageControlDisabled,
   );
   const imageControl =
     imageControlElement === 'label' ? (
-      <div className={joinClassNames(styles.imageWrapper, classNames.imageWrapper)}>
+      <div className={joinClassNames(styles.messageInput__imageWrapper, classNames.imageWrapper)}>
         <label htmlFor={imageInputId} className={imageControlClassName}>
           {imageIcon}
           {fileInput}
@@ -386,11 +387,11 @@ export function ChatMessageInput({
   const isSendDisabled = disabled || !value.trim();
 
   return (
-    <div className={joinClassNames(styles.inputContainer, classNames.container)}>
+    <div className={joinClassNames(styles.messageInput, classNames.container)}>
       {imageControl}
       <textarea
         ref={textareaRef}
-        className={joinClassNames(styles.textarea, classNames.textarea)}
+        className={joinClassNames(styles.messageInput__textarea, classNames.textarea)}
         placeholder={placeholder}
         aria-label={textareaAriaLabel}
         rows={1}
@@ -401,7 +402,7 @@ export function ChatMessageInput({
       />
       <button
         type="button"
-        className={joinClassNames(styles.sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
+        className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
         aria-label={sendButtonAriaLabel}
         onClick={handleSend}
         disabled={isSendDisabled}
