@@ -32,7 +32,7 @@
   display: grid;
   grid-template-columns: 384px minmax(0, 1fr);
   width: 100%;
-  height: 851px;
+  height: calc(100vh - 540px);
 
   @include media.media-breakpoint(mobile) {
     grid-template-columns: 1fr;
