@@ -39,7 +39,7 @@ interface ChatRoomListClassNames {
 
 interface ChatRoomListProps {
   items: ChatRoomListItem[];
-  classNames: ChatRoomListClassNames;
+  classNames?: ChatRoomListClassNames;
   emptyContent: ReactNode;
   contentElement?: 'div' | 'span';
   emptyElement?: 'div' | 'p';
@@ -86,7 +86,7 @@ interface ChatMessageListClassNames {
 
 interface ChatMessageListProps {
   groups: ChatMessageListGroup[];
-  classNames: ChatMessageListClassNames;
+  classNames?: ChatMessageListClassNames;
   wrapGroups?: boolean;
   bubbleElement?: 'div' | 'span';
   dateLabelElement?: 'div' | 'span';
@@ -105,7 +105,7 @@ interface ChatMessageInputClassNames {
 }
 
 interface ChatMessageInputProps {
-  classNames: ChatMessageInputClassNames;
+  classNames?: ChatMessageInputClassNames;
   imageIcon: ReactNode;
   sendIcon: ReactNode;
   value: string;
@@ -122,15 +122,13 @@ interface ChatMessageInputProps {
   fileInputAriaLabel?: string;
   textareaAriaLabel?: string;
   sendButtonAriaLabel?: string;
-  textareaResetHeight?: string;
-  disableSendWhenEmpty?: boolean;
 }
 
 const joinClassNames = (...classNames: (string | false | undefined)[]) => classNames.filter(Boolean).join(' ');
 
 export function ChatRoomList({
   items,
-  classNames,
+  classNames = {},
   emptyContent,
   contentElement: ContentElement = 'div',
   emptyElement: EmptyElement = 'div',
@@ -184,7 +182,7 @@ export function ChatRoomList({
 
 export function ChatMessageList({
   groups,
-  classNames,
+  classNames = {},
   wrapGroups = false,
   bubbleElement: BubbleElement = 'div',
   dateLabelElement: DateLabelElement = 'div',
@@ -295,7 +293,7 @@ export function ChatMessageList({
 }
 
 export function ChatMessageInput({
-  classNames,
+  classNames = {},
   imageIcon,
   sendIcon,
   value,
@@ -312,8 +310,6 @@ export function ChatMessageInput({
   fileInputAriaLabel,
   textareaAriaLabel,
   sendButtonAriaLabel,
-  textareaResetHeight = 'auto',
-  disableSendWhenEmpty = true,
 }: ChatMessageInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const internalFileInputRef = useRef<HTMLInputElement>(null);
@@ -322,7 +318,7 @@ export function ChatMessageInput({
   const resizeTextarea = () => {
     if (!textareaRef.current) return;
 
-    textareaRef.current.style.height = textareaResetHeight;
+    textareaRef.current.style.height = 'auto';
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   };
 
@@ -335,7 +331,7 @@ export function ChatMessageInput({
     if (!value.trim() || disabled) return;
     if (onSend() === false) return;
 
-    if (textareaRef.current) textareaRef.current.style.height = textareaResetHeight;
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -387,7 +383,7 @@ export function ChatMessageInput({
         {fileInput}
       </>
     );
-  const isSendDisabled = disabled || (disableSendWhenEmpty && !value.trim());
+  const isSendDisabled = disabled || !value.trim();
 
   return (
     <div className={joinClassNames(styles.inputContainer, classNames.container)}>

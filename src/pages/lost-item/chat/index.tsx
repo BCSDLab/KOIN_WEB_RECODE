@@ -264,8 +264,6 @@ function LostItemChatPage({ token }: { token: string }) {
                     imageInputMultiple
                     fileInputAriaLabel="사진 전송"
                     sendButtonAriaLabel="문자 전송"
-                    textareaResetHeight="45px"
-                    disableSendWhenEmpty={false}
                   />
                 </div>
               </>
