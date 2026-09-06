@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
-import ImageUploadIcon from 'assets/svg/common/image-upload.svg';
-import SendIcon from 'assets/svg/common/send.svg';
+import ImageUploadIcon from 'assets/svg/common/chat-photo.svg';
+import SendIcon from 'assets/svg/common/chat-send.svg';
 import { ChatMessageInput } from 'components/ui/Chat';
 import styles from './TeamChatSendBar.module.scss';
 

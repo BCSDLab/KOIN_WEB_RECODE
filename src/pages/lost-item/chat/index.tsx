@@ -9,8 +9,8 @@ import BlockIcon from 'assets/svg/Articles/block.svg';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
-import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
-import SendIcon from 'assets/svg/Articles/send.svg';
+import AddPhotoIcon from 'assets/svg/common/chat-photo.svg';
+import SendIcon from 'assets/svg/common/chat-send.svg';
 
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
