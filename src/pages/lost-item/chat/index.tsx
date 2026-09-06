@@ -187,14 +187,7 @@ function LostItemChatPage({ token }: { token: string }) {
             <ChatRoomList
               items={chatRoomItems}
               classNames={{
-                item: styles['chat-list--item'],
-                avatar: styles['chat-list--item--profile'],
                 content: styles['chat-list--item--content'],
-                header: styles['chat-list--item--title'],
-                time: styles['chat-list--item--date'],
-                previewRow: styles['chat-list--item--description'],
-                preview: styles['chat-list--preview-content'],
-                unreadCount: styles['chat-list--message-count'],
                 empty: styles.chat__empty,
               }}
               emptyContent="채팅방이 없습니다.🧐"
@@ -239,16 +232,7 @@ function LostItemChatPage({ token }: { token: string }) {
                   <ChatMessageList
                     groups={messageGroups}
                     classNames={{
-                      dateLabel: styles['message-date-header'],
-                      mineRow: styles['message-item__right'],
-                      otherGroup: styles['message-item-container'],
-                      sender: styles['message-item--header'],
-                      senderName: styles['message-item--name'],
-                      otherRow: styles['message-item'],
-                      bubbleMine: styles['message-item--content__right'],
-                      bubbleOthers: styles['message-item--content'],
                       image: styles['message-item--content-image'],
-                      time: styles['message-item--time'],
                     }}
                     bubbleElement="span"
                   />
@@ -260,11 +244,8 @@ function LostItemChatPage({ token }: { token: string }) {
                   <ChatMessageInput
                     classNames={{
                       container: styles['chat-input-container'],
-                      imageWrapper: styles['chat-input--photo'],
-                      imageControl: styles['message-button'],
                       imageControlDisabled: styles['message-button--disabled'],
                       textarea: styles['chat-input'],
-                      sendButton: styles['message-button'],
                       sendButtonDisabled: styles['message-button--disabled'],
                     }}
                     imageIcon={<AddPhotoIcon />}
@@ -284,7 +265,6 @@ function LostItemChatPage({ token }: { token: string }) {
                     fileInputAriaLabel="사진 전송"
                     sendButtonAriaLabel="문자 전송"
                     textareaResetHeight="45px"
-                    textareaMaxHeight="110px"
                     disableSendWhenEmpty={false}
                   />
                 </div>

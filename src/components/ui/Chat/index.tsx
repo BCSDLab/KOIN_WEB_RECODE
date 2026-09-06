@@ -8,6 +8,7 @@ import {
   type RefObject,
 } from 'react';
 import Link from 'next/link';
+import styles from './Chat.module.scss';
 
 interface ChatRoomListItem {
   key: Key;
@@ -23,17 +24,17 @@ interface ChatRoomListItem {
 }
 
 interface ChatRoomListClassNames {
-  item: string;
+  item?: string;
   activeItem?: string;
-  avatar: string;
-  content: string;
-  header: string;
+  avatar?: string;
+  content?: string;
+  header?: string;
   title?: string;
-  time: string;
-  previewRow: string;
-  preview: string;
-  unreadCount: string;
-  empty: string;
+  time?: string;
+  previewRow?: string;
+  preview?: string;
+  unreadCount?: string;
+  empty?: string;
 }
 
 interface ChatRoomListProps {
@@ -66,21 +67,21 @@ export interface ChatMessageListGroup {
 
 interface ChatMessageListClassNames {
   dateContainer?: string;
-  dateLabel: string;
-  mineRow: string;
-  otherGroup: string;
+  dateLabel?: string;
+  mineRow?: string;
+  otherGroup?: string;
   otherGroupConsecutive?: string;
-  sender: string;
-  senderName: string;
-  otherRow: string;
-  bubbleMine: string;
-  bubbleOthers: string;
+  sender?: string;
+  senderName?: string;
+  otherRow?: string;
+  bubbleMine?: string;
+  bubbleOthers?: string;
   imageBubble?: string;
   image?: string;
   meta?: string;
   metaMine?: string;
   unreadCount?: string;
-  time: string;
+  time?: string;
 }
 
 interface ChatMessageListProps {
@@ -93,13 +94,13 @@ interface ChatMessageListProps {
 }
 
 interface ChatMessageInputClassNames {
-  container: string;
+  container?: string;
   imageWrapper?: string;
-  imageControl: string;
+  imageControl?: string;
   imageControlDisabled?: string;
   fileInput?: string;
-  textarea: string;
-  sendButton: string;
+  textarea?: string;
+  sendButton?: string;
   sendButtonDisabled?: string;
 }
 
@@ -121,9 +122,7 @@ interface ChatMessageInputProps {
   fileInputAriaLabel?: string;
   textareaAriaLabel?: string;
   sendButtonAriaLabel?: string;
-  textareaRows?: number;
   textareaResetHeight?: string;
-  textareaMaxHeight?: string;
   disableSendWhenEmpty?: boolean;
 }
 
@@ -137,29 +136,45 @@ export function ChatRoomList({
   emptyElement: EmptyElement = 'div',
 }: ChatRoomListProps) {
   if (items.length === 0) {
-    return <EmptyElement className={classNames.empty}>{emptyContent}</EmptyElement>;
+    return <EmptyElement className={joinClassNames(styles.roomEmpty, classNames.empty)}>{emptyContent}</EmptyElement>;
   }
 
   return items.map((item) => (
     <Link
       key={item.key}
       href={item.href}
-      className={joinClassNames(classNames.item, item.isActive && classNames.activeItem)}
+      className={joinClassNames(
+        styles.roomItem,
+        classNames.item,
+        item.isActive && styles.roomItemActive,
+        item.isActive && classNames.activeItem,
+      )}
       aria-current={item.isActive ? 'page' : undefined}
       onClick={item.onClick}
     >
-      <ContentElement className={classNames.avatar} aria-hidden={item.avatarAriaHidden}>
+      <ContentElement
+        className={joinClassNames(styles.roomAvatar, classNames.avatar)}
+        aria-hidden={item.avatarAriaHidden}
+      >
         {item.avatar}
       </ContentElement>
-      <ContentElement className={classNames.content}>
-        <ContentElement className={classNames.header}>
-          <ContentElement className={classNames.title}>{item.title}</ContentElement>
-          {item.timeLabel && <ContentElement className={classNames.time}>{item.timeLabel}</ContentElement>}
+      <ContentElement className={joinClassNames(styles.roomContent, classNames.content)}>
+        <ContentElement className={joinClassNames(styles.roomHeader, classNames.header)}>
+          <ContentElement className={joinClassNames(styles.roomTitle, classNames.title)}>{item.title}</ContentElement>
+          {item.timeLabel && (
+            <ContentElement className={joinClassNames(styles.roomTime, classNames.time)}>
+              {item.timeLabel}
+            </ContentElement>
+          )}
         </ContentElement>
-        <ContentElement className={classNames.previewRow}>
-          <ContentElement className={classNames.preview}>{item.preview}</ContentElement>
+        <ContentElement className={joinClassNames(styles.roomPreviewRow, classNames.previewRow)}>
+          <ContentElement className={joinClassNames(styles.roomPreview, classNames.preview)}>
+            {item.preview}
+          </ContentElement>
           {item.unreadCount > 0 && (
-            <ContentElement className={classNames.unreadCount}>{item.unreadCount}</ContentElement>
+            <ContentElement className={joinClassNames(styles.roomUnreadCount, classNames.unreadCount)}>
+              {item.unreadCount}
+            </ContentElement>
           )}
         </ContentElement>
       </ContentElement>
@@ -176,14 +191,20 @@ export function ChatMessageList({
   senderNameElement: SenderNameElement = 'div',
 }: ChatMessageListProps) {
   const renderMessage = (message: ChatMessageListItem) => {
-    let bubbleClassName = message.isMine ? classNames.bubbleMine : classNames.bubbleOthers;
-    if (message.isImage && classNames.imageBubble) bubbleClassName = classNames.imageBubble;
+    let bubbleClassName = message.isMine
+      ? joinClassNames(styles.bubble, styles.bubbleMine, classNames.bubbleMine)
+      : joinClassNames(styles.bubble, styles.bubbleOthers, classNames.bubbleOthers);
+    if (message.isImage) bubbleClassName = joinClassNames(styles.imageBubble, classNames.imageBubble);
 
     const bubble = (
       <BubbleElement className={bubbleClassName}>
         {message.isImage ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={message.content} alt={message.imageAlt} className={classNames.image} />
+          <img
+            src={message.content}
+            alt={message.imageAlt}
+            className={joinClassNames(styles.image, classNames.image)}
+          />
         ) : (
           message.content
         )}
@@ -192,21 +213,34 @@ export function ChatMessageList({
 
     const metaContent = (
       <>
-        {(message.unreadCount ?? 0) > 0 && classNames.unreadCount && (
-          <span className={classNames.unreadCount}>{message.unreadCount}</span>
+        {(message.unreadCount ?? 0) > 0 && (
+          <span className={joinClassNames(styles.messageUnreadCount, classNames.unreadCount)}>
+            {message.unreadCount}
+          </span>
         )}
-        <span className={classNames.time}>{message.timeLabel}</span>
+        <span className={joinClassNames(styles.time, classNames.time)}>{message.timeLabel}</span>
       </>
     );
-    const meta = classNames.meta ? (
-      <div className={joinClassNames(classNames.meta, message.isMine && classNames.metaMine)}>{metaContent}</div>
-    ) : (
-      metaContent
+    const meta = (
+      <div
+        className={joinClassNames(
+          styles.meta,
+          classNames.meta,
+          message.isMine && styles.metaMine,
+          message.isMine && classNames.metaMine,
+        )}
+      >
+        {metaContent}
+      </div>
     );
 
     if (message.isMine) {
       return (
-        <div key={message.key} className={classNames.mineRow} data-message-id={message.messageId}>
+        <div
+          key={message.key}
+          className={joinClassNames(styles.mineRow, classNames.mineRow)}
+          data-message-id={message.messageId}
+        >
           {meta}
           {bubble}
         </div>
@@ -216,16 +250,23 @@ export function ChatMessageList({
     return (
       <div
         key={message.key}
-        className={joinClassNames(classNames.otherGroup, !message.showSender && classNames.otherGroupConsecutive)}
+        className={joinClassNames(
+          styles.otherGroup,
+          classNames.otherGroup,
+          !message.showSender && styles.otherGroupConsecutive,
+          !message.showSender && classNames.otherGroupConsecutive,
+        )}
         data-message-id={message.messageId}
       >
         {message.showSender && (
-          <div className={classNames.sender}>
+          <div className={joinClassNames(styles.sender, classNames.sender)}>
             {message.senderAvatar}
-            <SenderNameElement className={classNames.senderName}>{message.senderName}</SenderNameElement>
+            <SenderNameElement className={joinClassNames(styles.senderName, classNames.senderName)}>
+              {message.senderName}
+            </SenderNameElement>
           </div>
         )}
-        <div className={classNames.otherRow}>
+        <div className={joinClassNames(styles.otherRow, classNames.otherRow)}>
           {bubble}
           {meta}
         </div>
@@ -234,11 +275,13 @@ export function ChatMessageList({
   };
 
   return groups.map((group) => {
-    const dateLabel = <DateLabelElement className={classNames.dateLabel}>{group.dateLabel}</DateLabelElement>;
-    const dateHeader = classNames.dateContainer ? (
-      <div className={classNames.dateContainer}>{dateLabel}</div>
-    ) : (
-      dateLabel
+    const dateLabel = (
+      <DateLabelElement className={joinClassNames(styles.dateLabel, classNames.dateLabel)}>
+        {group.dateLabel}
+      </DateLabelElement>
+    );
+    const dateHeader = (
+      <div className={joinClassNames(styles.dateContainer, classNames.dateContainer)}>{dateLabel}</div>
     );
     const groupContent = (
       <>
@@ -269,9 +312,7 @@ export function ChatMessageInput({
   fileInputAriaLabel,
   textareaAriaLabel,
   sendButtonAriaLabel,
-  textareaRows,
   textareaResetHeight = 'auto',
-  textareaMaxHeight,
   disableSendWhenEmpty = true,
 }: ChatMessageInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -283,7 +324,6 @@ export function ChatMessageInput({
 
     textareaRef.current.style.height = textareaResetHeight;
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    if (textareaMaxHeight) textareaRef.current.style.maxHeight = textareaMaxHeight;
   };
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -314,16 +354,20 @@ export function ChatMessageInput({
       type="file"
       accept="image/*"
       multiple={imageInputMultiple}
-      className={classNames.fileInput}
+      className={joinClassNames(styles.fileInput, classNames.fileInput)}
       onChange={onImageChange}
       disabled={disabled}
       aria-label={fileInputAriaLabel}
     />
   );
-  const imageControlClassName = joinClassNames(classNames.imageControl, disabled && classNames.imageControlDisabled);
+  const imageControlClassName = joinClassNames(
+    styles.imageControl,
+    classNames.imageControl,
+    disabled && classNames.imageControlDisabled,
+  );
   const imageControl =
     imageControlElement === 'label' ? (
-      <div className={classNames.imageWrapper}>
+      <div className={joinClassNames(styles.imageWrapper, classNames.imageWrapper)}>
         <label htmlFor={imageInputId} className={imageControlClassName}>
           {imageIcon}
           {fileInput}
@@ -346,14 +390,14 @@ export function ChatMessageInput({
   const isSendDisabled = disabled || (disableSendWhenEmpty && !value.trim());
 
   return (
-    <div className={classNames.container}>
+    <div className={joinClassNames(styles.inputContainer, classNames.container)}>
       {imageControl}
       <textarea
         ref={textareaRef}
-        className={classNames.textarea}
+        className={joinClassNames(styles.textarea, classNames.textarea)}
         placeholder={placeholder}
         aria-label={textareaAriaLabel}
-        rows={textareaRows}
+        rows={1}
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
@@ -361,7 +405,7 @@ export function ChatMessageInput({
       />
       <button
         type="button"
-        className={joinClassNames(classNames.sendButton, disabled && classNames.sendButtonDisabled)}
+        className={joinClassNames(styles.sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
         aria-label={sendButtonAriaLabel}
         onClick={handleSend}
         disabled={isSendDisabled}

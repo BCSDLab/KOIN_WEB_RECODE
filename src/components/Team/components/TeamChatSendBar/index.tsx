@@ -36,7 +36,6 @@ export default function TeamChatSendBar({
       classNames={{
         container: styles.sendBar,
         imageControl: styles.sendBar__imageButton,
-        fileInput: styles.sendBar__fileInput,
         textarea: styles.sendBar__input,
         sendButton: styles.sendBar__sendButton,
       }}
@@ -51,7 +50,6 @@ export default function TeamChatSendBar({
       imageControlAriaLabel="이미지 전송"
       textareaAriaLabel="메시지 입력"
       sendButtonAriaLabel="전송"
-      textareaRows={1}
     />
   );
 }

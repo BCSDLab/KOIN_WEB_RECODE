@@ -58,16 +58,6 @@ function ChatRoomSidebarList({ chatRooms, recruitmentId, chatRoomId }: ChatRoomS
     <ChatRoomList
       items={items}
       classNames={{
-        item: styles.chat__roomItem,
-        activeItem: styles['chat__roomItem--active'],
-        avatar: styles.chat__roomAvatar,
-        content: styles.chat__roomContent,
-        header: styles.chat__roomHeader,
-        title: styles.chat__roomName,
-        time: styles.chat__roomTime,
-        previewRow: styles.chat__roomPreviewRow,
-        preview: styles.chat__roomPreview,
-        unreadCount: styles.chat__unreadCount,
         empty: styles.chat__empty,
       }}
       emptyContent="채팅방이 없습니다."
@@ -233,19 +223,9 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
             classNames={{
               dateContainer: styles.chatRoom__dateChip,
               dateLabel: styles.chatRoom__dateLabel,
-              mineRow: styles['chatRoom__messageRow--mine'],
-              otherGroup: styles.chatRoom__messageGroup,
-              otherGroupConsecutive: styles['chatRoom__messageGroup--consecutive'],
-              sender: styles.chatRoom__sender,
-              senderName: styles.chatRoom__senderName,
-              otherRow: styles['chatRoom__messageRow--others'],
               bubbleMine: `${styles.chatRoom__bubble} ${styles['chatRoom__bubble--mine']}`,
               bubbleOthers: `${styles.chatRoom__bubble} ${styles['chatRoom__bubble--others']}`,
               imageBubble: styles.chatRoom__imageBubble,
-              meta: styles.chatRoom__meta,
-              metaMine: styles['chatRoom__meta--mine'],
-              unreadCount: styles.chatRoom__unreadCount,
-              time: styles.chatRoom__time,
             }}
             wrapGroups
             dateLabelElement="span"
