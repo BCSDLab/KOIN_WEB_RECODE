@@ -4,24 +4,30 @@ import { nicknameDuplicateCheck } from 'api/auth';
 
 import showToast from 'utils/ts/showToast';
 
-function useNicknameCheckServer() {
+interface UseNicknameCheckServerOptions {
+  showToastOnResult?: boolean;
+}
+
+function useNicknameCheckServer({ showToastOnResult = true }: UseNicknameCheckServerOptions = {}) {
   const { data, status, mutate } = useMutation({
     mutationFn: nicknameDuplicateCheck,
     onSuccess: () => {
-      showToast('success', '사용 가능한 닉네임입니다.');
+      if (showToastOnResult) {
+        showToast('success', '사용 가능한 닉네임입니다.');
+      }
     },
     onError: (error) => {
       if (isKoinError(error)) {
         if (error.status === 409) {
-          showToast('error', error.message);
+          if (showToastOnResult) showToast('error', error.message);
           return;
         }
         if (error.status === 412) {
-          showToast('error', '올바르지 않은 닉네임 형식입니다.');
+          if (showToastOnResult) showToast('error', '올바르지 않은 닉네임 형식입니다.');
           return;
         }
         sendClientError(error);
-        showToast('error', '네트워크 연결을 확인해주세요.');
+        if (showToastOnResult) showToast('error', '네트워크 연결을 확인해주세요.');
       }
     },
   });

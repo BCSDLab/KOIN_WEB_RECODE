@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
+import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
@@ -13,6 +14,7 @@ import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
 import ErrorIcon from 'assets/svg/Login/error.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
+import WarningMobileIcon from 'assets/svg/mobile-warning-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import UserDeleteModal from 'components/Auth/ModifyInfoPage/components/UserDeleteModal';
@@ -28,7 +30,7 @@ import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNickn
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -56,6 +58,11 @@ interface ICustomFormInput {
   value: unknown;
   valid: string | true;
   isVerified?: boolean;
+}
+
+interface NicknameMessage {
+  type: 'success' | 'warning';
+  content: string;
 }
 
 interface IRegisterOption {
@@ -383,14 +390,26 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
+  const [nicknameMessage, setNicknameMessage] = React.useState<NicknameMessage | null>(null);
   const isMobile = useMediaQuery();
   const { setIsValid } = useValidationContext();
 
-  const { status, currentCheckedNickname, changeTargetNickname } = useNicknameDuplicateCheck();
+  const { status, currentCheckedNickname, changeTargetNickname } = useNicknameDuplicateCheck({
+    showToastOnResult: !isMobile,
+  });
+
+  const showNicknameWarning = (content: string) => {
+    if (isMobile) {
+      setNicknameMessage({ type: 'warning', content });
+      return;
+    }
+    showToast('error', content);
+  };
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setCurrentNicknameValue(newNickname);
+    setNicknameMessage(null);
     if (newNickname === '' && userInfo?.nickname) {
       setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
       return;
@@ -409,7 +428,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
     if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '사용할 수 없는 닉네임입니다.');
+      showNicknameWarning('사용할 수 없는 닉네임입니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
@@ -418,13 +437,25 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      showNicknameWarning('닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
     changeTargetNickname(currentNicknameValue, {
       onSuccess: () => {
+        if (isMobile) {
+          setNicknameMessage({ type: 'success', content: '사용 가능한 닉네임입니다.' });
+        }
         setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+      },
+      onError: (error) => {
+        if (!isMobile) return;
+        const content =
+          isKoinError(error) && error.status === 409
+            ? '중복된 닉네임입니다. 다시 입력해 주세요.'
+            : '닉네임 중복 확인에 실패했습니다.';
+        setNicknameMessage({ type: 'warning', content });
+        setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       },
     });
   };
@@ -462,27 +493,40 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           닉네임(선택)
         </label>
         {isMobile ? (
-          <div className={styles['form-input__row']}>
-            <input
-              onChange={handleNicknameChange}
-              className={styles['form-input']}
-              type="text"
-              autoComplete="nickname"
-              placeholder="닉네임 (선택)"
-              defaultValue={userInfo?.nickname || ''}
-              {...props}
-            />
-            <button
-              type="button"
-              className={cn({
-                [styles.modify__button]: true,
-                [styles['modify__button--nickname']]: true,
-              })}
-              onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
-            >
-              중복확인
-            </button>
+          <div className={styles['nickname-field']}>
+            <div className={styles['form-input__row']}>
+              <input
+                onChange={handleNicknameChange}
+                className={styles['form-input']}
+                type="text"
+                autoComplete="nickname"
+                placeholder="닉네임 (선택)"
+                defaultValue={userInfo?.nickname || ''}
+                {...props}
+              />
+              <button
+                type="button"
+                className={cn({
+                  [styles.modify__button]: true,
+                  [styles['modify__button--nickname']]: true,
+                })}
+                onClick={onClickNicknameDuplicateCheckButton}
+                disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
+              >
+                중복확인
+              </button>
+            </div>
+            {nicknameMessage && (
+              <p
+                className={cn({
+                  [styles['nickname-message']]: true,
+                  [styles[`nickname-message--${nicknameMessage.type}`]]: true,
+                })}
+              >
+                {nicknameMessage.type === 'success' ? <CorrectIcon /> : <WarningMobileIcon />}
+                {nicknameMessage.content}
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -672,25 +716,6 @@ const GenderInput = React.forwardRef((_, ref) => {
         <div className={styles['form-input__radio-wrapper']}>
           <input
             type="radio"
-            id="female"
-            name="gender"
-            value="1"
-            checked={selectedValue === '1'}
-            onChange={handleGenderChange}
-          />
-          <label
-            htmlFor="female"
-            className={cn({
-              [styles['form-input__label']]: true,
-              [styles['form-input__label--gender']]: true,
-            })}
-          >
-            여자
-          </label>
-        </div>
-        <div className={styles['form-input__radio-wrapper']}>
-          <input
-            type="radio"
             id="male"
             name="gender"
             value="0"
@@ -704,7 +729,26 @@ const GenderInput = React.forwardRef((_, ref) => {
               [styles['form-input__label--gender']]: true,
             })}
           >
-            남자
+            남성
+          </label>
+        </div>
+        <div className={styles['form-input__radio-wrapper']}>
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="1"
+            checked={selectedValue === '1'}
+            onChange={handleGenderChange}
+          />
+          <label
+            htmlFor="female"
+            className={cn({
+              [styles['form-input__label']]: true,
+              [styles['form-input__label--gender']]: true,
+            })}
+          >
+            여성
           </label>
         </div>
       </div>
@@ -769,48 +813,65 @@ const PhoneInput = React.forwardRef((props, ref) => {
               휴대전화
               <span className={styles['form-input__required']}>*</span>
             </label>
-            <div className={styles['form-input__row']}>
-              <input
-                className={styles['form-input']}
-                type="text"
-                autoComplete="tel"
-                placeholder="전화번호 (Ex.01012345678)"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                {...props}
-              />
-              <button
-                type="button"
-                className={cn({
-                  [styles.modify__button]: true,
-                  [styles['modify__button--phone']]: true,
-                  [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
-                })}
-                onClick={handleStartVerification}
-                disabled={phoneNumber === userInfo?.phone_number}
-              >
-                {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
-              </button>
+            <div className={styles['phone-field']}>
+              <div className={styles['form-input__row']}>
+                <input
+                  className={styles['form-input']}
+                  type="text"
+                  autoComplete="tel"
+                  placeholder="전화번호 (Ex.01012345678)"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  {...props}
+                />
+                <button
+                  type="button"
+                  className={cn({
+                    [styles.modify__button]: true,
+                    [styles['modify__button--phone']]: true,
+                    [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
+                  })}
+                  onClick={handleStartVerification}
+                  disabled={phoneNumber === userInfo?.phone_number}
+                >
+                  {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
+                </button>
+              </div>
+              {phoneMessage && (
+                <div className={styles['phone-message-group']}>
+                  <p
+                    className={cn({
+                      [styles['phone-message']]: true,
+                      [styles[`phone-message--${phoneMessage.type}`]]: true,
+                    })}
+                  >
+                    {phoneMessage.type === 'success' && <CorrectIcon />}
+                    {phoneMessage.type === 'error' && <ErrorIcon />}
+                    {phoneMessage.type === 'warning' && <WarningMobileIcon />}
+                    {phoneMessage.content}
+                    {phoneMessage.type === 'success' && (
+                      <span className={styles['form-message--count']}>
+                        남은 횟수
+                        {` (${data?.remaining_count}/${data?.total_count})`}
+                      </span>
+                    )}
+                  </p>
+                  {phoneMessage.type === 'error' && phoneMessage.content === MESSAGES.PHONE.ALREADY_REGISTERED && (
+                    <p className={styles['phone-inquiry']}>
+                      <span>해당 전화번호로 가입하신 적 없으신가요?</span>
+                      <a
+                        className={styles['phone-inquiry__link']}
+                        href={ROUTES.Inquiry()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        문의하기
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-            {phoneMessage && (
-              <p
-                className={cn({
-                  [styles['form-message']]: true,
-                  [styles[`form-message--${phoneMessage.type}`]]: true,
-                })}
-              >
-                {phoneMessage.type === 'success' && <CorrectIcon />}
-                {phoneMessage.type === 'error' && <ErrorIcon />}
-                {phoneMessage.type === 'warning' && <WarningIcon />}
-                {phoneMessage.content}
-                {phoneMessage.type === 'success' && (
-                  <span className={styles['form-message--count']}>
-                    남은 횟수
-                    {` (${data?.remaining_count}/${data?.total_count})`}
-                  </span>
-                )}
-              </p>
-            )}
           </div>
           {phoneMessage?.type === 'success' && (
             <div className={styles['form-input__label-wrapper']}>
@@ -852,7 +913,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
                 >
                   {verificationMessage.type === 'success' && <CorrectIcon />}
                   {verificationMessage.type === 'error' && <ErrorIcon />}
-                  {verificationMessage.type === 'warning' && <WarningIcon />}
+                  {verificationMessage.type === 'warning' && <WarningMobileIcon />}
                   {verificationMessage.content}
                 </p>
               )}
