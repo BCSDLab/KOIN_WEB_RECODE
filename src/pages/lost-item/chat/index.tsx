@@ -196,7 +196,6 @@ function LostItemChatPage({ token }: { token: string }) {
             <ChatRoomList
               items={chatRoomItems}
               classNames={{
-                content: styles['chat-list--item--content'],
                 empty: styles.chat__empty,
               }}
               emptyContent="채팅방이 없습니다.🧐"

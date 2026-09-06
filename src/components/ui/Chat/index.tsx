@@ -24,7 +24,6 @@ interface ChatRoomListItem {
 }
 
 interface ChatRoomListClassNames {
-  content?: string;
   empty?: string;
 }
 
@@ -164,7 +163,7 @@ export function ChatRoomList({
       <ContentElement className={styles.roomList__avatar} aria-hidden={item.avatarAriaHidden}>
         {item.avatar}
       </ContentElement>
-      <ContentElement className={joinClassNames(styles.roomList__content, classNames.content)}>
+      <ContentElement className={styles.roomList__content}>
         <ContentElement className={styles.roomList__header}>
           <ContentElement className={styles.roomList__title}>{item.title}</ContentElement>
           {item.timeLabel && <ContentElement className={styles.roomList__time}>{item.timeLabel}</ContentElement>}

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 48px;
   margin: 0 auto;
-  padding-top: 64px;
+  padding: 64px 0 98px;
 
   @include media.media-breakpoint(mobile) {
     align-items: center;
@@ -14,14 +14,16 @@
     height: calc(100vh - 56px);
     gap: 24px;
     margin: 0;
-    padding-top: 0;
+    padding: 0;
   }
 }
 
 .title {
+  margin: 0;
   color: #175c8e;
   font-size: 32px;
   font-weight: 500;
+  line-height: normal;
 
   @include media.media-breakpoint(mobile) {
     font-size: 24px;
@@ -29,8 +31,6 @@
 }
 
 .chat-container {
-  height: calc(100vh - 540px);
-
   @include media.media-breakpoint(mobile) {
     grid-template-columns: 1fr;
     height: 100vh;
@@ -84,14 +84,6 @@
   height: auto;
   max-height: 48px;
   border-radius: 12px;
-}
-
-.chat-list--item--content {
-  max-width: 265px;
-
-  @include media.media-breakpoint(mobile) {
-    max-width: 100%;
-  }
 }
 
 .chat-view--header {
