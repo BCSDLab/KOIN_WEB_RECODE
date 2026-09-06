@@ -334,7 +334,6 @@ export function ChatMessageInput({
         {fileInput}
       </>
     );
-  const isSendDisabled = disabled || !value.trim();
 
   return (
     <div className={joinClassNames(styles.messageInput, classNames.container)}>
@@ -355,7 +354,7 @@ export function ChatMessageInput({
         className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
         aria-label={sendButtonAriaLabel}
         onClick={handleSend}
-        disabled={isSendDisabled}
+        disabled={disabled}
       >
         {sendIcon}
       </button>
