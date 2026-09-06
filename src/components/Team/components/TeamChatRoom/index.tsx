@@ -10,7 +10,7 @@ import WebChatIcon from 'assets/svg/Team/web_chat.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import formatChatTime, { formatChatRoomListTime } from 'components/Team/utils/formatChatTime';
 import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDate';
-import { ChatMessageList, ChatRoomList } from 'components/ui/Chat';
+import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -204,41 +204,40 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   };
 
   return (
-    <div className={styles.chat}>
-      <aside className={styles.chat__sidebar} aria-label="채팅방 목록">
-        <ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />
-      </aside>
-
-      <section className={styles.chatRoom}>
-        <div className={styles.chatRoom__mobileHeader}>
-          <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
-        </div>
-        <div className={styles.chatRoom__desktopHeader}>
-          <h2>{chatRoom.room_name}</h2>
-          {memberCount}
-        </div>
-        <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
-          <ChatMessageList
-            groups={messageGroups}
-            classNames={{
-              dateContainer: styles.chatRoom__dateChip,
-              dateLabel: styles.chatRoom__dateLabel,
-              bubbleMine: styles.chatRoom__bubble,
-              bubbleOthers: styles.chatRoom__bubble,
-              imageBubble: styles.chatRoom__imageBubble,
-            }}
-            wrapGroups
-            dateLabelElement="span"
-            senderNameElement="span"
-          />
-        </div>
-        <TeamChatSendBar
-          disabled={isReadOnly || isSending || isUploading}
-          placeholder={isReadOnly ? '종료된 채팅방입니다' : undefined}
-          onSend={handleSend}
-          onImageSelect={handleImageSelect}
+    <ChatLayout
+      className={styles.chat}
+      sidebarClassName={styles.chat__sidebar}
+      panelClassName={styles.chatRoom}
+      sidebar={<ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />}
+    >
+      <div className={styles.chatRoom__mobileHeader}>
+        <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
+      </div>
+      <div className={styles.chatRoom__desktopHeader}>
+        <h2>{chatRoom.room_name}</h2>
+        {memberCount}
+      </div>
+      <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
+        <ChatMessageList
+          groups={messageGroups}
+          classNames={{
+            dateContainer: styles.chatRoom__dateChip,
+            dateLabel: styles.chatRoom__dateLabel,
+            bubbleMine: styles.chatRoom__bubble,
+            bubbleOthers: styles.chatRoom__bubble,
+            imageBubble: styles.chatRoom__imageBubble,
+          }}
+          wrapGroups
+          dateLabelElement="span"
+          senderNameElement="span"
         />
-      </section>
-    </div>
+      </div>
+      <TeamChatSendBar
+        disabled={isReadOnly || isSending || isUploading}
+        placeholder={isReadOnly ? '종료된 채팅방입니다' : undefined}
+        onSend={handleSend}
+        onImageSelect={handleImageSelect}
+      />
+    </ChatLayout>
   );
 }

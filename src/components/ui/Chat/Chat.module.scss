@@ -1,3 +1,31 @@
+.chatLayout {
+  display: grid;
+  grid-template-columns: 384px minmax(0, 1fr);
+  width: 100%;
+
+  &--withoutSidebar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &__sidebar {
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    border-left: 1px solid #eee;
+    background-color: #fff;
+  }
+
+  &__panel {
+    box-sizing: border-box;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid #eee;
+    background-color: #fafafa;
+  }
+}
+
 .roomList {
   &__item {
     box-sizing: border-box;

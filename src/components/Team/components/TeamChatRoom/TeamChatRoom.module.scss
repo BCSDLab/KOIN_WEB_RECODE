@@ -1,22 +1,10 @@
 @use "src/utils/scss/media" as media;
 
 .chat {
-  display: grid;
-  grid-template-columns: 384px minmax(0, 1fr);
-  width: 100%;
   height: 100%;
 
   * {
     box-sizing: border-box;
-  }
-
-  &__sidebar {
-    height: 100%;
-    overflow-y: auto;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-left: 1px solid #eee;
-    background: #fff;
   }
 
   &__empty {
@@ -38,13 +26,7 @@
 }
 
 .chatRoom {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: 100%;
   overflow: hidden;
-  border: 1px solid #eee;
-  background-color: #fafafa;
 
   &__mobileHeader {
     display: none;

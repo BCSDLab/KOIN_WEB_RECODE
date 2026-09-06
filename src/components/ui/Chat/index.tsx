@@ -103,7 +103,44 @@ interface ChatMessageInputProps {
   sendButtonAriaLabel?: string;
 }
 
+interface ChatLayoutProps {
+  sidebar: ReactNode;
+  children: ReactNode;
+  className?: string;
+  sidebarClassName?: string;
+  panelClassName?: string;
+  sidebarAriaLabel?: string;
+}
+
 const joinClassNames = (...classNames: (string | false | undefined)[]) => classNames.filter(Boolean).join(' ');
+
+export function ChatLayout({
+  sidebar,
+  children,
+  className,
+  sidebarClassName,
+  panelClassName,
+  sidebarAriaLabel = '채팅방 목록',
+}: ChatLayoutProps) {
+  const hasSidebar = Boolean(sidebar);
+
+  return (
+    <div
+      className={joinClassNames(
+        styles.chatLayout,
+        !hasSidebar && styles['chatLayout--withoutSidebar'],
+        className,
+      )}
+    >
+      {hasSidebar && (
+        <aside className={joinClassNames(styles.chatLayout__sidebar, sidebarClassName)} aria-label={sidebarAriaLabel}>
+          {sidebar}
+        </aside>
+      )}
+      {children && <section className={joinClassNames(styles.chatLayout__panel, panelClassName)}>{children}</section>}
+    </div>
+  );
+}
 
 export function ChatRoomList({
   items,

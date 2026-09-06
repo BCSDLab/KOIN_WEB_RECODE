@@ -20,7 +20,13 @@ import {
   formatISODateToKoreanDate,
   formatISODateToTime,
 } from 'components/Articles/LostItemChatPage/utils/date';
-import { ChatMessageInput, ChatMessageList, ChatRoomList, type ChatMessageListGroup } from 'components/ui/Chat';
+import {
+  ChatLayout,
+  ChatMessageInput,
+  ChatMessageList,
+  ChatRoomList,
+  type ChatMessageListGroup,
+} from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -181,9 +187,12 @@ function LostItemChatPage({ token }: { token: string }) {
     <div className={styles.container}>
       {!isMobile && <h1 className={styles.title}>쪽지</h1>}
 
-      <section className={styles['chat-container']}>
-        {showList && (
-          <div className={styles['chat-list']}>
+      <ChatLayout
+        className={styles['chat-container']}
+        sidebarClassName={styles['chat-list']}
+        panelClassName={styles['chat-view']}
+        sidebar={
+          showList && (
             <ChatRoomList
               items={chatRoomItems}
               classNames={{
@@ -192,11 +201,11 @@ function LostItemChatPage({ token }: { token: string }) {
               }}
               emptyContent="채팅방이 없습니다.🧐"
             />
-          </div>
-        )}
-
+          )
+        }
+      >
         {showDetail && (
-          <div className={styles['chat-view']}>
+          <>
             {!(chatroomDetail && messages) && (
               <div className={styles.chat__empty}>
                 선택된 채팅방이 없습니다.
@@ -268,9 +277,9 @@ function LostItemChatPage({ token }: { token: string }) {
                 </div>
               </>
             )}
-          </div>
+          </>
         )}
-      </section>
+      </ChatLayout>
 
       {isDeleteModalOpen && (
         <DeleteModal
