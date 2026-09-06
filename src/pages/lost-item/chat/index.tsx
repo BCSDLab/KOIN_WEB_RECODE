@@ -20,7 +20,7 @@ import {
   formatISODateToKoreanDate,
   formatISODateToTime,
 } from 'components/Articles/LostItemChatPage/utils/date';
-import { ChatMessageList, ChatRoomList, type ChatMessageListGroup } from 'components/ui/Chat';
+import { ChatMessageInput, ChatMessageList, ChatRoomList, type ChatMessageListGroup } from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -44,7 +44,6 @@ function LostItemChatPage({ token }: { token: string }) {
   const [inputValue, setInputValue] = useState('');
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
   const chatroomIdParam = searchParams.get('chatroomId');
@@ -88,20 +87,13 @@ function LostItemChatPage({ token }: { token: string }) {
 
   const sendMessage = () => {
     if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
-      return;
+      return false;
     }
 
     sendChatMessage({ content: inputValue });
     setInputValue('');
+    return true;
   }
-
-  const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      if (e.nativeEvent.isComposing) return;
-      e.preventDefault();
-      sendMessage();
-    }
-  };
 
   const addErrorImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = DefaultPhotoUrl;
@@ -116,18 +108,6 @@ function LostItemChatPage({ token }: { token: string }) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
-  /**
-   * @description
-   * 메세지 입력창의 높이를 자동으로 조절합니다.
-   */
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = '45px';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-      textareaRef.current.style.maxHeight = '110px';
-    }
-  }, [inputValue]);
 
   const chatRoomItems = (chatroomList ?? []).map(
     ({
@@ -277,44 +257,36 @@ function LostItemChatPage({ token }: { token: string }) {
                   {!isOnline && (
                     <div className={styles['offline-banner']}>오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.</div>
                   )}
-                  <div className={styles['chat-input-container']}>
-                    <div className={styles['chat-input--photo']}>
-                      <label
-                        htmlFor="image-file"
-                        className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
-                      >
-                        <AddPhotoIcon />
-                        <input
-                          type="file"
-                          ref={imgRef}
-                          accept="image/*"
-                          id="image-file"
-                          multiple
-                          onChange={uploadImage}
-                          disabled={!isOnline}
-                          aria-label="사진 전송"
-                        />
-                      </label>
-                    </div>
-                    <textarea
-                      ref={textareaRef}
-                      className={styles['chat-input']}
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyDown={sendMessageToEnterKeyDown}
-                      placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
-                      disabled={!isOnline}
-                    />
-                    <button
-                      type="button"
-                      onClick={sendMessage}
-                      className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
-                      disabled={!isOnline}
-                      aria-label="문자 전송"
-                    >
-                      <SendIcon />
-                    </button>
-                  </div>
+                  <ChatMessageInput
+                    classNames={{
+                      container: styles['chat-input-container'],
+                      imageWrapper: styles['chat-input--photo'],
+                      imageControl: styles['message-button'],
+                      imageControlDisabled: styles['message-button--disabled'],
+                      textarea: styles['chat-input'],
+                      sendButton: styles['message-button'],
+                      sendButtonDisabled: styles['message-button--disabled'],
+                    }}
+                    imageIcon={<AddPhotoIcon />}
+                    sendIcon={<SendIcon />}
+                    value={inputValue}
+                    onChange={setInputValue}
+                    onSend={sendMessage}
+                    onImageChange={() => {
+                      void uploadImage();
+                    }}
+                    disabled={!isOnline}
+                    placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
+                    fileInputRef={imgRef}
+                    imageControlElement="label"
+                    imageInputId="image-file"
+                    imageInputMultiple
+                    fileInputAriaLabel="사진 전송"
+                    sendButtonAriaLabel="문자 전송"
+                    textareaResetHeight="45px"
+                    textareaMaxHeight="110px"
+                    disableSendWhenEmpty={false}
+                  />
                 </div>
               </>
             )}
