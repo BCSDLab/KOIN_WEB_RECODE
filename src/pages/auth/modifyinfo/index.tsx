@@ -756,12 +756,17 @@ const GenderInput = React.forwardRef((_, ref) => {
   );
 });
 
+const normalizePhoneNumber = (value: string) => value.replace(/\D/g, '');
+
 const PhoneInput = React.forwardRef((props, ref) => {
   const { data: userInfo } = useUser();
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number ?? '');
   const [codeNumber, setCodeNumber] = useState<string>('');
   const { setIsValid } = useValidationContext();
   const isMobile = useMediaQuery();
+  const normalizedPhoneNumber = normalizePhoneNumber(phoneNumber);
+  const originalPhoneNumber = normalizePhoneNumber(userInfo?.phone_number ?? '');
+  const isPhoneNumberUnchanged = normalizedPhoneNumber === originalPhoneNumber;
 
   const {
     checkPhoneNumber,
@@ -772,34 +777,48 @@ const PhoneInput = React.forwardRef((props, ref) => {
     timeLeft,
     formattedTime,
     isRunning,
-    sendSMS,
-  } = usePhoneVerification(phoneNumber);
+    hasSentVerificationCode,
+    isSendLimitExceeded,
+    isSending,
+    smsSendCountData,
+    resetVerification,
+  } = usePhoneVerification(phoneNumber, { showVerificationHelp: isMobile });
 
-  const { data } = sendSMS;
+  const isSendButtonDisabled = isPhoneNumberUnchanged || isSendLimitExceeded || isSending || isVerified;
 
   useEffect(() => {
-    if (phoneNumber === userInfo?.phone_number) {
-      setIsValid((prev) => ({ ...prev, isPhoneValid: true }));
-    }
-
-    if (verifyCode.isSuccess) {
-      setIsValid((prev) => ({ ...prev, isPhoneValid: true, isFieldChanged: true }));
-    }
-  }, [verifyCode.isSuccess, setIsValid, phoneNumber, userInfo?.phone_number]);
+    setIsValid((prev) => ({
+      ...prev,
+      isPhoneValid: isPhoneNumberUnchanged || isVerified,
+      ...(isVerified && { isFieldChanged: true }),
+    }));
+  }, [isPhoneNumberUnchanged, isVerified, setIsValid]);
 
   useImperativeHandle(ref, () => {
-    const value = phoneNumber.replace(/-/g, '');
-    const valid = REGEX.PHONE_NUMBER.test(value) ? true : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
-    const originalValue = (userInfo?.phone_number ?? '').replace(/-/g, '');
+    const valid = REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+      ? true
+      : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
-    if (value !== originalValue) {
-      return { value, valid, isVerified };
+    if (!isPhoneNumberUnchanged) {
+      return { value: normalizedPhoneNumber, valid, isVerified };
     }
-    return { value, valid };
+    return { value: normalizedPhoneNumber, valid };
   });
 
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextPhoneNumber = e.target.value;
+    const isOriginalPhoneNumber = normalizePhoneNumber(nextPhoneNumber) === originalPhoneNumber;
+
+    setPhoneNumber(nextPhoneNumber);
+    setCodeNumber('');
+    resetVerification();
+    setIsValid((prev) => ({ ...prev, isPhoneValid: isOriginalPhoneNumber }));
+  };
+
   const handleStartVerification = () => {
-    if (phoneNumber !== userInfo?.phone_number) {
+    if (!isPhoneNumberUnchanged) {
+      setCodeNumber('');
+      setIsValid((prev) => ({ ...prev, isPhoneValid: false }));
       checkPhoneNumber.mutate(phoneNumber);
     }
   };
@@ -821,7 +840,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   autoComplete="tel"
                   placeholder="전화번호 (Ex.01012345678)"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={handlePhoneNumberChange}
                   {...props}
                 />
                 <button
@@ -829,12 +848,12 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   className={cn({
                     [styles.modify__button]: true,
                     [styles['modify__button--phone']]: true,
-                    [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
+                    [styles['modify__button--active']]: !isSendButtonDisabled,
                   })}
                   onClick={handleStartVerification}
-                  disabled={phoneNumber === userInfo?.phone_number}
+                  disabled={isSendButtonDisabled}
                 >
-                  {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
+                  {hasSentVerificationCode ? '인증번호 재발송' : '인증번호 발송'}
                 </button>
               </div>
               {phoneMessage && (
@@ -849,10 +868,10 @@ const PhoneInput = React.forwardRef((props, ref) => {
                     {phoneMessage.type === 'error' && <ErrorIcon />}
                     {phoneMessage.type === 'warning' && <WarningMobileIcon />}
                     {phoneMessage.content}
-                    {phoneMessage.type === 'success' && (
+                    {phoneMessage.type === 'success' && smsSendCountData && (
                       <span className={styles['form-message--count']}>
                         남은 횟수
-                        {` (${data?.remaining_count}/${data?.total_count})`}
+                        {` (${smsSendCountData.remaining_count}/${smsSendCountData.total_count})`}
                       </span>
                     )}
                   </p>
@@ -873,50 +892,70 @@ const PhoneInput = React.forwardRef((props, ref) => {
               )}
             </div>
           </div>
-          {phoneMessage?.type === 'success' && (
+          {hasSentVerificationCode && (
             <div className={styles['form-input__label-wrapper']}>
               <label htmlFor="code" className={styles['form-input__label']}>
                 휴대전화 인증
                 <span className={styles['form-input__required']}>*</span>
               </label>
-              <div className={styles['form-input__row']}>
-                <div className={styles['form-input__code-wrapper']}>
-                  <input
-                    className={styles['form-input']}
-                    type="text"
-                    autoComplete="one-time-code"
-                    placeholder="인증번호를 입력해주세요."
-                    value={codeNumber}
-                    onChange={(e) => setCodeNumber(e.target.value)}
-                  />
-                  {isRunning && <p className={styles['form-message__timer']}>{formattedTime}</p>}
+              <div className={styles['verification-field']}>
+                <div className={styles['form-input__row']}>
+                  <div className={styles['form-input__code-wrapper']}>
+                    <input
+                      className={styles['form-input']}
+                      type="text"
+                      autoComplete="one-time-code"
+                      placeholder="인증번호를 입력해주세요."
+                      value={codeNumber}
+                      onChange={(e) => setCodeNumber(e.target.value)}
+                      disabled={isVerified || isSendLimitExceeded || timeLeft === 0}
+                    />
+                    {!isVerified && !isSendLimitExceeded && (
+                      <p className={styles['form-message__timer']}>{formattedTime}</p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className={cn({
+                      [styles.modify__button]: true,
+                      [styles['modify__button--phone']]: true,
+                      [styles['modify__button--active']]:
+                        codeNumber !== '' && timeLeft > 0 && isRunning && !isVerified && !isSendLimitExceeded,
+                    })}
+                    onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                    disabled={codeNumber === '' || timeLeft === 0 || !isRunning || isVerified || isSendLimitExceeded}
+                  >
+                    인증하기
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className={cn({
-                    [styles.modify__button]: true,
-                    [styles['modify__button--phone']]: true,
-                    [styles['modify__button--active']]: codeNumber !== '',
-                  })}
-                  onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
-                  disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
-                >
-                  인증하기
-                </button>
+                {verificationMessage?.type === 'default' ? (
+                  <p className={styles['verification-inquiry']}>
+                    <span>{verificationMessage.content}</span>
+                    <a
+                      className={styles['verification-inquiry__link']}
+                      href={ROUTES.Inquiry()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      문의하기
+                    </a>
+                  </p>
+                ) : (
+                  verificationMessage && (
+                    <p
+                      className={cn({
+                        [styles['verification-message']]: true,
+                        [styles[`verification-message--${verificationMessage.type}`]]: true,
+                      })}
+                    >
+                      {verificationMessage.type === 'success' && <CorrectIcon />}
+                      {verificationMessage.type === 'error' && <ErrorIcon />}
+                      {verificationMessage.type === 'warning' && <WarningMobileIcon />}
+                      {verificationMessage.content}
+                    </p>
+                  )
+                )}
               </div>
-              {verificationMessage && (
-                <p
-                  className={cn({
-                    [styles['form-message']]: true,
-                    [styles[`form-message--${verificationMessage.type}`]]: true,
-                  })}
-                >
-                  {verificationMessage.type === 'success' && <CorrectIcon />}
-                  {verificationMessage.type === 'error' && <ErrorIcon />}
-                  {verificationMessage.type === 'warning' && <WarningMobileIcon />}
-                  {verificationMessage.content}
-                </p>
-              )}
             </div>
           )}
         </>
@@ -934,7 +973,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               autoComplete="tel"
               placeholder="전화번호 (Ex.01012345678)"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={handlePhoneNumberChange}
               {...props}
             />
             <button
@@ -942,12 +981,12 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={cn({
                 [styles.modify__button]: true,
                 [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
+                [styles['modify__button--active']]: !isSendButtonDisabled,
               })}
               onClick={handleStartVerification}
-              disabled={phoneNumber === userInfo?.phone_number}
+              disabled={isSendButtonDisabled}
             >
-              {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
+              {hasSentVerificationCode ? '인증번호 재발송' : '인증번호 발송'}
             </button>
             {phoneMessage && (
               <p
@@ -960,16 +999,16 @@ const PhoneInput = React.forwardRef((props, ref) => {
                 {phoneMessage.type === 'error' && <ErrorIcon />}
                 {phoneMessage.type === 'warning' && <WarningIcon />}
                 {phoneMessage.content}
-                {phoneMessage.type === 'success' && (
+                {phoneMessage.type === 'success' && smsSendCountData && (
                   <span className={styles['form-message--count']}>
                     남은 횟수
-                    {` (${data?.remaining_count}/${data?.total_count})`}
+                    {` (${smsSendCountData.remaining_count}/${smsSendCountData.total_count})`}
                   </span>
                 )}
               </p>
             )}
           </div>
-          {phoneMessage?.type === 'success' && (
+          {hasSentVerificationCode && (
             <div className={styles['form-input__label-wrapper']}>
               <label htmlFor="code" className={styles['form-input__label']}>
                 휴대전화 인증
