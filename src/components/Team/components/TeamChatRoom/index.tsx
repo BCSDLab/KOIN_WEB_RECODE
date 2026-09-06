@@ -223,8 +223,8 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
             classNames={{
               dateContainer: styles.chatRoom__dateChip,
               dateLabel: styles.chatRoom__dateLabel,
-              bubbleMine: `${styles.chatRoom__bubble} ${styles['chatRoom__bubble--mine']}`,
-              bubbleOthers: `${styles.chatRoom__bubble} ${styles['chatRoom__bubble--others']}`,
+              bubbleMine: styles.chatRoom__bubble,
+              bubbleOthers: styles.chatRoom__bubble,
               imageBubble: styles.chatRoom__imageBubble,
             }}
             wrapGroups
