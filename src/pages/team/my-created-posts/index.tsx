@@ -151,7 +151,7 @@ function CreatedPostsListSection({
                     </>
                   }
                   actionSlot={
-                    <div className={styles.mobileOnly}>
+                    <div className={styles.actionRow}>
                       <button
                         type="button"
                         className={styles.actionButton}

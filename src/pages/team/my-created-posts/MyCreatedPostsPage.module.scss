@@ -222,12 +222,23 @@
   }
 }
 
-// 모바일: 카드 하단 별도 행에 배치되는 전체폭 액션 버튼(actionSlot).
+.actionRow {
+  display: none;
+  gap: 12px;
+  width: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .actionButton {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
+  width: 140px;
   height: 40px;
   border: 0.5px solid #b611f5;
   border-radius: 16px;

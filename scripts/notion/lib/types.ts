@@ -60,6 +60,7 @@ export const DATABASES: readonly DatabaseConfig[] = [
   { name: '버스', id: '1c39ae650b5981ecada6e03385f34894', team: 'CAMPUS' },
   { name: '배너', id: '1c29ae650b59818db23edd65c05a39b2', team: 'CAMPUS' },
   { name: '동아리', id: '1fd9ae650b5981778e7dff63a4ae7ae4', team: 'CAMPUS' },
+  { name: '팀원모집', id: 'b259ae650b5983ebbfd001d597f6b047', team: 'CAMPUS' },
 
   { name: '주변상점', id: '1be9ae650b5981b39b25f4c7c58ac3c0', team: 'BUSINESS' },
   { name: '복덕방', id: '1be9ae650b5981368084e913e80539fe', team: 'BUSINESS' },

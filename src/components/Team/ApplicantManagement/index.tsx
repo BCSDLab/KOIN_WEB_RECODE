@@ -8,7 +8,6 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ApplicantCard from './components/ApplicantCard';
@@ -17,7 +16,6 @@ import styles from './ApplicantManagement.module.scss';
 export default function ApplicantManagement() {
   const router = useRouter();
   const token = useTokenState();
-  const logger = useLogger();
   const isMobile = useMediaQuery();
   const { postId } = router.query;
   const recruitmentId = typeof postId === 'string' ? postId : '';
@@ -30,11 +28,6 @@ export default function ApplicantManagement() {
   const handleGroupChatClick = () => {
     if (!data || data.recruitment.team_chat_room_id === null) return;
 
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'team_recruitment_group_chat',
-      value: data.recruitment.title,
-    });
     router.push(ROUTES.TeamChat({ recruitmentId, chatRoomId: String(data.recruitment.team_chat_room_id) }));
   };
 
