@@ -17,7 +17,6 @@ interface UsePhoneVerificationOptions {
   showVerificationHelp?: boolean;
 }
 
-const INCORRECT_VERIFICATION_MESSAGE = '인증번호가 일치하지 않습니다.';
 const VERIFICATION_DURATION_SECONDS = 180;
 const VERIFICATION_HELP_DELAY_SECONDS = 60;
 
@@ -92,7 +91,7 @@ export function usePhoneVerification(
       if (isKoinError(err)) {
         const { status } = err;
         if (status === 400) {
-          setVerificationMessage({ type: 'warning', content: INCORRECT_VERIFICATION_MESSAGE });
+          setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
         }
         if (status === 404) {
           setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
