@@ -85,7 +85,13 @@ export default function MyCreatedPostFilterPanel({
   };
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} className={styles.panel} aria-label="필터">
+    <BottomModal
+      isOpen={isOpen}
+      onClose={onClose}
+      className={styles.panel}
+      backdropClassName={styles.backdrop}
+      aria-label="필터"
+    >
       <BottomModalHeader className={styles.header}>
         <span className={styles.headerTitle}>필터</span>
         <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
