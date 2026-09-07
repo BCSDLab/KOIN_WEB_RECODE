@@ -45,12 +45,15 @@
   }
 
   &__header {
-    position: relative;
-    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 4px;
+  }
+
+  &__headerAction {
+    position: relative;
+    z-index: 2;
   }
 
   &__badges {

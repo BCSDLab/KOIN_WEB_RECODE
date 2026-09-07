@@ -86,7 +86,7 @@ export default function RecruitmentCard({
       <div className={styles.card__header}>
         <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
 
-        {rightSlot}
+        {rightSlot && <div className={styles.card__headerAction}>{rightSlot}</div>}
       </div>
 
       <h2 className={styles.card__title}>{recruitment.title}</h2>
