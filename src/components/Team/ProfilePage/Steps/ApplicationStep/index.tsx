@@ -57,10 +57,7 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
               maxLength={20}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid}
-              {...register('preferredRole', {
-                required: '선호 역할을 작성해주세요.',
-                maxLength: { value: 20, message: '선호 역할은 20자 이내로 입력해주세요.' },
-              })}
+              {...register('preferredRole')}
             />
           )}
         </FormField>
@@ -91,10 +88,7 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
           error={errors.introduction?.message}
         >
           {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => {
-            const { ref: introductionRef, ...introductionField } = register('introduction', {
-              required: '자기소개를 작성해주세요.',
-              maxLength: { value: 1000, message: '자기소개는 1000자 이내로 입력해주세요.' },
-            });
+            const { ref: introductionRef, ...introductionField } = register('introduction');
             return (
               <textarea
                 id={controlId}

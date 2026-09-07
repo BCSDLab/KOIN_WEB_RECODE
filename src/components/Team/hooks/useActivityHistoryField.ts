@@ -4,7 +4,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
 
-interface ActivityValue {
+export interface ActivityValue {
   id: string;
   title: string;
   startDate: string;
@@ -14,6 +14,8 @@ interface ActivityValue {
   status: 'draft' | 'saved';
   hasBeenSaved: boolean;
 }
+
+export type ActivityValidationResult = { success: true } | { success: false; message: string };
 
 interface ActivityHistoryFormValues {
   activities: ActivityValue[];
@@ -39,7 +41,10 @@ const createActivityId = () => {
   return `activity-${Date.now()}-${activitySequence}`;
 };
 
-export default function useActivityHistoryField(loggingTitle: ActivityHistoryLoggingTitle) {
+export default function useActivityHistoryField(
+  loggingTitle: ActivityHistoryLoggingTitle,
+  validateActivity: (activity: ActivityValue) => ActivityValidationResult,
+) {
   const { actionEventClick } = useLogger();
   const { control, register, getValues, setValue } = useFormContext<ActivityHistoryFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: 'activities' });
@@ -49,10 +54,10 @@ export default function useActivityHistoryField(loggingTitle: ActivityHistoryLog
   const handleAppend = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.ADD,
       value: '활동 이력 추가',
     });
+
     append({
       id: createActivityId(),
       title: '',
@@ -78,33 +83,15 @@ export default function useActivityHistoryField(loggingTitle: ActivityHistoryLog
   const handleDone = (index: number) => {
     const activity = getValues(`activities.${index}`);
 
-    // 검증 순서(제목→날짜→내용)는 두 페이지 중 하나로 통일한 것. 순서에 따라 여러 필드가
-    // 비었을 때 어떤 경고 토스트가 먼저 뜨는지만 달라지고, 최종 검증 결과는 동일하다.
-    if (!activity.title.trim()) {
-      showToast('warning', '활동명을 작성해주세요.');
-      return;
-    }
-    if (!activity.startDate) {
-      showToast('warning', '활동 시작일을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && !activity.endDate) {
-      showToast('warning', '활동 종료일을 선택하거나 진행 중을 선택해주세요.');
-      return;
-    }
-    if (!activity.isOngoing && activity.endDate && activity.endDate < activity.startDate) {
-      showToast('warning', '활동 종료일은 시작일 이후로 선택해주세요.');
-      return;
-    }
-    if (!activity.content.trim()) {
-      showToast('warning', '활동 내용을 작성해주세요.');
+    const result = validateActivity(activity);
+    if (!result.success) {
+      showToast('warning', result.message);
       return;
     }
 
     const doneEvent = loggingTitle.getDoneEvent(activity.hasBeenSaved);
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: doneEvent.eventLabel,
       value: doneEvent.value,
     });

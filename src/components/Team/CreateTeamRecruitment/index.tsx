@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { teamMutations } from 'api/team/mutations';
-import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import NewTeamRecruitment from 'components/Team/NewTeamRecruitment';
 import toRecruitmentRequestBody from 'components/Team/NewTeamRecruitment/toRecruitmentRequestBody';
 import ROUTES from 'static/routes';
@@ -14,7 +13,6 @@ export default function CreateTeamRecruitment() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const token = useTokenState();
-  const { isAuthReady } = useTeamAuthGuard();
   const { mutateAsync: createRecruitment } = useMutation(teamMutations.createRecruitment(queryClient, token));
 
   const handleSubmit = async (values: TeamRecruitmentFormValues) => {
@@ -27,8 +25,6 @@ export default function CreateTeamRecruitment() {
       throw error;
     }
   };
-
-  if (!isAuthReady) return null;
 
   return <NewTeamRecruitment onSubmit={handleSubmit} />;
 }

@@ -110,28 +110,28 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
       });
     }
 
-    if (primaryAction.type === 'login') {
-      openLoginModal();
-      return;
-    }
-
-    if (primaryAction.type === 'apply') {
-      router.push(ROUTES.TeamRecruitmentApply({ postId: String(recruitment.id) }));
-      return;
-    }
-
-    if (primaryAction.type === 'manage') {
-      navigateToApplicantManagement();
-      return;
-    }
-
-    if (primaryAction.type === 'chat' && recruitment.team_chat_room_id !== null) {
-      router.push(
-        ROUTES.TeamChat({
-          recruitmentId: String(recruitment.id),
-          chatRoomId: String(recruitment.team_chat_room_id),
-        }),
-      );
+    switch (primaryAction.type) {
+      case 'login':
+        openLoginModal();
+        return;
+      case 'apply':
+        router.push(ROUTES.TeamRecruitmentApply({ postId: String(recruitment.id) }));
+        return;
+      case 'manage':
+        navigateToApplicantManagement();
+        return;
+      case 'chat':
+        if (recruitment.team_chat_room_id !== null) {
+          router.push(
+            ROUTES.TeamChat({
+              recruitmentId: String(recruitment.id),
+              chatRoomId: String(recruitment.team_chat_room_id),
+            }),
+          );
+        }
+        return;
+      case 'disabled':
+        return;
     }
   };
 

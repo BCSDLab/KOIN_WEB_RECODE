@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,6 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import useTeamAuthGuard from 'components/Team/hooks/useTeamAuthGuard';
 import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import { createApplicationFormSchema } from 'components/Team/RecruitmentApplyPage/schema';
 import SubPageHeader from 'components/ui/SubPageHeader';
@@ -50,21 +49,14 @@ export default function RecruitmentApplyPage() {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { actionEventClick } = useLogger();
-  const { isAuthReady } = useTeamAuthGuard();
   const [pendingValues, setPendingValues] = useState<ApplicationFormValues | null>(null);
 
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
 
-  const buildStepHref = useCallback(
-    (step: ApplyStepTitle) => ROUTES.TeamRecruitmentApply({ postId: String(postId), step }),
-    [postId],
-  );
-  const onExitFirstStep = useCallback(
-    () => router.push(ROUTES.TeamDetail({ postId: String(postId) })),
-    [router, postId],
-  );
+  const buildStepHref = (step: ApplyStepTitle) => ROUTES.TeamRecruitmentApply({ postId: String(postId), step });
+  const onExitFirstStep = () => router.push(ROUTES.TeamDetail({ postId: String(postId) }));
   const { currentStep, nextStep, goBack, isReady } = useTeamFormStep<ApplyStepTitle>(
     APPLY_STEPS,
     '기본 정보',
@@ -90,7 +82,7 @@ export default function RecruitmentApplyPage() {
 
   const isGeneralRecruitment = !!recruitment && recruitment.roles.length === 0;
 
-  const schema = useMemo(() => createApplicationFormSchema(isGeneralRecruitment), [isGeneralRecruitment]);
+  const schema = createApplicationFormSchema(isGeneralRecruitment);
 
   const methods = useForm<ApplicationFormValues>({
     resolver: zodResolver(schema),
@@ -133,9 +125,9 @@ export default function RecruitmentApplyPage() {
     });
   }, [existingProfile, methods]);
 
-  const goToFirstStep = useCallback(() => {
+  const goToFirstStep = () => {
     nextStep('기본 정보', { replace: true });
-  }, [nextStep]);
+  };
 
   useEffect(() => {
     if (!isReady || currentStep !== '지원서 작성') return;
@@ -222,8 +214,6 @@ export default function RecruitmentApplyPage() {
     });
     setPendingValues(null);
   };
-
-  if (!isAuthReady) return null;
 
   return (
     <div className={styles.container}>

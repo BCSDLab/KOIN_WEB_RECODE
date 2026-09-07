@@ -3,18 +3,32 @@ import { setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin } 
 
 const isSafeExternalRedirect = (url: string) => {
   try {
-    const u = new URL(url);
+    const { hostname } = new URL(url);
 
     return (
-      u.hostname === 'order.koreatech.in' ||
-      u.hostname === 'order.stage.koreatech.in' ||
-      u.hostname === 'koreatech.in' ||
-      u.hostname.endsWith('.koreatech.in')
+      hostname === 'order.koreatech.in' ||
+      hostname === 'order.stage.koreatech.in' ||
+      hostname === 'koreatech.in' ||
+      hostname.endsWith('.koreatech.in')
     );
   } catch {
     return false;
   }
 };
+
+type RedirectTarget = { type: 'external' | 'internal'; destination: string } | { type: 'fallback' };
+
+function resolveRedirectTarget(redirect: unknown): RedirectTarget {
+  if (typeof redirect !== 'string' || redirect.length === 0) return { type: 'fallback' };
+
+  const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
+  if (isAbsoluteUrl) {
+    return isSafeExternalRedirect(redirect) ? { type: 'external', destination: redirect } : { type: 'fallback' };
+  }
+
+  const isInternalPath = redirect.startsWith('/') && !redirect.startsWith('//');
+  return isInternalPath ? { type: 'internal', destination: redirect } : { type: 'fallback' };
+}
 
 export function useLoginRedirect() {
   const router = useRouter();
@@ -26,23 +40,19 @@ export function useLoginRedirect() {
   };
 
   const redirectAfterLogin = () => {
-    const { redirect } = router.query;
+    const target = resolveRedirectTarget(router.query.redirect);
 
-    if (typeof redirect !== 'string' || redirect.length === 0) {
+    if (target.type === 'fallback') {
       navigateToFallback();
       return;
     }
 
-    const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
-
-    if (!isAbsoluteUrl) return;
-    if (isSafeExternalRedirect(redirect)) {
-      window.location.href = redirect;
-    } else {
-      navigateToFallback();
+    if (target.type === 'external') {
+      window.location.href = target.destination;
+      return;
     }
 
-    router.replace(redirect);
+    router.replace(target.destination);
   };
 
   return {

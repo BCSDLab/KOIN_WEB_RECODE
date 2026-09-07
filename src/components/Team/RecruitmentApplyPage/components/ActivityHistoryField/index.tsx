@@ -1,8 +1,9 @@
 import XIcon from 'assets/svg/Team/x-icon.svg';
-import useActivityHistoryField from 'components/Team/hooks/useActivityHistoryField';
+import useActivityHistoryField, { type ActivityValue } from 'components/Team/hooks/useActivityHistoryField';
 import {
   APPLY_ACTIVITY_CONTENT_MAX_LENGTH,
   APPLY_ACTIVITY_TITLE_MAX_LENGTH,
+  savedApplyActivitySchema,
 } from 'components/Team/RecruitmentApplyPage/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
 import styles from './ActivityHistoryField.module.scss';
@@ -11,6 +12,13 @@ const LOGGING_TITLE = {
   ADD: 'team_recruitment_apply_activity_add',
   EDIT: 'team_recruitment_apply_activity_modify',
   DONE: 'team_recruitment_apply_activity_modify_complete',
+};
+
+const validateActivity = (activity: ActivityValue) => {
+  const result = savedApplyActivitySchema.safeParse({ ...activity, status: 'saved' });
+  return result.success
+    ? { success: true as const }
+    : { success: false as const, message: result.error.issues[0].message };
 };
 
 export default function ActivityHistoryField() {
@@ -27,11 +35,14 @@ export default function ActivityHistoryField() {
     handleDateSelect,
     handleOpenDatePicker,
     handleCloseDatePicker,
-  } = useActivityHistoryField({
-    ADD: LOGGING_TITLE.ADD,
-    EDIT: LOGGING_TITLE.EDIT,
-    getDoneEvent: (hasBeenSaved) => ({ eventLabel: LOGGING_TITLE.DONE, value: hasBeenSaved ? '수정하기' : '완료' }),
-  });
+  } = useActivityHistoryField(
+    {
+      ADD: LOGGING_TITLE.ADD,
+      EDIT: LOGGING_TITLE.EDIT,
+      getDoneEvent: (hasBeenSaved) => ({ eventLabel: LOGGING_TITLE.DONE, value: hasBeenSaved ? '수정하기' : '완료' }),
+    },
+    validateActivity,
+  );
 
   return (
     <div className={styles.activity}>

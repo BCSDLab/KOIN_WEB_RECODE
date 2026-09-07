@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 /**
@@ -16,20 +15,17 @@ function useTeamFormStep<T extends string>(
 
   const currentStep = step && steps.includes(step) ? step : defaultStep;
 
-  const nextStep = useCallback(
-    (next: T, options?: { replace: boolean }) => {
-      const href = buildStepHref(next);
+  const nextStep = (next: T, options?: { replace: boolean }) => {
+    const href = buildStepHref(next);
 
-      if (options?.replace) {
-        router.replace(href);
-        return;
-      }
-      router.push(href);
-    },
-    [router, buildStepHref],
-  );
+    if (options?.replace) {
+      router.replace(href);
+      return;
+    }
+    router.push(href);
+  };
 
-  const goBack = useCallback(() => {
+  const goBack = () => {
     const currentIndex = steps.indexOf(currentStep);
 
     if (currentIndex > 0) {
@@ -37,7 +33,7 @@ function useTeamFormStep<T extends string>(
       return;
     }
     onExitFirstStep();
-  }, [steps, currentStep, nextStep, onExitFirstStep]);
+  };
 
   return {
     currentStep,
