@@ -40,6 +40,12 @@ export const savedApplyActivitySchema = z
       .refine(isValidCalendarDate, '활동 시작일이 올바르지 않습니다.'),
   })
   .superRefine((activity, context) => {
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (isValidCalendarDate(activity.startDate) && activity.startDate > today) {
+      context.addIssue({ code: 'custom', path: ['startDate'], message: '활동 시작일은 오늘 이전으로 선택해주세요.' });
+    }
+
     if (activity.isOngoing) return;
 
     if (!activity.endDate) {
@@ -48,6 +54,10 @@ export const savedApplyActivitySchema = z
     }
     if (!isValidCalendarDate(activity.endDate)) {
       context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일이 올바르지 않습니다.' });
+      return;
+    }
+    if (activity.endDate > today) {
+      context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일은 오늘 이전으로 선택해주세요.' });
       return;
     }
     if (activity.endDate < activity.startDate) {
