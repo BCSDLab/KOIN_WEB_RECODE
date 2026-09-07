@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -30,10 +30,10 @@ import styles from './MyCreatedPostsPage.module.scss';
 
 interface CreatedPostsListSectionProps {
   requestParams: MyCreatedTeamRecruitmentListRequest;
-  onFilterOpen: () => void;
+  onFilterOpen: (anchorRect: DOMRect) => void;
   onApplicantClick: (recruitment: MyCreatedTeamRecruitment) => void;
   onCloseClick: (recruitment: MyCreatedTeamRecruitment) => void;
-  onChatClick: (recruitment: MyCreatedTeamRecruitment) => React.MouseEventHandler<HTMLButtonElement>;
+  onChatClick: (recruitment: MyCreatedTeamRecruitment) => MouseEventHandler<HTMLButtonElement>;
 }
 
 function CreatedPostsListSection({
@@ -54,13 +54,13 @@ function CreatedPostsListSection({
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
-  const handleFilterOpen = () => {
+  const handleFilterOpen: MouseEventHandler<HTMLButtonElement> = (event) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_created_post_filter', value: '필터' });
-    onFilterOpen();
+    onFilterOpen(event.currentTarget.getBoundingClientRect());
   };
 
   const handleApplicantClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -68,7 +68,7 @@ function CreatedPostsListSection({
     };
 
   const handleCloseClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -186,6 +186,7 @@ export default function MyCreatedPostsPage() {
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
+  const [filterAnchorRect, setFilterAnchorRect] = useState<DOMRect | null>(null);
   const [requestParams, setRequestParams] = useState<MyCreatedTeamRecruitmentListRequest>({
     status: 'ALL',
     sort: 'LATEST_DESC',
@@ -243,7 +244,7 @@ export default function MyCreatedPostsPage() {
   };
 
   const handleChatClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -287,7 +288,10 @@ export default function MyCreatedPostsPage() {
             <Suspense fallback={null}>
               <CreatedPostsListSection
                 requestParams={requestParams}
-                onFilterOpen={openFilter}
+                onFilterOpen={(anchorRect) => {
+                  setFilterAnchorRect(anchorRect);
+                  openFilter();
+                }}
                 onApplicantClick={handleApplicantClick}
                 onCloseClick={handleCloseClick}
                 onChatClick={handleChatClick}
@@ -300,7 +304,11 @@ export default function MyCreatedPostsPage() {
       {isFilterOpen && (
         <MyCreatedPostFilterPanel
           isOpen={isFilterOpen}
-          onClose={closeFilter}
+          onClose={() => {
+            closeFilter();
+            setFilterAnchorRect(null);
+          }}
+          anchorRect={filterAnchorRect}
           status={requestParams.status ?? 'ALL'}
           sort={requestParams.sort ?? 'LATEST_DESC'}
           onApply={handleApplyFilter}

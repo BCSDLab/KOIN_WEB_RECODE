@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -36,8 +36,8 @@ const APPLICATION_STATUS_CLASS = {
 
 interface ApplicationsListSectionProps {
   requestParams: MyTeamRecruitmentApplicationListRequest;
-  onFilterOpen: () => void;
-  onChatClick: (application: MyTeamRecruitmentApplication) => React.MouseEventHandler<HTMLButtonElement>;
+  onFilterOpen: (anchorRect: DOMRect) => void;
+  onChatClick: (application: MyTeamRecruitmentApplication) => MouseEventHandler<HTMLButtonElement>;
 }
 
 function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: ApplicationsListSectionProps) {
@@ -52,9 +52,9 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
-  const handleFilterOpen = () => {
+  const handleFilterOpen: MouseEventHandler<HTMLButtonElement> = (event) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_applied_post_filter', value: '필터' });
-    onFilterOpen();
+    onFilterOpen(event.currentTarget.getBoundingClientRect());
   };
 
   return (
@@ -127,6 +127,7 @@ export default function MyApplicationsPage() {
   const router = useRouter();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
+  const [filterAnchorRect, setFilterAnchorRect] = useState<DOMRect | null>(null);
   const [requestParams, setRequestParams] = useState<MyTeamRecruitmentApplicationListRequest>({
     statuses: [],
     sort: 'LATEST_DESC',
@@ -137,7 +138,7 @@ export default function MyApplicationsPage() {
   };
 
   const handleChatClick =
-    (application: MyTeamRecruitmentApplication): React.MouseEventHandler<HTMLButtonElement> =>
+    (application: MyTeamRecruitmentApplication): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -181,7 +182,10 @@ export default function MyApplicationsPage() {
             <Suspense fallback={null}>
               <ApplicationsListSection
                 requestParams={requestParams}
-                onFilterOpen={openFilter}
+                onFilterOpen={(anchorRect) => {
+                  setFilterAnchorRect(anchorRect);
+                  openFilter();
+                }}
                 onChatClick={handleChatClick}
               />
             </Suspense>
@@ -192,7 +196,11 @@ export default function MyApplicationsPage() {
       {isFilterOpen && (
         <MyApplicationFilterPanel
           isOpen={isFilterOpen}
-          onClose={closeFilter}
+          onClose={() => {
+            closeFilter();
+            setFilterAnchorRect(null);
+          }}
+          anchorRect={filterAnchorRect}
           statuses={requestParams.statuses ?? []}
           sort={requestParams.sort ?? 'LATEST_DESC'}
           onApply={handleApplyFilter}

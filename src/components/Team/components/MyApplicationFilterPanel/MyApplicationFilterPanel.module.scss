@@ -1,16 +1,15 @@
 @use "utils/scss/media.scss" as media;
 
-.backdrop {
-  background: transparent;
-}
-
 .panel {
   width: 390px;
   max-height: 85vh;
-  margin: auto;
+  margin: 0;
   border-radius: 16px;
   box-shadow: 0 0 20px rgb(0 0 0 / 7%);
   animation: none;
+  z-index: 30;
+  background: #fff;
+  overflow: hidden;
 }
 
 .header {
@@ -23,7 +22,7 @@
   font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 600;
-  color: #b611f5;
+  color: #175c8e;
   line-height: 1.6;
 }
 
@@ -39,7 +38,7 @@
   -webkit-tap-highlight-color: transparent;
 
   &:focus-visible {
-    outline: 2px solid #b611f5;
+    outline: 2px solid #175c8e;
     outline-offset: 2px;
   }
 
@@ -81,7 +80,7 @@
   -webkit-tap-highlight-color: transparent;
 
   &:focus-visible {
-    outline: 2px solid #b611f5;
+    outline: 2px solid #175c8e;
     outline-offset: 2px;
   }
 
@@ -96,7 +95,7 @@
   height: 48px;
   border-radius: 20px;
   border: none;
-  background: #b611f5;
+  background: #175c8e;
   cursor: pointer;
   font-family: Pretendard, sans-serif;
   font-size: 16px;
@@ -107,11 +106,11 @@
   -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background: #980ac9;
+    background: #134f7a;
   }
 
   &:focus-visible {
-    outline: 2px solid #b611f5;
+    outline: 2px solid #175c8e;
     outline-offset: 2px;
   }
 }
@@ -135,6 +134,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+
+  > button {
+    &:hover,
+    &[aria-pressed="true"] {
+      border-color: #175c8e;
+      background: #fff;
+      color: #175c8e;
+    }
+  }
 }
 
 @include media.media-breakpoint(mobile) {
@@ -149,6 +157,38 @@
     border-radius: 32px 32px 0 0;
     box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
     animation: slide-up 0.25s ease-out;
+  }
+
+  .headerTitle {
+    color: #b611f5;
+  }
+
+  .closeButton:focus-visible {
+    outline-color: #b611f5;
+  }
+
+  .resetButton:focus-visible {
+    outline-color: #b611f5;
+  }
+
+  .applyButton {
+    background: #b611f5;
+
+    &:hover {
+      background: #980ac9;
+    }
+
+    &:focus-visible {
+      outline-color: #b611f5;
+    }
+  }
+
+  .sectionBadges > button {
+    &:hover,
+    &[aria-pressed="true"] {
+      border-color: #b611f5;
+      color: #b611f5;
+    }
   }
 }
 
