@@ -116,9 +116,9 @@ export function usePhoneVerification(
     hasSentVerificationCode &&
     isRunning &&
     timeLeft <= VERIFICATION_DURATION_SECONDS - VERIFICATION_HELP_DELAY_SECONDS;
-  const displayedVerificationMessage: VerificationMessage | null = shouldShowVerificationHelp
-    ? { type: 'default', content: MESSAGES.VERIFICATION.DEFAULT }
-    : verificationMessage;
+  const displayedVerificationMessage: VerificationMessage | null =
+    verificationMessage ??
+    (shouldShowVerificationHelp ? { type: 'default', content: MESSAGES.VERIFICATION.DEFAULT } : null);
 
   return {
     checkPhoneNumber,
