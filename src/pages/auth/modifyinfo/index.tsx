@@ -554,6 +554,9 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           </>
         )}
       </div>
+      <p className={styles['validation-status']} role="status" aria-live="polite" aria-atomic="true">
+        {nicknameMessage?.content ?? ''}
+      </p>
     </div>
   );
 });
@@ -1054,6 +1057,9 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
           )}
         </>
       )}
+      <p className={styles['validation-status']} role="status" aria-live="polite" aria-atomic="true">
+        {verificationMessage?.content ?? phoneMessage?.content ?? ''}
+      </p>
     </>
   );
 });
