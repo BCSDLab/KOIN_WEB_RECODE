@@ -39,6 +39,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicLocalStorage } from 'utils/ts/env';
+import { normalizePhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
@@ -57,7 +58,6 @@ interface IFormType {
 interface ICustomFormInput {
   value: unknown;
   valid: string | true;
-  isVerified?: boolean;
 }
 
 interface NicknameMessage {
@@ -756,9 +756,7 @@ const GenderInput = React.forwardRef((_, ref) => {
   );
 });
 
-const normalizePhoneNumber = (value: string) => value.replace(/\D/g, '');
-
-const PhoneInput = React.forwardRef((props, ref) => {
+const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number ?? '');
   const [codeNumber, setCodeNumber] = useState<string>('');
@@ -782,7 +780,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
     isSending,
     smsSendCountData,
     resetVerification,
-  } = usePhoneVerification(phoneNumber, { showVerificationHelp: isMobile });
+  } = usePhoneVerification(normalizedPhoneNumber, { showVerificationHelp: isMobile });
 
   const isSendButtonDisabled = isPhoneNumberUnchanged || isSendLimitExceeded || isSending || isVerified;
 
@@ -794,32 +792,31 @@ const PhoneInput = React.forwardRef((props, ref) => {
     }));
   }, [isPhoneNumberUnchanged, isVerified, setIsValid]);
 
-  useImperativeHandle(ref, () => {
-    const valid = REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
-      ? true
-      : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
+  useImperativeHandle(
+    ref,
+    () => {
+      const valid: string | true = REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+        ? true
+        : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
-    if (!isPhoneNumberUnchanged) {
-      return { value: normalizedPhoneNumber, valid, isVerified };
-    }
-    return { value: normalizedPhoneNumber, valid };
-  });
+      return { value: normalizedPhoneNumber, valid };
+    },
+    [normalizedPhoneNumber],
+  );
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextPhoneNumber = e.target.value;
-    const isOriginalPhoneNumber = normalizePhoneNumber(nextPhoneNumber) === originalPhoneNumber;
 
     setPhoneNumber(nextPhoneNumber);
     setCodeNumber('');
     resetVerification();
-    setIsValid((prev) => ({ ...prev, isPhoneValid: isOriginalPhoneNumber }));
   };
 
   const handleStartVerification = () => {
     if (!isPhoneNumberUnchanged) {
       setCodeNumber('');
       setIsValid((prev) => ({ ...prev, isPhoneValid: false }));
-      checkPhoneNumber.mutate(phoneNumber);
+      checkPhoneNumber.mutate(normalizedPhoneNumber);
     }
   };
 
@@ -922,7 +919,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
                       [styles['modify__button--active']]:
                         codeNumber !== '' && timeLeft > 0 && isRunning && !isVerified && !isSendLimitExceeded,
                     })}
-                    onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                    onClick={() =>
+                      verifyCode.mutate({ phone_number: normalizedPhoneNumber, verification_code: codeNumber })
+                    }
                     disabled={codeNumber === '' || timeLeft === 0 || !isRunning || isVerified || isSendLimitExceeded}
                   >
                     인증하기
@@ -949,7 +948,6 @@ const PhoneInput = React.forwardRef((props, ref) => {
                       })}
                     >
                       {verificationMessage.type === 'success' && <CorrectIcon />}
-                      {verificationMessage.type === 'error' && <ErrorIcon />}
                       {verificationMessage.type === 'warning' && <WarningMobileIcon />}
                       {verificationMessage.content}
                     </p>
@@ -1032,7 +1030,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   [styles['modify__button--phone']]: true,
                   [styles['modify__button--active']]: codeNumber !== '',
                 })}
-                onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                onClick={() =>
+                  verifyCode.mutate({ phone_number: normalizedPhoneNumber, verification_code: codeNumber })
+                }
                 disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
               >
                 인증하기
@@ -1045,7 +1045,6 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   })}
                 >
                   {verificationMessage.type === 'success' && <CorrectIcon />}
-                  {verificationMessage.type === 'error' && <ErrorIcon />}
                   {verificationMessage.type === 'warning' && <WarningIcon />}
                   {verificationMessage.content}
                 </p>

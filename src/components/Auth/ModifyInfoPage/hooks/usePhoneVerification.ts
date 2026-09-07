@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { smsSend, smsVerify, checkPhone } from 'api/auth';
@@ -17,31 +17,24 @@ interface UsePhoneVerificationOptions {
   showVerificationHelp?: boolean;
 }
 
-const VERIFICATION_HELP_DELAY = 60000;
 const INCORRECT_VERIFICATION_MESSAGE = '인증번호가 일치하지 않습니다.';
+const VERIFICATION_DURATION_SECONDS = 180;
+const VERIFICATION_HELP_DELAY_SECONDS = 60;
 
 export function usePhoneVerification(
-  phoneNumber: string,
+  normalizedPhoneNumber: string,
   { showVerificationHelp = false }: UsePhoneVerificationOptions = {},
 ) {
   const [isVerified, setIsVerified] = useState(false);
   const [hasSentVerificationCode, setHasSentVerificationCode] = useState(false);
+  const [isSendLimitExceeded, setIsSendLimitExceeded] = useState(false);
   const [phoneMessage, setPhoneMessage] = useState<VerificationMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<VerificationMessage | null>(null);
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendResponse | null>(null);
-  const verificationHelpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const clearVerificationHelpTimer = () => {
-    if (!verificationHelpTimerRef.current) return;
-
-    clearTimeout(verificationHelpTimerRef.current);
-    verificationHelpTimerRef.current = null;
-  };
 
   const { start, stop, reset: resetTimer, expire, formattedTime, timeLeft, isRunning } = useVerificationTimer(
-    180,
+    VERIFICATION_DURATION_SECONDS,
     () => {
-      clearVerificationHelpTimer();
       if (!isVerified) {
         setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
@@ -51,27 +44,21 @@ export function usePhoneVerification(
   const sendSMS = useMutation({
     mutationFn: smsSend,
     onSuccess: (data: SmsSendResponse) => {
-      clearVerificationHelpTimer();
+      setIsSendLimitExceeded(false);
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       setVerificationMessage(null);
       setSmsSendCountData(data);
       setHasSentVerificationCode(true);
       setIsVerified(false);
       start();
-
-      if (showVerificationHelp) {
-        verificationHelpTimerRef.current = setTimeout(() => {
-          setVerificationMessage({ type: 'default', content: MESSAGES.VERIFICATION.DEFAULT });
-        }, VERIFICATION_HELP_DELAY);
-      }
     },
     onError: (err) => {
       if (isKoinError(err)) {
         const { status } = err;
         if (status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
         if (status === 429) {
-          clearVerificationHelpTimer();
           stop();
+          setIsSendLimitExceeded(true);
           setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
           setVerificationMessage(null);
         }
@@ -81,7 +68,7 @@ export function usePhoneVerification(
 
   const checkPhoneNumber = useMutation({
     mutationFn: checkPhone,
-    onSuccess: () => sendSMS.mutate({ phone_number: phoneNumber }),
+    onSuccess: () => sendSMS.mutate({ phone_number: normalizedPhoneNumber }),
     onError: (err) => {
       if (isKoinError(err)) {
         const { status } = err;
@@ -94,7 +81,6 @@ export function usePhoneVerification(
   const verifyCode = useMutation({
     mutationFn: smsVerify,
     onSuccess: () => {
-      clearVerificationHelpTimer();
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       setIsVerified(true);
       stop();
@@ -106,7 +92,6 @@ export function usePhoneVerification(
           setVerificationMessage({ type: 'warning', content: INCORRECT_VERIFICATION_MESSAGE });
         }
         if (status === 404) {
-          clearVerificationHelpTimer();
           setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
           expire();
         }
@@ -115,44 +100,36 @@ export function usePhoneVerification(
   });
 
   const resetVerification = () => {
-    clearVerificationHelpTimer();
     stop();
     resetTimer();
     setIsVerified(false);
     setHasSentVerificationCode(false);
+    setIsSendLimitExceeded(false);
     setPhoneMessage(null);
     setVerificationMessage(null);
     setSmsSendCountData(null);
-    checkPhoneNumber.reset();
-    sendSMS.reset();
-    verifyCode.reset();
   };
 
-  useEffect(
-    () => () => {
-      if (verificationHelpTimerRef.current) {
-        clearTimeout(verificationHelpTimerRef.current);
-      }
-    },
-    [],
-  );
-
-  const isSendLimitExceeded = phoneMessage?.content === MESSAGES.VERIFICATION.STOP;
   const isSending = checkPhoneNumber.isPending || sendSMS.isPending;
+  const shouldShowVerificationHelp =
+    showVerificationHelp &&
+    hasSentVerificationCode &&
+    isRunning &&
+    timeLeft <= VERIFICATION_DURATION_SECONDS - VERIFICATION_HELP_DELAY_SECONDS;
+  const displayedVerificationMessage: VerificationMessage | null = shouldShowVerificationHelp
+    ? { type: 'default', content: MESSAGES.VERIFICATION.DEFAULT }
+    : verificationMessage;
 
   return {
     checkPhoneNumber,
     verifyCode,
     phoneMessage,
-    verificationMessage,
+    verificationMessage: displayedVerificationMessage,
     isVerified,
     hasSentVerificationCode,
     isSendLimitExceeded,
     isSending,
     smsSendCountData,
-    sendSMS,
-    setPhoneMessage,
-    setVerificationMessage,
     resetVerification,
     formattedTime,
     timeLeft,
