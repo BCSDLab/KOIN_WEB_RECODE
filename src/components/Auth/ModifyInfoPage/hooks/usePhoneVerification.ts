@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { smsSend, smsVerify, checkPhone } from 'api/auth';
@@ -24,6 +24,12 @@ export function usePhoneVerification(
   normalizedPhoneNumber: string,
   { showVerificationHelp = false }: UsePhoneVerificationOptions = {},
 ) {
+  const currentPhoneNumberRef = useRef(normalizedPhoneNumber);
+
+  useEffect(() => {
+    currentPhoneNumberRef.current = normalizedPhoneNumber;
+  }, [normalizedPhoneNumber]);
+
   const [isVerified, setIsVerified] = useState(false);
   const [hasSentVerificationCode, setHasSentVerificationCode] = useState(false);
   const [isSendLimitExceeded, setIsSendLimitExceeded] = useState(false);
@@ -42,7 +48,9 @@ export function usePhoneVerification(
 
   const sendSMS = useMutation({
     mutationFn: smsSend,
-    onSuccess: (data: SmsSendResponse) => {
+    onSuccess: (data: SmsSendResponse, { phone_number: requestedPhoneNumber }) => {
+      if (requestedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       setIsSendLimitExceeded(false);
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       setVerificationMessage(null);
@@ -51,7 +59,9 @@ export function usePhoneVerification(
       setIsVerified(false);
       start();
     },
-    onError: (err) => {
+    onError: (err, { phone_number: requestedPhoneNumber }) => {
+      if (requestedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       if (isKoinError(err)) {
         const { status } = err;
         if (status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
@@ -68,10 +78,13 @@ export function usePhoneVerification(
   const checkPhoneNumber = useMutation({
     mutationFn: checkPhone,
     onSuccess: (_, checkedPhoneNumber) => {
-      if (checkedPhoneNumber !== normalizedPhoneNumber) return;
+      if (checkedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       sendSMS.mutate({ phone_number: checkedPhoneNumber });
     },
-    onError: (err) => {
+    onError: (err, checkedPhoneNumber) => {
+      if (checkedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       if (isKoinError(err)) {
         const { status } = err;
         if (status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
@@ -82,12 +95,16 @@ export function usePhoneVerification(
 
   const verifyCode = useMutation({
     mutationFn: smsVerify,
-    onSuccess: () => {
+    onSuccess: (_, { phone_number: requestedPhoneNumber }) => {
+      if (requestedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       setIsVerified(true);
       stop();
     },
-    onError: (err) => {
+    onError: (err, { phone_number: requestedPhoneNumber }) => {
+      if (requestedPhoneNumber !== currentPhoneNumberRef.current) return;
+
       if (isKoinError(err)) {
         const { status } = err;
         if (status === 400) {
