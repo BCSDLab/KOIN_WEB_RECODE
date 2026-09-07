@@ -63,6 +63,7 @@ function LostItemChatPage({ token }: { token: string }) {
     defaultChatroomId: chatroomId,
     defaultArticleId: articleId,
     sendMessage: sendChatMessage,
+    sendMessageAsync: sendChatMessageAsync,
   } = useChatPolling({
     token,
     articleId: searchParams.get('articleId'),
@@ -81,7 +82,9 @@ function LostItemChatPage({ token }: { token: string }) {
       }
 
       const imageUrlList = await saveImgFile();
-      imageUrlList.forEach((imageUrl) => sendChatMessage({ content: imageUrl, isImage: true }));
+      for (const imageUrl of imageUrlList) {
+        await sendChatMessageAsync({ content: imageUrl, isImage: true });
+      }
     } catch (error) {
       if (error instanceof UploadError) {
         showToast('error', error.message);
