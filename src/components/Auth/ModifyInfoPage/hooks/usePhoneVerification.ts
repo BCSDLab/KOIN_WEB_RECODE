@@ -68,7 +68,10 @@ export function usePhoneVerification(
 
   const checkPhoneNumber = useMutation({
     mutationFn: checkPhone,
-    onSuccess: () => sendSMS.mutate({ phone_number: normalizedPhoneNumber }),
+    onSuccess: (_, checkedPhoneNumber) => {
+      if (checkedPhoneNumber !== normalizedPhoneNumber) return;
+      sendSMS.mutate({ phone_number: checkedPhoneNumber });
+    },
     onError: (err) => {
       if (isKoinError(err)) {
         const { status } = err;

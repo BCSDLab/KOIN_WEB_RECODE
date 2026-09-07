@@ -441,6 +441,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
+    setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
     changeTargetNickname(currentNicknameValue, {
       onSuccess: () => {
         if (isMobile) {
@@ -795,13 +796,13 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
   useImperativeHandle(
     ref,
     () => {
-      const valid: string | true = REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+      const valid: string | true = isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
         ? true
         : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
       return { value: normalizedPhoneNumber, valid };
     },
-    [normalizedPhoneNumber],
+    [isPhoneNumberUnchanged, normalizedPhoneNumber],
   );
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
