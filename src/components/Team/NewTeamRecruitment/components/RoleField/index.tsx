@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import MinusIcon from 'assets/svg/Team/minus-sign.svg';
 import PlusIcon from 'assets/svg/Team/plus.svg';
@@ -24,28 +23,14 @@ interface RoleNameInputProps {
 }
 
 function RoleNameInput({ value, onChange }: RoleNameInputProps) {
-  const isComposingRef = useRef(false);
-
-  const commit = (raw: string) => {
-    onChange(raw.slice(0, TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH));
-  };
-
   return (
     <input
       type="text"
       value={value}
       placeholder="역할명"
       maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
-      onCompositionStart={() => {
-        isComposingRef.current = true;
-      }}
-      onCompositionEnd={(event) => {
-        isComposingRef.current = false;
-        commit(event.currentTarget.value);
-      }}
       onChange={(event) => {
-        if (isComposingRef.current) return;
-        commit(event.target.value);
+        onChange(event.target.value.slice(0, TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH));
       }}
     />
   );
