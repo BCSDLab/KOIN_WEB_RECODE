@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
+import Portal from 'components/Portal';
 import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import type { TeamRecruitmentSort, TeamRecruitmentStatusFilter } from 'api/team/entity';
 import styles from './MyCreatedPostFilterPanel.module.scss';
 
@@ -21,6 +25,7 @@ const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
 interface MyCreatedPostFilterPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  anchorRect: DOMRect | null;
   status: TeamRecruitmentStatusFilter;
   sort: TeamRecruitmentSort;
   onApply: (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => void;
@@ -29,14 +34,19 @@ interface MyCreatedPostFilterPanelProps {
 export default function MyCreatedPostFilterPanel({
   isOpen,
   onClose,
+  anchorRect,
   status,
   sort,
   onApply,
 }: MyCreatedPostFilterPanelProps) {
   const logger = useLogger();
+  const isMobile = useMediaQuery();
 
   const [localStatus, setLocalStatus] = useState<TeamRecruitmentStatusFilter>(status);
   const [localSort, setLocalSort] = useState<TeamRecruitmentSort>(sort);
+
+  const { containerRef } = useOutsideClick<HTMLDivElement>({ onOutsideClick: onClose });
+  useBodyScrollLock(!isMobile && isOpen);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -84,8 +94,8 @@ export default function MyCreatedPostFilterPanel({
     });
   };
 
-  return (
-    <BottomModal isOpen={isOpen} onClose={onClose} className={styles.panel} aria-label="필터">
+  const body = (
+    <>
       <BottomModalHeader className={styles.header}>
         <span className={styles.headerTitle}>필터</span>
         <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
@@ -132,6 +142,36 @@ export default function MyCreatedPostFilterPanel({
           적용하기
         </button>
       </BottomModalFooter>
-    </BottomModal>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <BottomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        className={styles.panel}
+        backdropClassName={styles.backdrop}
+        aria-label="필터"
+      >
+        {body}
+      </BottomModal>
+    );
+  }
+
+  if (!anchorRect) return null;
+
+  return (
+    <Portal>
+      <div
+        ref={containerRef}
+        className={styles.panel}
+        style={{ position: 'fixed', top: anchorRect.bottom + 8, right: window.innerWidth - anchorRect.right }}
+        role="dialog"
+        aria-label="필터"
+      >
+        {body}
+      </div>
+    </Portal>
   );
 }

@@ -51,6 +51,11 @@
     gap: 4px;
   }
 
+  &__headerAction {
+    position: relative;
+    z-index: 2;
+  }
+
   &__badges {
     display: flex;
     align-items: center;
