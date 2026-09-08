@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import MinusIcon from 'assets/svg/Team/minus-sign.svg';
 import PlusIcon from 'assets/svg/Team/plus.svg';
@@ -15,6 +16,39 @@ import styles from './RoleField.module.scss';
 interface RoleFieldProps {
   control: Control<TeamRecruitmentFormValues>;
   eventLabel: string;
+}
+
+interface RoleNameInputProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function RoleNameInput({ value, onChange }: RoleNameInputProps) {
+  const isComposingRef = useRef(false);
+
+  const commit = (raw: string) => {
+    onChange(raw.slice(0, TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH));
+  };
+
+  return (
+    <input
+      type="text"
+      value={value}
+      placeholder="역할명"
+      maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
+      onCompositionStart={() => {
+        isComposingRef.current = true;
+      }}
+      onCompositionEnd={(event) => {
+        isComposingRef.current = false;
+        commit(event.currentTarget.value);
+      }}
+      onChange={(event) => {
+        if (isComposingRef.current) return;
+        commit(event.target.value);
+      }}
+    />
+  );
 }
 
 export default function RoleField({ control, eventLabel }: RoleFieldProps) {
@@ -111,13 +145,7 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
               name={`roles.${index}.name`}
               render={({ field }) => (
                 <div className={styles['field__row-name']}>
-                  <input
-                    type="text"
-                    value={field.value}
-                    placeholder="역할명"
-                    maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
-                    onChange={field.onChange}
-                  />
+                  <RoleNameInput value={field.value} onChange={field.onChange} />
                   <span>
                     {field.value.length}/{TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
                   </span>
