@@ -1,9 +1,10 @@
 import isValidCalendarDate from 'components/Team/utils/isValidCalendarDate';
+import { MESSAGES, REGEX } from 'static/auth';
 import { z } from 'zod';
 
 // ── 기본 정보 (1단계) ──────────────────────────────────────
 // 현재 BasicInfoStep의 register(...) 인라인 룰을 그대로 옮긴 것.
-// 학번은 학부/대학원, 입학연도에 따라 자릿수가 달라 길이 조건은 두지 않고 숫자 여부만 검증한다.
+// 학번 형식은 회원가입 페이지(REGEX.STUDENT_NUMBER)와 동일하게 검증한다.
 const basicInfoSchema = z.object({
   nickname: z.string().trim().min(1, '닉네임을 입력해주세요.').max(20, '닉네임은 20자 이내로 입력해주세요.'),
   department: z.string().min(1, '학과 · 학부를 선택해주세요.'),
@@ -11,7 +12,7 @@ const basicInfoSchema = z.object({
     .string()
     .trim()
     .min(1, '학번을 작성해주세요.')
-    .regex(/^\d+$/, '학번은 숫자만 입력해주세요.'),
+    .regex(REGEX.STUDENT_NUMBER, MESSAGES.STUDENT_NUMBER.FORMAT),
 });
 
 // ── 지원서 작성 (2단계) ────────────────────────────────────
