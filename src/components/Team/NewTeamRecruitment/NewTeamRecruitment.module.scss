@@ -235,5 +235,9 @@
     border-radius: 16px;
     background: #b611f5;
     font-size: 15px;
+
+    &--disabled {
+      background: #d3d3d3;
+    }
   }
 }
