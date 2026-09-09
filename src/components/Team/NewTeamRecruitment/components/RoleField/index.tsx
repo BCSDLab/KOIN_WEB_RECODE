@@ -17,6 +17,25 @@ interface RoleFieldProps {
   eventLabel: string;
 }
 
+interface RoleNameInputProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function RoleNameInput({ value, onChange }: RoleNameInputProps) {
+  return (
+    <input
+      type="text"
+      value={value}
+      placeholder="역할명"
+      maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
+      onChange={(event) => {
+        onChange(event.target.value.slice(0, TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH));
+      }}
+    />
+  );
+}
+
 export default function RoleField({ control, eventLabel }: RoleFieldProps) {
   const logger = useLogger();
   const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
@@ -111,13 +130,7 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
               name={`roles.${index}.name`}
               render={({ field }) => (
                 <div className={styles['field__row-name']}>
-                  <input
-                    type="text"
-                    value={field.value}
-                    placeholder="역할명"
-                    maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
-                    onChange={field.onChange}
-                  />
+                  <RoleNameInput value={field.value} onChange={field.onChange} />
                   <span>
                     {field.value.length}/{TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
                   </span>
