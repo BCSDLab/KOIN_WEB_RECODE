@@ -7,13 +7,15 @@ import styles from './ScheduleField.module.scss';
 
 interface ScheduleFieldProps {
   control: Control<TeamRecruitmentFormValues>;
+  periodError?: string;
+  deadlineError?: string;
 }
 
 function formatDotDate(date: Date | null) {
   return date ? getYyyyMmDd(date, '.') : '';
 }
 
-export default function ScheduleField({ control }: ScheduleFieldProps) {
+export default function ScheduleField({ control, periodError, deadlineError }: ScheduleFieldProps) {
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
   const [isDeadlineCalendarOpen, openDeadlineCalendar, closeDeadlineCalendar] = useBooleanState(false);
@@ -65,6 +67,7 @@ export default function ScheduleField({ control }: ScheduleFieldProps) {
               )}
             />
           </div>
+          {periodError && <p className={styles.schedule__error}>{periodError}</p>}
         </div>
         <div className={styles.schedule__item}>
           <span className={styles.schedule__label}>마감일</span>
@@ -86,6 +89,7 @@ export default function ScheduleField({ control }: ScheduleFieldProps) {
               </>
             )}
           />
+          {deadlineError && <p className={styles.schedule__error}>{deadlineError}</p>}
         </div>
       </div>
     </div>

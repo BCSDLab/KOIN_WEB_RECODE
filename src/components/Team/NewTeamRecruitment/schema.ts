@@ -66,12 +66,14 @@ export const teamRecruitmentFormSchema = z
     if (!data.isRoleUnified) {
       const roleNames = data.roles.map((role) => role.name.trim());
 
+      const filledRoleNames = roleNames.filter((roleName) => roleName !== '');
+
       if (data.roles.length === 0) {
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할을 추가해주세요.' });
+      } else if (new Set(filledRoleNames).size !== filledRoleNames.length) {
+        ctx.addIssue({ code: 'custom', path: ['roles'], message: '중복되지 않은 역할명을 입력해주세요.' });
       } else if (roleNames.some((roleName) => roleName === '')) {
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할명을 입력해주세요.' });
-      } else if (new Set(roleNames).size !== roleNames.length) {
-        ctx.addIssue({ code: 'custom', path: ['roles'], message: '중복되지 않은 역할명을 입력해주세요.' });
       } else if (
         data.roles.reduce((sum, role) => sum + role.memberCount, 0) > TEAM_RECRUITMENT_MAX_MEMBER_COUNT
       ) {
