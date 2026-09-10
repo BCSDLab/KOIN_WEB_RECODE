@@ -4,8 +4,11 @@ import { maskSensitive } from 'utils/ts/maskSensitive';
 const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
 const isProduction = environment === 'production';
 
-/** React 19가 하이드레이션 실패 시 console.error로 출력하는 메시지 패턴 */
-const HYDRATION_ERROR_PATTERN = /Hydration failed|didn't match|Text content does not match|error while hydrating/i;
+// React 19가 하이드레이션 실패 시 console.error로 출력하는 메시지 패턴.
+// 프로덕션 빌드는 문구 대신 `Minified React error #418` 처럼 코드 번호만 찍는다.
+// 418/419/421/422/423/425는 React 에러 코드 테이블(facebook/react) 기준 전부 하이드레이션 계열이다.
+const HYDRATION_ERROR_PATTERN =
+  /Hydration failed|didn't match|Text content does not match|error while hydrating|Minified React error #4(1[89]|2[1-3]|25)/i;
 
 interface KoinErrorLike {
   type?: string;
@@ -190,7 +193,9 @@ Sentry.init({
   profilesSampleRate: isProduction ? 0.1 : 1.0,
   replaysSessionSampleRate: isProduction ? 0.3 : 0.0,
   replaysOnErrorSampleRate: 1.0,
-  sendDefaultPii: true,
+  // sendDefaultPii: true와 동일한 수집 범위. frameContextLines: 7은 그 레거시 기본값을
+  // 그대로 유지한 것 — dataCollection만 켜면 5로 바뀐다.
+  dataCollection: { frameContextLines: 7 },
 });
 
 reportHydrationDiff();
