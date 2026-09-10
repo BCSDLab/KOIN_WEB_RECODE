@@ -31,6 +31,7 @@ export default function ArticlesSearchResultList({
           key={article.id}
           href={ROUTES.ArticlesDetail({ id: String(article.id) })}
           className={styles.item}
+          prefetch={false}
         >
           <span className={styles.item__tag}>{formatTag(article.board_id)}</span>
           <p className={styles.item__title}>{article.title}</p>

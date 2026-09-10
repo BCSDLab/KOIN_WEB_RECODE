@@ -51,7 +51,7 @@ export default function MobileArticleList({ articles }: MobileArticleListProps) 
         }
 
         return (
-          <Link key={article.id} href={getLink(article)} className={styles.item}>
+          <Link key={article.id} href={getLink(article)} className={styles.item} prefetch={false}>
             <span className={styles.item__tag}>{tag}</span>
             <p className={styles.item__title}>{article.title}</p>
             <div className={styles.item__meta}>

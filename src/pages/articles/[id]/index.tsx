@@ -46,9 +46,10 @@ export const getStaticProps: GetStaticProps<
   }
 
   try {
-    const article = await withStaticFetchRetry('article.detail', () => getArticle(id));
-    const hotArticles =
-      (await withStaticFetchRetry('article.hot', () => getHotArticles()).catch(() => [])) ?? [];
+    const [article, hotArticles] = await Promise.all([
+      withStaticFetchRetry('article.detail', () => getArticle(id)),
+      withStaticFetchRetry('article.hot', () => getHotArticles()).catch(() => []),
+    ]);
     const serverTime = new Date();
 
     const articleWithNew = Sentry.startSpan(

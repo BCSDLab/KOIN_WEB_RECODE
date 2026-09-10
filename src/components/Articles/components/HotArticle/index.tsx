@@ -55,6 +55,7 @@ export default function HotArticles() {
               className={styles['hot-article__content']}
               href={ROUTES.ArticlesDetail({ id: String(article.id) })}
               key={article.id + article.board_id}
+              prefetch={false}
               onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
             >
               <span className={styles['hot-article__rank']}>{index + 1}</span>

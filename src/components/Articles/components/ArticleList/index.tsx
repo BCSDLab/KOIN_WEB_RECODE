@@ -75,7 +75,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
 
           // 2. 신고되지 않은 게시글 (클릭 O, 상세페이지로 이동)
           return (
-            <Link className={styles.list__link} href={getLink(article)} key={article.id}>
+            <Link className={styles.list__link} href={getLink(article)} key={article.id} prefetch={false}>
               <div className={styles.list__id}>{article.id}</div>
               <div className={styles.title}>
                 <div className={styles.title__container}>
