@@ -186,7 +186,6 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const handleCancelSubmit = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: `team_recruitment_profile_${PROFILE_LOG_MODE[mode]}_submit_cancel`,
       value: '취소하기',
     });

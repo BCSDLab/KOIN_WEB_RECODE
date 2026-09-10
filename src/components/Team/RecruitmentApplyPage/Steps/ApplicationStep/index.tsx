@@ -35,7 +35,6 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
   const handleSubmitClick = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: LOGGING_TITLE.SUBMIT,
       value: '지원하기',
     });
@@ -84,7 +83,6 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
                             field.onChange(role.id);
                             actionEventClick({
                               team: 'CAMPUS',
-                              event_category: 'click',
                               event_label: LOGGING_TITLE.ROLE_SELECT,
                               value: role.name,
                             });

@@ -180,7 +180,6 @@ export default function RecruitmentApplyPage() {
 
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: LOGGING_TITLE.SUBMIT_CONFIRM,
       value: '지원하기',
     });
@@ -208,7 +207,6 @@ export default function RecruitmentApplyPage() {
   const handleCancelSubmit = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: LOGGING_TITLE.SUBMIT_CANCEL,
       value: '취소하기',
     });

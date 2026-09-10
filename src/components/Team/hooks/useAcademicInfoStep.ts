@@ -53,7 +53,6 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleLoadUserInfo = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.LOAD_USER_INFO,
       value: '회원정보 불러오기',
     });
@@ -69,7 +68,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     mutationFn: (data: { department: string; studentNumber: string }) =>
       updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
     onSuccess: () => {
-      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
+      actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.NEXT, value: '다음' });
       onSaved();
     },
     onError: (error) => {
@@ -93,7 +92,6 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleMajorSelect = (value: string) => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.MAJOR_SELECT,
       value,
     });

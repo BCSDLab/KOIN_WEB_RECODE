@@ -88,7 +88,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '학생',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -99,7 +98,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '외부인',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -220,7 +218,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       sessionLogger.actionSessionEvent({
                         event_label: 'identity_verification',
                         value: '인증번호 발송',
-                        event_category: 'click',
                         session_name: 'sign_up',
                       });
                     }}

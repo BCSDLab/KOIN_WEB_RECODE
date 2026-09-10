@@ -82,7 +82,6 @@ export default function AdditionalLink() {
             session_name: 'sign_up',
             event_label: 'start_sign_up',
             value: '회원가입 시작',
-            event_category: 'click',
           });
         }}
       >

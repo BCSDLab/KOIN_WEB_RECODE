@@ -30,7 +30,6 @@ const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateO
       logger.actionEventClick({
         event_label: 'user_info',
         value: '정보수정 완료',
-        event_category: 'click',
         team: 'USER',
       });
     },
@@ -42,7 +41,6 @@ const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateO
       logger.actionEventClick({
         event_label: 'user_info',
         value: '정보수정 실패',
-        event_category: 'click',
         team: 'USER',
       });
     },
