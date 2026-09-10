@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import * as gtag from 'lib/gtag';
+import type { LoggingTeam } from 'lib/gtag';
 
 type ActionLoggerProps = {
-  team: string;
+  team: LoggingTeam;
   event_label: string;
   value: string;
   event_category?: string;
@@ -13,7 +14,7 @@ type ActionLoggerProps = {
 };
 
 type LoggerEventProps = {
-  team: string;
+  team: LoggingTeam;
   event_category: string;
   event_label: string;
   value: string;
