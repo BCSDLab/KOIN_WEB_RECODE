@@ -94,5 +94,7 @@ Sentry.init({
 
   enableLogs: true,
   tracesSampleRate: isProduction ? 0.7 : 0.1,
-  sendDefaultPii: true,
+  // sendDefaultPii: true와 동일한 수집 범위. frameContextLines: 7은 그 레거시 기본값을
+  // 그대로 유지한 것 — dataCollection만 켜면 5로 바뀐다.
+  dataCollection: { frameContextLines: 7 },
 });
