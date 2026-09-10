@@ -16,14 +16,12 @@ export const useOutsideClick = <TContainer extends HTMLElement = HTMLDivElement>
       const container = containerRef.current;
       const background = backgroundRef.current;
 
-      if (!container) return;
-
-      if (clickedElement === background) {
+      if (container && !container.contains(clickedElement)) {
         onOutsideClick(e);
         return;
       }
 
-      if (!container.contains(clickedElement)) {
+      if (!container && clickedElement === background) {
         onOutsideClick(e);
       }
     };
