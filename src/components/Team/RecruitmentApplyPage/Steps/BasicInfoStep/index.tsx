@@ -135,7 +135,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                 id={controlId}
                 type="text"
                 inputMode="numeric"
-                className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
+                className={cn({ [controlClassName]: true, [styles.grayInput]: true, 'rr-mask': true })}
                 placeholder="학번을 작성해주세요."
                 maxLength={10}
                 disabled={isSaving}

@@ -181,23 +181,26 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       <div className={styles['form-container']}>
         <div className={styles['name-gender-wrapper']}>
           <h1 className={styles['name-gender-wrapper__header']}>성함과 성별을 알려주세요.</h1>
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            rules={{
-              required: MESSAGES.NAME.REQUIRED,
-              validate: validateName,
-            }}
-            render={({ field, fieldState }) => (
-              <CustomInput
-                {...field}
-                placeholder="성함을 입력해 주세요."
-                isDelete
-                message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
-              />
-            )}
-          />
+          {/* rr-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+          <div className="rr-mask">
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: MESSAGES.NAME.REQUIRED,
+                validate: validateName,
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="성함을 입력해 주세요."
+                  isDelete
+                  message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
+                />
+              )}
+            />
+          </div>
           <div className={styles['checkbox-wrapper']}>
             {GENDER_OPTIONS.map(({ label, value }) => (
               <label key={value} className={styles['checkbox-wrapper__checkbox']}>
@@ -211,7 +214,8 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         {isNameAndGenderFilled && (
           <div className={styles['number-wrapper']}>
             <h1 className={styles['number-wrapper__header']}>휴대전화 번호를 입력해 주세요.</h1>
-            <div className={styles['input-wrapper']}>
+            {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+            <div className={`${styles['input-wrapper']} rr-mask`}>
               <Controller
                 name="phone_number"
                 control={control}
