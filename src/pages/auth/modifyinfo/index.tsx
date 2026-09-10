@@ -304,10 +304,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           비밀번호 변경
           <span className={styles['form-input__required']}>*</span>
         </label>
+        {/* rr-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
         <input
           className={cn({
             [styles['form-input']]: true,
             [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+            'rr-mask': true,
           })}
           type={visible.password ? 'text' : 'password'}
           autoComplete="new-password"
@@ -334,8 +336,9 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           비밀번호 확인
           <span className={styles['form-input__required']}>*</span>
         </label>
+        {/* rr-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
         <input
-          className={styles['form-input']}
+          className={`${styles['form-input']} rr-mask`}
           type={visible.passwordConfirm ? 'text' : 'password'}
           onChange={handlePasswordConfirmChange}
           autoComplete="new-password"
@@ -579,8 +582,9 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* rr-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} rr-mask`}
               placeholder="학번 (선택)"
               value={studentNumber}
               onChange={handleChangeStudentId}
@@ -623,8 +627,9 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* rr-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} rr-mask`}
               placeholder="학번 (선택)"
               value={studentNumber}
               onChange={handleChangeStudentId}
@@ -867,8 +872,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
               휴대전화 변경
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} rr-mask`}
               type="text"
               autoComplete="tel"
               placeholder="전화번호 (Ex.01012345678)"
@@ -1017,8 +1023,9 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
         이메일(선택)
       </label>
       <div className={styles['form-input__email-wrapper']}>
+        {/* rr-mask: Session Replay에서 이메일을 가리기 위한 Sentry 기본 마스킹 클래스 */}
         <input
-          className={styles['form-input__email']}
+          className={`${styles['form-input__email']} rr-mask`}
           type={isStudent ? 'text' : 'email'}
           autoComplete="email"
           placeholder="이메일 (선택)"
@@ -1103,8 +1110,9 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
         이름
         <span className={styles['form-input__required']}>*</span>
       </label>
+      {/* rr-mask: Session Replay에서 이름을 가리기 위한 Sentry 기본 마스킹 클래스 */}
       <input
-        className={styles['form-input']}
+        className={`${styles['form-input']} rr-mask`}
         type="text"
         autoComplete="name"
         placeholder="이름을 입력해주세요."
@@ -1228,8 +1236,9 @@ function ModifyInfoDefaultPage() {
             아이디
             <span className={styles['form-input__required']}>*</span>
           </label>
+          {/* rr-mask: Session Replay에서 아이디를 가리기 위한 Sentry 기본 마스킹 클래스 */}
           <input
-            className={styles['form-input']}
+            className={`${styles['form-input']} rr-mask`}
             type="text"
             readOnly
             disabled
