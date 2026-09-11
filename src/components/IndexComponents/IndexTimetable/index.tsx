@@ -66,7 +66,7 @@ export default function IndexTimeTable({ serverSemester }: IndexTimeTableProps) 
       >
         시간표
       </Link>
-      <ErrorBoundary fallbackClassName="loading">
+      <ErrorBoundary fallbackClassName="loading" showHomeAction={false}>
         <Link
           href={ROUTES.Timetable()}
           onClick={() => {

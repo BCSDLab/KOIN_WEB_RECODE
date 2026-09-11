@@ -26,3 +26,29 @@
   background-color: #175c8e;
   margin-top: 25px;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+
+  .button {
+    margin-top: 0;
+  }
+}
+
+.retryButton {
+  padding: 8px 16px;
+  border: 1px solid #175c8e;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #175c8e;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f7fb;
+  }
+}

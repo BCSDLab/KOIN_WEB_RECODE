@@ -1,18 +1,10 @@
-import React from 'react';
-import { sendClientError } from '@bcsdlab/koin';
+import type { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import * as Sentry from '@sentry/nextjs';
-import { AxiosError } from 'axios';
+import axios from 'axios';
+import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
-
-interface Props {
-  fallbackClassName: string;
-  children: React.ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  eventId?: string;
-}
+import styles from './ErrorBoundary.module.scss';
 
 interface AxiosErrorData {
   error?: {
@@ -20,46 +12,47 @@ interface AxiosErrorData {
   };
 }
 
-function isAxiosError(error: AxiosError<AxiosErrorData> | Error): error is AxiosError<AxiosErrorData> {
-  return 'response' in error;
+function getErrorMessage(error: unknown): string {
+  if (axios.isAxiosError<AxiosErrorData>(error)) {
+    return error.response?.data?.error?.message ?? '알 수 없는 오류가 발생했습니다.';
+  }
+  return error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    // 이후에 사용시 해제
-    this.state = { hasError: false } as State;
-  }
+interface Props {
+  fallbackClassName: string;
+  children: ReactNode;
+  /** "다시 시도"로도 복구 안 될 때를 대비한 탈출 수단. 이미 홈인 위치(예: 홈 화면 위젯)에서만 끈다. */
+  showHomeAction?: boolean;
+}
 
-  // 이후에 사용시 해제
-  // static getDerivedStateFromError(_: Error) {
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
+export default function ErrorBoundary({ fallbackClassName, children, showHomeAction = true }: Props) {
+  const router = useRouter();
 
-  // 이후에 사용시 해제
-  // componentDidCatch(error: AxiosError<AxiosErrorData> | Error, __: ErrorInfo) {
-  componentDidCatch(error: AxiosError<AxiosErrorData> | Error) {
-    const errorMessage = isAxiosError(error)
-      ? (error.response?.data?.error?.message ?? '알 수 없는 오류가 발생했습니다.')
-      : error.message;
-    showToast('error', errorMessage);
-    sendClientError(error);
-    const eventId = Sentry.captureException(error);
-    this.setState({ eventId });
-  }
-
-  render() {
-    const { children, fallbackClassName } = this.props;
-    const { hasError, eventId } = this.state;
-    if (hasError) {
-      return (
+  return (
+    <Sentry.ErrorBoundary
+      beforeCapture={(scope) => scope.setTag('koin.boundary', 'generic')}
+      onError={(error) => showToast('error', getErrorMessage(error))}
+      fallback={({ eventId, resetError }) => (
         <div className={fallbackClassName} role="alert">
-          Error
-          {eventId && ` (참조 코드: ${eventId})`}
+          <p className={styles.message}>
+            일시적인 오류가 발생했습니다.
+            {eventId && ` (참조 코드: ${eventId})`}
+          </p>
+          <div className={styles.actions}>
+            <button type="button" className={styles.retryButton} onClick={resetError}>
+              다시 시도
+            </button>
+            {showHomeAction && (
+              <button type="button" className={styles.retryButton} onClick={() => router.push(ROUTES.Main())}>
+                홈으로
+              </button>
+            )}
+          </div>
         </div>
-      );
-    }
-    return children;
-  }
+      )}
+    >
+      {children}
+    </Sentry.ErrorBoundary>
+  );
 }

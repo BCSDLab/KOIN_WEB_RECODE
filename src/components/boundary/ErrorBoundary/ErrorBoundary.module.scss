@@ -1,0 +1,25 @@
+.message {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.retryButton {
+  padding: 6px 14px;
+  border: 1px solid #175c8e;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #175c8e;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f2f7fb;
+  }
+}

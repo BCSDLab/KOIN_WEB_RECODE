@@ -1,75 +1,60 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import * as Sentry from '@sentry/nextjs';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import showToast from 'utils/ts/showToast';
 import styles from './StoreErrorBoundary.module.scss';
 
 interface Props {
   onErrorClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-interface State {
-  hasError: boolean;
-  status?: number;
-  eventId?: string;
+function getStatus(error: unknown): number | undefined {
+  if (axios.isAxiosError(error)) return error.response?.status;
+  if (isKoinError(error)) return error.status;
+  return undefined;
 }
 
-type AppError = Error | AxiosError<unknown, unknown>;
-
-function isAxiosError(error: AppError): error is AxiosError<unknown, unknown> {
-  return axios.isAxiosError(error);
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (isKoinError(error)) return error.message;
+  return '오류가 발생했습니다.';
 }
 
-export default class StoreErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    if (isKoinError(error) || isAxiosError(error)) {
-      // AxiosError는 status가 response?.status에 있음
-      const status = isAxiosError(error) ? error.response?.status : (error as unknown as { status?: number }).status;
-
-      return { hasError: true, status };
-    }
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error) {
-    showToast('error', error.message);
-    const eventId = Sentry.captureException(error);
-    this.setState({ eventId });
-  }
-
-  render() {
-    const { children, onErrorClick } = this.props;
-    const {
-      hasError, status, eventId,
-    } = this.state;
-
-    if (hasError && status === 404) {
-      return (
-        <div className={styles.container} role="alert">
-          <h1>존재하지 않는 상점입니다.</h1>
-          <button className={styles.button} type="button" onClick={onErrorClick}>
-            상점 목록
-          </button>
-        </div>
-      );
-    }
-
-    if (hasError) {
-      return (
-        <div className={styles.container} role="alert">
-          <p>오류가 발생했습니다.</p>
-          {eventId && <p className={styles.eventId}>문의 시 참조 코드: {eventId}</p>}
-        </div>
-      );
-    }
-
-    return children;
-  }
+export default function StoreErrorBoundary({ onErrorClick, children }: Props) {
+  return (
+    <Sentry.ErrorBoundary
+      beforeCapture={(scope) => scope.setTag('koin.boundary', 'store')}
+      onError={(error) => showToast('error', getErrorMessage(error))}
+      fallback={({ error, eventId, resetError }) => {
+        if (getStatus(error) === 404) {
+          return (
+            <div className={styles.container} role="alert">
+              <h1>존재하지 않는 상점입니다.</h1>
+              <button className={styles.button} type="button" onClick={onErrorClick}>
+                상점 목록
+              </button>
+            </div>
+          );
+        }
+        return (
+          <div className={styles.container} role="alert">
+            <p>오류가 발생했습니다.</p>
+            {eventId && <p className={styles.eventId}>문의 시 참조 코드: {eventId}</p>}
+            <div className={styles.actions}>
+              <button className={styles.retryButton} type="button" onClick={resetError}>
+                다시 시도
+              </button>
+              <button className={styles.button} type="button" onClick={onErrorClick}>
+                상점 목록
+              </button>
+            </div>
+          </div>
+        );
+      }}
+    >
+      {children}
+    </Sentry.ErrorBoundary>
+  );
 }
