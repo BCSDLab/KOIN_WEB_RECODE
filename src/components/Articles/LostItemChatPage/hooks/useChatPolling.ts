@@ -96,7 +96,7 @@ const useChatPolling = ({
     }
   }, [messages, numericArticleId, numericChatroomId]);
 
-  const { mutate: sendMessage } = useMutation({
+  const { mutate: sendMessage, mutateAsync: sendMessageAsync } = useMutation({
     mutationFn: ({ content, isImage = false }: { content: string; isImage?: boolean }) => {
       if (defaultArticleId == null || defaultChatroomId == null) {
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
@@ -202,6 +202,7 @@ const useChatPolling = ({
     defaultChatroomId,
     defaultArticleId,
     sendMessage,
+    sendMessageAsync,
     leaveChatroom,
     invalidateChatroomList,
     invalidateMessages,

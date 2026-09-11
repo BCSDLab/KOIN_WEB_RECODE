@@ -26,9 +26,9 @@ export function formatDate(timestamp: string): string {
   return `${month}월 ${day}일`;
 }
 
-export const formatISODateToMonthAndDay = (timestamp: string): string => {
+export const formatISODateToKoreanDate = (timestamp: string): string => {
   const date = new Date(timestamp);
-  return `${(date.getMonth() + 1).toString().padStart(2, '0')}월 ${date.getDate().toString().padStart(2, '0')}일`;
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 };
 
 export const formatISODateToTime = (timestamp: string): string => {
