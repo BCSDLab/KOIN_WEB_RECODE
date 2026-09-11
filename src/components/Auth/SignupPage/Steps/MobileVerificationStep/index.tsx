@@ -113,7 +113,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증완료',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -137,7 +136,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증번호 발송',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },

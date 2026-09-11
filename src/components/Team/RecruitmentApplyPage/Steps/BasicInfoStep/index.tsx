@@ -178,7 +178,6 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
             onAppend={() =>
               actionEventClick({
                 team: 'CAMPUS',
-                event_category: 'click',
                 event_label: LOGGING_TITLE.SKILL_ADD,
                 value: '기술 / 자격증 추가',
               })

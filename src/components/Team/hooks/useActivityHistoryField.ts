@@ -76,7 +76,7 @@ export default function useActivityHistoryField(
   };
 
   const handleEdit = (index: number) => {
-    actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.EDIT, value: '수정' });
+    actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.EDIT, value: '수정' });
     setValue(`activities.${index}.status`, 'draft');
   };
 

@@ -23,10 +23,10 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
+import type { LoggingTeam } from 'lib/gtag';
 import styles from './CategoryPage.module.scss';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
-type CategoryLoggingTeam = 'USER' | 'CAMPUS' | 'BUSINESS';
 type CategoryEventLabel =
   | 'category_team_recruitment'
   | 'category_lost_and_found'
@@ -43,7 +43,7 @@ type CategoryEventLabel =
   | 'category_koin_for_business';
 
 interface CategoryLogging {
-  team: CategoryLoggingTeam;
+  team: LoggingTeam;
   event_label: CategoryEventLabel;
   value: string;
 }

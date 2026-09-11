@@ -45,7 +45,6 @@ function PCCafeteriaComponent() {
     sessionLogger.actionSessionEvent({
       event_label: 'dining_to_shop',
       value: DINING_TYPE_MAP[diningType],
-      event_category: 'click',
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });

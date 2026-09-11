@@ -14,14 +14,14 @@ export default function DeleteModal({ close, deleteMyReview, storeDetail }: Prop
 
   const loggingConfirmDeleteClick = () => {
     logger.actionEventClick({
-      team: 'BUSINSESS',
+      team: 'BUSINESS',
       event_label: 'shop_detail_view_review_delete_done',
       value: storeDetail.name,
     });
   };
   const loggingCancelDeleteClick = () => {
     logger.actionEventClick({
-      team: 'BUSINSESS',
+      team: 'BUSINESS',
       event_label: 'shop_detail_view_review_delete_cancel',
       value: storeDetail.name,
     });

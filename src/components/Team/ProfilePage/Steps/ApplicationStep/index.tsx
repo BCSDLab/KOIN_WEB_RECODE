@@ -28,7 +28,6 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
   const handleSave = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: `team_recruitment_profile_${logMode}_submit`,
       value: submitLabel,
     });
@@ -71,7 +70,6 @@ export default function ApplicationStep({ mode, onBack, onSubmit, isSubmitting, 
           onAppend={() =>
             actionEventClick({
               team: 'CAMPUS',
-              event_category: 'click',
               event_label: `team_recruitment_profile_${logMode}_skill_add`,
               value: '기술 / 자격증 추가',
             })

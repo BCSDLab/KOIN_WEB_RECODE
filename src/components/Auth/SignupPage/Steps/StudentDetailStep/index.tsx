@@ -98,7 +98,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '아이디생성',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -119,7 +118,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '닉네임생성',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -180,7 +178,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         sessionLogger.actionSessionEvent({
           event_label: 'sign_up_completed',
           value: '회원가입완료',
-          event_category: 'click',
           session_name: 'sign_up',
         });
       },

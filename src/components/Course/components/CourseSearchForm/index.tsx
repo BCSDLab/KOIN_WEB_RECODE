@@ -51,18 +51,18 @@ export default function CourseSearchForm({
 
   const handleChangeDropdown = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_all', value: selectedValue });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_all', value: selectedValue });
     onDepartmentChange(e);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_check', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_check', value: '' });
     onSearch();
   };
 
   const handleGoMain = () => {
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_back', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_back', value: '' });
     router.push(ROUTES.Main());
   };
 

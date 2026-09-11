@@ -7,6 +7,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import { useServerRequest } from 'utils/context/serverRequest';
+import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -14,7 +15,9 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
+import type { SubmenuTitle } from 'static/category';
 import styles from './PCHeader.module.scss';
 
 const ID: { [key: string]: string } = {
@@ -82,55 +85,11 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   // 그리고 클라이언트가 마운트 후 로그인 UI로 교체한다(a → button).
   const isLoggedin = mounted ? !!token : (serverRequest?.isLoggedIn ?? false);
 
-  const logShortcut = (title: string) => {
-    const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
-      공지사항: { team: 'CAMPUS', event_label: 'header', value: '공지사항' },
-      분실물: { team: 'CAMPUS', event_label: 'header', value: '분실물' },
-      '버스 교통편': { team: 'CAMPUS', event_label: 'header', value: '버스 교통편' },
-      '버스 시간표': { team: 'CAMPUS', event_label: 'header', value: '버스 시간표' },
-      식단: { team: 'CAMPUS', event_label: 'header', value: '식단' },
-      시간표: { team: 'USER', event_label: 'header', value: '시간표' },
-      복덕방: { team: 'BUSINESS', event_label: 'header', value: '복덕방' },
-      주변상점: {
-        team: 'BUSINESS',
-        event_label: 'header',
-        value: '주변상점',
-        event_category: 'click',
-      },
-      '교내 시설물 정보': {
-        team: 'CAMPUS',
-        event_label: 'header',
-        value: '교내 시설물 정보',
-        event_category: 'click',
-      },
-      '학교 부서 정보': {
-        team: 'CAMPUS',
-        event_label: 'header',
-        value: '학교 부서 정보',
-        event_category: 'click',
-      },
-      쪽지: {
-        team: 'CAMPUS',
-        event_label: 'header',
-        value: '쪽지',
-        event_category: 'click',
-      },
-      동아리: {
-        team: 'CAMPUS',
-        event_label: 'header',
-        value: '동아리',
-        event_category: 'click',
-      },
-      '팀원 모집': {
-        team: 'CAMPUS',
-        event_label: 'header',
-        value: '팀원 모집',
-        event_category: 'click',
-      },
-    };
+  const logShortcut = (title: SubmenuTitle) => {
+    const info = SHORTCUT_LOGGING_MAP[title];
 
-    if (loggingMap[title]) {
-      logger.actionEventClick(loggingMap[title]);
+    if (info) {
+      logger.actionEventClick({ ...info, event_label: 'header' });
 
       if (pathname === ROUTES.GraduationCalculator()) {
         logger.actionEventClick({
@@ -150,7 +109,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: '로고',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
     }
     if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
@@ -162,7 +121,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: shopName.name,
         event_category: 'logo',
         current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
+        duration_time: getElapsedSeconds('enter_storeDetail'),
       });
     }
     if (pathname.includes(ROUTES.GraduationCalculator())) {
@@ -190,7 +149,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     ));
   };
 
-  const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: string) => {
+  const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: SubmenuTitle) => {
     logShortcut(title);
     if (!token && title === '쪽지') {
       e.preventDefault();
@@ -288,7 +247,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                     session_name: 'sign_up',
                     event_label: 'header',
                     value: '회원가입 시작',
-                    event_category: 'click',
                   });
                 }}
               >

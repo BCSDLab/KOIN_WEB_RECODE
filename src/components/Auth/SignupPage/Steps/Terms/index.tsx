@@ -29,7 +29,6 @@ export default function Terms({ onNext }: TermsProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'terms_agreement',
       value: '약관동의',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
