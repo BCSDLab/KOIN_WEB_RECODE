@@ -22,6 +22,14 @@ function asKoinError(error: unknown): KoinErrorLike | null {
   return candidate.type === 'KOIN_ERROR' ? candidate : null;
 }
 
+/** WebPageTest 등 합성 모니터링 봇/크롤러의 UA 패턴. 실사용자 모바일 네트워크 지연은 걸러내지 않는다. */
+const BOT_USER_AGENT_PATTERN = /bot|crawler|spider|WebPageTest|HeadlessChrome|PhantomJS|Pingdom|Lighthouse/i;
+
+function isBotUserAgent(): boolean {
+  if (typeof window === 'undefined') return false;
+  return BOT_USER_AGENT_PATTERN.test(window.navigator.userAgent);
+}
+
 function getBrowserFamily(userAgent: string): string {
   if (/Edg\//.test(userAgent)) return 'edge';
   if (/SamsungBrowser\//.test(userAgent)) return 'samsung-internet';
@@ -86,6 +94,8 @@ Sentry.init({
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
 
   beforeSendTransaction(event) {
+    if (isBotUserAgent()) return null;
+
     const transactionKey = getTransactionKey(event.transaction);
     if (transactionKey) {
       event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
