@@ -191,7 +191,7 @@ export interface MyTeamRecruitmentApplicationListResponse extends APIResponse {
 
 export type TeamChatRoomType = 'TEAM' | 'DIRECT';
 
-export type TeamChatRoomStatus = 'ACTIVE';
+export type TeamChatRoomStatus = 'ACTIVE' | 'READ_ONLY';
 
 export interface TeamChatRoomListItem {
   recruitment_id: number;
