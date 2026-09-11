@@ -22,7 +22,6 @@ interface CategoryWithEvent extends Category {
     team: LoggingTeam;
     event_label: string;
     value: string;
-    event_category?: string;
     previous_page: string;
     current_page: string;
   };
