@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const APPLY_NICKNAME_MAX_LENGTH = 20;
 export const APPLY_PREFERRED_ROLE_MAX_LENGTH = 20;
-export const APPLY_SKILL_MAX_LENGTH = 30;
+export const APPLY_SKILL_MAX_LENGTH = 20;
 export const APPLY_ACTIVITY_TITLE_MAX_LENGTH = 50;
 export const APPLY_ACTIVITY_CONTENT_MAX_LENGTH = 1000;
 export const APPLY_INTRODUCTION_MAX_LENGTH = 1000;
@@ -93,6 +93,12 @@ export const createApplicationFormSchema = (isGeneralRecruitment: boolean) =>
     const skillValues = data.skills.map((skill) => skill.value.trim());
     if (skillValues.some((value) => value === '')) {
       context.addIssue({ code: 'custom', path: ['skills'], message: '빈 항목을 삭제하거나 내용을 입력해주세요.' });
+    } else if (skillValues.some((value) => value.length > APPLY_SKILL_MAX_LENGTH)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['skills'],
+        message: `기술 / 자격증은 ${APPLY_SKILL_MAX_LENGTH}자 이내로 입력해주세요.`,
+      });
     } else if (new Set(skillValues).size !== skillValues.length) {
       context.addIssue({ code: 'custom', path: ['skills'], message: '중복되지 않은 값을 입력해주세요.' });
     }
