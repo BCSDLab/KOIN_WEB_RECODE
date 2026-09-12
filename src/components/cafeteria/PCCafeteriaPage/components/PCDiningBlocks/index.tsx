@@ -37,21 +37,25 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
   };
 
   useEffect(() => {
-    if (boxRef.current) {
-      const blocks = boxRef.current.children;
-      const columnHeights = [0, 0, 0];
-      let columnIndex = 0;
+    const box = boxRef.current;
+    if (!box) return;
 
-      Array.from(blocks).forEach((block) => {
-        const x = columnIndex * (276 + 16); // 열 인덱스에 따라 x 위치 계산
-        const y = columnHeights[columnIndex]; // 현재 열의 높이에서 시작
-        (block as HTMLElement).style.transform = `translate(${x}px, ${y}px)`;
-        columnHeights[columnIndex] += (block as HTMLElement).clientHeight + 16; // 열 높이 업데이트
-        columnIndex = (columnIndex + 1) % columnHeights.length; // 다음 열 인덱스로 업데이트
-      });
+    // 읽기(clientHeight)와 쓰기(style.transform)를 한 루프에서 번갈아 하면, 쓰기 직후의
+    // 읽기마다 브라우저가 레이아웃을 강제로 다시 계산한다(forced synchronous layout).
+    // 블록 수만큼 반복되는 불필요한 리플로우라 먼저 전부 읽고, 그다음 전부 쓴다.
+    const blocks = Array.from(box.children) as HTMLElement[];
+    const blockHeights = blocks.map((block) => block.clientHeight);
 
-      boxRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
-    }
+    const columnHeights = [0, 0, 0];
+    blocks.forEach((block, index) => {
+      const columnIndex = index % columnHeights.length;
+      const x = columnIndex * (276 + 16); // 열 인덱스에 따라 x 위치 계산
+      const y = columnHeights[columnIndex]; // 현재 열의 높이에서 시작
+      block.style.transform = `translate(${x}px, ${y}px)`;
+      columnHeights[columnIndex] += blockHeights[index] + 16; // 열 높이 업데이트
+    });
+
+    box.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
   }, [filteredDinings]);
 
   return (
