@@ -8,7 +8,7 @@
     "@hookform/resolvers": "^5.9.1",
     "@next/third-parties": "latest",
     "@opentelemetry/api": "1.9.1",
-    "@opentelemetry/core": "2.8.0",
+    "@opentelemetry/core": "2.11.0",
     "@sentry/nextjs": "^10.74.0",
     "@tanstack/react-query": "^5.90.21",
     "axios": "^0.33.0",
@@ -119,7 +119,7 @@
     "sharp": "0.35.0",
     "ip": "2.0.1",
     "@babel/core": "7.29.6",
-    "@opentelemetry/core": "2.8.0"
+    "@opentelemetry/core": "2.11.0"
   },
   "type": "module",
   "packageManager": "yarn@4.17.0"
