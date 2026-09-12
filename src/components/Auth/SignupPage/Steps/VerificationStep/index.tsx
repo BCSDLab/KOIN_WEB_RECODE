@@ -126,8 +126,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       </div>
 
       <div className={styles['form-container']}>
-        {/* rr-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
-        <div className={`${styles['input-wrapper']} rr-mask`}>
+        {/* sentry-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="name"
             control={control}
@@ -166,8 +166,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
           </div>
         </div>
 
-        {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
-        <div className={`${styles['input-wrapper']} rr-mask`}>
+        {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="phone_number"
             control={control}

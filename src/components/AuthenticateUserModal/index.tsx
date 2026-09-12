@@ -94,7 +94,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
           보안을 위해 비밀번호 입력이 필요합니다.
         </div>
         <div className={styles.container__footer}>
-          {/* rr-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
+          {/* sentry-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
           <div className={styles.container__input}>
             <input
               type={isBlind ? 'password' : 'text'}
@@ -102,7 +102,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
               className={cn({
                 [styles['container__password-input']]: true,
                 [styles['container__password-input--error']]: isKoinError(error),
-                'rr-mask': true,
+                'sentry-mask': true,
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

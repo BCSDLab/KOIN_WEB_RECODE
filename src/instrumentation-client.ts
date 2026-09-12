@@ -180,9 +180,8 @@ Sentry.init({
       maskAllText: false,
       maskAllInputs: false,
       blockAllMedia: false,
-      // Sentry 기본 마스킹 셀렉터(.sentry-mask/[data-sentry-mask])는 그대로 두고,
-      // 코드 전반에서 이미 쓰고 있는 rr-mask 클래스도 동일하게 마스킹 대상에 추가한다.
-      mask: ['.rr-mask'],
+      // maskAllText/maskAllInputs를 꺼도 .sentry-mask 클래스(또는
+      // [data-sentry-mask] 속성)가 붙은 요소는 기본 셀렉터로 항상 마스킹된다.
     }),
     // plain object로 throw된 에러의 추가 속성을 이벤트에 붙인다 (KoinError 대응)
     Sentry.extraErrorDataIntegration(),

@@ -52,8 +52,8 @@ export default function TeamProfileMobile({
               <p className={styles.summaryCard__nickname}>{profile.profile_nickname}</p>
               <ul className={styles.summaryCard__meta}>
                 <li>{profile.department}</li>
-                {/* rr-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
-                <li className="rr-mask">{profile.student_number}</li>
+                {/* sentry-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+                <li className="sentry-mask">{profile.student_number}</li>
               </ul>
               <button type="button" className={styles.summaryCard__button} onClick={onModifyClick}>
                 프로필 수정하기

@@ -104,8 +104,8 @@ function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, onActionClick,
         <div className={styles.profileMenu__userIcon}>
           <UserIcon />
         </div>
-        {/* rr-mask: Session Replay에서 이름/학번·아이디를 가리기 위한 Sentry 기본 마스킹 클래스 */}
-        <div className={`${styles.profileMenu__userText} rr-mask`}>
+        {/* sentry-mask: Session Replay에서 이름/학번·아이디를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles.profileMenu__userText} sentry-mask`}>
           <h1 className={styles.profileMenu__title}>{title}</h1>
           {subtitle && <p className={styles.profileMenu__userMeta}>{subtitle}</p>}
         </div>
