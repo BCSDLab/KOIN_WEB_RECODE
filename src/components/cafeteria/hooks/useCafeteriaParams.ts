@@ -15,7 +15,22 @@ export const useCafeteriaParams = () => {
   const renderTomorrow = new Date(renderToday);
   renderTomorrow.setDate(renderToday.getDate() + 1);
 
-  const dateParam = (): Date | null => (query[DATE_KEY] ? new Date(query[DATE_KEY] as string) : null);
+  const dateParam = (): Date | null => {
+    const value = query[DATE_KEY];
+    const rawDate = Array.isArray(value) ? value[0] : value;
+    if (typeof rawDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) return null;
+
+    const [year, month, day] = rawDate.split('-').map(Number);
+    const parsed = new Date(0);
+    parsed.setUTCFullYear(year, month - 1, day);
+    parsed.setUTCHours(0, 0, 0, 0);
+
+    return parsed.getUTCFullYear() === year
+      && parsed.getUTCMonth() === month - 1
+      && parsed.getUTCDate() === day
+      ? parsed
+      : null;
+  };
 
   const shiftDate = (days: number) => {
     const base = dateParam() ?? new Date();

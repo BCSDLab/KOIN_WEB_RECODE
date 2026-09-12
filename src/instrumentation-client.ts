@@ -6,9 +6,10 @@ const isProduction = environment === 'production';
 
 // React 19가 하이드레이션 실패 시 console.error로 출력하는 메시지 패턴.
 // 프로덕션 빌드는 문구 대신 `Minified React error #418` 처럼 코드 번호만 찍는다.
-// 418/419/421/422/423/425는 React 에러 코드 테이블(facebook/react) 기준 전부 하이드레이션 계열이다.
+// 418/419/421-425는 React 에러 코드 테이블(facebook/react) 기준 전부 하이드레이션 계열이다
+// (424: 하이드레이션 완료 전 업데이트가 발생해 루트 전체가 클라이언트 렌더링으로 전환).
 const HYDRATION_ERROR_PATTERN =
-  /Hydration failed|didn't match|Text content does not match|error while hydrating|Minified React error #4(1[89]|2[1-3]|25)/i;
+  /Hydration failed|didn't match|Text content does not match|error while hydrating|Minified React error #4(1[89]|2[1-5])/i;
 
 interface KoinErrorLike {
   type?: string;
@@ -179,6 +180,9 @@ Sentry.init({
       maskAllText: false,
       maskAllInputs: false,
       blockAllMedia: false,
+      // Sentry 기본 마스킹 셀렉터(.sentry-mask/[data-sentry-mask])는 그대로 두고,
+      // 코드 전반에서 이미 쓰고 있는 rr-mask 클래스도 동일하게 마스킹 대상에 추가한다.
+      mask: ['.rr-mask'],
     }),
     // plain object로 throw된 에러의 추가 속성을 이벤트에 붙인다 (KoinError 대응)
     Sentry.extraErrorDataIntegration(),

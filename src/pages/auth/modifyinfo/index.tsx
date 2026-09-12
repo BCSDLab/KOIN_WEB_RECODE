@@ -630,7 +630,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
-            {/* rr-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+            {/* rr-mask: Session Replay에서 학번을 가리기 위한 마스킹 클래스 */}
             <input
               className={`${styles['form-input']} rr-mask`}
               placeholder="학번 (선택)"
@@ -675,7 +675,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
-            {/* rr-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+            {/* rr-mask: Session Replay에서 학번을 가리기 위한 마스킹 클래스 */}
             <input
               className={`${styles['form-input']} rr-mask`}
               placeholder="학번 (선택)"
@@ -840,8 +840,9 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
             </label>
             <div className={styles['phone-field']}>
               <div className={styles['form-input__row']}>
+                {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 마스킹 클래스 */}
                 <input
-                  className={styles['form-input']}
+                  className={`${styles['form-input']} rr-mask`}
                   type="text"
                   autoComplete="tel"
                   placeholder="전화번호 (Ex.01012345678)"
@@ -907,8 +908,9 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
               <div className={styles['verification-field']}>
                 <div className={styles['form-input__row']}>
                   <div className={styles['form-input__code-wrapper']}>
+                    {/* rr-mask: Session Replay에서 인증번호를 가리기 위한 마스킹 클래스 */}
                     <input
-                      className={styles['form-input']}
+                      className={`${styles['form-input']} rr-mask`}
                       type="text"
                       autoComplete="one-time-code"
                       placeholder="인증번호를 입력해주세요."
@@ -974,7 +976,7 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
               휴대전화 변경
               <span className={styles['form-input__required']}>*</span>
             </label>
-            {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+            {/* rr-mask: Session Replay에서 전화번호를 가리기 위한 마스킹 클래스 */}
             <input
               className={`${styles['form-input']} rr-mask`}
               type="text"
@@ -1023,8 +1025,9 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
                 <span className={styles['form-input__required']}>*</span>
               </label>
               <div className={styles['form-input__code-wrapper']}>
+                {/* rr-mask: Session Replay에서 인증번호를 가리기 위한 마스킹 클래스 */}
                 <input
-                  className={styles['form-input']}
+                  className={`${styles['form-input']} rr-mask`}
                   type="text"
                   autoComplete="one-time-code"
                   placeholder="인증번호를 입력해주세요."
@@ -1129,7 +1132,7 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
         이메일(선택)
       </label>
       <div className={styles['form-input__email-wrapper']}>
-        {/* rr-mask: Session Replay에서 이메일을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        {/* rr-mask: Session Replay에서 이메일을 가리기 위한 마스킹 클래스 */}
         <input
           className={`${styles['form-input__email']} rr-mask`}
           type={isStudent ? 'text' : 'email'}
@@ -1216,7 +1219,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
         이름
         <span className={styles['form-input__required']}>*</span>
       </label>
-      {/* rr-mask: Session Replay에서 이름을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+      {/* rr-mask: Session Replay에서 이름을 가리기 위한 마스킹 클래스 */}
       <input
         className={`${styles['form-input']} rr-mask`}
         type="text"
@@ -1342,7 +1345,7 @@ function ModifyInfoDefaultPage() {
             아이디
             <span className={styles['form-input__required']}>*</span>
           </label>
-          {/* rr-mask: Session Replay에서 아이디를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+          {/* rr-mask: Session Replay에서 아이디를 가리기 위한 마스킹 클래스 */}
           <input
             className={`${styles['form-input']} rr-mask`}
             type="text"
