@@ -107,7 +107,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     }
   }, [lastMessageId]);
 
-  const isReadOnly = chatRoom.status === 'READ_ONLY';
   const isTeamRoom = chatRoom.room_type === 'TEAM';
   const messageGroups = groupChatMessagesByDate(mergedMessages);
   const memberCount = isTeamRoom ? (
@@ -293,8 +292,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
           ))}
         </div>
         <TeamChatSendBar
-          disabled={isReadOnly || isSending || isUploading}
-          placeholder={isReadOnly ? '종료된 채팅방입니다' : undefined}
+          disabled={isSending || isUploading}
           onSend={handleSend}
           onImageSelect={handleImageSelect}
         />

@@ -191,14 +191,11 @@ export interface MyTeamRecruitmentApplicationListResponse extends APIResponse {
 
 export type TeamChatRoomType = 'TEAM' | 'DIRECT';
 
-export type TeamChatRoomStatus = 'ACTIVE' | 'READ_ONLY';
-
 export interface TeamChatRoomListItem {
   recruitment_id: number;
   chat_room_id: number;
   room_name: string;
   room_type: TeamChatRoomType;
-  status: TeamChatRoomStatus;
   counterpart_id: number | null;
   counterpart_nickname: string | null;
   last_message_id: number | null;
@@ -219,7 +216,6 @@ export interface TeamChatRoomResponse extends APIResponse {
   chat_room_id: number;
   room_name: string;
   room_type: TeamChatRoomType;
-  status: TeamChatRoomStatus;
   member_count: number;
   max_member_count: number;
   counterpart: TeamChatCounterpart | null;
@@ -229,7 +225,6 @@ export interface TeamChatDirectRoomResponse extends APIResponse {
   chat_room_id: number;
   room_name: string;
   room_type: 'DIRECT';
-  status: TeamChatRoomStatus;
   counterpart: TeamChatCounterpart;
 }
 

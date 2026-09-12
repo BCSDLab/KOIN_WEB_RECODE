@@ -5,14 +5,12 @@ import styles from './TeamChatSendBar.module.scss';
 
 interface TeamChatSendBarProps {
   disabled?: boolean;
-  placeholder?: string;
   onSend: (content: string) => void;
   onImageSelect: (file: File) => void;
 }
 
 export default function TeamChatSendBar({
   disabled = false,
-  placeholder = '메세지 보내기',
   onSend,
   onImageSelect,
 }: TeamChatSendBarProps) {
@@ -82,7 +80,7 @@ export default function TeamChatSendBar({
       <textarea
         ref={textareaRef}
         className={styles.sendBar__input}
-        placeholder={placeholder}
+        placeholder="메세지 보내기"
         aria-label="메시지 입력"
         rows={1}
         value={content}
