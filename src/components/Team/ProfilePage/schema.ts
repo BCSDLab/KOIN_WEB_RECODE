@@ -18,7 +18,7 @@ const basicInfoSchema = z.object({
 
 // ── 지원서 작성 (2단계) ────────────────────────────────────
 const skillSchema = z.object({
-  value: z.string().max(30, '기술 / 자격증은 30자 이내로 입력해주세요.'),
+  value: z.string().max(20, '기술 / 자격증은 20자 이내로 입력해주세요.'),
 });
 
 // status에 따라 필수 필드가 달라지므로 판별 유니온으로 나눈다.
@@ -62,10 +62,7 @@ const applicationSchema = z.object({
   introduction: z.string().trim().min(1, '자기소개를 작성해주세요.').max(1000, '자기소개는 1000자 이내로 입력해주세요.'),
 });
 
-// zod v4에서 ZodObject.merge()는 deprecated라 shape를 직접 펼쳐서 합친다.
 export const profileFormSchema = z.object({ ...basicInfoSchema.shape, ...applicationSchema.shape }).superRefine((data, context) => {
-  // ActivityHistoryField의 "완료" 버튼을 안 눌러 draft로 남은 활동 이력이 있으면 제출 불가.
-  // 지금 ProfilePage.handleRequestSubmit의 수동 체크(values.activities.some(status==='draft'))를 그대로 스키마로 옮긴 것.
   const hasDraftActivity = data.activities.some((activity) => activity.status === 'draft');
   if (hasDraftActivity) {
     context.addIssue({
