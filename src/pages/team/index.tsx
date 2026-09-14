@@ -27,8 +27,9 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import { redirectToLogin } from 'utils/ts/auth';
+import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './TeamListPage.module.scss';
 
@@ -134,7 +135,7 @@ export default function TeamListPage() {
     appliedFilter.meetingType !== DEFAULT_TEAM_RECRUITMENT_FILTER.meetingType ||
     appliedFilter.sort !== DEFAULT_TEAM_RECRUITMENT_FILTER.sort;
 
-  const handleProfileClick = () => {
+  const handleProfileClick = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'team_recruitment_profile',
@@ -142,7 +143,9 @@ export default function TeamListPage() {
     });
 
     if (!token) {
-      redirectToLogin(router.asPath);
+      setRedirectPath(router.asPath);
+      await router.push(ROUTES.Auth());
+      showToast('warning', '로그인이 필요한 기능입니다.');
       return;
     }
     router.push(ROUTES.TeamProfile());
