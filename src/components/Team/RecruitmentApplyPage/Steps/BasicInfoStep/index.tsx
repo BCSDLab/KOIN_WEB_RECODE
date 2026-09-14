@@ -1,3 +1,5 @@
+'use no memo';
+
 import { cn } from '@bcsdlab/utils';
 import useAcademicInfoStep from 'components/Team/hooks/useAcademicInfoStep';
 import DeptSelect from 'components/Team/ProfilePage/components/DeptSelect';
