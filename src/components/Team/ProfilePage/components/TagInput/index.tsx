@@ -35,7 +35,6 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
       {fields.length > 0 && (
         <ul className={styles.tagInput__list}>
           {fields.map((field, index) => {
-            // edit 모드에서 이미 값이 채워진 항목은 연필 아이콘으로 수정 진입점을 보여준다 (Figma 수정 화면 기준).
             const showEditIcon = mode === 'edit' && Boolean(skills[index]?.value?.trim());
             const { ref: fieldRef, ...fieldProps } = register(`skills.${index}.value` as const);
 
@@ -45,7 +44,7 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
                   type="text"
                   className={styles.tagInput__field}
                   placeholder={placeholder}
-                  maxLength={30}
+                  maxLength={20}
                   ref={(el) => {
                     fieldRef(el);
                     inputRefs.current[field.id] = el;
