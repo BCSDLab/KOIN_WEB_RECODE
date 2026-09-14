@@ -104,13 +104,13 @@ When a PR closes an issue, keep the same domain bracket as the issue; the descri
 
 ## Branches
 
-One pattern only:
-
 ```text
 {type}/#{issue-number}/{english-kebab-case}
 ```
 
 `{type}` is one of `feat`, `fix`, `refactor`, `test`, `docs`, `chore` (use `chore` for both `deploy` and `setting` work types). The description segment is in **English**, kebab-case, concise.
+
+**Exception — hotfix branches targeting `main`:** use `hotfix` as `{type}` instead of `fix`, regardless of the underlying work type. This is the only case where `{type}` is not one of the six values above.
 
 Examples:
 
@@ -118,9 +118,10 @@ Examples:
 feat/#1328/team-recruitment-profile-entry
 fix/#1324/graduation-calculator-entry-removal
 chore/#1319/sentry-koin-error-dedup
+hotfix/#1462/nearby-store-desktop-link
 ```
 
-This skill creates the issue first (see **Issue Creation** below) if one does not already exist, so an issue number is always available before branching. If the current branch already starts with `{type}/#{issue-number}/`, reuse that issue instead of creating another one.
+This skill creates the issue first (see **Issue Creation** below) if one does not already exist, so an issue number is always available before branching. If the current branch already starts with `{type}/#{issue-number}/` (or `hotfix/#{issue-number}/` for a hotfix), reuse that issue instead of creating another one.
 
 ## Issue Creation
 
