@@ -39,7 +39,7 @@ export default function ActivityHistoryField() {
     {
       ADD: LOGGING_TITLE.ADD,
       EDIT: LOGGING_TITLE.EDIT,
-      getDoneEvent: (hasBeenSaved) => ({ eventLabel: LOGGING_TITLE.DONE, value: hasBeenSaved ? '수정하기' : '완료' }),
+      getDoneEvent: () => ({ eventLabel: LOGGING_TITLE.DONE, value: '수정하기' }),
     },
     validateActivity,
   );
