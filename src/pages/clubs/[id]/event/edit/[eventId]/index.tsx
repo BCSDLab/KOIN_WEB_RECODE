@@ -8,9 +8,9 @@ import ImagesUploadSlider from 'components/Club/NewClubEvent/components/ImagesUp
 import TimePicker from 'components/Club/NewClubEvent/components/TimePicker';
 import TimeSelector from 'components/Club/NewClubEvent/components/TimeSelector';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
 import DetailDescription from 'components/Club/NewClubRecruitment/components/DetailDescription';
 import DatePicker from 'components/ui/DatePicker';
+import DatePickerModal from 'components/ui/DatePickerModal';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

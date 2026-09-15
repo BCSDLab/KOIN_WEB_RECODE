@@ -21,8 +21,8 @@
 
   @include media.media-breakpoint(mobile) {
     display: flex;
-    width: 96px;
-    height: 56px;
+    width: 117px;
+    height: 111px;
     margin: 100px auto 24px;
   }
 }
@@ -44,7 +44,7 @@
     font-weight: 500;
     line-height: 160%;
     margin-top: 0;
-    margin-bottom: 57px;
+    margin-bottom: 52px;
     color: #000;
   }
 }
@@ -73,15 +73,17 @@
       line-height: 160%;
     }
 
-    &--orange {
+    &--purple {
       @include media.media-breakpoint(mobile) {
-        background-color: #f7941e;
+        background-color: #b611f5;
       }
     }
 
-    &--blue {
+    &--white {
       @include media.media-breakpoint(mobile) {
-        background-color: #175c8e;
+        background-color: #fff;
+        color: #b611f5;
+        border: 1px solid #b611f5;
       }
     }
   }

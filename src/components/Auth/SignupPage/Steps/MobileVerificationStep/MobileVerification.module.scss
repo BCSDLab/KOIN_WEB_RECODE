@@ -60,14 +60,14 @@
       height: 16px;
       margin: 0 0 2px;
       border-radius: 50px;
-      border: 2px solid #175c8e;
+      border: 2px solid #b611f5;
       cursor: pointer;
     }
 
     input[type="radio"]:checked {
-      background-color: #175c8e;
+      background-color: #b611f5;
       border: 2px solid white;
-      box-shadow: 0 0 0 2px #175c8e;
+      box-shadow: 0 0 0 2px #b611f5;
     }
 
     & > div {
@@ -125,6 +125,10 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 160%;
+  
+  @include media.media-breakpoint(mobile) {
+    color: #b611f5;
+  }
 }
 
 .label-count-number {
@@ -143,7 +147,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    background: #175c8e;
+    background: #b611f5;
     color: #fff;
     font-size: 16px;
     font-weight: 500;

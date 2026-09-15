@@ -65,9 +65,47 @@ const ROUTES = {
   CallvanChat: ({ id }: ROUTESParams<'id'>) => `/callvan/chat/${id}`,
   CallvanParticipants: ({ postId }: ROUTESParams<'postId'>) => `/callvan/${postId}/participants`,
   CallvanReport: ({ postId, userId }: ROUTESParams<'postId' | 'userId'>) => `/callvan/${postId}/report/${userId}`,
+  Team: () => '/team',
+  TeamRecruitmentNew: () => '/team/recruitment/new',
+  TeamRecruitmentEdit: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/edit`,
+  TeamRecruitmentApply: ({ postId, step }: ROUTESParams<'postId' | 'step'>) =>
+    `/team/recruitment/${postId}/apply${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamRecruitmentApplicants: ({ postId }: ROUTESParams<'postId'>) => `/team/recruitment/${postId}/applicants`,
+  TeamRecruitmentApplicantDetail: ({ postId, applicantId }: ROUTESParams<'postId' | 'applicantId'>) =>
+    `/team/recruitment/${postId}/applicants/${applicantId}`,
+  TeamProfile: () => '/team/profile',
+  TeamProfileCreate: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/create${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamProfileEdit: ({ step }: ROUTESParams<'step'> = {}) =>
+    `/team/profile/edit${step ? `?step=${encodeURIComponent(step)}` : ''}`,
+  TeamDetail: ({ postId }: { postId: string }) => `/team/recruitment/${postId}`,
+  TeamNotifications: () => '/team/notifications',
+  TeamMyApplications: () => '/team/my-applications',
+  TeamMyCreatedPosts: () => '/team/my-created-posts',
+  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
+    `/team/chat/${recruitmentId}/${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ROUTES 함수마다 params 타입이 달라 목록 원소 타입을 any로 통일한다.
+type RouteFn = (params: any) => string;
+
+// 로그인 없이 URL 직접 접근이 불가능해야 하는 라우트
+export const PROTECTED_ROUTES: RouteFn[] = [
+  ROUTES.TeamRecruitmentNew,
+  ROUTES.TeamRecruitmentEdit,
+  ROUTES.TeamRecruitmentApply,
+  ROUTES.TeamRecruitmentApplicants,
+  ROUTES.TeamRecruitmentApplicantDetail,
+  ROUTES.TeamProfile,
+  ROUTES.TeamProfileCreate,
+  ROUTES.TeamProfileEdit,
+  ROUTES.TeamNotifications,
+  ROUTES.TeamMyApplications,
+  ROUTES.TeamMyCreatedPosts,
+  ROUTES.TeamChat,
+];
 
 export default ROUTES;

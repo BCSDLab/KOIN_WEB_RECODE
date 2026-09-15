@@ -18,7 +18,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useSemester } from 'utils/zustand/semester';
 import DownloadTimetableModal from './DownloadTimetableModal';
 import styles from './MyLectureTimetable.module.scss';
@@ -127,7 +127,7 @@ function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: n
         team: 'USER',
         event_label: 'timetable',
         value: '이미지저장',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
       openModal();
     }

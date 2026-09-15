@@ -46,17 +46,17 @@ export const useValidationContext = (isStudent?: boolean) => {
   const anyAccountChange = !!isValid.isPasswordValid || !!isValid.isEmailValid || !!isValid.isNicknameValid;
 
   const isStudentFormValid =
-    (isValid.isPhoneValid &&
-      isValid.isStudentIdValid &&
+    isValid.isPhoneValid &&
+    ((isValid.isStudentIdValid &&
       isValid.isStudentMajorValid &&
       isValid.isGenderValid &&
       isValid.isNameValid &&
       isValid.isFieldChanged) ||
-    anyAccountChange;
+      anyAccountChange);
 
   const isGeneralFormValid =
-    (isValid.isPhoneValid && isValid.isGenderValid && isValid.isNameValid && isValid.isFieldChanged) ||
-    anyAccountChange;
+    isValid.isPhoneValid &&
+    ((isValid.isGenderValid && isValid.isNameValid && isValid.isFieldChanged) || anyAccountChange);
 
   const isFormValid = isStudent ? isStudentFormValid : isGeneralFormValid;
 

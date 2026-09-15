@@ -1,0 +1,180 @@
+@use "src/utils/scss/media" as media;
+
+.mobileHeader {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+  }
+}
+
+.header {
+  background: #f8f8fa;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 64px 24px 96px;
+  background: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 0;
+    min-height: calc(100dvh - 56px);
+    background: #f8f8fa;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  width: 100%;
+  max-width: 1136px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 24px;
+    max-width: none;
+    padding: 20px;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: normal;
+  color: #175c8e;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.error {
+  margin: 48px 0;
+  color: #727272;
+  font-size: 14px;
+  line-height: 160%;
+  text-align: center;
+}
+
+.chatButton {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    width: 35px;
+    height: 35px;
+
+    path {
+      stroke: #175c8e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 24px;
+      height: 24px;
+
+      path {
+        stroke: #b611f5;
+      }
+    }
+  }
+}
+
+.recruitmentStatus {
+  flex-shrink: 0;
+  color: #b611f5;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 160%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 12px;
+  }
+
+  &--empty {
+    flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__title {
+    color: #000;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  &__count {
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 12px;
+    }
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0 0;
+  gap: 12px;
+
+  svg {
+    display: none;
+
+    @include media.media-breakpoint(mobile) {
+      display: block;
+      width: 95px;
+      height: 75px;
+    }
+  }
+
+  &__title {
+    color: #000;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__subtitle {
+    color: #4b4b4b;
+    font-size: 14px;
+    line-height: 160%;
+    text-align: center;
+  }
+}

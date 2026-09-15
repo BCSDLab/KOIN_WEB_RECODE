@@ -1,5 +1,7 @@
+export type LoggingTeam = 'CAMPUS' | 'BUSINESS' | 'USER';
+
 type GTagEvent = {
-  team: string;
+  team: LoggingTeam;
   event_category: string;
   event_label: string;
   value: string;

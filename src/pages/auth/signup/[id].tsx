@@ -40,7 +40,6 @@ function SignupPage() {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: user,
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };

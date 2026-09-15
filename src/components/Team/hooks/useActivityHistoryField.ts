@@ -1,0 +1,135 @@
+import { useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { getYyyyMmDd } from 'utils/ts/calendar';
+import showToast from 'utils/ts/showToast';
+
+export interface ActivityValue {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string | null;
+  isOngoing: boolean;
+  content: string;
+  status: 'draft' | 'saved';
+  hasBeenSaved: boolean;
+}
+
+export type ActivityValidationResult = { success: true } | { success: false; message: string };
+
+interface ActivityHistoryFormValues {
+  activities: ActivityValue[];
+}
+
+type ActivityDateField = 'startDate' | 'endDate';
+
+interface OpenDatePicker {
+  index: number;
+  field: ActivityDateField;
+}
+
+interface ActivityHistoryLoggingTitle {
+  ADD: string;
+  EDIT: string;
+  getDoneEvent: (hasBeenSaved: boolean) => { eventLabel: string; value: string };
+}
+
+let activitySequence = 0;
+
+const createActivityId = () => {
+  activitySequence += 1;
+  return `activity-${Date.now()}-${activitySequence}`;
+};
+
+export default function useActivityHistoryField(
+  loggingTitle: ActivityHistoryLoggingTitle,
+  validateActivity: (activity: ActivityValue) => ActivityValidationResult,
+) {
+  const { actionEventClick } = useLogger();
+  const { control, register, getValues, setValue } = useFormContext<ActivityHistoryFormValues>();
+  const { fields, append, remove } = useFieldArray({ control, name: 'activities' });
+  const activities = useWatch({ control, name: 'activities' }) ?? [];
+  const [openDatePicker, setOpenDatePicker] = useState<OpenDatePicker | null>(null);
+
+  const handleAppend = () => {
+    actionEventClick({
+      team: 'CAMPUS',
+      event_label: loggingTitle.ADD,
+      value: '활동 이력 추가',
+    });
+
+    append({
+      id: createActivityId(),
+      title: '',
+      startDate: '',
+      endDate: null,
+      isOngoing: false,
+      content: '',
+      status: 'draft',
+      hasBeenSaved: false,
+    });
+  };
+
+  const handleRemove = (index: number) => {
+    setOpenDatePicker(null);
+    remove(index);
+  };
+
+  const handleEdit = (index: number) => {
+    actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.EDIT, value: '수정' });
+    setValue(`activities.${index}.status`, 'draft');
+  };
+
+  const handleDone = (index: number) => {
+    const activity = getValues(`activities.${index}`);
+
+    const result = validateActivity(activity);
+    if (!result.success) {
+      showToast('warning', result.message);
+      return;
+    }
+
+    const doneEvent = loggingTitle.getDoneEvent(activity.hasBeenSaved);
+    actionEventClick({
+      team: 'CAMPUS',
+      event_label: doneEvent.eventLabel,
+      value: doneEvent.value,
+    });
+    setValue(`activities.${index}.status`, 'saved');
+    setValue(`activities.${index}.hasBeenSaved`, true);
+  };
+
+  const handleToggleOngoing = (index: number, checked: boolean) => {
+    setValue(`activities.${index}.isOngoing`, checked);
+    if (checked) {
+      setValue(`activities.${index}.endDate`, null);
+    }
+  };
+
+  const handleDateSelect = (index: number, field: ActivityDateField) => (date: Date) => {
+    setValue(`activities.${index}.${field}`, getYyyyMmDd(date));
+  };
+
+  const handleOpenDatePicker = (index: number, field: ActivityDateField) => {
+    setOpenDatePicker({ index, field });
+  };
+
+  const handleCloseDatePicker = () => {
+    setOpenDatePicker(null);
+  };
+
+  return {
+    fields,
+    activities,
+    register,
+    openDatePicker,
+    handleAppend,
+    handleRemove,
+    handleEdit,
+    handleDone,
+    handleToggleOngoing,
+    handleDateSelect,
+    handleOpenDatePicker,
+    handleCloseDatePicker,
+  };
+}

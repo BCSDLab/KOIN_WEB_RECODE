@@ -13,7 +13,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Panel.module.scss';
@@ -52,6 +52,7 @@ export default function Panel({ openModal }: PanelProps) {
     if (title === '쪽지') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
     if (title === '동아리') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '동아리' });
     if (title === '콜밴팟 모집') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '콜밴팟 모집' });
+    if (title === '팀원 모집') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '팀원 모집' });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
@@ -63,7 +64,7 @@ export default function Panel({ openModal }: PanelProps) {
         value: '햄버거',
         previous_page: '시간표',
         current_page: title,
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
     }
   };

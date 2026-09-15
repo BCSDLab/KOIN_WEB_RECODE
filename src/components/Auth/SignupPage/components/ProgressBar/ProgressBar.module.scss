@@ -14,7 +14,7 @@
     justify-content: space-between;
 
     & > span {
-      color: #175c8e;
+      color: #b611f5;
       font-size: 1rem;
       font-weight: 500;
       line-height: 1.6;
@@ -36,7 +36,7 @@
 .progress-bar {
   @include media.media-breakpoint(mobile) {
     height: 100%;
-    background-color: #175c8e;
+    background-color: #b611f5;
     border-radius: 3px;
     transition: width 0.3s ease-out;
   }

@@ -121,6 +121,16 @@ export default [
         },
       ],
 
+      // useLogger/useSessionLogger 모두 event_category 를 넘기지 않으면 'click' 을 기본값으로 채운다.
+      // 리터럴 'click' 을 직접 쓰면 항상 중복이므로 막는다. 동적으로 'click' 이 될 수 있는 값(조건식 등)은 잡지 않는다.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "Property[key.name='event_category'][value.type='Literal'][value.value='click']",
+          message: "event_category: 'click' 은 actionEventClick/actionSessionEvent 의 기본값이라 중복입니다. 생략하세요.",
+        },
+      ],
+
       'import/extensions': 'off',
       'react/jsx-key': 'off',
       'react/display-name': 'off',

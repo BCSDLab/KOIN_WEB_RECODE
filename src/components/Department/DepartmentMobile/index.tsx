@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
-import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
 import IconBox from 'components/ui/IconBox';
+import SearchBar from 'components/ui/SearchBar';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import type { DepartmentViewProps } from 'components/Department/types';
 import styles from './DepartmentMobile.module.scss';
@@ -22,42 +21,12 @@ export default function DepartmentMobile({
   onFeedbackClick,
   updatedAt,
 }: DepartmentViewProps) {
-  const router = useRouter();
-
   return (
     <div className={styles.page}>
-      <div className={styles.page__header}>
-        <button
-          type="button"
-          className={styles['page__back-button']}
-          onClick={() => router.back()}
-          aria-label="뒤로가기"
-        >
-          <ArrowBackIcon />
-        </button>
-        <h1 className={styles.page__title}>학교 부서 정보</h1>
-        <div className={styles['page__spacer']} />
-      </div>
+      <SubPageHeader title="학교 부서 정보" />
 
       <div className={styles.page__content}>
-        <div className={styles['page__search-pill']}>
-          <input
-            className={styles['page__search-input']}
-            type="text"
-            value={searchValue}
-            placeholder="검색어를 입력해주세요."
-            autoComplete="off"
-            onChange={(e) => onSearchChange(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                onSearchSubmit();
-              }
-            }}
-          />
-          <button type="button" className={styles['page__search-button']} onClick={onSearchSubmit} aria-label="검색">
-            <SearchIcon className={styles['page__search-icon']} aria-hidden />
-          </button>
-        </div>
+        <SearchBar value={searchValue} onChange={onSearchChange} onSearch={onSearchSubmit} label="학교 부서 검색" />
 
         {isSearching ? (
           searchResultCategories.length === 0 ? (

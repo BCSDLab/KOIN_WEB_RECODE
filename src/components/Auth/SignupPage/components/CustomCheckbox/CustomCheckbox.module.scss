@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 $check-icon-path: "../../../../../assets/svg/check-icon.svg";
 $white-check-icon-path: "../../../../../assets/svg/white-check-icon.svg";
 
@@ -24,8 +26,12 @@ $white-check-icon-path: "../../../../../assets/svg/white-check-icon.svg";
   @include svg-background($check-icon-path);
 
   &:checked {
-    background-color: #f7941e;
+    background-color: #175c8e;
     border: none;
+    
+    @include media.media-breakpoint(mobile) {
+      background-color: #b611f5;
+    }
 
     @include svg-background($white-check-icon-path);
   }

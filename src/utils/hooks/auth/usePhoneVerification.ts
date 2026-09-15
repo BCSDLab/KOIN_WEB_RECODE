@@ -129,7 +129,6 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
         sessionLogger.actionSessionEvent({
           event_label: 'identity_verification',
           value: '인증완료',
-          event_category: 'click',
           session_name: 'sign_up',
         });
       }

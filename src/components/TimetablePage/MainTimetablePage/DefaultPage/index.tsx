@@ -8,6 +8,7 @@ import TimetableList from 'components/TimetablePage/components/TimetableList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
@@ -27,7 +28,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         value: 'OS스와이프',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
       history.back();
       return;
@@ -39,7 +40,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       value: '뒤로가기버튼',
       previous_page: '시간표',
       current_page: '메인',
-      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+      duration_time: getElapsedSeconds('enterTimetablePage'),
     });
   }, [logger]);
 

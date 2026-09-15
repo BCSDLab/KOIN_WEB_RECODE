@@ -39,21 +39,23 @@ export default function LoginForm() {
   return (
     <>
       <form className={styles.loginform} onSubmit={onSubmit}>
+        {/* sentry-mask: Session Replay에서 아이디(학번/전화번호)를 가리기 위한 Sentry 기본 마스킹 클래스 */}
         <input
           ref={(inputRef) => {
             loginRef.current.userIdInput = inputRef;
           }}
-          className={styles['form-input']}
+          className={`${styles['form-input']} sentry-mask`}
           autoComplete="username"
           name="userId"
           placeholder="아이디(Koreatech ID/전화번호)"
         />
         <div className={styles['form-input-wrapper']}>
+          {/* sentry-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
           <input
             ref={(inputRef) => {
               loginRef.current.passwordInput = inputRef;
             }}
-            className={styles['form-input']}
+            className={`${styles['form-input']} sentry-mask`}
             type={isPasswordVisible ? 'text' : 'password'}
             autoComplete="current-password"
             name="password"
@@ -86,7 +88,6 @@ export default function LoginForm() {
                 session_name: 'sign_up',
                 event_label: 'start_sign_up',
                 value: '회원가입 시작',
-                event_category: 'click',
               });
             }}
           >

@@ -8,9 +8,13 @@ const ADMIN_NICKNAME_REGEX = /admin|관리자/;
 
 const INVALID_NICKNAME_REGEX = /^[A-Za-z가-힣\d]+$/;
 
-const useNicknameDuplicateCheck = () => {
+interface UseNicknameDuplicateCheckOptions {
+  showToastOnResult?: boolean;
+}
+
+const useNicknameDuplicateCheck = (options: UseNicknameDuplicateCheckOptions = {}) => {
   const [nickname, setNickname] = React.useState('');
-  const { data, mutate, status } = useNicknameCheckServer();
+  const { data, mutate, status } = useNicknameCheckServer(options);
 
   const changeTargetNickname = (
     targetNickname: string,

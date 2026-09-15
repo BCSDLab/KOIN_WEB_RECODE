@@ -55,8 +55,8 @@ function MobileFindIdPhonePage() {
     stopTimer();
     setIncorrect();
     disableButton();
-    setPhoneMessage(null);
-    setVerificationMessage({ type: 'default', content: MESSAGES.PHONE.REGISTRATION });
+    setPhoneMessage({ type: 'default', content: MESSAGES.PHONE.REGISTRATION });
+    setVerificationMessage(null);
   }, [phoneNumber]);
 
   return (
@@ -83,6 +83,15 @@ function MobileFindIdPhonePage() {
                   buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => checkPhoneExists({ phone_number: phoneNumber })}
                 >
+                  {phoneMessage?.type === 'default' && (
+                    <button
+                      className={styles['label-link-button']}
+                      type="button"
+                      onClick={() => router.push(ROUTES.Email())}
+                    >
+                      이메일로 찾기
+                    </button>
+                  )}
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
@@ -93,40 +102,32 @@ function MobileFindIdPhonePage() {
             />
           </div>
 
-          <div className={styles['name-gender-wrapper']}>
-            <h1 className={styles['name-gender-wrapper__header']}>인증 번호</h1>
+          {phoneMessage?.type === 'success' && (
+            <div className={styles['name-gender-wrapper']}>
+              <h1 className={styles['name-gender-wrapper__header']}>인증 번호</h1>
 
-            <Controller
-              name="verification_code"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="인증번호를 입력해주세요."
-                  isTimer={isVerified ? false : isTimer}
-                  timerValue={timerValue}
-                  message={verificationMessage}
-                  isDelete={!isVerified}
-                  isButton
-                  disabled={isVerified}
-                  buttonText="인증번호 확인"
-                  buttonDisabled={!field.value || isDisabled || isVerified}
-                  buttonOnClick={() => onClickSendVerificationButton()}
-                >
-                  {verificationMessage?.type === 'default' && (
-                    <button
-                      className={styles['label-link-button']}
-                      type="button"
-                      onClick={() => router.push(ROUTES.Email())}
-                    >
-                      이메일로 찾기
-                    </button>
-                  )}
-                </CustomInput>
-              )}
-            />
-          </div>
+              <Controller
+                name="verification_code"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="인증번호를 입력해주세요."
+                    isTimer={isVerified ? false : isTimer}
+                    timerValue={timerValue}
+                    message={verificationMessage}
+                    isDelete={!isVerified}
+                    isButton
+                    disabled={isVerified}
+                    buttonText="인증번호 확인"
+                    buttonDisabled={!field.value || isDisabled || isVerified}
+                    buttonOnClick={() => onClickSendVerificationButton()}
+                  />
+                )}
+              />
+            </div>
+          )}
         </div>
         <button type="submit" className={styles['next-button']} disabled={!isFormFilled || !isCodeCorrect}>
           다음

@@ -1,4 +1,7 @@
-import { withSentryConfig } from '@sentry/nextjs';
+// eslint-import-resolver-typescript@4.4.4가 이 서브패스 exports 조건을 못 읽어 오탐한다.
+// tsc(moduleResolution: bundler)는 정상 해석한다 — package.json exports map에 실제로 있음.
+// eslint-disable-next-line import/no-unresolved
+import { withSentryConfig } from '@sentry/nextjs/config';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: false,

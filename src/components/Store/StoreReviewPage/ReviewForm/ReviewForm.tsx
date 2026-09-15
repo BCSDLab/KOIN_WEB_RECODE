@@ -11,7 +11,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './ReviewForm.module.scss';
 
@@ -67,7 +67,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
   const reviewSuccessLogging = () => {
     const getReviewDurationTime =
-      (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReview'))) / 1000;
+      getElapsedSeconds('enterReview');
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_write_done',

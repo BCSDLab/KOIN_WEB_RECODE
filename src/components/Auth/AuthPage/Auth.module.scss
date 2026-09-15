@@ -18,10 +18,11 @@
     margin: 80px auto 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
+      align-items: center;
       margin: 0 24px;
     }
   }
@@ -31,8 +32,8 @@
     margin-bottom: 40px;
 
     @include media.media-breakpoint(mobile) {
-      margin-bottom: 32px;
-      align-self: flex-start;
+      margin-bottom: 52px;
+      align-self: center;
     }
   }
 

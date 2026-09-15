@@ -33,7 +33,7 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
   const { data: courses } = useSuspenseQuery(courseQueries.search(searchParams));
 
   const handleAddOpenCourse = (course: PreCourse) => {
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_apply', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_apply', value: '' });
     onAddCourse(course);
   };
 
@@ -45,7 +45,9 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
       title="개설강좌 정보"
       data={courses}
       columns={columns}
-      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`}
+      getRowKey={(course) =>
+        `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`
+      }
     />
   );
 }
@@ -61,7 +63,7 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
   const { data: preCourses } = useSuspenseQuery(courseQueries.preCourseList(token, timetableFrameId));
 
   const handleAddPreCourse = (course: PreCourse) => {
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_pre_apply', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_pre_apply', value: '' });
     onAddCourse(course);
   };
 

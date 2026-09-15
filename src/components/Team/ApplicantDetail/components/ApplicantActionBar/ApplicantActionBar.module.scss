@@ -1,0 +1,143 @@
+@use "src/utils/scss/media" as media;
+
+.bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  box-sizing: border-box;
+  width: min(1136px, calc(100% - 40px));
+  margin: auto auto 0;
+  padding: 0 0 96px;
+
+  &__reject {
+    width: 182px;
+    padding: 0 24px;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    background: #ff4c50;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      background: #cacaca;
+      cursor: default;
+    }
+  }
+
+  &__accept {
+    order: -1;
+    width: 182px;
+    padding: 0 24px;
+    border: none;
+    height: 48px;
+    border-radius: 8px;
+    background: #175c8e;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      background: #cacaca;
+      cursor: default;
+    }
+  }
+
+  &__accepted,
+  &__rejected {
+    width: 202px;
+    padding: 0 24px;
+    height: 48px;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    cursor: default;
+  }
+
+  &__accepted {
+    border: 1px solid #70a2ce;
+    color: #175c8e;
+  }
+
+  &__rejected {
+    border: 1px solid #ec2d30;
+    color: #ec2d30;
+  }
+
+  &__chat {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+@include media.media-breakpoint(mobile) {
+  .bar {
+    justify-content: initial;
+    gap: 12px;
+    width: 100%;
+    margin: auto 0 0;
+    padding: 16px 24px 24px;
+
+    &__reject,
+    &__accept,
+    &__accepted,
+    &__rejected {
+      width: auto;
+      flex: 1;
+      order: initial;
+      height: 48px;
+      border-radius: 16px;
+    }
+
+    &__reject {
+      padding: 0 24px;
+      border: 0.5px solid #b611f5;
+      background: #fff;
+      color: #b611f5;
+    }
+
+    &__accept {
+      padding: 0 24px;
+      background: #b611f5;
+    }
+
+    &__accepted {
+      border: 0.5px solid #980ac9;
+      color: #980ac9;
+    }
+
+    &__rejected {
+      border: 0.5px solid #ec2d30;
+      color: #ec2d30;
+    }
+
+    &__chat {
+      display: flex;
+    }
+  }
+}

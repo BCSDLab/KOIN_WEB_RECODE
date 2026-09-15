@@ -91,30 +91,32 @@ function MobileFindIdEmailPage() {
             />
           </div>
 
-          <div className={styles['name-gender-wrapper']}>
-            <h1 className={styles['name-gender-wrapper__header']}>인증 번호</h1>
+          {emailMessage?.type === 'success' && (
+            <div className={styles['name-gender-wrapper']}>
+              <h1 className={styles['name-gender-wrapper__header']}>인증 번호</h1>
 
-            <Controller
-              name="verification_code"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="인증번호를 입력해주세요."
-                  isDelete={!isVerified}
-                  isTimer={isVerified ? false : isTimer}
-                  timerValue={timerValue}
-                  message={verificationMessage}
-                  isButton
-                  disabled={isVerified}
-                  buttonText="인증번호 확인"
-                  buttonDisabled={!field.value || isDisabled || isVerified}
-                  buttonOnClick={() => onClickSendVerificationButton()}
-                />
-              )}
-            />
-          </div>
+              <Controller
+                name="verification_code"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="인증번호를 입력해주세요."
+                    isDelete={!isVerified}
+                    isTimer={isVerified ? false : isTimer}
+                    timerValue={timerValue}
+                    message={verificationMessage}
+                    isButton
+                    disabled={isVerified}
+                    buttonText="인증번호 확인"
+                    buttonDisabled={!field.value || isDisabled || isVerified}
+                    buttonOnClick={() => onClickSendVerificationButton()}
+                  />
+                )}
+              />
+            </div>
+          )}
         </div>
         <button type="submit" className={styles['next-button']} disabled={!isFormFilled || !isCodeCorrect}>
           다음

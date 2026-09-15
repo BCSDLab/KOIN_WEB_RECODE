@@ -88,7 +88,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '학생',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -99,7 +98,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '외부인',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -126,7 +124,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       </div>
 
       <div className={styles['form-container']}>
-        <div className={styles['input-wrapper']}>
+        {/* sentry-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="name"
             control={control}
@@ -165,7 +164,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
           </div>
         </div>
 
-        <div className={styles['input-wrapper']}>
+        {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="phone_number"
             control={control}
@@ -220,7 +220,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       sessionLogger.actionSessionEvent({
                         event_label: 'identity_verification',
                         value: '인증번호 발송',
-                        event_category: 'click',
                         session_name: 'sign_up',
                       });
                     }}

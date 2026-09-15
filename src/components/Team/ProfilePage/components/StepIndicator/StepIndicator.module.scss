@@ -1,0 +1,96 @@
+@use "src/utils/scss/media" as media;
+
+.indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-end;
+  gap: 4px;
+  width: auto;
+
+  @include media.media-breakpoint(mobile) {
+    align-self: auto;
+    width: 100%;
+    gap: 6px;
+    padding: 8px 0 16px;
+  }
+
+  &__circles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__line {
+    width: 140px;
+    height: 3px;
+    background: #e1e1e1;
+
+    @include media.media-breakpoint(mobile) {
+      width: 60px;
+    }
+  }
+
+  &__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 100px;
+    background: #e1e1e1;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    color: #0b0b0d;
+
+    @include media.media-breakpoint(mobile) {
+      width: 32px;
+      height: 32px;
+    }
+
+    &--current {
+      background: #175c8e;
+      color: #fff;
+
+      @include media.media-breakpoint(mobile) {
+        background: #c358fc;
+      }
+    }
+  }
+
+  &__labels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 235px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 150px;
+    }
+  }
+
+  &__label {
+    width: 56px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: nowrap;
+    text-align: center;
+    color: #cacaca;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    &--current {
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        color: #c358fc;
+      }
+    }
+  }
+}
