@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import BbicoIcon from 'assets/svg/common/bbico-icon.svg';
 import KoinTitleIcon from 'assets/svg/common/koin-title-icon.svg';
+import ROUTES from 'static/routes';
 
 // import NotificationBellIcon from 'assets/svg/common/notification-icon.svg';
 // import useLogger from 'utils/hooks/analytics/useLogger';
@@ -13,7 +14,7 @@ function MobileHomeRedesignHeader() {
 
   return (
     <header className={styles.header}>
-      <Link href="/" className={styles.header__brand}>
+      <Link href={ROUTES.Main()} className={styles.header__brand}>
         <BbicoIcon aria-hidden />
         <KoinTitleIcon aria-label="KOIN" />
       </Link>

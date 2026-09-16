@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 
 import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
+import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 import styles from './CompleteStep.module.scss';
@@ -23,7 +24,7 @@ function CompleteStep() {
               className={`${styles['button-container__button']} ${styles['button-container__button--purple']}`}
               type="button"
               onClick={() => {
-                router.push('/auth');
+                router.push(ROUTES.Auth());
               }}
             >
               로그인 바로가기
@@ -31,7 +32,7 @@ function CompleteStep() {
             <button
               className={`${styles['button-container__button']} ${styles['button-container__button--white']}`}
               type="button"
-              onClick={() => router.push('/')}
+              onClick={() => router.push(ROUTES.Main())}
             >
               홈화면 바로가기
             </button>
@@ -50,7 +51,7 @@ function CompleteStep() {
             className={styles['button-login-navigate']}
             type="button"
             onClick={() => {
-              router.push('/auth');
+              router.push(ROUTES.Auth());
             }}
           >
             로그인 화면 바로가기

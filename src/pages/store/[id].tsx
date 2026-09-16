@@ -171,7 +171,7 @@ function StoreDetailPage({ id }: Props) {
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: `${storeType}_call`,
-      value: storeDetail!.name,
+      value: storeDetail.name,
       duration_time: getElapsedSeconds('enter_storeDetail'),
     });
   };
@@ -180,7 +180,7 @@ function StoreDetailPage({ id }: Props) {
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_picture',
-      value: storeDetail!.name,
+      value: storeDetail.name,
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -200,7 +200,7 @@ function StoreDetailPage({ id }: Props) {
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_detail_view_back',
-      value: storeDetail!.name,
+      value: storeDetail.name,
       event_category: 'ShopList',
       current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
       duration_time: getElapsedSeconds('enter_storeDetail'),
@@ -429,7 +429,7 @@ function StoreDetailPage({ id }: Props) {
                     className={styles.image__button}
                     aria-label="이미지 확대"
                     type="button"
-                    onClick={() => onClickImage(storeDetail!.image_urls, index)}
+                    onClick={() => onClickImage(storeDetail.image_urls, index)}
                   >
                     <Image
                       className={styles.image__poster}
@@ -463,7 +463,7 @@ function StoreDetailPage({ id }: Props) {
               logger.actionEventClick({
                 team: 'BUSINESS',
                 event_label: 'shop_detail_view',
-                value: storeDetail!.name,
+                value: storeDetail.name,
               });
             }}
           >
@@ -521,7 +521,7 @@ function StoreDetail({ dehydratedState, id }: { dehydratedState: DehydratedState
   const router = useRouter();
 
   return (
-    <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
+    <StoreErrorBoundary onErrorClick={() => router.push(ROUTES.Store())}>
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div />}>
           <StoreDetailPage id={id} />

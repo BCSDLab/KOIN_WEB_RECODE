@@ -3,9 +3,16 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusNotice from 'components/Bus/BusNotice';
 import { BUS_TYPES } from 'static/bus';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 
 import styles from './BusTabs.module.scss';
+
+const BUS_TAB_ROUTES: Record<(typeof BUS_TYPES)[number]['key'], string> = {
+  shuttle: ROUTES.BusCourseShuttle(),
+  express: ROUTES.BusCourseExpress(),
+  city: ROUTES.BusCourseCity(),
+};
 
 export default function BusTabs() {
   const router = useRouter();
@@ -20,7 +27,7 @@ export default function BusTabs() {
       event_label: 'timetable_bus_type_tab',
       value: type.tabValue,
     });
-    router.replace(`/bus/${type.key}`);
+    router.replace(BUS_TAB_ROUTES[type.key]);
   };
 
   return (
@@ -34,7 +41,7 @@ export default function BusTabs() {
               onClick={() => onClickBusTab(type)}
               onMouseEnter={() => {
                 if (selectedTab !== type.key) {
-                  router.prefetch(`/bus/${type.key}`);
+                  router.prefetch(BUS_TAB_ROUTES[type.key]);
                 }
               }}
               className={cn({

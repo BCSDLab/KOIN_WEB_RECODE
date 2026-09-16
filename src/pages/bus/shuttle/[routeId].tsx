@@ -8,6 +8,7 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
@@ -44,7 +45,10 @@ export default function ShuttleDetailPage() {
   return (
     <BusCoursePage>
       {/* 카테고리 버튼 */}
-      <ShuttleCategoryTabs category={category} onChange={(v) => router.replace(`/bus/shuttle?category=${v}`)} />
+      <ShuttleCategoryTabs
+        category={category}
+        onChange={(v) => router.replace(`${ROUTES.BusCourseShuttle()}?category=${v}`)}
+      />
 
       {shuttleTimetableDetail.route_info.length <= 2 && (
         <div className={styles['time-table-wrapper']}>

@@ -9,13 +9,13 @@ import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
 import CourseTypeList from './CourseTypeList';
@@ -66,10 +66,10 @@ function CourseTable({ frameId }: { frameId: number }) {
       value: '시간표 수정',
     });
     if (mySemester?.semesters.length === 0) {
-      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+      showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {
       navigate(
-        `/${ROUTES.TimetableModify({ id: String(frameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
+        `${ROUTES.TimetableModify({ id: String(frameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };

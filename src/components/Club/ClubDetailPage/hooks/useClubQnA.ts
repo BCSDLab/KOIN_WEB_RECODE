@@ -5,13 +5,14 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { deleteClubQnA, postClubQnA } from 'api/club';
 import type { ClubNewQnA } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useClubQnA(clubId: number | string | undefined) {
   const router = useRouter();
   if (!clubId) {
-    router.push('/clubs');
+    router.push(ROUTES.Club());
   }
   const queryClient = useQueryClient();
   const token = useTokenState();
