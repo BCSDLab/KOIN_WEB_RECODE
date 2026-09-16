@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
 import { COOKIE_KEY } from 'static/url';
 import { getCookieDomain, setCookie } from 'utils/ts/cookie';
@@ -9,6 +9,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 
 const useAuth = () => {
   const { setToken, setRefreshToken } = useTokenStore.getState();
+  const queryClient = useQueryClient();
 
   const getRefreshToken = useCallback(() => {
     const refreshTokenStorage = isomorphicLocalStorage.getJSONItem<{ state?: { refreshToken?: string } } | null>(
@@ -35,6 +36,7 @@ const useAuth = () => {
     onError: () => {
       setToken('');
       setRefreshToken('');
+      queryClient.clear();
     },
   });
 

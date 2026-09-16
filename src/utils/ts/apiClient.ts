@@ -14,6 +14,7 @@ import { redirectToClub, redirectToLogin } from './auth';
 import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { isomorphicLocalStorage } from './env';
 import { saveTokensToNative } from './iosBridge';
+import { queryClient } from './queryClient';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 
@@ -157,6 +158,7 @@ export default class APIClient {
       .catch(() => {
         useTokenStore.getState().setToken('');
         useTokenStore.getState().setRefreshToken('');
+        queryClient.clear();
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
@@ -242,6 +244,7 @@ export default class APIClient {
       } catch {
         useTokenStore.getState().setToken('');
         useTokenStore.getState().setRefreshToken('');
+        queryClient.clear();
         if (window.webkit?.messageHandlers != null) {
           saveTokensToNative('', '');
         }

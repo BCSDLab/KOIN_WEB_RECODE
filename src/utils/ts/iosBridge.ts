@@ -1,3 +1,4 @@
+import { queryClient } from 'utils/ts/queryClient';
 import { useTokenStore } from 'utils/zustand/auth';
 
 const isBrowser = () => typeof window !== 'undefined';
@@ -60,6 +61,9 @@ if (isBrowser()) {
 }
 
 export function setTokensFromNative(access: string, refresh: string) {
+  const previousToken = useTokenStore.getState().token;
+  // 네이티브가 다른 계정의 토큰을 주입하는 경우(계정 전환 등) 이전 사용자의 캐시가 남지 않도록 비운다.
+  if (access && access !== previousToken) queryClient.clear();
   if (access) useTokenStore.getState().setToken(access);
   if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }

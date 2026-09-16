@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
 import { COOKIE_KEY } from 'static/url';
@@ -7,6 +8,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 
 export const useLogout = () => {
   const { setToken, setRefreshToken } = useTokenStore();
+  const queryClient = useQueryClient();
   const logout = () => {
     const domain = getCookieDomain();
 
@@ -15,6 +17,7 @@ export const useLogout = () => {
     deleteCookie(COOKIE_KEY.AUTH_TOKEN, domain ? { domain: domain } : undefined);
     isomorphicSessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
     setToken('');
+    queryClient.clear();
     window.location.href = ROUTES.Main();
   };
 
