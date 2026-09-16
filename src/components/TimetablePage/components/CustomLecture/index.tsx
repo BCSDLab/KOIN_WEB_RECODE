@@ -1,7 +1,7 @@
 'use no memo';
 
-/* eslint-disable react-hooks/refs */
-/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/refs -- DOM 크기 측정을 위해 렌더 중 ref.current를 직접 읽음 ('use no memo'로 컴파일러 최적화 제외) */
+/* eslint-disable react-hooks/set-state-in-effect -- DOM 레이아웃 측정(getBoundingClientRect) 후에만 알 수 있는 값을 effect에서 상태로 반영 */
 import { useState, useEffect, useRef } from 'react';
 
 import { cn } from '@bcsdlab/utils';
@@ -577,7 +577,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
         },
       ],
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 직접 추가 페이지 진입 시 폼 초기화를 1회만 실행
   }, []);
 
   useEffect(() => {
@@ -616,7 +616,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
       professor: selectedEditLecture.professor,
       lecture_infos: newLectureInfos,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- setter/updater는 안정적인 참조라 selectedEditLecture 변경 시에만 재실행
   }, [selectedEditLecture]);
 
   return (

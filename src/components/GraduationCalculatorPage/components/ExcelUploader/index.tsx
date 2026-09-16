@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useEffect } from 'react';
 
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
@@ -17,6 +15,7 @@ function ExcelUploader() {
 
   useEffect(() => {
     openTooltip();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 툴팁을 연다
   }, []);
 
   return (

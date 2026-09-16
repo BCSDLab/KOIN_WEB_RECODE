@@ -86,7 +86,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
     }
   }, [data, setCurrentFrameIndex, currentFrameIndex]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
   useEffect(() => () => portalManager.close(), []);
 
   return (

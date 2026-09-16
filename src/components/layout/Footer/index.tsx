@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element -- 작은 정적 로고/아이콘이라 최적화 이점 대비 설정 비용이 큼 */
 /* 푸터 로고/아이콘은 작은 정적 이미지라 Next/Image 최적화 이득이 작아 img 유지 */
 import Link from 'next/link';
 import { useRouter } from 'next/router';

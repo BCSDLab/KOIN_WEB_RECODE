@@ -93,7 +93,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
   useLayoutEffect(() => {
     if (!ref.current) return;
     ref.current.scrollTop = (middleOffset + selectedIndex) * ITEM_HEIGHT;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 실행 (이후 변경은 아래 별도 effect가 처리)
   }, []);
 
   // 외부에서 selectedIndex가 변경될 때 (초기화 등) 스크롤 위치 복원

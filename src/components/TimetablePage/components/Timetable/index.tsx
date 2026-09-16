@@ -202,7 +202,7 @@ function Timetable({
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`value-${index}`}
             />
           ))}
@@ -220,7 +220,7 @@ function Timetable({
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']

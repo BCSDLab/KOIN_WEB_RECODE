@@ -140,7 +140,7 @@ export default function RecruitmentApplyPage() {
       goToFirstStep();
     }
     // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- goToFirstStep은 React Compiler가 참조를 안정화함
   }, [isReady, currentStep, methods]);
 
   const { mutate: upsertProfile, isPending: isProfilePending } = useUpsertTeamRecruitmentProfileMutation();

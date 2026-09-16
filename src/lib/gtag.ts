@@ -52,7 +52,7 @@ export const event = ({
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
       팀: team,
       '이벤트 Category': event_category,
@@ -76,7 +76,7 @@ export const startSession = ({ event_label, value, event_category, custom_sessio
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
       '세션 시작': event_label,
       값: value,

@@ -127,10 +127,10 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     if (semesterOptionList.length === 0) return;
     if (isSemesterInList(semesterOptionList, semester)) return;
     updateSemester(semesterOptionList[0].value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- semester/updateSemester를 넣으면 재실행이 무한루프를 유발함
   }, [semesterOptionList]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
   React.useEffect(() => () => portalManager.close(), []);
 
   return (
