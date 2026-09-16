@@ -1,13 +1,15 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BannersResponse } from 'api/banner/entity';
+
+import type { BannersResponse } from 'api/banner/entity';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { useSwipeable } from 'react-swipeable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { getCookie, setCookie } from 'utils/ts/cookie';
+
 import styles from './Banner.module.scss';
 
 interface BannerCardProps {
@@ -79,6 +81,7 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
   useEffect(() => {
     if (bannersList.count === 0) {
       closeModal();
+
       return;
     }
 
@@ -86,6 +89,7 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
     const isBannerHidden = getCookie(HIDE_BANNER_COOKIE) === `modal_category_${bannerCategoryId}`;
     if (isBannerHidden) {
       closeModal();
+
       return;
     }
 

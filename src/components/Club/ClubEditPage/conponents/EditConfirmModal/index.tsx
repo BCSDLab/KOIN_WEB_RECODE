@@ -1,10 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/router';
-import { NewClubData } from 'api/club/entity';
+
+import type { NewClubData } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import usePutClub from 'components/Club/ClubEditPage/hooks/usePutClub';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './EditConfirmModal.module.scss';
 
 interface EditConfirmModalProps {
@@ -72,6 +74,7 @@ export default function EditConfirmModal({
       setIsEdit(false);
     }
   };
+
   return (
     <div className={styles['modal-background']} onClick={closeModal} role="button" tabIndex={0} onKeyDown={() => {}}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="presentation">

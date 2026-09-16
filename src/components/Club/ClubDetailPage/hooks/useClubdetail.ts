@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { putClubInroduction } from 'api/club';
-import { ClubIntroductionData } from 'api/club/entity';
+import type { ClubIntroductionData } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';

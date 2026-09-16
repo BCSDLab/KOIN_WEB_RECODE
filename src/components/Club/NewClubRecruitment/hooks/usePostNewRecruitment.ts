@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
@@ -24,5 +25,6 @@ export default function usePostNewRecruitment(clubId: number | undefined) {
       } else sendClientError(e);
     },
   });
+
   return { mutateAsync };
 }

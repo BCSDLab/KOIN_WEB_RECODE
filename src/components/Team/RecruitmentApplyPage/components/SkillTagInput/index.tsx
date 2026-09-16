@@ -1,7 +1,8 @@
 import XIcon from 'assets/svg/Team/x-icon.svg';
 import { APPLY_SKILL_MAX_LENGTH } from 'components/Team/RecruitmentApplyPage/schema';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 import type { ApplicationFormValues } from 'components/Team/RecruitmentApplyPage/types';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+
 import styles from './SkillTagInput.module.scss';
 
 interface SkillTagInputProps {

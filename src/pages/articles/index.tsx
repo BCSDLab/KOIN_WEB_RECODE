@@ -1,5 +1,6 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
@@ -51,6 +52,7 @@ function usePageParams(initialPage: string) {
 
   if (!mounted) return initialPage;
   const page = router.query.page;
+
   return typeof page === 'string' ? page : initialPage;
 }
 
@@ -60,10 +62,15 @@ function useBoardIdParams(initialBoardId: number) {
 
   if (!mounted) return initialBoardId;
   const boardId = router.query.boardId;
+
   return typeof boardId === 'string' ? Number(boardId) : initialBoardId;
 }
 
-export default function ArticleListPage({ initialPage, initialBoardId, serverNow }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ArticleListPage({
+  initialPage,
+  initialBoardId,
+  serverNow,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const token = useTokenState();
   const paramsPage = usePageParams(initialPage);
   const boardId = useBoardIdParams(initialBoardId);
@@ -84,12 +91,12 @@ export default function ArticleListPage({ initialPage, initialBoardId, serverNow
 
   return (
     <ArticlesPageLayout
-      mobileTabMenu={(
+      mobileTabMenu={
         <>
           <MobileArticleTabMenu currentBoardId={boardId} />
           <MobileArticleSearchButton />
         </>
-      )}
+      }
     >
       <ArticlesHeader />
       <ArticleList articles={articles} />

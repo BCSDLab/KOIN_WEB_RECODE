@@ -1,8 +1,10 @@
 import { useRef } from 'react';
+
 import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import type { ProfileFormValues, TeamProfileFormMode } from 'components/Team/ProfilePage/types';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+
 import styles from './TagInput.module.scss';
 
 interface TagInputProps {

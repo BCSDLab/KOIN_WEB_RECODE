@@ -1,7 +1,12 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
+import type {
+  TeamRecruitmentProfileResponse,
+  UpsertTeamRecruitmentProfileRequest,
+} from 'api/teamRecruitmentProfile/entity';
 import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
@@ -14,15 +19,12 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+
 import { PROFILE_LOG_MODE } from './constants';
 import { profileFormSchema, type ProfileFormValues } from './schema';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
 import { PROFILE_STEPS, type ProfileStepTitle, type TeamProfileFormMode } from './types';
-import type {
-  TeamRecruitmentProfileResponse,
-  UpsertTeamRecruitmentProfileRequest,
-} from 'api/teamRecruitmentProfile/entity';
 import styles from './ProfilePage.module.scss';
 
 interface TeamProfileFormProps {
@@ -142,9 +144,9 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
     },
   });
 
-  const goToFirstStep = () => {
+  const goToFirstStep = useCallback(() => {
     nextStep('기본 정보', { replace: true });
-  };
+  }, [nextStep]);
 
   useEffect(() => {
     if (!isReady || currentStep !== '지원서 작성') return;
@@ -166,6 +168,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
       if (errors.nickname || errors.department || errors.studentNumber) {
         showToast('warning', '기본 정보를 먼저 입력해주세요.');
         goToFirstStep();
+
         return;
       }
       showToast('warning', errors.activities?.message ?? '필수 항목을 모두 작성해주세요.');
@@ -245,6 +248,9 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   });
 
   return (
-    <ProfileFormBody mode={mode} defaultValues={isEditMode ? toDefaultValues(existingProfile ?? null) : EMPTY_DEFAULT_VALUES} />
+    <ProfileFormBody
+      mode={mode}
+      defaultValues={isEditMode ? toDefaultValues(existingProfile ?? null) : EMPTY_DEFAULT_VALUES}
+    />
   );
 }

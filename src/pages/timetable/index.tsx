@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
+import type { TimetableFrameListResponse } from 'api/timetable/entity';
 import {
   createDefaultTimetableFrameList,
   isValidTimetableFrameId,
@@ -23,7 +25,7 @@ import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
-import type { TimetableFrameListResponse } from 'api/timetable/entity';
+
 import styles from './TimetablePage.module.scss';
 
 const MobilePage = dynamic(
@@ -57,6 +59,7 @@ async function prefetchTimetableData(
     if (!semester) {
       setDefaultTimetableFrameList(queryClient);
       await prefetchBaseTimetableData(queryClient);
+
       return;
     }
 
@@ -71,11 +74,13 @@ async function prefetchTimetableData(
 
       setDefaultTimetableFrameList(queryClient, semester);
       await prefetchBaseTimetableData(queryClient);
+
       return;
     }
 
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    const hasValidatedFrame = validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
+    const hasValidatedFrame =
+      validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
     const currentFrameId = hasValidatedFrame ? validatedFrameId : (mainFrame?.id ?? null);
 
     const prefetchPromises = [prefetchBaseTimetableData(queryClient)];

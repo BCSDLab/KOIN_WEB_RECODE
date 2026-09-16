@@ -1,8 +1,10 @@
 import { useState } from 'react';
+
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import RefreshIcon from 'assets/svg/Articles/refresh.svg';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { LIST_OPTIONS, CATEGORY_OPTIONS, ITEM_TYPE_OPTIONS, STATUS_OPTIONS } from 'static/filterOptions';
+
 import styles from './LostItemFilterContent.module.scss';
 
 export type Author = 'ALL' | 'MY';
@@ -10,12 +12,12 @@ export type Type = 'ALL' | 'LOST' | 'FOUND';
 export type Category = 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
 export type FoundStatus = 'ALL' | 'FOUND' | 'NOT_FOUND';
 
-export type FilterState = {
+export interface FilterState {
   author: Author;
   type: Type;
   category: Category[];
   foundStatus: FoundStatus;
-};
+}
 
 const DEFAULT_FILTER: FilterState = {
   author: 'ALL',
@@ -38,7 +40,7 @@ function ChipSingle<T extends string>({
   allLabel = '전체',
 }: {
   value: T | null;
-  options: readonly ChipSingleOption<T>[];
+  options: ReadonlyArray<ChipSingleOption<T>>;
   onChange: (next: T) => void;
   allKey: T;
   allLabel?: string;
@@ -78,7 +80,7 @@ function ChipMulti<T extends string>({
   allLabel = '전체',
 }: {
   value: T[];
-  options: readonly ChipSingleOption<T>[];
+  options: ReadonlyArray<ChipSingleOption<T>>;
   onChange: (next: T[]) => void;
   allLabel?: string;
 }) {

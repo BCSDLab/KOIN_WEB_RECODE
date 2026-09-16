@@ -2,10 +2,12 @@ import { Suspense } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import TeamChatRoom from 'components/Team/components/TeamChatRoom';
+
 import styles from './TeamChatPage.module.scss';
 
 export default function TeamChatPage() {

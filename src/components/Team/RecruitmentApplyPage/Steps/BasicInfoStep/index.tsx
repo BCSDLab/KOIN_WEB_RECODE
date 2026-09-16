@@ -13,10 +13,11 @@ import {
   APPLY_PREFERRED_ROLE_MAX_LENGTH,
 } from 'components/Team/RecruitmentApplyPage/schema';
 import { APPLY_STEPS } from 'components/Team/RecruitmentApplyPage/types';
+import type { ApplicationFormValues } from 'components/Team/RecruitmentApplyPage/types';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import showToast from 'utils/ts/showToast';
-import type { ApplicationFormValues } from 'components/Team/RecruitmentApplyPage/types';
+
 import styles from './BasicInfoStep.module.scss';
 
 interface BasicInfoStepProps {
@@ -56,6 +57,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
     ]);
     if (!isValid) {
       showToast('warning', errors.activities?.message ?? '필수 항목을 모두 작성해주세요.');
+
       return;
     }
 
@@ -197,6 +199,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
           >
             {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => {
               const { ref: introductionRef, ...introductionField } = register('introduction');
+
               return (
                 <textarea
                   id={controlId}

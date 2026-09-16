@@ -3,10 +3,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
+import type { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
 import { authQueryKeys } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
 import BlindIcon from 'assets/svg/blind-icon.svg';
@@ -29,7 +30,7 @@ import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
@@ -44,16 +45,18 @@ import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useAuthentication } from 'utils/zustand/authentication';
+
 import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
-interface IFormType {
-  [key: string]: {
+type IFormType = Record<
+  string,
+  {
     ref: HTMLInputElement | ICustomFormInput | null;
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
-  };
-}
+  }
+>;
 
 interface ICustomFormInput {
   value: unknown;
@@ -77,14 +80,12 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: { [key: string]: any }): void;
+  (formValue: Record<string, any>): void;
 }
 
 type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
 
-interface MappedFields {
-  [key: string]: keyof UserResponseKeys;
-}
+type MappedFields = Record<string, keyof UserResponseKeys>;
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
@@ -157,6 +158,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
     if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
       showToast('error', '변경된 정보가 없습니다.');
+
       return;
     }
 
@@ -174,13 +176,16 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
           return [nameValue[0], nameValue[1].ref.value];
         }
+
         return [nameValue[0], undefined];
       });
       submitForm(Object.fromEntries(formValue));
+
       return;
     }
     showToast('error', invalidFormEntry[1]);
   };
+
   return {
     register,
     onSubmit,
@@ -216,6 +221,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
+
     return {
       valid,
       value: password,
@@ -229,36 +235,42 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (!value) {
       dispatchValidation({ type: 'EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.length < 6 || value.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (!PASSWORD_REGEX.test(value)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (passwordConfirmValue === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value !== passwordConfirmValue) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
@@ -273,30 +285,35 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (password.length < 6 || password.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (!PASSWORD_REGEX.test(password)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (password !== value) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
@@ -404,6 +421,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const showNicknameWarning = (content: string) => {
     if (isMobile) {
       setNicknameMessage({ type: 'warning', content });
+
       return;
     }
     showToast('error', content);
@@ -415,11 +433,13 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     setNicknameMessage(null);
     if (newNickname === '' && userInfo?.nickname) {
       setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+
       return;
     }
 
     if (newNickname === '') {
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
 
@@ -433,15 +453,18 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
       showNicknameWarning('사용할 수 없는 닉네임입니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
+
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
       showNicknameWarning('닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
     setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
@@ -479,6 +502,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         valid: '닉네임 중복확인을 해주세요.',
       };
     }
+
     return {
       value: currentNicknameValue,
       valid: true,
@@ -618,6 +642,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     } else {
       valid = true;
     }
+
     return { value: { studentNumber, major }, valid };
   }, [studentNumber, major]);
 
@@ -801,17 +826,14 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
     }));
   }, [isPhoneNumberUnchanged, isVerified, setIsValid]);
 
-  useImperativeHandle(
-    ref,
-    () => {
-      const valid: string | true = isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+  useImperativeHandle(ref, () => {
+    const valid: string | true =
+      isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
         ? true
         : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
-      return { value: normalizedPhoneNumber, valid };
-    },
-    [isPhoneNumberUnchanged, normalizedPhoneNumber],
-  );
+    return { value: normalizedPhoneNumber, valid };
+  }, [isPhoneNumberUnchanged, normalizedPhoneNumber]);
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextPhoneNumber = e.target.value;
@@ -1101,6 +1123,7 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     if (email === '' && userInfo?.email) {
       valid = true;
     }
+
     return {
       value: email === '' ? null : fullEmail,
       valid,
@@ -1184,6 +1207,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     setName(currentName);
     if (currentName.trim() === '') {
       setIsValid((prev) => ({ ...prev, isNameValid: false }));
+
       return;
     }
 
@@ -1265,6 +1289,7 @@ const useModifyInfoForm = () => {
     }
     mutate(payload);
   };
+
   return { submitForm, status };
 };
 

@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
+
 import styles from './FindIdEmailPage.module.scss';
 
 function FindIdEmailPage() {

@@ -1,8 +1,11 @@
 'use no memo';
+
 /* eslint-disable react-hooks/refs */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useRef } from 'react';
+
 import { cn } from '@bcsdlab/utils';
+import type { MyLectureInfo, Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
@@ -15,14 +18,14 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
-import type { MyLectureInfo, Semester } from 'api/timetable/entity';
+
 import styles from './CustomLecture.module.scss';
 
 type Hour = (typeof HOUR)[number]['value'] | '24시';
 
 type Minute = (typeof MINUTE)[number]['value'];
 
-type TimeSpaceComponents = {
+interface TimeSpaceComponents {
   time: {
     startHour: Hour;
     startMinute: Minute;
@@ -33,7 +36,7 @@ type TimeSpaceComponents = {
   startTime: number;
   endTime: number;
   place: string;
-};
+}
 
 const initialTimeSpaceComponent: TimeSpaceComponents = {
   time: {
@@ -60,6 +63,7 @@ const findKeyByValue = (object: Record<Hour, number>, value: number) =>
   Object.entries(object).find(([, val]) => val === value)?.[0] as Hour;
 const getHour = (time: number, key: Record<Hour, number>, isStart: boolean) => {
   const adjustedTime = time % 2 === (isStart ? 0 : 1) ? time : time - 1;
+
   return findKeyByValue(key, adjustedTime);
 };
 const getMinute = (time: number, isStart: boolean): Minute => (time % 2 === (isStart ? 0 : 1) ? '00분' : '30분');
@@ -124,6 +128,7 @@ function TimeSpaceInput({
     if (lectureIndex) {
       return updatedTimeSpaceComponent?.[0]?.time ?? initialTimeSpaceComponent.time;
     }
+
     return initialTimeSpaceComponent?.time ?? initialTimeSpaceComponent.time;
   });
 
@@ -133,6 +138,7 @@ function TimeSpaceInput({
     if (lectureIndex) {
       return updatedTimeSpaceComponent?.[0]?.place ?? '';
     }
+
     return initialTimeSpaceComponent?.place ?? '';
   });
 
@@ -361,7 +367,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
   // 직접 추가 input 값
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
-  const [timeSpaceComponents, setTimeSpaceComponents] = useState<{ id: string }[]>([]);
+  const [timeSpaceComponents, setTimeSpaceComponents] = useState<Array<{ id: string }>>([]);
 
   const timeSpaceContainerRef = useRef<HTMLDivElement>(null);
   const timeSpaceComponentRef = useRef<HTMLDivElement[] | null[]>([]);
@@ -401,6 +407,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
       if (editingLectureId && myLecture.id === editingLectureId) {
         return false;
       }
+
       return myLecture.lecture_infos.some((info) =>
         customLectureInfos!.some(
           (times) =>
@@ -432,18 +439,21 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
     e.preventDefault();
     if (!isValid) {
       setIsFirstSubmit(false);
+
       return;
     }
 
     // 중복 시간 검사
     if (checkTimeOverlap(selectedEditLecture?.id)) {
       showToast('error', '강의가 중복되어 추가할 수 없습니다.');
+
       return;
     }
 
     const isContainComma = customTempLecture?.lecture_infos.some((item) => item.place.includes(','));
     if (isContainComma) {
       showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
+
       return;
     }
 
@@ -479,6 +489,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
         ],
       });
       setIsFirstSubmit(true);
+
       return;
     }
 
@@ -489,6 +500,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
         class_title: lectureName,
         class_places: customTempLecture.lecture_infos.map((info) => ({ class_place: info.place })),
       });
+
       return;
     }
 
@@ -525,6 +537,7 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
     const newId = uuidv4();
     if (timeSpaceComponents.length > 4) {
       showToast('info', '"시간 및 장소 추가"는 최대 5개까지 가능합니다.');
+
       return;
     }
 

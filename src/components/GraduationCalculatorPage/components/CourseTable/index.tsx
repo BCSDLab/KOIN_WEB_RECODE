@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+
+import type { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import SemesterList from 'components/TimetablePage/components/SemesterList';
 import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
@@ -16,6 +17,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useSemester } from 'utils/zustand/semester';
+
 import CourseTypeList from './CourseTypeList';
 import DeleteLectureModal from './DeleteLectureModal';
 import SemesterCourseTable from './SemesterCourseTable';
@@ -26,7 +28,7 @@ function CourseTable({ frameId }: { frameId: number }) {
   const token = useTokenState();
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures }: { myLectures: (MyLectureInfo | Lecture)[] } = useMyLectures(frameId);
+  const { myLectures }: { myLectures: Array<MyLectureInfo | Lecture> } = useMyLectures(frameId);
   const allMyLectures = useAllMyLectures(token);
   const isUnSelectedCourseType = (allMyLectures ?? []).find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);

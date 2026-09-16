@@ -1,5 +1,7 @@
 import React from 'react';
+
 import EllipsisTooltip from 'components/GraduationCalculatorPage/components/CourseTable/EllipsisTooltip';
+
 import styles from './SemesterCourseTable.module.scss';
 
 export interface SemesterCourseTableProps {

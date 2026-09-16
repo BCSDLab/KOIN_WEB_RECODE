@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+
 import styles from './SubPageHeader.module.scss';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -15,13 +17,7 @@ interface SubPageHeaderProps {
   size?: 'small' | 'medium';
 }
 
-export default function SubPageHeader({
-  title,
-  onBack,
-  rightAction,
-  className,
-  size = 'small',
-}: SubPageHeaderProps) {
+export default function SubPageHeader({ title, onBack, rightAction, className, size = 'small' }: SubPageHeaderProps) {
   const router = useRouter();
   const headerRef = useRef<HTMLDivElement>(null);
   const backButtonRef = useRef<HTMLButtonElement>(null);
@@ -53,6 +49,7 @@ export default function SubPageHeader({
   const handleBack = () => {
     if (onBack) {
       onBack();
+
       return;
     }
 

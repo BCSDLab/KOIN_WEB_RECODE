@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
@@ -7,11 +8,12 @@ import { deptQueries } from 'api/dept/queries';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { Controller, type FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
+
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -167,6 +169,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
 
     if (!emailId) {
       handleSubmit(onSubmit)();
+
       return;
     }
 
@@ -192,12 +195,14 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
+
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
   const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined): InputMessage | null => {
     if (fieldValue === '') return null;
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
+
     return emailMessage;
   };
 

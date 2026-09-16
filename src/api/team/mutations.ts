@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
-import { teamQueryKeys } from './queries';
+
 import type {
   PostTeamRecruitmentApplicationRequest,
   TeamChatMessageSendRequest,
@@ -21,6 +21,7 @@ import {
   updateTeamRecruitment,
   sendTeamRecruitmentChatMessage,
 } from './index';
+import { teamQueryKeys } from './queries';
 
 const invalidateRecruitmentList = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: teamQueryKeys.listRoot });
@@ -89,6 +90,7 @@ export const teamMutations = {
       onError: (error) => {
         if (isKoinError(error)) {
           showToast('error', error.message);
+
           return;
         }
         sendClientError(error);
@@ -105,6 +107,7 @@ export const teamMutations = {
       onError: (error) => {
         if (isKoinError(error)) {
           showToast('error', error.message);
+
           return;
         }
         sendClientError(error);
@@ -122,6 +125,7 @@ export const teamMutations = {
       onError: (error) => {
         if (isKoinError(error)) {
           showToast('error', error.message || '지원서 제출에 실패했습니다.');
+
           return;
         }
         showToast('error', '지원서 제출에 실패했습니다.');
@@ -139,6 +143,7 @@ export const teamMutations = {
       onError: (error) => {
         if (isKoinError(error)) {
           showToast('error', error.message);
+
           return;
         }
         sendClientError(error);

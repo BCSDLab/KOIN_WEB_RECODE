@@ -1,6 +1,7 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 import { storeQueryKeys } from 'api/store/queries';
-import { ReviewRequest } from './entity';
+
+import type { ReviewRequest } from './entity';
 import { postStoreReview, putStoreReview } from './index';
 
 interface ReviewMutationCallbacks {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
@@ -9,13 +10,14 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   rowWidthList: number[];
   timetableFrameId: number;
-  list: Array<Lecture> | Array<MyLectureInfo>;
-  myLectures: Array<Lecture> | Array<MyLectureInfo>;
+  list: Lecture[] | MyLectureInfo[];
+  myLectures: Lecture[] | MyLectureInfo[];
   selectedLecture: Lecture | undefined;
   onClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
@@ -66,6 +68,7 @@ function LectureTable({
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
+
       return;
     }
 
@@ -96,6 +99,7 @@ function LectureTable({
       }
     }
   };
+
   function useKeyboardEvent() {
     React.useEffect(() => {
       function keyboardNavigation(e: KeyboardEvent) {
@@ -124,13 +128,16 @@ function LectureTable({
           }
         }
       }
+
       window.addEventListener('keydown', keyboardNavigation, true);
+
       return () => {
         window.removeEventListener('keydown', keyboardNavigation, true);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cursor]);
   }
+
   useKeyboardEvent();
   React.useEffect(() => {
     if (containerRef.current) {
@@ -142,6 +149,7 @@ function LectureTable({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
+
   return (
     <div className={styles.table}>
       <div className={styles['table__lecture-list']} ref={containerRef}>

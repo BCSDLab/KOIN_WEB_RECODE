@@ -14,6 +14,7 @@ export function formatDate(timestamp: string): string {
     const period = hours < 12 ? '오전' : '오후';
     const formattedHours = hours % 12 || 12;
     const formattedMinutes = minutes.toString().padStart(2, '0');
+
     return `${period} ${formattedHours}:${formattedMinutes}`;
   }
 
@@ -23,16 +24,19 @@ export function formatDate(timestamp: string): string {
 
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
+
   return `${month}월 ${day}일`;
 }
 
 export const formatISODateToMonthAndDay = (timestamp: string): string => {
   const date = new Date(timestamp);
+
   return `${(date.getMonth() + 1).toString().padStart(2, '0')}월 ${date.getDate().toString().padStart(2, '0')}일`;
 };
 
 export const formatISODateToTime = (timestamp: string): string => {
   const date = new Date(timestamp);
+
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 };
 
@@ -40,5 +44,6 @@ export const getKoreaISODate = () => {
   const TIME_DIFFERENCE = 9;
   const date = new Date();
   date.setHours(date.getHours() + TIME_DIFFERENCE);
+
   return date.toISOString();
 };

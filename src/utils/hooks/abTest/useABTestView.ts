@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { abTestQueries } from 'api/abTest/queries';
 import useMount from 'utils/hooks/state/useMount';

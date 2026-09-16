@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+
 import { cn } from '@bcsdlab/utils';
-import { TimetableFrameInfo } from 'api/timetable/entity';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import BookMarkIcon from 'assets/svg/book-mark.svg';
 import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
 import SettingIcon from 'assets/svg/setting-icon.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import SemesterList from 'components/TimetablePage/components/SemesterList';
 import TimetableSettingModal from 'components/TimetablePage/components/TimetableList/TimetableSettingModal';
@@ -17,6 +18,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
+
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {

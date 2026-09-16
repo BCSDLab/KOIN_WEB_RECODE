@@ -1,11 +1,13 @@
 import type { FunctionComponent, SVGProps } from 'react';
+
 import SleepMascotIcon from 'assets/svg/common/sleep-bbico.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
 import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import type { TeamProfileViewProps } from 'components/Team/TeamProfilePage/types';
+import SubPageHeader from 'components/ui/SubPageHeader';
+
 import styles from './TeamProfileMobile.module.scss';
 
 interface MenuCardProps {

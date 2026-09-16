@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { PortalContext } from 'components/modal/Modal/PortalProvider';
 
 const useModalPortal = () => {

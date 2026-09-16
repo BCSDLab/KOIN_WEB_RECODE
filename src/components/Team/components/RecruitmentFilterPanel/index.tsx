@@ -1,29 +1,31 @@
 import { useEffect, useState } from 'react';
-import SpinIcon from 'assets/svg/Callvan/spin.svg';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
-import StatusBadge from 'components/Callvan/components/StatusBadge';
-import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
-import useLogger from 'utils/hooks/analytics/useLogger';
+
 import type {
   TeamRecruitmentCategory,
   TeamRecruitmentMeetingType,
   TeamRecruitmentSort,
   TeamRecruitmentStatusFilter,
 } from 'api/team/entity';
+import SpinIcon from 'assets/svg/Callvan/spin.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
+import StatusBadge from 'components/Callvan/components/StatusBadge';
+import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
+import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './RecruitmentFilterPanel.module.scss';
 
-export const TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS: Array<{ value: TeamRecruitmentStatusFilter; label: string }> = [
   { value: 'ALL', label: '전체' },
   { value: 'RECRUITING', label: '모집 중' },
   { value: 'CLOSED', label: '모집 완료' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: { value: TeamRecruitmentCategory; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: Array<{ value: TeamRecruitmentCategory; label: string }> = [
   { value: 'CONTEST', label: '공모전' },
   { value: 'EXTERNAL_ACTIVITY', label: '대외활동' },
   { value: 'STUDY', label: '스터디' },
@@ -31,10 +33,10 @@ export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: { value: TeamRecruitmentC
   { value: 'OTHER', label: '기타' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS: {
+export const TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS: Array<{
   value: TeamRecruitmentMeetingType;
   label: string;
-}[] = [
+}> = [
   { value: 'ONLINE', label: '온라인' },
   { value: 'OFFLINE', label: '오프라인' },
   { value: 'MIXED', label: '온·오프라인' },
@@ -66,12 +68,7 @@ const copyFilter = (filter: TeamRecruitmentFilter): TeamRecruitmentFilter => ({
   categories: [...filter.categories],
 });
 
-export default function RecruitmentFilterPanel({
-  isOpen,
-  onClose,
-  filter,
-  onApply,
-}: RecruitmentFilterPanelProps) {
+export default function RecruitmentFilterPanel({ isOpen, onClose, filter, onApply }: RecruitmentFilterPanelProps) {
   return (
     <BottomModal
       isOpen={isOpen}
@@ -85,11 +82,7 @@ export default function RecruitmentFilterPanel({
   );
 }
 
-function RecruitmentFilterPanelContent({
-  onClose,
-  filter,
-  onApply,
-}: Omit<RecruitmentFilterPanelProps, 'isOpen'>) {
+function RecruitmentFilterPanelContent({ onClose, filter, onApply }: Omit<RecruitmentFilterPanelProps, 'isOpen'>) {
   const logger = useLogger();
   const [draftFilter, setDraftFilter] = useState<TeamRecruitmentFilter>(() => copyFilter(filter));
 
@@ -99,6 +92,7 @@ function RecruitmentFilterPanelContent({
     };
 
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 

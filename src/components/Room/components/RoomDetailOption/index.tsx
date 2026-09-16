@@ -1,11 +1,11 @@
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
 import OPTION_CATEGORY from 'static/optionCategory';
+
 import styles from './RoomDetailOption.module.scss';
 
-type RoomDetailOptionProps = {
-  [key in (typeof OPTION_CATEGORY)[number]['img_code']]: boolean;
-};
+type RoomDetailOptionProps = Record<(typeof OPTION_CATEGORY)[number]['img_code'], boolean>;
 
 function RoomDetailOption({ roomOptions }: { roomOptions: RoomDetailOptionProps }) {
   return (

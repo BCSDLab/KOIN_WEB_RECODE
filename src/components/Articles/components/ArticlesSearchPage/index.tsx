@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
@@ -9,6 +10,7 @@ import ArticlesSearchResultList from 'components/Articles/components/ArticlesSea
 import HotSearchKeywords from 'components/Articles/components/HotSearchKeywords';
 import RecentSearchKeywords from 'components/Articles/components/RecentSearchKeywords';
 import { useRecentSearchKeywords } from 'components/Articles/hooks/useRecentSearchKeywords';
+
 import styles from './ArticlesSearchPage.module.scss';
 
 const HOT_KEYWORD_COUNT = 5;
@@ -52,11 +54,7 @@ export default function ArticlesSearchPage() {
 
     addKeyword(trimmed);
     setSubmittedQuery(trimmed);
-    router.replace(
-      { pathname: router.pathname, query: { query: trimmed } },
-      undefined,
-      { shallow: true },
-    );
+    router.replace({ pathname: router.pathname, query: { query: trimmed } }, undefined, { shallow: true });
   };
 
   const handleKeywordSelect = (keyword: string) => {

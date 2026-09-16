@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { BOARD_IDS } from 'components/Articles/utils/convertArticlesTag';
+
 import styles from './MobileArticleTabMenu.module.scss';
 
 const TABS = [

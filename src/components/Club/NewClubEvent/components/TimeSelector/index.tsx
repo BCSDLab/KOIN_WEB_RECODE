@@ -1,6 +1,7 @@
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './TimeSelector.module.scss';
 
 interface PickerProps {

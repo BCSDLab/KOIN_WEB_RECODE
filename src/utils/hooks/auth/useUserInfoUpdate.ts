@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { updateUser, updateGeneralUser } from 'api/auth';
-import { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
-import { AxiosError } from 'axios';
+import type { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
+import type { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';

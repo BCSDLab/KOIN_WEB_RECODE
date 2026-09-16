@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRelateSearch } from 'api/store';
-import { RelatedSearchResponse } from 'api/store/entity';
+import type { RelatedSearchResponse } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
@@ -12,11 +13,13 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './SearchBarModal.module.scss';
 
 interface SearchBarModalProps {
   onClose: () => void;
 }
+
 export default function SearchBarModal({ onClose }: SearchBarModalProps) {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { data: categories } = useSuspenseQuery(storeQueries.categories());
@@ -37,12 +40,13 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
     debounceTimeout.current = setTimeout(async () => {
       if (inputValue.length === 0) {
         setRelateSearchItems(undefined);
+
         return;
       }
       const data = await getRelateSearch(inputValue);
       setRelateSearchItems(data);
     }, 200);
-  }
+  };
 
   const handleSearch = () => {
     const value = storeRef.current?.value ?? '';
@@ -77,14 +81,13 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
             onFocus={() => {
               const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
               if (categories) {
-                logger.actionEventClick(
-                  {
-                    team: 'BUSINESS',
-                    event_label: 'shop_categories_search',
-                    value: `search in ${categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기'
-                    }`,
-                  },
-                );
+                logger.actionEventClick({
+                  team: 'BUSINESS',
+                  event_label: 'shop_categories_search',
+                  value: `search in ${
+                    categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기'
+                  }`,
+                });
               }
             }}
           />

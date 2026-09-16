@@ -1,5 +1,6 @@
-import LostItemFilterContent, { FilterState } from 'components/Articles/components/LostItemFilterContent';
+import LostItemFilterContent, { type FilterState } from 'components/Articles/components/LostItemFilterContent';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './LostItemFilterModal.module.scss';
 
 interface LostItemFilterModalProps {

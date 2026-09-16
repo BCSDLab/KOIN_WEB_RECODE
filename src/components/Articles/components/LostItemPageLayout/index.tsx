@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import SearchIcon from 'assets/svg/Articles/search.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import styles from './LostItemPageLayout.module.scss';
 
 export default function LostItemPageLayout({ children }: { children: React.ReactNode }) {

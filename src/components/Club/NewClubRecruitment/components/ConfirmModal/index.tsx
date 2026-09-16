@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router';
+
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './ConfirmModal.module.scss';
 
 interface ConfirmModalProps {

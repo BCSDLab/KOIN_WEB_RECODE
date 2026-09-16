@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+
 import { useServerRequest } from 'utils/context/serverRequest';
 
 const MOBILE_QUERY = '(max-width: 576px)';
@@ -11,6 +12,7 @@ function subscribeToMediaQuery(query: string) {
     const handleChange = () => onStoreChange();
 
     matchMedia.addEventListener('change', handleChange);
+
     return () => {
       matchMedia.removeEventListener('change', handleChange);
     };
@@ -37,6 +39,7 @@ export default function useMediaQuery(query: string = MOBILE_QUERY): boolean {
     subscribeToMediaQuery(query),
     () => {
       if (typeof window === 'undefined') return false;
+
       return window.matchMedia(query).matches;
     },
     () => serverSnapshot,

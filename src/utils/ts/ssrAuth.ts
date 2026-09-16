@@ -1,4 +1,5 @@
 import type { GetServerSidePropsContext } from 'next';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { COOKIE_DOMAIN, COOKIE_KEY } from 'static/url';
 import { buildCookieString } from 'utils/ts/cookie';

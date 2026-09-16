@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { CALLVAN_POST_LOCATION_LABEL, CallvanPostLocationType } from 'api/callvan/entity';
+import { CALLVAN_POST_LOCATION_LABEL, type CallvanPostLocationType } from 'api/callvan/entity';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import SwapIcon from 'assets/svg/Callvan/swap.svg';
 import DateDropdown from 'components/Callvan/components/DateDropdown';
@@ -11,6 +12,7 @@ import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useCreateCallvan from 'components/Callvan/hooks/useCreateCallvan';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './AddPostForm.module.scss';
 
 interface FormState {
@@ -27,6 +29,7 @@ interface FormState {
 
 function formatTime(hour: number, minute: number, isPM: boolean): string {
   const hour24 = isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
+
   return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 }
 
@@ -34,12 +37,14 @@ function formatDateParam(date: Date): string {
   const y = date.getFullYear();
   const mo = String(date.getMonth() + 1).padStart(2, '0');
   const d = String(date.getDate()).padStart(2, '0');
+
   return `${y}-${mo}-${d}`;
 }
 
 function getLocationLabel(type: CallvanPostLocationType | null, customName: string): string {
   if (!type) return '';
   if (type === 'CUSTOM') return customName || '직접입력';
+
   return CALLVAN_POST_LOCATION_LABEL[type];
 }
 
@@ -78,14 +83,14 @@ export default function AddPostForm() {
       arrivalType: prev.departureType,
       arrivalCustomName: prev.departureCustomName,
     }));
-  }
+  };
 
   const handleParticipantsChange = (delta: number) => {
     setForm((prev) => ({
       ...prev,
       maxParticipants: Math.min(11, Math.max(2, prev.maxParticipants + delta)),
     }));
-  }
+  };
 
   const handleSubmit = () => {
     if (!form.departureType || !form.arrivalType || isPending) return;
@@ -101,6 +106,7 @@ export default function AddPostForm() {
 
     if (selectedDateTime < new Date()) {
       openToast('현재 시각보다 이전 시각으로 모집글을 생성할 수 없습니다.');
+
       return;
     }
 
@@ -130,16 +136,11 @@ export default function AddPostForm() {
     logger.actionEventClick({ event_label: 'callvan_write_back', team: 'CAMPUS', value: '' });
     router.back();
   };
-  
+
   return (
     <div className={styles.page}>
       <header className={styles.page__header}>
-        <button
-          type="button"
-          className={styles['page__back-button']}
-          onClick={handleBack}
-          aria-label="뒤로가기"
-        >
+        <button type="button" className={styles['page__back-button']} onClick={handleBack} aria-label="뒤로가기">
           <ArrowBackIcon />
         </button>
         <h1 className={styles.page__title}>콜밴팟</h1>

@@ -20,6 +20,7 @@ interface KoinErrorLike {
 function asKoinError(error: unknown): KoinErrorLike | null {
   if (error == null || typeof error !== 'object') return null;
   const candidate = error as KoinErrorLike;
+
   return candidate.type === 'KOIN_ERROR' ? candidate : null;
 }
 
@@ -28,6 +29,7 @@ const BOT_USER_AGENT_PATTERN = /bot|crawler|spider|WebPageTest|HeadlessChrome|Ph
 
 function isBotUserAgent(): boolean {
   if (typeof window === 'undefined') return false;
+
   return BOT_USER_AGENT_PATTERN.test(window.navigator.userAgent);
 }
 
@@ -37,19 +39,19 @@ function getBrowserFamily(userAgent: string): string {
   if (/Chrome\//.test(userAgent)) return 'chrome';
   if (/Firefox\//.test(userAgent)) return 'firefox';
   if (/Safari\//.test(userAgent)) return 'safari';
+
   return 'other';
 }
 
 function normalizeRoute(pathname: string): string {
-  return pathname
-    .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
-    .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+  return pathname.replace(/\/[0-9]+(?=\/|$)/g, '/:id').replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
 }
 
 function getTransactionKey(transaction: string | undefined): string | undefined {
   if (!transaction) return undefined;
   if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
   if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+
   return undefined;
 }
 
@@ -101,6 +103,7 @@ Sentry.init({
     if (transactionKey) {
       event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
     }
+
     return event;
   },
 
@@ -109,10 +112,10 @@ Sentry.init({
 
     // Axios 네트워크/타임아웃/취소 에러
     if (
-      error != null
-      && typeof error === 'object'
-      && 'code' in error
-      && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
+      error != null &&
+      typeof error === 'object' &&
+      'code' in error &&
+      (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
     ) {
       return null;
     }
@@ -153,6 +156,7 @@ Sentry.init({
 
   beforeSendLog(log) {
     if (log.level === 'debug') return null;
+
     // API가 인증 실패 응답에 토큰 원문을 실어 보내고, 그 메시지가 그대로 로그로 넘어온다.
     return maskSensitive(log);
   },

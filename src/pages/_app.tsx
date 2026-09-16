@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
+
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -54,6 +55,7 @@ const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 function AutoLogin() {
   useAutoLogin();
+
   return null;
 }
 

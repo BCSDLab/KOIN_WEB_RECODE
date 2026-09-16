@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { LostItemChatroomDetailMessagesResponse, LostItemChatroomDetailMessage } from './entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type { LostItemChatroomDetailMessagesResponse, LostItemChatroomDetailMessage } from './entity';
 
 export class GetLostItemChatroomMessagesV2<R extends LostItemChatroomDetailMessagesResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

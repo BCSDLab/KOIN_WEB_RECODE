@@ -1,4 +1,5 @@
-import { forwardRef, InputHTMLAttributes } from 'react';
+import { forwardRef, type InputHTMLAttributes } from 'react';
+
 import styles from './CustomCheckbox.module.scss';
 
 type CustomCheckboxProps = InputHTMLAttributes<HTMLInputElement>;

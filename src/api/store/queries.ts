@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { StoreFilterType, StoreSorterType } from './entity';
+
+import type { StoreFilterType, StoreSorterType } from './entity';
 import {
   getAllEvent,
   getMyReview,
@@ -141,6 +142,7 @@ export const storeQueries = {
         if (lastPage.total_page > lastPage.current_page) {
           return lastPage.current_page + 1;
         }
+
         return undefined;
       },
     }),

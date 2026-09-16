@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { LostItemImageDTO } from 'api/articles/entity';
+import type { LostItemImageDTO } from 'api/articles/entity';
 import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
 import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
 import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
+
 import styles from './DisplayImage.module.scss';
 
 interface DisplayImageProps {

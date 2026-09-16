@@ -1,11 +1,13 @@
 import Link from 'next/link';
+
 import ChevronRightIcon from 'assets/svg/common/chevron-right-icon.svg';
 import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
+import type { DepartmentViewProps } from 'components/Department/types';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
-import type { DepartmentViewProps } from 'components/Department/types';
+
 import styles from './DepartmentDesktop.module.scss';
 
 export default function DepartmentDesktop({
@@ -20,7 +22,8 @@ export default function DepartmentDesktop({
   updatedAt,
 }: DepartmentViewProps) {
   const searchResults = searchResultCategories.flatMap(({ category, departments }) =>
-    departments.map((department) => ({ category, department })));
+    departments.map((department) => ({ category, department })),
+  );
 
   return (
     <div className={styles.page}>

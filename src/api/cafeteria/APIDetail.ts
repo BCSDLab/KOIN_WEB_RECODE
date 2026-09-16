@@ -1,6 +1,7 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { APIResponse } from 'interfaces/APIResponse';
-import { DiningResponseType } from './entity';
+import type { APIResponse } from 'interfaces/APIResponse';
+
+import type { DiningResponseType } from './entity';
 
 export class DiningLikePatcher<R extends APIResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PATCH;
@@ -55,9 +56,7 @@ export default class DiningResponse<R extends DiningResponseType> implements API
 
   response!: R;
 
-  params: {
-    [index: string]: string;
-  };
+  params: Record<string, string>;
 
   auth = false;
 

@@ -1,4 +1,5 @@
 import { startTransition, useState } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
@@ -7,6 +8,7 @@ import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptio
 import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {

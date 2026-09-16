@@ -1,6 +1,6 @@
 export type LoggingTeam = 'CAMPUS' | 'BUSINESS' | 'USER';
 
-type GTagEvent = {
+interface GTagEvent {
   team: LoggingTeam;
   event_category: string;
   event_label: string;
@@ -8,14 +8,14 @@ type GTagEvent = {
   duration_time?: number;
   previous_page?: string;
   current_page?: string;
-};
+}
 
-type SessionEvent = {
+interface SessionEvent {
   event_label: string;
   value: string;
   event_category: string;
   custom_session_id: string;
-};
+}
 
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 const API_PATH = process.env.NEXT_PUBLIC_API_PATH;

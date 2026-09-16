@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { HotClubResponse } from 'api/club/entity';
+
+import type { HotClubResponse } from 'api/club/entity';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
@@ -11,6 +12,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import ClubMobileViewB from './ClubMobileViewB';
 import styles from './IndexClub.module.scss';
 
@@ -70,6 +72,7 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
       });
     }
   };
+
   return (
     <section className={styles.template}>
       <Link className={styles.template__title} href={ROUTES.Club()}>

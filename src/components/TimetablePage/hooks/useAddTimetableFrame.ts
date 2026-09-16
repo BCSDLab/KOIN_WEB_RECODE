@@ -8,6 +8,7 @@ export default function useAddTimetableFrame(token: string) {
   const queryClient = useQueryClient();
   const semester = useSemester();
   const mutation = timetableMutations.addFrame(queryClient, token, semester);
+
   return useMutation({
     ...mutation,
     onError: (error) => {

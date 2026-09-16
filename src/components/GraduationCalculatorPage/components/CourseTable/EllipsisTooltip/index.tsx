@@ -1,5 +1,7 @@
-import { ReactNode, ReactElement } from 'react';
+import type { ReactNode, ReactElement } from 'react';
+
 import { useEllipsisTooltip } from 'utils/hooks/ui/useEllipsisTooltip';
+
 import styles from './EllipsisTooltip.module.scss';
 
 interface EllipsisTooltipProps {
@@ -19,6 +21,7 @@ const extractText = (node: ReactNode): string => {
       }
     }
   }
+
   return '';
 };
 

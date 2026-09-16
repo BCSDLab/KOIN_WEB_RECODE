@@ -1,6 +1,13 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { CallvanListRequest } from './entity';
-import { getCallvanChat, getCallvanList, getCallvanNotifications, getCallvanPostDetail, getCallvanRestriction } from './index';
+
+import type { CallvanListRequest } from './entity';
+import {
+  getCallvanChat,
+  getCallvanList,
+  getCallvanNotifications,
+  getCallvanPostDetail,
+  getCallvanRestriction,
+} from './index';
 
 const CALLVAN_LIST_LIMIT = 10;
 

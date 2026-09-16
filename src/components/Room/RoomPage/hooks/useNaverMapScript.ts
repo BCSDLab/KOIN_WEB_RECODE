@@ -5,6 +5,7 @@ const NAVER_MAP_SCRIPT_ID = 'naver-map-script';
 export default function useNaverMapScript() {
   const [isLoaded, setIsLoaded] = useState(() => {
     if (typeof window === 'undefined') return false;
+
     return !!window.naver?.maps;
   });
 
@@ -15,6 +16,7 @@ export default function useNaverMapScript() {
     if (existingScript) {
       const handleLoad = () => setIsLoaded(true);
       existingScript.addEventListener('load', handleLoad);
+
       return () => existingScript.removeEventListener('load', handleLoad);
     }
 

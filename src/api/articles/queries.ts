@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { LostItemArticlesRequest, SearchArticlesRequest, SearchLostItemArticleRequest } from './entity';
+
+import type { LostItemArticlesRequest, SearchArticlesRequest, SearchLostItemArticleRequest } from './entity';
 import {
   getArticle,
   getArticles,
@@ -22,7 +23,8 @@ type LostItemSearchParams = Required<Pick<SearchLostItemArticleRequest, 'query'>
   limit: number;
 };
 
-type ArticlesSearchParams = Required<Pick<SearchArticlesRequest, 'query'>> & Pick<SearchArticlesRequest, 'boardId' | 'limit'>;
+type ArticlesSearchParams = Required<Pick<SearchArticlesRequest, 'query'>> &
+  Pick<SearchArticlesRequest, 'boardId' | 'limit'>;
 
 export const articleQueryKeys = {
   all: ['articles'] as const,

@@ -1,7 +1,9 @@
 import type { GetServerSidePropsContext } from 'next';
-import { COOKIE_KEY } from 'static/url';
-import { getValidToken } from './auth';
 import type { ParsedUrlQuery } from 'querystring';
+
+import { COOKIE_KEY } from 'static/url';
+
+import { getValidToken } from './auth';
 
 interface ParsedParams {
   token: string | undefined;
@@ -29,11 +31,13 @@ export const parseQueryNumber = (
 ): number | null => {
   if (!value) return defaultValue;
   const parsed = Number(value);
+
   return Number.isNaN(parsed) ? defaultValue : parsed;
 };
 
 export const parseQueryBoolean = (value: string | string[] | undefined, defaultValue: boolean = false): boolean => {
   if (!value) return defaultValue;
+
   return String(value) === 'true';
 };
 

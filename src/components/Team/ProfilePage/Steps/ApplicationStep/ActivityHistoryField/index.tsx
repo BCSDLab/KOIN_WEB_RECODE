@@ -2,8 +2,9 @@ import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
 import useActivityHistoryField, { type ActivityValue } from 'components/Team/hooks/useActivityHistoryField';
 import { savedActivitySchema } from 'components/Team/ProfilePage/schema';
-import DatePickerModal from 'components/ui/DatePickerModal';
 import type { TeamProfileFormMode } from 'components/Team/ProfilePage/types';
+import DatePickerModal from 'components/ui/DatePickerModal';
+
 import styles from './ActivityHistoryField.module.scss';
 
 interface ActivityHistoryFieldProps {
@@ -31,6 +32,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
 
   const validateActivity = (activity: ActivityValue) => {
     const result = savedActivitySchema.safeParse({ ...activity, status: 'saved' });
+
     return result.success
       ? { success: true as const }
       : { success: false as const, message: result.error.issues[0].message };
@@ -182,6 +184,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                 </div>
                 {(() => {
                   const { ref: contentRef, ...contentField } = register(`activities.${index}.content` as const);
+
                   return (
                     <textarea
                       className={styles.draftCard__textarea}
@@ -222,6 +225,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
         (() => {
           const targetActivity = activities[openDatePicker.index];
           const rawDate = targetActivity?.[openDatePicker.field];
+
           return (
             <DatePickerModal
               selectedDate={rawDate ? new Date(`${rawDate}T00:00:00`) : new Date()}

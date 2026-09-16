@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import SearchIcon from 'assets/svg/search-01.svg';
 import ROUTES from 'static/routes';
+
 import styles from './MobileArticleSearchButton.module.scss';
 
 export default function MobileArticleSearchButton() {

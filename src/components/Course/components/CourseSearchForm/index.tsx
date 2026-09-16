@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Semester } from 'api/timetable/entity';
+
+import type { Semester } from 'api/timetable/entity';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+
 import styles from './CourseSearchForm.module.scss';
 
 const DEPARTMENTS = [

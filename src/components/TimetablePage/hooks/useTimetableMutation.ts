@@ -1,17 +1,5 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import useToast from 'components/feedback/Toast/useToast';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { isomorphicSessionStorage } from 'utils/ts/env';
-import showToast from 'utils/ts/showToast';
-import { useLecturesAction } from 'utils/zustand/myLectures';
-import { useSemester } from 'utils/zustand/semester';
-import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
-import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
-import useDeleteTimetableLecture from './useDeleteTimetableLecture';
-import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
-import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
-import useRollbackLecture from './useRollbackLecture';
 import type {
   AddTimetableCustomLecture,
   Lecture,
@@ -20,11 +8,24 @@ import type {
   TimetableCustomLecture,
   TimetableRegularLecture,
 } from 'api/timetable/entity';
+import useToast from 'components/feedback/Toast/useToast';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { isomorphicSessionStorage } from 'utils/ts/env';
+import showToast from 'utils/ts/showToast';
+import { useLecturesAction } from 'utils/zustand/myLectures';
+import { useSemester } from 'utils/zustand/semester';
 
-type RemoveMyLectureProps = {
+import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
+import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
+import useDeleteTimetableLecture from './useDeleteTimetableLecture';
+import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
+import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
+import useRollbackLecture from './useRollbackLecture';
+
+interface RemoveMyLectureProps {
   clickedLecture: Lecture | MyLectureInfo | null;
   id: number;
-};
+}
 
 export default function useTimetableMutation(timetableFrameId: number, semesterOverride?: Semester) {
   const token = useTokenState();
@@ -70,7 +71,10 @@ export default function useTimetableMutation(timetableFrameId: number, semesterO
 
   // 강의 복원
   const restoreLecture = (id: number[]) => {
-    const restoredLecture = isomorphicSessionStorage.getJSONItem<Lecture | MyLectureInfo | null>('restoreLecture', null);
+    const restoredLecture = isomorphicSessionStorage.getJSONItem<Lecture | MyLectureInfo | null>(
+      'restoreLecture',
+      null,
+    );
     if (!restoredLecture || typeof restoredLecture !== 'object') return;
 
     if ('name' in restoredLecture) {
@@ -116,6 +120,7 @@ export default function useTimetableMutation(timetableFrameId: number, semesterO
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`));
       }
+
       return removeLectureFromServer(id);
     },
     onSuccess: (_data, variables) => {

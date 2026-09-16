@@ -1,6 +1,6 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { CallvanReportRequest, CreateCallvanRequest, SendChatRequest } from './entity';
-import { callvanQueryKeys } from './queries';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
+import type { CallvanReportRequest, CreateCallvanRequest, SendChatRequest } from './entity';
 import {
   cancelCallvan,
   closeCallvanPost,
@@ -14,6 +14,7 @@ import {
   reportCallvanParticipant,
   sendCallvanChat,
 } from './index';
+import { callvanQueryKeys } from './queries';
 
 const invalidateCallvanInfiniteList = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: callvanQueryKeys.infiniteListRoot });

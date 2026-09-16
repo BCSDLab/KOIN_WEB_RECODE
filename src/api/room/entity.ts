@@ -1,6 +1,6 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
-export type LandList = {
+export interface LandList {
   internal_name: string;
   monthly_fee: string;
   latitude: number;
@@ -10,7 +10,7 @@ export type LandList = {
   id: number;
   softDeleted: boolean;
   room_type: string;
-};
+}
 
 export interface LandDetailResponse extends APIResponse {
   monthly_fee: string;

@@ -1,4 +1,5 @@
 import APIClient from 'utils/ts/apiClient';
+
 import { GetStoreReview, AddStoreReview, EditStoreReview } from './APIDetail';
 
 export const getStoreReview = APIClient.of(GetStoreReview);

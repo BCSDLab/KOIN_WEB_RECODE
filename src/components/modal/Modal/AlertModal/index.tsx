@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import CloseIcon from 'assets/svg/close-icon-black.svg';
+
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {
@@ -25,6 +27,7 @@ export default function AlertModal({ title, description, onClose, onConfirm }: A
     };
     document.addEventListener('click', handleOutsideClick);
     document.addEventListener('keydown', handleESCClick);
+
     return () => {
       document.removeEventListener('click', handleOutsideClick);
       document.removeEventListener('keydown', handleESCClick);

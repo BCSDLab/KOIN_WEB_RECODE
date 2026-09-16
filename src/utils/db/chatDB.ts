@@ -1,5 +1,5 @@
-import { openDB, type IDBPDatabase } from 'idb';
 import type { LostItemChatroomDetailMessage } from 'api/articles/entity';
+import { openDB, type IDBPDatabase } from 'idb';
 
 const DB_NAME = 'koin-chat';
 const DB_VERSION = 1;
@@ -52,6 +52,7 @@ function getDB(): Promise<ChatDB> {
       },
     });
   }
+
   return dbPromise;
 }
 
@@ -89,12 +90,14 @@ export async function getCachedMessages(
 
     if (Date.now() - record.updatedAt > CACHE_TTL_MS) {
       await db.delete(STORE_NAME, key);
+
       return null;
     }
 
     return record.messages;
   } catch {
     console.error('Failed to get cached messages');
+
     return null;
   }
 }
@@ -117,6 +120,7 @@ export async function cacheMessages(
     });
   } catch {
     console.error('Failed to cache messages');
+
     return null;
   }
 }
@@ -127,6 +131,7 @@ export async function clearChatroomCache(articleId: number, chatroomId: number):
     await db.delete(STORE_NAME, buildKey(articleId, chatroomId));
   } catch {
     console.error('Failed to clear chatroom cache');
+
     return null;
   }
 }
@@ -137,6 +142,7 @@ export async function clearAllChatCache(): Promise<void | null> {
     await db.clear(STORE_NAME);
   } catch {
     console.error('Failed to clear all chat cache');
+
     return null;
   }
 }

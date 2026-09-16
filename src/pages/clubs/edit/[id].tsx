@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { NewClubData } from 'api/club/entity';
+
+import type { NewClubData } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import MobileView from 'components/Club/NewClubPage/components/MobileView';
@@ -8,6 +9,7 @@ import PCView from 'components/Club/NewClubPage/components/PCView';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { mapDetailToForm } from 'utils/ts/clubCategoryMapping';
+
 import styles from './ClubEditPage.module.scss';
 
 function ClubEditPage({ id }: { id: number }) {
@@ -17,6 +19,7 @@ function ClubEditPage({ id }: { id: number }) {
 
   const initForm = () => {
     const mapped = mapDetailToForm(clubDetail);
+
     return {
       ...mapped,
       open_chat: mapped.open_chat?.replace(/^https?:\/\//, '') ?? '',

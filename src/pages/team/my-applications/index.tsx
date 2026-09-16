@@ -3,8 +3,15 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import type {
+  MyTeamRecruitmentApplication,
+  MyTeamRecruitmentApplicationListRequest,
+  TeamApplicationStatus,
+  TeamRecruitmentSort,
+} from 'api/team/entity';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
@@ -20,12 +27,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import type {
-  MyTeamRecruitmentApplication,
-  MyTeamRecruitmentApplicationListRequest,
-  TeamApplicationStatus,
-  TeamRecruitmentSort,
-} from 'api/team/entity';
+
 import styles from './MyApplicationsPage.module.scss';
 
 const APPLICATION_STATUS_CLASS = {

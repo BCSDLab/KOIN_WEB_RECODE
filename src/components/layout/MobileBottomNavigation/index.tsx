@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import CategoryIcon from 'assets/svg/common/category-icon.svg';
 import ClipBoardIcon from 'assets/svg/common/clipboard-icon.svg';
 import HomeIcon from 'assets/svg/common/home-icon.svg';
 import UserIcon from 'assets/svg/common/user-icon.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './MobileBottomNavigation.module.scss';
 
 const NAVIGATION_ITEMS = [

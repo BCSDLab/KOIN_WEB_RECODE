@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { deleteClubQnA, postClubQnA } from 'api/club';
-import { ClubNewQnA } from 'api/club/entity';
+import type { ClubNewQnA } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';

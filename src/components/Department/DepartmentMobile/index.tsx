@@ -1,13 +1,15 @@
 import Link from 'next/link';
+
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
+import type { DepartmentViewProps } from 'components/Department/types';
 import IconBox from 'components/ui/IconBox';
 import SearchBar from 'components/ui/SearchBar';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
-import type { DepartmentViewProps } from 'components/Department/types';
+
 import styles from './DepartmentMobile.module.scss';
 
 export default function DepartmentMobile({

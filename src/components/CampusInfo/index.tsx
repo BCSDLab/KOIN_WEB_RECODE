@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
+
 import styles from './CampusInfo.module.scss';
 
 const CAFETERIA_HEAD_TABLE = {
@@ -33,10 +34,10 @@ const formatDateRange = (fromDate: string, toDate: string) => {
   return `기간 : ${fromFormatted} - ${toFormatted}`;
 };
 
-type ShopIconProps = {
+interface ShopIconProps {
   readonly iconUrl: string | null | undefined;
   readonly name: string;
-};
+}
 
 function ShopIcon({ iconUrl, name }: ShopIconProps) {
   return (

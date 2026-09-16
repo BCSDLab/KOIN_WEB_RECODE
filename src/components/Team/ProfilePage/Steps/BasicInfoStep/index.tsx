@@ -4,6 +4,7 @@ import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
 import { PROFILE_STEPS, type ProfileFormValues, type TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
+
 import styles from './BasicInfoStep.module.scss';
 
 interface BasicInfoStepProps {

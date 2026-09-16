@@ -1,5 +1,6 @@
 import type { ComponentType, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
+
 import LoginIcon from 'assets/svg/common/login-icon.svg';
 import LogoutIcon from 'assets/svg/common/logout-icon.svg';
 import SettingIcon from 'assets/svg/common/setting-icon.svg';
@@ -15,23 +16,24 @@ import { useLogout } from 'utils/hooks/auth/useLogout';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+
 import styles from './ProfilePage.module.scss';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
-type LinkProfileMenuItem = {
+interface LinkProfileMenuItem {
   type: 'link';
   title: string;
   href: string;
   Icon: IconComponent;
-};
+}
 
-type ButtonProfileMenuItem = {
+interface ButtonProfileMenuItem {
   type: 'button';
   action: 'logout' | 'setting';
   title: string;
   Icon: IconComponent;
-};
+}
 
 type ProfileMenuItem = LinkProfileMenuItem | ButtonProfileMenuItem;
 
@@ -95,6 +97,7 @@ interface ProfileMenuProps {
 function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, onActionClick, subtitle }: ProfileMenuProps) {
   const getButtonAction = (action: ButtonProfileMenuItem) => {
     if (action.action === 'setting') return onOpenAuthModal;
+
     return onLogout;
   };
 

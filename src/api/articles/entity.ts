@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export interface GetArticlesRequest {
   boardId: string;
@@ -184,7 +184,7 @@ interface LostItemArticleForPostDTO {
 }
 
 export interface LostItemArticlesRequestDTO {
-  articles: Array<LostItemArticleForPostDTO>;
+  articles: LostItemArticleForPostDTO[];
 }
 
 export interface LostItemArticlesPostResponseDTO {

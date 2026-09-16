@@ -7,12 +7,14 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './FormDate.module.scss';
 
 const getyyyyMMdd = (date: Date) => {
   const yyyy = date.getFullYear();
   const MM = String(date.getMonth() + 1).padStart(2, '0');
   const dd = String(date.getDate()).padStart(2, '0');
+
   return `${yyyy}.${MM}.${dd}`;
 };
 

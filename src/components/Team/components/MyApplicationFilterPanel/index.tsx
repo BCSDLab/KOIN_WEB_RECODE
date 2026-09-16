@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+
+import type { TeamApplicationStatus, TeamRecruitmentSort } from 'api/team/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
@@ -8,16 +10,16 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import type { TeamApplicationStatus, TeamRecruitmentSort } from 'api/team/entity';
+
 import styles from './MyApplicationFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: TeamApplicationStatus; label: string }[] = [
+const STATUS_OPTIONS: Array<{ value: TeamApplicationStatus; label: string }> = [
   { value: 'ACCEPTED', label: '승인' },
   { value: 'PENDING', label: '대기' },
   { value: 'REJECTED', label: '거절' },
 ];
 
-const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
@@ -53,6 +55,7 @@ export default function MyApplicationFilterPanel({
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
@@ -69,6 +72,7 @@ export default function MyApplicationFilterPanel({
     setLocalStatuses((prev) => {
       if (prev.includes(option.value)) return prev.filter((status) => status !== option.value);
       const next = [...prev, option.value];
+
       return next.length === STATUS_OPTIONS.length ? [] : next;
     });
     logStatusSelect(option.label);

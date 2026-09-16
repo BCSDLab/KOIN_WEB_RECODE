@@ -1,14 +1,15 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
 import { Refresh } from 'api/auth/APIDetail';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { CustomAxiosError, KoinError } from 'interfaces/APIError';
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { APIResponse } from 'interfaces/APIResponse';
+import axios, { type AxiosError, type AxiosResponse } from 'axios';
+import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import type { APIResponse } from 'interfaces/APIResponse';
 import { COOKIE_KEY } from 'static/url';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
+
 import { redirectToClub, redirectToLogin } from './auth';
 import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { isomorphicLocalStorage } from './env';
@@ -91,6 +92,7 @@ export default class APIClient {
           if (axios.isAxiosError(err) && err.response?.status === 503) {
             useServerStateStore.getState().setMaintenance(true);
             reject(err);
+
             return;
           }
           try {
@@ -112,6 +114,7 @@ export default class APIClient {
                   () => (request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse)),
                 );
                 resolve(response);
+
                 return;
               }
             }
@@ -134,6 +137,7 @@ export default class APIClient {
     // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
     if (this.refreshPromise) {
       await this.refreshPromise;
+
       return;
     }
 
@@ -157,6 +161,7 @@ export default class APIClient {
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
           redirectToClub();
+
           return;
         }
         redirectToLogin();
@@ -189,6 +194,7 @@ export default class APIClient {
 
       // 재요청 실행 및 결과 반환
       const route = normalizeApiPath(originalRequest?.url);
+
       return await Sentry.startSpan(
         {
           name: `Retry API request: ${route}`,
@@ -228,6 +234,7 @@ export default class APIClient {
             },
             () => this.refreshAccessToken(refreshToken),
           );
+
           return await this.retryRequest(error);
         }
       } catch {
@@ -239,6 +246,7 @@ export default class APIClient {
       }
 
       redirectToLogin();
+
       return null;
     }
 
@@ -259,6 +267,7 @@ export default class APIClient {
               }),
           );
           useTokenStore.getState().setUserType(response.data.user_type);
+
           return await this.retryRequest(error);
         } catch {
           return null;
@@ -271,6 +280,7 @@ export default class APIClient {
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
+
     return (
       response?.status !== undefined &&
       response?.data !== undefined &&
@@ -283,6 +293,7 @@ export default class APIClient {
   private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
+
       return {
         type: 'KOIN_ERROR',
         status: koinError.status,
@@ -290,6 +301,7 @@ export default class APIClient {
         message: koinError.data.message,
       };
     }
+
     return {
       type: 'AXIOS_ERROR',
       ...error,

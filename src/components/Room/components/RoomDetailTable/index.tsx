@@ -60,6 +60,7 @@ function RoomDetailTable({
       rightValue: phone,
     },
   ];
+
   return (
     <table className={styles.table}>
       <tbody>

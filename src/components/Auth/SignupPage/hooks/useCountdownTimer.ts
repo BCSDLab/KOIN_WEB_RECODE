@@ -31,8 +31,10 @@ function useCountdownTimer({ duration, onExpire }: CountdownTimerOptions) {
           clearInterval(intervalRef.current!);
           setIsRunning(false);
           onExpire?.();
+
           return 0;
         }
+
         return prev - 1;
       });
     }, 1000);

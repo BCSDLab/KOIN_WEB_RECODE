@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type WeatherId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 

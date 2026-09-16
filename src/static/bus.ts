@@ -1,7 +1,8 @@
-import { CityCourse } from 'api/bus/entity';
+import type { CityCourse } from 'api/bus/entity';
 import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
 import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
 import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
+
 import ROUTES from './routes';
 
 export const BUS_TYPES = [
@@ -152,7 +153,8 @@ export const CITY_COURSES: CityCourse[] = [
   { bus_number: 405, direction: '종합터미널', direction_type: 'from' },
 ];
 
-export const CITY_COURSES_MAP = new Map<  // 조회를 빠르기 하기 위해 map 객체 생성
+export const CITY_COURSES_MAP = new Map<
+  // 조회를 빠르기 하기 위해 map 객체 생성
   string, // key: '400-to'
   CityCourse
 >();

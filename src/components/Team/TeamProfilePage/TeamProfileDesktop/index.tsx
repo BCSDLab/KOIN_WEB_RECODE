@@ -1,9 +1,11 @@
 import type { FunctionComponent, SVGProps } from 'react';
+
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
 import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
 import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import type { TeamProfileViewProps } from 'components/Team/TeamProfilePage/types';
+
 import styles from './TeamProfileDesktop.module.scss';
 
 interface MenuCardProps {

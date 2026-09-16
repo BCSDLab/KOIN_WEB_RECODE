@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import RightArrow from 'assets/svg/right-arrow.svg';
@@ -7,6 +8,7 @@ import { createArticlesWithNewSelector } from 'components/Articles/utils/selectA
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './IndexArticles.module.scss';
 
 interface IndexArticlesProps {

@@ -1,6 +1,7 @@
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import { BUS_FEEDBACK_FORM } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './InfoFooter.module.scss';
 
 type BUSTYPE = 'SHUTTLE' | 'EXPRESS' | 'CITY';

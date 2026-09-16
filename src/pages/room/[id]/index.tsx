@@ -1,5 +1,6 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
+
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getRoomList } from 'api/room';
 import { roomQueries } from 'api/room/queries';
@@ -17,6 +18,7 @@ import {
   ROOM_ISR_REVALIDATE_SECONDS,
   withStaticFetchRetry,
 } from 'utils/ts/isr';
+
 import styles from './RoomDetailPage.module.scss';
 
 interface RoomDetailPageProps {

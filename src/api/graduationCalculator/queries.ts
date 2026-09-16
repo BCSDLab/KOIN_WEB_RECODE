@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { Semester } from './entity';
+
+import type { Semester } from './entity';
 import { calculateGraduationCredits, getCourseType, getGeneralEducation } from './index';
 
 export const graduationCalculatorQueryKeys = {

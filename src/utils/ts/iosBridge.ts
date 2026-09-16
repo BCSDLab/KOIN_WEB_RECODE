@@ -16,6 +16,7 @@ class IOSWebBridge {
 
   private generateCallbackId(): string {
     this.callbackIdCounter += 1;
+
     return `cb_${Date.now()}_${this.callbackIdCounter}`;
   }
 
@@ -76,6 +77,7 @@ export async function requestTokensFromNative(): Promise<NativeTokens> {
 
   try {
     const tokens = await window.NativeBridge?.call<NativeTokens>('getUserToken');
+
     return {
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
@@ -89,6 +91,7 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
   if (!isBrowser()) return false;
   try {
     await window.NativeBridge?.call<boolean>('putUserToken', { access, refresh });
+
     return true;
   } catch {
     return false;

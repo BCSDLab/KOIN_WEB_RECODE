@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { Semester, TimetableFrameListResponse, VersionType } from './entity';
+
+import type { Semester, TimetableFrameListResponse, VersionType } from './entity';
 import {
   getLectureList,
   getMySemester,
@@ -19,15 +20,15 @@ const ALL_LECTURES_KEY = 'allLectures';
 
 type TimetableUserType = 'STUDENT' | 'GENERAL' | '' | null;
 
-type MySemesterQueryParams = {
+interface MySemesterQueryParams {
   userType?: TimetableUserType;
-};
+}
 
-type FrameListQueryParams = {
+interface FrameListQueryParams {
   fallbackOnError?: boolean;
   hasUserSemester?: boolean;
   userType?: TimetableUserType;
-};
+}
 
 const canUseStudentTimetableQuery = (token: string, userType?: TimetableUserType) =>
   Boolean(token) && (!userType || userType === 'STUDENT');

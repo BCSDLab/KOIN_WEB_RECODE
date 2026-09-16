@@ -1,17 +1,17 @@
-import { Semester } from 'api/timetable/entity';
+import type { Semester } from 'api/timetable/entity';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type State = {
+interface State {
   semester: Semester;
-};
+}
 
-type Action = {
+interface Action {
   action: {
     updateSemester: (semester: State['semester']) => void;
   };
-};
+}
 
 const useSemesterStore = create(
   persist<State & Action>(

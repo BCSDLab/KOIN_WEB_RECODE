@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
+
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import DeleteModal from 'components/Store/StoreDetailPage/components/Review/components/DeleteModal/DeleteModal';
 import { useDeleteReview } from 'components/Store/StoreDetailPage/hooks/useDeleteReview';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
@@ -9,6 +10,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
+
 import styles from './SelectButton.module.scss';
 
 interface Props {
@@ -18,6 +20,7 @@ interface Props {
   store_id: string;
 }
 const REVEIW_REPORT_LOGIN = ['리뷰를 신고하기 ', '리뷰 신고는 회원만 사용 가능합니다.'];
+
 export default function SelectButton({ is_mine, review_id, is_reported, store_id }: Props) {
   const router = useRouter();
   const portalManager = useModalPortal();
@@ -79,9 +82,7 @@ export default function SelectButton({ is_mine, review_id, is_reported, store_id
           <>
             <button
               type="button"
-              onClick={() =>
-                router.push(ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id) }))
-              }
+              onClick={() => router.push(ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id) }))}
               className={styles.section}
             >
               수정하기
@@ -97,6 +98,7 @@ export default function SelectButton({ is_mine, review_id, is_reported, store_id
             onClick={() => {
               if (is_reported) {
                 showToast('error', '이미 신고된 리뷰입니다.');
+
                 return;
               }
               if (userInfo) {

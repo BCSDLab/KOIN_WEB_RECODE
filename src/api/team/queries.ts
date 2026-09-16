@@ -1,5 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
+
 import type {
   MyCreatedTeamRecruitmentListRequest,
   MyTeamRecruitmentApplicationListRequest,
