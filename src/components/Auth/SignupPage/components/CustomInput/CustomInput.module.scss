@@ -169,7 +169,7 @@
   }
 }
 
-.messageWrapper {
+.message-wrapper {
   display: flex;
   align-items: center;
   margin-top: 8px;
@@ -198,7 +198,7 @@
 
     &--warning {
       color: #f7941e;
-      
+
       @include media.media-breakpoint(mobile) {
         color: #b611f5;
       }

@@ -15,7 +15,7 @@ interface Props {
 export default function LostItemFilterBottomSheet({ isOpen, onClose, onReset, onApply, initialFilter }: Props) {
   return (
     <BottomModal isOpen={isOpen} onClose={onClose} className={styles.sheet}>
-      <div className={styles.sheetInner}>
+      <div className={styles['sheet-inner']}>
         <LostItemFilterContent initialFilter={initialFilter} onClose={onClose} onReset={onReset} onApply={onApply} />
       </div>
     </BottomModal>

@@ -29,7 +29,7 @@ export default function ArticlesPageLayout({ children, mobileTabMenu }: Articles
           </div>
         )}
         {mobileTabMenu}
-        <div className={styles.listScroll}>{children}</div>
+        <div className={styles['list-scroll']}>{children}</div>
       </div>
 
       <div className={styles.aside}>

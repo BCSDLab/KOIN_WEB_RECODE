@@ -200,7 +200,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles.mobileHeader}>
+        <div className={styles['mobile-header']}>
           <SubPageHeader title={MODE_TEXT[mode].title} />
         </div>
         <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>

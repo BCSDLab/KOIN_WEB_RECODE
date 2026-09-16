@@ -19,7 +19,7 @@ export default function LostItemFilterModal(props: LostItemFilterModalProps) {
 
   return (
     <div className={styles.modal}>
-      <div ref={containerRef} className={styles.modalInner}>
+      <div ref={containerRef} className={styles['modal-inner']}>
         <LostItemFilterContent {...props} />
       </div>
     </div>

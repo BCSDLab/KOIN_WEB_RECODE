@@ -102,34 +102,38 @@ function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, onActionClick,
   };
 
   return (
-    <section className={styles.profileMenu}>
-      <div className={styles.profileMenu__user}>
-        <div className={styles.profileMenu__userIcon}>
+    <section className={styles['profile-menu']}>
+      <div className={styles['profile-menu__user']}>
+        <div className={styles['profile-menu__userIcon']}>
           <UserIcon />
         </div>
         {/* sentry-mask: Session Replay에서 이름/학번·아이디를 가리기 위한 Sentry 기본 마스킹 클래스 */}
-        <div className={`${styles.profileMenu__userText} sentry-mask`}>
-          <h1 className={styles.profileMenu__title}>{title}</h1>
-          {subtitle && <p className={styles.profileMenu__userMeta}>{subtitle}</p>}
+        <div className={`${styles['profile-menu__userText']} sentry-mask`}>
+          <h1 className={styles['profile-menu__title']}>{title}</h1>
+          {subtitle && <p className={styles['profile-menu__userMeta']}>{subtitle}</p>}
         </div>
       </div>
-      <ul className={styles.profileMenu__actions}>
+      <ul className={styles['profile-menu__actions']}>
         {actions.map((action) => {
           const Icon = action.Icon;
 
           return (
             <li key={action.title}>
               {action.type === 'link' ? (
-                <Link href={action.href} className={styles.profileMenu__action} onClick={() => onActionClick(action)}>
+                <Link
+                  href={action.href}
+                  className={styles['profile-menu__action']}
+                  onClick={() => onActionClick(action)}
+                >
                   <IconBox>
                     <Icon />
                   </IconBox>
-                  <span className={styles.profileMenu__actionLabel}>{action.title}</span>
+                  <span className={styles['profile-menu__actionLabel']}>{action.title}</span>
                 </Link>
               ) : (
                 <button
                   type="button"
-                  className={styles.profileMenu__action}
+                  className={styles['profile-menu__action']}
                   onClick={() => {
                     onActionClick(action);
                     getButtonAction(action)();
@@ -138,7 +142,7 @@ function ProfileMenu({ title, actions, onLogout, onOpenAuthModal, onActionClick,
                   <IconBox>
                     <Icon />
                   </IconBox>
-                  <span className={styles.profileMenu__actionLabel}>{action.title}</span>
+                  <span className={styles['profile-menu__actionLabel']}>{action.title}</span>
                 </button>
               )}
             </li>

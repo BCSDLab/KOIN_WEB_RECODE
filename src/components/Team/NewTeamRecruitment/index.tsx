@@ -253,7 +253,7 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        <div className={styles.mobileHeader}>
+        <div className={styles['mobile-header']}>
           <SubPageHeader title={headerTitle} className={styles.header} />
         </div>
         <h1 className={styles.title}>{headerTitle}</h1>

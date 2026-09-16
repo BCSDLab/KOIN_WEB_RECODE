@@ -26,7 +26,7 @@ function CompletePage() {
       <div className={styles['title-container']}>
         <h2 className={styles.title}>{TITLE}</h2>
 
-        <div className={styles['subTitle-container']}>
+        <div className={styles['sub-title-container']}>
           {SUB_TITLE.map(({ key, text }) => (
             <div key={key} className={styles.subTitle}>
               {text}

@@ -32,8 +32,8 @@ export default function LostItemPageLayout({ children }: { children: React.React
   };
 
   return (
-    <div className={styles['lostItem-template']}>
-      <div className={styles['lostItem-content']}>
+    <div className={styles['lost-item-template']}>
+      <div className={styles['lost-item-content']}>
         <div className={styles.header}>
           <Link href={ROUTES.LostItems()}>
             <h1 className={styles.header__title}>분실물</h1>
@@ -60,7 +60,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
           </div>
         </div>
 
-        <div className={styles.listScroll}>{children}</div>
+        <div className={styles['list-scroll']}>{children}</div>
       </div>
 
       <div className={styles.aside}>

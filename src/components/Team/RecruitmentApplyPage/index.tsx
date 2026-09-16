@@ -222,7 +222,7 @@ export default function RecruitmentApplyPage() {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles.mobileHeader}>
+        <div className={styles['mobile-header']}>
           <SubPageHeader title="팀원 모집 지원" />
         </div>
         <h1 className={styles.title}>팀원 모집 지원</h1>

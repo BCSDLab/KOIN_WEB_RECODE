@@ -145,13 +145,13 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     <>
       <main className={styles.content}>
         <h1 className={styles.title}>모집글 상세</h1>
-        <div className={styles.summaryRow}>
+        <div className={styles['summary-row']}>
           <section className={cn({ [styles.summary]: true, [styles['summary--inline']]: canManage })}>
             <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
             <h2 className={styles.summary__title}>{recruitment.title}</h2>
           </section>
           {canManage && (
-            <button type="button" className={styles.manageButton} onClick={navigateToApplicantManagement}>
+            <button type="button" className={styles['manage-button']} onClick={navigateToApplicantManagement}>
               지원자 관리
             </button>
           )}
@@ -231,7 +231,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
                 <dd className={styles.information__value}>{recruitment.author_nickname}</dd>
               </div>
             </dl>
-            <section className={styles.roleCard}>
+            <section className={styles['role-card']}>
               <h3 className={styles.section__title}>모집 역할 및 인원</h3>
               <div className={styles.roles}>
                 {roles.map((role) => (
@@ -256,11 +256,11 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
         </button>
       </div>
       {recruitment.is_author && (
-        <div className={styles.ownerActions}>
-          <button type="button" className={styles.ownerActions__edit} onClick={onEdit}>
+        <div className={styles['owner-actions']}>
+          <button type="button" className={styles['owner-actions__edit']} onClick={onEdit}>
             수정
           </button>
-          <button type="button" className={styles.ownerActions__delete} onClick={onDelete}>
+          <button type="button" className={styles['owner-actions__delete']} onClick={onDelete}>
             삭제
           </button>
         </div>
@@ -340,7 +340,7 @@ export default function RecruitmentDetail() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader
           title="팀원 모집"
           rightAction={

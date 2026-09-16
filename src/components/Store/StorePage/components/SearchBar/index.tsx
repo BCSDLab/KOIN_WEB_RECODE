@@ -21,10 +21,10 @@ export default function SearchBar() {
   const [toggle, setToggle] = useState(true);
 
   return (
-    <div className={styles.search_bar}>
+    <div className={styles['search-bar']}>
       {toggle && (
         <button
-          className={styles.search_bar__input}
+          className={styles['search-bar__input']}
           type="button"
           onClick={() => {
             if (!isMobile) setToggle(false);
@@ -44,7 +44,7 @@ export default function SearchBar() {
       )}
       {/* <input
         ref={storeRef}
-        className={styles.search_bar__input}
+        className={styles['search-bar__input']}
         defaultValue={
           searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
         }
@@ -65,7 +65,7 @@ export default function SearchBar() {
         }}
       /> */}
       <button
-        className={styles.search_bar__icon}
+        className={styles['search-bar__icon']}
         type="button"
         onClick={() => {
           // setParams('storeName', storeRef.current?.value ?? '', {

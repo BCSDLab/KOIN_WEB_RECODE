@@ -96,7 +96,7 @@
   }
 }
 
-.chat-list--item--profile {
+.chat-list--item-profile {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,14 +121,14 @@
   cursor: pointer;
 }
 
-.chat-list--item--image {
+.chat-list--item-image {
   width: auto;
   height: auto;
   max-height: 48px;
   border-radius: 12px;
 }
 
-.chat-list--item--content {
+.chat-list--item-content {
   width: 100%;
   max-width: 265px;
   display: flex;
@@ -139,7 +139,7 @@
   }
 }
 
-.chat-list--item--title {
+.chat-list--item-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -164,12 +164,12 @@
   }
 }
 
-.chat-list--item--date {
+.chat-list--item-date {
   display: flex;
   justify-content: flex-end;
 }
 
-.chat-list--item--description {
+.chat-list--item-description {
   display: flex;
   justify-content: space-between;
   align-items: center;

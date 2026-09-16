@@ -146,7 +146,7 @@ export default function ApplicantDetail() {
 
   return (
     <>
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader title="지원자 상세" className={styles.header} />
       </div>
 
@@ -158,12 +158,12 @@ export default function ApplicantDetail() {
 
           {!isLoading && data && (
             <>
-              <div className={styles.desktopTitle}>
-                <h1 className={styles.desktopTitle__heading}>지원자 상세</h1>
+              <div className={styles['desktop-title']}>
+                <h1 className={styles['desktop-title__heading']}>지원자 상세</h1>
                 {recruitment && (
-                  <div className={styles.desktopTitle__context}>
-                    <span className={styles.desktopTitle__category}>{CATEGORY_LABEL[recruitment.category]}</span>
-                    <span className={styles.desktopTitle__recruitment}>{recruitment.title}</span>
+                  <div className={styles['desktop-title__context']}>
+                    <span className={styles['desktop-title__category']}>{CATEGORY_LABEL[recruitment.category]}</span>
+                    <span className={styles['desktop-title__recruitment']}>{recruitment.title}</span>
                   </div>
                 )}
               </div>
@@ -179,7 +179,7 @@ export default function ApplicantDetail() {
                 onChatClick={handleChatClick}
               />
 
-              <h2 className={styles.page__sectionTitle}>기본 정보</h2>
+              <h2 className={styles['page__section-title']}>기본 정보</h2>
 
               <div className={styles.skills}>
                 <span className={styles.skills__label}>보유기술 및 자격증</span>
@@ -195,20 +195,20 @@ export default function ApplicantDetail() {
               <ActivityHistoryList
                 activities={data.profile_snapshot.activities}
                 onMoreClick={() => setIsActivityModalOpen(true)}
-                className={styles.activitySection}
+                className={styles['activity-section']}
               />
 
-              <DetailInfoSection label="자기소개" className={styles.selfIntroductionSection}>
+              <DetailInfoSection label="자기소개" className={styles['self-introduction-section']}>
                 <p className={styles.text}>{data.profile_snapshot.self_introduction}</p>
               </DetailInfoSection>
 
-              <h2 className={styles.page__sectionTitle}>지원 내용</h2>
+              <h2 className={styles['page__section-title']}>지원 내용</h2>
 
-              <DetailInfoSection label="지원 동기" className={styles.motivationSection}>
+              <DetailInfoSection label="지원 동기" className={styles['motivation-section']}>
                 <p className={styles.text}>{data.motivation}</p>
               </DetailInfoSection>
 
-              <DetailInfoSection label="참여 가능 시간" className={styles.availabilitySection}>
+              <DetailInfoSection label="참여 가능 시간" className={styles['availability-section']}>
                 <p className={styles.text}>{data.availability}</p>
               </DetailInfoSection>
             </>

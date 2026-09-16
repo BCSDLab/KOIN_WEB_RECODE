@@ -22,7 +22,7 @@ function Dropdown({ options, value, suffix, onChange }: DropdownProps) {
   const { containerRef } = useOutsideClick({ onOutsideClick: close });
 
   return (
-    <div className={styles.dropdownWrapper} ref={containerRef}>
+    <div className={styles['dropdown-wrapper']} ref={containerRef}>
       <button type="button" className={styles.trigger} onClick={toggle}>
         {value?.toString().padStart(2, '0') ?? '00'} {suffix}
         <DownArrowIcon />
@@ -61,7 +61,7 @@ export default function TimeSelector({ hour, minute, onChange }: PickerProps) {
   const minuteOptions = Array.from({ length: 60 }, (_, i) => i);
 
   return (
-    <div className={styles.pickerContainer}>
+    <div className={styles['picker-container']}>
       <Dropdown
         options={hourOptions}
         value={hour}

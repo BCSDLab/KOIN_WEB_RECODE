@@ -71,16 +71,16 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
         <StepIndicator steps={APPLY_STEPS} currentIndex={0} />
 
         <div className={styles.step__body}>
-          <div className={styles.loadInfo}>
-            <div className={styles.loadInfo__head}>
-              <span className={styles.loadInfo__title}>
-                <span className={styles['loadInfo__title--highlight']}>코인</span> 회원정보 불러오기
+          <div className={styles['load-info']}>
+            <div className={styles['load-info__head']}>
+              <span className={styles['load-info__title']}>
+                <span className={styles['load-info__title--highlight']}>코인</span> 회원정보 불러오기
               </span>
-              <span className={styles.loadInfo__description}>닉네임, 학과(학부), 학번</span>
+              <span className={styles['load-info__description']}>닉네임, 학과(학부), 학번</span>
             </div>
             <button
               type="button"
-              className={styles.loadInfo__button}
+              className={styles['load-info__button']}
               onClick={handleLoadUserInfo}
               disabled={isLoadingUserInfo}
             >
@@ -99,7 +99,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
               <input
                 id={controlId}
                 type="text"
-                className={cn({ [controlClassName]: true, [styles.grayInput]: true })}
+                className={cn({ [controlClassName]: true, [styles['gray-input']]: true })}
                 placeholder="닉네임을 입력해주세요."
                 maxLength={APPLY_NICKNAME_MAX_LENGTH}
                 aria-describedby={ariaDescribedBy}
@@ -126,7 +126,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                     }}
                     disabled={isSaving}
                     ariaDescribedBy={ariaDescribedBy}
-                    className={styles.grayDropdown}
+                    className={styles['gray-dropdown']}
                   />
                 )}
               />
@@ -139,7 +139,7 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                 id={controlId}
                 type="text"
                 inputMode="numeric"
-                className={cn({ [controlClassName]: true, [styles.grayInput]: true, 'sentry-mask': true })}
+                className={cn({ [controlClassName]: true, [styles['gray-input']]: true, 'sentry-mask': true })}
                 placeholder="학번을 작성해주세요."
                 maxLength={10}
                 disabled={isSaving}
@@ -205,8 +205,8 @@ export default function BasicInfoStep({ onNext }: BasicInfoStepProps) {
                   id={controlId}
                   className={cn({
                     [controlClassName]: true,
-                    [styles.grayInput]: true,
-                    [styles.introductionControl]: true,
+                    [styles['gray-input']]: true,
+                    [styles['introduction-control']]: true,
                   })}
                   placeholder="자기소개를 작성해주세요."
                   maxLength={APPLY_INTRODUCTION_MAX_LENGTH}

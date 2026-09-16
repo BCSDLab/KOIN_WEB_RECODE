@@ -41,7 +41,12 @@ interface AppliedFilterChipProps {
 
 function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
   return (
-    <button type="button" className={styles.appliedFilterChip} onClick={onRemove} aria-label={`${label} 필터 해제`}>
+    <button
+      type="button"
+      className={styles['applied-filter-chip']}
+      onClick={onRemove}
+      aria-label={`${label} 필터 해제`}
+    >
       <span>{label}</span>
       <XIcon aria-hidden />
     </button>
@@ -180,7 +185,7 @@ export default function TeamListPage() {
       <main className={styles.page}>
         {!isMobile && <h1 className={styles.title}>팀원모집</h1>}
 
-        <div className={styles.searchRow}>
+        <div className={styles['search-row']}>
           <SearchBar
             value={searchTitle}
             onChange={setSearchTitle}
@@ -191,17 +196,17 @@ export default function TeamListPage() {
 
           <button
             type="button"
-            className={styles.filterButton}
+            className={styles['filter-button']}
             onClick={handleFilterClick}
             aria-haspopup="dialog"
             aria-expanded={isFilterOpen}
           >
-            <span className={styles.filterButton__label}>필터</span>
+            <span className={styles['filter-button__label']}>필터</span>
             <FilterIcon />
           </button>
 
           <div className={styles.actions}>
-            <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
+            <button type="button" className={styles['profile-button']} onClick={handleProfileClick}>
               내 프로필
             </button>
 
@@ -213,7 +218,7 @@ export default function TeamListPage() {
         </div>
 
         {hasAppliedFilter && (
-          <div className={styles.appliedFilters}>
+          <div className={styles['applied-filters']}>
             {appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS, appliedFilter.status)}
@@ -250,11 +255,11 @@ export default function TeamListPage() {
           </div>
         )}
 
-        <p className={styles.totalCount}>전체({totalCount})</p>
+        <p className={styles['total-count']}>전체({totalCount})</p>
 
         <div className={styles.content}>
           {isLoading && (
-            <p className={styles.loadingState} role="status">
+            <p className={styles['loading-state']} role="status">
               모집글을 불러오는 중입니다.
             </p>
           )}
@@ -286,9 +291,9 @@ export default function TeamListPage() {
                 />
               ))}
 
-              {isFetchingNextPage && <p className={styles.loadingIndicator}>모집글을 불러오는 중입니다.</p>}
+              {isFetchingNextPage && <p className={styles['loading-indicator']}>모집글을 불러오는 중입니다.</p>}
 
-              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+              <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
             </div>
           )}
         </div>
