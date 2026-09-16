@@ -8,9 +8,8 @@ import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
 import CallvanActionModal from 'components/Callvan/components/CallvanActionModal';
-import CloseConfirmModal from 'components/Callvan/components/CloseConfirmModal';
 import CompleteConfirmModal from 'components/Callvan/components/CompleteConfirmModal';
-import ReopenConfirmModal from 'components/Callvan/components/ReopenConfirmModal';
+import ConfirmModal from 'components/Callvan/components/ConfirmModal';
 import useCancelCallvan from 'components/Callvan/hooks/useCancelCallvan';
 import useCloseCallvan from 'components/Callvan/hooks/useCloseCallvan';
 import useCompleteCallvan from 'components/Callvan/hooks/useCompleteCallvan';
@@ -320,8 +319,20 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           </div>
         </div>
       </div>
-      {isCloseModalOpen && <CloseConfirmModal onConfirm={handleCloseConfirm} onCancel={closeCloseModal} />}
-      {isReopenModalOpen && <ReopenConfirmModal onConfirm={handleReopenConfirm} onCancel={closeReopenModal} />}
+      {isCloseModalOpen && (
+        <ConfirmModal
+          title="해당 콜밴팟 모집을 마감할까요?"
+          onConfirm={handleCloseConfirm}
+          onCancel={closeCloseModal}
+        />
+      )}
+      {isReopenModalOpen && (
+        <ConfirmModal
+          title="해당 콜밴팟을 다시 모집할까요?"
+          onConfirm={handleReopenConfirm}
+          onCancel={closeReopenModal}
+        />
+      )}
       {isCompleteModalOpen && <CompleteConfirmModal onConfirm={handleCompleteConfirm} onCancel={closeCompleteModal} />}
       {isLoginModalOpen && (
         <CallvanActionModal
