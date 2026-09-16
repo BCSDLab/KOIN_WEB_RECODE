@@ -1,0 +1,10 @@
+.next/
+dist/
+.yarn/
+node_modules/
+.pnp.*
+yarn.lock
+src/generated/
+analytics.events.json
+public/sitemap*.xml
+public/robots.txt
