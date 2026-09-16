@@ -264,9 +264,10 @@ export default [
       'prefer-const': 'error',
       'no-var': 'error',
       'import/no-cycle': 'error',
+      // react/jsx-key는 react.configs.recommended에 이미 포함되어 있어 별도로 켤 필요 없다 (기존에는 off로 꺼둔 상태였다).
+      'react/no-array-index-key': 'error',
 
       'import/extensions': 'off',
-      'react/jsx-key': 'off',
       'react/display-name': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/require-default-props': 'off',
