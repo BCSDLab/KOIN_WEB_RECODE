@@ -62,7 +62,6 @@ export default function DetailStep({ description, images, onDescriptionChange, o
           <div className={styles['detail-step__image-slider']}>
             {images.map((file, index) => (
               <div key={`${file.name}-${file.size}-${file.lastModified}`} className={styles['image-item']}>
-                {/* blob: URL이라 next/image가 처리할 수 없음 */}
                 {/* eslint-disable-next-line @next/next/no-img-element -- URL.createObjectURL의 blob: URL은 next/image가 최적화할 수 없음 */}
                 <img
                   src={URL.createObjectURL(file)}

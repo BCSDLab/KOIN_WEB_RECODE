@@ -99,7 +99,6 @@ function StoreBenefit() {
           >
             <div className={styles.tab__content}>
               <div className={styles['tab__content--logo']}>
-                {/* 이미지 크기가 작고 개별 크기가 모두 다르기에 img 태그 유지 */}
                 {/* eslint-disable-next-line @next/next/no-img-element -- 개별 크기가 제각각인 소형 아이콘 목록 */}
                 <img
                   src={

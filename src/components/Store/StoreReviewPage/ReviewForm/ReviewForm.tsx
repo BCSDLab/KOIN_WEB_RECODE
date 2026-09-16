@@ -135,7 +135,6 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
         <ul className={styles.template__images}>
           {imageFile.map((url: string) => (
             <li key={url}>
-              {/* 업로드된 리뷰 이미지 미리보기 목록이라 개별 크기가 제각각이다. */}
               {/* eslint-disable-next-line @next/next/no-img-element -- 업로드 이미지 미리보기라 크기가 제각각 */}
               <img src={url} alt="리뷰 이미지" loading="lazy" decoding="async" />
               <button type="button" aria-label="이미지 삭제" onClick={() => deleteImage(url)}>

@@ -222,7 +222,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
 
                 const bubble = message.is_image ? (
                   <div className={styles['chat-room__imageBubble']}>
-                    {/* 채팅 버블에 원본 비율로 표시해야 해서 크기가 제각각이라 <img>를 유지한다. */}
                     {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
                     <img src={message.content} alt="전송된 이미지" />
                   </div>

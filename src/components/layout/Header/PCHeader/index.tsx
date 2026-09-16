@@ -165,7 +165,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   return (
     <>
       <Link className={styles.header__logo} href={ROUTES.Main()} tabIndex={0} onClick={escapeByLogo}>
-        {/* 헤더 로고는 작은 정적 이미지라 Next/Image 프록시/도메인 설정 대비 이득이 작아 img 유지 */}
         {/* eslint-disable-next-line @next/next/no-img-element -- 작은 정적 로고라 최적화 이점 대비 설정 비용이 큼 */}
         <img
           src="https://static.koreatech.in/assets/img/logo_white.png"
