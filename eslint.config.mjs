@@ -6,6 +6,7 @@ import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import checkFile from 'eslint-plugin-check-file';
+import eslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import stylistic from '@stylistic/eslint-plugin';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -63,6 +64,7 @@ export default [
       'react-hooks': reactHooks,
       '@stylistic': stylistic,
       'check-file': checkFile,
+      '@eslint-community/eslint-comments': eslintComments,
       local: { rules: { 'prefer-top-level-type-import': preferTopLevelTypeImport } },
     },
     settings: {
@@ -303,6 +305,9 @@ export default [
         { ignoreMiddleExtensions: true },
       ],
       'check-file/folder-naming-convention': ['error', { 'src/api/*/': 'CAMEL_CASE' }],
+      // eslint-disable 주석은 규칙명을 명시하고 사유를 남긴다 (Lint 개선 논의 결정 사항).
+      '@eslint-community/eslint-comments/require-description': ['error', { ignore: [] }],
+      '@eslint-community/eslint-comments/no-unlimited-disable': 'error',
       // react/jsx-key는 react.configs.recommended에 이미 포함되어 있어 별도로 켤 필요 없다 (기존에는 off로 꺼둔 상태였다).
       'react/no-array-index-key': 'error',
 

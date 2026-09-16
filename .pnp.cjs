@@ -30,6 +30,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@bcsdlab/utils", "npm:0.0.15"],\
+          ["@eslint-community/eslint-plugin-eslint-comments", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.8.1"],\
           ["@hookform/resolvers", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1"],\
           ["@next/eslint-plugin-next", "npm:15.5.23"],\
           ["@next/third-parties", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.2"],\
@@ -2873,6 +2874,30 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/unplugged/@esbuild-win32-x64-npm-0.27.2-fb03408001/node_modules/@esbuild/win32-x64/",\
         "packageDependencies": [\
           ["@esbuild/win32-x64", "npm:0.27.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@eslint-community/eslint-plugin-eslint-comments", [\
+      ["npm:4.8.1", {\
+        "packageLocation": "./.yarn/cache/@eslint-community-eslint-plugin-eslint-comments-npm-4.8.1-31887155ee-7a21119728.zip/node_modules/@eslint-community/eslint-plugin-eslint-comments/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-plugin-eslint-comments", "npm:4.8.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.8.1", {\
+        "packageLocation": "./.yarn/__virtual__/@eslint-community-eslint-plugin-eslint-comments-virtual-abaf1bc912/0/cache/@eslint-community-eslint-plugin-eslint-comments-npm-4.8.1-31887155ee-7a21119728.zip/node_modules/@eslint-community/eslint-plugin-eslint-comments/",\
+        "packageDependencies": [\
+          ["@eslint-community/eslint-plugin-eslint-comments", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.8.1"],\
+          ["@types/eslint", null],\
+          ["escape-string-regexp", "npm:4.0.0"],\
+          ["eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.38.0"],\
+          ["ignore", "npm:7.0.5"]\
+        ],\
+        "packagePeers": [\
+          "@types/eslint",\
+          "eslint"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9599,6 +9624,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
           ["@bcsdlab/utils", "npm:0.0.15"],\
+          ["@eslint-community/eslint-plugin-eslint-comments", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.8.1"],\
           ["@hookform/resolvers", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.9.1"],\
           ["@next/eslint-plugin-next", "npm:15.5.23"],\
           ["@next/third-parties", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.2"],\
