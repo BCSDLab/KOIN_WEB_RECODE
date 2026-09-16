@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import type { NewClubData } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
+import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfirmModal';
 import MobileView from 'components/Club/NewClubPage/components/MobileView';
 import PCView from 'components/Club/NewClubPage/components/PCView';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
