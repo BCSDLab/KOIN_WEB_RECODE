@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { storeMutations } from 'api/store/mutations';
-import { useKoinToast } from 'utils/hooks/koinToast/useKoinToast';
+import { useKoinToast } from 'components/feedback/KoinToast/useKoinToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 

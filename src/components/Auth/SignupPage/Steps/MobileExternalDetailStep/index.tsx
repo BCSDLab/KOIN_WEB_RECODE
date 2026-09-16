@@ -5,6 +5,7 @@ import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
+import type { InputMessage } from 'interfaces/InputMessage';
 import {
   Controller,
   type ControllerRenderProps,
@@ -17,7 +18,7 @@ import { REGEX, MESSAGES } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
+import CustomInput from '../../components/CustomInput';
 import styles from './MobileExternalDetailStep.module.scss';
 
 interface MobileExternalDetailStepProps {

@@ -28,6 +28,7 @@ import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfir
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import { NO_SELECTED_EVENT_ID } from 'static/club';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
@@ -41,8 +42,6 @@ import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 import styles from './ClubDetailPage.module.scss';
-
-export const NO_SELECTED_EVENT_ID = -1;
 
 const TAB_LABEL = {
   intro: '상세 소개',

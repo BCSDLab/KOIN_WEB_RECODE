@@ -8,17 +8,12 @@ import EyeCloseIcon from 'assets/svg/Login/eye-close.svg';
 import EyeOpenIcon from 'assets/svg/Login/eye-open.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
 import FormatTime from 'components/Auth/SignupPage/hooks/useFormatTime';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { useFormContext } from 'react-hook-form';
 import type { UserType } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 
 import styles from './PCCustomInput.module.scss';
-
-export type InputMessage = {
-  type: 'error' | 'warning' | 'success' | 'info' | 'default';
-  content: string;
-  code?: 'SMS_LIMIT' | 'ALREADY_REGISTERED' | (string & {});
-} | null;
 
 interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
   htmlFor: string;

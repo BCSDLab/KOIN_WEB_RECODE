@@ -11,11 +11,11 @@ import {
   idExists,
   idMatchEmail,
 } from 'api/auth';
-import type { InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
-import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
 import showToast from 'utils/ts/showToast';
 
 interface UseEmailVerificationProps {

@@ -7,7 +7,8 @@ import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent } f
 import { deptQueries } from 'api/dept/queries';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
-import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
+import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { Controller, type FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';

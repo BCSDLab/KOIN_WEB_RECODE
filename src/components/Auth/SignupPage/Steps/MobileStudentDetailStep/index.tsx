@@ -6,6 +6,7 @@ import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
+import type { InputMessage } from 'interfaces/InputMessage';
 import {
   Controller,
   type ControllerRenderProps,
@@ -19,7 +20,7 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
+import CustomInput from '../../components/CustomInput';
 import CustomSelector from '../../components/CustomSelector';
 import styles from './MobileStudentDetailStep.module.scss';
 
