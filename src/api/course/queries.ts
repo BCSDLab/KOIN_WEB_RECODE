@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+import { getViewerScope } from 'utils/ts/getViewerScope';
 
 import type { CourseRequestParams } from './entity';
 import { getCourseSearch, getPreCourseList } from './index';
@@ -6,7 +7,8 @@ import { getCourseSearch, getPreCourseList } from './index';
 export const courseQueryKeys = {
   all: ['course'] as const,
   search: (params: CourseRequestParams) => [...courseQueryKeys.all, 'search', params] as const,
-  preCourseList: (timetableFrameId: number) => [...courseQueryKeys.all, 'pre-course-list', timetableFrameId] as const,
+  preCourseList: (timetableFrameId: number, token?: string | null) =>
+    [...courseQueryKeys.all, 'pre-course-list', timetableFrameId, getViewerScope(token)] as const,
 };
 
 export const courseQueries = {
@@ -19,7 +21,7 @@ export const courseQueries = {
 
   preCourseList: (token: string, timetableFrameId: number) =>
     queryOptions({
-      queryKey: courseQueryKeys.preCourseList(timetableFrameId),
+      queryKey: courseQueryKeys.preCourseList(timetableFrameId, token),
       queryFn: () => getPreCourseList(token, timetableFrameId),
       gcTime: 0,
     }),

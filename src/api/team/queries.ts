@@ -1,4 +1,5 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
+import { getViewerScope } from 'utils/ts/getViewerScope';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 
 import type {
@@ -32,10 +33,6 @@ export const TEAM_CHAT_MESSAGE_LIMIT = 100;
 
 export const TEAM_CHAT_POLLING_INTERVAL = 1000;
 
-type TeamViewerScope = 'guest' | 'auth';
-
-const getViewerScope = (token?: string | null): TeamViewerScope => (token ? 'auth' : 'guest');
-
 export type TeamRecruitmentInfiniteListRequest = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 
 export const teamQueryKeys = {
@@ -48,25 +45,26 @@ export const teamQueryKeys = {
     [...teamQueryKeys.listRoot, 'infinite', getViewerScope(token), params] as const,
   notificationsRoot: ['team', 'notifications'] as const,
   notifications: (token: string, params: TeamRecruitmentNotificationListRequest) =>
-    [...teamQueryKeys.notificationsRoot, token, params] as const,
-  infiniteNotifications: (token: string) => [...teamQueryKeys.notificationsRoot, 'infinite', token] as const,
+    [...teamQueryKeys.notificationsRoot, getViewerScope(token), params] as const,
+  infiniteNotifications: (token: string) =>
+    [...teamQueryKeys.notificationsRoot, 'infinite', getViewerScope(token)] as const,
   myApplicationsRoot: ['team', 'my-applications'] as const,
   infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
     [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
   applicantsRoot: (recruitmentId: string) => ['team', 'recruitment', recruitmentId, 'applicants'] as const,
   applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
-    [...teamQueryKeys.applicantsRoot(recruitmentId), token, params] as const,
+    [...teamQueryKeys.applicantsRoot(recruitmentId), getViewerScope(token), params] as const,
   applicantDetail: (recruitmentId: string, applicationId: string, token: string) =>
-    [...teamQueryKeys.applicantsRoot(recruitmentId), 'detail', applicationId, token] as const,
+    [...teamQueryKeys.applicantsRoot(recruitmentId), 'detail', applicationId, getViewerScope(token)] as const,
   myCreatedRoot: ['team', 'my-created'] as const,
   infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
     [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
   chatRoot: ['team', 'chat'] as const,
-  chatRoomList: (token: string) => [...teamQueryKeys.chatRoot, 'rooms', token] as const,
+  chatRoomList: (token: string) => [...teamQueryKeys.chatRoot, 'rooms', getViewerScope(token)] as const,
   chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
-    [...teamQueryKeys.chatRoot, 'room', token, recruitmentId, chatRoomId] as const,
+    [...teamQueryKeys.chatRoot, 'room', getViewerScope(token), recruitmentId, chatRoomId] as const,
   chatMessagesRoot: (token: string, recruitmentId: number, chatRoomId: number) =>
-    [...teamQueryKeys.chatRoot, 'messages', token, recruitmentId, chatRoomId] as const,
+    [...teamQueryKeys.chatRoot, 'messages', getViewerScope(token), recruitmentId, chatRoomId] as const,
   chatMessages: (token: string, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest) =>
     [...teamQueryKeys.chatMessagesRoot(token, recruitmentId, chatRoomId), params] as const,
 };

@@ -40,8 +40,12 @@ const prefetchBaseTimetableData = async (queryClient: QueryClient) => {
   ]);
 };
 
-const setDefaultTimetableFrameList = (queryClient: QueryClient, semester = getRecentSemester()) => {
-  queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+const setDefaultTimetableFrameList = (
+  queryClient: QueryClient,
+  token?: string | null,
+  semester = getRecentSemester(),
+) => {
+  queryClient.setQueryData(timetableQueryKeys.frameList(semester, token), createDefaultTimetableFrameList());
 };
 
 async function prefetchTimetableData(
@@ -57,7 +61,7 @@ async function prefetchTimetableData(
     const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
     if (!semester) {
-      setDefaultTimetableFrameList(queryClient);
+      setDefaultTimetableFrameList(queryClient, token);
       await prefetchBaseTimetableData(queryClient);
 
       return;
@@ -72,7 +76,7 @@ async function prefetchTimetableData(
         throw error;
       }
 
-      setDefaultTimetableFrameList(queryClient, semester);
+      setDefaultTimetableFrameList(queryClient, token, semester);
       await prefetchBaseTimetableData(queryClient);
 
       return;
@@ -95,7 +99,11 @@ async function prefetchTimetableData(
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
     if (isAuthError) clearServerAuthCookies(context);
-    setDefaultTimetableFrameList(queryClient, getSemesterFromQuery(query.year, query.term) ?? getRecentSemester());
+    setDefaultTimetableFrameList(
+      queryClient,
+      token,
+      getSemesterFromQuery(query.year, query.term) ?? getRecentSemester(),
+    );
     await prefetchBaseTimetableData(queryClient);
   }
 }

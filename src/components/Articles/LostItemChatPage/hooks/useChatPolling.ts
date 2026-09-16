@@ -57,7 +57,7 @@ const useChatPolling = ({
   useEffect(() => {
     if (numericArticleId == null || numericChatroomId == null) return;
 
-    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId);
+    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token);
     const existing = queryClient.getQueryData(queryKey);
     if (existing) return;
 
@@ -66,13 +66,13 @@ const useChatPolling = ({
         queryClient.setQueryData(queryKey, cached);
       }
     });
-  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId]);
+  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId, token]);
 
   const { data: chatroomDetail } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
       ? articleQueries.lostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId),
+          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId, token),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -82,7 +82,7 @@ const useChatPolling = ({
     ...(defaultArticleId && defaultChatroomId && isOnline
       ? articleQueries.lostItemChatroomMessages(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -110,7 +110,7 @@ const useChatPolling = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
       });
     },
     onError: (error) => {
@@ -136,7 +136,7 @@ const useChatPolling = ({
         clearChatroomCache(numericArticleId, numericChatroomId);
       }
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomList,
+        queryKey: articleQueryKeys.lostItemChatroomList(token),
       });
     },
     onError: (error) => {
@@ -186,15 +186,15 @@ const useChatPolling = ({
 
   const invalidateChatroomList = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomList,
+      queryKey: articleQueryKeys.lostItemChatroomList(token),
     });
-  }, [queryClient]);
+  }, [queryClient, token]);
 
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
     });
-  }, [queryClient, defaultArticleId, defaultChatroomId]);
+  }, [queryClient, defaultArticleId, defaultChatroomId, token]);
 
   return {
     chatroomList,

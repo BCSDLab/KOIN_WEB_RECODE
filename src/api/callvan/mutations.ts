@@ -62,7 +62,7 @@ export const callvanMutations = {
   report: (queryClient: QueryClient, token: string, postId: number) =>
     mutationOptions({
       mutationFn: (data: CallvanReportRequest) => reportCallvanParticipant(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId, token) }),
     }),
 
   markAllNotificationsRead: (queryClient: QueryClient, token: string) =>
@@ -86,6 +86,6 @@ export const callvanMutations = {
   sendChat: (queryClient: QueryClient, token: string, postId: number) =>
     mutationOptions({
       mutationFn: (data: SendChatRequest) => sendCallvanChat(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId, token) }),
     }),
 };
