@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -127,9 +127,9 @@ export default function RecruitmentApplyPage() {
     });
   }, [existingProfile, methods]);
 
-  const goToFirstStep = useCallback(() => {
+  const goToFirstStep = () => {
     nextStep('기본 정보', { replace: true });
-  }, [nextStep]);
+  };
 
   useEffect(() => {
     if (!isReady || currentStep !== '지원서 작성') return;
@@ -139,7 +139,9 @@ export default function RecruitmentApplyPage() {
       showToast('warning', '기본 정보를 먼저 입력해주세요.');
       goToFirstStep();
     }
-  }, [isReady, currentStep, methods, goToFirstStep]);
+    // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, currentStep, methods]);
 
   const { mutate: upsertProfile, isPending: isProfilePending } = useUpsertTeamRecruitmentProfileMutation();
   const { mutate: submitApplication, isPending: isApplicationPending } = useMutation(

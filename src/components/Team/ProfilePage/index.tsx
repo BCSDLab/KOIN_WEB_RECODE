@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -144,9 +144,9 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
     },
   });
 
-  const goToFirstStep = useCallback(() => {
+  const goToFirstStep = () => {
     nextStep('기본 정보', { replace: true });
-  }, [nextStep]);
+  };
 
   useEffect(() => {
     if (!isReady || currentStep !== '지원서 작성') return;
@@ -156,7 +156,9 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
       showToast('warning', '기본 정보를 먼저 입력해주세요.');
       goToFirstStep();
     }
-  }, [isReady, currentStep, methods, goToFirstStep]);
+    // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, currentStep, methods]);
 
   // 저장/수정 버튼은 검증만 통과시키고, 실제 upsert는 확인 모달에서 승인해야 실행된다.
   // 작성 중인(draft) 활동 이력이 남아있으면 안 된다는 규칙은 profileFormSchema의 superRefine이 검증하므로,
