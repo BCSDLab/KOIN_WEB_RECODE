@@ -27,36 +27,46 @@ model: opus
 ## 출력
 
 `_workspace/01_planner_plan.md` 파일:
+
 ```markdown
 # 기능 구현 계획: [기능명]
 
 ## 개요
+
 [기능 설명 1~2줄]
 
 ## 브랜치
+
 - 베이스: develop
 - 브랜치명: feature/[name]
 
 ## 구현 파일 목록
+
 ### 신규 생성
+
 - src/api/[domain]/APIDetail.ts — [설명]
 - src/api/[domain]/entity.ts — [타입 정의]
 - ...
 
 ### 수정
+
 - src/pages/[path].tsx — [변경 내용]
 - ...
 
 ## API 설계
+
 [APIDetail.ts 클래스 설계]
 
 ## 컴포넌트 구조
+
 [컴포넌트 트리]
 
 ## 상태 관리 전략
+
 [React Query / Zustand 사용 결정]
 
 ## 참조 케이스
+
 [유사 기능 파일 경로]
 ```
 

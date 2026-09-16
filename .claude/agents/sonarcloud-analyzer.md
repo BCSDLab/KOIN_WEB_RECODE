@@ -28,6 +28,7 @@ SonarCloud에서 프로젝트 이슈를 조회하고, 수정 가능한 이슈를
 ## 출력
 
 `_workspace/01_analyzer_issues.json` 파일:
+
 ```json
 {
   "summary": {

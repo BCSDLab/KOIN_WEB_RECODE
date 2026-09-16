@@ -28,7 +28,7 @@ $white-check-icon-path: "../../../../../assets/svg/white-check-icon.svg";
   &:checked {
     background-color: #175c8e;
     border: none;
-    
+
     @include media.media-breakpoint(mobile) {
       background-color: #b611f5;
     }
