@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable import/no-duplicates */
+/* eslint-disable @next/next/no-img-element -- 이미지가 동적으로 바뀌고 크기·비율이 제각각이라 sizes/fill 설정 비용 대비 이득이 작음 */
 // NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
@@ -7,7 +6,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
+// FIXME: 이 프로젝트의 svg 웹팩 로더(@svgr/webpack)는 쿼리와 무관하게 항상 컴포넌트를 반환하므로,
+// 아래 DefaultPhotoUrl은 실제로는 문자열이 아니라 컴포넌트 참조다. addErrorImage에서 img.src에 대입하는
+// 용도로 쓰이고 있어 런타임에 의도한 동작을 하지 않을 가능성이 크다 (별도 확인/수정 필요).
+// eslint-disable-next-line import/no-duplicates -- 위 FIXME 참고, 문자열 URL을 얻으려던 의도였음
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
+// eslint-disable-next-line import/no-duplicates -- 위 FIXME 참고, 문자열 URL을 얻으려던 의도였음
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
