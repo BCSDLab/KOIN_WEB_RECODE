@@ -262,6 +262,7 @@ export default [
       'react/self-closing-comp': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-nested-ternary': 'error',
       'import/no-cycle': 'error',
       // react/jsx-key는 react.configs.recommended에 이미 포함되어 있어 별도로 켤 필요 없다 (기존에는 off로 꺼둔 상태였다).
       'react/no-array-index-key': 'error',
