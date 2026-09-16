@@ -99,11 +99,11 @@ export default function SemesterLectureListModal({
         ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
-    <span>{lecture.name}</span>,
-    <span>{lecture.professor ? lecture.professor : ''}</span>,
-    <span>{lecture.grades}</span>,
-    <span>{course}</span>,
-    <span>{}</span>,
+    <span key={`${lecture.code}-name`}>{lecture.name}</span>,
+    <span key={`${lecture.code}-professor`}>{lecture.professor ? lecture.professor : ''}</span>,
+    <span key={`${lecture.code}-grades`}>{lecture.grades}</span>,
+    <span key={`${lecture.code}-course`}>{course}</span>,
+    <span key={`${lecture.code}-empty`} />,
   ]);
 
   return (
@@ -169,7 +169,11 @@ export default function SemesterLectureListModal({
           </div>
         </div>
         <div className={styles['container__lecture-table']}>
-          <SemesterCourseTable tableData={tableData} hasProfessor={lectureStatus === '수강한 강의'} />
+          <SemesterCourseTable
+            tableData={tableData}
+            rowKeys={filteredLectureByLectureStatus.map((lecture) => lecture.code)}
+            hasProfessor={lectureStatus === '수강한 강의'}
+          />
         </div>
       </div>
     </div>

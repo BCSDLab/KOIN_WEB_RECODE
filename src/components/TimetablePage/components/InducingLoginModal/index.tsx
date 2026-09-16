@@ -31,7 +31,8 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
         </div>
         <div className={styles.container__detail}>
           {sentences.map((sentence, index) => (
-            <div>
+            // eslint-disable-next-line react/no-array-index-key -- 고정 문자열을 '.'로 분리한 정적 목록이라 재정렬/삽입이 없다.
+            <div key={index}>
               {sentence}
               {index < sentences.length - 1 && '.'}
             </div>

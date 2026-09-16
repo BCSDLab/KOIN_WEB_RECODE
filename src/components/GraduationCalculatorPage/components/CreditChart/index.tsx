@@ -62,6 +62,7 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
       <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
       <div className={styles['credit-chart__y-axis']}>
         {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map((credit, idx) => (
+          // eslint-disable-next-line react/no-array-index-key -- 고정된 13개 눈금의 정적 축이라 재정렬되지 않는다.
           <div key={`y-axis-${idx}`} className={styles['credit-chart__y-axis--value']}>
             <div>{credit}</div>
             <div className={styles['credit-chart__contour']} />

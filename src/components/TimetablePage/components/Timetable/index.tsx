@@ -202,6 +202,7 @@ function Timetable({
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
               // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
             />
           ))}
@@ -219,6 +220,7 @@ function Timetable({
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key
               key={`${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']
@@ -397,6 +399,7 @@ function Timetable({
                       ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                             gap: `${rowHeight / 5.5}px`,
                           }}
+                          // eslint-disable-next-line react/no-array-index-key -- start_time/end_time가 겹칠 수 있어 idx로 유일성을 보장한다.
                           key={`${idx}-${info.start_time}-${info.end_time}`}
                         >
                           <div
