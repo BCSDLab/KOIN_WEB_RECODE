@@ -6,5 +6,6 @@ node_modules/
 yarn.lock
 src/generated/
 analytics.events.json
+src/assets/lottie/
 public/sitemap*.xml
 public/robots.txt
