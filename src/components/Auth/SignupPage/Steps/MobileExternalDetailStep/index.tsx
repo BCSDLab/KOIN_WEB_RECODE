@@ -40,8 +40,8 @@ interface GeneralFormValues {
 
 function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const { control, getValues, handleSubmit, trigger } = useFormContext<GeneralFormValues>();
-  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
+  const nicknameControl = useWatch({ control, name: 'nickname' }) ?? '';
+  const loginId = useWatch({ control, name: 'login_id' }) ?? '';
 
   const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });

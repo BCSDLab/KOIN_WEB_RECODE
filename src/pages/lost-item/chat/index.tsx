@@ -96,7 +96,7 @@ function LostItemChatPage({ token }: { token: string }) {
     setInputValue('');
   };
 
-  const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const sendMessageToEnterKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       if (e.nativeEvent.isComposing) return;
       e.preventDefault();

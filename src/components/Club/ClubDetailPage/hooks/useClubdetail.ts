@@ -22,7 +22,7 @@ export default function useClubDetail(clubId: number, serverToken?: string | nul
 
   const { status: clubIntroductionEditStatus, mutateAsync: clubIntroductionEditMutateAsync } = useMutation({
     mutationFn: async (data: ClubIntroductionData) => {
-      await putClubInroduction(token, clubId!, data);
+      await putClubInroduction(token, clubId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clubQueries.detail(Number(clubId), token).queryKey });

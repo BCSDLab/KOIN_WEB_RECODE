@@ -21,7 +21,7 @@ export interface ArticleWithNew extends Article {
 }
 
 export function isArticleWithNew(article: Article | ArticleWithNew): article is ArticleWithNew {
-  return 'isNew' in article && typeof (article as ArticleWithNew).isNew === 'boolean';
+  return 'isNew' in article && typeof article.isNew === 'boolean';
 }
 
 export interface Attachment {

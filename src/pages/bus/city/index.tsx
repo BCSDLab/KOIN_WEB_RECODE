@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CityInfo, DirectionType } from 'api/bus/entity';
+import type { DirectionType } from 'api/bus/entity';
 import { busQueries } from 'api/bus/queries';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
@@ -44,7 +44,7 @@ export default function CityBusTimetable() {
       direction: selectedDirection,
     }),
     select: (response) => ({
-      info: response as CityInfo,
+      info: response,
       type: 'city' as const,
     }),
   });

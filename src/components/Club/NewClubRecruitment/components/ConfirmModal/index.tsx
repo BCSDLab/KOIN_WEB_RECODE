@@ -19,7 +19,7 @@ export default function ConfirmModal({ closeModal, onSubmit, onCancel, type = 'c
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     onSubmit();
     closeModal();
   };

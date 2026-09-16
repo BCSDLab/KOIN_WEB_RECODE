@@ -49,7 +49,7 @@ export default function FormCategory({ category, setCategory, isCategorySelected
                 [styles.category__button]: true,
                 [styles['category__button--selected']]: category === item,
               })}
-              onClick={() => handleCategoryClick(item as FindUserCategory)}
+              onClick={() => handleCategoryClick(item)}
             >
               {item}
             </button>

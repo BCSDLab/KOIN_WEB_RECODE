@@ -134,7 +134,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
   };
 
-  const escapeByheader = async (title: string) => {
+  const escapeByheader = (title: string) => {
     if (pathname === ROUTES.GraduationCalculator()) {
       logger.actionEventClick({
         team: 'USER',

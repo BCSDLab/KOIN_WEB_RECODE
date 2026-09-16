@@ -7,7 +7,7 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 
-export const getServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = (context: NextPageContext) => {
   const postId = Number(context.query?.postId);
   const userId = Number(context.query?.userId);
 

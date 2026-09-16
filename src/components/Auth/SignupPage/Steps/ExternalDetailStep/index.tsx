@@ -35,10 +35,10 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
 
   const { errors } = useFormState({ control });
 
-  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
+  const loginId = useWatch({ control, name: 'login_id' }) ?? '';
   const passwordCheck = useWatch({ control, name: 'password_check' });
-  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const emailControl = (useWatch({ control, name: 'email' }) ?? '') as string;
+  const nicknameControl = useWatch({ control, name: 'nickname' }) ?? '';
+  const emailControl = useWatch({ control, name: 'email' }) ?? '';
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
   const [isCorrectNickname, setIsCorrectNickname, setInCorrectNickname] = useBooleanState(false);
