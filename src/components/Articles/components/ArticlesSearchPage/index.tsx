@@ -62,6 +62,35 @@ export default function ArticlesSearchPage() {
     submitSearch(keyword);
   };
 
+  const renderContent = () => {
+    if (!hasSearched) {
+      return (
+        <>
+          <HotSearchKeywords keywords={hotKeywordData?.keywords ?? []} onKeywordClick={handleKeywordSelect} />
+          <RecentSearchKeywords
+            keywords={recentKeywords}
+            onKeywordClick={handleKeywordSelect}
+            onKeywordRemove={removeKeyword}
+            onClearAll={clearKeywords}
+          />
+        </>
+      );
+    }
+
+    if (isSearchLoading) return null;
+
+    if (!hasResults) return <ArticlesSearchEmptyState />;
+
+    return (
+      <ArticlesSearchResultList
+        articles={searchResultArticles}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
+    );
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.page__header}>
@@ -102,30 +131,7 @@ export default function ArticlesSearchPage() {
         </div>
       </div>
 
-      <div className={styles.page__content}>
-        {hasSearched ? (
-          isSearchLoading ? null : hasResults ? (
-            <ArticlesSearchResultList
-              articles={searchResultArticles}
-              hasNextPage={hasNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              onLoadMore={() => fetchNextPage()}
-            />
-          ) : (
-            <ArticlesSearchEmptyState />
-          )
-        ) : (
-          <>
-            <HotSearchKeywords keywords={hotKeywordData?.keywords ?? []} onKeywordClick={handleKeywordSelect} />
-            <RecentSearchKeywords
-              keywords={recentKeywords}
-              onKeywordClick={handleKeywordSelect}
-              onKeywordRemove={removeKeyword}
-              onClearAll={clearKeywords}
-            />
-          </>
-        )}
-      </div>
+      <div className={styles.page__content}>{renderContent()}</div>
     </div>
   );
 }

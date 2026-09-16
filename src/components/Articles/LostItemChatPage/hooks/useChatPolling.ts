@@ -40,12 +40,14 @@ const useChatPolling = ({
     refetchIntervalInBackground: false,
   });
 
-  const matchedRoom =
-    chatroomId != null
-      ? chatroomList?.find((room) => room.chat_room_id === Number(chatroomId))
-      : autoSelectFirst
-        ? chatroomList?.[0]
-        : undefined;
+  const findMatchedRoom = () => {
+    if (chatroomId != null) return chatroomList?.find((room) => room.chat_room_id === Number(chatroomId));
+    if (autoSelectFirst) return chatroomList?.[0];
+
+    return undefined;
+  };
+
+  const matchedRoom = findMatchedRoom();
 
   const defaultChatroomId = chatroomId ?? matchedRoom?.chat_room_id ?? null;
   const defaultArticleId = articleId ?? matchedRoom?.article_id ?? null;

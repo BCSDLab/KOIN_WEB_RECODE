@@ -27,8 +27,14 @@ interface FormState {
   maxParticipants: number;
 }
 
+function to24Hour(hour: number, isPM: boolean): number {
+  if (isPM) return hour === 12 ? 12 : hour + 12;
+
+  return hour === 12 ? 0 : hour;
+}
+
 function formatTime(hour: number, minute: number, isPM: boolean): string {
-  const hour24 = isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour;
+  const hour24 = to24Hour(hour, isPM);
 
   return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 }

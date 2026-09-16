@@ -166,11 +166,19 @@ function ProfilePageContent() {
   const title = isLoggedIn ? userName || '정보를 입력해주세요.' : '로그인을 해주세요.';
   const subtitle = isStudent ? userInfo.student_number || '학번 정보 없음' : userInfo?.login_id;
   const actions = getProfileMenus(isLoggedIn);
-  const handleProfileMenuActionClick = (action: ProfileMenuItem) => {
-    const eventLabel =
-      action.title === '로그인' ? 'home_login' : action.title === '로그아웃' ? 'home_logout' : 'home_settings';
+  const getProfileMenuEventLabel = (actionTitle: string) => {
+    if (actionTitle === '로그인') return 'home_login';
+    if (actionTitle === '로그아웃') return 'home_logout';
 
-    logger.actionEventClick({ team: 'CAMPUS', event_label: eventLabel, value: action.title });
+    return 'home_settings';
+  };
+
+  const handleProfileMenuActionClick = (action: ProfileMenuItem) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: getProfileMenuEventLabel(action.title),
+      value: action.title,
+    });
   };
 
   return (
