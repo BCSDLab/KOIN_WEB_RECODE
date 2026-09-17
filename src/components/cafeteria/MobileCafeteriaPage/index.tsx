@@ -3,7 +3,7 @@ import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import { DiningType } from 'api/dinings/entity';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';

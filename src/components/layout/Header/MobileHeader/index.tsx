@@ -88,7 +88,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const useLightHeader = isClubRoute || isArticleRoute;
+  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
+  const useLightHeader = isClubRoute || isArticleRoute || isCafeteriaRoute;
 
   return (
     <>
