@@ -44,6 +44,14 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
               <div className={styles.category__type}>
                 <div className={styles['category__type--title']}>
                   {dining.place}
+                  {dining.soldout_at && (
+                    <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>
+                  )}
+                  {!dining.soldout_at && dining.changed_at && (
+                    <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>
+                  )}
+                </div>
+                <div className={styles.category__details}>
                   <div className={styles.category__calorie}>
                     {!!dining.kcal && `${dining.kcal}Kcal`}
                     {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
@@ -53,12 +61,6 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                     {!!dining.price_card && ` ${dining.price_card}원`}
                   </div>
                 </div>
-                {dining.soldout_at && (
-                  <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>
-                )}
-                {!dining.soldout_at && dining.changed_at && (
-                  <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>
-                )}
               </div>
             </div>
             <li className={styles['category__menu-list']}>
