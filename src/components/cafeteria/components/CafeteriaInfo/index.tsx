@@ -56,22 +56,25 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
     <div className={styles.background} aria-hidden ref={backgroundRef}>
       <div className={styles.box}>
         {isMobile && (
-          <>
-            <div className={styles.division} />
-            <div className={styles['mobile-header']}>
-              <button type="button" aria-label="닫기 버튼" onClick={closeInfo}>
-                <BlackArrowBackIcon />
-              </button>
-              <span className={styles['mobile-header__title']}>학생식당정보</span>
-            </div>
-          </>
+          <div className={styles['mobile-header']}>
+            <button type="button" aria-label="닫기 버튼" onClick={closeInfo}>
+              <BlackArrowBackIcon />
+            </button>
+            <span className={styles['mobile-header__title']}>학생식당정보</span>
+          </div>
         )}
         <div className={styles.header}>
           <div className={styles.header__title}>
             <span className={styles.header__main}>
-              {cafeteriaInfo.name}
-              &nbsp;
-              {cafeteriaInfo.semester} 중 운영시간
+              {isMobile ? (
+                <>
+                  {cafeteriaInfo.semester}&nbsp;{cafeteriaInfo.name} 운영시간
+                </>
+              ) : (
+                <>
+                  {cafeteriaInfo.name}&nbsp;{cafeteriaInfo.semester} 중 운영시간
+                </>
+              )}
             </span>
             <span className={styles.header__sub}>
               <span className={styles['header__sub--bold']}>위치</span>
@@ -86,9 +89,10 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
             <CloseIcon />
           </button>
         </div>
+        {isMobile && <div className={styles.division} />}
 
         <ScheduleTable title="평일" schedules={weekday} />
-        <ScheduleTable title="토요일" schedules={weekend} />
+        <ScheduleTable title={isMobile ? '주말' : '토요일'} schedules={weekend} />
 
         <div className={styles.update}>
           {cafeteriaInfo.updated_at.split('-').join('.')}
