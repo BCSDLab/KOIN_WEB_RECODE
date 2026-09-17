@@ -1,21 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { coopshopQueries } from 'api/coopshop/queries';
 import { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
-import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
+import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import CafeteriaInfoWidget from './components/CafeteriaInfoWidget';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -25,19 +20,7 @@ export default function MobileCafeteriaPage() {
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
-  const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
-  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
-  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-  useBodyScrollLock(isCafeteriaInfoOpen);
-
-  useEffect(() => {
-    setButtonContent(
-      <button type="button" aria-label="학생식당 운영 정보 안내" onClick={openCafeteriaInfo}>
-        <InformationIcon />
-      </button>,
-    );
-  }, [setButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[dining] });
@@ -102,14 +85,9 @@ export default function MobileCafeteriaPage() {
         <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
-      <div
-        className={cn({
-          [styles['cafeteria-info']]: true,
-          [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
-        })}
-      >
-        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />
-      </div>
+      <CafeteriaInfoBoundary>
+        <CafeteriaInfoWidget />
+      </CafeteriaInfoBoundary>
     </>
   );
 }

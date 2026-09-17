@@ -1,12 +1,9 @@
 import { cn } from '@bcsdlab/utils';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { coopshopQueries } from 'api/coopshop/queries';
-import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
-import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
+import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import CafeteriaInfoTrigger from './components/CafeteriaInfoTrigger';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -41,14 +38,8 @@ const generateWeek = (today: Date) => {
 
 export default function DateNavigator() {
   const { date } = useCafeteriaParams();
-  const portalManager = useModalPortal();
-  const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
 
   const thisWeek = generateWeek(date.current());
-
-  const handleInformationClick = () => {
-    portalManager.open(() => <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />);
-  };
 
   return (
     <div className={styles.container}>
@@ -72,10 +63,9 @@ export default function DateNavigator() {
             <RightArrow />
           </button>
         </div>
-        <button type="button" className={styles.information} onClick={() => handleInformationClick()}>
-          <InformationIcon />
-          학생식당정보
-        </button>
+        <CafeteriaInfoBoundary>
+          <CafeteriaInfoTrigger />
+        </CafeteriaInfoBoundary>
       </div>
 
       <div className={styles.week}>
