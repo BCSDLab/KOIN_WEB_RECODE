@@ -1,17 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import { DiningType } from 'api/dinings/entity';
-import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
-import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
@@ -23,8 +19,6 @@ import styles from './MobileCafeteriaPage.module.scss';
 export default function MobileCafeteriaPage() {
   const { diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
-  const router = useRouter();
-  const sessionLogger = useSessionLogger();
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
@@ -61,15 +55,6 @@ export default function MobileCafeteriaPage() {
     };
   }, [logger, diningType]);
 
-  const handleDiningToStore = () => {
-    sessionLogger.actionSessionEvent({
-      event_label: 'dining_to_shop',
-      value: DINING_TYPE_MAP[diningType],
-      session_name: 'dining2shop',
-      session_lifetime_minutes: 30,
-    });
-    router.push('/store');
-  };
   useScrollToTop();
 
   return (
@@ -91,14 +76,6 @@ export default function MobileCafeteriaPage() {
         ))}
       </div>
       <div className={styles.blocks}>
-        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
-          <StoreCtaIcon />
-          <div className={styles['recommend-banner__text']}>
-            <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
-            <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
-          </div>
-          <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
-        </button>
         <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
