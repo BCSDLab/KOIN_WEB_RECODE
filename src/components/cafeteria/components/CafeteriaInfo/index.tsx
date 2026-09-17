@@ -47,7 +47,9 @@ interface CafeteriaInfoProps {
 
 export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInfoProps) {
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
-  const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '토요일');
+  const weekend = cafeteriaInfo.opens.filter((schedule) =>
+    ['주말', '토요일'].includes(schedule.day_of_week),
+  );
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
   useEscapeKeyDown({ onEscape: closeInfo });
   const isMobile = useMediaQuery();
