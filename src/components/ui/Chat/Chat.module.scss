@@ -261,7 +261,8 @@
   border-top: 1px solid #eee;
   background-color: #f5f5f5;
 
-  &__imageButton {
+  &__imageButton,
+  &__sendButton {
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -274,18 +275,20 @@
     background-color: #e4f2ff;
     cursor: pointer;
 
-    svg {
-      width: 20px;
-      height: 20px;
-
-      path {
-        fill: #10477a;
-      }
+    svg path {
+      fill: #10477a;
     }
 
     &:disabled {
       opacity: 0.4;
       cursor: default;
+    }
+  }
+
+  &__imageButton {
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -329,30 +332,9 @@
   }
 
   &__sendButton {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    padding: 0;
-    border: none;
-    border-radius: 12px;
-    background-color: #e4f2ff;
-    cursor: pointer;
-
     svg {
       width: 21px;
       height: 18px;
-
-      path {
-        fill: #10477a;
-      }
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: default;
     }
   }
 }

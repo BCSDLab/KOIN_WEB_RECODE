@@ -107,13 +107,6 @@
     gap: 12px;
     align-items: center;
   }
-
-  & > div:last-child {
-    color: #727272;
-    text-align: center;
-    font-size: 14px;
-    line-height: 160%; /* 22.4px */
-  }
 }
 
 .chat-view--title {
@@ -198,12 +191,7 @@
   margin-bottom: 8px;
 }
 
-.message-button--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
+.message-button--disabled,
 button.image-button--disabled:disabled {
   opacity: 0.5;
   cursor: not-allowed;
