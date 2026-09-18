@@ -26,10 +26,6 @@ interface TeamChatRoomProps {
   chatRoomId: number;
 }
 
-interface ChatRoomSidebarListProps extends TeamChatRoomProps {
-  chatRooms: TeamChatRoomListItem[];
-}
-
 const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
@@ -37,35 +33,6 @@ const getChatRoomPreview = (room: TeamChatRoomListItem) => {
   if (room.last_message_is_image) return '사진을 보냈습니다.';
   return room.last_message_content ?? '';
 };
-
-function ChatRoomSidebarList({ chatRooms, recruitmentId, chatRoomId }: ChatRoomSidebarListProps) {
-  const items = chatRooms.map((room) => ({
-    key: `${room.recruitment_id}-${room.chat_room_id}`,
-    href: ROUTES.TeamChat({
-      recruitmentId: String(room.recruitment_id),
-      chatRoomId: String(room.chat_room_id),
-    }),
-    title: room.room_name,
-    timeLabel: room.last_message_at ? formatChatRoomListTime(room.last_message_at) : undefined,
-    preview: getChatRoomPreview(room),
-    unreadCount: room.unread_message_count,
-    avatar: <DefaultPhotoIcon />,
-    avatarAriaHidden: true,
-    isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
-  }));
-
-  return (
-    <ChatRoomList
-      items={items}
-      classNames={{
-        empty: styles.chat__empty,
-      }}
-      emptyContent="채팅방이 없습니다."
-      contentElement="span"
-      emptyElement="p"
-    />
-  );
-}
 
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {
   const token = useTokenState();
@@ -98,6 +65,21 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     }
   }, [lastMessageId]);
 
+  const sidebarItems = chatRooms.map((room) => ({
+    key: `${room.recruitment_id}-${room.chat_room_id}`,
+    href: ROUTES.TeamChat({
+      recruitmentId: String(room.recruitment_id),
+      chatRoomId: String(room.chat_room_id),
+    }),
+    title: room.room_name,
+    timeLabel: room.last_message_at ? formatChatRoomListTime(room.last_message_at) : undefined,
+    preview: getChatRoomPreview(room),
+    unreadCount: room.unread_message_count,
+    avatar: <DefaultPhotoIcon />,
+    avatarAriaHidden: true,
+    isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
+  }));
+
   const isReadOnly = chatRoom.status === 'READ_ONLY';
   const isTeamRoom = chatRoom.room_type === 'TEAM';
   const messageGroups = groupChatMessagesByDate(mergedMessages).map((group) => ({
@@ -109,7 +91,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       isMine: message.user_id === user?.id,
       content: message.content,
       isImage: message.is_image,
-      imageAlt: '전송된 이미지',
       timeLabel: formatChatTime(message.timestamp),
       unreadCount: message.unread_count,
       showSender: index === 0 || group.messages[index - 1].user_id !== message.user_id,
@@ -208,7 +189,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       className={styles.chat}
       sidebarClassName={styles.chat__sidebar}
       panelClassName={styles.chatRoom}
-      sidebar={<ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />}
+      sidebar={<ChatRoomList items={sidebarItems} classNames={{ empty: styles.chat__empty }} />}
     >
       <div className={styles.chatRoom__mobileHeader}>
         <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
@@ -227,9 +208,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
             bubbleOthers: styles.chatRoom__bubble,
             imageBubble: styles.chatRoom__imageBubble,
           }}
-          wrapGroups
-          dateLabelElement="span"
-          senderNameElement="span"
         />
       </div>
       <TeamChatSendBar

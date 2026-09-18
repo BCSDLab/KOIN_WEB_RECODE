@@ -1,5 +1,4 @@
 import {
-  Fragment,
   useRef,
   type ChangeEvent,
   type Key,
@@ -32,9 +31,7 @@ interface ChatRoomListClassNames {
 interface ChatRoomListProps {
   items: ChatRoomListItem[];
   classNames?: ChatRoomListClassNames;
-  emptyContent: ReactNode;
-  contentElement?: 'div' | 'span';
-  emptyElement?: 'div' | 'p';
+  emptyContent?: ReactNode;
 }
 
 export interface ChatMessageListItem {
@@ -43,7 +40,6 @@ export interface ChatMessageListItem {
   isMine: boolean;
   content: string;
   isImage: boolean;
-  imageAlt: string;
   timeLabel: string;
   unreadCount?: number;
   showSender?: boolean;
@@ -69,10 +65,6 @@ interface ChatMessageListClassNames {
 interface ChatMessageListProps {
   groups: ChatMessageListGroup[];
   classNames?: ChatMessageListClassNames;
-  wrapGroups?: boolean;
-  bubbleElement?: 'div' | 'span';
-  dateLabelElement?: 'div' | 'span';
-  senderNameElement?: 'div' | 'span';
 }
 
 interface ChatMessageInputClassNames {
@@ -138,12 +130,10 @@ export function ChatLayout({
 export function ChatRoomList({
   items,
   classNames = {},
-  emptyContent,
-  contentElement: ContentElement = 'div',
-  emptyElement: EmptyElement = 'div',
+  emptyContent = '채팅방이 없습니다.',
 }: ChatRoomListProps) {
   if (items.length === 0) {
-    return <EmptyElement className={joinClassNames(styles.roomList__empty, classNames.empty)}>{emptyContent}</EmptyElement>;
+    return <div className={joinClassNames(styles.roomList__empty, classNames.empty)}>{emptyContent}</div>;
   }
 
   return items.map((item) => (
@@ -154,21 +144,21 @@ export function ChatRoomList({
       aria-current={item.isActive ? 'page' : undefined}
       onClick={item.onClick}
     >
-      <ContentElement className={styles.roomList__avatar} aria-hidden={item.avatarAriaHidden}>
+      <div className={styles.roomList__avatar} aria-hidden={item.avatarAriaHidden}>
         {item.avatar}
-      </ContentElement>
-      <ContentElement className={styles.roomList__content}>
-        <ContentElement className={styles.roomList__header}>
-          <ContentElement className={styles.roomList__title}>{item.title}</ContentElement>
-          {item.timeLabel && <ContentElement className={styles.roomList__time}>{item.timeLabel}</ContentElement>}
-        </ContentElement>
-        <ContentElement className={styles.roomList__previewRow}>
-          <ContentElement className={styles.roomList__preview}>{item.preview}</ContentElement>
+      </div>
+      <div className={styles.roomList__content}>
+        <div className={styles.roomList__header}>
+          <div className={styles.roomList__title}>{item.title}</div>
+          {item.timeLabel && <div className={styles.roomList__time}>{item.timeLabel}</div>}
+        </div>
+        <div className={styles.roomList__previewRow}>
+          <div className={styles.roomList__preview}>{item.preview}</div>
           {item.unreadCount > 0 && (
-            <ContentElement className={styles.roomList__unreadCount}>{item.unreadCount}</ContentElement>
+            <div className={styles.roomList__unreadCount}>{item.unreadCount}</div>
           )}
-        </ContentElement>
-      </ContentElement>
+        </div>
+      </div>
     </Link>
   ));
 }
@@ -176,10 +166,6 @@ export function ChatRoomList({
 export function ChatMessageList({
   groups,
   classNames = {},
-  wrapGroups = false,
-  bubbleElement: BubbleElement = 'div',
-  dateLabelElement: DateLabelElement = 'div',
-  senderNameElement: SenderNameElement = 'div',
 }: ChatMessageListProps) {
   const renderMessage = (message: ChatMessageListItem) => {
     let bubbleClassName = message.isMine
@@ -188,18 +174,18 @@ export function ChatMessageList({
     if (message.isImage) bubbleClassName = joinClassNames(styles.messageList__imageBubble, classNames.imageBubble);
 
     const bubble = (
-      <BubbleElement className={bubbleClassName}>
+      <div className={bubbleClassName}>
         {message.isImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={message.content}
-            alt={message.imageAlt}
+            alt="전송된 이미지"
             className={joinClassNames(styles.messageList__image, classNames.image)}
           />
         ) : (
           message.content
         )}
-      </BubbleElement>
+      </div>
     );
 
     const metaContent = (
@@ -242,7 +228,7 @@ export function ChatMessageList({
         {message.showSender && (
           <div className={styles.messageList__sender}>
             {message.senderAvatar}
-            <SenderNameElement className={styles.messageList__senderName}>{message.senderName}</SenderNameElement>
+            <span className={styles.messageList__senderName}>{message.senderName}</span>
           </div>
         )}
         <div className={styles.messageList__row}>
@@ -253,24 +239,16 @@ export function ChatMessageList({
     );
   };
 
-  return groups.map((group) => {
-    const dateLabel = (
-      <DateLabelElement className={joinClassNames(styles.messageList__dateLabel, classNames.dateLabel)}>
-        {group.dateLabel}
-      </DateLabelElement>
-    );
-    const dateHeader = (
-      <div className={joinClassNames(styles.messageList__date, classNames.dateContainer)}>{dateLabel}</div>
-    );
-    const groupContent = (
-      <>
-        {dateHeader}
-        {group.messages.map(renderMessage)}
-      </>
-    );
-
-    return wrapGroups ? <div key={group.key}>{groupContent}</div> : <Fragment key={group.key}>{groupContent}</Fragment>;
-  });
+  return groups.map((group) => (
+    <div key={group.key}>
+      <div className={joinClassNames(styles.messageList__date, classNames.dateContainer)}>
+        <span className={joinClassNames(styles.messageList__dateLabel, classNames.dateLabel)}>
+          {group.dateLabel}
+        </span>
+      </div>
+      {group.messages.map(renderMessage)}
+    </div>
+  ));
 }
 
 export function ChatMessageInput({

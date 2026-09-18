@@ -157,7 +157,6 @@ function LostItemChatPage({ token }: { token: string }) {
       isMine: message.user_id === userInfo?.id,
       content: message.content,
       isImage: message.is_image,
-      imageAlt: '메세지 이미지',
       timeLabel,
       showSender,
       senderName: message.user_nickname || '익명',
@@ -241,7 +240,6 @@ function LostItemChatPage({ token }: { token: string }) {
                     classNames={{
                       image: styles['message-item--content-image'],
                     }}
-                    bubbleElement="span"
                   />
                 </div>
                 <div className={styles['chat-input-container-wrapper']}>
