@@ -53,7 +53,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   const isMobile = useMediaQuery();
 
   return (
-    <div className={styles.background} aria-hidden ref={backgroundRef}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.box}>
         {isMobile && (
           <div className={styles['mobile-header']}>
