@@ -94,7 +94,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
         {isMobile && <div className={styles.division} />}
 
         <ScheduleTable title="평일" schedules={weekday} />
-        <ScheduleTable title={isMobile ? '주말' : '토요일'} schedules={weekend} />
+        <ScheduleTable title="토요일" schedules={weekend} />
 
         <div className={styles.update}>
           {cafeteriaInfo.updated_at.split('-').join('.')}
