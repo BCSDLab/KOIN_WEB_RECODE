@@ -8,6 +8,8 @@ import {
   type RefObject,
 } from 'react';
 import Link from 'next/link';
+import ImageUploadIcon from 'assets/svg/common/chat-photo.svg';
+import SendIcon from 'assets/svg/common/chat-send.svg';
 import styles from './Chat.module.scss';
 
 interface ChatRoomListItem {
@@ -84,8 +86,6 @@ interface ChatMessageInputClassNames {
 
 interface ChatMessageInputProps {
   classNames?: ChatMessageInputClassNames;
-  imageIcon: ReactNode;
-  sendIcon: ReactNode;
   value: string;
   onChange: (value: string) => void;
   onSend: () => boolean | void;
@@ -93,13 +93,7 @@ interface ChatMessageInputProps {
   disabled?: boolean;
   placeholder?: string;
   fileInputRef?: RefObject<HTMLInputElement | null>;
-  imageControlElement?: 'button' | 'label';
-  imageInputId?: string;
   imageInputMultiple?: boolean;
-  imageControlAriaLabel?: string;
-  fileInputAriaLabel?: string;
-  textareaAriaLabel?: string;
-  sendButtonAriaLabel?: string;
 }
 
 interface ChatLayoutProps {
@@ -281,8 +275,6 @@ export function ChatMessageList({
 
 export function ChatMessageInput({
   classNames = {},
-  imageIcon,
-  sendIcon,
   value,
   onChange,
   onSend,
@@ -290,13 +282,7 @@ export function ChatMessageInput({
   disabled = false,
   placeholder = '메세지 보내기',
   fileInputRef,
-  imageControlElement = 'button',
-  imageInputId,
   imageInputMultiple = false,
-  imageControlAriaLabel,
-  fileInputAriaLabel,
-  textareaAriaLabel,
-  sendButtonAriaLabel,
 }: ChatMessageInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const internalFileInputRef = useRef<HTMLInputElement>(null);
@@ -330,55 +316,36 @@ export function ChatMessageInput({
     }
   };
 
-  const fileInput = (
-    <input
-      ref={resolvedFileInputRef}
-      id={imageInputId}
-      type="file"
-      accept="image/*"
-      multiple={imageInputMultiple}
-      className={styles.messageInput__file}
-      onChange={onImageChange}
-      disabled={disabled}
-      aria-label={fileInputAriaLabel}
-    />
-  );
-  const imageControlClassName = joinClassNames(
-    styles.messageInput__imageButton,
-    classNames.imageControl,
-    disabled && classNames.imageControlDisabled,
-  );
-  const imageControl =
-    imageControlElement === 'label' ? (
-      <div className={styles.messageInput__imageWrapper}>
-        <label htmlFor={imageInputId} className={imageControlClassName}>
-          {imageIcon}
-          {fileInput}
-        </label>
-      </div>
-    ) : (
-      <>
-        <button
-          type="button"
-          className={imageControlClassName}
-          aria-label={imageControlAriaLabel}
-          onClick={() => resolvedFileInputRef.current?.click()}
-          disabled={disabled}
-        >
-          {imageIcon}
-        </button>
-        {fileInput}
-      </>
-    );
-
   return (
     <div className={joinClassNames(styles.messageInput, classNames.container)}>
-      {imageControl}
+      <button
+        type="button"
+        className={joinClassNames(
+          styles.messageInput__imageButton,
+          classNames.imageControl,
+          disabled && classNames.imageControlDisabled,
+        )}
+        aria-label="이미지 전송"
+        onClick={() => resolvedFileInputRef.current?.click()}
+        disabled={disabled}
+      >
+        <ImageUploadIcon />
+      </button>
+      <input
+        ref={resolvedFileInputRef}
+        type="file"
+        accept="image/*"
+        multiple={imageInputMultiple}
+        className={styles.messageInput__file}
+        onChange={onImageChange}
+        disabled={disabled}
+        aria-label="이미지 파일 선택"
+      />
       <textarea
         ref={textareaRef}
         className={joinClassNames(styles.messageInput__textarea, classNames.textarea)}
         placeholder={placeholder}
-        aria-label={textareaAriaLabel}
+        aria-label="메시지 입력"
         rows={1}
         value={value}
         onChange={handleChange}
@@ -388,11 +355,11 @@ export function ChatMessageInput({
       <button
         type="button"
         className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
-        aria-label={sendButtonAriaLabel}
+        aria-label="전송"
         onClick={handleSend}
         disabled={disabled}
       >
-        {sendIcon}
+        <SendIcon />
       </button>
     </div>
   );

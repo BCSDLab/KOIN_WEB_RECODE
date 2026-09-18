@@ -1,6 +1,4 @@
 import { useState, type ChangeEvent } from 'react';
-import ImageUploadIcon from 'assets/svg/common/chat-photo.svg';
-import SendIcon from 'assets/svg/common/chat-send.svg';
 import { ChatMessageInput } from 'components/ui/Chat';
 import styles from './TeamChatSendBar.module.scss';
 
@@ -13,7 +11,7 @@ interface TeamChatSendBarProps {
 
 export default function TeamChatSendBar({
   disabled = false,
-  placeholder = '메세지 보내기',
+  placeholder,
   onSend,
   onImageSelect,
 }: TeamChatSendBarProps) {
@@ -39,17 +37,12 @@ export default function TeamChatSendBar({
         textarea: styles.sendBar__input,
         sendButton: styles.sendBar__sendButton,
       }}
-      imageIcon={<ImageUploadIcon />}
-      sendIcon={<SendIcon />}
       value={content}
       onChange={setContent}
       onSend={handleSend}
       onImageChange={handleFileChange}
       disabled={disabled}
       placeholder={placeholder}
-      imageControlAriaLabel="이미지 전송"
-      textareaAriaLabel="메시지 입력"
-      sendButtonAriaLabel="전송"
     />
   );
 }

@@ -9,8 +9,6 @@ import BlockIcon from 'assets/svg/Articles/block.svg';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
-import AddPhotoIcon from 'assets/svg/common/chat-photo.svg';
-import SendIcon from 'assets/svg/common/chat-send.svg';
 
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
@@ -253,12 +251,10 @@ function LostItemChatPage({ token }: { token: string }) {
                   <ChatMessageInput
                     classNames={{
                       container: styles['chat-input-container'],
-                      imageControlDisabled: styles['message-button--disabled'],
+                      imageControlDisabled: styles['image-button--disabled'],
                       textarea: styles['chat-input'],
                       sendButtonDisabled: styles['message-button--disabled'],
                     }}
-                    imageIcon={<AddPhotoIcon />}
-                    sendIcon={<SendIcon />}
                     value={inputValue}
                     onChange={setInputValue}
                     onSend={sendMessage}
@@ -266,13 +262,9 @@ function LostItemChatPage({ token }: { token: string }) {
                       void uploadImage();
                     }}
                     disabled={!isOnline}
-                    placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
+                    placeholder={isOnline ? undefined : '오프라인 상태입니다'}
                     fileInputRef={imgRef}
-                    imageControlElement="label"
-                    imageInputId="image-file"
                     imageInputMultiple
-                    fileInputAriaLabel="사진 전송"
-                    sendButtonAriaLabel="문자 전송"
                   />
                 </div>
               </>
