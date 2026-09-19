@@ -191,13 +191,7 @@ function LostItemChatPage({ token }: { token: string }) {
         panelClassName={styles['chat-view']}
         sidebar={
           showList && (
-            <ChatRoomList
-              items={chatRoomItems}
-              classNames={{
-                empty: styles.chat__empty,
-              }}
-              emptyContent="채팅방이 없습니다.🧐"
-            />
+            <ChatRoomList items={chatRoomItems} />
           )
         }
       >

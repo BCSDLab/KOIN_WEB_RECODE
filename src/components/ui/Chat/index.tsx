@@ -24,14 +24,8 @@ interface ChatRoomListItem {
   onClick?: () => void;
 }
 
-interface ChatRoomListClassNames {
-  empty?: string;
-}
-
 interface ChatRoomListProps {
   items: ChatRoomListItem[];
-  classNames?: ChatRoomListClassNames;
-  emptyContent?: ReactNode;
 }
 
 export interface ChatMessageListItem {
@@ -125,13 +119,9 @@ export function ChatLayout({
   );
 }
 
-export function ChatRoomList({
-  items,
-  classNames = {},
-  emptyContent = '채팅방이 없습니다.',
-}: ChatRoomListProps) {
+export function ChatRoomList({ items }: ChatRoomListProps) {
   if (items.length === 0) {
-    return <div className={joinClassNames(styles.roomList__empty, classNames.empty)}>{emptyContent}</div>;
+    return <div className={styles.roomList__empty}>채팅방이 없습니다.🧐</div>;
   }
 
   return items.map((item) => (

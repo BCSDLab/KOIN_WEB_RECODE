@@ -189,7 +189,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       className={styles.chat}
       sidebarClassName={styles.chat__sidebar}
       panelClassName={styles.chatRoom}
-      sidebar={<ChatRoomList items={sidebarItems} classNames={{ empty: styles.chat__empty }} />}
+      sidebar={<ChatRoomList items={sidebarItems} />}
     >
       <div className={styles.chatRoom__mobileHeader}>
         <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
