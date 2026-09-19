@@ -81,14 +81,18 @@ function LostItemChatPage({ token }: { token: string }) {
 
       const imageUrlList = await saveImgFile();
       for (const imageUrl of imageUrlList) {
-        await sendChatMessageAsync({ content: imageUrl, isImage: true });
+        try {
+          await sendChatMessageAsync({ content: imageUrl, isImage: true });
+        } catch {
+          continue;
+        }
       }
     } catch (error) {
       if (error instanceof UploadError) {
         showToast('error', error.message);
       }
     }
-  }
+  };
 
   const sendMessage = () => {
     if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
@@ -98,7 +102,7 @@ function LostItemChatPage({ token }: { token: string }) {
     sendChatMessage({ content: inputValue });
     setInputValue('');
     return true;
-  }
+  };
 
   const addErrorImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = DefaultPhotoUrl;
@@ -189,11 +193,7 @@ function LostItemChatPage({ token }: { token: string }) {
         className={styles['chat-container']}
         sidebarClassName={styles['chat-list']}
         panelClassName={styles['chat-view']}
-        sidebar={
-          showList && (
-            <ChatRoomList items={chatRoomItems} />
-          )
-        }
+        sidebar={showList && <ChatRoomList items={chatRoomItems} />}
       >
         {showDetail && (
           <>
