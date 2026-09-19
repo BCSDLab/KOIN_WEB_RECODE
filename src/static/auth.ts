@@ -82,6 +82,7 @@ export const INQUIRY_URL = 'https://open.kakao.com/o/sgiYx4Qg';
 export const STORAGE_KEY = {
   USER_INFO_COMPLETION: 'isUserInfoComplete',
   MODAL_SESSION_SHOWN: 'userInfoModalShown',
+  FOUND_LOGIN_ID: 'foundLoginId',
 } as const;
 
 export const COMPLETION_STATUS = {

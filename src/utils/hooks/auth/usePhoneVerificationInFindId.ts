@@ -6,9 +6,10 @@ import { useMutation } from '@tanstack/react-query';
 import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
 import type { SmsSendResponse } from 'api/auth/entity';
 import type { InputMessage } from 'interfaces/InputMessage';
-import { MESSAGES } from 'static/auth';
+import { MESSAGES, STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionStorage } from 'utils/hooks/state/useWebStorage';
 import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
 import showToast from 'utils/ts/showToast';
 
@@ -33,6 +34,7 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
+  const [, setFoundLoginId] = useSessionStorage<string | null>(STORAGE_KEY.FOUND_LOGIN_ID, null);
 
   const {
     isRunning: isTimer,
@@ -153,7 +155,8 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
   const { mutate: findId } = useMutation({
     mutationFn: idFindSms,
     onSuccess: ({ login_id }) => {
-      router.push(`${ROUTES.IDResult()}?userId=${login_id}`);
+      setFoundLoginId(login_id);
+      router.push(ROUTES.IDResult());
     },
   });
 
