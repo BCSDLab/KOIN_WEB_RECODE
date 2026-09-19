@@ -3,7 +3,7 @@ import type { APIResponse } from 'interfaces/APIResponse';
 export type Semester = '학기' | '하계방학' | '동계방학';
 
 export interface Opens {
-  day_of_week: string; // 요일 또는 평일, 주말, 공휴일 등
+  day_of_week: '평일' | '주말' | '토요일';
   type: '아침' | '점심' | '저녁' | null;
   open_time: string; // HH:mm
   close_time: string; // HH:mm
