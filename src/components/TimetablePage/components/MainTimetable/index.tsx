@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
-import { Lecture, MyLectureInfo, SemesterCheckResponse, TimetableFrameListResponse } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo, SemesterCheckResponse, TimetableFrameListResponse } from 'api/timetable/entity';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
@@ -13,13 +14,14 @@ import TotalGrades from 'components/TimetablePage/components/TotalGrades';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
-import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
+
 import DownloadTimetableModal from './DownloadTimetableModal';
 import styles from './MyLectureTimetable.module.scss';
 
@@ -37,12 +39,14 @@ function checkSemesterAndTimetable(
   frameList: TimetableFrameListResponse,
 ): boolean {
   if (mySemester?.semesters.length === 0) {
-    toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+    showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
+
     return false;
   }
 
   if (!frameList.some((frame) => isValidTimetableFrameId(frame.id))) {
-    toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+    showToast('error', '시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+
     return false;
   }
 
@@ -103,7 +107,9 @@ function InvalidMainTimetable() {
       myLectures={[]}
       onClickDownloadImage={onClickDownloadImage}
       onClickEdit={onClickEdit}
-      timetableContent={<TimetableGridPlaceholder columnWidth={140} firstColumnWidth={70} rowHeight={33} totalHeight={700} />}
+      timetableContent={
+        <TimetableGridPlaceholder columnWidth={140} firstColumnWidth={70} rowHeight={33} totalHeight={700} />
+      }
     />
   );
 }
@@ -136,7 +142,7 @@ function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: n
   const onClickEdit = () => {
     if (checkSemesterAndTimetable(mySemester, timeTableFrameList)) {
       router.push(
-        `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
+        `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };
@@ -148,7 +154,13 @@ function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: n
       onClickDownloadImage={onClickDownloadImage}
       onClickEdit={onClickEdit}
       timetableContent={
-        <Timetable timetableFrameId={timetableFrameId} columnWidth={140} firstColumnWidth={70} rowHeight={33} totalHeight={700} />
+        <Timetable
+          timetableFrameId={timetableFrameId}
+          columnWidth={140}
+          firstColumnWidth={70}
+          rowHeight={33}
+          totalHeight={700}
+        />
       }
       footer={isModalOpen && <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />}
     />

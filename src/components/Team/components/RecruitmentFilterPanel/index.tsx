@@ -1,29 +1,31 @@
 import { useEffect, useState } from 'react';
-import SpinIcon from 'assets/svg/Callvan/spin.svg';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
-import StatusBadge from 'components/Callvan/components/StatusBadge';
-import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
-import useLogger from 'utils/hooks/analytics/useLogger';
+
 import type {
   TeamRecruitmentCategory,
   TeamRecruitmentMeetingType,
   TeamRecruitmentSort,
   TeamRecruitmentStatusFilter,
 } from 'api/team/entity';
+import SpinIcon from 'assets/svg/Callvan/spin.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
+import StatusBadge from 'components/Callvan/components/StatusBadge';
+import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
+import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './RecruitmentFilterPanel.module.scss';
 
-export const TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS: Array<{ value: TeamRecruitmentStatusFilter; label: string }> = [
   { value: 'ALL', label: '전체' },
   { value: 'RECRUITING', label: '모집 중' },
   { value: 'CLOSED', label: '모집 완료' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: { value: TeamRecruitmentCategory; label: string }[] = [
+export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: Array<{ value: TeamRecruitmentCategory; label: string }> = [
   { value: 'CONTEST', label: '공모전' },
   { value: 'EXTERNAL_ACTIVITY', label: '대외활동' },
   { value: 'STUDY', label: '스터디' },
@@ -31,10 +33,10 @@ export const TEAM_RECRUITMENT_FILTER_CATEGORY_OPTIONS: { value: TeamRecruitmentC
   { value: 'OTHER', label: '기타' },
 ];
 
-export const TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS: {
+export const TEAM_RECRUITMENT_FILTER_MEETING_TYPE_OPTIONS: Array<{
   value: TeamRecruitmentMeetingType;
   label: string;
-}[] = [
+}> = [
   { value: 'ONLINE', label: '온라인' },
   { value: 'OFFLINE', label: '오프라인' },
   { value: 'MIXED', label: '온·오프라인' },
@@ -66,12 +68,7 @@ const copyFilter = (filter: TeamRecruitmentFilter): TeamRecruitmentFilter => ({
   categories: [...filter.categories],
 });
 
-export default function RecruitmentFilterPanel({
-  isOpen,
-  onClose,
-  filter,
-  onApply,
-}: RecruitmentFilterPanelProps) {
+export default function RecruitmentFilterPanel({ isOpen, onClose, filter, onApply }: RecruitmentFilterPanelProps) {
   return (
     <BottomModal
       isOpen={isOpen}
@@ -85,11 +82,7 @@ export default function RecruitmentFilterPanel({
   );
 }
 
-function RecruitmentFilterPanelContent({
-  onClose,
-  filter,
-  onApply,
-}: Omit<RecruitmentFilterPanelProps, 'isOpen'>) {
+function RecruitmentFilterPanelContent({ onClose, filter, onApply }: Omit<RecruitmentFilterPanelProps, 'isOpen'>) {
   const logger = useLogger();
   const [draftFilter, setDraftFilter] = useState<TeamRecruitmentFilter>(() => copyFilter(filter));
 
@@ -99,6 +92,7 @@ function RecruitmentFilterPanelContent({
     };
 
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
@@ -154,16 +148,16 @@ function RecruitmentFilterPanelContent({
   return (
     <>
       <BottomModalHeader className={styles.header}>
-        <span className={styles.headerTitle}>필터</span>
-        <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
+        <span className={styles['header-title']}>필터</span>
+        <button type="button" className={styles['close-button']} onClick={onClose} aria-label="필터 닫기">
           <CloseIcon />
         </button>
       </BottomModalHeader>
 
       <BottomModalContent className={styles.content}>
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>모집 상태</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>모집 상태</h3>
+          <div className={styles['section-badges']}>
             {TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
@@ -176,8 +170,8 @@ function RecruitmentFilterPanelContent({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>정렬</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>정렬</h3>
+          <div className={styles['section-badges']}>
             {TEAM_RECRUITMENT_FILTER_SORT_OPTIONS.map((option) => (
               <StatusBadge
                 key={option.value}
@@ -190,8 +184,8 @@ function RecruitmentFilterPanelContent({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>카테고리</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>카테고리</h3>
+          <div className={styles['section-badges']}>
             <StatusBadge
               label="전체"
               isActive={draftFilter.categories.length === 0}
@@ -209,8 +203,8 @@ function RecruitmentFilterPanelContent({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>진행 방식</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>진행 방식</h3>
+          <div className={styles['section-badges']}>
             <StatusBadge
               label="전체"
               isActive={draftFilter.meetingType === undefined}
@@ -229,11 +223,11 @@ function RecruitmentFilterPanelContent({
       </BottomModalContent>
 
       <BottomModalFooter className={styles.footer}>
-        <button type="button" className={styles.resetButton} onClick={handleReset}>
+        <button type="button" className={styles['reset-button']} onClick={handleReset}>
           초기화
           <SpinIcon />
         </button>
-        <button type="button" className={styles.applyButton} onClick={handleApply}>
+        <button type="button" className={styles['apply-button']} onClick={handleApply}>
           적용하기
         </button>
       </BottomModalFooter>

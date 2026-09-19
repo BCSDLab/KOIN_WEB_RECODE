@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
@@ -18,7 +20,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
-import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
+
 import styles from './TeamChatRoom.module.scss';
 
 interface TeamChatRoomProps {
@@ -35,6 +37,7 @@ const BOTTOM_STICK_THRESHOLD = 80;
 
 const getChatRoomPreview = (room: TeamChatRoomListItem) => {
   if (room.last_message_is_image) return '사진을 보냈습니다.';
+
   return room.last_message_content ?? '';
 };
 
@@ -112,8 +115,8 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const memberCount = isTeamRoom ? (
     <span
       className={cn({
-        [styles.chatRoom__memberCount]: true,
-        [styles['chatRoom__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
+        [styles['chat-room__memberCount']]: true,
+        [styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
       })}
     >
       <PeopleIcon />
@@ -192,22 +195,22 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
         <ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />
       </aside>
 
-      <section className={styles.chatRoom}>
-        <div className={styles.chatRoom__mobileHeader}>
+      <section className={styles['chat-room']}>
+        <div className={styles['chat-room__mobileHeader']}>
           <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
         </div>
-        <div className={styles.chatRoom__desktopHeader}>
+        <div className={styles['chat-room__desktopHeader']}>
           <h2>{chatRoom.room_name}</h2>
           {memberCount}
         </div>
-        <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
+        <div ref={messagesContainerRef} className={styles['chat-room__messages']} onScroll={handleMessagesScroll}>
           {messageGroups.map((group) => (
             <div key={group.date}>
-              <div className={styles.chatRoom__dateChip}>
+              <div className={styles['chat-room__dateChip']}>
                 <span
                   className={cn({
-                    [styles.chatRoom__dateLabel]: true,
-                    [styles['chatRoom__dateLabel--today']]: group.isToday,
+                    [styles['chat-room__dateLabel']]: true,
+                    [styles['chat-room__dateLabel--today']]: group.isToday,
                   })}
                 >
                   {group.label}
@@ -218,16 +221,16 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
                 const isFirstOfSender = index === 0 || group.messages[index - 1].user_id !== message.user_id;
 
                 const bubble = message.is_image ? (
-                  <div className={styles.chatRoom__imageBubble}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <div className={styles['chat-room__imageBubble']}>
+                    {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
                     <img src={message.content} alt="전송된 이미지" />
                   </div>
                 ) : (
                   <div
                     className={cn({
-                      [styles.chatRoom__bubble]: true,
-                      [styles['chatRoom__bubble--mine']]: isMine,
-                      [styles['chatRoom__bubble--others']]: !isMine,
+                      [styles['chat-room__bubble']]: true,
+                      [styles['chat-room__bubble--mine']]: isMine,
+                      [styles['chat-room__bubble--others']]: !isMine,
                     })}
                   >
                     {message.content}
@@ -237,14 +240,14 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
                 const meta = (
                   <div
                     className={cn({
-                      [styles.chatRoom__meta]: true,
-                      [styles['chatRoom__meta--mine']]: isMine,
+                      [styles['chat-room__meta']]: true,
+                      [styles['chat-room__meta--mine']]: isMine,
                     })}
                   >
                     {message.unread_count > 0 && (
-                      <span className={styles.chatRoom__unreadCount}>{message.unread_count}</span>
+                      <span className={styles['chat-room__unreadCount']}>{message.unread_count}</span>
                     )}
-                    <span className={styles.chatRoom__time}>{formatChatTime(message.timestamp)}</span>
+                    <span className={styles['chat-room__time']}>{formatChatTime(message.timestamp)}</span>
                   </div>
                 );
 
@@ -252,7 +255,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
                   return (
                     <div
                       key={message.message_id}
-                      className={styles['chatRoom__messageRow--mine']}
+                      className={styles['chat-room__messageRow--mine']}
                       data-message-id={message.message_id}
                     >
                       {meta}
@@ -265,23 +268,23 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
                   <div
                     key={message.message_id}
                     className={cn({
-                      [styles.chatRoom__messageGroup]: true,
-                      [styles['chatRoom__messageGroup--consecutive']]: !isFirstOfSender,
+                      [styles['chat-room__messageGroup']]: true,
+                      [styles['chat-room__messageGroup--consecutive']]: !isFirstOfSender,
                     })}
                     data-message-id={message.message_id}
                   >
                     {isFirstOfSender && (
-                      <div className={styles.chatRoom__sender}>
-                        <span className={styles.chatRoom__desktopSenderIcon} aria-hidden="true">
+                      <div className={styles['chat-room__sender']}>
+                        <span className={styles['chat-room__desktopSenderIcon']} aria-hidden="true">
                           <WebChatIcon />
                         </span>
-                        <span className={styles.chatRoom__mobileSenderIcon} aria-hidden="true">
+                        <span className={styles['chat-room__mobileSenderIcon']} aria-hidden="true">
                           <ChatAvatarIcon />
                         </span>
-                        <span className={styles.chatRoom__senderName}>{message.user_nickname}</span>
+                        <span className={styles['chat-room__senderName']}>{message.user_nickname}</span>
                       </div>
                     )}
-                    <div className={styles['chatRoom__messageRow--others']}>
+                    <div className={styles['chat-room__messageRow--others']}>
                       {bubble}
                       {meta}
                     </div>
@@ -291,11 +294,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
             </div>
           ))}
         </div>
-        <TeamChatSendBar
-          disabled={isSending || isUploading}
-          onSend={handleSend}
-          onImageSelect={handleImageSelect}
-        />
+        <TeamChatSendBar disabled={isSending || isUploading} onSend={handleSend} onImageSelect={handleImageSelect} />
       </section>
     </div>
   );

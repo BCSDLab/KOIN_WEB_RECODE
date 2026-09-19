@@ -20,6 +20,7 @@ function useTeamFormStep<T extends string>(
 
     if (options?.replace) {
       router.replace(href);
+
       return;
     }
     router.push(href);
@@ -30,6 +31,7 @@ function useTeamFormStep<T extends string>(
 
     if (currentIndex > 0) {
       nextStep(steps[currentIndex - 1]);
+
       return;
     }
     onExitFirstStep();

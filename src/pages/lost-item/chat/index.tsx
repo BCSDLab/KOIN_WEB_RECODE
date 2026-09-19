@@ -1,18 +1,18 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable import/no-duplicates */
-// NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
-// next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
+/* eslint-disable @next/next/no-img-element -- 이미지가 동적으로 바뀌고 크기·비율이 제각각이라 sizes/fill 설정 비용 대비 이득이 작음 */
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
+// FIXME: svg 웹팩 로더가 쿼리와 무관하게 항상 컴포넌트를 반환해, addErrorImage의 img.src에 대입되는
+// 아래 DefaultPhotoUrl은 실제로는 문자열이 아닐 수 있다 (별도 확인 필요).
+// eslint-disable-next-line import/no-duplicates -- 위 FIXME 참고, 문자열 URL을 얻으려던 의도였음
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
+// eslint-disable-next-line import/no-duplicates -- 위 FIXME 참고, 문자열 URL을 얻으려던 의도였음
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import SendIcon from 'assets/svg/Articles/send.svg';
-
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
@@ -31,6 +31,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
+
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
@@ -72,6 +73,7 @@ function LostItemChatPage({ token }: { token: string }) {
     try {
       if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
+
         return;
       }
 
@@ -84,7 +86,7 @@ function LostItemChatPage({ token }: { token: string }) {
         showToast('error', error.message);
       }
     }
-  }
+  };
 
   const sendMessage = () => {
     if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
@@ -93,9 +95,9 @@ function LostItemChatPage({ token }: { token: string }) {
 
     sendChatMessage({ content: inputValue });
     setInputValue('');
-  }
+  };
 
-  const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const sendMessageToEnterKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       if (e.nativeEvent.isComposing) return;
       e.preventDefault();
@@ -154,25 +156,25 @@ function LostItemChatPage({ token }: { token: string }) {
                   onClick={() => logMessageListSelcetClick()}
                 >
                   {lost_item_image_url ? (
-                    <div className={styles['chat-list--item--profile']}>
+                    <div className={styles['chat-list--item-profile']}>
                       <img
                         src={lost_item_image_url}
                         alt="분실물 이미지"
-                        className={styles['chat-list--item--image']}
+                        className={styles['chat-list--item-image']}
                         onError={addErrorImage}
                       />
                     </div>
                   ) : (
-                    <div className={styles['chat-list--item--profile']}>
+                    <div className={styles['chat-list--item-profile']}>
                       <DefaultPhotoIcon />
                     </div>
                   )}
-                  <div className={styles['chat-list--item--content']}>
-                    <div className={styles['chat-list--item--title']}>
+                  <div className={styles['chat-list--item-content']}>
+                    <div className={styles['chat-list--item-title']}>
                       <div>{article_title}</div>
-                      <div className={styles['chat-list--item--date']}>{formatDate(last_message_at)}</div>
+                      <div className={styles['chat-list--item-date']}>{formatDate(last_message_at)}</div>
                     </div>
-                    <div className={styles['chat-list--item--description']}>
+                    <div className={styles['chat-list--item-description']}>
                       <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
                       {unread_message_count !== 0 && (
                         <div className={styles['chat-list--message-count']}>{unread_message_count}</div>
@@ -202,11 +204,11 @@ function LostItemChatPage({ token }: { token: string }) {
                       <img
                         src={chatroomDetail.chat_partner_profile_image}
                         alt="분실물 이미지"
-                        className={styles['chat-list--item--profile']}
+                        className={styles['chat-list--item-profile']}
                         onError={addErrorImage}
                       />
                     ) : (
-                      <div className={styles['chat-list--item--profile']}>
+                      <div className={styles['chat-list--item-profile']}>
                         <DefaultPhotoIcon />
                       </div>
                     )}
@@ -229,11 +231,13 @@ function LostItemChatPage({ token }: { token: string }) {
 
                     return acc.concat(
                       (index === 0 || messageDate !== prevDate) && (
+                        // eslint-disable-next-line react/no-array-index-key -- 폴링으로 뒤에만 추가되는 시간순 고정 목록이라 안전하다.
                         <div key={`date-${index}`} className={styles['message-date-header']}>
                           {messageDate}
                         </div>
                       ),
                       isMe ? (
+                        // eslint-disable-next-line react/no-array-index-key -- 폴링으로 뒤에만 추가되는 시간순 고정 목록이라 안전하다.
                         <div key={`msg-${index}`} className={styles['message-item__right']}>
                           <span className={styles['message-item--time']}>{messageTime}</span>
                           <span className={styles['message-item--content__right']}>
@@ -248,6 +252,7 @@ function LostItemChatPage({ token }: { token: string }) {
                           </span>
                         </div>
                       ) : (
+                        // eslint-disable-next-line react/no-array-index-key -- 폴링으로 뒤에만 추가되는 시간순 고정 목록이라 안전하다.
                         <div key={`msg-${index}`} className={styles['message-item-container']}>
                           {(isSenderChanged || messageTime !== prevTime) && (
                             <div className={styles['message-item--header']}>

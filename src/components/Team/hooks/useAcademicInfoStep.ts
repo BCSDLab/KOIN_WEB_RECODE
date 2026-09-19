@@ -43,6 +43,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '회원정보를 불러오지 못했습니다.');
+
         return;
       }
       showToast('error', '회원정보를 불러오지 못했습니다.');
@@ -59,6 +60,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
 
     if (!token) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     loadUserInfo();
@@ -74,6 +76,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
+
         return;
       }
       showToast('error', '학적 정보 수정에 실패했습니다.');
@@ -84,6 +87,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleSaveAcademicInfo = (data: { department: string; studentNumber: string }) => {
     if (!token) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     saveAcademicInfo(data);

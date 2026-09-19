@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
+
 import styles from './FindIdEmailPage.module.scss';
 
 function FindIdEmailPage() {
@@ -60,6 +61,7 @@ function FindIdEmailPage() {
     stopTimer();
     setEmailMessage(null);
     setIncorrect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- email 변경 시에만 재실행 (나머지는 훅이 반환하는 안정적 함수)
   }, [email]);
 
   const onBack = () => {

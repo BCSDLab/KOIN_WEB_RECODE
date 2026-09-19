@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import ChevronLeft from 'assets/svg/Bus/chevron-left.svg';
 import ChevronRight from 'assets/svg/Bus/chevron-right.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './SelectDropdown.module.scss';
 
 interface Option {
@@ -14,7 +16,7 @@ interface Option {
 
 interface SelectDropdownProps {
   type: 'dayOfMonth' | 'hour' | 'minute';
-  options: Array<Option>;
+  options: Option[];
   selectedLabel: string;
   setSelectedLabel: (label: string) => void;
   setValue: (value: number) => void;
@@ -36,8 +38,10 @@ export default function SelectDropdown({
   const getCurrentOptionIndex = () => {
     if (type === 'minute') {
       const numericPart = parseInt(selectedLabel.replace(/\D/g, ''), 10); // 분 단위의 경우 '분'을 제외한 숫자만 추출
+
       return Math.floor(numericPart / 10);
     }
+
     return options.findIndex(({ label }) => label === selectedLabel);
   };
 

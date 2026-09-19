@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { ClubEventRequest } from 'api/club/entity';
+
+import type { ClubEventRequest } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import ImagesUploadSlider from 'components/Club/NewClubEvent/components/ImagesUploadSlider';
 import TimePicker from 'components/Club/NewClubEvent/components/TimePicker';
@@ -14,6 +15,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
+
 import styles from './NewClubEvent.module.scss';
 
 function NewClubEvent({ id }: { id: string }) {
@@ -61,6 +63,7 @@ function NewClubEvent({ id }: { id: string }) {
 
   function splitKoreanDate(date: Date): [string, string] {
     const [year, ...rest] = formatKoreanDate(date).split(' ');
+
     return [year, rest.join(' ')];
   }
 

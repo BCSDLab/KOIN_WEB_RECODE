@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
@@ -7,8 +8,10 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './ShuttleDetailPage.module.scss';
 
 function asString(value: string | string[]): string {
@@ -19,7 +22,7 @@ export default function ShuttleDetailPage() {
   const router = useRouter();
   const { routeId } = router.query;
 
-  const shuttleTimetableId = routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null;
+  const shuttleTimetableId = routeId ? asString(routeId) : null;
   const { data: shuttleTimetableDetail } = useQuery({
     ...busQueries.shuttleTimetableDetail(shuttleTimetableId),
     staleTime: 1000 * 60 * 10,
@@ -42,7 +45,10 @@ export default function ShuttleDetailPage() {
   return (
     <BusCoursePage>
       {/* 카테고리 버튼 */}
-      <ShuttleCategoryTabs category={category} onChange={(v) => router.replace(`/bus/shuttle?category=${v}`)} />
+      <ShuttleCategoryTabs
+        category={category}
+        onChange={(v) => router.replace(`${ROUTES.BusCourseShuttle()}?category=${v}`)}
+      />
 
       {shuttleTimetableDetail.route_info.length <= 2 && (
         <div className={styles['time-table-wrapper']}>
@@ -61,6 +67,7 @@ export default function ShuttleDetailPage() {
               <div className={styles['detail__button-wrapper']}>
                 {shuttleTimetableDetail.route_info.map(({ name }) => (
                   <button
+                    key={name}
                     type="button"
                     className={cn({
                       [styles.detail__button]: true,
@@ -87,6 +94,7 @@ export default function ShuttleDetailPage() {
             <div className={styles['detail__button-wrapper']}>
               {shuttleTimetableDetail.route_info.map(({ name }) => (
                 <button
+                  key={name}
                   type="button"
                   className={cn({
                     [styles.detail__button]: true,
@@ -120,8 +128,11 @@ export default function ShuttleDetailPage() {
                       {name}
                       {detail}
                     </div>
-                    {arrival_time.map((time) => (
-                      <div className={styles['time-table__time']}>{time ? time.split('/')[0] : time}</div>
+                    {arrival_time.map((time, index) => (
+                      // eslint-disable-next-line react/no-array-index-key -- 정류장 도착 시간의 고정 순서 배열이라 재정렬/삽입이 없다.
+                      <div key={index} className={styles['time-table__time']}>
+                        {time ? time.split('/')[0] : time}
+                      </div>
                     ))}
                   </React.Fragment>
                 ))}
@@ -166,7 +177,7 @@ export default function ShuttleDetailPage() {
           <div className={styles['time-table']} style={{ gridTemplateRows: `repeat(${rowLength}, 1fr)` }}>
             <div className={styles['time-table__number']}>승하차장명</div>
             {shuttleTimetableDetail.node_info.map(({ name, detail }) => (
-              <div className={`${styles['time-table__node']} ${styles['time-table__node--long']}`}>
+              <div key={name} className={`${styles['time-table__node']} ${styles['time-table__node--long']}`}>
                 <div>{name}</div>
                 {detail && <div className={styles['time-table__node-detail']}>{detail}</div>}
               </div>
@@ -179,8 +190,11 @@ export default function ShuttleDetailPage() {
                   <br />
                   {detail}
                 </div>
-                {arrival_time.map((time) => (
-                  <div className={styles['time-table__time']}>{time ? time.split('/')[0] : time}</div>
+                {arrival_time.map((time, index) => (
+                  // eslint-disable-next-line react/no-array-index-key -- 정류장 도착 시간의 고정 순서 배열이라 재정렬/삽입이 없다.
+                  <div key={index} className={styles['time-table__time']}>
+                    {time ? time.split('/')[0] : time}
+                  </div>
                 ))}
               </React.Fragment>
             ))}

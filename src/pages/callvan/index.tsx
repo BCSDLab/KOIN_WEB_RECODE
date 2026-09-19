@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
-import { CallvanListRequest } from 'api/callvan/entity';
+import type { CallvanListRequest } from 'api/callvan/entity';
 import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import CallvanList from 'components/Callvan/components/CallvanList';
 import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
-import { CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
+import { type CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
@@ -15,6 +16,7 @@ import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
 
 const DEFAULT_PARAMS: CallvanParams = {
@@ -80,8 +82,8 @@ function useCallvanParams(initialParams: CallvanParams): CallvanParams {
   const mounted = useMount();
 
   if (!mounted) return initialParams;
-  return parseCallvanQuery(router.query, DEFAULT_PARAMS);
 
+  return parseCallvanQuery(router.query, DEFAULT_PARAMS);
 }
 
 export default function CallvanPage({ initialParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -115,7 +117,7 @@ function CallvanContent({ params }: CallvanContentProps) {
     enabled: !!token,
   });
 
-  const posts = data?.pages.flatMap((page) => page.posts) ?? []
+  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 

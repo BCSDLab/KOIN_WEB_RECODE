@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
+
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClientProvider } from '@tanstack/react-query';
 import { pretendard } from 'assets/font';
 import Toast from 'components/feedback/Toast';
 import Layout from 'components/layout';
@@ -19,6 +20,7 @@ import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
+import { queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
 interface PageProps {
@@ -37,23 +39,12 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
   Component: NextPageWithAuth;
 };
 
-// React Query 클라이언트 설정
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnReconnect: true,
-      retry: false,
-      enabled: typeof window !== 'undefined',
-      staleTime: 60 * 1000, // 1 minutes
-    },
-  },
-});
-
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 function AutoLogin() {
   useAutoLogin();
+
   return null;
 }
 
@@ -80,11 +71,13 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
-  const pageTitle = !Component.title
-    ? undefined
-    : typeof Component.title === 'function'
-      ? Component.title(router.asPath)
-      : Component.title;
+  const getPageTitle = (): string | undefined => {
+    if (!Component.title) return undefined;
+
+    return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
+  };
+
+  const pageTitle = getPageTitle();
 
   // ios 브릿지
   useEffect(() => {

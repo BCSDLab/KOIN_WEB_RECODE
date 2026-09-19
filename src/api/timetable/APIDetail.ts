@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   Semester,
   SemestersResponse,
   LecturesResponse,
@@ -72,9 +73,7 @@ export class TimetableLectureInfo<R extends TimetableLectureInfoResponse> implem
 
   auth = true;
 
-  params: {
-    [index: string]: number;
-  };
+  params: Record<string, number>;
 
   constructor(
     public authorization: string,
@@ -259,9 +258,7 @@ export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implem
 
   auth = true;
 
-  params: {
-    [index: string]: number;
-  };
+  params: Record<string, number>;
 
   constructor(
     public authorization: string,

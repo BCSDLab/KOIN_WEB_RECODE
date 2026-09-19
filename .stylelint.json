@@ -1,7 +1,14 @@
 {
   "extends": ["stylelint-config-standard-scss"],
-  "plugin": ["stylelint-selector-bem-pattern"],
   "rules": {
-    "selector-class-pattern": null
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z][a-z0-9]*(-[a-z0-9]+)*)?(--[a-z][a-z0-9]*(-[a-z0-9]+)*)?$",
+      {
+        "message": "BEM kebab-case: block__element--modifier"
+      }
+    ],
+    "declaration-block-no-shorthand-property-overrides": true,
+    "function-no-unknown": true,
+    "no-unknown-animations": true
   }
 }

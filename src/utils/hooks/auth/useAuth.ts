@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { useMutation } from '@tanstack/react-query';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
 import { COOKIE_KEY } from 'static/url';
 import { getCookieDomain, setCookie } from 'utils/ts/cookie';
@@ -8,18 +9,21 @@ import { useTokenStore } from 'utils/zustand/auth';
 
 const useAuth = () => {
   const { setToken, setRefreshToken } = useTokenStore.getState();
+  const queryClient = useQueryClient();
 
   const getRefreshToken = useCallback(() => {
     const refreshTokenStorage = isomorphicLocalStorage.getJSONItem<{ state?: { refreshToken?: string } } | null>(
       'refresh-token-storage',
       null,
     );
+
     return refreshTokenStorage?.state?.refreshToken ?? null;
   }, []);
 
   const { mutateAsync: refreshAccessToken } = useMutation({
     mutationFn: async (refresh_token: string) => {
       const response = await refresh({ refresh_token });
+
       return response;
     },
     onSuccess: (response) => {
@@ -32,6 +36,7 @@ const useAuth = () => {
     onError: () => {
       setToken('');
       setRefreshToken('');
+      queryClient.clear();
     },
   });
 

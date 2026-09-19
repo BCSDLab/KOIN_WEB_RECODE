@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
+
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import ROUTES from 'static/routes';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { setRedirectPath } from 'utils/ts/auth';
+
 import styles from './LoginRequiredModal.module.scss';
 
 interface LoginRequiredProps {
@@ -13,6 +15,7 @@ interface LoginRequiredProps {
   onCancelClick?: () => void;
   enableRedirect?: boolean;
 }
+
 export default function LoginRequiredModal({
   title,
   description,

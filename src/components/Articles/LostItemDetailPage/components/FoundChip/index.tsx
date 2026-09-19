@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+
 import styles from './FoundChip.module.scss';
 
 type ChipSize = 'xs' | 'small' | 'large';

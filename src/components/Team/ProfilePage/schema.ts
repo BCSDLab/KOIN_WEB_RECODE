@@ -59,19 +59,25 @@ const applicationSchema = z.object({
   preferredRole: z.string().trim().min(1, '선호 역할을 작성해주세요.').max(20, '선호 역할은 20자 이내로 입력해주세요.'),
   skills: z.array(skillSchema),
   activities: z.array(activitySchema),
-  introduction: z.string().trim().min(1, '자기소개를 작성해주세요.').max(1000, '자기소개는 1000자 이내로 입력해주세요.'),
+  introduction: z
+    .string()
+    .trim()
+    .min(1, '자기소개를 작성해주세요.')
+    .max(1000, '자기소개는 1000자 이내로 입력해주세요.'),
 });
 
-export const profileFormSchema = z.object({ ...basicInfoSchema.shape, ...applicationSchema.shape }).superRefine((data, context) => {
-  const hasDraftActivity = data.activities.some((activity) => activity.status === 'draft');
-  if (hasDraftActivity) {
-    context.addIssue({
-      code: 'custom',
-      path: ['activities'],
-      message: '작성 중인 활동 이력을 완료해주세요.',
-    });
-  }
-});
+export const profileFormSchema = z
+  .object({ ...basicInfoSchema.shape, ...applicationSchema.shape })
+  .superRefine((data, context) => {
+    const hasDraftActivity = data.activities.some((activity) => activity.status === 'draft');
+    if (hasDraftActivity) {
+      context.addIssue({
+        code: 'custom',
+        path: ['activities'],
+        message: '작성 중인 활동 이력을 완료해주세요.',
+      });
+    }
+  });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 export type ProfileActivityValue = z.infer<typeof activitySchema>;

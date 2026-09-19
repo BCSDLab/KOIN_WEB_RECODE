@@ -1,13 +1,14 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
 import { create } from 'zustand';
 
 type CustomButtonState = { type: 'custom'; content: ReactNode } | { type: 'default'; content: null };
 
-type HeaderStore = {
+interface HeaderStore {
   buttonState: CustomButtonState;
   setButtonContent: (content: ReactNode) => void;
   resetButtonContent: () => void;
-};
+}
 
 export const useHeaderButtonStore = create<HeaderStore>((set) => ({
   buttonState: { type: 'default', content: null },

@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
+
 import { cn } from '@bcsdlab/utils';
-import { Arrival, Depart } from 'api/bus/entity';
+import type { Arrival, Depart } from 'api/bus/entity';
 import ExchangeIconMobile from 'assets/svg/Bus/exchange-icon-mobile.svg';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'components/Bus/BusRoutePage/components/PlaceSelect';
 import { LOCATION_TYPE_KEY } from 'components/Bus/BusRoutePage/constants/location';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {

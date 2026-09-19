@@ -1,6 +1,7 @@
-import { DeleteResponse } from 'api/auth/entity';
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import type { DeleteResponse } from 'api/auth/entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   StoreListResponse,
   StoreListV2Response,
   StoreDetailResponse,

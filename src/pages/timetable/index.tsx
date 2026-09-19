@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
+import type { TimetableFrameListResponse } from 'api/timetable/entity';
 import {
   createDefaultTimetableFrameList,
   isValidTimetableFrameId,
@@ -23,7 +25,7 @@ import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
-import type { TimetableFrameListResponse } from 'api/timetable/entity';
+
 import styles from './TimetablePage.module.scss';
 
 const MobilePage = dynamic(
@@ -38,8 +40,12 @@ const prefetchBaseTimetableData = async (queryClient: QueryClient) => {
   ]);
 };
 
-const setDefaultTimetableFrameList = (queryClient: QueryClient, semester = getRecentSemester()) => {
-  queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+const setDefaultTimetableFrameList = (
+  queryClient: QueryClient,
+  token?: string | null,
+  semester = getRecentSemester(),
+) => {
+  queryClient.setQueryData(timetableQueryKeys.frameList(semester, token), createDefaultTimetableFrameList());
 };
 
 async function prefetchTimetableData(
@@ -55,8 +61,9 @@ async function prefetchTimetableData(
     const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
     if (!semester) {
-      setDefaultTimetableFrameList(queryClient);
+      setDefaultTimetableFrameList(queryClient, token);
       await prefetchBaseTimetableData(queryClient);
+
       return;
     }
 
@@ -69,13 +76,15 @@ async function prefetchTimetableData(
         throw error;
       }
 
-      setDefaultTimetableFrameList(queryClient, semester);
+      setDefaultTimetableFrameList(queryClient, token, semester);
       await prefetchBaseTimetableData(queryClient);
+
       return;
     }
 
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    const hasValidatedFrame = validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
+    const hasValidatedFrame =
+      validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
     const currentFrameId = hasValidatedFrame ? validatedFrameId : (mainFrame?.id ?? null);
 
     const prefetchPromises = [prefetchBaseTimetableData(queryClient)];
@@ -90,7 +99,11 @@ async function prefetchTimetableData(
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
     if (isAuthError) clearServerAuthCookies(context);
-    setDefaultTimetableFrameList(queryClient, getSemesterFromQuery(query.year, query.term) ?? getRecentSemester());
+    setDefaultTimetableFrameList(
+      queryClient,
+      token,
+      getSemesterFromQuery(query.year, query.term) ?? getRecentSemester(),
+    );
     await prefetchBaseTimetableData(queryClient);
   }
 }

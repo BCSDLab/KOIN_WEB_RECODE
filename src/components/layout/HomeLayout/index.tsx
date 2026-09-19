@@ -4,6 +4,7 @@ import Header from 'components/layout/Header';
 import MobileHomeRedesignHeader from 'components/layout/Header/MobileHomeRedesignHeader';
 import MobileBottomNavigation from 'components/layout/MobileBottomNavigation';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './HomeLayout.module.scss';
 
 interface HomeLayoutProps {

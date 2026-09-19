@@ -2,6 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from 'api/auth';
+import type { LoginResponse } from 'api/auth/entity';
 import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
@@ -9,7 +10,6 @@ import { getCookieDomain, setCookie } from 'utils/ts/cookie';
 import { saveTokensToNative } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
-import type { LoginResponse } from 'api/auth/entity';
 
 interface IsAutoLogin {
   isAutoLoginFlag: boolean;
@@ -72,10 +72,12 @@ export const useLogin = (state: IsAutoLogin) => {
 
     if (userInfo.login_id === '') {
       showToast('error', '계정을 입력해주세요');
+
       return;
     }
     if (userInfo.login_pw === '') {
       showToast('error', '비밀번호를 입력해주세요');
+
       return;
     }
 

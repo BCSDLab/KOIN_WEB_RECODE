@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
-import { RestrictedCallvanResponse } from 'api/callvan/entity';
+
+import type { RestrictedCallvanResponse } from 'api/callvan/entity';
 import { getCallvanRestrictionModalCopy } from 'components/Callvan/utils/callvanRestriction';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+
 import styles from './CallvanRestrictionModal.module.scss';
 
 interface CallvanRestrictionModalProps {
@@ -40,6 +42,7 @@ export default function CallvanRestrictionModal({ restriction, onClose }: Callva
             </h2>
             <div className={styles.modal__description}>
               {descriptionLines.map((line, index) => (
+                // eslint-disable-next-line react/no-array-index-key -- 고정 안내 문구를 줄바꿈한 정적 목록이다.
                 <p key={`${line}-${index}`}>{line}</p>
               ))}
             </div>

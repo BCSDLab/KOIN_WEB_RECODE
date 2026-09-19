@@ -1,21 +1,23 @@
 import { useRouter } from 'next/router';
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+
+import type { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import SemesterList from 'components/TimetablePage/components/SemesterList';
 import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
+
 import CourseTypeList from './CourseTypeList';
 import DeleteLectureModal from './DeleteLectureModal';
 import SemesterCourseTable from './SemesterCourseTable';
@@ -26,7 +28,7 @@ function CourseTable({ frameId }: { frameId: number }) {
   const token = useTokenState();
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures }: { myLectures: (MyLectureInfo | Lecture)[] } = useMyLectures(frameId);
+  const { myLectures }: { myLectures: Array<MyLectureInfo | Lecture> } = useMyLectures(frameId);
   const allMyLectures = useAllMyLectures(token);
   const isUnSelectedCourseType = (allMyLectures ?? []).find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);
@@ -64,10 +66,10 @@ function CourseTable({ frameId }: { frameId: number }) {
       value: '시간표 수정',
     });
     if (mySemester?.semesters.length === 0) {
-      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+      showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {
       navigate(
-        `/${ROUTES.TimetableModify({ id: String(frameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
+        `${ROUTES.TimetableModify({ id: String(frameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };
@@ -93,16 +95,22 @@ function CourseTable({ frameId }: { frameId: number }) {
   };
 
   const tableData = filteredMyLectures.map((lecture: MyLectureInfo) => [
-    <span>{lecture.class_title}</span>,
-    <span>{lecture.professor}</span>,
-    <span>{lecture.grades}</span>,
+    <span key={`${lecture.id}-title`}>{lecture.class_title}</span>,
+    <span key={`${lecture.id}-professor`}>{lecture.professor}</span>,
+    <span key={`${lecture.id}-grades`}>{lecture.grades}</span>,
     <CourseTypeList
+      key={`${lecture.id}-course-type`}
       courseTypeDefault={lecture.course_type}
       selectedGeneralEducationArea={lecture.general_education_area}
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
-    <button type="button" onClick={(e) => onClickDeleteLecture(e, lecture.id)} aria-label="삭제 버튼">
+    <button
+      key={`${lecture.id}-delete`}
+      type="button"
+      onClick={(e) => onClickDeleteLecture(e, lecture.id)}
+      aria-label="삭제 버튼"
+    >
       <CloseIcon />
     </button>,
   ]);
@@ -112,7 +120,10 @@ function CourseTable({ frameId }: { frameId: number }) {
       <SemesterList />
       <div className={styles.content}>
         <div className={styles.content__table}>
-          <SemesterCourseTable tableData={tableData} />
+          <SemesterCourseTable
+            tableData={tableData}
+            rowKeys={filteredMyLectures.map((lecture: MyLectureInfo) => lecture.id)}
+          />
         </div>
         <button type="button" className={styles.content__trigger} onClick={onClickEditTimetable}>
           시간표 수정하기

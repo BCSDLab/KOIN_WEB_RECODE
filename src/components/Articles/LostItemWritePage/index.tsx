@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
@@ -72,6 +73,7 @@ export default function LostItemWritePage() {
 
     if (lostItems.length === 0) {
       showToast('error', '물품을 추가해주세요.');
+
       return;
     }
 

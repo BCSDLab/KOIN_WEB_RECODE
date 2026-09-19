@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
+
 import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
+
 import styles from './ReportPage.module.scss';
 
 function ReportPage({ id }: { id: string }) {
@@ -23,5 +25,6 @@ export default function ReportPageWrapper() {
   if (!id || Array.isArray(id)) {
     return null;
   }
+
   return <ReportPage id={id} />;
 }

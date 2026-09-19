@@ -1,10 +1,12 @@
 import Link from 'next/link';
+
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+
 import styles from './LatestLostItemList.module.scss';
 
 function LatestLostItemList() {
@@ -27,11 +29,7 @@ function LatestLostItemList() {
           <div className={styles.empty}>게시물이 없습니다.</div>
         ) : (
           articles.map((article) => (
-            <Link
-              key={article.id}
-              href={ROUTES.LostItemDetail({ id: String(article.id) })}
-              className={styles.item}
-            >
+            <Link key={article.id} href={ROUTES.LostItemDetail({ id: String(article.id) })} className={styles.item}>
               <div className={styles.item__content}>
                 <span className={styles.item__type}>{article.type === 'LOST' ? '분실물' : '습득물'}</span>
                 <div className={styles.item__info}>

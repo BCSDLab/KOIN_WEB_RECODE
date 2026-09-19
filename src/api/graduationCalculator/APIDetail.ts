@@ -1,6 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
-import {
+import type {
   GraduationAgree,
   GeneralEducationResponse,
   Semester,

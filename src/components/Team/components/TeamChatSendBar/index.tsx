@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
+
 import ImageUploadIcon from 'assets/svg/common/image-upload.svg';
 import SendIcon from 'assets/svg/common/send.svg';
+
 import styles from './TeamChatSendBar.module.scss';
 
 interface TeamChatSendBarProps {
@@ -9,11 +11,7 @@ interface TeamChatSendBarProps {
   onImageSelect: (file: File) => void;
 }
 
-export default function TeamChatSendBar({
-  disabled = false,
-  onSend,
-  onImageSelect,
-}: TeamChatSendBarProps) {
+export default function TeamChatSendBar({ disabled = false, onSend, onImageSelect }: TeamChatSendBarProps) {
   const [content, setContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,10 +58,10 @@ export default function TeamChatSendBar({
   };
 
   return (
-    <div className={styles.sendBar}>
+    <div className={styles['send-bar']}>
       <button
         type="button"
-        className={styles.sendBar__imageButton}
+        className={styles['send-bar__imageButton']}
         aria-label="이미지 전송"
         onClick={() => fileInputRef.current?.click()}
         disabled={disabled}
@@ -74,12 +72,12 @@ export default function TeamChatSendBar({
         type="file"
         accept="image/*"
         ref={fileInputRef}
-        className={styles.sendBar__fileInput}
+        className={styles['send-bar__fileInput']}
         onChange={handleFileChange}
       />
       <textarea
         ref={textareaRef}
-        className={styles.sendBar__input}
+        className={styles['send-bar__input']}
         placeholder="메세지 보내기"
         aria-label="메시지 입력"
         rows={1}
@@ -90,7 +88,7 @@ export default function TeamChatSendBar({
       />
       <button
         type="button"
-        className={styles.sendBar__sendButton}
+        className={styles['send-bar__sendButton']}
         aria-label="전송"
         onClick={handleSend}
         disabled={disabled || !content.trim()}

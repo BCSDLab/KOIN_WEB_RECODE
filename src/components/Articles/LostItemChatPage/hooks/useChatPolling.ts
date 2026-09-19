@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import {
   keepPreviousData,
@@ -39,12 +40,14 @@ const useChatPolling = ({
     refetchIntervalInBackground: false,
   });
 
-  const matchedRoom =
-    chatroomId != null
-      ? chatroomList?.find((room) => room.chat_room_id === Number(chatroomId))
-      : autoSelectFirst
-        ? chatroomList?.[0]
-        : undefined;
+  const findMatchedRoom = () => {
+    if (chatroomId != null) return chatroomList?.find((room) => room.chat_room_id === Number(chatroomId));
+    if (autoSelectFirst) return chatroomList?.[0];
+
+    return undefined;
+  };
+
+  const matchedRoom = findMatchedRoom();
 
   const defaultChatroomId = chatroomId ?? matchedRoom?.chat_room_id ?? null;
   const defaultArticleId = articleId ?? matchedRoom?.article_id ?? null;
@@ -56,7 +59,7 @@ const useChatPolling = ({
   useEffect(() => {
     if (numericArticleId == null || numericChatroomId == null) return;
 
-    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId);
+    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token);
     const existing = queryClient.getQueryData(queryKey);
     if (existing) return;
 
@@ -65,13 +68,13 @@ const useChatPolling = ({
         queryClient.setQueryData(queryKey, cached);
       }
     });
-  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId]);
+  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId, token]);
 
   const { data: chatroomDetail } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
       ? articleQueries.lostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId),
+          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId, token),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -81,7 +84,7 @@ const useChatPolling = ({
     ...(defaultArticleId && defaultChatroomId && isOnline
       ? articleQueries.lostItemChatroomMessages(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -109,7 +112,7 @@ const useChatPolling = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
       });
     },
     onError: (error) => {
@@ -135,7 +138,7 @@ const useChatPolling = ({
         clearChatroomCache(numericArticleId, numericChatroomId);
       }
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomList,
+        queryKey: articleQueryKeys.lostItemChatroomList(token),
       });
     },
     onError: (error) => {
@@ -150,7 +153,7 @@ const useChatPolling = ({
 
   const leaveRoom = useCallback(
     (aId: number, cId: number) => {
-      postLeaveLostItemChatroomV2(token, aId, cId).catch((error) => {
+      postLeaveLostItemChatroomV2(token, aId, cId).catch((error: unknown) => {
         if (isKoinError(error)) {
           showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
         } else {
@@ -185,15 +188,15 @@ const useChatPolling = ({
 
   const invalidateChatroomList = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomList,
+      queryKey: articleQueryKeys.lostItemChatroomList(token),
     });
-  }, [queryClient]);
+  }, [queryClient, token]);
 
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
+      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
     });
-  }, [queryClient, defaultArticleId, defaultChatroomId]);
+  }, [queryClient, defaultArticleId, defaultChatroomId, token]);
 
   return {
     chatroomList,

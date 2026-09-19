@@ -1,5 +1,6 @@
-import { AxiosResponse } from 'axios';
-import { APIResponse } from './APIResponse';
+import type { AxiosResponse } from 'axios';
+
+import type { APIResponse } from './APIResponse';
 
 export const HTTP_METHOD = {
   GET: 'GET',
@@ -11,7 +12,7 @@ export const HTTP_METHOD = {
 
 export type HTTPMethod = (typeof HTTP_METHOD)[keyof typeof HTTP_METHOD];
 
-export type APIRequest<R extends APIResponse> = {
+export interface APIRequest<R extends APIResponse> {
   response: R;
   path: string;
   method: HTTPMethod;
@@ -22,4 +23,4 @@ export type APIRequest<R extends APIResponse> = {
   headers?: Record<string, string | number>;
   parse?: (data: AxiosResponse<R>) => R;
   convertBody?: (data: unknown) => string;
-};
+}

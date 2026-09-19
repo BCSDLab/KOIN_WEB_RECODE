@@ -1,6 +1,4 @@
-type ROUTESParams<T extends string = string> = {
-  [key in T]?: string;
-};
+type ROUTESParams<T extends string = string> = Partial<Record<T, string>>;
 
 const ROUTES = {
   Main: () => '/',
@@ -8,7 +6,7 @@ const ROUTES = {
   NotFound: () => '*',
   Timetable: () => '/timetable',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
-    `timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
+    `/timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
   GraduationCalculator: () => '/graduation',
   Course: () => '/course',
   Store: () => '/store',
@@ -18,6 +16,7 @@ const ROUTES = {
   BusCourseShuttle: () => '/bus/shuttle',
   BusCourseExpress: () => '/bus/express',
   BusCourseCity: () => '/bus/city',
+  BusShuttleDetail: ({ routeId }: ROUTESParams<'routeId'>) => `/bus/shuttle/${routeId}`,
   Club: () => '/clubs',
   ClubDetail: ({ id, hot }: ROUTESParams<'id' | 'hot'>) => `/clubs/${id}?hot=${hot}`,
   NewClub: () => '/clubs/new',

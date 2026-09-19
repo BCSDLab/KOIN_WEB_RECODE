@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
-import { DEPARTMENT_CONTACT_CATEGORIES, DepartmentContactCategory } from 'api/departmentContact/entity';
+
+import { DEPARTMENT_CONTACT_CATEGORIES, type DepartmentContactCategory } from 'api/departmentContact/entity';
 import CategoryDetailPage from 'components/Department/CategoryDetail';
 import Layout from 'components/layout';
 

@@ -57,24 +57,24 @@
   }
 }
 
-.filterAnchor {
+.filter-anchor {
   position: relative;
 }
 
-.filterPopover {
+.filter-popover {
   position: absolute;
   right: 0;
   top: 0;
   z-index: 11;
 }
 
-.writeAnchor {
+.write-anchor {
   position: relative;
   display: inline-flex;
   align-items: center;
 }
 
-.writePopover {
+.write-popover {
   position: absolute;
   right: 0;
   top: 0;
@@ -86,7 +86,7 @@
   z-index: 50;
 }
 
-.writeHeader {
+.write-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -94,14 +94,14 @@
   border-bottom: 1px solid #e1e1e1;
 }
 
-.writeTitle {
+.write-title {
   font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #175c8e;
 }
 
-.writeClose {
+.write-close {
   border: 0;
   display: inline-flex;
   align-items: center;
@@ -109,14 +109,14 @@
   cursor: pointer;
 }
 
-.writeBody {
+.write-body {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 20px 32px;
 }
 
-.writeOptionButton {
+.write-option-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,7 +128,7 @@
   text-decoration: none;
 }
 
-.writeOptionText {
+.write-option-text {
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 600;

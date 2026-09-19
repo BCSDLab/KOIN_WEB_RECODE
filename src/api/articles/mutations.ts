@@ -1,10 +1,10 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import {
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
+import type {
   LostItemArticlesRequestDTO,
   ReportItemArticleRequestDTO,
   UpdateLostItemArticleRequestDTO,
 } from './entity';
-import { articleQueryKeys } from './queries';
 import {
   deleteLostItemArticle,
   postBlockLostItemChatroom,
@@ -14,6 +14,7 @@ import {
   postReportLostItemArticle,
   putLostItemArticle,
 } from './index';
+import { articleQueryKeys } from './queries';
 
 const invalidateLostItemAll = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemAll });
@@ -26,6 +27,7 @@ export const articleMutations = {
     mutationOptions({
       mutationFn: async (data: LostItemArticlesRequestDTO) => {
         const response = await postLostItemArticle(token, data);
+
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
@@ -35,6 +37,7 @@ export const articleMutations = {
     mutationOptions({
       mutationFn: async (data: UpdateLostItemArticleRequestDTO) => {
         const response = await putLostItemArticle(token, articleId, data);
+
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
@@ -59,7 +62,7 @@ export const articleMutations = {
   toggleLostItemFound: (queryClient: QueryClient, token: string, articleId: number) =>
     mutationOptions({
       mutationFn: () => postFoundLostItem(token, articleId),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId, token) }),
     }),
 
   createLostItemChatroom: (queryClient: QueryClient, token: string) =>

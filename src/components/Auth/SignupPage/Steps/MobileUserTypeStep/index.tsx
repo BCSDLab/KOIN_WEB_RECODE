@@ -1,5 +1,6 @@
 import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
 import type { UserType } from 'static/auth';
+
 import styles from './MobileUserTypeStep.module.scss';
 
 interface MobileUserTypeStepProps {

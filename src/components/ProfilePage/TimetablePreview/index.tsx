@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
+
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
@@ -9,6 +10,7 @@ import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+
 import styles from './TimetablePreview.module.scss';
 
 const timetableDays = ['월', '화', '수', '목', '금'];

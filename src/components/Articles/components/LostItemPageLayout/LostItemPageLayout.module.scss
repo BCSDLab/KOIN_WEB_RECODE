@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.lostItem-template {
+.lost-item-template {
   display: flex;
   margin-top: 60px;
   width: 100%;
@@ -15,7 +15,7 @@
   }
 }
 
-.lostItem-content {
+.lost-item-content {
   width: 100%;
   max-width: 1500px; // MacBook Pro 14" 기준
   margin-bottom: 60px;
@@ -118,7 +118,7 @@
   }
 }
 
-.listScroll {
+.list-scroll {
   @include media.media-breakpoint(mobile) {
     flex: 1 1 auto;
     min-height: 0;

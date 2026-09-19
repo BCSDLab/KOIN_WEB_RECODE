@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import MobileHeader from './MobileHeader';
 import PCHeader from './PCHeader';
 import styles from './Header.module.scss';

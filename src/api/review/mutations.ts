@@ -1,6 +1,7 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 import { storeQueryKeys } from 'api/store/queries';
-import { ReviewRequest } from './entity';
+
+import type { ReviewRequest } from './entity';
 import { postStoreReview, putStoreReview } from './index';
 
 interface ReviewMutationCallbacks {
@@ -9,7 +10,7 @@ interface ReviewMutationCallbacks {
 
 const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: string) => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.myReviews(shopId) }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.detail(shopId) }),

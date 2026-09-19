@@ -1,5 +1,6 @@
-import ChatBubbleIcon from 'assets/svg/Team/accept-chat.svg';
 import type { TeamApplicationStatus } from 'api/team/entity';
+import ChatBubbleIcon from 'assets/svg/Team/accept-chat.svg';
+
 import styles from './ApplicantActionBar.module.scss';
 
 interface ApplicantActionBarProps {

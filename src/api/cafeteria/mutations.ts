@@ -1,6 +1,7 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { cafeteriaQueryKeys } from './queries';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
 import { cancelCafeteriaDiningLike, likeCafeteriaDining } from './index';
+import { cafeteriaQueryKeys } from './queries';
 
 const invalidateDinings = (queryClient: QueryClient, date: string) =>
   queryClient.invalidateQueries({ queryKey: cafeteriaQueryKeys.dinings(date) });

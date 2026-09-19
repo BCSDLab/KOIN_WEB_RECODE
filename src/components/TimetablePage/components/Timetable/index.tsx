@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
+import ROUTES from 'static/routes';
 import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -13,6 +15,7 @@ import showToast from 'utils/ts/showToast';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
+
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -54,11 +57,12 @@ function Timetable({
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
+
       return;
     }
 
     router.push(
-      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
+      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'direct' })}&lectureIndex=${lectureIndex}${
         semester ? `&year=${semester.year}&term=${semester.term}` : ''
       }`,
     );
@@ -198,6 +202,7 @@ function Timetable({
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
               // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`value-${index}`}
             />
           ))}
@@ -215,6 +220,7 @@ function Timetable({
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']
@@ -393,6 +399,7 @@ function Timetable({
                       ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                             gap: `${rowHeight / 5.5}px`,
                           }}
+                          // eslint-disable-next-line react/no-array-index-key -- start_time/end_time가 겹칠 수 있어 idx로 유일성을 보장한다.
                           key={`${idx}-${info.start_time}-${info.end_time}`}
                         >
                           <div

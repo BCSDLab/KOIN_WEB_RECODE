@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import * as Sentry from '@sentry/nextjs';
-import axios, { AxiosError } from 'axios';
+import axios, { type AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
+
 import styles from './StoreErrorBoundary.module.scss';
 
 interface Props {
@@ -35,6 +37,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
       return { hasError: true, status };
     }
+
     return { hasError: true };
   }
 
@@ -46,9 +49,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
 
   render() {
     const { children, onErrorClick } = this.props;
-    const {
-      hasError, status, eventId,
-    } = this.state;
+    const { hasError, status, eventId } = this.state;
 
     if (hasError && status === 404) {
       return (
@@ -65,7 +66,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
       return (
         <div className={styles.container} role="alert">
           <p>오류가 발생했습니다.</p>
-          {eventId && <p className={styles.eventId}>문의 시 참조 코드: {eventId}</p>}
+          {eventId && <p className={styles['event-id']}>문의 시 참조 코드: {eventId}</p>}
         </div>
       );
     }

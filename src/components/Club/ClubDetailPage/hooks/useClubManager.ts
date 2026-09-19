@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -10,7 +12,7 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   const router = useRouter();
   const logger = useLogger();
   if (!clubId) {
-    router.push('/clubs');
+    router.push(ROUTES.Club());
   }
   const token = useTokenState();
   const queryClient = useQueryClient();

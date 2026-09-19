@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import usePhoneVerificationInFindId from 'utils/hooks/auth/usePhoneVerificationInFindId';
+
 import styles from './MobileFindIdPhonePage.module.scss';
 
 function MobileFindIdPhonePage() {
@@ -57,6 +58,7 @@ function MobileFindIdPhonePage() {
     disableButton();
     setPhoneMessage({ type: 'default', content: MESSAGES.PHONE.REGISTRATION });
     setVerificationMessage(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- phoneNumber 변경 시에만 재실행 (나머지는 훅이 반환하는 안정적 함수)
   }, [phoneNumber]);
 
   return (

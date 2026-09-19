@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export interface GetArticlesRequest {
   boardId: string;
@@ -21,7 +21,7 @@ export interface ArticleWithNew extends Article {
 }
 
 export function isArticleWithNew(article: Article | ArticleWithNew): article is ArticleWithNew {
-  return 'isNew' in article && typeof (article as ArticleWithNew).isNew === 'boolean';
+  return 'isNew' in article && typeof article.isNew === 'boolean';
 }
 
 export interface Attachment {
@@ -184,7 +184,7 @@ interface LostItemArticleForPostDTO {
 }
 
 export interface LostItemArticlesRequestDTO {
-  articles: Array<LostItemArticleForPostDTO>;
+  articles: LostItemArticleForPostDTO[];
 }
 
 export interface LostItemArticlesPostResponseDTO {

@@ -2,6 +2,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './ClubNotificationModal.module.scss';
 
 interface ClubNotificationModalProps {

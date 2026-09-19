@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Course, PreCourse } from 'api/course/entity';
+import type { Course, PreCourse } from 'api/course/entity';
 import { courseQueries } from 'api/course/queries';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
@@ -21,6 +22,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { setRedirectPath } from 'utils/ts/auth';
 import { useSemester } from 'utils/zustand/semester';
+
 import styles from './CoursePage.module.scss';
 
 interface OpenCoursesTableContentProps {

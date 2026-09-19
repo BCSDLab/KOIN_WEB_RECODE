@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
@@ -7,6 +8,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
+
 import styles from './ImagesUploadSlider.module.scss';
 
 interface ClubImageUploaderProps {
