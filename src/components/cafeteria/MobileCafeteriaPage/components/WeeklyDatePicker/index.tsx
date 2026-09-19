@@ -50,9 +50,7 @@ export default function WeeklyDatePicker() {
                 type="button"
                 onClick={() => date.set(day)}
               >
-                {dateFormat(day) === dateFormat() && (
-                  <div className={styles['picker__button--selector']} />
-                )}
+                {dateFormat(day) === dateFormat() && <div className={styles['picker__button--selector']} />}
                 {day.getDate()}
               </button>
             </div>

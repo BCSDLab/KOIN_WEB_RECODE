@@ -26,13 +26,7 @@ export default function DetailModal({ url, close }: DetailModalProps) {
           <CloseIcon />
         </button>
         <div className={styles.photo__image}>
-          <Image
-            src={url}
-            alt="상세 이미지"
-            fill
-            priority
-            sizes="calc(100vw - 48px)"
-          />
+          <Image src={url} alt="상세 이미지" fill priority sizes="calc(100vw - 48px)" />
         </div>
       </div>
     </div>
