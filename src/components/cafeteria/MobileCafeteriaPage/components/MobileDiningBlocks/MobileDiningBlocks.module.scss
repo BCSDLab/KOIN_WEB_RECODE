@@ -1,27 +1,15 @@
 .category {
-  display: block;
   background-color: #fff;
-  margin: 0 24px 8px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow:
     0 2px 4px rgb(0 0 0 / 4%),
     0 1px 1px rgb(0 0 0 / 2%);
 
-  &:first-child {
-    margin-top: 16px;
-  }
-
   &__menu-list-row {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-  }
-
-  &__header {
-    padding: 0;
-    margin: 0;
-    border: none;
   }
 
   &__type {
@@ -30,19 +18,11 @@
     align-items: center;
     gap: 8px;
     box-sizing: border-box;
-    margin: 0;
     padding: 16px;
-    border: none;
     font-size: 18px;
     font-weight: 600;
     color: #000;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-align: center;
     line-height: 1.15;
-    background-color: rgb(255 255 255);
-    z-index: 1;
 
     &--title {
       display: flex;
@@ -60,8 +40,6 @@
   &__calorie {
     font-size: 12px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.9;
     letter-spacing: -0.4px;
     text-align: left;
@@ -71,13 +49,10 @@
   &__price {
     font-size: 12px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.25;
     letter-spacing: -0.4px;
     text-align: left;
     color: rgb(126 126 126);
-    margin-top: 0;
   }
 
   &__block {
@@ -129,11 +104,8 @@
   &__menu {
     font-size: 14px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     overflow-wrap: break-word;
     line-height: 1.6;
-    letter-spacing: normal;
     color: #000;
   }
 }

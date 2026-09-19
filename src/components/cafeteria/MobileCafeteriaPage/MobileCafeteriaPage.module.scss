@@ -17,7 +17,7 @@
     color: #e1e1e1;
 
     &--selected {
-      border-bottom: 1px solid #b611f5;
+      border-bottom: 2px solid #b611f5;
       color: #b611f5;
     }
   }
@@ -26,7 +26,8 @@
 .blocks {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  padding: 16px 24px;
 
   &--empty {
     display: flex;
@@ -38,7 +39,6 @@
   }
 
   &__caution {
-    margin: 8px 24px 16px;
     color: #cacaca;
     font-family: Pretendard, sans-serif;
     font-size: 13px;

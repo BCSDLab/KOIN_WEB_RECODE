@@ -39,31 +39,29 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
     <>
       {filteredDinings.map((dining) => (
         <div className={styles.category} key={dining.id}>
-          <ul className={styles['category__menu-list-row']}>
-            <div className={styles.category__header}>
-              <div className={styles.category__type}>
-                <div className={styles['category__type--title']}>
-                  {dining.place}
-                  {dining.soldout_at && (
-                    <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>
-                  )}
-                  {!dining.soldout_at && dining.changed_at && (
-                    <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>
-                  )}
+          <div className={styles['category__menu-list-row']}>
+            <div className={styles.category__type}>
+              <div className={styles['category__type--title']}>
+                {dining.place}
+                {dining.soldout_at && (
+                  <span className={styles['category__block--sold-out']}>품절</span>
+                )}
+                {!dining.soldout_at && dining.changed_at && (
+                  <span className={styles['category__block--changed']}>변경됨</span>
+                )}
+              </div>
+              <div className={styles.category__details}>
+                <div className={styles.category__calorie}>
+                  {!!dining.kcal && `${dining.kcal}Kcal`}
+                  {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
                 </div>
-                <div className={styles.category__details}>
-                  <div className={styles.category__calorie}>
-                    {!!dining.kcal && `${dining.kcal}Kcal`}
-                    {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
-                  </div>
-                  <div className={styles.category__price}>
-                    {!!dining.price_cash && `${dining.price_cash}원/`}
-                    {!!dining.price_card && ` ${dining.price_card}원`}
-                  </div>
+                <div className={styles.category__price}>
+                  {!!dining.price_cash && `${dining.price_cash}원/`}
+                  {!!dining.price_card && ` ${dining.price_card}원`}
                 </div>
               </div>
             </div>
-            <li className={styles['category__menu-list']}>
+            <div className={styles['category__menu-list']}>
               <ul>
                 {dining.menu.map((menuItem) => (
                   <li className={styles.category__menu} key={menuItem.id}>
@@ -72,8 +70,8 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                 ))}
               </ul>
               <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       ))}
     </>

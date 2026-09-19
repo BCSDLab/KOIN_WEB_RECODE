@@ -12,6 +12,8 @@
   overflow: hidden;
 
   &--no-image {
+    border: 1px solid #cacaca;
+    box-sizing: border-box;
     cursor: default;
   }
 
