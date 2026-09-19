@@ -157,7 +157,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
       goToFirstStep();
     }
     // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- goToFirstStep은 React Compiler가 참조를 안정화함
   }, [isReady, currentStep, methods]);
 
   // 저장/수정 버튼은 검증만 통과시키고, 실제 upsert는 확인 모달에서 승인해야 실행된다.

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
@@ -46,6 +45,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
         }
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleScroll은 React Compiler가 참조를 안정화함
   }, [storeMenuCategories]);
 
   const scrollToTarget = (name: string) => {

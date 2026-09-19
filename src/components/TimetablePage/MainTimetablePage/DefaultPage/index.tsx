@@ -53,7 +53,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 리스너 등록
   }, []);
 
   React.useEffect(() => {

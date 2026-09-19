@@ -1,10 +1,10 @@
-/* eslint-disable no-restricted-imports */
 import { useEffect, useRef, useState } from 'react';
 
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import type { SmsSendResponse } from 'api/auth/entity';
+import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
 import type { InputMessage } from 'interfaces/InputMessage';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
@@ -13,7 +13,6 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
 
-import CustomInput from '../../components/CustomInput';
 import styles from './MobileVerification.module.scss';
 
 interface MobileVerificationProps {

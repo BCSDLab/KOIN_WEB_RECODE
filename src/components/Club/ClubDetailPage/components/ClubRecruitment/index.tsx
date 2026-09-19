@@ -130,7 +130,7 @@ export default function ClubRecruitment({
               </div>
               <div className={styles['recruitment-info__image__container']}>
                 {clubRecruitmentData.image_url && (
-                  // eslint-disable-next-line @next/next/no-img-element
+                  // eslint-disable-next-line @next/next/no-img-element -- 업로드 이미지 크기가 제각각이라 object-fit으로 표시
                   <img
                     className={styles['recruitment-info__image']}
                     src={clubRecruitmentData.image_url}
@@ -172,7 +172,7 @@ export default function ClubRecruitment({
               </div>
               <div className={styles['recruitment-info__image__container']}>
                 {clubRecruitmentData.image_url && (
-                  // eslint-disable-next-line @next/next/no-img-element
+                  // eslint-disable-next-line @next/next/no-img-element -- 업로드 이미지 크기가 제각각이라 object-fit으로 표시
                   <img
                     className={styles['recruitment-info__image']}
                     src={clubRecruitmentData.image_url}

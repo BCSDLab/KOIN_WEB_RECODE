@@ -146,7 +146,7 @@ export const storeQueries = {
   myReview: (shopId: string, sorter: string, token: string) =>
     // 로그인한 본인 리뷰만 응답하는 엔드포인트라 토큰 값 자체는 결과 모양에 영향을 주지 않는다.
     // 사용자 전환은 principal 전환 시점의 queryClient.clear()로 별도 처리한다.
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps -- token은 결과 모양에 영향을 주지 않는다
     queryOptions({
       queryKey: storeQueryKeys.myReview(shopId, sorter),
       queryFn: () => getMyReview(shopId, sorter, token),

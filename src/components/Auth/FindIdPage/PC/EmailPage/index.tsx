@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -62,6 +61,7 @@ function FindIdEmailPage() {
     stopTimer();
     setEmailMessage(null);
     setIncorrect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- email 변경 시에만 재실행 (나머지는 훅이 반환하는 안정적 함수)
   }, [email]);
 
   const onBack = () => {

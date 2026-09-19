@@ -173,7 +173,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                     )}
                     {msg.is_image ? (
                       <div className={styles['chat-room__bubble-image']}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
                         <img src={msg.content} alt="업로드 이미지" />
                       </div>
                     ) : (
@@ -208,7 +208,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                   <div className={styles['chat-room__message-row--others']}>
                     {msg.is_image ? (
                       <div className={styles['chat-room__bubble-image']}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
                         <img src={msg.content} alt="업로드 이미지" />
                       </div>
                     ) : (

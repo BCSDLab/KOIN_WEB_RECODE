@@ -178,7 +178,7 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
         event_category: 'entry',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 모달이 열릴 때만 로깅해야 하므로 logger/currentBanner 변경은 무시
   }, [isModalOpen]);
 
   if (!isModalOpen) return null;

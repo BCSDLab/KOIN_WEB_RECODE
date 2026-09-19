@@ -1,6 +1,3 @@
-// 리팩토링 작업중이라 임시로 비활성화
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -54,6 +51,7 @@ type IFormType = Record<
   string,
   {
     ref: HTMLInputElement | ICustomFormInput | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldRefs가 여러 필드 타입을 섞어 담음
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
   }
 >;
@@ -69,6 +67,7 @@ interface NicknameMessage {
 }
 
 interface IRegisterOption {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldsRefs가 여러 필드 타입을 섞어 담음
   validFunction?: (value: unknown, fieldsRefs: { current: any }) => string | true;
   required?: boolean;
 }
@@ -80,6 +79,7 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, formValue가 필드마다 다른 타입을 가짐
   (formValue: Record<string, any>): void;
 }
 
@@ -123,6 +123,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 필드마다 값 타입이 달라 순회 중엔 특정할 수 없음
       let inputValue: any;
       const studentInfo = {
         studentNumber: '',
@@ -1235,6 +1236,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     if (name === userInfo?.name) {
       setIsValid((prev) => ({ ...prev, isNameValid: true }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 초기값만 1회 비교
   }, []);
 
   return (
@@ -1330,6 +1332,7 @@ function ModifyInfoDefaultPage() {
     if (!isAuthenticated) {
       router.replace(ROUTES.Main());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Next.js router는 안정적인 참조라 의존성에서 제외
   }, [isAuthenticated, openModal]);
 
   return (

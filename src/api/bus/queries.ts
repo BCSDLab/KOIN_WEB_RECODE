@@ -71,7 +71,7 @@ export const busQueries = {
     const { depart, arrival, ...rest } = params;
 
     // route 키는 params 전체를 JSON.stringify로 직렬화하므로 depart/arrival/rest 변화가 이미 반영된다.
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps -- 키가 params 전체를 이미 포함한다
     return queryOptions({
       queryKey: busQueryKeys.route(params),
       queryFn:

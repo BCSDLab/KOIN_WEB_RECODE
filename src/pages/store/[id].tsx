@@ -253,8 +253,8 @@ function StoreDetailPage({ id }: Props) {
   };
 
   useScrollToTop();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
+  React.useEffect(() => () => portalManager.close(), []);
   useScrollLogging(detailScrollLogging);
 
   React.useEffect(() => {
@@ -271,8 +271,8 @@ function StoreDetailPage({ id }: Props) {
         isomorphicSessionStorage.removeItem('enterReviewPage');
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, storeDetail]); // param이 바뀌어도 버튼이 적용되어야 함
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- param이 바뀌어도 버튼이 적용되어야 함 (logger는 안정적)
+  }, [searchParams, storeDetail]);
 
   useEffect(
     () => {
@@ -293,7 +293,7 @@ function StoreDetailPage({ id }: Props) {
         window.removeEventListener('popstate', handlePopState);
       };
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 리스너 등록
     [],
   );
 

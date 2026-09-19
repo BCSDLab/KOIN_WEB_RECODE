@@ -135,7 +135,7 @@ function LectureTable({
       return () => {
         window.removeEventListener('keydown', keyboardNavigation, true);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- cursor 변경 시에만 리스너를 재등록 (list/핸들러는 세션 중 안정적)
     }, [cursor]);
   }
 
@@ -148,7 +148,7 @@ function LectureTable({
         behavior: 'smooth',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- containerRef는 안정적인 ref라 의존성에서 제외
   }, [cursor]);
 
   return (

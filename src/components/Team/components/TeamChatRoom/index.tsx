@@ -222,7 +222,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
 
                 const bubble = message.is_image ? (
                   <div className={styles['chat-room__imageBubble']}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
                     <img src={message.content} alt="전송된 이미지" />
                   </div>
                 ) : (
