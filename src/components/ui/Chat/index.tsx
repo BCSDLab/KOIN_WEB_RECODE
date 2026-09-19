@@ -52,6 +52,7 @@ interface ChatMessageListClassNames {
   dateLabel?: string;
   bubbleMine?: string;
   bubbleOthers?: string;
+  imageBubble?: string;
 }
 
 interface ChatMessageListProps {
@@ -155,7 +156,7 @@ export function ChatMessageList({
     let bubbleClassName = message.isMine
       ? joinClassNames(styles.messageList__bubble, styles['messageList__bubble--mine'], classNames.bubbleMine)
       : joinClassNames(styles.messageList__bubble, styles['messageList__bubble--other'], classNames.bubbleOthers);
-    if (message.isImage) bubbleClassName = styles.messageList__imageBubble;
+    if (message.isImage) bubbleClassName = joinClassNames(styles.messageList__imageBubble, classNames.imageBubble);
 
     const bubble = (
       <div className={bubbleClassName}>

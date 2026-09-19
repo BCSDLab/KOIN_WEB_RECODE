@@ -134,6 +134,12 @@
   }
 
 
+  &__imageBubble {
+    @include media.media-breakpoint(mobile) {
+      max-width: 220px;
+    }
+  }
+
   @include media.media-breakpoint(mobile) {
     height: 100dvh;
     border: 0;
