@@ -36,11 +36,11 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
   const generalCourseLectures = generalCourses?.lectures ?? [];
 
   const tableData = generalCourseLectures.map((lecture) => [
-    <span>{lecture.name}</span>,
-    <span>{}</span>, // 개설 목록 테이블에서는 '교수명' 비활성화
-    <span>{lecture.grades}</span>,
-    <span>교양선택</span>,
-    <span>{}</span>, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
+    <span key={`${lecture.code}-name`}>{lecture.name}</span>,
+    <span key={`${lecture.code}-professor`} />, // 개설 목록 테이블에서는 '교수명' 비활성화
+    <span key={`${lecture.code}-grades`}>{lecture.grades}</span>,
+    <span key={`${lecture.code}-course`}>교양선택</span>,
+    <span key={`${lecture.code}-delete`} />, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
   ]);
 
   return (
@@ -70,7 +70,11 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
           <div className={styles.content__table}>
-            <SemesterCourseTable tableData={tableData} hasProfessor={false} />
+            <SemesterCourseTable
+              tableData={tableData}
+              rowKeys={generalCourseLectures.map((lecture) => lecture.code)}
+              hasProfessor={false}
+            />
           </div>
         </div>
       </div>

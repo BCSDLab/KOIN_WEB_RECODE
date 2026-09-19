@@ -95,16 +95,22 @@ function CourseTable({ frameId }: { frameId: number }) {
   };
 
   const tableData = filteredMyLectures.map((lecture: MyLectureInfo) => [
-    <span>{lecture.class_title}</span>,
-    <span>{lecture.professor}</span>,
-    <span>{lecture.grades}</span>,
+    <span key={`${lecture.id}-title`}>{lecture.class_title}</span>,
+    <span key={`${lecture.id}-professor`}>{lecture.professor}</span>,
+    <span key={`${lecture.id}-grades`}>{lecture.grades}</span>,
     <CourseTypeList
+      key={`${lecture.id}-course-type`}
       courseTypeDefault={lecture.course_type}
       selectedGeneralEducationArea={lecture.general_education_area}
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
-    <button type="button" onClick={(e) => onClickDeleteLecture(e, lecture.id)} aria-label="삭제 버튼">
+    <button
+      key={`${lecture.id}-delete`}
+      type="button"
+      onClick={(e) => onClickDeleteLecture(e, lecture.id)}
+      aria-label="삭제 버튼"
+    >
       <CloseIcon />
     </button>,
   ]);
@@ -114,7 +120,10 @@ function CourseTable({ frameId }: { frameId: number }) {
       <SemesterList />
       <div className={styles.content}>
         <div className={styles.content__table}>
-          <SemesterCourseTable tableData={tableData} />
+          <SemesterCourseTable
+            tableData={tableData}
+            rowKeys={filteredMyLectures.map((lecture: MyLectureInfo) => lecture.id)}
+          />
         </div>
         <button type="button" className={styles.content__trigger} onClick={onClickEditTimetable}>
           시간표 수정하기

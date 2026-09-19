@@ -53,6 +53,7 @@ export default function TimetableGridPlaceholder({
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
+              // eslint-disable-next-line react/no-array-index-key -- DEFAULT_TIME_STRING는 고정 정적 배열이다.
               key={`placeholder-row-${value}-${index}`}
             />
           ))}
@@ -69,6 +70,7 @@ export default function TimetableGridPlaceholder({
           {DEFAULT_TIME_STRING.map((value, index) => (
             <div
               style={{ height: `${rowHeight}px` }}
+              // eslint-disable-next-line react/no-array-index-key -- DEFAULT_TIME_STRING는 고정 정적 배열이다.
               key={`placeholder-time-${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']

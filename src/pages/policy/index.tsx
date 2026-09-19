@@ -16,6 +16,7 @@ function PolicyPage() {
               <h3 className={styles.policy__title}>{policy.title}</h3>
               {Array.isArray(policy.content) ? (
                 policy.content.map((text, index) => (
+                  // eslint-disable-next-line react/no-array-index-key -- static/policy의 고정 텍스트 목록이라 재정렬되지 않는다.
                   <div className={styles.policy__content} key={index}>
                     {text}
                   </div>
@@ -26,6 +27,7 @@ function PolicyPage() {
               {policy.items && (
                 <ul>
                   {policy.items.map((item, index) => (
+                    // eslint-disable-next-line react/no-array-index-key -- static/policy의 고정 텍스트 목록이라 재정렬되지 않는다.
                     <li className={styles.policy__items} key={index}>
                       {item}
                     </li>
@@ -36,6 +38,7 @@ function PolicyPage() {
               {policy.additionalItems && (
                 <ul>
                   {policy.additionalItems.map((item, index) => (
+                    // eslint-disable-next-line react/no-array-index-key -- static/policy의 고정 텍스트 목록이라 재정렬되지 않는다.
                     <li className={styles.policy__items} key={index}>
                       {item}
                     </li>
@@ -52,6 +55,7 @@ function PolicyPage() {
               <h3 className={styles.policy__title}>{terms.title}</h3>
               {Array.isArray(terms.content) ? (
                 terms.content.map((text, index) => (
+                  // eslint-disable-next-line react/no-array-index-key -- static/policy의 고정 텍스트 목록이라 재정렬되지 않는다.
                   <div className={styles.policy__content} key={index}>
                     {text}
                   </div>

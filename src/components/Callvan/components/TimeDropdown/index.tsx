@@ -141,6 +141,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
       {Array.from({ length: MINUTE_REPEAT }, (_, repeatIdx) =>
         items.map((item, itemIdx) => (
           <div
+            // eslint-disable-next-line react/no-array-index-key -- 무한 스크롤 연출을 위해 동일 항목을 반복 렌더링하므로 위치 외에 유일한 키가 없다.
             key={`${repeatIdx}-${itemIdx}`}
             role="button"
             tabIndex={0}

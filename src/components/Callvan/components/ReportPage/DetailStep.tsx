@@ -61,7 +61,7 @@ export default function DetailStep({ description, images, onDescriptionChange, o
         <div className={styles['detail-step__image-box']}>
           <div className={styles['detail-step__image-slider']}>
             {images.map((file, index) => (
-              <div key={index} className={styles['image-item']}>
+              <div key={`${file.name}-${file.size}-${file.lastModified}`} className={styles['image-item']}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={URL.createObjectURL(file)}

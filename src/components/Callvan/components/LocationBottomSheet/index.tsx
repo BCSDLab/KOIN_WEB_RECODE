@@ -72,6 +72,7 @@ function LocationBottomSheetContent({
         <div className={styles.sheet__content}>
           <div className={styles['chip-group']}>
             {CHIP_ROWS.map((row, rowIndex) => (
+              // eslint-disable-next-line react/no-array-index-key -- CHIP_ROWS는 고정 정적 배열이다.
               <div key={rowIndex} className={styles['chip-row']}>
                 {row.map((locationType) => (
                   <button

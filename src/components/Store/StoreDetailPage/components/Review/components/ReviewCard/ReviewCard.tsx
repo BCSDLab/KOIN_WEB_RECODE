@@ -83,7 +83,10 @@ export default function ReviewCard({
         </button>
       </div>
       <div className={styles.rating}>
-        <div>{ratingList.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}</div>
+        <div>
+          {/* eslint-disable-next-line react/no-array-index-key -- 별점은 항상 고정 5칸이며 위치 자체가 의미를 가진다. */}
+          {ratingList.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
+        </div>
         <div className={styles.created}>
           {created_at}
           {is_modified && '(수정됨)'}
@@ -114,6 +117,7 @@ export default function ReviewCard({
           <div className={styles['menu-card']}>
             {
               menu_names.map((menu, idx) => (
+                // eslint-disable-next-line react/no-array-index-key -- 메뉴명이 중복될 수 있어 고정 순서 idx로 유일성을 보장하며, 수정·삭제되지 않는다.
                 <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>
                   {menu}
                 </div>

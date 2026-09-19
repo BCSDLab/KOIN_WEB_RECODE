@@ -181,6 +181,7 @@ function CourseTypeList({
             >
               {generalCourseType.map((type) => (
                 <button
+                  key={type}
                   type="button"
                   className={cn({
                     [styles['select__general-item']]: true,

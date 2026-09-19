@@ -95,6 +95,7 @@ export default function CityBusTimetable() {
             <div className={styles['city-label__button']}>노선</div>
             {CITY_COURSES.slice(0, 3).map((cityCourse) => (
               <button
+                key={cityCourse.bus_number}
                 className={cn({
                   [styles['city-label__button']]: true,
                   [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
@@ -118,6 +119,7 @@ export default function CityBusTimetable() {
             <div className={styles['city-label__button']}>운행</div>
             {cityBusDirections.map((cityBusDirection) => (
               <button
+                key={cityBusDirection.value}
                 className={cn({
                   [styles['city-label__button']]: true,
                   [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirectionType,
