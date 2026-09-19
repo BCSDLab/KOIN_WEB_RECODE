@@ -41,7 +41,10 @@ const rule = {
             const sourceText = sourceCode.getText(node.source);
             const hasSemi = sourceCode.getLastToken(node).value === ';';
 
-            return fixer.replaceText(node, `import type { ${names.join(', ')} } from ${sourceText}${hasSemi ? ';' : ''}`);
+            return fixer.replaceText(
+              node,
+              `import type { ${names.join(', ')} } from ${sourceText}${hasSemi ? ';' : ''}`,
+            );
           },
         });
       },

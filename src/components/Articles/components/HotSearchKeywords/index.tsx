@@ -13,12 +13,7 @@ export default function HotSearchKeywords({ keywords, onKeywordClick }: HotSearc
       <p className={styles.section__title}>많이 검색되는 키워드</p>
       <div className={styles.section__chips}>
         {keywords.map((keyword) => (
-          <button
-            key={keyword}
-            type="button"
-            className={styles.chip}
-            onClick={() => onKeywordClick(keyword)}
-          >
+          <button key={keyword} type="button" className={styles.chip} onClick={() => onKeywordClick(keyword)}>
             {`#${keyword}`}
           </button>
         ))}
