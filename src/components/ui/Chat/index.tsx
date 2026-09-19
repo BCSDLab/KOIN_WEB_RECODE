@@ -52,8 +52,6 @@ interface ChatMessageListClassNames {
   dateLabel?: string;
   bubbleMine?: string;
   bubbleOthers?: string;
-  imageBubble?: string;
-  image?: string;
 }
 
 interface ChatMessageListProps {
@@ -159,7 +157,7 @@ export function ChatMessageList({
     let bubbleClassName = message.isMine
       ? joinClassNames(styles.messageList__bubble, styles['messageList__bubble--mine'], classNames.bubbleMine)
       : joinClassNames(styles.messageList__bubble, styles['messageList__bubble--other'], classNames.bubbleOthers);
-    if (message.isImage) bubbleClassName = joinClassNames(styles.messageList__imageBubble, classNames.imageBubble);
+    if (message.isImage) bubbleClassName = styles.messageList__imageBubble;
 
     const bubble = (
       <div className={bubbleClassName}>
@@ -168,7 +166,7 @@ export function ChatMessageList({
           <img
             src={message.content}
             alt="전송된 이미지"
-            className={joinClassNames(styles.messageList__image, classNames.image)}
+            className={styles.messageList__image}
           />
         ) : (
           message.content

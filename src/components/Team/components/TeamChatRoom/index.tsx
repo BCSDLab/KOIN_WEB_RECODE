@@ -206,7 +206,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
             dateLabel: styles.chatRoom__dateLabel,
             bubbleMine: styles.chatRoom__bubble,
             bubbleOthers: styles.chatRoom__bubble,
-            imageBubble: styles.chatRoom__imageBubble,
           }}
         />
       </div>

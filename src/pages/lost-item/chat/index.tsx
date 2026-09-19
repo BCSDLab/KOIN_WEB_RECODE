@@ -229,12 +229,7 @@ function LostItemChatPage({ token }: { token: string }) {
                 </div>
 
                 <div className={styles['message-container']} ref={chatContainerRef}>
-                  <ChatMessageList
-                    groups={messageGroups}
-                    classNames={{
-                      image: styles['message-item--content-image'],
-                    }}
-                  />
+                  <ChatMessageList groups={messageGroups} />
                 </div>
                 <div className={styles['chat-input-container-wrapper']}>
                   {!isOnline && (
