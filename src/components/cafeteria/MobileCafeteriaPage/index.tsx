@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
@@ -18,13 +17,13 @@ import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
 
 export default function MobileCafeteriaPage() {
-  const { asPath } = useRouter();
   const { diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
@@ -33,7 +32,8 @@ export default function MobileCafeteriaPage() {
         <InformationIcon />
       </button>,
     );
-  }, [asPath, setButtonContent, openCafeteriaInfo]);
+    return resetButtonContent;
+  }, [setButtonContent, resetButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[dining] });
