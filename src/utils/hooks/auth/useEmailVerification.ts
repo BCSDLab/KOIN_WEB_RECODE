@@ -12,9 +12,10 @@ import {
   idMatchEmail,
 } from 'api/auth';
 import type { InputMessage } from 'interfaces/InputMessage';
-import { MESSAGES } from 'static/auth';
+import { MESSAGES, STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionStorage } from 'utils/hooks/state/useWebStorage';
 import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
 import showToast from 'utils/ts/showToast';
 
@@ -39,6 +40,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [emailSendCountData, setEmailSendCountData] = useState<EmailSendCountData | null>(null);
+  const [, setFoundLoginId] = useSessionStorage<string | null>(STORAGE_KEY.FOUND_LOGIN_ID, null);
 
   const {
     isRunning: isTimer,
@@ -116,7 +118,8 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const { mutate: findEmail } = useMutation({
     mutationFn: idFindEmail,
     onSuccess: ({ login_id }) => {
-      router.push(`${ROUTES.IDResult()}?userId=${login_id}`);
+      setFoundLoginId(login_id);
+      router.push(ROUTES.IDResult());
     },
   });
 
