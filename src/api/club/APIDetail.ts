@@ -1,4 +1,5 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
 import type {
   ClubCategoriesResponse,
   ClubDetailResponse,

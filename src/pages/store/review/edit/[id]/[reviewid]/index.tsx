@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { reviewQueries } from 'api/review/queries';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
@@ -11,6 +12,7 @@ function EditReviewComponent({ id, reviewId }: { id: string; reviewId: string })
   const { storeDetail } = useStoreDetail(id);
   const { mutate } = useEditStoreReview(String(storeDetail.id), reviewId);
   const { data: initialData } = useSuspenseQuery(reviewQueries.detail(token, id, reviewId));
+
   return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />;
 }
 

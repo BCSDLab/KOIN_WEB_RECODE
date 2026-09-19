@@ -1,6 +1,7 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
-import {
+
+import type {
   AddTimetableFrameRequest,
   AddTimetableLectureCustomRequest,
   AddTimetableLectureRegularRequest,
@@ -10,7 +11,6 @@ import {
   TimetableFrameInfo,
   TimetableRegularLecture,
 } from './entity';
-import { timetableQueryKeys } from './queries';
 import {
   addTimetableFrame,
   addTimetableLectureCustom,
@@ -24,22 +24,23 @@ import {
   rollbackTimetableFrame,
   rollbackTimetableLecture,
 } from './index';
+import { timetableQueryKeys } from './queries';
 
-type DeleteTimetableFrameVariables = {
+interface DeleteTimetableFrameVariables {
   id: number;
-};
+}
 
-type EditTimetableLectureRegularVariables = {
+interface EditTimetableLectureRegularVariables {
   timetableFrameId: number;
   editedLecture: TimetableRegularLecture;
   token: string;
-};
+}
 
-type EditTimetableLectureCustomVariables = {
+interface EditTimetableLectureCustomVariables {
   timetableFrameId: number;
   editedLecture: TimetableCustomLecture;
   token: string;
-};
+}
 
 const invalidateFrameList = (queryClient: QueryClient, semester: Semester) =>
   queryClient.invalidateQueries({ queryKey: timetableQueryKeys.frameList(semester) });
@@ -108,10 +109,7 @@ export const timetableMutations = {
   editLectureRegular: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: ({ timetableFrameId, editedLecture, token }: EditTimetableLectureRegularVariables) =>
-        editTimetableLectureRegular(
-          { timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture },
-          token,
-        ),
+        editTimetableLectureRegular({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }, token),
       onSuccess: async (data, variables) => {
         queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetableFrameId), data);
         await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });

@@ -6,6 +6,7 @@ import {
   savedApplyActivitySchema,
 } from 'components/Team/RecruitmentApplyPage/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
+
 import styles from './ActivityHistoryField.module.scss';
 
 const LOGGING_TITLE = {
@@ -16,6 +17,7 @@ const LOGGING_TITLE = {
 
 const validateActivity = (activity: ActivityValue) => {
   const result = savedApplyActivitySchema.safeParse({ ...activity, status: 'saved' });
+
   return result.success
     ? { success: true as const }
     : { success: false as const, message: result.error.issues[0].message };
@@ -158,6 +160,7 @@ export default function ActivityHistoryField() {
                   </div>
                   {(() => {
                     const { ref: contentRef, ...contentField } = register(`activities.${index}.content` as const);
+
                     return (
                       <textarea
                         className={styles.draftCard__textarea}
@@ -199,6 +202,7 @@ export default function ActivityHistoryField() {
         (() => {
           const targetActivity = activities[openDatePicker.index];
           const rawDate = targetActivity?.[openDatePicker.field];
+
           return (
             <DatePickerModal
               selectedDate={rawDate ? new Date(`${rawDate}T00:00:00`) : new Date()}

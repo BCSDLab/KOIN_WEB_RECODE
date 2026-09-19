@@ -1,11 +1,9 @@
 import { cn } from '@bcsdlab/utils';
 import { DAYS_STRING } from 'static/timetable';
+
 import styles from 'components/TimetablePage/components/Timetable/Timetable.module.scss';
 
-const DEFAULT_TIME_STRING = ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [
-  time,
-  '',
-]);
+const DEFAULT_TIME_STRING = ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']);
 
 interface TimetableGridPlaceholderProps {
   readonly firstColumnWidth: number;
@@ -23,7 +21,11 @@ export default function TimetableGridPlaceholder({
   const columnHeight = DEFAULT_TIME_STRING.length * rowHeight;
 
   return (
-    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }} aria-hidden>
+    <div
+      className={styles.timetable}
+      style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}
+      aria-hidden
+    >
       <div className={styles.timetable__head} style={{ height: `${rowHeight + 5}px` }}>
         <div
           className={cn({

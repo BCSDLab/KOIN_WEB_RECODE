@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ClubRecruitment } from 'api/club/entity';
+import type { ClubRecruitment } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import usePutClubRecruitment from 'components/Club/ClubRecruitmentEditPage/hooks/usePutClubRecruitment';
@@ -14,10 +15,12 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
+
 import styles from './ClubRecruitmentEditPage.module.scss';
 
 function splitKoreanDate(date: Date): [string, string] {
   const [year, ...rest] = formatKoreanDate(date).split(' ');
+
   return [year, rest.join(' ')];
 }
 

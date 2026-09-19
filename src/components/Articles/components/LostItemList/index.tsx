@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LostItemArticleForGetDTO } from 'api/articles/entity';
+
+import type { LostItemArticleForGetDTO } from 'api/articles/entity';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
@@ -9,15 +10,14 @@ import ROUTES from 'static/routes';
 import { useServerRequest } from 'utils/context/serverRequest';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+
 import styles from './LostItemList.module.scss';
 
 interface LostItemListProps {
   articles: LostItemArticleForGetDTO[];
 }
 
-type HeaderRowInfo = {
-  [key: string]: string;
-};
+type HeaderRowInfo = Record<string, string>;
 
 const HEADER_ROW: HeaderRowInfo = {
   classification: '분류',

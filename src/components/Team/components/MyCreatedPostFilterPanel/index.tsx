@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+
+import type { TeamRecruitmentSort, TeamRecruitmentStatusFilter } from 'api/team/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
@@ -8,16 +10,16 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import type { TeamRecruitmentSort, TeamRecruitmentStatusFilter } from 'api/team/entity';
+
 import styles from './MyCreatedPostFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
+const STATUS_OPTIONS: Array<{ value: TeamRecruitmentStatusFilter; label: string }> = [
   { value: 'ALL', label: '전체' },
   { value: 'RECRUITING', label: '모집 중' },
   { value: 'CLOSED', label: '모집 마감' },
 ];
 
-const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
@@ -53,6 +55,7 @@ export default function MyCreatedPostFilterPanel({
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 

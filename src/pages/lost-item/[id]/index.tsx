@@ -1,5 +1,6 @@
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
@@ -26,6 +27,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './LostItemDetailPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
@@ -108,6 +110,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   ) => {
     if (token) {
       onSuccess();
+
       return;
     }
     portalManager.open((portalOption) => (
@@ -147,6 +150,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
       logItemPostReportClick();
       if (isMobile) {
         navigate(ROUTES.LostItemReport({ id: String(articleId) }));
+
         return;
       }
       openReportModal();

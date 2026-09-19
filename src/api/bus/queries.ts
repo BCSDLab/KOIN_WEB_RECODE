@@ -1,12 +1,6 @@
 import { queryOptions, skipToken } from '@tanstack/react-query';
-import {
-  BusRouteParams,
-  CityBusParams,
-  Depart,
-  Arrival,
-  ExpressCourse,
-  ShuttleCourse,
-} from './entity';
+
+import type { BusRouteParams, CityBusParams, Depart, Arrival, ExpressCourse, ShuttleCourse } from './entity';
 import {
   getBusNoticeInfo,
   getBusRouteInfo,

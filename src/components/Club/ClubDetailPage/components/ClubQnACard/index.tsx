@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { ClubNewQnA, ClubQnAItem } from 'api/club/entity';
+import { type Dispatch, type SetStateAction, useState } from 'react';
+
+import type { ClubNewQnA, ClubQnAItem } from 'api/club/entity';
 import DeleteIcon from 'assets/svg/Club/delete-reply-icon.svg';
 import ReplyIcon from 'assets/svg/Club/reply-icon.svg';
 import SendIcon from 'assets/svg/Club/send-icon.svg';
@@ -8,6 +9,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
+
 import styles from './ClubQnACard.module.scss';
 
 interface ClubQnACardProps {

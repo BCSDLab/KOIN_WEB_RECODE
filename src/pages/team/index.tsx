@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
+import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { teamQueries, type TeamRecruitmentInfiniteListRequest } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
@@ -31,6 +31,7 @@ import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './TeamListPage.module.scss';
 
 interface AppliedFilterChipProps {
@@ -47,7 +48,7 @@ function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
   );
 }
 
-const getFilterLabel = <T extends string>(options: { value: T; label: string }[], value: T) =>
+const getFilterLabel = <T extends string>(options: Array<{ value: T; label: string }>, value: T) =>
   options.find((option) => option.value === value)?.label ?? value;
 
 const INITIAL_FILTER: TeamRecruitmentFilter = {
@@ -146,6 +147,7 @@ export default function TeamListPage() {
       setRedirectPath(router.asPath);
       await router.push(ROUTES.Auth());
       showToast('warning', '로그인이 필요한 기능입니다.');
+
       return;
     }
     router.push(ROUTES.TeamProfile());
@@ -160,6 +162,7 @@ export default function TeamListPage() {
 
     if (!token) {
       redirectToLogin(router.asPath);
+
       return;
     }
     router.push(ROUTES.TeamRecruitmentNew());
@@ -263,11 +266,7 @@ export default function TeamListPage() {
                 <p className={styles.empty__message}>
                   {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
                 </p>
-                {!isError && (
-                  <p className={styles.empty__description}>
-                    직접 모집글을 작성하여 팀원을 모집해보세요.
-                  </p>
-                )}
+                {!isError && <p className={styles.empty__description}>직접 모집글을 작성하여 팀원을 모집해보세요.</p>}
               </div>
               {!isError && (
                 <button type="button" className={styles.empty__recruitButton} onClick={handleRecruitClick}>

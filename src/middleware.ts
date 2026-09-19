@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
+
 import ROUTES, { PROTECTED_ROUTES } from 'static/routes';
 import { COOKIE_DOMAIN, COOKIE_KEY } from 'static/url';
 import { isTokenExpired } from 'utils/ts/auth';
@@ -19,6 +20,7 @@ const paramProxy = new Proxy({}, { get: () => PARAM_TOKEN });
 function toPathPattern(routeFn: (params: Record<string, string | undefined>) => string): RegExp {
   const template = routeFn(paramProxy).split('?')[0];
   const escaped = escapeRegExp(template).replaceAll(PARAM_TOKEN, '[^/]+');
+
   return new RegExp(`^${escaped}$`);
 }
 
@@ -36,6 +38,7 @@ export function middleware(request: NextRequest) {
   if (isProtectedPath(request.nextUrl.pathname) && (!token || isExpired)) {
     const loginUrl = new URL(ROUTES.Auth(), request.url);
     loginUrl.searchParams.set('redirect', `${request.nextUrl.pathname}${request.nextUrl.search}`);
+
     return NextResponse.redirect(loginUrl);
   }
 
@@ -63,6 +66,7 @@ export function middleware(request: NextRequest) {
     const cookieStrings = [COOKIE_KEY.AUTH_TOKEN, COOKIE_KEY.AUTH_USER_TYPE].flatMap((name) => {
       const hostOnly = `${name}=; ${baseOptions}`;
       if (isLocalhost(hostname)) return [hostOnly];
+
       return [hostOnly, `${name}=; Domain=${COOKIE_DOMAIN}; ${baseOptions}`];
     });
 

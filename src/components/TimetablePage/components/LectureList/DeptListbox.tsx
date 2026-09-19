@@ -1,5 +1,6 @@
 import React from 'react';
-import { Selector, SelectorProps } from 'components/ui/Selector';
+
+import { Selector, type SelectorProps } from 'components/ui/Selector';
 
 type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
@@ -25,6 +26,7 @@ function DeptListbox({ value, onChange, dropDownMaxHeight, isWhiteBackground }: 
     // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Selector
       options={deptOptionList}

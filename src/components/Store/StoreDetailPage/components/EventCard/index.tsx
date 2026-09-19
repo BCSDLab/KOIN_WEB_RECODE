@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { StoreEvent } from 'api/store/entity';
+import type { StoreEvent } from 'api/store/entity';
 import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
 import EventContent from 'components/Store/StoreDetailPage/components/EventContent';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './EventCard.module.scss';
 
 export default function EventCard({ event }: { event: StoreEvent }) {

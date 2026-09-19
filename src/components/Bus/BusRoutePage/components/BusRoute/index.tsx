@@ -1,9 +1,10 @@
 import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-28x28.svg';
 import { SHORT_BUS_TYPE_MAP } from 'components/Bus/BusRoutePage/constants/busType';
-import { Schedule } from 'components/Bus/BusRoutePage/ts/types';
+import type { Schedule } from 'components/Bus/BusRoutePage/ts/types';
 import { formatTimeDifference, formatTimeWithSeconds, isToday } from 'components/Bus/BusRoutePage/utils/timeModule';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {

@@ -1,6 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
 import ParticipantsList from 'components/Callvan/components/ParticipantsList';

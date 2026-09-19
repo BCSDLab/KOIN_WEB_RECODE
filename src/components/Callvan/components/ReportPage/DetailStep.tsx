@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
+
 import ImageUploadIcon from 'assets/svg/common/image-upload.svg';
+
 import styles from './ReportPage.module.scss';
 
 const MAX_DESCRIPTION_LENGTH = 1000;

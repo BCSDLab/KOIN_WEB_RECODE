@@ -17,5 +17,6 @@ export const useLogout = () => {
     setToken('');
     window.location.href = ROUTES.Main();
   };
+
   return logout;
 };

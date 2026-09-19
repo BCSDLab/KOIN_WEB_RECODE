@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import BusNotice from 'components/Bus/BusNotice';
 import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './BusTabs.module.scss';
 
 export default function BusTabs() {

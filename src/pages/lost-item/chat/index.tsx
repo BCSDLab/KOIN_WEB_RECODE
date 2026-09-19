@@ -12,7 +12,6 @@ import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import SendIcon from 'assets/svg/Articles/send.svg';
-
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
@@ -31,6 +30,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
+
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
@@ -72,6 +72,7 @@ function LostItemChatPage({ token }: { token: string }) {
     try {
       if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
+
         return;
       }
 
@@ -84,7 +85,7 @@ function LostItemChatPage({ token }: { token: string }) {
         showToast('error', error.message);
       }
     }
-  }
+  };
 
   const sendMessage = () => {
     if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
@@ -93,7 +94,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
     sendChatMessage({ content: inputValue });
     setInputValue('');
-  }
+  };
 
   const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

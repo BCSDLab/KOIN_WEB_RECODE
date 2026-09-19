@@ -1,5 +1,6 @@
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from 'static/policy';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
@@ -65,4 +66,5 @@ function PolicyPage() {
     </div>
   );
 }
+
 export default PolicyPage;

@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
+
 import { sendClientError } from '@bcsdlab/koin';
 import { useQueryClient } from '@tanstack/react-query';
-import { RestrictedCallvanResponse } from 'api/callvan/entity';
+import type { RestrictedCallvanResponse } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import CallvanRestrictionModal from 'components/Callvan/components/CallvanRestrictionModal';
 import { isCallvanRestrictedError } from 'components/Callvan/utils/callvanRestriction';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
 export default function useCallvanRestrictionModal(token: string) {
@@ -31,12 +32,14 @@ export default function useCallvanRestrictionModal(token: string) {
         const restriction = await queryClient.fetchQuery(callvanQueries.restriction(token));
         if (restriction.is_restricted) {
           open(restriction);
+
           return true;
         }
 
         return false;
       } catch (restrictionError) {
         sendClientError(restrictionError);
+
         return false;
       }
     },

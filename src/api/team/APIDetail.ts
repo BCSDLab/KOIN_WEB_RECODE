@@ -1,6 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
-import {
+import type {
   MyCreatedTeamRecruitmentListRequest,
   MyCreatedTeamRecruitmentListResponse,
   MyTeamRecruitmentApplicationListRequest,
@@ -129,9 +129,9 @@ export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> imple
   }
 }
 
-export class GetTeamRecruitmentNotifications<
-  R extends TeamRecruitmentNotificationListResponse,
-> implements APIRequest<R> {
+export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificationListResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.GET;
 
   path = '/team-recruitments/notifications';
@@ -153,9 +153,9 @@ export class GetTeamRecruitmentNotifications<
   }
 }
 
-export class GetMyTeamRecruitmentApplications<
-  R extends MyTeamRecruitmentApplicationListResponse,
-> implements APIRequest<R> {
+export class GetMyTeamRecruitmentApplications<R extends MyTeamRecruitmentApplicationListResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.GET;
 
   path = '/team-recruitments/me/applications';
@@ -403,9 +403,7 @@ export class GetTeamRecruitmentApplicantDetail<R extends TeamRecruitmentApplican
   }
 }
 
-export class PostTeamRecruitmentApplication<R extends PostTeamRecruitmentApplicationResponse>
-  implements APIRequest<R>
-{
+export class PostTeamRecruitmentApplication<R extends PostTeamRecruitmentApplicationResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;

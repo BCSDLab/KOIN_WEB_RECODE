@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { ABTestAssignResponse } from './entity';
+
+import type { ABTestAssignResponse } from './entity';
 import { abTestAssign } from './index';
 
 type DefaultABTestAssignResponse = ABTestAssignResponse | { access_history_id: null; variable_name: string };

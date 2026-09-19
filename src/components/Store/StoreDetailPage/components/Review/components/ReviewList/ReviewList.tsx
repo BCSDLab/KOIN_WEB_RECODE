@@ -1,10 +1,11 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
+
 import { keepPreviousData, useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import ChervronUp from 'assets/svg/chervron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { REVEIW_LOGIN } from 'components/Store/StoreDetailPage/components/Review/components/ReviewButton/index';
 import ReviewCard from 'components/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
@@ -12,6 +13,7 @@ import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown'
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
+
 import styles from './ReviewList.module.scss';
 
 type SortType = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
@@ -67,6 +69,7 @@ export default function ReviewList({ id }: { id: string }) {
         <LoginRequiredModal title={REVEIW_LOGIN[0]} description={REVEIW_LOGIN[1]} onClose={portalOption.close} />
       ));
     }
+
     return !userInfo;
   };
 

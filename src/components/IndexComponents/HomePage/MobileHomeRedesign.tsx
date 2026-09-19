@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
 import { storeQueries } from 'api/store/queries';
@@ -18,6 +19,7 @@ import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
+
 import styles from './MobileHomeRedesign.module.scss';
 
 const unibus = BUS_LINKS[2];

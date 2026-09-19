@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
@@ -12,11 +14,11 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+
 import ActivityHistoryDetailModal from './components/ActivityHistoryDetailModal';
 import ActivityHistoryList from './components/ActivityHistoryList';
 import ApplicantActionBar from './components/ApplicantActionBar';
 import ApplicantProfileHeader from './components/ApplicantProfileHeader';
-import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import styles from './ApplicantDetail.module.scss';
 
 interface DecisionModalCopy {

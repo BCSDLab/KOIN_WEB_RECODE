@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
 import { COOKIE_KEY } from 'static/url';
@@ -14,12 +15,14 @@ const useAuth = () => {
       'refresh-token-storage',
       null,
     );
+
     return refreshTokenStorage?.state?.refreshToken ?? null;
   }, []);
 
   const { mutateAsync: refreshAccessToken } = useMutation({
     mutationFn: async (refresh_token: string) => {
       const response = await refresh({ refresh_token });
+
       return response;
     },
     onSuccess: (response) => {

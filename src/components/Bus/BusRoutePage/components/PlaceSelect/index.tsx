@@ -1,16 +1,17 @@
 import { cn } from '@bcsdlab/utils';
-import { DepartArrivalPlace } from 'api/bus/entity';
+import type { DepartArrivalPlace } from 'api/bus/entity';
 import {
   locationLabels,
   locations,
   LOCATION_MAP,
   REVERSE_LOCATION_MAP,
 } from 'components/Bus/BusRoutePage/constants/location';
-import { LocationDisplay } from 'components/Bus/BusRoutePage/ts/types';
-import { LoggingLocation } from 'components/Bus/hooks/useBusLogger';
+import type { LocationDisplay } from 'components/Bus/BusRoutePage/ts/types';
+import type { LoggingLocation } from 'components/Bus/hooks/useBusLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './PlaceSelect.module.scss';
 
 interface PlaceSelectProps {
@@ -47,6 +48,7 @@ export default function PlaceSelect({
     if (oppositePlace === currentLocation) {
       exchangePlace();
       closeDropdown();
+
       return;
     }
 

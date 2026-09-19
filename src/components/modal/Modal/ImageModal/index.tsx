@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { createTouchHandlers } from 'utils/ts/touchHandler';
+
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -26,6 +28,7 @@ function ImageModal({ imageList, imageIndex, onClose }: ImageModalProps) {
     (move: number) => {
       setSelectedIndex((prevIndex) => {
         const newIndex = prevIndex + move;
+
         return Math.max(0, Math.min(newIndex, imageList.length - 1));
       });
     },

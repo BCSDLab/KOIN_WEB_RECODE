@@ -2,8 +2,9 @@ import { useRef } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { TeamRecruitmentNotification } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -17,7 +18,7 @@ import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
-import type { TeamRecruitmentNotification } from 'api/team/entity';
+
 import styles from './TeamNotificationsPage.module.scss';
 
 export default function TeamNotificationsPage() {
@@ -79,11 +80,13 @@ export default function TeamNotificationsPage() {
           chatRoomId: String(notification.chat_room_id),
         }),
       );
+
       return;
     }
 
     if (notification.target_type === 'MY_APPLICATIONS') {
       router.push(ROUTES.TeamMyApplications());
+
       return;
     }
 

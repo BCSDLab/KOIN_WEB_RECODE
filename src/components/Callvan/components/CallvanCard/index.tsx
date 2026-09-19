@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { CallvanPost } from 'api/callvan/entity';
+import type { CallvanPost } from 'api/callvan/entity';
 import ChatIcon from 'assets/svg/Callvan/chat.svg';
 import ChevronRightIcon from 'assets/svg/Callvan/chevron-right.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
@@ -22,6 +23,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { redirectToLogin } from 'utils/ts/auth';
+
 import styles from './CallvanCard.module.scss';
 
 const CALLVAN_CATEGORY = '11';
@@ -32,6 +34,7 @@ interface CallvanCardProps {
 
 function getDayOfWeek(dateStr: string): string {
   const date = new Date(dateStr);
+
   return DAYS[date.getDay()];
 }
 
@@ -40,6 +43,7 @@ function formatDate(dateStr: string): string {
   const month = parts[1];
   const day = parts[2];
   const dayOfWeek = getDayOfWeek(dateStr);
+
   return `${month}.${day} (${dayOfWeek})`;
 }
 
@@ -122,6 +126,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </button>
       );
     }
+
     return <span className={styles['card__phone-placeholder']} />;
   };
 
@@ -142,6 +147,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </button>
       );
     }
+
     return (
       <div className={styles.card__count}>
         <PeopleIcon />
@@ -205,6 +211,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           </div>
         );
       }
+
       return null;
     }
 

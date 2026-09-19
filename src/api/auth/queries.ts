@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
+
+import type { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
 import { getGeneralUser, getUser, getUserAcademicInfo } from './index';
 
 type AuthUserType = 'STUDENT' | 'GENERAL';

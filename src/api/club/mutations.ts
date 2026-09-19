@@ -1,5 +1,5 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { clubQueryKeys } from './queries';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
 import type { ClubEventRequest, ClubRecruitmentRequest, NewClubData, NewClubManager } from './entity';
 import {
   deleteClubEvent,
@@ -18,6 +18,7 @@ import {
   putClubRecruitment,
   putNewClubManager,
 } from './index';
+import { clubQueryKeys } from './queries';
 
 interface ClubMutationCallbacks {
   onSuccess?: () => void | Promise<void>;

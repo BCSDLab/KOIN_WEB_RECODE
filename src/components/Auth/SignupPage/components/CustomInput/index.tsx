@@ -1,4 +1,5 @@
-import { ComponentPropsWithoutRef, forwardRef } from 'react';
+import { type ComponentPropsWithoutRef, forwardRef } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import CloseIcon from 'assets/svg/Login/close.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
@@ -9,9 +10,10 @@ import WarningIcon from 'assets/svg/Login/warning.svg';
 import MobileWarningIcon from 'assets/svg/mobile-warning-icon.svg';
 import FormatTime from 'components/Auth/SignupPage/hooks/useFormatTime';
 import { useFormContext } from 'react-hook-form';
-import { UserType } from 'static/auth';
+import type { UserType } from 'static/auth';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import styles from './CustomInput.module.scss';
 
 export type InputMessage = {
@@ -66,6 +68,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       if (isVisibleButton && type === 'password') {
         return isPasswordVisible ? 'text' : 'password';
       }
+
       return type;
     };
 

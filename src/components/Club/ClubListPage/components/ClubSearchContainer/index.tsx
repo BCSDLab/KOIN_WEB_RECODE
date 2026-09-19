@@ -1,8 +1,9 @@
 import { type ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { searchClub } from 'api/club';
-import { ClubSearchResponse } from 'api/club/entity';
+import type { ClubSearchResponse } from 'api/club/entity';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SearchIcon from 'assets/svg/Club/search.svg';
 import RelateSearchItem from 'components/Club/ClubListPage/components/RelateSearchItem/RelateSearchItem';
@@ -11,6 +12,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+
 import styles from './ClubSearchContainer.module.scss';
 
 export default function ClubSearchContainer() {
@@ -25,6 +27,7 @@ export default function ClubSearchContainer() {
   const debouncedSearch = useDebounce(async (inputValue: string) => {
     if (inputValue.length === 0) {
       setRelateSearchItems(null);
+
       return;
     }
     const data = await searchClub(inputValue);

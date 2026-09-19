@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -10,7 +11,7 @@ import {
   idExists,
   idMatchEmail,
 } from 'api/auth';
-import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
+import type { InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';

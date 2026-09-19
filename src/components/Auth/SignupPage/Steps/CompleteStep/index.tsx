@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './CompleteStep.module.scss';
 
 function CompleteStep() {

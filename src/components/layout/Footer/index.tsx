@@ -2,16 +2,18 @@
 /* 푸터 로고/아이콘은 작은 정적 이미지라 Next/Image 최적화 이득이 작아 img 유지 */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { CATEGORY } from 'static/category';
+import type { SubmenuTitle } from 'static/category';
 import ROUTES from 'static/routes';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
-import type { SubmenuTitle } from 'static/category';
+
 import styles from './Footer.module.scss';
 
 function Footer() {

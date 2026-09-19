@@ -1,8 +1,10 @@
 import Image from 'next/image';
+
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './DetailImage.module.scss';
 
 interface DetailModalProps {

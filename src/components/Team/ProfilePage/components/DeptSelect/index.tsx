@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import ChevronDownIcon from 'assets/svg/Team/chevron-down-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './DeptSelect.module.scss';
 
 interface DeptOption {

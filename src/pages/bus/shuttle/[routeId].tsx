@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
@@ -9,6 +10,7 @@ import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './ShuttleDetailPage.module.scss';
 
 function asString(value: string | string[]): string {

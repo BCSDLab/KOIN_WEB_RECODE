@@ -3,9 +3,10 @@ import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import CustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
-import { Controller, FieldError, useFormContext, useWatch } from 'react-hook-form';
-import { ContactType, MESSAGES, REGEX } from 'static/auth';
+import { Controller, type FieldError, useFormContext, useWatch } from 'react-hook-form';
+import { type ContactType, MESSAGES, REGEX } from 'static/auth';
 import showToast from 'utils/ts/showToast';
+
 import styles from './MobileResetPassword.module.scss';
 
 interface MobileResetPasswordProps {
@@ -43,6 +44,7 @@ function MobileResetPassword({ onNext, contactType }: MobileResetPasswordProps) 
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
+
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 

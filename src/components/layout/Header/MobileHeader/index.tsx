@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
@@ -18,6 +19,7 @@ import { backButtonTapped } from 'utils/ts/iosBridge';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -53,6 +55,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         duration_time: getElapsedSeconds('enter_storeDetail'),
       }); // 상점 내 뒤로가기 버튼 로깅
       router.back();
+
       return;
     }
     if (pathname === '/timetable') {
@@ -72,6 +75,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
       (pathname === ROUTES.Club() || params.hot === 'true')
     ) {
       backButtonTapped();
+
       return;
     }
     // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
@@ -121,7 +125,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             !isClubRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
-              .sort((a, b) => b.link.length - a.link.length)[0]?.title ?? '')}
+              .sort((a, b) => b.link.length - a.link.length)[0]?.title ??
+              '')}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
           {pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 수정'}

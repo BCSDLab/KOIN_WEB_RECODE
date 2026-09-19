@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { teamQueries } from 'api/team/queries';
@@ -10,6 +11,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import ApplicantCard from './components/ApplicantCard';
 import styles from './ApplicantManagement.module.scss';
 

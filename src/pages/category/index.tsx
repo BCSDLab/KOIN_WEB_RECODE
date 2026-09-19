@@ -1,5 +1,6 @@
 import type { ComponentType, MouseEvent, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
+
 import BriefcaseIcon from 'assets/svg/category/briefcase-icon.svg';
 import CalendarIcon from 'assets/svg/category/calendar-icon.svg';
 import ChatIcon from 'assets/svg/category/chat-icon.svg';
@@ -16,14 +17,15 @@ import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import RouteIcon from 'assets/svg/common/route-icon.svg';
 import HomeLayout from 'components/layout/HomeLayout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import IconBox from 'components/ui/IconBox';
+import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
-import type { LoggingTeam } from 'lib/gtag';
+
 import styles from './CategoryPage.module.scss';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -269,6 +271,7 @@ function CategoryPage() {
           <ul className={styles.menu}>
             {items.map((item) => {
               const { title: itemTitle, href, Icon } = item;
+
               return (
                 <li key={itemTitle}>
                   <Link href={href} className={styles.menu__link} onClick={(e) => handleMenuClick(e, item)}>

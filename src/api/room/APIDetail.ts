@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { LandListResponse, LandDetailResponse } from './entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type { LandListResponse, LandDetailResponse } from './entity';
 
 export class LandList<R extends LandListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

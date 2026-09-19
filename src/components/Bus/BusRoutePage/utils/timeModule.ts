@@ -22,6 +22,7 @@ export const formatRelativeDate = (date: Date) => {
   const now = new Date();
 
   if (now.getDate() === date.getDate()) return '오늘';
+
   return `${date.getMonth() + 1}월 ${date.getDate()}일`;
 };
 
@@ -32,11 +33,13 @@ export const format12Hour = (date: Date) => {
 
   const period = hour >= 12 ? '오후' : '오전';
   const displayHour = hour > 12 ? hour - 12 : hour;
+
   return `${period} ${String(displayHour)}:${String(minute).padStart(2, '0')}`;
 };
 
 export const isToday = (date: Date) => {
   const today = new Date();
+
   return (
     date.getDate() === today.getDate() &&
     date.getMonth() === today.getMonth() &&
@@ -66,5 +69,6 @@ export const formatTimeDifference = (time1: string, time2: string) => {
   if (isPast) return '';
 
   if (hours === 0) return `${minutes}분 전`;
+
   return `${hours}시간 ${minutes > 0 ? `${minutes}분` : ''} 전`;
 };

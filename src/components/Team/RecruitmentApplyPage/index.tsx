@@ -1,10 +1,12 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
+import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
@@ -19,10 +21,10 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
 import { APPLY_STEPS, type ApplicationFormValues, type ApplyStepTitle } from './types';
-import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import styles from './RecruitmentApplyPage.module.scss';
 
 const LOGGING_TITLE = {
@@ -137,7 +139,9 @@ export default function RecruitmentApplyPage() {
       showToast('warning', '기본 정보를 먼저 입력해주세요.');
       goToFirstStep();
     }
-  }, [isReady, currentStep, methods, goToFirstStep]);
+    // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, currentStep, methods]);
 
   const { mutate: upsertProfile, isPending: isProfilePending } = useUpsertTeamRecruitmentProfileMutation();
   const { mutate: submitApplication, isPending: isApplicationPending } = useMutation(
@@ -158,6 +162,7 @@ export default function RecruitmentApplyPage() {
       ) {
         showToast('warning', '기본 정보를 먼저 입력해주세요.');
         goToFirstStep();
+
         return;
       }
       showToast('warning', '필수 항목을 모두 작성해주세요.');
@@ -173,6 +178,7 @@ export default function RecruitmentApplyPage() {
       const selectedRole = recruitment.roles.find((role) => role.id === pendingValues.roleId);
       if (!selectedRole) {
         showToast('warning', '지원 역할을 다시 선택해주세요.');
+
         return;
       }
       roleId = selectedRole.id;

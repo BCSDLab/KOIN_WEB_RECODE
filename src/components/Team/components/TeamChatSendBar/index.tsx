@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
+
 import ImageUploadIcon from 'assets/svg/common/image-upload.svg';
 import SendIcon from 'assets/svg/common/send.svg';
+
 import styles from './TeamChatSendBar.module.scss';
 
 interface TeamChatSendBarProps {
@@ -9,11 +11,7 @@ interface TeamChatSendBarProps {
   onImageSelect: (file: File) => void;
 }
 
-export default function TeamChatSendBar({
-  disabled = false,
-  onSend,
-  onImageSelect,
-}: TeamChatSendBarProps) {
+export default function TeamChatSendBar({ disabled = false, onSend, onImageSelect }: TeamChatSendBarProps) {
   const [content, setContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

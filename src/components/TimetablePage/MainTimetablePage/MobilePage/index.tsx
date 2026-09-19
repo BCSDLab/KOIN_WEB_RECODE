@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
+
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import SemesterListbox from 'components/TimetablePage/components/SemesterList';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -9,6 +10,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
+
 import styles from './MobilePage.module.scss';
 
 interface MobilePageProps {

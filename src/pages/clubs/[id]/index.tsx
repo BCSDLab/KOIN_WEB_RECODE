@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
@@ -38,6 +39,7 @@ import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
+
 import styles from './ClubDetailPage.module.scss';
 
 export const NO_SELECTED_EVENT_ID = -1;
@@ -175,6 +177,7 @@ export default function ClubDetailPage({
     if (!initialClubId || isPending) return;
     if (!token) {
       openAuthModal();
+
       return;
     }
     if (clubDetail.is_liked) {

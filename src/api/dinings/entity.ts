@@ -1,12 +1,12 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type DiningType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
 
-export type DiningTypes = Array<DiningType>;
+export type DiningTypes = DiningType[];
 
 export type DiningPlace = 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
 
-export type OriginalDining = {
+export interface OriginalDining {
   id: number;
   date: string;
   type: DiningType;
@@ -20,17 +20,15 @@ export type OriginalDining = {
   updated_at: string;
   soldout_at: string | null;
   changed_at: string | null;
-};
+}
 
-export type MenuItem = {
+export interface MenuItem {
   id: number;
   name: string;
-};
+}
 
 export type Dining = Omit<OriginalDining, 'menu'> & {
-  menu: Array<MenuItem>;
+  menu: MenuItem[];
 };
 
-export interface DiningsResponseType extends APIResponse {
-  [index: number]: OriginalDining;
-}
+export interface DiningsResponseType extends APIResponse, Record<number, OriginalDining> {}

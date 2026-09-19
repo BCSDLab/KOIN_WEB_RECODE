@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import type { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
+
 import ReportPage from 'components/Callvan/components/ReportPage';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

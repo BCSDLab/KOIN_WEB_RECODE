@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import Suspense from 'components/ssr/SSRSuspense';
@@ -9,6 +10,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
+
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
@@ -31,6 +33,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         duration_time: getElapsedSeconds('enterTimetablePage'),
       });
       history.back();
+
       return;
     }
     // 브라우저의 뒤로가기 버튼 클릭 시 / 마우스 사이드 버튼 누를 시
@@ -46,6 +49,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
+
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
@@ -61,6 +65,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       }
     };
     window.addEventListener('wheel', handleWheel);
+
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };

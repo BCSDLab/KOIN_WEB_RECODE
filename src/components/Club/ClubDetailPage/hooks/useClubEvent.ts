@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
 import useTokenState from 'utils/hooks/state/useTokenState';

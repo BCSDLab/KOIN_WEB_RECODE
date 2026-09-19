@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import Layout from 'components/layout';

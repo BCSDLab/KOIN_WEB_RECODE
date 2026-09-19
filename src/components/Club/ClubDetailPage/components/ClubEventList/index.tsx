@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
 import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
@@ -7,6 +8,7 @@ import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEv
 import { NO_SELECTED_EVENT_ID } from 'pages/clubs/[id]';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './ClubEventList.module.scss';
 
 interface ClubEventListProps {
@@ -43,6 +45,7 @@ export default function ClubEventList({
 
   const getStatusLabel = (value: string) => {
     const option = statusOptions.find((opt) => opt.value === value);
+
     return option ? option.label : '최신 등록순';
   };
 

@@ -1,4 +1,4 @@
-import { Dining, DiningType } from 'api/dinings/entity';
+import type { Dining, DiningType } from 'api/dinings/entity';
 import { PLACE_ORDER } from 'static/cafeteria';
 
 export const filterDinings = (dinings: Dining[], type: DiningType) => {
@@ -9,6 +9,7 @@ export const filterDinings = (dinings: Dining[], type: DiningType) => {
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);
     const indexB = PLACE_ORDER.indexOf(b.place);
+
     return indexA - indexB;
   });
 

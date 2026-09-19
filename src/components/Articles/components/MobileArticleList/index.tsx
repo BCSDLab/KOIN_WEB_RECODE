@@ -1,8 +1,10 @@
 import Link from 'next/link';
+
+import type { ArticleWithNew } from 'api/articles/entity';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
-import type { ArticleWithNew } from 'api/articles/entity';
+
 import styles from './MobileArticleList.module.scss';
 
 interface MobileArticleListProps {
@@ -11,11 +13,13 @@ interface MobileArticleListProps {
 
 const formatDate = (time: string) => {
   if (typeof time !== 'string') return '';
+
   return time.split(' ')[0].replaceAll('-', '.');
 };
 
 const getLink = (article: ArticleWithNew) => {
   if (article.board_id === 14) return ROUTES.LostItemDetail({ id: String(article.id) });
+
   return ROUTES.ArticlesDetail({ id: String(article.id) });
 };
 

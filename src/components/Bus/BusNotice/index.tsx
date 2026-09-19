@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info.svg';
@@ -8,6 +9,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
+
 import styles from './BusNotice.module.scss';
 
 export interface BusNoticeProps {

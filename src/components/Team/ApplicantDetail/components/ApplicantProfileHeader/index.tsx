@@ -1,8 +1,9 @@
 import { cn } from '@bcsdlab/utils';
+import type { TeamApplicationRole, TeamApplicationStatus } from 'api/team/entity';
 import ApplicantChatIcon from 'assets/svg/Team/applicant-chat.svg';
 import ProfileAvatarIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
-import type { TeamApplicationRole, TeamApplicationStatus } from 'api/team/entity';
+
 import styles from './ApplicantProfileHeader.module.scss';
 
 const STATUS_CLASS: Record<TeamApplicationStatus, string> = {

@@ -1,15 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import Logo from 'assets/svg/Login/logo.svg';
 import MobileLogo from 'assets/svg/Login/mobile-logo.svg';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './Auth.module.scss';
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const isMobile = useMediaQuery();
+
   return (
     <div className={styles.template}>
       {router.pathname === ROUTES.Auth() && (

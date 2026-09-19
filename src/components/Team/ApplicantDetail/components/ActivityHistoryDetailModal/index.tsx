@@ -1,8 +1,9 @@
+import type { TeamApplicationActivity } from 'api/team/entity';
 import XIcon from 'assets/svg/Team/x-icon.svg';
 import { formatRecruitmentDate } from 'components/Team/utils/recruitmentDisplay';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import type { TeamApplicationActivity } from 'api/team/entity';
+
 import styles from './ActivityHistoryDetailModal.module.scss';
 
 interface ActivityHistoryDetailModalProps {
@@ -12,6 +13,7 @@ interface ActivityHistoryDetailModalProps {
 
 const formatPeriod = (activity: TeamApplicationActivity) => {
   const endLabel = activity.is_ongoing ? '진행 중' : formatRecruitmentDate(activity.ended_at ?? '');
+
   return `${formatRecruitmentDate(activity.started_at)} - ${endLabel}`;
 };
 

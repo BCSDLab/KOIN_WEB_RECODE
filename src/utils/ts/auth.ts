@@ -1,4 +1,5 @@
 import ROUTES from 'static/routes';
+
 import { isomorphicSessionStorage } from './env';
 
 const REDIRECT_KEY = 'REDIRECT_AFTER_LOGIN';
@@ -37,6 +38,7 @@ export function isTokenExpired(token: string): boolean {
   try {
     const payload = token.split('.')[1];
     const decoded = JSON.parse(atob(payload));
+
     return decoded.exp * 1000 < Date.now();
   } catch {
     return true;
@@ -45,5 +47,6 @@ export function isTokenExpired(token: string): boolean {
 
 export function getValidToken(token: string | null | undefined): string | undefined {
   if (!token) return undefined;
+
   return isTokenExpired(token) ? undefined : token;
 }

@@ -1,4 +1,5 @@
 import { HTTP_METHOD, type APIRequest } from 'interfaces/APIRequest';
+
 import type { CourseResponse, PreCourseResponse } from './entity';
 
 export class CourseSearch<R extends CourseResponse> implements APIRequest<R> {

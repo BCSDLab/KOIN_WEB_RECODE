@@ -1,5 +1,6 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
+
 import type { ClubRecruitmentResponse, HotClubResponse } from './entity';
 import {
   getClubCategories,
@@ -56,14 +57,16 @@ export const clubQueryKeys = {
     ] as const,
   hot: () => [...clubQueryKeys.all, 'hot'] as const,
   detailRoot: (clubId?: number | string) =>
-    clubId === undefined ? [...clubQueryKeys.all, 'detail'] as const : [...clubQueryKeys.all, 'detail', Number(clubId)] as const,
+    clubId === undefined
+      ? ([...clubQueryKeys.all, 'detail'] as const)
+      : ([...clubQueryKeys.all, 'detail', Number(clubId)] as const),
   detail: (clubId: number, token?: string | null) =>
     [...clubQueryKeys.detailRoot(clubId), getViewerScope(token)] as const,
   recruitment: (clubId: number) => [...clubQueryKeys.all, 'recruitment', clubId] as const,
   eventListRoot: (clubId?: string | number) =>
     clubId === undefined
-      ? [...clubQueryKeys.all, 'event-list'] as const
-      : [...clubQueryKeys.all, 'event-list', clubId] as const,
+      ? ([...clubQueryKeys.all, 'event-list'] as const)
+      : ([...clubQueryKeys.all, 'event-list', clubId] as const),
   eventList: (clubId: string | number, eventType: string, token?: string | null) =>
     [...clubQueryKeys.eventListRoot(clubId), eventType, getViewerScope(token)] as const,
   eventDetail: (clubId: string | number, eventId: string | number) =>

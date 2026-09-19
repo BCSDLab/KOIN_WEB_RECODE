@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import {
   dehydrate,
@@ -18,7 +19,7 @@ import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
 import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
 import ImageModal from 'components/modal/Modal/ImageModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import EventTable from 'components/Store/StoreDetailPage/components/EventTable';
 import MenuTable from 'components/Store/StoreDetailPage/components/MenuTable';
 import ReviewPage from 'components/Store/StoreDetailPage/components/Review';
@@ -42,6 +43,7 @@ import {
   withStaticFetchRetry,
 } from 'utils/ts/isr';
 import showToast from 'utils/ts/showToast';
+
 import styles from './StoreDetailPage.module.scss';
 
 interface Props {
@@ -285,6 +287,7 @@ function StoreDetailPage({ id }: Props) {
         });
       };
       window.addEventListener('popstate', handlePopState);
+
       return () => {
         isomorphicSessionStorage.removeItem('enterReviewPage');
         window.removeEventListener('popstate', handlePopState);

@@ -1,9 +1,10 @@
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
 import { timetableQueryKeys } from 'api/timetable/queries';
 import usePostGraduationExcel from 'components/GraduationCalculatorPage/hooks/usePostGraduationExcel';
-import { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
+import type { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import showToast from 'utils/ts/showToast';
 

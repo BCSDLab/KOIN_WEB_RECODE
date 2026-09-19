@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
@@ -19,7 +21,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
+
 import styles from './RecruitmentDetail.module.scss';
 
 const formatCreatedAt = (createdAt: string) => formatRecruitmentDate(createdAt.split(' ')[0]);
@@ -113,12 +115,15 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     switch (primaryAction.type) {
       case 'login':
         openLoginModal();
+
         return;
       case 'apply':
         router.push(ROUTES.TeamRecruitmentApply({ postId: String(recruitment.id) }));
+
         return;
       case 'manage':
         navigateToApplicantManagement();
+
         return;
       case 'chat':
         if (recruitment.team_chat_room_id !== null) {
@@ -129,6 +134,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
             }),
           );
         }
+
         return;
       case 'disabled':
         return;

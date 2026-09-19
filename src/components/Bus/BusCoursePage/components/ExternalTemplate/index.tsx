@@ -1,4 +1,5 @@
 import { BUS_TYPES } from 'static/bus';
+
 import styles from './ExternalTemplate.module.scss';
 
 export default function Template({ typeNumber, arrivalList }: { typeNumber: number; arrivalList: string[][] }) {

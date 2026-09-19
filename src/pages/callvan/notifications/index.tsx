@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
@@ -19,6 +20,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './CallvanNotifications.module.scss';
 
 export const getServerSideProps = withCacheControl<{
@@ -120,8 +122,8 @@ export default function CallvanNotificationsPage() {
       </div>
 
       <div className={styles['notification-page__content']}>
-        {isResolved
-          && (hasNotifications ? (
+        {isResolved &&
+          (hasNotifications ? (
             <div className={styles['notification-page__list']}>
               {notifications.map((notification, index) => (
                 <div key={notification.id}>

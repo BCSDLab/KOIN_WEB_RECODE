@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { GeneralUserResponse, UserResponse } from 'api/auth/entity';
+import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
 import { authQueries } from 'api/auth/queries';
 import { useServerRequest } from 'utils/context/serverRequest';
-import { UserType, useTokenStore } from 'utils/zustand/auth';
+import { type UserType, useTokenStore } from 'utils/zustand/auth';
 
 type GeneralUserWithAnonymousNickname = GeneralUserResponse & {
   anonymous_nickname: string;

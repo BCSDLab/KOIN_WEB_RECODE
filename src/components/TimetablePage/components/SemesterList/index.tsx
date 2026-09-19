@@ -1,11 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { Semester } from 'api/timetable/entity';
+import type { Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
 import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
@@ -18,6 +19,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+
 import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';

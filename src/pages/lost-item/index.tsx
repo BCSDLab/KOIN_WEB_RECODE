@@ -1,18 +1,20 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
-import { LostItemArticlesRequest } from 'api/articles/entity';
+import type { LostItemArticlesRequest } from 'api/articles/entity';
 import { articleQueries } from 'api/articles/queries';
 import LostItemList from 'components/Articles/components/LostItemList';
 import LostItemPageLayout from 'components/Articles/components/LostItemPageLayout';
 import Pagination from 'components/Articles/components/Pagination';
-import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
+import { type LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { selectLostItemPaginationData } from 'components/Articles/utils/selectArticlesData';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
@@ -51,6 +53,7 @@ function useLostItemParams(initialParams: LostItemParams) {
   const mounted = useMount();
 
   if (!mounted) return initialParams;
+
   return parseLostItemQuery(router.query, initialParams);
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
@@ -16,16 +17,17 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 import { BUS_SHUTTLE_ISR_REVALIDATE_SECONDS, withStaticFetchRetry } from 'utils/ts/isr';
+
 import styles from './ShuttleBusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
   region: string;
-  routes: {
+  routes: Array<{
     id: string;
     route_name: string;
     sub_name: string | null;
     type: string;
-  }[];
+  }>;
   category: string;
 }
 

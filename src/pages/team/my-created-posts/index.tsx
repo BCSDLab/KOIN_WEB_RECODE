@@ -3,7 +3,14 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import type {
+  MyCreatedTeamRecruitment,
+  MyCreatedTeamRecruitmentListRequest,
+  TeamRecruitmentSort,
+  TeamRecruitmentStatusFilter,
+} from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -20,12 +27,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import type {
-  MyCreatedTeamRecruitment,
-  MyCreatedTeamRecruitmentListRequest,
-  TeamRecruitmentSort,
-  TeamRecruitmentStatusFilter,
-} from 'api/team/entity';
+
 import styles from './MyCreatedPostsPage.module.scss';
 
 interface CreatedPostsListSectionProps {
@@ -152,11 +154,7 @@ function CreatedPostsListSection({
                   }
                   actionSlot={
                     <div className={styles.actionRow}>
-                      <button
-                        type="button"
-                        className={styles.actionButton}
-                        onClick={handleApplicantClick(recruitment)}
-                      >
+                      <button type="button" className={styles.actionButton} onClick={handleApplicantClick(recruitment)}>
                         지원자 관리
                       </button>
 

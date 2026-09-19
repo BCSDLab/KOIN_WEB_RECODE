@@ -1,23 +1,25 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import LostItemFilterBottomSheet from 'components/Articles/components/LostItemFilterBottomSheet';
-import { FilterState } from 'components/Articles/components/LostItemFilterContent';
+import type { FilterState } from 'components/Articles/components/LostItemFilterContent';
 import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
 import LostItemWriteBottomSheet from 'components/Articles/components/LostItemWriteBottomSheet';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
-import { buildQueryFromFilter, LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
+import { buildQueryFromFilter, type LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
@@ -90,6 +92,7 @@ export default function LostItemRouteButton() {
           onClose={portalOption.close}
         />
       ));
+
       return;
     }
 

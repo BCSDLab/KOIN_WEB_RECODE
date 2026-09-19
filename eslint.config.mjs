@@ -5,7 +5,12 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
+import stylistic from '@stylistic/eslint-plugin';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
+
+import preferTopLevelTypeImport from './eslint-rules/prefer-top-level-type-import.js';
 
 export default [
   {
@@ -15,6 +20,7 @@ export default [
       '**/.yarn/**',
       'node_modules/**',
       'scripts/**',
+      'eslint-rules/**',
       '**/*.d.ts',
       '**/.pnp.*',
       'prettier.config.js',
@@ -22,9 +28,17 @@ export default [
     ],
   },
 
+  {
+    // 사용하지 않는 eslint-disable 주석은 오류로 처리한다 (Lint 개선 논의 결정 사항).
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
+  },
+
   importPlugin.flatConfigs.recommended,
   jsxA11y.flatConfigs.recommended,
   ...tseslint.configs.recommended,
+  ...tanstackQuery.configs['flat/recommended'],
 
   {
     files: ['src/**/*.{ts,tsx,js,jsx}'],
@@ -46,6 +60,8 @@ export default [
       '@next/next': next,
       react,
       'react-hooks': reactHooks,
+      '@stylistic': stylistic,
+      local: { rules: { 'prefer-top-level-type-import': preferTopLevelTypeImport } },
     },
     settings: {
       next: { rootDir: ['.'] },
@@ -93,7 +109,9 @@ export default [
       'import/order': [
         'error',
         {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'object', 'type', 'index'],
+          // 3개 시각 그룹: (내장·외부) / 내부 절대경로 / (부모·형제·index 상대경로).
+          // 'type'을 별도 그룹으로 선언하지 않아 같은 모듈의 값·타입 import가 갈라지지 않는다.
+          groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
           pathGroups: [
             { pattern: 'react', group: 'external', position: 'before' },
             { pattern: 'react-dom', group: 'external', position: 'before' },
@@ -110,8 +128,36 @@ export default [
           ],
 
           pathGroupsExcludedImportTypes: ['react', 'next'],
+          // pathGroups가 자체 시각 그룹을 만들지 않고 지정한 group에 합쳐지도록 한다.
+          distinctGroup: false,
+          'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
+      ],
+
+      // 타입 import는 값 import와 구분하되, 같은 모듈이면 한 줄에 inline으로 유지한다.
+      // named specifier가 전부 type이 되면 local/prefer-top-level-type-import가 import type {}으로 묶는다.
+      // (import/consistent-type-specifier-style의 prefer-inline은 이미 top-level인 type import를 무조건
+      // 다시 inline으로 되돌려서 이 규칙과 충돌하므로 사용하지 않는다.)
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      ],
+      'local/prefer-top-level-type-import': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+      '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
+
+      // 문장 사이 개행: 디렉티브 뒤 / export 앞 / return 앞 / 함수·클래스 선언 앞뒤.
+      '@stylistic/padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: 'directive', next: '*' },
+        { blankLine: 'any', prev: 'directive', next: 'directive' },
+        { blankLine: 'always', prev: '*', next: ['export', 'return'] },
+        // 배럴 파일처럼 export가 연달아 나올 때는 줄마다 빈 줄이 끼지 않도록 예외를 둔다.
+        { blankLine: 'any', prev: 'export', next: 'export' },
+        { blankLine: 'always', prev: '*', next: ['function', 'class'] },
+        { blankLine: 'always', prev: ['function', 'class'], next: '*' },
       ],
 
       'no-restricted-imports': [
@@ -129,7 +175,29 @@ export default [
           selector: "Property[key.name='event_category'][value.type='Literal'][value.value='click']",
           message: "event_category: 'click' 은 actionEventClick/actionSessionEvent 의 기본값이라 중복입니다. 생략하세요.",
         },
+        {
+          // CLAUDE.md 규칙 3: 쿠키 이름은 COOKIE_KEY 상수로만 참조한다.
+          // 세션 쿠키처럼 런타임 값을 조합하는 template literal(표현식 포함)은 대상이 아니다.
+          selector: "CallExpression[callee.name=/^(setCookie|getCookie|deleteCookie)$/][arguments.0.type='Literal']",
+          message: '쿠키 이름을 문자열로 직접 쓰지 마세요. static/url 의 COOKIE_KEY 상수를 사용하세요.',
+        },
+        {
+          // CLAUDE.md 규칙 8: window.webkit 접근은 항상 optional chaining을 유지한다.
+          selector:
+            "MemberExpression[optional=false][object.type='MemberExpression'][object.object.name='window'][object.property.name='webkit']",
+          message: 'window.webkit 접근에는 optional chaining을 사용하세요 (window.webkit?.xxx).',
+        },
       ],
+
+      // 쿼리 키에 토큰/식별자가 누락된 24건이 있어, 별도 PR(쿼리 키 인증 정보 정리)에서 정리한 뒤 error로 전환한다.
+      '@tanstack/query/exhaustive-deps': 'off',
+
+      'react/jsx-no-bind': ['error', { allowArrowFunctions: true, allowBind: false, allowFunctions: false }],
+      'react/no-unstable-nested-components': 'error',
+      'react/self-closing-comp': 'error',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'import/no-cycle': 'error',
 
       'import/extensions': 'off',
       'react/jsx-key': 'off',
@@ -154,4 +222,7 @@ export default [
       'no-restricted-properties': 'off',
     },
   },
+
+  // Prettier와 충돌하는 포맷팅 규칙을 끈다. 배열의 마지막에 위치해야 한다.
+  eslintConfigPrettier,
 ];

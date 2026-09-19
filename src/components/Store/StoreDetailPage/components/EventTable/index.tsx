@@ -1,8 +1,10 @@
 import Image from 'next/image';
+
 import { useQuery } from '@tanstack/react-query';
-import { StoreEvent } from 'api/store/entity';
+import type { StoreEvent } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import EventCard from 'components/Store/StoreDetailPage/components/EventCard';
+
 import styles from './EventTable.module.scss';
 
 export default function EventTable({ id }: { id: string }) {

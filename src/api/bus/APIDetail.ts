@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   CourseResponse,
   BusResponse,
   BusTimetableResponse,

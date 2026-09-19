@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { UseMutateFunction } from '@tanstack/react-query';
-import { ReviewRequest } from 'api/review/entity';
-import { StoreDetailResponse } from 'api/store/entity';
+import type { UseMutateFunction } from '@tanstack/react-query';
+import type { ReviewRequest } from 'api/review/entity';
+import type { StoreDetailResponse } from 'api/store/entity';
 import DeleteImageIcon from 'assets/svg/delete-icon.svg';
 import StarIcon from 'assets/svg/empty-star.svg';
 import DeleteMenuIcon from 'assets/svg/trash-can-icon.svg';
@@ -13,6 +14,7 @@ import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import uuidv4 from 'utils/ts/uuidGenerater';
+
 import styles from './ReviewForm.module.scss';
 
 const MAX_IMAGE_LENGTH = 3;
@@ -32,7 +34,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   const [rate, setRate] = useState(initialData.rating ?? 0);
 
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
-  const [menuList, setMenuList] = useState<{ id: string; name: string }[]>(
+  const [menuList, setMenuList] = useState<Array<{ id: string; name: string }>>(
     initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
   );
 
@@ -66,8 +68,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   };
 
   const reviewSuccessLogging = () => {
-    const getReviewDurationTime =
-      getElapsedSeconds('enterReview');
+    const getReviewDurationTime = getElapsedSeconds('enterReview');
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_write_done',

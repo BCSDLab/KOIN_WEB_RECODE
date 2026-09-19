@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './TimeDropdown.module.scss';
 
 const ITEM_HEIGHT = 32;

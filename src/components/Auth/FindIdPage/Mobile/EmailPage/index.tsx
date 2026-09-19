@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
+
 import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
+
 import styles from './EmailPage.module.scss';
 
 function MobileFindIdEmailPage() {

@@ -1,14 +1,16 @@
 import { useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { Controller, type FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
+
 import styles from './ExternalDetailStep.module.scss';
 
 interface ExternalDetailStepProps {
@@ -135,6 +137,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
 
     if (!emailId) {
       handleSubmit(onSubmit)();
+
       return;
     }
 
@@ -153,12 +156,14 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
+
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
   const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined): InputMessage | null => {
     if (fieldValue === '') return null;
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
+
     return emailMessage;
   };
 

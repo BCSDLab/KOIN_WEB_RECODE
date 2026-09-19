@@ -1,13 +1,13 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type Semester = '학기' | '하계방학' | '동계방학';
 
-export type Opens = {
+export interface Opens {
   day_of_week: '평일' | '주말' | '토요일';
   type: '아침' | '점심' | '저녁' | null;
   open_time: string; // HH:mm
   close_time: string; // HH:mm
-};
+}
 
 export interface CoopShopResponse extends APIResponse {
   semester: string; // 00-0학기

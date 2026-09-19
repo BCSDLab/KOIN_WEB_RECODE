@@ -4,6 +4,7 @@ import {
   PostLostItemChatroomMessageV2,
 } from 'api/articles/ChatAPIDetailV2';
 import APIClient from 'utils/ts/apiClient';
+
 import {
   GetArticles,
   GetHotArticles,
@@ -26,7 +27,8 @@ import {
   GetLostItemSearch,
 } from './APIDetail';
 
-export const getArticles = (token: string, page: string, boardId?: number) => APIClient.of(GetArticles)(token, page, boardId);
+export const getArticles = (token: string, page: string, boardId?: number) =>
+  APIClient.of(GetArticles)(token, page, boardId);
 
 export const getArticle = APIClient.of(GetArticle);
 

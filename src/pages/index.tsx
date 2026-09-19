@@ -1,13 +1,17 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import { authQueries } from 'api/auth/queries';
+import type { BannersResponse } from 'api/banner/entity';
 import { bannerQueries } from 'api/banner/queries';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { callvanQueries } from 'api/callvan/queries';
 import { coopshopQueries } from 'api/coopshop/queries';
+import type { StoreCategoriesResponse } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
+import type { Semester } from 'api/timetable/entity';
 import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
 import { weatherQueries } from 'api/weather/queries';
 import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
@@ -19,9 +23,6 @@ import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
 import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
-import type { BannersResponse } from 'api/banner/entity';
-import type { StoreCategoriesResponse } from 'api/store/entity';
-import type { Semester } from 'api/timetable/entity';
 import type { UserType } from 'utils/zustand/auth';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
@@ -48,6 +49,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     } catch (error) {
       if (isServerAuthError(error)) {
         resetAuthContext();
+
         return null;
       }
       if (isKoinError(error) && error.status === 403) {
@@ -85,7 +87,9 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   if (isMobile) {
     await Promise.all([
       queryClient.prefetchQuery(weatherQueries.info()),
-      queryClient.prefetchQuery(callvanQueries.list('', { statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 })),
+      queryClient.prefetchQuery(
+        callvanQueries.list('', { statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
+      ),
       queryClient.prefetchQuery(storeQueries.counts()),
       queryClient.prefetchQuery(storeQueries.eventCount()),
       queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo()),

@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
-import { RestrictedCallvanResponse } from 'api/callvan/entity';
+
+import type { RestrictedCallvanResponse } from 'api/callvan/entity';
 import { getCallvanRestrictionModalCopy } from 'components/Callvan/utils/callvanRestriction';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+
 import styles from './CallvanRestrictionModal.module.scss';
 
 interface CallvanRestrictionModalProps {

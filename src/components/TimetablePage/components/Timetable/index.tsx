@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
@@ -13,6 +14,7 @@ import showToast from 'utils/ts/showToast';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
+
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -54,6 +56,7 @@ function Timetable({
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
+
       return;
     }
 

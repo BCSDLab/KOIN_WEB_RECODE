@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
-import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus, CALLVAN_LOCATION_LABEL } from 'api/callvan/entity';
+
+import {
+  type CallvanAuthor,
+  type CallvanLocation,
+  type CallvanSort,
+  type CallvanStatus,
+  CALLVAN_LOCATION_LABEL,
+} from 'api/callvan/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './CallvanFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: CallvanStatus; label: string }[] = [
+const STATUS_OPTIONS: Array<{ value: CallvanStatus; label: string }> = [
   { value: 'RECRUITING', label: '모집중' },
   { value: 'CLOSED', label: '모집마감' },
 ];
 
-const SORT_OPTIONS: { value: CallvanSort; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: CallvanSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEPARTURE_ASC', label: '출발시각순' },
 ];
@@ -72,12 +80,14 @@ export default function CallvanFilterPanel({
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   const toggleStatus = (value: CallvanStatus) => {
     setLocalStatuses((prev) => {
       if (prev.includes(value)) return prev.filter((s) => s !== value);
+
       return [...prev, value];
     });
   };
@@ -86,6 +96,7 @@ export default function CallvanFilterPanel({
     setLocalDepartures((prev) => {
       if (prev.includes(value)) return prev.filter((l) => l !== value);
       const next = [...prev, value];
+
       return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
     });
   };
@@ -94,6 +105,7 @@ export default function CallvanFilterPanel({
     setLocalArrivals((prev) => {
       if (prev.includes(value)) return prev.filter((l) => l !== value);
       const next = [...prev, value];
+
       return next.length === CALLVAN_FILTER_LOCATIONS.length ? [] : next;
     });
   };

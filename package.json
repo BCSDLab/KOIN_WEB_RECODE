@@ -41,8 +41,10 @@
     "typecheck": "tsc --noEmit",
     "build": "next build && next-sitemap",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
-    "lint:eslint": "eslint src/",
+    "lint:eslint": "eslint src/ --max-warnings 0",
     "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "log": "tsx scripts/notion/fetch-logging-spec.ts"
   },
   "browserslist": {
@@ -61,7 +63,9 @@
     "@next/eslint-plugin-next": "^15.5.23",
     "@notionhq/client": "^5.9.0",
     "@sentry/cli": "^3.7.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@svgr/webpack": "^8.1.0",
+    "@tanstack/eslint-plugin-query": "^5.102.8",
     "@types/file-saver": "^2.0.7",
     "@types/gtag.js": "^0.0.19",
     "@types/jsdom": "^28.0.3",
@@ -76,7 +80,6 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^16.4.0",
@@ -87,7 +90,6 @@
     "stylelint": "^17.14.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
-    "stylelint-selector-bem-pattern": "^5.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2"

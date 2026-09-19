@@ -22,6 +22,7 @@ export default function groupChatMessagesByDate(messages: TeamChatMessage[]): Te
 
     if (lastGroup?.date === date) {
       lastGroup.messages.push(message);
+
       return groups;
     }
 
@@ -31,6 +32,7 @@ export default function groupChatMessagesByDate(messages: TeamChatMessage[]): Te
       isToday: date === todayKey,
       messages: [message],
     });
+
     return groups;
   }, []);
 }

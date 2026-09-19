@@ -1,4 +1,4 @@
-import { DiningType } from 'api/dinings/entity';
+import type { DiningType } from 'api/dinings/entity';
 
 export const convertDateToSimpleString = (date: Date) =>
   `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
@@ -12,17 +12,20 @@ function kstTimeOn(base: Date, hours: number, minutes: number): Date {
   const y = kstNow.getUTCFullYear();
   const m = kstNow.getUTCMonth();
   const d = kstNow.getUTCDate();
+
   return new Date(Date.UTC(y, m, d, hours, minutes) - KST_OFFSET_MINUTES * 60 * 1000);
 }
 
 function kstHour(date: Date): number {
   const kst = new Date(date.getTime() + KST_OFFSET_MINUTES * 60 * 1000);
+
   return kst.getUTCHours();
 }
 
 /** KST 기준 달력일 키(YYYY-MM-DD). 날짜가 바뀌었는지 실행 환경 타임존과 무관하게 비교할 때 쓴다. */
 export function kstDateKey(date: Date): string {
   const kst = new Date(date.getTime() + KST_OFFSET_MINUTES * 60 * 1000);
+
   return kst.toISOString().slice(0, 10);
 }
 
@@ -53,6 +56,7 @@ export class DiningTime {
   public getType(): DiningType {
     if (this.isBreakfastTime()) return 'BREAKFAST';
     if (this.isLunchTime()) return 'LUNCH';
+
     return 'DINNER';
   }
 

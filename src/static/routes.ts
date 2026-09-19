@@ -1,6 +1,4 @@
-type ROUTESParams<T extends string = string> = {
-  [key in T]?: string;
-};
+type ROUTESParams<T extends string = string> = Partial<Record<T, string>>;
 
 const ROUTES = {
   Main: () => '/',

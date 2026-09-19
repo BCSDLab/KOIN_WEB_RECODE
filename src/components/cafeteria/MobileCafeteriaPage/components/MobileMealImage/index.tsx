@@ -1,8 +1,10 @@
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { Dining } from 'api/dinings/entity';
+import type { Dining } from 'api/dinings/entity';
 import NoMeals from 'assets/svg/no-meals-mobile.svg';
 import NoPhoto from 'assets/svg/no-photography-mobile.svg';
+
 import styles from './MobileMealImage.module.scss';
 
 interface MobileMealImageProps {

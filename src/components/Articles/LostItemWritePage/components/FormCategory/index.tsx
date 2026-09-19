@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
-import { FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
+import { type FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
+
 import styles from './FormCategory.module.scss';
 
 const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '기타'];

@@ -1,11 +1,12 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useDeleteTimetableFrame from 'components/TimetablePage/hooks/useDeleteTimetableFrame';
 import useUpdateTimetableFrame from 'components/TimetablePage/hooks/useUpdateTimetableFrame';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
-import type { TimetableFrameInfo } from 'api/timetable/entity';
+
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -48,6 +49,7 @@ export default function TimetableSettingModal({ focusFrame, onClose }: Timetable
   const onDelete = async () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
+
       return;
     }
     try {
@@ -56,6 +58,7 @@ export default function TimetableSettingModal({ focusFrame, onClose }: Timetable
     } catch (err) {
       if (isKoinError(err)) {
         showToast('error', err.message);
+
         return;
       }
       sendClientError(err);

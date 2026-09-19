@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { CourseRequestParams } from './entity';
+
+import type { CourseRequestParams } from './entity';
 import { getCourseSearch, getPreCourseList } from './index';
 
 export const courseQueryKeys = {
@@ -12,7 +13,8 @@ export const courseQueries = {
   search: (params: CourseRequestParams) =>
     queryOptions({
       queryKey: courseQueryKeys.search(params),
-      queryFn: () => getCourseSearch(params.name || undefined, params.department || undefined, params.year, params.semester),
+      queryFn: () =>
+        getCourseSearch(params.name || undefined, params.department || undefined, params.year, params.semester),
     }),
 
   preCourseList: (token: string, timetableFrameId: number) =>
