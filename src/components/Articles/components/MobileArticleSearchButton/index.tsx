@@ -9,10 +9,10 @@ export default function MobileArticleSearchButton() {
   const router = useRouter();
 
   return (
-    <div className={styles.searchBar}>
+    <div className={styles['search-bar']}>
       <button
         type="button"
-        className={styles.searchBar__button}
+        className={styles['search-bar__button']}
         onClick={() => router.push(ROUTES.ArticlesSearch())}
         aria-label="공지사항 검색"
       >

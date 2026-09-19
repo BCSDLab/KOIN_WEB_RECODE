@@ -28,23 +28,23 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
   };
 
   return (
-    <div className={styles.tagInput}>
-      <div className={styles.tagInput__head}>
-        <span className={styles.tagInput__label}>{label}</span>
-        <p className={styles.tagInput__description}>{description}</p>
+    <div className={styles['tag-input']}>
+      <div className={styles['tag-input__head']}>
+        <span className={styles['tag-input__label']}>{label}</span>
+        <p className={styles['tag-input__description']}>{description}</p>
       </div>
 
       {fields.length > 0 && (
-        <ul className={styles.tagInput__list}>
+        <ul className={styles['tag-input__list']}>
           {fields.map((field, index) => {
             const showEditIcon = mode === 'edit' && Boolean(skills[index]?.value?.trim());
             const { ref: fieldRef, ...fieldProps } = register(`skills.${index}.value` as const);
 
             return (
-              <li key={field.id} className={styles.tagInput__tag}>
+              <li key={field.id} className={styles['tag-input__tag']}>
                 <input
                   type="text"
-                  className={styles.tagInput__field}
+                  className={styles['tag-input__field']}
                   placeholder={placeholder}
                   maxLength={20}
                   ref={(el) => {
@@ -56,7 +56,7 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
                 {showEditIcon && (
                   <button
                     type="button"
-                    className={styles.tagInput__edit}
+                    className={styles['tag-input__edit']}
                     aria-label={`${label} ${index + 1} 수정`}
                     onClick={() => inputRefs.current[field.id]?.focus()}
                   >
@@ -65,7 +65,7 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
                 )}
                 <button
                   type="button"
-                  className={styles.tagInput__remove}
+                  className={styles['tag-input__remove']}
                   onClick={() => remove(index)}
                   aria-label={`${label} ${index + 1} 삭제`}
                 >
@@ -77,7 +77,7 @@ export default function TagInput({ mode, label, description, addButtonLabel, pla
         </ul>
       )}
 
-      <button type="button" className={styles.tagInput__add} onClick={handleAppend}>
+      <button type="button" className={styles['tag-input__add']} onClick={handleAppend}>
         {addButtonLabel}
       </button>
     </div>

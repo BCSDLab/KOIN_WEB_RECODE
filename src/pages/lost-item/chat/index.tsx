@@ -155,25 +155,25 @@ function LostItemChatPage({ token }: { token: string }) {
                   onClick={() => logMessageListSelcetClick()}
                 >
                   {lost_item_image_url ? (
-                    <div className={styles['chat-list--item--profile']}>
+                    <div className={styles['chat-list--item-profile']}>
                       <img
                         src={lost_item_image_url}
                         alt="분실물 이미지"
-                        className={styles['chat-list--item--image']}
+                        className={styles['chat-list--item-image']}
                         onError={addErrorImage}
                       />
                     </div>
                   ) : (
-                    <div className={styles['chat-list--item--profile']}>
+                    <div className={styles['chat-list--item-profile']}>
                       <DefaultPhotoIcon />
                     </div>
                   )}
-                  <div className={styles['chat-list--item--content']}>
-                    <div className={styles['chat-list--item--title']}>
+                  <div className={styles['chat-list--item-content']}>
+                    <div className={styles['chat-list--item-title']}>
                       <div>{article_title}</div>
-                      <div className={styles['chat-list--item--date']}>{formatDate(last_message_at)}</div>
+                      <div className={styles['chat-list--item-date']}>{formatDate(last_message_at)}</div>
                     </div>
-                    <div className={styles['chat-list--item--description']}>
+                    <div className={styles['chat-list--item-description']}>
                       <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
                       {unread_message_count !== 0 && (
                         <div className={styles['chat-list--message-count']}>{unread_message_count}</div>
@@ -203,11 +203,11 @@ function LostItemChatPage({ token }: { token: string }) {
                       <img
                         src={chatroomDetail.chat_partner_profile_image}
                         alt="분실물 이미지"
-                        className={styles['chat-list--item--profile']}
+                        className={styles['chat-list--item-profile']}
                         onError={addErrorImage}
                       />
                     ) : (
-                      <div className={styles['chat-list--item--profile']}>
+                      <div className={styles['chat-list--item-profile']}>
                         <DefaultPhotoIcon />
                       </div>
                     )}

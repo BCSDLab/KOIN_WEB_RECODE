@@ -50,16 +50,16 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
         <StepIndicator steps={PROFILE_STEPS} currentIndex={0} />
 
         <div className={styles.step__body}>
-          <div className={styles.loadInfo}>
-            <div className={styles.loadInfo__head}>
-              <span className={styles.loadInfo__title}>
-                <span className={styles['loadInfo__title--highlight']}>코인</span> 회원정보 불러오기
+          <div className={styles['load-info']}>
+            <div className={styles['load-info__head']}>
+              <span className={styles['load-info__title']}>
+                <span className={styles['load-info__title--highlight']}>코인</span> 회원정보 불러오기
               </span>
-              <span className={styles.loadInfo__description}>닉네임, 학과(학부), 학번</span>
+              <span className={styles['load-info__description']}>닉네임, 학과(학부), 학번</span>
             </div>
             <button
               type="button"
-              className={styles.loadInfo__button}
+              className={styles['load-info__button']}
               onClick={handleLoadUserInfo}
               disabled={isLoadingUserInfo}
             >

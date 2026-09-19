@@ -79,11 +79,11 @@ function CreatedPostsListSection({
 
   return (
     <>
-      <div className={styles.summaryRow}>
-        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
+      <div className={styles['summary-row']}>
+        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
-          <span className={styles.filterButton__label}>필터</span>
+        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
+          <span className={styles['filter-button__label']}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -109,7 +109,7 @@ function CreatedPostsListSection({
               const chatButton = canChat && (
                 <button
                   type="button"
-                  className={styles.chatButton}
+                  className={styles['chat-button']}
                   aria-label="팀 채팅방으로 이동"
                   onClick={onChatClick(recruitment)}
                 >
@@ -126,12 +126,12 @@ function CreatedPostsListSection({
                   recruitment={recruitment}
                   rightSlot={
                     <>
-                      <div className={styles.mobileOnly}>{chatButton}</div>
-                      <div className={styles.desktopOnly}>
-                        <div className={styles.desktopActions}>
+                      <div className={styles['mobile-only']}>{chatButton}</div>
+                      <div className={styles['desktop-only']}>
+                        <div className={styles['desktop-actions']}>
                           <button
                             type="button"
-                            className={styles.desktopActionButton}
+                            className={styles['desktop-action-button']}
                             onClick={handleApplicantClick(recruitment)}
                           >
                             지원자 관리
@@ -140,7 +140,7 @@ function CreatedPostsListSection({
                           {recruitment.can_close && (
                             <button
                               type="button"
-                              className={styles.desktopActionButton}
+                              className={styles['desktop-action-button']}
                               onClick={handleCloseClick(recruitment)}
                             >
                               모집마감
@@ -153,13 +153,21 @@ function CreatedPostsListSection({
                     </>
                   }
                   actionSlot={
-                    <div className={styles.actionRow}>
-                      <button type="button" className={styles.actionButton} onClick={handleApplicantClick(recruitment)}>
+                    <div className={styles['action-row']}>
+                      <button
+                        type="button"
+                        className={styles['action-button']}
+                        onClick={handleApplicantClick(recruitment)}
+                      >
                         지원자 관리
                       </button>
 
                       {recruitment.can_close && (
-                        <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
+                        <button
+                          type="button"
+                          className={styles['action-button']}
+                          onClick={handleCloseClick(recruitment)}
+                        >
                           모집 마감
                         </button>
                       )}
@@ -169,7 +177,7 @@ function CreatedPostsListSection({
               );
             })}
 
-            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
           </div>
         )}
       </div>
@@ -270,7 +278,7 @@ export default function MyCreatedPostsPage() {
         <meta name="description" content="내가 작성한 팀원 모집 게시글과 지원자 현황을 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader
           title="내가 작성한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
@@ -282,7 +290,7 @@ export default function MyCreatedPostsPage() {
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 작성한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
             <Suspense fallback={null}>
               <CreatedPostsListSection
                 requestParams={requestParams}

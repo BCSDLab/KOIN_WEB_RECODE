@@ -101,10 +101,10 @@ function TeamProfilePage() {
         <meta name="description" content="팀원 모집 프로필을 확인하고 관리할 수 있습니다." />
       </Head>
 
-      <div className={styles.desktopOnly}>
+      <div className={styles['desktop-only']}>
         <TeamProfileDesktop {...viewProps} />
       </div>
-      <div className={styles.mobileOnly}>
+      <div className={styles['mobile-only']}>
         <TeamProfileMobile {...viewProps} />
       </div>
     </>

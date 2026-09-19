@@ -31,26 +31,26 @@ export default function SkillTagInput({
   };
 
   return (
-    <div className={styles.tagInput}>
-      <div className={styles.tagInput__head}>
-        <span className={styles.tagInput__label}>{label}</span>
-        <p className={styles.tagInput__description}>{description}</p>
+    <div className={styles['tag-input']}>
+      <div className={styles['tag-input__head']}>
+        <span className={styles['tag-input__label']}>{label}</span>
+        <p className={styles['tag-input__description']}>{description}</p>
       </div>
 
       {fields.length > 0 && (
-        <ul className={styles.tagInput__list}>
+        <ul className={styles['tag-input__list']}>
           {fields.map((field, index) => (
-            <li key={field.id} className={styles.tagInput__tag}>
+            <li key={field.id} className={styles['tag-input__tag']}>
               <input
                 type="text"
-                className={styles.tagInput__field}
+                className={styles['tag-input__field']}
                 placeholder={placeholder}
                 maxLength={APPLY_SKILL_MAX_LENGTH}
                 {...register(`skills.${index}.value` as const)}
               />
               <button
                 type="button"
-                className={styles.tagInput__remove}
+                className={styles['tag-input__remove']}
                 onClick={() => remove(index)}
                 aria-label={`${label} ${index + 1} 삭제`}
               >
@@ -61,11 +61,11 @@ export default function SkillTagInput({
         </ul>
       )}
 
-      <button type="button" className={styles.tagInput__add} onClick={handleAppend}>
+      <button type="button" className={styles['tag-input__add']} onClick={handleAppend}>
         {addButtonLabel}
       </button>
 
-      {error && <p className={styles.tagInput__error}>{error}</p>}
+      {error && <p className={styles['tag-input__error']}>{error}</p>}
     </div>
   );
 }

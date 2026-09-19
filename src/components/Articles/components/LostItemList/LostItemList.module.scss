@@ -40,7 +40,7 @@ $lost-items-columns: 1fr 5.5fr 1.5fr 1.5fr 1fr;
   justify-content: center;
 }
 
-.lostItemList {
+.lost-item-list {
   width: 100%;
 
   &__row,
@@ -203,7 +203,7 @@ $lost-items-columns: 1fr 5.5fr 1.5fr 1.5fr 1fr;
     }
   }
 
-  .lostItemListMobile {
+  .lost-item-list-mobile {
     font-size: 12px;
 
     &__row,

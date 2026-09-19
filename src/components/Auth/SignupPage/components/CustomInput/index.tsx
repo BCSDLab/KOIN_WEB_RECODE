@@ -141,11 +141,13 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           )}
         </div>
         {message && (
-          <div className={styles.messageWrapper}>
+          <div className={styles['message-wrapper']}>
             {message.type === 'error' && <ErrorIcon />}
             {message.type === 'success' && <CorrectIcon />}
             {message.type === 'warning' && (isMobile ? <MobileWarningIcon /> : <WarningIcon />)}
-            <p className={`${styles.messageWrapper__message} ${styles[`messageWrapper__message--${message.type}`]}`}>
+            <p
+              className={`${styles['message-wrapper__message']} ${styles[`message-wrapper__message--${message.type}`]}`}
+            >
               {message.content}
             </p>
             {children}

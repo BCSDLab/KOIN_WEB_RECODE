@@ -11,7 +11,7 @@ export default function EventTable({ id }: { id: string }) {
   const { data: storeEventList, isError: isStoreEventListError } = useQuery(storeQueries.eventList(id));
 
   return (
-    <div className={styles.eventContainer}>
+    <div className={styles['event-container']}>
       {!isStoreEventListError && storeEventList && storeEventList.events.length > 0 ? (
         storeEventList.events.map((event: StoreEvent) => <EventCard key={event.title} event={event} />)
       ) : (

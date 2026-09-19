@@ -30,12 +30,12 @@ export default function SearchBar({
   return (
     <div
       className={cn({
-        [styles.searchBar]: true,
-        [styles['searchBar--small']]: size === 'small',
+        [styles['search-bar']]: true,
+        [styles['search-bar--small']]: size === 'small',
       })}
     >
       <input
-        className={styles.searchBar__input}
+        className={styles['search-bar__input']}
         type="text"
         aria-label={label}
         value={value}
@@ -46,11 +46,11 @@ export default function SearchBar({
       />
 
       {onSearch ? (
-        <button type="button" className={styles.searchBar__button} aria-label="검색" onClick={onSearch}>
-          <SearchIcon className={styles.searchBar__icon} aria-hidden />
+        <button type="button" className={styles['search-bar__button']} aria-label="검색" onClick={onSearch}>
+          <SearchIcon className={styles['search-bar__icon']} aria-hidden />
         </button>
       ) : (
-        <SearchIcon className={styles.searchBar__icon} aria-hidden />
+        <SearchIcon className={styles['search-bar__icon']} aria-hidden />
       )}
     </div>
   );

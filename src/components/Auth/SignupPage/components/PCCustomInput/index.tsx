@@ -142,11 +142,13 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>(
         </div>
         <div>
           {message && (
-            <div className={styles.messageWrapper}>
+            <div className={styles['message-wrapper']}>
               {message.type === 'error' && <ErrorIcon />}
               {message.type === 'success' && <CorrectIcon />}
               {message.type === 'warning' && <WarningIcon />}
-              <p className={`${styles.messageWrapper__message} ${styles[`messageWrapper__message--${message.type}`]}`}>
+              <p
+                className={`${styles['message-wrapper__message']} ${styles[`message-wrapper__message--${message.type}`]}`}
+              >
                 {message.content}
               </p>
               {children}

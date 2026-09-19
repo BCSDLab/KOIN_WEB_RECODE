@@ -27,13 +27,13 @@ function UserInfoModal() {
     <div className={styles.background}>
       <div className={styles.container}>
         {showCloseButton && (
-          <button type="button" className={styles.closeButton} onClick={handleSkipModal} aria-label="모달 닫기">
+          <button type="button" className={styles['close-button']} onClick={handleSkipModal} aria-label="모달 닫기">
             <CloseIcon />
           </button>
         )}
 
         <div className={styles.content}>
-          <div className={styles.lottieContainer}>
+          <div className={styles['lottie-container']}>
             <Lottie animationData={waveHandAnimation} style={{ width: '100%', height: '100%' }} loop autoplay />
           </div>
 
@@ -45,7 +45,7 @@ function UserInfoModal() {
             </div>
           </div>
 
-          <button type="button" className={styles.actionButton} onClick={handleNavigateToModifyInfo}>
+          <button type="button" className={styles['action-button']} onClick={handleNavigateToModifyInfo}>
             정보 입력하러 가기
           </button>
         </div>

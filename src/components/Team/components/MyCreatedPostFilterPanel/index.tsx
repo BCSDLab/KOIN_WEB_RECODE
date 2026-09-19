@@ -100,16 +100,16 @@ export default function MyCreatedPostFilterPanel({
   const body = (
     <>
       <BottomModalHeader className={styles.header}>
-        <span className={styles.headerTitle}>필터</span>
-        <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
+        <span className={styles['header-title']}>필터</span>
+        <button type="button" className={styles['close-button']} onClick={onClose} aria-label="필터 닫기">
           <CloseIcon />
         </button>
       </BottomModalHeader>
 
       <BottomModalContent className={styles.content}>
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>모집 상태</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>모집 상태</h3>
+          <div className={styles['section-badges']}>
             {STATUS_OPTIONS.map((opt) => (
               <StatusBadge
                 key={opt.value}
@@ -122,8 +122,8 @@ export default function MyCreatedPostFilterPanel({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>정렬</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>정렬</h3>
+          <div className={styles['section-badges']}>
             {SORT_OPTIONS.map((opt) => (
               <StatusBadge
                 key={opt.value}
@@ -137,11 +137,11 @@ export default function MyCreatedPostFilterPanel({
       </BottomModalContent>
 
       <BottomModalFooter className={styles.footer}>
-        <button type="button" className={styles.resetButton} onClick={handleReset}>
+        <button type="button" className={styles['reset-button']} onClick={handleReset}>
           초기화
           <SpinIcon />
         </button>
-        <button type="button" className={styles.applyButton} onClick={handleApply}>
+        <button type="button" className={styles['apply-button']} onClick={handleApply}>
           적용하기
         </button>
       </BottomModalFooter>

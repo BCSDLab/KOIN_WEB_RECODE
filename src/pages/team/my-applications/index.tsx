@@ -61,11 +61,11 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
 
   return (
     <>
-      <div className={styles.summaryRow}>
-        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
+      <div className={styles['summary-row']}>
+        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
-          <span className={styles.filterButton__label}>필터</span>
+        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
+          <span className={styles['filter-button__label']}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -93,7 +93,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                 rightSlot={
                   <span
                     className={cn({
-                      [styles.applicationStatus]: true,
+                      [styles['application-status']]: true,
                       [styles[APPLICATION_STATUS_CLASS[application.status]]]: true,
                     })}
                   >
@@ -105,7 +105,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                   application.team_chat_room_id !== null && (
                     <button
                       type="button"
-                      className={styles.chatButton}
+                      className={styles['chat-button']}
                       aria-label="팀 채팅방으로 이동"
                       onClick={onChatClick(application)}
                     >
@@ -116,7 +116,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
               />
             ))}
 
-            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
           </div>
         )}
       </div>
@@ -168,7 +168,7 @@ export default function MyApplicationsPage() {
         <meta name="description" content="내가 지원한 팀원 모집 게시글과 지원 상태를 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader
           title="내가 지원한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
@@ -180,7 +180,7 @@ export default function MyApplicationsPage() {
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 지원한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
             <Suspense fallback={null}>
               <ApplicationsListSection
                 requestParams={requestParams}

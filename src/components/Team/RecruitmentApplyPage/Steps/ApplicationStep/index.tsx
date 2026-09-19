@@ -67,14 +67,14 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
                       <li key={role.id}>
                         <label
                           className={cn({
-                            [styles.roleOption]: true,
-                            [styles['roleOption--selected']]: field.value === role.id,
-                            [styles['roleOption--closed']]: role.is_closed,
+                            [styles['role-option']]: true,
+                            [styles['role-option--selected']]: field.value === role.id,
+                            [styles['role-option--closed']]: role.is_closed,
                           })}
                         >
                           <input
                             type="radio"
-                            className={styles.roleOption__input}
+                            className={styles['role-option__input']}
                             name={field.name}
                             value={role.id}
                             checked={field.value === role.id}
@@ -89,9 +89,9 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
                               });
                             }}
                           />
-                          <span className={styles.roleOption__icon} aria-hidden />
-                          <span className={styles.roleOption__name}>{role.name}</span>
-                          <span className={styles.roleOption__count}>
+                          <span className={styles['role-option__icon']} aria-hidden />
+                          <span className={styles['role-option__name']}>{role.name}</span>
+                          <span className={styles['role-option__count']}>
                             {role.is_closed ? '모집 마감' : `${role.current_participants}/${role.max_participants}명`}
                           </span>
                         </label>
@@ -152,7 +152,7 @@ export default function ApplicationStep({ roles, onBack, onSubmit, isSubmitting 
             {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
               <textarea
                 id={controlId}
-                className={cn({ [controlClassName]: true, [styles.availabilityControl]: true })}
+                className={cn({ [controlClassName]: true, [styles['availability-control']]: true })}
                 placeholder="참여 가능한 시간을 작성해주세요."
                 maxLength={APPLY_AVAILABILITY_MAX_LENGTH}
                 aria-describedby={ariaDescribedBy}
