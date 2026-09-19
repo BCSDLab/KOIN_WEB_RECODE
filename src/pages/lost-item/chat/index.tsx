@@ -238,9 +238,9 @@ function LostItemChatPage({ token }: { token: string }) {
                   <ChatMessageInput
                     classNames={{
                       container: styles['chat-input-container'],
-                      imageControlDisabled: styles['image-button--disabled'],
+                      imageControl: styles['image-button'],
                       textarea: styles['chat-input'],
-                      sendButtonDisabled: styles['message-button--disabled'],
+                      sendButton: styles['send-button'],
                     }}
                     value={inputValue}
                     onChange={setInputValue}

@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .chatLayout {
   display: grid;
   grid-template-columns: 384px minmax(0, 1fr);
@@ -287,8 +289,15 @@
     }
 
     &:disabled {
-      opacity: 0.4;
-      cursor: default;
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+
+      @include media.media-breakpoint(mobile) {
+        opacity: 0.4;
+        cursor: default;
+        pointer-events: auto;
+      }
     }
   }
 

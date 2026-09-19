@@ -185,9 +185,14 @@
   margin-bottom: 8px;
 }
 
-.message-button--disabled,
-button.image-button--disabled:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+@include media.media-breakpoint(mobile) {
+  button.image-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  button.send-button:disabled {
+    pointer-events: none;
+  }
 }

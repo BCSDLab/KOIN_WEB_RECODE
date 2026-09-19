@@ -62,10 +62,8 @@ interface ChatMessageListProps {
 interface ChatMessageInputClassNames {
   container?: string;
   imageControl?: string;
-  imageControlDisabled?: string;
   textarea?: string;
   sendButton?: string;
-  sendButtonDisabled?: string;
 }
 
 interface ChatMessageInputProps {
@@ -284,11 +282,7 @@ export function ChatMessageInput({
     <div className={joinClassNames(styles.messageInput, classNames.container)}>
       <button
         type="button"
-        className={joinClassNames(
-          styles.messageInput__imageButton,
-          classNames.imageControl,
-          disabled && classNames.imageControlDisabled,
-        )}
+        className={joinClassNames(styles.messageInput__imageButton, classNames.imageControl)}
         aria-label="이미지 전송"
         onClick={() => resolvedFileInputRef.current?.click()}
         disabled={disabled}
@@ -318,7 +312,7 @@ export function ChatMessageInput({
       />
       <button
         type="button"
-        className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton, disabled && classNames.sendButtonDisabled)}
+        className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton)}
         aria-label="전송"
         onClick={handleSend}
         disabled={disabled}
