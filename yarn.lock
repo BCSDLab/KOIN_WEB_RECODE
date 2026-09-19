@@ -5392,6 +5392,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-check-file@npm:^3.3.1":
+  version: 3.3.2
+  resolution: "eslint-plugin-check-file@npm:3.3.2"
+  dependencies:
+    is-glob: "npm:^4.0.3"
+    micromatch: "npm:^4.0.8"
+  peerDependencies:
+    eslint: ">=9.0.0"
+  checksum: 10/833811ea0ff6ba2943b8c912fa067cde86ac230c5c0ddbb430c49226b3be1d49d733d6f02c228aacb038708146863dee4425312f09e236845e303fd85940002e
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-import@npm:^2.32.0":
   version: 2.32.0
   resolution: "eslint-plugin-import@npm:2.32.0"
@@ -6981,6 +6993,7 @@ __metadata:
     eslint: "npm:^9.38.0"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-import-resolver-typescript: "npm:^4.4.4"
+    eslint-plugin-check-file: "npm:^3.3.1"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
     eslint-plugin-react: "npm:^7.37.5"

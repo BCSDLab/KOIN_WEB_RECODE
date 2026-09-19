@@ -5,6 +5,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
+import checkFile from 'eslint-plugin-check-file';
 import stylistic from '@stylistic/eslint-plugin';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -61,6 +62,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       '@stylistic': stylistic,
+      'check-file': checkFile,
       local: { rules: { 'prefer-top-level-type-import': preferTopLevelTypeImport } },
     },
     settings: {
@@ -289,6 +291,18 @@ export default [
           ],
         },
       ],
+      // 파일명 컨벤션. 이미 사실상 100% 지켜지고 있는 범위만 강제한다(components/, api/ 도메인 폴더명은
+      // PascalCase/camelCase가 섞여 있어 대규모 리네임 없이는 강제할 수 없어 이번엔 제외).
+      'check-file/filename-naming-convention': [
+        'error',
+        {
+          'src/utils/**/*.{ts,tsx}': 'CAMEL_CASE',
+          'src/static/**/*.ts': 'CAMEL_CASE',
+          'src/interfaces/**/*.ts': 'PASCAL_CASE',
+        },
+        { ignoreMiddleExtensions: true },
+      ],
+      'check-file/folder-naming-convention': ['error', { 'src/api/*/': 'CAMEL_CASE' }],
       // react/jsx-key는 react.configs.recommended에 이미 포함되어 있어 별도로 켤 필요 없다 (기존에는 off로 꺼둔 상태였다).
       'react/no-array-index-key': 'error',
 
