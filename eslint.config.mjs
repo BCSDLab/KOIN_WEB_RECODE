@@ -325,6 +325,16 @@ export default [
     },
   },
   {
+    // 저장소 루트의 Sentry 런타임 설정 파일. tsconfig.json의 include(src/**/*)에는
+    // 포함되지 않아 위 src/**/* 블록의 import/resolver 설정을 못 받고, 기본 node
+    // resolver로는 baseUrl 기반 절대경로 임포트(예: utils/ts/maskSensitive)를
+    // 못 찾아 import/no-unresolved 오탐이 난다. resolver 설정만 별도로 적용한다.
+    files: ['sentry.*.config.ts'],
+    settings: {
+      'import/resolver': { typescript: {} },
+    },
+  },
+  {
     // isomorphicLocalStorage / isomorphicSessionStorage 의 구현체.
     // 저장소에 직접 접근하는 유일한 정당한 지점이므로 SSR 안전성 규칙에서 제외한다.
     files: ['src/utils/ts/env.ts'],
