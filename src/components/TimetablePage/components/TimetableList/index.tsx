@@ -13,10 +13,10 @@ import TimetableSettingModal from 'components/TimetablePage/components/Timetable
 import useAddTimetableFrame from 'components/TimetablePage/hooks/useAddTimetableFrame';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
-import { toast } from 'react-toastify';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetableList.module.scss';
@@ -58,7 +58,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
   const handleAddTimetableClick = () => {
     if (token) {
       if (mySemester?.semesters.length === 0) {
-        toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+        showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {
         addTimetableFrame(semester, {
           onSuccess: (newTimetable) => {

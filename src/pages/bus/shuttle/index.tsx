@@ -13,6 +13,7 @@ import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
@@ -80,11 +81,11 @@ export default function ShuttleBusTimetable() {
           category={category}
           onChange={(v) => {
             if (v === '전체') {
-              router.replace('/bus/shuttle', undefined, { shallow: true });
+              router.replace(ROUTES.BusCourseShuttle(), undefined, { shallow: true });
             } else {
               router.replace(
                 {
-                  pathname: '/bus/shuttle',
+                  pathname: ROUTES.BusCourseShuttle(),
                   query: { category: v },
                 },
                 undefined,
@@ -217,7 +218,7 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
                 value: `${route.type}_${route.route_name}`,
               });
               router.push({
-                pathname: `/bus/shuttle/${route.id}`,
+                pathname: ROUTES.BusShuttleDetail({ routeId: route.id }),
                 query: { category },
               });
             }}

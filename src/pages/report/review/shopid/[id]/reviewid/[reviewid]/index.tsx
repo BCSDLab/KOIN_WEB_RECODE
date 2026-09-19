@@ -6,9 +6,9 @@ import CheckBox from 'components/Store/StoreDetailPage/components/Review/compone
 import ReportingLabel from 'components/Store/StoreDetailPage/components/Review/components/ReportingLabel';
 import useReviewReport from 'components/Store/StoreDetailPage/components/Review/components/ReviewReporting/query/useReviewReport';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
-import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import showToast from 'utils/ts/showToast';
 
 import styles from './ReviewReporting.module.scss';
 
@@ -75,7 +75,7 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: s
 
   const handleReport = () => {
     if (selectOptions.includes('etc') && etcDescription.trim() === '') {
-      toast.error('신고 사유를 입력해주세요.');
+      showToast('error', '신고 사유를 입력해주세요.');
       setEtcDescription('');
 
       return;

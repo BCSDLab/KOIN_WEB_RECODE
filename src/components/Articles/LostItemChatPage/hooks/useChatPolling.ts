@@ -151,7 +151,7 @@ const useChatPolling = ({
 
   const leaveRoom = useCallback(
     (aId: number, cId: number) => {
-      postLeaveLostItemChatroomV2(token, aId, cId).catch((error) => {
+      postLeaveLostItemChatroomV2(token, aId, cId).catch((error: unknown) => {
         if (isKoinError(error)) {
           showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
         } else {

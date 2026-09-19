@@ -62,7 +62,7 @@ export default function ClubQnACard({
     await deleteClubQnAMutateAsync(qnaId);
   };
 
-  const handleDeleteReply = async (qnaId: number) => {
+  const handleDeleteReply = (qnaId: number) => {
     setReplyId(qnaId);
     setQnA('delete');
     openModal();

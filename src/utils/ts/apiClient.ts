@@ -183,7 +183,9 @@ export default class APIClient {
   }
 
   private async retryRequest(error: AxiosError) {
-    if (!axios.isAxiosError(error)) return Promise.reject(error);
+    // error 는 매개변수 타입상 이미 AxiosError(Error)이므로, 아래 방어적 재검증 분기에서는
+    // narrowing 결과가 never가 되어 instanceof로 되짚을 수 없다. 타입 단언으로 되돌린다.
+    if (!axios.isAxiosError(error)) return Promise.reject(error as Error);
     try {
       const originalRequest = error.config;
       const newToken = useTokenStore.getState().token;
@@ -205,7 +207,7 @@ export default class APIClient {
         () => axios(originalRequest!),
       );
     } catch (retryError) {
-      return Promise.reject(retryError);
+      return Promise.reject(retryError instanceof Error ? retryError : new Error(String(retryError)));
     }
   }
 
@@ -289,26 +291,28 @@ export default class APIClient {
     );
   }
 
-  // error 를 경우에 따라 KoinError와 AxiosError로 반환
-  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
+  // error 를 경우에 따라 KoinError와 AxiosError로 반환한다.
+  // isKoinError()는 type 필드만으로 판별하므로, reject()가 실제 Error 인스턴스를 넘기도록
+  // Object.assign으로 필드를 얹어도 isKoinError()/기존 소비 코드와 호환된다.
+  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): Error & (KoinError | CustomAxiosError) {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
 
-      return {
-        type: 'KOIN_ERROR',
+      return Object.assign(new Error(koinError.data.message), {
+        type: 'KOIN_ERROR' as const,
         status: koinError.status,
         code: koinError.data.code,
         message: koinError.data.message,
-      };
+      });
     }
 
-    return {
-      type: 'AXIOS_ERROR',
+    return Object.assign(new Error(error.message), {
+      type: 'AXIOS_ERROR' as const,
       ...error,
-    };
+    });
   }
 
-  private createTracedKoinError(error: AxiosError<KoinError>, route: string): KoinError | CustomAxiosError {
+  private createTracedKoinError(error: AxiosError<KoinError>, route: string): Error & (KoinError | CustomAxiosError) {
     return Sentry.startSpan(
       {
         name: `Convert API error: ${route}`,

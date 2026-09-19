@@ -24,7 +24,7 @@ import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLik
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
-import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
+import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
@@ -198,7 +198,7 @@ export default function ClubDetailPage({
   };
   const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
-  const handleIntroductionSave = async () => {
+  const handleIntroductionSave = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_introduction_correction_save',
@@ -218,7 +218,7 @@ export default function ClubDetailPage({
     openEditModal();
   };
 
-  const handleEditClick = async () => {
+  const handleEditClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_correction',

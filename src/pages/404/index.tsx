@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 
 import Error from 'assets/svg/page-not-found-error.svg';
+import ROUTES from 'static/routes';
 
 import styles from './PageNotFound.module.scss';
 
@@ -19,7 +20,7 @@ export default function PageNotFound() {
           <br />
           최대한 빠르게 오픈하도록 하겠습니다.
         </div>
-        <button type="button" className={styles.content__button} onClick={() => router.push('/')}>
+        <button type="button" className={styles.content__button} onClick={() => router.push(ROUTES.Main())}>
           메인 화면 바로가기
         </button>
       </div>

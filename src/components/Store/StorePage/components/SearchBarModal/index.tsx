@@ -8,6 +8,7 @@ import { storeQueries } from 'api/store/queries';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import RelateSearchItem from 'components/Store/StorePage/components/RelateSearchItem';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -109,7 +110,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
               content={item.keyword}
               onClick={() => {
                 if (item.shop_id) {
-                  router.push(`/store/${item.shop_id}`);
+                  router.push(ROUTES.StoreDetail({ id: String(item.shop_id) }));
                 } else {
                   setParams(
                     { shopIds: item.shop_ids.toString() },

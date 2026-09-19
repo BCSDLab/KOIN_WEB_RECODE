@@ -20,7 +20,7 @@ const useNicknameDuplicateCheck = (options: UseNicknameDuplicateCheckOptions = {
 
   const changeTargetNickname = (
     targetNickname: string,
-    options?: MutateOptions<NicknameDuplicateCheckResponse, unknown, string, unknown> | undefined,
+    options?: MutateOptions<NicknameDuplicateCheckResponse, unknown, string, unknown>,
   ) => {
     if (ADMIN_NICKNAME_REGEX.test(targetNickname)) {
       showToast('warning', '사용할 수 없는 닉네임입니다.');

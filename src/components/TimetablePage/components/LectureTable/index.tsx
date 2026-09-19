@@ -6,6 +6,7 @@ import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
@@ -73,7 +74,7 @@ function LectureTable({
     }
 
     navigate(
-      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
+      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'direct' })}&lectureIndex=${lectureIndex}${
         semester ? `&year=${semester.year}&term=${semester.term}` : ''
       }`,
     );

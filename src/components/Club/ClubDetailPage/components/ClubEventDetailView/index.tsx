@@ -77,7 +77,7 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
     closeModal();
   };
 
-  const handleClickDeleteButton = async () => {
+  const handleClickDeleteButton = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_event_delete',

@@ -11,6 +11,7 @@ import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -71,7 +72,7 @@ export default function MobileCafeteriaPage() {
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    router.push('/store');
+    router.push(ROUTES.Store());
   };
   useScrollToTop();
 

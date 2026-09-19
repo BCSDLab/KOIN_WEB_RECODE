@@ -7,6 +7,7 @@ import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
+import ROUTES from 'static/routes';
 import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -61,7 +62,7 @@ function Timetable({
     }
 
     router.push(
-      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
+      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'direct' })}&lectureIndex=${lectureIndex}${
         semester ? `&year=${semester.year}&term=${semester.term}` : ''
       }`,
     );

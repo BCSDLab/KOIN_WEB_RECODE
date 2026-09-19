@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 interface ClubEventListProps {
@@ -14,7 +15,7 @@ export function useClubEventList({ clubId, eventType }: ClubEventListProps) {
   const router = useRouter();
 
   if (!clubId) {
-    router.push('/clubs');
+    router.push(ROUTES.Club());
   }
   const { data: clubEventList } = useSuspenseQuery(clubQueries.eventList(clubId!, eventType, token));
 
@@ -25,7 +26,7 @@ export function useClubEventDetail(clubId: string | number | undefined, eventId:
   const router = useRouter();
 
   if (!clubId) {
-    router.push('/clubs');
+    router.push(ROUTES.Club());
   }
 
   const { data: clubEventDetail } = useSuspenseQuery(clubQueries.eventDetail(clubId!, eventId!));

@@ -1,4 +1,3 @@
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import type { TimetableFrameInfo } from 'api/timetable/entity';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useDeleteTimetableFrame from 'components/TimetablePage/hooks/useDeleteTimetableFrame';
@@ -46,23 +45,14 @@ export default function TimetableSettingModal({ focusFrame, onClose }: Timetable
   };
 
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, focusFrame);
-  const onDelete = async () => {
+  const onDelete = () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
 
       return;
     }
-    try {
-      await deleteTimetableFrame({ id: focusFrame.id });
-      onClose();
-    } catch (err) {
-      if (isKoinError(err)) {
-        showToast('error', err.message);
-
-        return;
-      }
-      sendClientError(err);
-    }
+    deleteTimetableFrame({ id: focusFrame.id });
+    onClose();
   };
 
   return (

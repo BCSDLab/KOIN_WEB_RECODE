@@ -148,6 +148,15 @@ export default [
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
 
+      // 타입 안전성 세부 규칙 (Lint 개선 논의)
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-redundant-type-constituents': 'error',
+      '@typescript-eslint/no-duplicate-type-constituents': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/prefer-promise-reject-errors': 'error',
+      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
+      '@typescript-eslint/require-await': 'error',
+
       // 문장 사이 개행: 디렉티브 뒤 / export 앞 / return 앞 / 함수·클래스 선언 앞뒤.
       '@stylistic/padding-line-between-statements': [
         'error',
@@ -164,6 +173,13 @@ export default [
         'error',
         {
           patterns: [{ group: ['../*'], message: 'Usage of relative parent imports is not allowed.' }],
+          paths: [
+            {
+              name: 'react-toastify',
+              importNames: ['toast'],
+              message: 'toast를 직접 쓰지 말고 utils/ts/showToast 의 showToast(type, message)를 사용하세요.',
+            },
+          ],
         },
       ],
 
@@ -173,7 +189,8 @@ export default [
         'error',
         {
           selector: "Property[key.name='event_category'][value.type='Literal'][value.value='click']",
-          message: "event_category: 'click' 은 actionEventClick/actionSessionEvent 의 기본값이라 중복입니다. 생략하세요.",
+          message:
+            "event_category: 'click' 은 actionEventClick/actionSessionEvent 의 기본값이라 중복입니다. 생략하세요.",
         },
         {
           // CLAUDE.md 규칙 3: 쿠키 이름은 COOKIE_KEY 상수로만 참조한다.
@@ -186,6 +203,55 @@ export default [
           selector:
             "MemberExpression[optional=false][object.type='MemberExpression'][object.object.name='window'][object.property.name='webkit']",
           message: 'window.webkit 접근에는 optional chaining을 사용하세요 (window.webkit?.xxx).',
+        },
+        {
+          // CLAUDE.md 규칙 5: 라우팅 경로는 ROUTES 헬퍼로만 참조한다.
+          // 외부 URL(슬래시로 시작하지 않음)이나 hash/query-only 이동(슬래시로 시작하지 않는 값)은 대상이 아니다.
+          // esquery의 정규식 리터럴 파서가 '/'를 델리미터로만 인식해 문자 클래스([/])도 못 쓰므로 \x2F로 우회한다.
+          selector:
+            "CallExpression[callee.object.name='router'][callee.property.name=/^(push|replace|prefetch)$/][arguments.0.type='Literal'][arguments.0.value=/^\\x2F/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='router'][callee.property.name=/^(push|replace|prefetch)$/][arguments.0.type='TemplateLiteral'][arguments.0.quasis.0.value.raw=/^\\x2F/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          // router.push({ pathname: '/...' }) 형태. Next.js 동적 라우트 패턴([id] 등)은 ROUTES가 다루는
+          // 실제 목적지 문자열이 아니므로 제외한다.
+          selector:
+            "CallExpression[callee.object.name='router'][callee.property.name=/^(push|replace|prefetch)$/] Property[key.name='pathname'][value.type='Literal'][value.value=/^\\x2F(?!.*\\[)/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='router'][callee.property.name=/^(push|replace|prefetch)$/] Property[key.name='pathname'][value.type='TemplateLiteral'][value.quasis.0.value.raw=/^\\x2F(?!.*\\[)/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector: "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > Literal[value=/^\\x2F/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > Literal[value=/^\\x2F/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] > JSXAttribute[name.name='href'] > JSXExpressionContainer > TemplateLiteral[quasis.0.value.raw=/^\\x2F/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] JSXAttribute[name.name='href'] Property[key.name='pathname'][value.type='Literal'][value.value=/^\\x2F(?!.*\\[)/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
+        },
+        {
+          selector:
+            "JSXOpeningElement[name.name='Link'] JSXAttribute[name.name='href'] Property[key.name='pathname'][value.type='TemplateLiteral'][value.quasis.0.value.raw=/^\\x2F(?!.*\\[)/]",
+          message: '라우팅 경로를 문자열로 직접 쓰지 마세요. static/routes 의 ROUTES 헬퍼를 사용하세요.',
         },
       ],
 
@@ -220,6 +286,13 @@ export default [
     rules: {
       'no-restricted-globals': 'off',
       'no-restricted-properties': 'off',
+    },
+  },
+  {
+    // showToast()의 구현체. react-toastify의 toast를 직접 감싸는 유일한 정당한 지점이다.
+    files: ['src/utils/ts/showToast.ts'],
+    rules: {
+      'no-restricted-imports': 'off',
     },
   },
 
