@@ -6,11 +6,12 @@ import type {
   UpsertTeamRecruitmentProfileRequest,
 } from 'api/teamRecruitmentProfile/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { getViewerScope } from 'utils/ts/getViewerScope';
 import showToast from 'utils/ts/showToast';
 
 export const teamRecruitmentProfileQueryKeys = {
   all: ['team-recruitment-profile'] as const,
-  me: (token: string) => [...teamRecruitmentProfileQueryKeys.all, 'me', token] as const,
+  me: (token: string) => [...teamRecruitmentProfileQueryKeys.all, 'me', getViewerScope(token)] as const,
 };
 
 export const teamRecruitmentProfileQueries = {

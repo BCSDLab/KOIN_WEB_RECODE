@@ -255,8 +255,7 @@ export default [
         },
       ],
 
-      // 쿼리 키에 토큰/식별자가 누락된 24건이 있어, 별도 PR(쿼리 키 인증 정보 정리)에서 정리한 뒤 error로 전환한다.
-      '@tanstack/query/exhaustive-deps': 'off',
+      '@tanstack/query/exhaustive-deps': 'error',
 
       'react/jsx-no-bind': ['error', { allowArrowFunctions: true, allowBind: false, allowFunctions: false }],
       'react/no-unstable-nested-components': 'error',

@@ -10,7 +10,7 @@ interface StoreMutationCallbacks {
 
 const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: string) => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.myReviews(shopId) }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.detail(shopId) }),
@@ -45,7 +45,7 @@ export const storeMutations = {
       mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data, token),
       onSuccess: async () => {
         await Promise.all([
-          queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+          queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
           queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
         ]);
         await callbacks.onSuccess?.();

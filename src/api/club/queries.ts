@@ -1,5 +1,6 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
+import { getViewerScope } from 'utils/ts/getViewerScope';
 
 import type { ClubRecruitmentResponse, HotClubResponse } from './entity';
 import {
@@ -37,10 +38,6 @@ interface ClubListQueryParams {
   isRecruiting?: boolean;
   clubName?: string;
 }
-
-type ClubViewerScope = 'auth' | 'guest';
-
-const getViewerScope = (token?: string | null): ClubViewerScope => (token ? 'auth' : 'guest');
 
 export const clubQueryKeys = {
   all: ['club'] as const,

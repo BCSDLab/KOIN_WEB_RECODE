@@ -3,7 +3,7 @@ import { getRelateSearch } from 'api/store';
 
 export const useRelateSearch = (query: string) => {
   const { data } = useQuery({
-    queryKey: ['relateSearch'],
+    queryKey: ['relateSearch', query],
     queryFn: () => getRelateSearch(query),
   });
 

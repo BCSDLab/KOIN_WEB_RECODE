@@ -38,7 +38,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   };
 
   const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {
-    queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+    queryClient.setQueryData(timetableQueryKeys.frameList(semester, token), createDefaultTimetableFrameList());
   };
 
   const fetchMySemester = async () => {

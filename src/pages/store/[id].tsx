@@ -125,7 +125,7 @@ function StoreDetailPage({ id }: Props) {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: parallelData } = useSuspenseQuery({
-    queryKey: storeQueryKeys.detailPage(id),
+    queryKey: storeQueryKeys.detailPage(id, token),
     queryFn: () =>
       Promise.all([
         queryClient.fetchQuery(storeQueries.detail(id)),

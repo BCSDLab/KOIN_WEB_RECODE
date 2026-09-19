@@ -62,7 +62,7 @@ export const articleMutations = {
   toggleLostItemFound: (queryClient: QueryClient, token: string, articleId: number) =>
     mutationOptions({
       mutationFn: () => postFoundLostItem(token, articleId),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId, token) }),
     }),
 
   createLostItemChatroom: (queryClient: QueryClient, token: string) =>
