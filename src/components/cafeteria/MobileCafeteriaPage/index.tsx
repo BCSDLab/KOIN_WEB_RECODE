@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import type { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
@@ -32,6 +32,7 @@ export default function MobileCafeteriaPage() {
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
@@ -40,7 +41,9 @@ export default function MobileCafeteriaPage() {
         <InformationIcon />
       </button>,
     );
-  }, [setButtonContent, openCafeteriaInfo]);
+
+    return resetButtonContent;
+  }, [setButtonContent, resetButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[dining] });
@@ -74,6 +77,7 @@ export default function MobileCafeteriaPage() {
     });
     router.push(ROUTES.Store());
   };
+
   useScrollToTop();
 
   return (

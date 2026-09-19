@@ -17,6 +17,7 @@ function Header() {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
+  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
 
   return (
     <header
@@ -24,7 +25,7 @@ function Header() {
         [styles.header]: true,
         [styles['header--main']]: isMain,
         [styles['header--new-club']]: isClubRoute,
-        [styles['header--mobile-light']]: isArticleRoute,
+        [styles['header--mobile-light']]: isArticleRoute || isCafeteriaRoute,
       })}
     >
       <nav className={styles.header__content}>

@@ -21,11 +21,13 @@ export default function DetailModal({ url, close }: DetailModalProps) {
 
   return (
     <div className={styles.photo} ref={backgroundRef}>
-      <button type="button" aria-label="닫기" className={styles.photo__close} onClick={close}>
-        <CloseIcon />
-      </button>
-      <div className={styles.photo__image}>
-        <Image src={url} alt="상세 이미지" fill priority sizes="100vw" />
+      <div className={styles.photo__content}>
+        <button type="button" aria-label="닫기" className={styles.photo__close} onClick={close}>
+          <CloseIcon />
+        </button>
+        <div className={styles.photo__image}>
+          <Image src={url} alt="상세 이미지" fill priority sizes="calc(100vw - 48px)" />
+        </div>
       </div>
     </div>
   );
