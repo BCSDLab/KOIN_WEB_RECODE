@@ -1,5 +1,5 @@
-import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -55,26 +55,11 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.box}>
-        {isMobile && (
-          <div className={styles['mobile-header']}>
-            <button type="button" aria-label="닫기 버튼" onClick={closeInfo}>
-              <BlackArrowBackIcon />
-            </button>
-            <span className={styles['mobile-header__title']}>학생식당정보</span>
-          </div>
-        )}
+        {isMobile && <SubPageHeader title="학생식당정보" onBack={closeInfo} />}
         <div className={styles.header}>
           <div className={styles.header__title}>
             <span className={styles.header__main}>
-              {isMobile ? (
-                <>
-                  {cafeteriaInfo.semester}&nbsp;{cafeteriaInfo.name} 운영시간
-                </>
-              ) : (
-                <>
-                  {cafeteriaInfo.name}&nbsp;{cafeteriaInfo.semester} 중 운영시간
-                </>
-              )}
+              {cafeteriaInfo.semester} {cafeteriaInfo.name} 운영시간
             </span>
             <span className={styles.header__sub}>
               <span className={styles['header__sub--bold']}>위치</span>
