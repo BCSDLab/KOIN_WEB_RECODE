@@ -264,6 +264,31 @@ export default [
       'no-var': 'error',
       'no-nested-ternary': 'error',
       'import/no-cycle': 'error',
+      'import/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            // interfaces/ 는 순수 타입 계층이라 다른 어떤 계층에도 의존하면 안 된다.
+            { target: './src/interfaces', from: './src/components' },
+            { target: './src/interfaces', from: './src/pages' },
+            { target: './src/interfaces', from: './src/utils' },
+            { target: './src/interfaces', from: './src/api' },
+            { target: './src/interfaces', from: './src/static' },
+            // static/ 은 UI 계층에 의존하면 안 된다. (api entity 타입 참조는 예외로 허용)
+            { target: './src/static', from: './src/components' },
+            { target: './src/static', from: './src/pages' },
+            { target: './src/static', from: './src/utils' },
+            // utils/ 는 UI 계층(components/pages)에 의존하면 안 된다.
+            { target: './src/utils', from: './src/components' },
+            { target: './src/utils', from: './src/pages' },
+            // api/ 는 UI 계층에 의존하면 안 된다.
+            { target: './src/api', from: './src/components' },
+            { target: './src/api', from: './src/pages' },
+            // components/ 는 라우팅 계층(pages/)에 의존하면 안 된다.
+            { target: './src/components', from: './src/pages' },
+          ],
+        },
+      ],
       // react/jsx-key는 react.configs.recommended에 이미 포함되어 있어 별도로 켤 필요 없다 (기존에는 off로 꺼둔 상태였다).
       'react/no-array-index-key': 'error',
 

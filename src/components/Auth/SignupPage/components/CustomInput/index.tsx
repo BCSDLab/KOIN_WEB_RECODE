@@ -9,18 +9,13 @@ import EyeOpenIcon from 'assets/svg/Login/eye-open.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
 import MobileWarningIcon from 'assets/svg/mobile-warning-icon.svg';
 import FormatTime from 'components/Auth/SignupPage/hooks/useFormatTime';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { useFormContext } from 'react-hook-form';
 import type { UserType } from 'static/auth';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 
 import styles from './CustomInput.module.scss';
-
-export type InputMessage = {
-  type: 'error' | 'warning' | 'success' | 'info' | 'default';
-  content: string;
-  code?: 'SMS_LIMIT' | 'ALREADY_REGISTERED' | (string & {});
-} | null;
 
 interface CustomInputProps extends ComponentPropsWithoutRef<'input'> {
   placeholder?: string;

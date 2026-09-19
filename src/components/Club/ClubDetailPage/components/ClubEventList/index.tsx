@@ -5,7 +5,7 @@ import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
 import ClubEventDetailView from 'components/Club/ClubDetailPage/components/ClubEventDetailView';
 import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
-import { NO_SELECTED_EVENT_ID } from 'pages/clubs/[id]';
+import { NO_SELECTED_EVENT_ID } from 'static/club';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
