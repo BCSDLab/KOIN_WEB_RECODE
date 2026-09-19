@@ -144,6 +144,7 @@ function LostItemChatPage({ token }: { token: string }) {
       ) : (
         <DefaultPhotoIcon />
       ),
+      isActive: article_id === Number(articleId) && chat_room_id === Number(chatroomId),
       onClick: logMessageListSelcetClick,
     }),
   );
