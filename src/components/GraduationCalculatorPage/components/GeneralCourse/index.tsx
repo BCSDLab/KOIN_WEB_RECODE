@@ -3,6 +3,7 @@
 import { startTransition, useEffect } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
+import type { GeneralEducationArea } from 'api/graduationCalculator/entity';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
@@ -18,6 +19,14 @@ import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 
 import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
+
+function getEnrolledLabel(track: GeneralEducationArea): string {
+  if (track.course_type === '교양선택' || track.course_type === '인성과소양') {
+    return `${track.completed_credit ?? 0} / ${track.required_credit ?? 0}`;
+  }
+
+  return Array.isArray(track.course_names) && track.course_names.length > 0 ? track.course_names[0] : '';
+}
 
 function GeneralCourse() {
   const logger = useLogger();
@@ -71,14 +80,7 @@ function GeneralCourse() {
               {track.required_credit <= track.completed_credit ? <CompletedIcon /> : <NotCompletedIcon />}
               <div className={styles.course__track}>{track.course_type}</div>
             </button>
-            <div className={styles.course__enrolled}>
-              {}
-              {track.course_type === '교양선택' || track.course_type === '인성과소양'
-                ? `${track.completed_credit ?? 0} / ${track.required_credit ?? 0}`
-                : Array.isArray(track.course_names) && track.course_names.length > 0
-                  ? track.course_names[0]
-                  : ''}
-            </div>
+            <div className={styles.course__enrolled}>{getEnrolledLabel(track)}</div>
           </div>
         ))}
       </div>

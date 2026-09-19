@@ -25,6 +25,49 @@ export default function DepartmentDesktop({
     departments.map((department) => ({ category, department })),
   );
 
+  const renderBody = () => {
+    if (!isSearching) {
+      return (
+        <ul className={styles.menu}>
+          {categories.map(({ category, title, Icon }) => (
+            <li key={category}>
+              <Link
+                href={ROUTES.DepartmentCategory({ category })}
+                className={styles.menu__link}
+                onClick={() => onCategoryClick(category, title)}
+              >
+                <div className={styles.menu__content}>
+                  <IconBox className={styles['menu__icon-box']}>
+                    <Icon className={styles.menu__icon} />
+                  </IconBox>
+                  <span className={styles.menu__title}>{title}</span>
+                </div>
+                <ChevronRightIcon className={styles.chevron} aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    if (searchResults.length === 0) {
+      return (
+        <div className={styles['search-empty']}>
+          <p>검색 결과가 없습니다.</p>
+          <p>다른 검색어로 다시 검색해주세요.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles['search-result']}>
+        {searchResults.map(({ category, department }) => (
+          <DepartmentCard key={`${category}-${department.name}`} department={department} />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.content}>
@@ -53,40 +96,7 @@ export default function DepartmentDesktop({
             </button>
           </div>
 
-          {isSearching ? (
-            searchResults.length === 0 ? (
-              <div className={styles['search-empty']}>
-                <p>검색 결과가 없습니다.</p>
-                <p>다른 검색어로 다시 검색해주세요.</p>
-              </div>
-            ) : (
-              <div className={styles['search-result']}>
-                {searchResults.map(({ category, department }) => (
-                  <DepartmentCard key={`${category}-${department.name}`} department={department} />
-                ))}
-              </div>
-            )
-          ) : (
-            <ul className={styles.menu}>
-              {categories.map(({ category, title, Icon }) => (
-                <li key={category}>
-                  <Link
-                    href={ROUTES.DepartmentCategory({ category })}
-                    className={styles.menu__link}
-                    onClick={() => onCategoryClick(category, title)}
-                  >
-                    <div className={styles.menu__content}>
-                      <IconBox className={styles['menu__icon-box']}>
-                        <Icon className={styles.menu__icon} />
-                      </IconBox>
-                      <span className={styles.menu__title}>{title}</span>
-                    </div>
-                    <ChevronRightIcon className={styles.chevron} aria-hidden />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+          {renderBody()}
         </div>
 
         <div className={styles.footer}>

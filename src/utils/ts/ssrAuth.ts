@@ -15,6 +15,11 @@ export function clearServerAuthCookies(context: GetServerSidePropsContext) {
   ]);
 
   const previous = context.res.getHeader('Set-Cookie');
-  const previousCookies = Array.isArray(previous) ? previous : previous ? [String(previous)] : [];
+  let previousCookies: string[] = [];
+  if (Array.isArray(previous)) {
+    previousCookies = previous;
+  } else if (previous) {
+    previousCookies = [String(previous)];
+  }
   context.res.setHeader('Set-Cookie', [...previousCookies, ...cookies]);
 }

@@ -67,7 +67,9 @@ export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams
   const author = isCallvanAuthor(rawAuthor) ? rawAuthor : fallback.author;
 
   const rawJoined = parseStringParam(query, 'joined');
-  const joined = rawJoined === 'true' ? true : rawJoined === 'false' ? false : fallback.joined;
+  let joined = fallback.joined;
+  if (rawJoined === 'true') joined = true;
+  else if (rawJoined === 'false') joined = false;
 
   const rawStatuses = parseArrayParam(query, 'statuses');
   const validStatuses = rawStatuses.filter(isCallvanStatus);

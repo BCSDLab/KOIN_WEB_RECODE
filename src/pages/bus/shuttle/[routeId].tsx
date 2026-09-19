@@ -22,7 +22,7 @@ export default function ShuttleDetailPage() {
   const router = useRouter();
   const { routeId } = router.query;
 
-  const shuttleTimetableId = routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null;
+  const shuttleTimetableId = routeId ? asString(routeId) : null;
   const { data: shuttleTimetableDetail } = useQuery({
     ...busQueries.shuttleTimetableDetail(shuttleTimetableId),
     staleTime: 1000 * 60 * 10,

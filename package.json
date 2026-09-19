@@ -43,6 +43,7 @@
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/ --max-warnings 0",
     "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json",
+    "lint:complexity-report": "node scripts/lint/complexity-report.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "log": "tsx scripts/notion/fetch-logging-spec.ts"
