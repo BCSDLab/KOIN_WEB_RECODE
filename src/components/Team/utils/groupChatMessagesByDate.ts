@@ -7,7 +7,6 @@ export interface TeamChatMessageGroup {
   messages: TeamChatMessage[];
 }
 
-
 export default function groupChatMessagesByDate(messages: TeamChatMessage[]): TeamChatMessageGroup[] {
   return messages.reduce<TeamChatMessageGroup[]>((groups, message) => {
     const date = message.timestamp.slice(0, 10);

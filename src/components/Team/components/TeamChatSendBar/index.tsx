@@ -10,11 +10,7 @@ interface TeamChatSendBarProps {
   onImageSelect: (file: File) => void;
 }
 
-export default function TeamChatSendBar({
-  disabled = false,
-  onSend,
-  onImageSelect,
-}: TeamChatSendBarProps) {
+export default function TeamChatSendBar({ disabled = false, onSend, onImageSelect }: TeamChatSendBarProps) {
   const [content, setContent] = useState('');
 
   const handleSend = () => {

@@ -1,11 +1,4 @@
-import {
-  useRef,
-  type ChangeEvent,
-  type Key,
-  type KeyboardEvent,
-  type ReactNode,
-  type RefObject,
-} from 'react';
+import { useRef, type ChangeEvent, type Key, type KeyboardEvent, type ReactNode, type RefObject } from 'react';
 import Link from 'next/link';
 
 import ImageUploadIcon from 'assets/svg/common/chat-photo.svg';
@@ -91,13 +84,7 @@ interface ChatLayoutProps {
 
 const joinClassNames = (...classNames: Array<string | false | undefined>) => classNames.filter(Boolean).join(' ');
 
-export function ChatLayout({
-  sidebar,
-  children,
-  className,
-  sidebarClassName,
-  panelClassName,
-}: ChatLayoutProps) {
+export function ChatLayout({ sidebar, children, className, sidebarClassName, panelClassName }: ChatLayoutProps) {
   const hasSidebar = Boolean(sidebar);
 
   return (
@@ -113,7 +100,9 @@ export function ChatLayout({
           {sidebar}
         </aside>
       )}
-      {children && <section className={joinClassNames(styles['chat-layout__panel'], panelClassName)}>{children}</section>}
+      {children && (
+        <section className={joinClassNames(styles['chat-layout__panel'], panelClassName)}>{children}</section>
+      )}
     </div>
   );
 }
@@ -141,19 +130,14 @@ export function ChatRoomList({ items }: ChatRoomListProps) {
         </div>
         <div className={styles['room-list__preview-row']}>
           <div className={styles['room-list__preview']}>{item.preview}</div>
-          {item.unreadCount > 0 && (
-            <div className={styles['room-list__unread-count']}>{item.unreadCount}</div>
-          )}
+          {item.unreadCount > 0 && <div className={styles['room-list__unread-count']}>{item.unreadCount}</div>}
         </div>
       </div>
     </Link>
   ));
 }
 
-export function ChatMessageList({
-  groups,
-  classNames = {},
-}: ChatMessageListProps) {
+export function ChatMessageList({ groups, classNames = {} }: ChatMessageListProps) {
   const renderMessage = (message: ChatMessageListItem) => {
     let bubbleClassName = message.isMine
       ? joinClassNames(styles['message-list__bubble'], styles['message-list__bubble--mine'], classNames.bubbleMine)
@@ -164,11 +148,7 @@ export function ChatMessageList({
       <div className={bubbleClassName}>
         {message.isImage ? (
           // eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지의 원본 비율을 유지하고 CSS로 표시 크기를 제한함
-          <img
-            src={message.content}
-            alt="전송된 이미지"
-            className={styles['message-list__image']}
-          />
+          <img src={message.content} alt="전송된 이미지" className={styles['message-list__image']} />
         ) : (
           message.content
         )}
@@ -184,7 +164,9 @@ export function ChatMessageList({
       </>
     );
     const meta = (
-      <div className={joinClassNames(styles['message-list__meta'], message.isMine && styles['message-list__meta--mine'])}>
+      <div
+        className={joinClassNames(styles['message-list__meta'], message.isMine && styles['message-list__meta--mine'])}
+      >
         {metaContent}
       </div>
     );

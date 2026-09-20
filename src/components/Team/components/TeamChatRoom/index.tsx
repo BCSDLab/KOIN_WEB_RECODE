@@ -212,11 +212,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
           }}
         />
       </div>
-      <TeamChatSendBar
-        disabled={isSending || isUploading}
-        onSend={handleSend}
-        onImageSelect={handleImageSelect}
-      />
+      <TeamChatSendBar disabled={isSending || isUploading} onSend={handleSend} onImageSelect={handleImageSelect} />
     </ChatLayout>
   );
 }
