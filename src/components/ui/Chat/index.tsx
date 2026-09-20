@@ -31,7 +31,7 @@ export interface ChatMessageListItem {
   isImage: boolean;
   timeLabel: string;
   unreadCount?: number;
-  showSender?: boolean;
+  senderId: number;
   senderName?: string;
   senderAvatar?: ReactNode;
 }
@@ -138,7 +138,11 @@ export function ChatRoomList({ items }: ChatRoomListProps) {
 }
 
 export function ChatMessageList({ groups, classNames = {} }: ChatMessageListProps) {
-  const renderMessage = (message: ChatMessageListItem) => {
+  const renderMessage = (message: ChatMessageListItem, previousMessage?: ChatMessageListItem) => {
+    const showSender =
+      !previousMessage ||
+      message.senderId !== previousMessage.senderId ||
+      message.timeLabel !== previousMessage.timeLabel;
     let bubbleClassName = message.isMine
       ? joinClassNames(styles['message-list__bubble'], styles['message-list__bubble--mine'], classNames.bubbleMine)
       : joinClassNames(styles['message-list__bubble'], styles['message-list__bubble--other'], classNames.bubbleOthers);
@@ -190,11 +194,11 @@ export function ChatMessageList({ groups, classNames = {} }: ChatMessageListProp
         className={joinClassNames(
           styles['message-list__item'],
           styles['message-list__item--other'],
-          !message.showSender && styles['message-list__item--consecutive'],
+          !showSender && styles['message-list__item--consecutive'],
         )}
         data-message-id={message.messageId}
       >
-        {message.showSender && (
+        {showSender && (
           <div className={styles['message-list__sender']}>
             {message.senderAvatar}
             <span className={styles['message-list__sender-name']}>{message.senderName}</span>
@@ -215,7 +219,7 @@ export function ChatMessageList({ groups, classNames = {} }: ChatMessageListProp
           {group.dateLabel}
         </span>
       </div>
-      {group.messages.map(renderMessage)}
+      {group.messages.map((message, index) => renderMessage(message, group.messages[index - 1]))}
     </div>
   ));
 }

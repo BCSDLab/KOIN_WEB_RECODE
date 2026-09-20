@@ -148,21 +148,16 @@ function LostItemChatPage({ token }: { token: string }) {
     }),
   );
 
-  const messageGroups = (messages ?? []).reduce<ChatMessageListGroup[]>((groups, message, index, allMessages) => {
+  const messageGroups = (messages ?? []).reduce<ChatMessageListGroup[]>((groups, message, index) => {
     const dateLabel = formatChatDate(message.timestamp);
     const timeLabel = formatChatTime(message.timestamp);
-    const previousMessage = allMessages[index - 1];
-    const showSender =
-      !previousMessage ||
-      message.user_id !== previousMessage.user_id ||
-      timeLabel !== formatChatTime(previousMessage.timestamp);
     const normalizedMessage = {
       key: `${message.timestamp}-${index}`,
       isMine: message.user_id === userInfo?.id,
       content: message.content,
       isImage: message.is_image,
       timeLabel,
-      showSender,
+      senderId: message.user_id,
       senderName: message.user_nickname || '익명',
       senderAvatar: (
         <div className={styles['message-item--profile']}>

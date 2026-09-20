@@ -87,7 +87,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const messageGroups = groupChatMessagesByDate(mergedMessages).map((group) => ({
     key: group.date,
     dateLabel: group.label,
-    messages: group.messages.map((message, index) => ({
+    messages: group.messages.map((message) => ({
       key: message.message_id,
       messageId: message.message_id,
       isMine: message.user_id === user?.id,
@@ -95,7 +95,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       isImage: message.is_image,
       timeLabel: formatChatTime(message.timestamp),
       unreadCount: message.unread_count,
-      showSender: index === 0 || group.messages[index - 1].user_id !== message.user_id,
+      senderId: message.user_id,
       senderName: message.user_nickname,
       senderAvatar: (
         <>
