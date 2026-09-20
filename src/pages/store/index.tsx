@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import {
   dehydrate,
@@ -11,6 +12,7 @@ import {
   useSuspenseQuery,
   type DehydratedState,
 } from '@tanstack/react-query';
+import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
@@ -31,17 +33,17 @@ import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isomorphicLocalStorage, isomorphicSessionStorage } from 'utils/ts/env';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
-import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
+
 import styles from './StorePage.module.scss';
 
-type StoreSearchQueryType = {
+interface StoreSearchQueryType {
   storeName?: string;
   category?: string;
   delivery?: string;
   bank?: string;
   card?: string;
   shopIds?: string;
-};
+}
 
 const MOBILE_SORT_CHECK_BOX = [
   {
@@ -136,7 +138,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 function Store() {
   const enterCategoryTimeRef = useRef<number | null>(null);
   const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
-  const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
+  const [storeFilterList, setStoreFilterList] = useState<Record<StoreFilterType, boolean>>({
     OPEN: false,
     DELIVERY: false,
   });

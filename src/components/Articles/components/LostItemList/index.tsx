@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LostItemArticleForGetDTO } from 'api/articles/entity';
+
+import type { LostItemArticleForGetDTO } from 'api/articles/entity';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
@@ -9,15 +10,14 @@ import ROUTES from 'static/routes';
 import { useServerRequest } from 'utils/context/serverRequest';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+
 import styles from './LostItemList.module.scss';
 
 interface LostItemListProps {
   articles: LostItemArticleForGetDTO[];
 }
 
-type HeaderRowInfo = {
-  [key: string]: string;
-};
+type HeaderRowInfo = Record<string, string>;
 
 const HEADER_ROW: HeaderRowInfo = {
   classification: '분류',
@@ -52,22 +52,22 @@ export default function LostItemList({ articles }: LostItemListProps) {
         <button
           key={article.id}
           type="button"
-          className={styles.lostItemListMobile__rowDisabled}
+          className={styles['lost-item-list-mobile__rowDisabled']}
           onClick={handleReportedClick}
         >
-          <div className={styles.lostItemListMobile__type}>{typeText}</div>
+          <div className={styles['lost-item-list-mobile__type']}>{typeText}</div>
 
-          <div className={styles.lostItemListMobile__title}>
-            <div className={styles.lostItemListMobile__titleMeta}>
-              <div className={styles.lostItemListMobile__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
+          <div className={styles['lost-item-list-mobile__title']}>
+            <div className={styles['lost-item-list-mobile__titleMeta']}>
+              <div className={styles['lost-item-list-mobile__reportedText']}>신고에 의해 숨김 처리 되었습니다.</div>
             </div>
             <FoundChip isFound={article.is_found} size="xs" />
           </div>
 
-          <div className={styles.lostItemListMobile__writeMeta}>
-            <div className={styles.lostItemListMobile__author}>{article.author}</div>
-            <div className={styles.lostItemListMobile__dot}>·</div>
-            <div className={styles.lostItemListMobile__date}>{registeredDate}</div>
+          <div className={styles['lost-item-list-mobile__writeMeta']}>
+            <div className={styles['lost-item-list-mobile__author']}>{article.author}</div>
+            <div className={styles['lost-item-list-mobile__dot']}>·</div>
+            <div className={styles['lost-item-list-mobile__date']}>{registeredDate}</div>
           </div>
         </button>
       );
@@ -76,28 +76,28 @@ export default function LostItemList({ articles }: LostItemListProps) {
     return (
       <Link
         key={article.id}
-        className={styles.lostItemListMobile__row}
+        className={styles['lost-item-list-mobile__row']}
         href={detailLink}
         onClick={() => logLostItemPostEntry(article.type === 'LOST' ? '분실물' : '습득물')}
       >
-        <div className={styles.lostItemListMobile__type}>{typeText}</div>
+        <div className={styles['lost-item-list-mobile__type']}>{typeText}</div>
 
-        <div className={styles.lostItemListMobile__title}>
-          <div className={styles.lostItemListMobile__titleMeta}>
-            <span className={styles.lostItemListMobile__badge}>{article.category}</span>
-            <div className={styles.lostItemListMobile__place}>{article.found_place}</div>
+        <div className={styles['lost-item-list-mobile__title']}>
+          <div className={styles['lost-item-list-mobile__titleMeta']}>
+            <span className={styles['lost-item-list-mobile__badge']}>{article.category}</span>
+            <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
             <div>|</div>
-            <div className={styles.lostItemListMobile__foundDate}>{article.found_date}</div>
+            <div className={styles['lost-item-list-mobile__foundDate']}>{article.found_date}</div>
           </div>
           <FoundChip isFound={article.is_found} size="xs" />
         </div>
 
-        <div className={styles.lostItemListMobile__content}>{article.content}</div>
+        <div className={styles['lost-item-list-mobile__content']}>{article.content}</div>
 
-        <div className={styles.lostItemListMobile__writeMeta}>
-          <div className={styles.lostItemListMobile__author}>{article.author}</div>
-          <div className={styles.lostItemListMobile__dot}>·</div>
-          <div className={styles.lostItemListMobile__date}>{registeredDate}</div>
+        <div className={styles['lost-item-list-mobile__writeMeta']}>
+          <div className={styles['lost-item-list-mobile__author']}>{article.author}</div>
+          <div className={styles['lost-item-list-mobile__dot']}>·</div>
+          <div className={styles['lost-item-list-mobile__date']}>{registeredDate}</div>
         </div>
       </Link>
     );
@@ -111,19 +111,19 @@ export default function LostItemList({ articles }: LostItemListProps) {
         <button
           key={article.id}
           type="button"
-          className={styles.lostItemList__rowDisabled}
+          className={styles['lost-item-list__rowDisabled']}
           onClick={handleReportedClick}
         >
-          <div className={styles.lostItemList__type}>{typeText}</div>
+          <div className={styles['lost-item-list__type']}>{typeText}</div>
 
-          <div className={styles.lostItemList__title}>
-            <div className={styles.lostItemList__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
+          <div className={styles['lost-item-list__title']}>
+            <div className={styles['lost-item-list__reportedText']}>신고에 의해 숨김 처리 되었습니다.</div>
           </div>
 
-          <div className={styles.lostItemList__author}>{article.author}</div>
-          <div className={styles.lostItemList__date}>{registeredDate}</div>
+          <div className={styles['lost-item-list__author']}>{article.author}</div>
+          <div className={styles['lost-item-list__date']}>{registeredDate}</div>
 
-          <div className={styles.lostItemList__chip}>
+          <div className={styles['lost-item-list__chip']}>
             <FoundChip isFound={article.is_found} size="xs" />
           </div>
         </button>
@@ -133,22 +133,22 @@ export default function LostItemList({ articles }: LostItemListProps) {
     return (
       <Link
         key={article.id}
-        className={styles.lostItemList__row}
+        className={styles['lost-item-list__row']}
         href={detailLink}
         onClick={() => logLostItemPostEntry(article.type === 'LOST' ? '분실물' : '습득물')}
       >
-        <div className={styles.lostItemList__type}>{typeText}</div>
+        <div className={styles['lost-item-list__type']}>{typeText}</div>
 
-        <div className={styles.lostItemList__title}>
-          <div className={styles.lostItemList__titleMeta}>
-            <span className={styles.lostItemList__badge}>{article.category}</span>
-            <div className={styles.lostItemList__place}>{article.found_place}</div>
+        <div className={styles['lost-item-list__title']}>
+          <div className={styles['lost-item-list__titleMeta']}>
+            <span className={styles['lost-item-list__badge']}>{article.category}</span>
+            <div className={styles['lost-item-list__place']}>{article.found_place}</div>
             <div>|</div>
-            <div className={styles.lostItemList__foundDate}>{article.found_date}</div>
+            <div className={styles['lost-item-list__foundDate']}>{article.found_date}</div>
 
             {isNewArticle && (
               <Image
-                className={styles.lostItemList__newIcon}
+                className={styles['lost-item-list__newIcon']}
                 src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
                 alt="new"
                 width={15}
@@ -158,10 +158,10 @@ export default function LostItemList({ articles }: LostItemListProps) {
           </div>
         </div>
 
-        <div className={styles.lostItemList__author}>{article.author}</div>
-        <div className={styles.lostItemList__date}>{registeredDate}</div>
+        <div className={styles['lost-item-list__author']}>{article.author}</div>
+        <div className={styles['lost-item-list__date']}>{registeredDate}</div>
 
-        <div className={styles.lostItemList__chip}>
+        <div className={styles['lost-item-list__chip']}>
           <FoundChip isFound={article.is_found} size="xs" />
         </div>
       </Link>
@@ -181,7 +181,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
           </div>
         </div>
       </div>
-      <div className={styles.lostItemList}>
+      <div className={styles['lost-item-list']}>
         {articles.map((article) => (isMobile ? mobileRow(article) : desktopRow(article)))}
       </div>
     </React.Fragment>

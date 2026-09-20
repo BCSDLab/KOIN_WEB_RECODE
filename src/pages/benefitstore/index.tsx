@@ -1,7 +1,14 @@
 import { Suspense, useEffect } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
+
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient, useSuspenseQuery, type DehydratedState } from '@tanstack/react-query';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+  useSuspenseQuery,
+  type DehydratedState,
+} from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
@@ -12,6 +19,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './StoreBenefitPage.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
@@ -91,8 +99,7 @@ function StoreBenefit() {
           >
             <div className={styles.tab__content}>
               <div className={styles['tab__content--logo']}>
-                {/* 이미지 크기가 작고 개별 크기가 모두 다르기에 img 태그 유지 */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {/* eslint-disable-next-line @next/next/no-img-element -- 개별 크기가 제각각인 소형 아이콘 목록 */}
                 <img
                   src={
                     selectedCategory === item.id

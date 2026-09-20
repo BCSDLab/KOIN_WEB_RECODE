@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
@@ -20,6 +21,7 @@ export default function useUserInfoModal() {
   const isInfoMissing = isStudent
     ? (['login_id', 'gender', 'major', 'name', 'phone_number', 'student_number'] as const).some((field) => {
         const v = userInfo[field];
+
         return v === undefined || v === null || v === '';
       })
     : false;

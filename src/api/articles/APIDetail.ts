@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   ArticlesResponse,
   ArticleResponse,
   HotArticlesResponse,
@@ -219,9 +220,9 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
   }
 }
 
-export class GetLostItemChatroomDetailMessages<
-  R extends LostItemChatroomDetailMessagesResponse,
-> implements APIRequest<R> {
+export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.GET;
 
   path: string;

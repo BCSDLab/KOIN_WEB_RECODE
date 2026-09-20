@@ -1,7 +1,12 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
+import type {
+  TeamRecruitmentProfileResponse,
+  UpsertTeamRecruitmentProfileRequest,
+} from 'api/teamRecruitmentProfile/entity';
 import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
@@ -14,15 +19,12 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+
 import { PROFILE_LOG_MODE } from './constants';
 import { profileFormSchema, type ProfileFormValues } from './schema';
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
 import { PROFILE_STEPS, type ProfileStepTitle, type TeamProfileFormMode } from './types';
-import type {
-  TeamRecruitmentProfileResponse,
-  UpsertTeamRecruitmentProfileRequest,
-} from 'api/teamRecruitmentProfile/entity';
 import styles from './ProfilePage.module.scss';
 
 interface TeamProfileFormProps {
@@ -154,7 +156,9 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
       showToast('warning', '기본 정보를 먼저 입력해주세요.');
       goToFirstStep();
     }
-  }, [isReady, currentStep, methods, goToFirstStep]);
+    // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- goToFirstStep은 React Compiler가 참조를 안정화함
+  }, [isReady, currentStep, methods]);
 
   // 저장/수정 버튼은 검증만 통과시키고, 실제 upsert는 확인 모달에서 승인해야 실행된다.
   // 작성 중인(draft) 활동 이력이 남아있으면 안 된다는 규칙은 profileFormSchema의 superRefine이 검증하므로,
@@ -166,6 +170,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
       if (errors.nickname || errors.department || errors.studentNumber) {
         showToast('warning', '기본 정보를 먼저 입력해주세요.');
         goToFirstStep();
+
         return;
       }
       showToast('warning', errors.activities?.message ?? '필수 항목을 모두 작성해주세요.');
@@ -186,7 +191,6 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   const handleCancelSubmit = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: `team_recruitment_profile_${PROFILE_LOG_MODE[mode]}_submit_cancel`,
       value: '취소하기',
     });
@@ -196,7 +200,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles.mobileHeader}>
+        <div className={styles['mobile-header']}>
           <SubPageHeader title={MODE_TEXT[mode].title} />
         </div>
         <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>
@@ -246,6 +250,9 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   });
 
   return (
-    <ProfileFormBody mode={mode} defaultValues={isEditMode ? toDefaultValues(existingProfile ?? null) : EMPTY_DEFAULT_VALUES} />
+    <ProfileFormBody
+      mode={mode}
+      defaultValues={isEditMode ? toDefaultValues(existingProfile ?? null) : EMPTY_DEFAULT_VALUES}
+    />
   );
 }

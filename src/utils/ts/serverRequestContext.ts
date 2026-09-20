@@ -1,4 +1,5 @@
 import type { GetServerSidePropsContext } from 'next';
+
 import { COOKIE_KEY } from 'static/url';
 
 export type DeviceClass = 'mobile' | 'desktop';

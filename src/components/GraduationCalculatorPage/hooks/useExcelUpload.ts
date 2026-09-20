@@ -1,16 +1,19 @@
-import { DragEvent } from 'react';
+import type { DragEvent } from 'react';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
 import { timetableQueryKeys } from 'api/timetable/queries';
 import usePostGraduationExcel from 'components/GraduationCalculatorPage/hooks/usePostGraduationExcel';
-import { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
+import type { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export function useExcelUpload() {
   const queryClient = useQueryClient();
   const { mutate } = usePostGraduationExcel();
   const logger = useLogger();
+  const token = useTokenState();
 
   const handleFile = (file: File) => {
     const formData = new FormData();
@@ -19,7 +22,7 @@ export function useExcelUpload() {
     mutate(formData as unknown as GraduationExcelUploadForPost, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
-        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester() });
+        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(token) });
         showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
       },
       onError: () => {

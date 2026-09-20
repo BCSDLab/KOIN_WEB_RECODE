@@ -6,6 +6,7 @@ import showToast from 'utils/ts/showToast';
 export default function useAddTimetableLectureRegular(token: string) {
   const queryClient = useQueryClient();
   const mutation = timetableMutations.addLectureRegular(queryClient, token);
+
   return useMutation({
     ...mutation,
     onError: (error) => {

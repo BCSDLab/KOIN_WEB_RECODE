@@ -1,4 +1,4 @@
-.ellipsisContainer {
+.ellipsis-container {
   position: relative;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@
   z-index: 10;
 }
 
-.ellipsisContainer:hover .tooltip {
+.ellipsis-container:hover .tooltip {
   opacity: 1;
   visibility: visible;
 }

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import Layout from 'components/layout';
@@ -12,6 +13,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './TeamProfilePage.module.scss';
 
 // 로그인은 middleware.ts가 보장하므로 여기선 토큰이 항상 존재한다고 가정해도 된다.
@@ -99,10 +101,10 @@ function TeamProfilePage() {
         <meta name="description" content="팀원 모집 프로필을 확인하고 관리할 수 있습니다." />
       </Head>
 
-      <div className={styles.desktopOnly}>
+      <div className={styles['desktop-only']}>
         <TeamProfileDesktop {...viewProps} />
       </div>
-      <div className={styles.mobileOnly}>
+      <div className={styles['mobile-only']}>
         <TeamProfileMobile {...viewProps} />
       </div>
     </>

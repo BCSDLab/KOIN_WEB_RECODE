@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { ReviewRequest, ReviewResponse } from './entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type { ReviewRequest, ReviewResponse } from './entity';
 
 export class GetStoreReview<R extends ReviewResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

@@ -1,19 +1,21 @@
-type GTagEvent = {
-  team: string;
+export type LoggingTeam = 'CAMPUS' | 'BUSINESS' | 'USER';
+
+interface GTagEvent {
+  team: LoggingTeam;
   event_category: string;
   event_label: string;
   value: string;
   duration_time?: number;
   previous_page?: string;
   current_page?: string;
-};
+}
 
-type SessionEvent = {
+interface SessionEvent {
   event_label: string;
   value: string;
   event_category: string;
   custom_session_id: string;
-};
+}
 
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 const API_PATH = process.env.NEXT_PUBLIC_API_PATH;
@@ -50,7 +52,7 @@ export const event = ({
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
       팀: team,
       '이벤트 Category': event_category,
@@ -74,7 +76,7 @@ export const startSession = ({ event_label, value, event_category, custom_sessio
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
       '세션 시작': event_label,
       값: value,

@@ -7,17 +7,39 @@ import {
   TEAM_RECRUITMENT_MAX_ROLE_COUNT,
   TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH,
 } from 'components/Team/NewTeamRecruitment/constants';
-import { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
-import { Control, Controller, useFieldArray, useWatch } from 'react-hook-form';
+import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
+import { type Control, Controller, type UseFormTrigger, useFieldArray, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './RoleField.module.scss';
 
 interface RoleFieldProps {
   control: Control<TeamRecruitmentFormValues>;
+  trigger: UseFormTrigger<TeamRecruitmentFormValues>;
   eventLabel: string;
+  error?: string;
 }
 
-export default function RoleField({ control, eventLabel }: RoleFieldProps) {
+interface RoleNameInputProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function RoleNameInput({ value, onChange }: RoleNameInputProps) {
+  return (
+    <input
+      type="text"
+      value={value}
+      placeholder="역할명"
+      maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
+      onChange={(event) => {
+        onChange(event.target.value.slice(0, TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH));
+      }}
+    />
+  );
+}
+
+export default function RoleField({ control, trigger, eventLabel, error }: RoleFieldProps) {
   const logger = useLogger();
   const { fields, append, remove } = useFieldArray({ control, name: 'roles', keyName: 'fieldId' });
   const isRoleUnified = useWatch({ control, name: 'isRoleUnified' });
@@ -42,12 +64,7 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
             </span>
           )}
         </div>
-        <button
-          type="button"
-          className={styles['field__add-button']}
-          onClick={handleAddRole}
-          disabled={isAddDisabled}
-        >
+        <button type="button" className={styles['field__add-button']} onClick={handleAddRole} disabled={isAddDisabled}>
           역할 추가
           <PlusIcon />
         </button>
@@ -111,12 +128,12 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
               name={`roles.${index}.name`}
               render={({ field }) => (
                 <div className={styles['field__row-name']}>
-                  <input
-                    type="text"
+                  <RoleNameInput
                     value={field.value}
-                    placeholder="역할명"
-                    maxLength={TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
-                    onChange={field.onChange}
+                    onChange={(value) => {
+                      field.onChange(value);
+                      trigger('roles');
+                    }}
                   />
                   <span>
                     {field.value.length}/{TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH}
@@ -133,7 +150,10 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
                     type="button"
                     aria-label="인원수 감소"
                     disabled={field.value <= 1}
-                    onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                    onClick={() => {
+                      field.onChange(Math.max(1, field.value - 1));
+                      trigger('roles');
+                    }}
                   >
                     <MinusIcon />
                   </button>
@@ -142,7 +162,10 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
                     type="button"
                     aria-label="인원수 증가"
                     disabled={totalMemberCount >= TEAM_RECRUITMENT_MAX_MEMBER_COUNT}
-                    onClick={() => field.onChange(field.value + 1)}
+                    onClick={() => {
+                      field.onChange(field.value + 1);
+                      trigger('roles');
+                    }}
                   >
                     <PlusIcon />
                   </button>
@@ -170,6 +193,8 @@ export default function RoleField({ control, eventLabel }: RoleFieldProps) {
         역할 추가
         <PlusIcon />
       </button>
+
+      {error && <p className={styles.field__error}>{error}</p>}
     </div>
   );
 }

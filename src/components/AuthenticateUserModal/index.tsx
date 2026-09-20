@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
@@ -14,6 +15,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
+
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -71,6 +73,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
     };
 
     window.addEventListener('unload', handleUnload);
+
     return () => {
       window.removeEventListener('unload', handleUnload);
     };
@@ -94,6 +97,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
           보안을 위해 비밀번호 입력이 필요합니다.
         </div>
         <div className={styles.container__footer}>
+          {/* sentry-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
           <div className={styles.container__input}>
             <input
               type={isBlind ? 'password' : 'text'}
@@ -101,6 +105,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
               className={cn({
                 [styles['container__password-input']]: true,
                 [styles['container__password-input--error']]: isKoinError(error),
+                'sentry-mask': true,
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

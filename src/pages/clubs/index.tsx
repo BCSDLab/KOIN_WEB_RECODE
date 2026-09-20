@@ -1,6 +1,7 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
@@ -15,7 +16,7 @@ import ClubSearchContainer from 'components/Club/ClubListPage/components/ClubSea
 import useClubLike from 'components/Club/hooks/useClubLike';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -32,6 +33,7 @@ import {
   parseServerSideParams,
 } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -224,6 +226,7 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
           onClose={portalOption.close}
         />
       ));
+
       return;
     }
     if (isLiked) {

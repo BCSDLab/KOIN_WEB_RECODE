@@ -3,6 +3,7 @@ import { storeQueries } from 'api/store/queries';
 import Rating from 'components/Store/StoreDetailPage/components/Review/components/Rating/Rating';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './AverageRating.module.scss';
 
 export default function AverageRating({ id }: { id: string }) {

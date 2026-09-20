@@ -1,6 +1,6 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { CallvanReportRequest, CreateCallvanRequest, SendChatRequest } from './entity';
-import { callvanQueryKeys } from './queries';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
+import type { CallvanReportRequest, CreateCallvanRequest, SendChatRequest } from './entity';
 import {
   cancelCallvan,
   closeCallvanPost,
@@ -14,6 +14,7 @@ import {
   reportCallvanParticipant,
   sendCallvanChat,
 } from './index';
+import { callvanQueryKeys } from './queries';
 
 const invalidateCallvanInfiniteList = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: callvanQueryKeys.infiniteListRoot });
@@ -61,7 +62,7 @@ export const callvanMutations = {
   report: (queryClient: QueryClient, token: string, postId: number) =>
     mutationOptions({
       mutationFn: (data: CallvanReportRequest) => reportCallvanParticipant(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId, token) }),
     }),
 
   markAllNotificationsRead: (queryClient: QueryClient, token: string) =>
@@ -85,6 +86,6 @@ export const callvanMutations = {
   sendChat: (queryClient: QueryClient, token: string, postId: number) =>
     mutationOptions({
       mutationFn: (data: SendChatRequest) => sendCallvanChat(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId) }),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId, token) }),
     }),
 };

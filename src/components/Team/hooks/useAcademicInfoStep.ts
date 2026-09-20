@@ -43,6 +43,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '회원정보를 불러오지 못했습니다.');
+
         return;
       }
       showToast('error', '회원정보를 불러오지 못했습니다.');
@@ -53,13 +54,13 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleLoadUserInfo = () => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.LOAD_USER_INFO,
       value: '회원정보 불러오기',
     });
 
     if (!token) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     loadUserInfo();
@@ -69,12 +70,13 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     mutationFn: (data: { department: string; studentNumber: string }) =>
       updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
     onSuccess: () => {
-      actionEventClick({ team: 'CAMPUS', event_category: 'click', event_label: loggingTitle.NEXT, value: '다음' });
+      actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.NEXT, value: '다음' });
       onSaved();
     },
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
+
         return;
       }
       showToast('error', '학적 정보 수정에 실패했습니다.');
@@ -85,6 +87,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleSaveAcademicInfo = (data: { department: string; studentNumber: string }) => {
     if (!token) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     saveAcademicInfo(data);
@@ -93,7 +96,6 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const handleMajorSelect = (value: string) => {
     actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: loggingTitle.MAJOR_SELECT,
       value,
     });

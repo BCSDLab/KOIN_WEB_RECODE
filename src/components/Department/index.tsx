@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { DepartmentContactCategory } from 'api/departmentContact/entity';
+import type { DepartmentContactCategory } from 'api/departmentContact/entity';
 import { departmentContactQueries } from 'api/departmentContact/queries';
 import BackpackIcon from 'assets/svg/department/backpack-icon.svg';
 import BuildingIcon from 'assets/svg/department/building-icon.svg';
@@ -13,6 +14,7 @@ import { BUS_FEEDBACK_FORM } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import DepartmentDesktop from './DepartmentDesktop';
 import DepartmentMobile from './DepartmentMobile';
 import { formatUpdatedAt } from './formatUpdatedAt';

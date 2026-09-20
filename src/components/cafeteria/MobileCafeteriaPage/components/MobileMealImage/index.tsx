@@ -1,8 +1,10 @@
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { Dining } from 'api/dinings/entity';
+import type { Dining } from 'api/dinings/entity';
 import NoMeals from 'assets/svg/no-meals-mobile.svg';
 import NoPhoto from 'assets/svg/no-photography-mobile.svg';
+
 import styles from './MobileMealImage.module.scss';
 
 interface MobileMealImageProps {
@@ -37,9 +39,9 @@ export default function MobileMealImage({ dining, handleImageClick }: MobileMeal
           className={styles.image__img}
           src={dining.image_url!}
           alt="식단 사진"
-          width={202}
-          height={135}
-          sizes="202px"
+          width={310}
+          height={222}
+          sizes="310px"
         />
       ) : (
         <NoPhoto />

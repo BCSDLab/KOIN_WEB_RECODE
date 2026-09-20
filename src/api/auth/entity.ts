@@ -1,11 +1,11 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
-export type LoginRequest = {
+export interface LoginRequest {
   login_id: string;
   login_pw: string;
-};
+}
 
-export type LoginStudentRequest = {
+export interface LoginStudentRequest {
   name: string;
   phone_number: string;
   login_id: string;
@@ -15,9 +15,9 @@ export type LoginStudentRequest = {
   gender: string;
   email: string | null;
   nickname: string | null;
-};
+}
 
-export type LoginGeneralRequest = {
+export interface LoginGeneralRequest {
   name: string;
   phone_number: string;
   login_id: string;
@@ -26,7 +26,7 @@ export type LoginGeneralRequest = {
   email: string | null;
   nickname: string | null;
   marketing_notification_agreement: boolean;
-};
+}
 
 export interface LoginResponse extends APIResponse {
   token: string;

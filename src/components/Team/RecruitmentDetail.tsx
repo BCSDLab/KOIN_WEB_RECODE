@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
@@ -19,7 +21,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
+
 import styles from './RecruitmentDetail.module.scss';
 
 const formatCreatedAt = (createdAt: string) => formatRecruitmentDate(createdAt.split(' ')[0]);
@@ -113,12 +115,15 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     switch (primaryAction.type) {
       case 'login':
         openLoginModal();
+
         return;
       case 'apply':
         router.push(ROUTES.TeamRecruitmentApply({ postId: String(recruitment.id) }));
+
         return;
       case 'manage':
         navigateToApplicantManagement();
+
         return;
       case 'chat':
         if (recruitment.team_chat_room_id !== null) {
@@ -129,6 +134,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
             }),
           );
         }
+
         return;
       case 'disabled':
         return;
@@ -139,13 +145,13 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     <>
       <main className={styles.content}>
         <h1 className={styles.title}>모집글 상세</h1>
-        <div className={styles.summaryRow}>
+        <div className={styles['summary-row']}>
           <section className={cn({ [styles.summary]: true, [styles['summary--inline']]: canManage })}>
             <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
             <h2 className={styles.summary__title}>{recruitment.title}</h2>
           </section>
           {canManage && (
-            <button type="button" className={styles.manageButton} onClick={navigateToApplicantManagement}>
+            <button type="button" className={styles['manage-button']} onClick={navigateToApplicantManagement}>
               지원자 관리
             </button>
           )}
@@ -225,7 +231,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
                 <dd className={styles.information__value}>{recruitment.author_nickname}</dd>
               </div>
             </dl>
-            <section className={styles.roleCard}>
+            <section className={styles['role-card']}>
               <h3 className={styles.section__title}>모집 역할 및 인원</h3>
               <div className={styles.roles}>
                 {roles.map((role) => (
@@ -250,11 +256,11 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
         </button>
       </div>
       {recruitment.is_author && (
-        <div className={styles.ownerActions}>
-          <button type="button" className={styles.ownerActions__edit} onClick={onEdit}>
+        <div className={styles['owner-actions']}>
+          <button type="button" className={styles['owner-actions__edit']} onClick={onEdit}>
             수정
           </button>
-          <button type="button" className={styles.ownerActions__delete} onClick={onDelete}>
+          <button type="button" className={styles['owner-actions__delete']} onClick={onDelete}>
             삭제
           </button>
         </div>
@@ -334,7 +340,7 @@ export default function RecruitmentDetail() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader
           title="팀원 모집"
           rightAction={

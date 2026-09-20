@@ -1,10 +1,11 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { TimetableFrameInfo } from 'api/timetable/entity';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import { timetableMutations } from 'api/timetable/mutations';
 import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
+
 import useRollbackTimetableFrame from './useRollbackTimetableFrame';
 
 export default function useDeleteTimetableFrame(token: string, frameInfo: TimetableFrameInfo) {

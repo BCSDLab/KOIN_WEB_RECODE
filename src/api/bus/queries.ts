@@ -1,12 +1,6 @@
 import { queryOptions, skipToken } from '@tanstack/react-query';
-import {
-  BusRouteParams,
-  CityBusParams,
-  Depart,
-  Arrival,
-  ExpressCourse,
-  ShuttleCourse,
-} from './entity';
+
+import type { BusRouteParams, CityBusParams, Depart, Arrival, ExpressCourse, ShuttleCourse } from './entity';
 import {
   getBusNoticeInfo,
   getBusRouteInfo,
@@ -76,6 +70,8 @@ export const busQueries = {
   route: (params: BusRouteQueryParams) => {
     const { depart, arrival, ...rest } = params;
 
+    // route 키는 params 전체를 JSON.stringify로 직렬화하므로 depart/arrival/rest 변화가 이미 반영된다.
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps -- 키가 params 전체를 이미 포함한다
     return queryOptions({
       queryKey: busQueryKeys.route(params),
       queryFn:
@@ -83,8 +79,8 @@ export const busQueries = {
           ? () =>
               getBusRouteInfo({
                 ...rest,
-                depart: depart as Depart,
-                arrival: arrival as Arrival,
+                depart: depart,
+                arrival: arrival,
               })
           : skipToken,
     });

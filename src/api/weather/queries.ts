@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { getWeatherInfo } from './index';
 
 export const weatherQueryKeys = {

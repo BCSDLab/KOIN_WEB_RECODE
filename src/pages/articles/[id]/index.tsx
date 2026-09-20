@@ -1,7 +1,8 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
+
 import * as Sentry from '@sentry/nextjs';
 import { getArticle, getArticles, getHotArticles } from 'api/articles';
-import { ArticleResponseWithNew, HotArticle } from 'api/articles/entity';
+import type { ArticleResponseWithNew, HotArticle } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleAiSummary from 'components/Articles/components/ArticleAiSummary';
 import ArticleContent from 'components/Articles/components/ArticleContent';
@@ -47,8 +48,7 @@ export const getStaticProps: GetStaticProps<
 
   try {
     const article = await withStaticFetchRetry('article.detail', () => getArticle(id));
-    const hotArticles =
-      (await withStaticFetchRetry('article.hot', () => getHotArticles()).catch(() => [])) ?? [];
+    const hotArticles = (await withStaticFetchRetry('article.hot', () => getHotArticles()).catch(() => [])) ?? [];
     const serverTime = new Date();
 
     const articleWithNew = Sentry.startSpan(

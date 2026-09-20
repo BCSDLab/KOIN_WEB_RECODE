@@ -25,7 +25,10 @@ body {
 }
 
 a,
-button {
+button,
+input,
+textarea,
+select {
   color: #000;
   font-family: var(--font-pretendard), sans-serif;
 }

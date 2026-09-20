@@ -1,7 +1,9 @@
 import { createContext, useContext } from 'react';
+
 import BusTabs from 'components/Bus/BusCoursePage/components/BusTabs';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+
 import styles from './BusCoursePage.module.scss';
 
 export const BusCourseContext = createContext<{ isMobile: boolean }>({

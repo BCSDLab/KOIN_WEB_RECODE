@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 const useMobileBusCarousel = () => {
@@ -61,8 +62,9 @@ const useMobileBusCarousel = () => {
     };
   }, []);
 
-  const matchToMobileType = <T>(data: Array<T>) => {
+  const matchToMobileType = <T>(data: T[]) => {
     if (isMobile) return mobileBusTypes.map((index) => data[index]);
+
     return data;
   };
 

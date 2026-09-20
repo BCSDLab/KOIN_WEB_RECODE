@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Course, PreCourse } from 'api/course/entity';
+import type { Course, PreCourse } from 'api/course/entity';
 import { courseQueries } from 'api/course/queries';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
@@ -21,6 +22,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { setRedirectPath } from 'utils/ts/auth';
 import { useSemester } from 'utils/zustand/semester';
+
 import styles from './CoursePage.module.scss';
 
 interface OpenCoursesTableContentProps {
@@ -33,7 +35,7 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
   const { data: courses } = useSuspenseQuery(courseQueries.search(searchParams));
 
   const handleAddOpenCourse = (course: PreCourse) => {
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_apply', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_apply', value: '' });
     onAddCourse(course);
   };
 
@@ -45,7 +47,9 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
       title="개설강좌 정보"
       data={courses}
       columns={columns}
-      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`}
+      getRowKey={(course) =>
+        `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`
+      }
     />
   );
 }
@@ -61,7 +65,7 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
   const { data: preCourses } = useSuspenseQuery(courseQueries.preCourseList(token, timetableFrameId));
 
   const handleAddPreCourse = (course: PreCourse) => {
-    logger.actionEventClick({ team: 'User', event_label: 'application_training_pre_apply', value: '' });
+    logger.actionEventClick({ team: 'USER', event_label: 'application_training_pre_apply', value: '' });
     onAddCourse(course);
   };
 

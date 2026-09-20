@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import styles from './NotificationDropdown.module.scss';
 
 interface NotificationDropdownProps {
@@ -17,6 +18,7 @@ export default function NotificationDropdown({ onMarkAllRead, onDeleteAll, onClo
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 

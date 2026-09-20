@@ -1,5 +1,5 @@
-import { GeneralUserResponse, UserResponse } from 'api/auth/entity';
-import { UnionUserResponse } from 'utils/hooks/state/useUser';
+import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
+import type { UnionUserResponse } from 'utils/hooks/state/useUser';
 
 // utils/ts/userTypeGuards.ts
 export function isStudentUser(

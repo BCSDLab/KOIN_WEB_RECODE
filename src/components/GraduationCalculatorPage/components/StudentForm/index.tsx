@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
@@ -6,6 +7,7 @@ import useUpdateAcademicInfo from 'components/GraduationCalculatorPage/hooks/use
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
@@ -20,8 +22,7 @@ function StudentForm() {
   const majorOptionList =
     deptMajorList
       .find((deptMajor) => deptMajor.department === department)
-      ?.majors.map((majorName) => ({ label: majorName, value: majorName })) ??
-      [];
+      ?.majors.map((majorName) => ({ label: majorName, value: majorName })) ?? [];
 
   const departmentOptionList = deptMajorList.map((deptMajor) => ({
     label: deptMajor.department,

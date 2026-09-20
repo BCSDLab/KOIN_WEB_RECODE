@@ -1,6 +1,7 @@
+import type { TeamApplicationActivity } from 'api/team/entity';
 import ActivityMoreIcon from 'assets/svg/Team/activity-more.svg';
 import { formatRecruitmentDate } from 'components/Team/utils/recruitmentDisplay';
-import type { TeamApplicationActivity } from 'api/team/entity';
+
 import styles from './ActivityHistoryList.module.scss';
 
 interface ActivityHistoryListProps {
@@ -11,6 +12,7 @@ interface ActivityHistoryListProps {
 
 const formatPeriod = (activity: TeamApplicationActivity) => {
   const endLabel = activity.is_ongoing ? '진행 중' : formatRecruitmentDate(activity.ended_at ?? '');
+
   return `${formatRecruitmentDate(activity.started_at)} - ${endLabel}`;
 };
 

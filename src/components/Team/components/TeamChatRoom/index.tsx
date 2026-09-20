@@ -80,7 +80,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
   }));
 
-  const isReadOnly = chatRoom.status === 'READ_ONLY';
   const isTeamRoom = chatRoom.room_type === 'TEAM';
   const messageGroups = groupChatMessagesByDate(mergedMessages).map((group) => ({
     key: group.date,
@@ -97,10 +96,10 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       senderName: message.user_nickname,
       senderAvatar: (
         <>
-          <span className={styles.chatRoom__desktopSenderIcon} aria-hidden="true">
+          <span className={styles['chat-room__desktopSenderIcon']} aria-hidden="true">
             <WebChatIcon />
           </span>
-          <span className={styles.chatRoom__mobileSenderIcon} aria-hidden="true">
+          <span className={styles['chat-room__mobileSenderIcon']} aria-hidden="true">
             <ChatAvatarIcon />
           </span>
         </>
@@ -110,8 +109,8 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const memberCount = isTeamRoom ? (
     <span
       className={cn({
-        [styles.chatRoom__memberCount]: true,
-        [styles['chatRoom__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
+        [styles['chat-room__memberCount']]: true,
+        [styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
       })}
     >
       <PeopleIcon />
@@ -188,31 +187,30 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     <ChatLayout
       className={styles.chat}
       sidebarClassName={styles.chat__sidebar}
-      panelClassName={styles.chatRoom}
+      panelClassName={styles['chat-room']}
       sidebar={<ChatRoomList items={sidebarItems} />}
     >
-      <div className={styles.chatRoom__mobileHeader}>
+      <div className={styles['chat-room__mobileHeader']}>
         <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
       </div>
-      <div className={styles.chatRoom__desktopHeader}>
+      <div className={styles['chat-room__desktopHeader']}>
         <h2>{chatRoom.room_name}</h2>
         {memberCount}
       </div>
-      <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
+      <div ref={messagesContainerRef} className={styles['chat-room__messages']} onScroll={handleMessagesScroll}>
         <ChatMessageList
           groups={messageGroups}
           classNames={{
-            dateContainer: styles.chatRoom__dateChip,
-            dateLabel: styles.chatRoom__dateLabel,
-            bubbleMine: styles.chatRoom__bubble,
-            bubbleOthers: styles.chatRoom__bubble,
-            imageBubble: styles.chatRoom__imageBubble,
+            dateContainer: styles['chat-room__dateChip'],
+            dateLabel: styles['chat-room__dateLabel'],
+            bubbleMine: styles['chat-room__bubble'],
+            bubbleOthers: styles['chat-room__bubble'],
+            imageBubble: styles['chat-room__imageBubble'],
           }}
         />
       </div>
       <TeamChatSendBar
-        disabled={isReadOnly || isSending || isUploading}
-        placeholder={isReadOnly ? '종료된 채팅방입니다' : undefined}
+        disabled={isSending || isUploading}
         onSend={handleSend}
         onImageSelect={handleImageSelect}
       />

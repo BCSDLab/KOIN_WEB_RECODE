@@ -4,6 +4,7 @@ import FormField from 'components/Team/ProfilePage/components/FormField';
 import StepIndicator from 'components/Team/ProfilePage/components/StepIndicator';
 import { PROFILE_STEPS, type ProfileFormValues, type TeamProfileFormMode } from 'components/Team/ProfilePage/types';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
+
 import styles from './BasicInfoStep.module.scss';
 
 interface BasicInfoStepProps {
@@ -49,16 +50,16 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
         <StepIndicator steps={PROFILE_STEPS} currentIndex={0} />
 
         <div className={styles.step__body}>
-          <div className={styles.loadInfo}>
-            <div className={styles.loadInfo__head}>
-              <span className={styles.loadInfo__title}>
-                <span className={styles['loadInfo__title--highlight']}>코인</span> 회원정보 불러오기
+          <div className={styles['load-info']}>
+            <div className={styles['load-info__head']}>
+              <span className={styles['load-info__title']}>
+                <span className={styles['load-info__title--highlight']}>코인</span> 회원정보 불러오기
               </span>
-              <span className={styles.loadInfo__description}>닉네임, 학과(학부), 학번</span>
+              <span className={styles['load-info__description']}>닉네임, 학과(학부), 학번</span>
             </div>
             <button
               type="button"
-              className={styles.loadInfo__button}
+              className={styles['load-info__button']}
               onClick={handleLoadUserInfo}
               disabled={isLoadingUserInfo}
             >
@@ -112,11 +113,12 @@ export default function BasicInfoStep({ mode, onNext }: BasicInfoStepProps) {
 
           <FormField label="학번" required error={errors.studentNumber?.message}>
             {({ controlId, controlClassName, ariaDescribedBy, ariaInvalid }) => (
+              // sentry-mask: Session Replay에서 학번을 가리기 위한 Sentry 기본 마스킹 클래스
               <input
                 id={controlId}
                 type="text"
                 inputMode="numeric"
-                className={controlClassName}
+                className={`${controlClassName} sentry-mask`}
                 placeholder="학번을 작성해주세요."
                 maxLength={10}
                 disabled={isSaving}

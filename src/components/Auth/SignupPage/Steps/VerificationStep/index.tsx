@@ -1,14 +1,15 @@
-/* eslint-disable no-restricted-imports */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
+import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
-import { UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL } from 'static/auth';
+import { type UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL } from 'static/auth';
 import ROUTES from 'static/routes';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
-import PCCustomInput from '../../components/PCCustomInput';
+
 import styles from './VerificationStep.module.scss';
 
 interface VerificationProps {
@@ -88,7 +89,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '학생',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -99,7 +99,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '외부인',
-      event_category: 'click',
       session_name: 'sign_up',
     });
   };
@@ -126,7 +125,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       </div>
 
       <div className={styles['form-container']}>
-        <div className={styles['input-wrapper']}>
+        {/* sentry-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="name"
             control={control}
@@ -165,7 +165,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
           </div>
         </div>
 
-        <div className={styles['input-wrapper']}>
+        {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+        <div className={`${styles['input-wrapper']} sentry-mask`}>
           <Controller
             name="phone_number"
             control={control}
@@ -220,7 +221,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       sessionLogger.actionSessionEvent({
                         event_label: 'identity_verification',
                         value: '인증번호 발송',
-                        event_category: 'click',
                         session_name: 'sign_up',
                       });
                     }}

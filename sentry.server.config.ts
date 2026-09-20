@@ -94,5 +94,15 @@ Sentry.init({
 
   enableLogs: true,
   tracesSampleRate: isProduction ? 0.7 : 0.1,
-  sendDefaultPii: true,
+  // 자격증명급 위험이 있는 항목만 최소로 차단한다. cookie 헤더는 httpHeaders가 아니라
+  // 별도의 cookies 옵션으로 처리되므로 여기 deny에 넣어도 효과가 없다.
+  // frameContextLines: 7은 sendDefaultPii: true 시절의 기본값을 그대로 유지한 것이다.
+  dataCollection: {
+    cookies: false,
+    httpHeaders: {
+      request: { deny: ['authorization', 'referer'] },
+      response: { deny: ['authorization', 'referer'] },
+    },
+    frameContextLines: 7,
+  },
 });

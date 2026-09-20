@@ -1,3 +1,4 @@
+import { queryClient } from 'utils/ts/queryClient';
 import { useTokenStore } from 'utils/zustand/auth';
 
 const isBrowser = () => typeof window !== 'undefined';
@@ -16,6 +17,7 @@ class IOSWebBridge {
 
   private generateCallbackId(): string {
     this.callbackIdCounter += 1;
+
     return `cb_${Date.now()}_${this.callbackIdCounter}`;
   }
 
@@ -59,6 +61,9 @@ if (isBrowser()) {
 }
 
 export function setTokensFromNative(access: string, refresh: string) {
+  const previousToken = useTokenStore.getState().token;
+  // 네이티브가 다른 계정의 토큰을 주입하는 경우(계정 전환 등) 이전 사용자의 캐시가 남지 않도록 비운다.
+  if (access && access !== previousToken) queryClient.clear();
   if (access) useTokenStore.getState().setToken(access);
   if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
@@ -76,6 +81,7 @@ export async function requestTokensFromNative(): Promise<NativeTokens> {
 
   try {
     const tokens = await window.NativeBridge?.call<NativeTokens>('getUserToken');
+
     return {
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
@@ -89,6 +95,7 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
   if (!isBrowser()) return false;
   try {
     await window.NativeBridge?.call<boolean>('putUserToken', { access, refresh });
+
     return true;
   } catch {
     return false;

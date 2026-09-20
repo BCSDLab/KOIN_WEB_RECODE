@@ -1,8 +1,9 @@
 import { useState } from 'react';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPassword } from 'api/auth';
-import { CheckPasswordRequest } from 'api/auth/entity';
+import type { CheckPasswordRequest } from 'api/auth/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -18,10 +19,12 @@ const useCheckPassword = () => {
       if (isKoinError(err)) {
         if (err.status === 400) {
           setErrorMessage('비밀번호가 일치하지 않습니다.');
+
           return;
         }
         if (err.status === 403) {
           setErrorMessage('비밀번호를 입력해주세요.');
+
           return;
         }
         const message = err.message || '에러가 발생했습니다.';
@@ -30,6 +33,7 @@ const useCheckPassword = () => {
       }
     },
   });
+
   return {
     mutate,
     isSuccess,

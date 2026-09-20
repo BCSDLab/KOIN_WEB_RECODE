@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react';
+
+import type { TeamRecruitmentSort, TeamRecruitmentStatusFilter } from 'api/team/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
+import Portal from 'components/Portal';
 import BottomModal, { BottomModalContent, BottomModalFooter, BottomModalHeader } from 'components/ui/BottomModal';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import type { TeamRecruitmentSort, TeamRecruitmentStatusFilter } from 'api/team/entity';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './MyCreatedPostFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: TeamRecruitmentStatusFilter; label: string }[] = [
+const STATUS_OPTIONS: Array<{ value: TeamRecruitmentStatusFilter; label: string }> = [
   { value: 'ALL', label: '전체' },
   { value: 'RECRUITING', label: '모집 중' },
   { value: 'CLOSED', label: '모집 마감' },
 ];
 
-const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
@@ -21,6 +27,7 @@ const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
 interface MyCreatedPostFilterPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  anchorRect: DOMRect | null;
   status: TeamRecruitmentStatusFilter;
   sort: TeamRecruitmentSort;
   onApply: (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => void;
@@ -29,20 +36,26 @@ interface MyCreatedPostFilterPanelProps {
 export default function MyCreatedPostFilterPanel({
   isOpen,
   onClose,
+  anchorRect,
   status,
   sort,
   onApply,
 }: MyCreatedPostFilterPanelProps) {
   const logger = useLogger();
+  const isMobile = useMediaQuery();
 
   const [localStatus, setLocalStatus] = useState<TeamRecruitmentStatusFilter>(status);
   const [localSort, setLocalSort] = useState<TeamRecruitmentSort>(sort);
+
+  const { containerRef } = useOutsideClick<HTMLDivElement>({ onOutsideClick: onClose });
+  useBodyScrollLock(!isMobile && isOpen);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
@@ -84,19 +97,19 @@ export default function MyCreatedPostFilterPanel({
     });
   };
 
-  return (
-    <BottomModal isOpen={isOpen} onClose={onClose} className={styles.panel} aria-label="필터">
+  const body = (
+    <>
       <BottomModalHeader className={styles.header}>
-        <span className={styles.headerTitle}>필터</span>
-        <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
+        <span className={styles['header-title']}>필터</span>
+        <button type="button" className={styles['close-button']} onClick={onClose} aria-label="필터 닫기">
           <CloseIcon />
         </button>
       </BottomModalHeader>
 
       <BottomModalContent className={styles.content}>
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>모집 상태</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>모집 상태</h3>
+          <div className={styles['section-badges']}>
             {STATUS_OPTIONS.map((opt) => (
               <StatusBadge
                 key={opt.value}
@@ -109,8 +122,8 @@ export default function MyCreatedPostFilterPanel({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>정렬</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>정렬</h3>
+          <div className={styles['section-badges']}>
             {SORT_OPTIONS.map((opt) => (
               <StatusBadge
                 key={opt.value}
@@ -124,14 +137,44 @@ export default function MyCreatedPostFilterPanel({
       </BottomModalContent>
 
       <BottomModalFooter className={styles.footer}>
-        <button type="button" className={styles.resetButton} onClick={handleReset}>
+        <button type="button" className={styles['reset-button']} onClick={handleReset}>
           초기화
           <SpinIcon />
         </button>
-        <button type="button" className={styles.applyButton} onClick={handleApply}>
+        <button type="button" className={styles['apply-button']} onClick={handleApply}>
           적용하기
         </button>
       </BottomModalFooter>
-    </BottomModal>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <BottomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        className={styles.panel}
+        backdropClassName={styles.backdrop}
+        aria-label="필터"
+      >
+        {body}
+      </BottomModal>
+    );
+  }
+
+  if (!anchorRect) return null;
+
+  return (
+    <Portal>
+      <div
+        ref={containerRef}
+        className={styles.panel}
+        style={{ position: 'fixed', top: anchorRect.bottom + 8, right: window.innerWidth - anchorRect.right }}
+        role="dialog"
+        aria-label="필터"
+      >
+        {body}
+      </div>
+    </Portal>
   );
 }

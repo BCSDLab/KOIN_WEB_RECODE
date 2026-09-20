@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { TimetableLectureInfoResponse, MyLectureInfo } from 'api/timetable/entity';
+import type { TimetableLectureInfoResponse, MyLectureInfo } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
 
 interface UseTimetableInfoListParams {

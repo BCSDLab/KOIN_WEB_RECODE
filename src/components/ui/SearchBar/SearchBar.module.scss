@@ -1,4 +1,6 @@
-.searchBar {
+@use "src/utils/scss/media" as media;
+
+.search-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,8 +14,12 @@
   background: #fff;
 
   &:focus-within {
-    outline: 2px solid #b611f5;
+    outline: 2px solid #175c8e;
     outline-offset: 2px;
+
+    @include media.media-breakpoint(mobile) {
+      outline-color: #b611f5;
+    }
   }
 
   &--small {

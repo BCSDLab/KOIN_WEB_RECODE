@@ -1,12 +1,14 @@
 import { type Dispatch, type SetStateAction, useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { ClubRecruitment } from 'api/club/entity';
+import type { ClubRecruitment } from 'api/club/entity';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
+
 import styles from './ImageUploader.module.scss';
 
 interface ClubImageUploaderProps {

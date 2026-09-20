@@ -1,18 +1,20 @@
 import Link from 'next/link';
+
 import { getJosaPicker } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { StoreListV2 } from 'api/store/entity';
+import type { StoreListV2 } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import EventIcon from 'assets/svg/event.svg';
 import EmptyStar from 'assets/svg/Review/empty-star.svg';
 import Star from 'assets/svg/Review/star.svg';
 import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
 import ROUTES from 'static/routes';
-import { StorePageType } from 'static/store';
+import type { StorePageType } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
+
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -23,6 +25,7 @@ interface StoreListProps {
 export const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
   if (open_time === null && close_time === null) return '운영정보없음';
   if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
+
   return `${open_time}~${close_time}`;
 };
 

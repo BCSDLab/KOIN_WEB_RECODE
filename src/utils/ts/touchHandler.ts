@@ -46,6 +46,7 @@ export function createTouchHandlers({
       setScale((prev) => {
         const clamped = Math.min(Math.max(prev * newScale, 1), 3);
         startDistanceRef.current = newDistance;
+
         return clamped;
       });
     } else if (e.touches.length === 1 && scale > 1 && startTouchRef.current) {

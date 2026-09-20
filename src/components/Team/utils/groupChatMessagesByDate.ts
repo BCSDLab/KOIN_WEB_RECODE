@@ -15,6 +15,7 @@ export default function groupChatMessagesByDate(messages: TeamChatMessage[]): Te
 
     if (lastGroup?.date === date) {
       lastGroup.messages.push(message);
+
       return groups;
     }
 
@@ -23,6 +24,7 @@ export default function groupChatMessagesByDate(messages: TeamChatMessage[]): Te
       label: formatChatDate(message.timestamp),
       messages: [message],
     });
+
     return groups;
   }, []);
 }

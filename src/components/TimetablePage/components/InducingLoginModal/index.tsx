@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router';
+
+import ROUTES from 'static/routes';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './InducingLoginModal.module.scss';
 
 interface InducingLoginModalProps {
@@ -16,7 +19,7 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
 
   const goLogin = () => {
     onClose();
-    router.push('/auth');
+    router.push(ROUTES.Auth());
   };
 
   return (
@@ -28,7 +31,8 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
         </div>
         <div className={styles.container__detail}>
           {sentences.map((sentence, index) => (
-            <div>
+            // eslint-disable-next-line react/no-array-index-key -- 고정 문자열을 '.'로 분리한 정적 목록이라 재정렬/삽입이 없다.
+            <div key={index}>
               {sentence}
               {index < sentences.length - 1 && '.'}
             </div>

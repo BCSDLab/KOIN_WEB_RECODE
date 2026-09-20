@@ -1,6 +1,7 @@
 import React from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
@@ -12,20 +13,22 @@ import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 import { BUS_SHUTTLE_ISR_REVALIDATE_SECONDS, withStaticFetchRetry } from 'utils/ts/isr';
+
 import styles from './ShuttleBusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
   region: string;
-  routes: {
+  routes: Array<{
     id: string;
     route_name: string;
     sub_name: string | null;
     type: string;
-  }[];
+  }>;
   category: string;
 }
 
@@ -78,11 +81,11 @@ export default function ShuttleBusTimetable() {
           category={category}
           onChange={(v) => {
             if (v === '전체') {
-              router.replace('/bus/shuttle', undefined, { shallow: true });
+              router.replace(ROUTES.BusCourseShuttle(), undefined, { shallow: true });
             } else {
               router.replace(
                 {
-                  pathname: '/bus/shuttle',
+                  pathname: ROUTES.BusCourseShuttle(),
                   query: { category: v },
                 },
                 undefined,
@@ -215,7 +218,7 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
                 value: `${route.type}_${route.route_name}`,
               });
               router.push({
-                pathname: `/bus/shuttle/${route.id}`,
+                pathname: ROUTES.BusShuttleDetail({ routeId: route.id }),
                 query: { category },
               });
             }}

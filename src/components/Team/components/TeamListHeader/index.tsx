@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { useQuery } from '@tanstack/react-query';
 import { teamQueries } from 'api/team/queries';
 import ArrowBackIcon from 'assets/svg/Team/arrow-back.svg';
@@ -8,7 +9,9 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { redirectToLogin } from 'utils/ts/auth';
+import { setRedirectPath } from 'utils/ts/auth';
+import showToast from 'utils/ts/showToast';
+
 import styles from './TeamListHeader.module.scss';
 
 export default function TeamListHeader() {
@@ -27,6 +30,7 @@ export default function TeamListHeader() {
   const handleBack = () => {
     if (window.history.state?.idx === 0) {
       router.push(ROUTES.Main());
+
       return;
     }
 
@@ -38,11 +42,14 @@ export default function TeamListHeader() {
     router.push(ROUTES.TeamNotifications());
   };
 
-  const handleProfileClick = () => {
+  const handleProfileClick = async () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_profile', value: '프로필' });
 
     if (!token) {
-      redirectToLogin();
+      setRedirectPath(router.asPath);
+      await router.push(ROUTES.Auth());
+      showToast('warning', '로그인이 필요한 기능입니다.');
+
       return;
     }
     router.push(ROUTES.TeamProfile());

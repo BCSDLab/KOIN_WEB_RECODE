@@ -1,9 +1,10 @@
 import isValidCalendarDate from 'components/Team/utils/isValidCalendarDate';
+import { validateActivityDateRange } from 'components/Team/utils/validateActivityDateRange';
 import { z } from 'zod';
 
 export const APPLY_NICKNAME_MAX_LENGTH = 20;
 export const APPLY_PREFERRED_ROLE_MAX_LENGTH = 20;
-export const APPLY_SKILL_MAX_LENGTH = 30;
+export const APPLY_SKILL_MAX_LENGTH = 20;
 export const APPLY_ACTIVITY_TITLE_MAX_LENGTH = 50;
 export const APPLY_ACTIVITY_CONTENT_MAX_LENGTH = 1000;
 export const APPLY_INTRODUCTION_MAX_LENGTH = 1000;
@@ -39,26 +40,9 @@ export const savedApplyActivitySchema = z
       .min(1, '활동 시작일을 선택해주세요.')
       .refine(isValidCalendarDate, '활동 시작일이 올바르지 않습니다.'),
   })
-  .superRefine((activity, context) => {
-    if (activity.isOngoing) return;
+  .superRefine(validateActivityDateRange);
 
-    if (!activity.endDate) {
-      context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일을 선택하거나 진행 중을 선택해주세요.' });
-      return;
-    }
-    if (!isValidCalendarDate(activity.endDate)) {
-      context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일이 올바르지 않습니다.' });
-      return;
-    }
-    if (activity.endDate < activity.startDate) {
-      context.addIssue({ code: 'custom', path: ['endDate'], message: '활동 종료일은 시작일 이후로 선택해주세요.' });
-    }
-  });
-
-export const applyActivitySchema = z.discriminatedUnion('status', [
-  draftApplyActivitySchema,
-  savedApplyActivitySchema,
-]);
+export const applyActivitySchema = z.discriminatedUnion('status', [draftApplyActivitySchema, savedApplyActivitySchema]);
 
 const applicationFormBaseSchema = z.object({
   nickname: z.string(),
@@ -106,6 +90,12 @@ export const createApplicationFormSchema = (isGeneralRecruitment: boolean) =>
     const skillValues = data.skills.map((skill) => skill.value.trim());
     if (skillValues.some((value) => value === '')) {
       context.addIssue({ code: 'custom', path: ['skills'], message: '빈 항목을 삭제하거나 내용을 입력해주세요.' });
+    } else if (skillValues.some((value) => value.length > APPLY_SKILL_MAX_LENGTH)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['skills'],
+        message: `기술 / 자격증은 ${APPLY_SKILL_MAX_LENGTH}자 이내로 입력해주세요.`,
+      });
     } else if (new Set(skillValues).size !== skillValues.length) {
       context.addIssue({ code: 'custom', path: ['skills'], message: '중복되지 않은 값을 입력해주세요.' });
     }

@@ -1,18 +1,20 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
 import { Refresh } from 'api/auth/APIDetail';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { CustomAxiosError, KoinError } from 'interfaces/APIError';
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { APIResponse } from 'interfaces/APIResponse';
+import axios, { type AxiosError, type AxiosResponse } from 'axios';
+import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import type { APIResponse } from 'interfaces/APIResponse';
 import { COOKIE_KEY } from 'static/url';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
+
 import { redirectToClub, redirectToLogin } from './auth';
 import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { isomorphicLocalStorage } from './env';
 import { saveTokensToNative } from './iosBridge';
+import { queryClient } from './queryClient';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 
@@ -91,6 +93,7 @@ export default class APIClient {
           if (axios.isAxiosError(err) && err.response?.status === 503) {
             useServerStateStore.getState().setMaintenance(true);
             reject(err);
+
             return;
           }
           try {
@@ -112,6 +115,7 @@ export default class APIClient {
                   () => (request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse)),
                 );
                 resolve(response);
+
                 return;
               }
             }
@@ -134,6 +138,7 @@ export default class APIClient {
     // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
     if (this.refreshPromise) {
       await this.refreshPromise;
+
       return;
     }
 
@@ -153,10 +158,12 @@ export default class APIClient {
       .catch(() => {
         useTokenStore.getState().setToken('');
         useTokenStore.getState().setRefreshToken('');
+        queryClient.clear();
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
           redirectToClub();
+
           return;
         }
         redirectToLogin();
@@ -178,7 +185,9 @@ export default class APIClient {
   }
 
   private async retryRequest(error: AxiosError) {
-    if (!axios.isAxiosError(error)) return Promise.reject(error);
+    // error 는 매개변수 타입상 이미 AxiosError(Error)이므로, 아래 방어적 재검증 분기에서는
+    // narrowing 결과가 never가 되어 instanceof로 되짚을 수 없다. 타입 단언으로 되돌린다.
+    if (!axios.isAxiosError(error)) return Promise.reject(error as Error);
     try {
       const originalRequest = error.config;
       const newToken = useTokenStore.getState().token;
@@ -189,6 +198,7 @@ export default class APIClient {
 
       // 재요청 실행 및 결과 반환
       const route = normalizeApiPath(originalRequest?.url);
+
       return await Sentry.startSpan(
         {
           name: `Retry API request: ${route}`,
@@ -199,7 +209,7 @@ export default class APIClient {
         () => axios(originalRequest!),
       );
     } catch (retryError) {
-      return Promise.reject(retryError);
+      return Promise.reject(retryError instanceof Error ? retryError : new Error(String(retryError)));
     }
   }
 
@@ -228,17 +238,20 @@ export default class APIClient {
             },
             () => this.refreshAccessToken(refreshToken),
           );
+
           return await this.retryRequest(error);
         }
       } catch {
         useTokenStore.getState().setToken('');
         useTokenStore.getState().setRefreshToken('');
+        queryClient.clear();
         if (window.webkit?.messageHandlers != null) {
           saveTokensToNative('', '');
         }
       }
 
       redirectToLogin();
+
       return null;
     }
 
@@ -259,6 +272,7 @@ export default class APIClient {
               }),
           );
           useTokenStore.getState().setUserType(response.data.user_type);
+
           return await this.retryRequest(error);
         } catch {
           return null;
@@ -271,6 +285,7 @@ export default class APIClient {
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
+
     return (
       response?.status !== undefined &&
       response?.data !== undefined &&
@@ -279,24 +294,28 @@ export default class APIClient {
     );
   }
 
-  // error 를 경우에 따라 KoinError와 AxiosError로 반환
-  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
+  // error 를 경우에 따라 KoinError와 AxiosError로 반환한다.
+  // isKoinError()는 type 필드만으로 판별하므로, reject()가 실제 Error 인스턴스를 넘기도록
+  // Object.assign으로 필드를 얹어도 isKoinError()/기존 소비 코드와 호환된다.
+  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): Error & (KoinError | CustomAxiosError) {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
-      return {
-        type: 'KOIN_ERROR',
+
+      return Object.assign(new Error(koinError.data.message), {
+        type: 'KOIN_ERROR' as const,
         status: koinError.status,
         code: koinError.data.code,
         message: koinError.data.message,
-      };
+      });
     }
-    return {
-      type: 'AXIOS_ERROR',
+
+    return Object.assign(new Error(error.message), {
+      type: 'AXIOS_ERROR' as const,
       ...error,
-    };
+    });
   }
 
-  private createTracedKoinError(error: AxiosError<KoinError>, route: string): KoinError | CustomAxiosError {
+  private createTracedKoinError(error: AxiosError<KoinError>, route: string): Error & (KoinError | CustomAxiosError) {
     return Sentry.startSpan(
       {
         name: `Convert API error: ${route}`,

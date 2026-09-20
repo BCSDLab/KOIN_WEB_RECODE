@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { teamQueries } from 'api/team/queries';
@@ -10,6 +11,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import ApplicantCard from './components/ApplicantCard';
 import styles from './ApplicantManagement.module.scss';
 
@@ -34,7 +36,7 @@ export default function ApplicantManagement() {
   const groupChatButton = data?.recruitment.team_chat_available && (
     <button
       type="button"
-      className={styles.chatButton}
+      className={styles['chat-button']}
       onClick={handleGroupChatClick}
       aria-label="모집글 그룹 채팅방으로 이동"
     >
@@ -44,7 +46,7 @@ export default function ApplicantManagement() {
 
   return (
     <>
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader title="지원자 관리" className={styles.header} />
       </div>
 
@@ -62,7 +64,7 @@ export default function ApplicantManagement() {
                 recruitment={data.recruitment}
                 rightSlot={
                   isMobile ? (
-                    <span className={styles.recruitmentStatus}>
+                    <span className={styles['recruitment-status']}>
                       {data.recruitment.status === 'RECRUITING' ? '모집 중' : '모집완료'}
                     </span>
                   ) : (

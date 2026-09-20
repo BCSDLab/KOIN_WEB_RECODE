@@ -1,9 +1,16 @@
 import { Suspense, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import type {
+  MyCreatedTeamRecruitment,
+  MyCreatedTeamRecruitmentListRequest,
+  TeamRecruitmentSort,
+  TeamRecruitmentStatusFilter,
+} from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -20,20 +27,15 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import type {
-  MyCreatedTeamRecruitment,
-  MyCreatedTeamRecruitmentListRequest,
-  TeamRecruitmentSort,
-  TeamRecruitmentStatusFilter,
-} from 'api/team/entity';
+
 import styles from './MyCreatedPostsPage.module.scss';
 
 interface CreatedPostsListSectionProps {
   requestParams: MyCreatedTeamRecruitmentListRequest;
-  onFilterOpen: () => void;
+  onFilterOpen: (anchorRect: DOMRect) => void;
   onApplicantClick: (recruitment: MyCreatedTeamRecruitment) => void;
   onCloseClick: (recruitment: MyCreatedTeamRecruitment) => void;
-  onChatClick: (recruitment: MyCreatedTeamRecruitment) => React.MouseEventHandler<HTMLButtonElement>;
+  onChatClick: (recruitment: MyCreatedTeamRecruitment) => MouseEventHandler<HTMLButtonElement>;
 }
 
 function CreatedPostsListSection({
@@ -54,13 +56,13 @@ function CreatedPostsListSection({
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
-  const handleFilterOpen = () => {
+  const handleFilterOpen: MouseEventHandler<HTMLButtonElement> = (event) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_created_post_filter', value: '필터' });
-    onFilterOpen();
+    onFilterOpen(event.currentTarget.getBoundingClientRect());
   };
 
   const handleApplicantClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -68,7 +70,7 @@ function CreatedPostsListSection({
     };
 
   const handleCloseClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -77,11 +79,11 @@ function CreatedPostsListSection({
 
   return (
     <>
-      <div className={styles.summaryRow}>
-        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
+      <div className={styles['summary-row']}>
+        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
-          <span className={styles.filterButton__label}>필터</span>
+        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
+          <span className={styles['filter-button__label']}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -107,7 +109,7 @@ function CreatedPostsListSection({
               const chatButton = canChat && (
                 <button
                   type="button"
-                  className={styles.chatButton}
+                  className={styles['chat-button']}
                   aria-label="팀 채팅방으로 이동"
                   onClick={onChatClick(recruitment)}
                 >
@@ -124,12 +126,12 @@ function CreatedPostsListSection({
                   recruitment={recruitment}
                   rightSlot={
                     <>
-                      <div className={styles.mobileOnly}>{chatButton}</div>
-                      <div className={styles.desktopOnly}>
-                        <div className={styles.desktopActions}>
+                      <div className={styles['mobile-only']}>{chatButton}</div>
+                      <div className={styles['desktop-only']}>
+                        <div className={styles['desktop-actions']}>
                           <button
                             type="button"
-                            className={styles.desktopActionButton}
+                            className={styles['desktop-action-button']}
                             onClick={handleApplicantClick(recruitment)}
                           >
                             지원자 관리
@@ -138,7 +140,7 @@ function CreatedPostsListSection({
                           {recruitment.can_close && (
                             <button
                               type="button"
-                              className={styles.desktopActionButton}
+                              className={styles['desktop-action-button']}
                               onClick={handleCloseClick(recruitment)}
                             >
                               모집마감
@@ -151,17 +153,21 @@ function CreatedPostsListSection({
                     </>
                   }
                   actionSlot={
-                    <div className={styles.actionRow}>
+                    <div className={styles['action-row']}>
                       <button
                         type="button"
-                        className={styles.actionButton}
+                        className={styles['action-button']}
                         onClick={handleApplicantClick(recruitment)}
                       >
                         지원자 관리
                       </button>
 
                       {recruitment.can_close && (
-                        <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
+                        <button
+                          type="button"
+                          className={styles['action-button']}
+                          onClick={handleCloseClick(recruitment)}
+                        >
                           모집 마감
                         </button>
                       )}
@@ -171,7 +177,7 @@ function CreatedPostsListSection({
               );
             })}
 
-            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
           </div>
         )}
       </div>
@@ -186,6 +192,7 @@ export default function MyCreatedPostsPage() {
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
+  const [filterAnchorRect, setFilterAnchorRect] = useState<DOMRect | null>(null);
   const [requestParams, setRequestParams] = useState<MyCreatedTeamRecruitmentListRequest>({
     status: 'ALL',
     sort: 'LATEST_DESC',
@@ -243,7 +250,7 @@ export default function MyCreatedPostsPage() {
   };
 
   const handleChatClick =
-    (recruitment: MyCreatedTeamRecruitment): React.MouseEventHandler<HTMLButtonElement> =>
+    (recruitment: MyCreatedTeamRecruitment): MouseEventHandler<HTMLButtonElement> =>
     (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -271,7 +278,7 @@ export default function MyCreatedPostsPage() {
         <meta name="description" content="내가 작성한 팀원 모집 게시글과 지원자 현황을 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles.mobileHeader}>
+      <div className={styles['mobile-header']}>
         <SubPageHeader
           title="내가 작성한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
@@ -283,11 +290,14 @@ export default function MyCreatedPostsPage() {
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 작성한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
             <Suspense fallback={null}>
               <CreatedPostsListSection
                 requestParams={requestParams}
-                onFilterOpen={openFilter}
+                onFilterOpen={(anchorRect) => {
+                  setFilterAnchorRect(anchorRect);
+                  openFilter();
+                }}
                 onApplicantClick={handleApplicantClick}
                 onCloseClick={handleCloseClick}
                 onChatClick={handleChatClick}
@@ -300,7 +310,11 @@ export default function MyCreatedPostsPage() {
       {isFilterOpen && (
         <MyCreatedPostFilterPanel
           isOpen={isFilterOpen}
-          onClose={closeFilter}
+          onClose={() => {
+            closeFilter();
+            setFilterAnchorRect(null);
+          }}
+          anchorRect={filterAnchorRect}
           status={requestParams.status ?? 'ALL'}
           sort={requestParams.sort ?? 'LATEST_DESC'}
           onApply={handleApplyFilter}

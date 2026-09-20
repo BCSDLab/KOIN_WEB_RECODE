@@ -1,4 +1,4 @@
-import { ClubDetailResponse, NewClubData } from 'api/club/entity';
+import type { ClubDetailResponse, NewClubData } from 'api/club/entity';
 
 const clubCategoryMap: Record<1 | 2 | 3 | 4 | 5, string> = {
   1: '학술 분과',
@@ -11,6 +11,7 @@ const clubCategoryMap: Record<1 | 2 | 3 | 4 | 5, string> = {
 export function getClubCategoryName(id: number): string {
   return clubCategoryMap[id as 1 | 2 | 3 | 4 | 5] ?? '잘 못된 분과 ID입니다';
 }
+
 function categoryStringToId(label: string): number {
   const map: Record<string, number> = {
     '학술 분과': 1,
@@ -19,8 +20,10 @@ function categoryStringToId(label: string): number {
     '종교 분과': 4,
     '공연 분과': 5,
   };
+
   return map[label] ?? 1;
 }
+
 export function mapDetailToForm(detail: ClubDetailResponse): NewClubData {
   return {
     name: detail.name,

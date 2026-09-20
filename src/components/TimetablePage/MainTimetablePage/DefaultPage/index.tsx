@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import Suspense from 'components/ssr/SSRSuspense';
@@ -8,6 +9,8 @@ import TimetableList from 'components/TimetablePage/components/TimetableList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
+
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
@@ -27,9 +30,10 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         value: 'OS스와이프',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
       history.back();
+
       return;
     }
     // 브라우저의 뒤로가기 버튼 클릭 시 / 마우스 사이드 버튼 누를 시
@@ -39,16 +43,17 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       value: '뒤로가기버튼',
       previous_page: '시간표',
       current_page: '메인',
-      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+      duration_time: getElapsedSeconds('enterTimetablePage'),
     });
   }, [logger]);
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
+
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 리스너 등록
   }, []);
 
   React.useEffect(() => {
@@ -60,6 +65,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       }
     };
     window.addEventListener('wheel', handleWheel);
+
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };

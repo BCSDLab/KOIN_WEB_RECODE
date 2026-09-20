@@ -4,14 +4,12 @@ import styles from './TeamChatSendBar.module.scss';
 
 interface TeamChatSendBarProps {
   disabled?: boolean;
-  placeholder?: string;
   onSend: (content: string) => void;
   onImageSelect: (file: File) => void;
 }
 
 export default function TeamChatSendBar({
   disabled = false,
-  placeholder,
   onSend,
   onImageSelect,
 }: TeamChatSendBarProps) {
@@ -32,17 +30,16 @@ export default function TeamChatSendBar({
   return (
     <ChatMessageInput
       classNames={{
-        container: styles.sendBar,
-        imageControl: styles.sendBar__imageButton,
-        textarea: styles.sendBar__input,
-        sendButton: styles.sendBar__sendButton,
+        container: styles['send-bar'],
+        imageControl: styles['send-bar__imageButton'],
+        textarea: styles['send-bar__input'],
+        sendButton: styles['send-bar__sendButton'],
       }}
       value={content}
       onChange={setContent}
       onSend={handleSend}
       onImageChange={handleFileChange}
       disabled={disabled}
-      placeholder={placeholder}
     />
   );
 }

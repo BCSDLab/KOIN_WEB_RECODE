@@ -4,8 +4,12 @@ import { maskSensitive } from 'utils/ts/maskSensitive';
 const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
 const isProduction = environment === 'production';
 
-/** React 19가 하이드레이션 실패 시 console.error로 출력하는 메시지 패턴 */
-const HYDRATION_ERROR_PATTERN = /Hydration failed|didn't match|Text content does not match|error while hydrating/i;
+// React 19가 하이드레이션 실패 시 console.error로 출력하는 메시지 패턴.
+// 프로덕션 빌드는 문구 대신 `Minified React error #418` 처럼 코드 번호만 찍는다.
+// 418/419/421-425는 React 에러 코드 테이블(facebook/react) 기준 전부 하이드레이션 계열이다
+// (424: 하이드레이션 완료 전 업데이트가 발생해 루트 전체가 클라이언트 렌더링으로 전환).
+const HYDRATION_ERROR_PATTERN =
+  /Hydration failed|didn't match|Text content does not match|error while hydrating|Minified React error #4(1[89]|2[1-5])/i;
 
 interface KoinErrorLike {
   type?: string;
@@ -16,7 +20,17 @@ interface KoinErrorLike {
 function asKoinError(error: unknown): KoinErrorLike | null {
   if (error == null || typeof error !== 'object') return null;
   const candidate = error as KoinErrorLike;
+
   return candidate.type === 'KOIN_ERROR' ? candidate : null;
+}
+
+/** WebPageTest 등 합성 모니터링 봇/크롤러의 UA 패턴. 실사용자 모바일 네트워크 지연은 걸러내지 않는다. */
+const BOT_USER_AGENT_PATTERN = /bot|crawler|spider|WebPageTest|HeadlessChrome|PhantomJS|Pingdom|Lighthouse/i;
+
+function isBotUserAgent(): boolean {
+  if (typeof window === 'undefined') return false;
+
+  return BOT_USER_AGENT_PATTERN.test(window.navigator.userAgent);
 }
 
 function getBrowserFamily(userAgent: string): string {
@@ -25,19 +39,19 @@ function getBrowserFamily(userAgent: string): string {
   if (/Chrome\//.test(userAgent)) return 'chrome';
   if (/Firefox\//.test(userAgent)) return 'firefox';
   if (/Safari\//.test(userAgent)) return 'safari';
+
   return 'other';
 }
 
 function normalizeRoute(pathname: string): string {
-  return pathname
-    .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
-    .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+  return pathname.replace(/\/[0-9]+(?=\/|$)/g, '/:id').replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
 }
 
 function getTransactionKey(transaction: string | undefined): string | undefined {
   if (!transaction) return undefined;
   if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
   if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+
   return undefined;
 }
 
@@ -83,10 +97,13 @@ Sentry.init({
   release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
 
   beforeSendTransaction(event) {
+    if (isBotUserAgent()) return null;
+
     const transactionKey = getTransactionKey(event.transaction);
     if (transactionKey) {
       event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
     }
+
     return event;
   },
 
@@ -95,10 +112,10 @@ Sentry.init({
 
     // Axios 네트워크/타임아웃/취소 에러
     if (
-      error != null
-      && typeof error === 'object'
-      && 'code' in error
-      && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
+      error != null &&
+      typeof error === 'object' &&
+      'code' in error &&
+      (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
     ) {
       return null;
     }
@@ -139,6 +156,7 @@ Sentry.init({
 
   beforeSendLog(log) {
     if (log.level === 'debug') return null;
+
     // API가 인증 실패 응답에 토큰 원문을 실어 보내고, 그 메시지가 그대로 로그로 넘어온다.
     return maskSensitive(log);
   },
@@ -166,6 +184,8 @@ Sentry.init({
       maskAllText: false,
       maskAllInputs: false,
       blockAllMedia: false,
+      // maskAllText/maskAllInputs를 꺼도 .sentry-mask 클래스(또는
+      // [data-sentry-mask] 속성)가 붙은 요소는 기본 셀렉터로 항상 마스킹된다.
     }),
     // plain object로 throw된 에러의 추가 속성을 이벤트에 붙인다 (KoinError 대응)
     Sentry.extraErrorDataIntegration(),
@@ -190,7 +210,17 @@ Sentry.init({
   profilesSampleRate: isProduction ? 0.1 : 1.0,
   replaysSessionSampleRate: isProduction ? 0.3 : 0.0,
   replaysOnErrorSampleRate: 1.0,
-  sendDefaultPii: true,
+  // 자격증명급 위험이 있는 항목만 최소로 차단한다. cookie 헤더는 httpHeaders가 아니라
+  // 별도의 cookies 옵션으로 처리되므로 여기 deny에 넣어도 효과가 없다.
+  // frameContextLines: 7은 sendDefaultPii: true 시절의 기본값을 그대로 유지한 것이다.
+  dataCollection: {
+    cookies: false,
+    httpHeaders: {
+      request: { deny: ['authorization', 'referer'] },
+      response: { deny: ['authorization', 'referer'] },
+    },
+    frameContextLines: 7,
+  },
 });
 
 reportHydrationDiff();

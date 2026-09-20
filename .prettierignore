@@ -1,0 +1,11 @@
+.next/
+dist/
+.yarn/
+node_modules/
+.pnp.*
+yarn.lock
+src/generated/
+analytics.events.json
+src/assets/lottie/
+public/sitemap*.xml
+public/robots.txt

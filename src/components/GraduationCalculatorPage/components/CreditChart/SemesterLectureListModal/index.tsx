@@ -1,7 +1,8 @@
 import { startTransition, useState } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'api/auth/queries';
-import { LectureInfo } from 'api/graduationCalculator/entity';
+import type { LectureInfo } from 'api/graduationCalculator/entity';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
@@ -13,6 +14,7 @@ import { Selector } from 'components/ui/Selector';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { pick } from 'utils/ts/object';
+
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -97,11 +99,11 @@ export default function SemesterLectureListModal({
         ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
-    <span>{lecture.name}</span>,
-    <span>{lecture.professor ? lecture.professor : ''}</span>,
-    <span>{lecture.grades}</span>,
-    <span>{course}</span>,
-    <span>{}</span>,
+    <span key={`${lecture.code}-name`}>{lecture.name}</span>,
+    <span key={`${lecture.code}-professor`}>{lecture.professor ? lecture.professor : ''}</span>,
+    <span key={`${lecture.code}-grades`}>{lecture.grades}</span>,
+    <span key={`${lecture.code}-course`}>{course}</span>,
+    <span key={`${lecture.code}-empty`} />,
   ]);
 
   return (
@@ -167,7 +169,11 @@ export default function SemesterLectureListModal({
           </div>
         </div>
         <div className={styles['container__lecture-table']}>
-          <SemesterCourseTable tableData={tableData} hasProfessor={lectureStatus === '수강한 강의'} />
+          <SemesterCourseTable
+            tableData={tableData}
+            rowKeys={filteredLectureByLectureStatus.map((lecture) => lecture.code)}
+            hasProfessor={lectureStatus === '수강한 강의'}
+          />
         </div>
       </div>
     </div>

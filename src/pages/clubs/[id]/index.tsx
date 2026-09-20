@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
@@ -23,10 +24,11 @@ import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLik
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
-import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
+import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import { NO_SELECTED_EVENT_ID } from 'static/club';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
@@ -38,9 +40,8 @@ import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
-import styles from './ClubDetailPage.module.scss';
 
-export const NO_SELECTED_EVENT_ID = -1;
+import styles from './ClubDetailPage.module.scss';
 
 const TAB_LABEL = {
   intro: '상세 소개',
@@ -175,6 +176,7 @@ export default function ClubDetailPage({
     if (!initialClubId || isPending) return;
     if (!token) {
       openAuthModal();
+
       return;
     }
     if (clubDetail.is_liked) {
@@ -195,7 +197,7 @@ export default function ClubDetailPage({
   };
   const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
-  const handleIntroductionSave = async () => {
+  const handleIntroductionSave = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_introduction_correction_save',
@@ -215,7 +217,7 @@ export default function ClubDetailPage({
     openEditModal();
   };
 
-  const handleEditClick = async () => {
+  const handleEditClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_correction',

@@ -14,6 +14,7 @@ description: SonarCloud 이슈를 KOIN 프로젝트 컨벤션에 맞게 수정�
 ### TypeScript 관련
 
 **미사용 변수/임포트 제거**
+
 ```typescript
 // 이전 (typescript:S1128)
 import { useState, useEffect } from 'react'; // useEffect 미사용
@@ -23,6 +24,7 @@ import { useState } from 'react';
 ```
 
 **타입 단언 대신 타입 가드 사용**
+
 ```typescript
 // 이전 (typescript:S4325)
 const value = someValue as string;
@@ -34,6 +36,7 @@ if (typeof someValue === 'string') {
 ```
 
 **null 체크 누락**
+
 ```typescript
 // 이전
 const name = user.profile.name;
@@ -45,6 +48,7 @@ const name = user.profile?.name ?? '';
 ### React 관련
 
 **useEffect 의존성 배열 누락**
+
 ```typescript
 // 이전
 useEffect(() => {
@@ -58,22 +62,28 @@ useEffect(() => {
 ```
 
 **Key prop 누락**
+
 ```tsx
 // 이전
-{items.map(item => <Item data={item} />)}
+{
+  items.map((item) => <Item data={item} />);
+}
 
 // 수정
-{items.map(item => <Item key={item.id} data={item} />)}
+{
+  items.map((item) => <Item key={item.id} data={item} />);
+}
 ```
 
 ### KOIN 특수 패턴 적용
 
 **에러 핸들링 패턴**
+
 ```typescript
 // 이전 (패턴 불일치)
 onError: (error: unknown) => {
   showToast('error', (error as any).message);
-}
+};
 
 // 수정
 onError: (error) => {
@@ -82,10 +92,11 @@ onError: (error) => {
   } else {
     showToast('error', '오류가 발생했습니다.');
   }
-}
+};
 ```
 
 **console.log 제거**
+
 ```typescript
 // 이전
 console.log('data:', data);
@@ -95,6 +106,7 @@ console.log('data:', data);
 ```
 
 **하드코딩된 경로 → ROUTES 사용**
+
 ```typescript
 // 이전
 router.push('/store/123');
@@ -126,6 +138,7 @@ yarn lint:eslint src/components/Store/StoreDetail.tsx
 ## 수정 불가 판단 기준
 
 다음 경우 수정을 포기하고 failed 목록에 추가한다:
+
 - 수정이 비즈니스 로직 변경을 요구할 때
 - 타입 구조를 근본적으로 바꿔야 할 때
 - 다른 파일에 연쇄적인 영향이 클 때

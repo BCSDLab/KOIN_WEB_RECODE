@@ -2,8 +2,9 @@ import PencilLineIcon from 'assets/svg/Team/pencil-line-icon.svg';
 import XIcon from 'assets/svg/Team/x-icon.svg';
 import useActivityHistoryField, { type ActivityValue } from 'components/Team/hooks/useActivityHistoryField';
 import { savedActivitySchema } from 'components/Team/ProfilePage/schema';
-import DatePickerModal from 'components/ui/DatePickerModal';
 import type { TeamProfileFormMode } from 'components/Team/ProfilePage/types';
+import DatePickerModal from 'components/ui/DatePickerModal';
+
 import styles from './ActivityHistoryField.module.scss';
 
 interface ActivityHistoryFieldProps {
@@ -31,6 +32,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
 
   const validateActivity = (activity: ActivityValue) => {
     const result = savedActivitySchema.safeParse({ ...activity, status: 'saved' });
+
     return result.success
       ? { success: true as const }
       : { success: false as const, message: result.error.issues[0].message };
@@ -74,27 +76,27 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
 
           if (activity?.status === 'saved') {
             return (
-              <li key={field.id} className={styles.savedCard}>
-                <div className={styles.savedCard__head}>
-                  <span className={styles.savedCard__title}>{activity.title}</span>
-                  <div className={styles.savedCard__actions}>
+              <li key={field.id} className={styles['saved-card']}>
+                <div className={styles['saved-card__head']}>
+                  <span className={styles['saved-card__title']}>{activity.title}</span>
+                  <div className={styles['saved-card__actions']}>
                     {mode === 'edit' ? (
                       <button
                         type="button"
-                        className={styles.savedCard__editIcon}
+                        className={styles['saved-card__editIcon']}
                         onClick={() => handleEdit(index)}
                         aria-label="활동 이력 수정"
                       >
                         <PencilLineIcon aria-hidden />
                       </button>
                     ) : (
-                      <button type="button" className={styles.savedCard__edit} onClick={() => handleEdit(index)}>
+                      <button type="button" className={styles['saved-card__edit']} onClick={() => handleEdit(index)}>
                         수정
                       </button>
                     )}
                     <button
                       type="button"
-                      className={styles.savedCard__remove}
+                      className={styles['saved-card__remove']}
                       onClick={() => handleRemove(index)}
                       aria-label="활동 이력 삭제"
                     >
@@ -102,7 +104,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                     </button>
                   </div>
                 </div>
-                <dl className={styles.savedCard__meta}>
+                <dl className={styles['saved-card__meta']}>
                   <dt>활동 기간</dt>
                   <dd>{`${activity.startDate} ~ ${activity.isOngoing ? '진행 중' : (activity.endDate ?? '')}`}</dd>
                   <dt>활동 내용</dt>
@@ -113,15 +115,15 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
           }
 
           return (
-            <li key={field.id} className={styles.draftCard}>
-              <div className={styles.draftCard__group}>
-                <div className={styles.draftCard__row}>
-                  <span className={styles.draftCard__label}>
-                    활동명<span className={styles.draftCard__required}>*</span>
+            <li key={field.id} className={styles['draft-card']}>
+              <div className={styles['draft-card__group']}>
+                <div className={styles['draft-card__row']}>
+                  <span className={styles['draft-card__label']}>
+                    활동명<span className={styles['draft-card__required']}>*</span>
                   </span>
                   <button
                     type="button"
-                    className={styles.draftCard__remove}
+                    className={styles['draft-card__remove']}
                     onClick={() => handleRemove(index)}
                     aria-label="활동 이력 삭제"
                   >
@@ -130,61 +132,62 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                 </div>
                 <input
                   type="text"
-                  className={styles.draftCard__control}
+                  className={styles['draft-card__control']}
                   placeholder="활동명을 작성해주세요."
                   maxLength={50}
                   {...register(`activities.${index}.title` as const)}
                 />
               </div>
 
-              <div className={styles.draftCard__group}>
-                <span className={styles.draftCard__label}>
-                  활동기간<span className={styles.draftCard__required}>*</span>
+              <div className={styles['draft-card__group']}>
+                <span className={styles['draft-card__label']}>
+                  활동기간<span className={styles['draft-card__required']}>*</span>
                 </span>
-                <div className={styles.draftCard__period}>
-                  <div className={styles.draftCard__periodInputs}>
+                <div className={styles['draft-card__period']}>
+                  <div className={styles['draft-card__periodInputs']}>
                     <button
                       type="button"
-                      className={styles.draftCard__dateControl}
+                      className={styles['draft-card__dateControl']}
                       onClick={() => handleOpenDatePicker(index, 'startDate')}
                     >
                       {activity?.startDate ? activity.startDate.replaceAll('-', '.') : '시작일'}
                     </button>
-                    <span className={styles.draftCard__periodDivider}>-</span>
+                    <span className={styles['draft-card__periodDivider']}>-</span>
                     <button
                       type="button"
-                      className={styles.draftCard__dateControl}
+                      className={styles['draft-card__dateControl']}
                       disabled={isOngoing}
                       onClick={() => handleOpenDatePicker(index, 'endDate')}
                     >
                       {activity?.endDate ? activity.endDate.replaceAll('-', '.') : '종료일'}
                     </button>
                   </div>
-                  <label className={styles.draftCard__ongoing}>
+                  <label className={styles['draft-card__ongoing']}>
                     <input
                       type="checkbox"
-                      className={styles.draftCard__checkboxInput}
+                      className={styles['draft-card__checkboxInput']}
                       checked={isOngoing}
                       onChange={(event) => handleToggleOngoing(index, event.target.checked)}
                     />
-                    <span className={styles.draftCard__radioIcon} aria-hidden />
+                    <span className={styles['draft-card__radioIcon']} aria-hidden />
                     진행 중
                   </label>
                 </div>
               </div>
 
-              <div className={styles.draftCard__group}>
-                <div className={styles.draftCard__row}>
-                  <span className={styles.draftCard__label}>
-                    활동내용<span className={styles.draftCard__required}>*</span>
+              <div className={styles['draft-card__group']}>
+                <div className={styles['draft-card__row']}>
+                  <span className={styles['draft-card__label']}>
+                    활동내용<span className={styles['draft-card__required']}>*</span>
                   </span>
-                  <span className={styles.draftCard__counter}>{activity?.content?.length ?? 0}/1000</span>
+                  <span className={styles['draft-card__counter']}>{activity?.content?.length ?? 0}/1000</span>
                 </div>
                 {(() => {
                   const { ref: contentRef, ...contentField } = register(`activities.${index}.content` as const);
+
                   return (
                     <textarea
-                      className={styles.draftCard__textarea}
+                      className={styles['draft-card__textarea']}
                       placeholder="활동 내용을 간단히 작성해주세요."
                       maxLength={1000}
                       rows={4}
@@ -206,7 +209,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
                 })()}
               </div>
 
-              <button type="button" className={styles.draftCard__done} onClick={() => handleDone(index)}>
+              <button type="button" className={styles['draft-card__done']} onClick={() => handleDone(index)}>
                 {activity?.hasBeenSaved ? '수정하기' : '완료'}
               </button>
             </li>
@@ -222,6 +225,7 @@ export default function ActivityHistoryField({ mode }: ActivityHistoryFieldProps
         (() => {
           const targetActivity = activities[openDatePicker.index];
           const rawDate = targetActivity?.[openDatePicker.field];
+
           return (
             <DatePickerModal
               selectedDate={rawDate ? new Date(`${rawDate}T00:00:00`) : new Date()}

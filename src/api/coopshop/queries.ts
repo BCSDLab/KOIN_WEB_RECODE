@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { getAllShopInfo, getCafeteriaInfo } from './index';
 
 export const coopshopQueryKeys = {

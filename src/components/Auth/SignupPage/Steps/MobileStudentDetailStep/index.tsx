@@ -1,17 +1,26 @@
-/* eslint-disable no-restricted-imports */
 import { useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
-import { Controller, ControllerRenderProps, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
+import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
+import type { InputMessage } from 'interfaces/InputMessage';
+import {
+  Controller,
+  type ControllerRenderProps,
+  type FieldError,
+  useFormContext,
+  useFormState,
+  useWatch,
+} from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
-import CustomSelector from '../../components/CustomSelector';
+
 import styles from './MobileStudentDetailStep.module.scss';
 
 interface MobileVerificationProps {
@@ -65,7 +74,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '아이디생성',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -90,7 +98,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '닉네임생성',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -114,7 +121,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'sign_up_completed',
         value: '회원가입완료',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -135,6 +141,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
+
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 

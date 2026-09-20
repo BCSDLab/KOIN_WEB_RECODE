@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import {
   dehydrate,
@@ -18,7 +19,7 @@ import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
 import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
 import ImageModal from 'components/modal/Modal/ImageModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import EventTable from 'components/Store/StoreDetailPage/components/EventTable';
 import MenuTable from 'components/Store/StoreDetailPage/components/MenuTable';
 import ReviewPage from 'components/Store/StoreDetailPage/components/Review';
@@ -34,6 +35,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import {
   isNotFoundKoinError,
   STORE_DETAIL_ISR_REVALIDATE_SECONDS,
@@ -41,6 +43,7 @@ import {
   withStaticFetchRetry,
 } from 'utils/ts/isr';
 import showToast from 'utils/ts/showToast';
+
 import styles from './StoreDetailPage.module.scss';
 
 interface Props {
@@ -122,7 +125,7 @@ function StoreDetailPage({ id }: Props) {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: parallelData } = useSuspenseQuery({
-    queryKey: storeQueryKeys.detailPage(id),
+    queryKey: storeQueryKeys.detailPage(id, token),
     queryFn: () =>
       Promise.all([
         queryClient.fetchQuery(storeQueries.detail(id)),
@@ -162,14 +165,14 @@ function StoreDetailPage({ id }: Props) {
         value: '',
         previous_page: '리뷰',
         current_page: '전화',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time: getElapsedSeconds('enterReviewPage'),
       });
     }
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: `${storeType}_call`,
-      value: storeDetail!.name,
-      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
+      value: storeDetail.name,
+      duration_time: getElapsedSeconds('enter_storeDetail'),
     });
   };
 
@@ -177,8 +180,7 @@ function StoreDetailPage({ id }: Props) {
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_picture',
-      value: storeDetail!.name,
-      event_category: 'click',
+      value: storeDetail.name,
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -192,16 +194,16 @@ function StoreDetailPage({ id }: Props) {
         value: storeDetail.name,
         previous_page: '리뷰',
         current_page: '전체보기',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time: getElapsedSeconds('enterReviewPage'),
       });
     }
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_detail_view_back',
-      value: storeDetail!.name,
+      value: storeDetail.name,
       event_category: 'ShopList',
       current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
-      duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
+      duration_time: getElapsedSeconds('enter_storeDetail'),
     });
   };
   const onClickEventList = () => {
@@ -209,7 +211,6 @@ function StoreDetailPage({ id }: Props) {
       team: 'BUSINESS',
       event_label: 'shop_detail_view_event',
       value: `${storeDetail.name}`,
-      event_category: 'click',
     });
   };
   const onClickReviewList = () => {
@@ -217,7 +218,6 @@ function StoreDetailPage({ id }: Props) {
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review',
       value: `${storeDetail.name}`,
-      event_category: 'click',
     });
   };
   const copyAccount = async (account: string) => {
@@ -253,8 +253,8 @@ function StoreDetailPage({ id }: Props) {
   };
 
   useScrollToTop();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
+  React.useEffect(() => () => portalManager.close(), []);
   useScrollLogging(detailScrollLogging);
 
   React.useEffect(() => {
@@ -266,13 +266,13 @@ function StoreDetailPage({ id }: Props) {
           value: storeDetail.name,
           previous_page: '리뷰',
           current_page: searchParams.get('state') || '메뉴',
-          duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterReviewPage'))) / 1000,
+          duration_time: getElapsedSeconds('enterReviewPage'),
         });
         isomorphicSessionStorage.removeItem('enterReviewPage');
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, storeDetail]); // param이 바뀌어도 버튼이 적용되어야 함
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- param이 바뀌어도 버튼이 적용되어야 함 (logger는 안정적)
+  }, [searchParams, storeDetail]);
 
   useEffect(
     () => {
@@ -283,16 +283,17 @@ function StoreDetailPage({ id }: Props) {
           value: storeDetail.name,
           event_category: 'swipe',
           current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
-          duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
+          duration_time: getElapsedSeconds('enter_storeDetail'),
         });
       };
       window.addEventListener('popstate', handlePopState);
+
       return () => {
         isomorphicSessionStorage.removeItem('enterReviewPage');
         window.removeEventListener('popstate', handlePopState);
       };
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 리스너 등록
     [],
   );
 
@@ -428,7 +429,7 @@ function StoreDetailPage({ id }: Props) {
                     className={styles.image__button}
                     aria-label="이미지 확대"
                     type="button"
-                    onClick={() => onClickImage(storeDetail!.image_urls, index)}
+                    onClick={() => onClickImage(storeDetail.image_urls, index)}
                   >
                     <Image
                       className={styles.image__poster}
@@ -462,7 +463,7 @@ function StoreDetailPage({ id }: Props) {
               logger.actionEventClick({
                 team: 'BUSINESS',
                 event_label: 'shop_detail_view',
-                value: storeDetail!.name,
+                value: storeDetail.name,
               });
             }}
           >
@@ -520,7 +521,7 @@ function StoreDetail({ dehydratedState, id }: { dehydratedState: DehydratedState
   const router = useRouter();
 
   return (
-    <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
+    <StoreErrorBoundary onErrorClick={() => router.push(ROUTES.Store())}>
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div />}>
           <StoreDetailPage id={id} />

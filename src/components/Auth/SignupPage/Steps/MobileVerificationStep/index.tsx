@@ -1,16 +1,18 @@
-/* eslint-disable no-restricted-imports */
 import { useEffect, useRef, useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
+import type { SmsSendResponse } from 'api/auth/entity';
+import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
 import ROUTES from 'static/routes';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
-import useCountdownTimer from '../../hooks/useCountdownTimer';
-import type { SmsSendResponse } from 'api/auth/entity';
+import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
+
 import styles from './MobileVerification.module.scss';
 
 interface MobileVerificationProps {
@@ -113,7 +115,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증완료',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -137,7 +138,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증번호 발송',
-        event_category: 'click',
         session_name: 'sign_up',
       });
     },
@@ -181,23 +181,26 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       <div className={styles['form-container']}>
         <div className={styles['name-gender-wrapper']}>
           <h1 className={styles['name-gender-wrapper__header']}>성함과 성별을 알려주세요.</h1>
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            rules={{
-              required: MESSAGES.NAME.REQUIRED,
-              validate: validateName,
-            }}
-            render={({ field, fieldState }) => (
-              <CustomInput
-                {...field}
-                placeholder="성함을 입력해 주세요."
-                isDelete
-                message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
-              />
-            )}
-          />
+          {/* sentry-mask: Session Replay에서 실명을 가리기 위한 Sentry 기본 마스킹 클래스 */}
+          <div className="sentry-mask">
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: MESSAGES.NAME.REQUIRED,
+                validate: validateName,
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="성함을 입력해 주세요."
+                  isDelete
+                  message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
+                />
+              )}
+            />
+          </div>
           <div className={styles['checkbox-wrapper']}>
             {GENDER_OPTIONS.map(({ label, value }) => (
               <label key={value} className={styles['checkbox-wrapper__checkbox']}>
@@ -211,7 +214,8 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         {isNameAndGenderFilled && (
           <div className={styles['number-wrapper']}>
             <h1 className={styles['number-wrapper__header']}>휴대전화 번호를 입력해 주세요.</h1>
-            <div className={styles['input-wrapper']}>
+            {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 Sentry 기본 마스킹 클래스 */}
+            <div className={`${styles['input-wrapper']} sentry-mask`}>
               <Controller
                 name="phone_number"
                 control={control}

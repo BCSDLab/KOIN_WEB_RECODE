@@ -1,24 +1,28 @@
 import { useRouter } from 'next/router';
-import { DiningType } from 'api/dinings/entity';
+
+import type { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
+import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLiveNow';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import Suspense from 'components/ssr/SSRSuspense';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
 
-const getWeekAgo = () => {
-  const twoWeeksAgoSunday = new Date();
+const getWeekAgo = (now: Date) => {
+  const twoWeeksAgoSunday = new Date(now);
   while (twoWeeksAgoSunday.getDay() !== 0) {
     twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 1);
   }
@@ -29,6 +33,7 @@ const getWeekAgo = () => {
 
 function PCCafeteriaComponent() {
   const { date, diningType, setDiningType } = useCafeteriaParams();
+  const today = useCafeteriaLiveNow();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const router = useRouter();
@@ -45,14 +50,13 @@ function PCCafeteriaComponent() {
     sessionLogger.actionSessionEvent({
       event_label: 'dining_to_shop',
       value: DINING_TYPE_MAP[diningType],
-      event_category: 'click',
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    router.push('/store');
+    router.push(ROUTES.Store());
   };
 
-  const 지난주일요일 = getWeekAgo();
+  const 지난주일요일 = getWeekAgo(today);
   const isThisWeek = 지난주일요일 < date.current();
 
   const formatDiningDate = () => {

@@ -31,6 +31,7 @@ sonarcloud-analyzer가 생성한 이슈 배치를 처리하여, KOIN 프로젝�
 ## 출력
 
 `_workspace/02_fixer_result.json` 파일:
+
 ```json
 {
   "fixed": [

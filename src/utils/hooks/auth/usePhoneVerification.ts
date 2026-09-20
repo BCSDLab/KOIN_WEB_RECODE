@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
-import { SmsSendResponse } from 'api/auth/entity';
-import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
-import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
+import type { SmsSendResponse } from 'api/auth/entity';
+import type { InputMessage } from 'interfaces/InputMessage';
 import { useFormContext } from 'react-hook-form';
-import { MESSAGES } from 'static/auth';
+import { MESSAGES, STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionStorage } from 'utils/hooks/state/useWebStorage';
+import useCountdownTimer from 'utils/hooks/ui/useCountdownTimer';
 import showToast from 'utils/ts/showToast';
 
 interface UsePhoneVerificationProps {
@@ -37,6 +39,7 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
+  const [, setFoundLoginId] = useSessionStorage<string | null>(STORAGE_KEY.FOUND_LOGIN_ID, null);
 
   const {
     isRunning: isTimer,
@@ -129,7 +132,6 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
         sessionLogger.actionSessionEvent({
           event_label: 'identity_verification',
           value: '인증완료',
-          event_category: 'click',
           session_name: 'sign_up',
         });
       }
@@ -203,7 +205,8 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
   const { mutate: findId } = useMutation({
     mutationFn: idFindSms,
     onSuccess: ({ login_id }) => {
-      router.push(`${ROUTES.IDResult()}?userId=${login_id}`);
+      setFoundLoginId(login_id);
+      router.push(ROUTES.IDResult());
     },
   });
 

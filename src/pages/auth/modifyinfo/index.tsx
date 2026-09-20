@@ -1,11 +1,10 @@
-// 리팩토링 작업중이라 임시로 비활성화
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
+
+import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
+import type { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
 import { authQueryKeys } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
 import BlindIcon from 'assets/svg/blind-icon.svg';
@@ -13,6 +12,7 @@ import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
 import ErrorIcon from 'assets/svg/Login/error.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
+import WarningMobileIcon from 'assets/svg/mobile-warning-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import UserDeleteModal from 'components/Auth/ModifyInfoPage/components/UserDeleteModal';
@@ -27,8 +27,8 @@ import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
-import { Portal } from 'components/modal/Modal/PortalProvider';
-import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -37,28 +37,37 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicLocalStorage } from 'utils/ts/env';
+import { normalizePhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useAuthentication } from 'utils/zustand/authentication';
+
 import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
-interface IFormType {
-  [key: string]: {
+type IFormType = Record<
+  string,
+  {
     ref: HTMLInputElement | ICustomFormInput | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldRefs가 여러 필드 타입을 섞어 담음
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
-  };
-}
+  }
+>;
 
 interface ICustomFormInput {
   value: unknown;
   valid: string | true;
-  isVerified?: boolean;
+}
+
+interface NicknameMessage {
+  type: 'success' | 'warning';
+  content: string;
 }
 
 interface IRegisterOption {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldsRefs가 여러 필드 타입을 섞어 담음
   validFunction?: (value: unknown, fieldsRefs: { current: any }) => string | true;
   required?: boolean;
 }
@@ -70,14 +79,13 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: { [key: string]: any }): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, formValue가 필드마다 다른 타입을 가짐
+  (formValue: Record<string, any>): void;
 }
 
 type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
 
-interface MappedFields {
-  [key: string]: keyof UserResponseKeys;
-}
+type MappedFields = Record<string, keyof UserResponseKeys>;
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
@@ -115,6 +123,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 필드마다 값 타입이 달라 순회 중엔 특정할 수 없음
       let inputValue: any;
       const studentInfo = {
         studentNumber: '',
@@ -150,6 +159,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
     if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
       showToast('error', '변경된 정보가 없습니다.');
+
       return;
     }
 
@@ -167,13 +177,16 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
           return [nameValue[0], nameValue[1].ref.value];
         }
+
         return [nameValue[0], undefined];
       });
       submitForm(Object.fromEntries(formValue));
+
       return;
     }
     showToast('error', invalidFormEntry[1]);
   };
+
   return {
     register,
     onSubmit,
@@ -209,6 +222,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
+
     return {
       valid,
       value: password,
@@ -222,36 +236,42 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (!value) {
       dispatchValidation({ type: 'EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.length < 6 || value.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (!PASSWORD_REGEX.test(value)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (passwordConfirmValue === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value !== passwordConfirmValue) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
@@ -266,30 +286,35 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (password.length < 6 || password.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (!PASSWORD_REGEX.test(password)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (value === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
     if (password !== value) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+
       return;
     }
 
@@ -304,10 +329,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           비밀번호 변경
           <span className={styles['form-input__required']}>*</span>
         </label>
+        {/* sentry-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
         <input
           className={cn({
             [styles['form-input']]: true,
             [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+            'sentry-mask': true,
           })}
           type={visible.password ? 'text' : 'password'}
           autoComplete="new-password"
@@ -334,8 +361,9 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           비밀번호 확인
           <span className={styles['form-input__required']}>*</span>
         </label>
+        {/* sentry-mask: 보기 토글로 type이 text로 바뀌어도 항상 가려지도록 */}
         <input
-          className={styles['form-input']}
+          className={`${styles['form-input']} sentry-mask`}
           type={visible.passwordConfirm ? 'text' : 'password'}
           onChange={handlePasswordConfirmChange}
           autoComplete="new-password"
@@ -383,21 +411,36 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
+  const [nicknameMessage, setNicknameMessage] = React.useState<NicknameMessage | null>(null);
   const isMobile = useMediaQuery();
   const { setIsValid } = useValidationContext();
 
-  const { status, currentCheckedNickname, changeTargetNickname } = useNicknameDuplicateCheck();
+  const { status, currentCheckedNickname, changeTargetNickname } = useNicknameDuplicateCheck({
+    showToastOnResult: !isMobile,
+  });
+
+  const showNicknameWarning = (content: string) => {
+    if (isMobile) {
+      setNicknameMessage({ type: 'warning', content });
+
+      return;
+    }
+    showToast('error', content);
+  };
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setCurrentNicknameValue(newNickname);
+    setNicknameMessage(null);
     if (newNickname === '' && userInfo?.nickname) {
       setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+
       return;
     }
 
     if (newNickname === '') {
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
 
@@ -409,22 +452,38 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
     if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '사용할 수 없는 닉네임입니다.');
+      showNicknameWarning('사용할 수 없는 닉네임입니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
+
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      showNicknameWarning('닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+
       return;
     }
+    setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
     changeTargetNickname(currentNicknameValue, {
       onSuccess: () => {
+        if (isMobile) {
+          setNicknameMessage({ type: 'success', content: '사용 가능한 닉네임입니다.' });
+        }
         setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+      },
+      onError: (error) => {
+        if (!isMobile) return;
+        const content =
+          isKoinError(error) && error.status === 409
+            ? '중복된 닉네임입니다. 다시 입력해 주세요.'
+            : '닉네임 중복 확인에 실패했습니다.';
+        setNicknameMessage({ type: 'warning', content });
+        setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       },
     });
   };
@@ -444,6 +503,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         valid: '닉네임 중복확인을 해주세요.',
       };
     }
+
     return {
       value: currentNicknameValue,
       valid: true,
@@ -462,27 +522,40 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           닉네임(선택)
         </label>
         {isMobile ? (
-          <div className={styles['form-input__row']}>
-            <input
-              onChange={handleNicknameChange}
-              className={styles['form-input']}
-              type="text"
-              autoComplete="nickname"
-              placeholder="닉네임 (선택)"
-              defaultValue={userInfo?.nickname || ''}
-              {...props}
-            />
-            <button
-              type="button"
-              className={cn({
-                [styles.modify__button]: true,
-                [styles['modify__button--nickname']]: true,
-              })}
-              onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
-            >
-              중복확인
-            </button>
+          <div className={styles['nickname-field']}>
+            <div className={styles['form-input__row']}>
+              <input
+                onChange={handleNicknameChange}
+                className={styles['form-input']}
+                type="text"
+                autoComplete="nickname"
+                placeholder="닉네임 (선택)"
+                defaultValue={userInfo?.nickname || ''}
+                {...props}
+              />
+              <button
+                type="button"
+                className={cn({
+                  [styles.modify__button]: true,
+                  [styles['modify__button--nickname']]: true,
+                })}
+                onClick={onClickNicknameDuplicateCheckButton}
+                disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
+              >
+                중복확인
+              </button>
+            </div>
+            {nicknameMessage && (
+              <p
+                className={cn({
+                  [styles['nickname-message']]: true,
+                  [styles[`nickname-message--${nicknameMessage.type}`]]: true,
+                })}
+              >
+                {nicknameMessage.type === 'success' ? <CorrectIcon /> : <WarningMobileIcon />}
+                {nicknameMessage.content}
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -509,6 +582,9 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           </>
         )}
       </div>
+      <p className={styles['validation-status']} role="status" aria-live="polite" aria-atomic="true">
+        {nicknameMessage?.content ?? ''}
+      </p>
     </div>
   );
 });
@@ -567,6 +643,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     } else {
       valid = true;
     }
+
     return { value: { studentNumber, major }, valid };
   }, [studentNumber, major]);
 
@@ -579,8 +656,9 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* sentry-mask: Session Replay에서 학번을 가리기 위한 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} sentry-mask`}
               placeholder="학번 (선택)"
               value={studentNumber}
               onChange={handleChangeStudentId}
@@ -623,8 +701,9 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               학번
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* sentry-mask: Session Replay에서 학번을 가리기 위한 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} sentry-mask`}
               placeholder="학번 (선택)"
               value={studentNumber}
               onChange={handleChangeStudentId}
@@ -672,25 +751,6 @@ const GenderInput = React.forwardRef((_, ref) => {
         <div className={styles['form-input__radio-wrapper']}>
           <input
             type="radio"
-            id="female"
-            name="gender"
-            value="1"
-            checked={selectedValue === '1'}
-            onChange={handleGenderChange}
-          />
-          <label
-            htmlFor="female"
-            className={cn({
-              [styles['form-input__label']]: true,
-              [styles['form-input__label--gender']]: true,
-            })}
-          >
-            여자
-          </label>
-        </div>
-        <div className={styles['form-input__radio-wrapper']}>
-          <input
-            type="radio"
             id="male"
             name="gender"
             value="0"
@@ -704,7 +764,26 @@ const GenderInput = React.forwardRef((_, ref) => {
               [styles['form-input__label--gender']]: true,
             })}
           >
-            남자
+            남성
+          </label>
+        </div>
+        <div className={styles['form-input__radio-wrapper']}>
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="1"
+            checked={selectedValue === '1'}
+            onChange={handleGenderChange}
+          />
+          <label
+            htmlFor="female"
+            className={cn({
+              [styles['form-input__label']]: true,
+              [styles['form-input__label--gender']]: true,
+            })}
+          >
+            여성
           </label>
         </div>
       </div>
@@ -712,12 +791,15 @@ const GenderInput = React.forwardRef((_, ref) => {
   );
 });
 
-const PhoneInput = React.forwardRef((props, ref) => {
+const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number ?? '');
   const [codeNumber, setCodeNumber] = useState<string>('');
   const { setIsValid } = useValidationContext();
   const isMobile = useMediaQuery();
+  const normalizedPhoneNumber = normalizePhoneNumber(phoneNumber);
+  const originalPhoneNumber = normalizePhoneNumber(userInfo?.phone_number ?? '');
+  const isPhoneNumberUnchanged = normalizedPhoneNumber === originalPhoneNumber;
 
   const {
     checkPhoneNumber,
@@ -728,35 +810,45 @@ const PhoneInput = React.forwardRef((props, ref) => {
     timeLeft,
     formattedTime,
     isRunning,
-    sendSMS,
-  } = usePhoneVerification(phoneNumber);
+    hasSentVerificationCode,
+    isSendLimitExceeded,
+    isSending,
+    smsSendCountData,
+    resetVerification,
+  } = usePhoneVerification(normalizedPhoneNumber, { showVerificationHelp: isMobile });
 
-  const { data } = sendSMS;
+  const isSendButtonDisabled = isPhoneNumberUnchanged || isSendLimitExceeded || isSending || isVerified;
 
   useEffect(() => {
-    if (phoneNumber === userInfo?.phone_number) {
-      setIsValid((prev) => ({ ...prev, isPhoneValid: true }));
-    }
-
-    if (verifyCode.isSuccess) {
-      setIsValid((prev) => ({ ...prev, isPhoneValid: true, isFieldChanged: true }));
-    }
-  }, [verifyCode.isSuccess, setIsValid, phoneNumber, userInfo?.phone_number]);
+    setIsValid((prev) => ({
+      ...prev,
+      isPhoneValid: isPhoneNumberUnchanged || isVerified,
+      ...(isVerified && { isFieldChanged: true }),
+    }));
+  }, [isPhoneNumberUnchanged, isVerified, setIsValid]);
 
   useImperativeHandle(ref, () => {
-    const value = phoneNumber.replace(/-/g, '');
-    const valid = REGEX.PHONE_NUMBER.test(value) ? true : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
-    const originalValue = (userInfo?.phone_number ?? '').replace(/-/g, '');
+    const valid: string | true =
+      isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+        ? true
+        : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
-    if (value !== originalValue) {
-      return { value, valid, isVerified };
-    }
-    return { value, valid };
-  });
+    return { value: normalizedPhoneNumber, valid };
+  }, [isPhoneNumberUnchanged, normalizedPhoneNumber]);
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextPhoneNumber = e.target.value;
+
+    setPhoneNumber(nextPhoneNumber);
+    setCodeNumber('');
+    resetVerification();
+  };
 
   const handleStartVerification = () => {
-    if (phoneNumber !== userInfo?.phone_number) {
-      checkPhoneNumber.mutate(phoneNumber);
+    if (!isPhoneNumberUnchanged) {
+      setCodeNumber('');
+      setIsValid((prev) => ({ ...prev, isPhoneValid: false }));
+      checkPhoneNumber.mutate(normalizedPhoneNumber);
     }
   };
 
@@ -769,93 +861,133 @@ const PhoneInput = React.forwardRef((props, ref) => {
               휴대전화
               <span className={styles['form-input__required']}>*</span>
             </label>
-            <div className={styles['form-input__row']}>
-              <input
-                className={styles['form-input']}
-                type="text"
-                autoComplete="tel"
-                placeholder="전화번호 (Ex.01012345678)"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                {...props}
-              />
-              <button
-                type="button"
-                className={cn({
-                  [styles.modify__button]: true,
-                  [styles['modify__button--phone']]: true,
-                  [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
-                })}
-                onClick={handleStartVerification}
-                disabled={phoneNumber === userInfo?.phone_number}
-              >
-                {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
-              </button>
-            </div>
-            {phoneMessage && (
-              <p
-                className={cn({
-                  [styles['form-message']]: true,
-                  [styles[`form-message--${phoneMessage.type}`]]: true,
-                })}
-              >
-                {phoneMessage.type === 'success' && <CorrectIcon />}
-                {phoneMessage.type === 'error' && <ErrorIcon />}
-                {phoneMessage.type === 'warning' && <WarningIcon />}
-                {phoneMessage.content}
-                {phoneMessage.type === 'success' && (
-                  <span className={styles['form-message--count']}>
-                    남은 횟수
-                    {` (${data?.remaining_count}/${data?.total_count})`}
-                  </span>
-                )}
-              </p>
-            )}
-          </div>
-          {phoneMessage?.type === 'success' && (
-            <div className={styles['form-input__label-wrapper']}>
-              <label htmlFor="code" className={styles['form-input__label']}>
-                휴대전화 인증
-                <span className={styles['form-input__required']}>*</span>
-              </label>
+            <div className={styles['phone-field']}>
               <div className={styles['form-input__row']}>
-                <div className={styles['form-input__code-wrapper']}>
-                  <input
-                    className={styles['form-input']}
-                    type="text"
-                    autoComplete="one-time-code"
-                    placeholder="인증번호를 입력해주세요."
-                    value={codeNumber}
-                    onChange={(e) => setCodeNumber(e.target.value)}
-                  />
-                  {isRunning && <p className={styles['form-message__timer']}>{formattedTime}</p>}
-                </div>
+                {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 마스킹 클래스 */}
+                <input
+                  className={`${styles['form-input']} sentry-mask`}
+                  type="text"
+                  autoComplete="tel"
+                  placeholder="전화번호 (Ex.01012345678)"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  {...props}
+                />
                 <button
                   type="button"
                   className={cn({
                     [styles.modify__button]: true,
                     [styles['modify__button--phone']]: true,
-                    [styles['modify__button--active']]: codeNumber !== '',
+                    [styles['modify__button--active']]: !isSendButtonDisabled,
                   })}
-                  onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
-                  disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
+                  onClick={handleStartVerification}
+                  disabled={isSendButtonDisabled}
                 >
-                  인증하기
+                  {hasSentVerificationCode ? '인증번호 재발송' : '인증번호 발송'}
                 </button>
               </div>
-              {verificationMessage && (
-                <p
-                  className={cn({
-                    [styles['form-message']]: true,
-                    [styles[`form-message--${verificationMessage.type}`]]: true,
-                  })}
-                >
-                  {verificationMessage.type === 'success' && <CorrectIcon />}
-                  {verificationMessage.type === 'error' && <ErrorIcon />}
-                  {verificationMessage.type === 'warning' && <WarningIcon />}
-                  {verificationMessage.content}
-                </p>
+              {phoneMessage && (
+                <div className={styles['phone-message-group']}>
+                  <p
+                    className={cn({
+                      [styles['phone-message']]: true,
+                      [styles[`phone-message--${phoneMessage.type}`]]: true,
+                    })}
+                  >
+                    {phoneMessage.type === 'success' && <CorrectIcon />}
+                    {phoneMessage.type === 'error' && <ErrorIcon />}
+                    {phoneMessage.type === 'warning' && <WarningMobileIcon />}
+                    {phoneMessage.content}
+                    {phoneMessage.type === 'success' && smsSendCountData && (
+                      <span className={styles['form-message--count']}>
+                        남은 횟수
+                        {` (${smsSendCountData.remaining_count}/${smsSendCountData.total_count})`}
+                      </span>
+                    )}
+                  </p>
+                  {phoneMessage.type === 'error' && phoneMessage.content === MESSAGES.PHONE.ALREADY_REGISTERED && (
+                    <p className={styles['phone-inquiry']}>
+                      <span>해당 전화번호로 가입하신 적 없으신가요?</span>
+                      <a
+                        className={styles['phone-inquiry__link']}
+                        href={ROUTES.Inquiry()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        문의하기
+                      </a>
+                    </p>
+                  )}
+                </div>
               )}
+            </div>
+          </div>
+          {hasSentVerificationCode && (
+            <div className={styles['form-input__label-wrapper']}>
+              <label htmlFor="code" className={styles['form-input__label']}>
+                휴대전화 인증
+                <span className={styles['form-input__required']}>*</span>
+              </label>
+              <div className={styles['verification-field']}>
+                <div className={styles['form-input__row']}>
+                  <div className={styles['form-input__code-wrapper']}>
+                    {/* sentry-mask: Session Replay에서 인증번호를 가리기 위한 마스킹 클래스 */}
+                    <input
+                      className={`${styles['form-input']} sentry-mask`}
+                      type="text"
+                      autoComplete="one-time-code"
+                      placeholder="인증번호를 입력해주세요."
+                      value={codeNumber}
+                      onChange={(e) => setCodeNumber(e.target.value)}
+                      disabled={isVerified || isSendLimitExceeded || timeLeft === 0}
+                    />
+                    {!isVerified && !isSendLimitExceeded && (
+                      <p className={styles['form-message__timer']}>{formattedTime}</p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className={cn({
+                      [styles.modify__button]: true,
+                      [styles['modify__button--phone']]: true,
+                      [styles['modify__button--active']]:
+                        codeNumber !== '' && timeLeft > 0 && isRunning && !isVerified && !isSendLimitExceeded,
+                    })}
+                    onClick={() =>
+                      verifyCode.mutate({ phone_number: normalizedPhoneNumber, verification_code: codeNumber })
+                    }
+                    disabled={codeNumber === '' || timeLeft === 0 || !isRunning || isVerified || isSendLimitExceeded}
+                  >
+                    인증하기
+                  </button>
+                </div>
+                {verificationMessage?.type === 'default' ? (
+                  <p className={styles['verification-inquiry']}>
+                    <span>{verificationMessage.content}</span>
+                    <a
+                      className={styles['verification-inquiry__link']}
+                      href={ROUTES.Inquiry()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      문의하기
+                    </a>
+                  </p>
+                ) : (
+                  verificationMessage && (
+                    <p
+                      className={cn({
+                        [styles['verification-message']]: true,
+                        [styles[`verification-message--${verificationMessage.type}`]]: true,
+                      })}
+                    >
+                      {verificationMessage.type === 'success' && <CorrectIcon />}
+                      {verificationMessage.type === 'warning' && <WarningMobileIcon />}
+                      {verificationMessage.content}
+                    </p>
+                  )
+                )}
+              </div>
             </div>
           )}
         </>
@@ -867,13 +999,14 @@ const PhoneInput = React.forwardRef((props, ref) => {
               휴대전화 변경
               <span className={styles['form-input__required']}>*</span>
             </label>
+            {/* sentry-mask: Session Replay에서 전화번호를 가리기 위한 마스킹 클래스 */}
             <input
-              className={styles['form-input']}
+              className={`${styles['form-input']} sentry-mask`}
               type="text"
               autoComplete="tel"
               placeholder="전화번호 (Ex.01012345678)"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={handlePhoneNumberChange}
               {...props}
             />
             <button
@@ -881,12 +1014,12 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={cn({
                 [styles.modify__button]: true,
                 [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
+                [styles['modify__button--active']]: !isSendButtonDisabled,
               })}
               onClick={handleStartVerification}
-              disabled={phoneNumber === userInfo?.phone_number}
+              disabled={isSendButtonDisabled}
             >
-              {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
+              {hasSentVerificationCode ? '인증번호 재발송' : '인증번호 발송'}
             </button>
             {phoneMessage && (
               <p
@@ -899,24 +1032,25 @@ const PhoneInput = React.forwardRef((props, ref) => {
                 {phoneMessage.type === 'error' && <ErrorIcon />}
                 {phoneMessage.type === 'warning' && <WarningIcon />}
                 {phoneMessage.content}
-                {phoneMessage.type === 'success' && (
+                {phoneMessage.type === 'success' && smsSendCountData && (
                   <span className={styles['form-message--count']}>
                     남은 횟수
-                    {` (${data?.remaining_count}/${data?.total_count})`}
+                    {` (${smsSendCountData.remaining_count}/${smsSendCountData.total_count})`}
                   </span>
                 )}
               </p>
             )}
           </div>
-          {phoneMessage?.type === 'success' && (
+          {hasSentVerificationCode && (
             <div className={styles['form-input__label-wrapper']}>
               <label htmlFor="code" className={styles['form-input__label']}>
                 휴대전화 인증
                 <span className={styles['form-input__required']}>*</span>
               </label>
               <div className={styles['form-input__code-wrapper']}>
+                {/* sentry-mask: Session Replay에서 인증번호를 가리기 위한 마스킹 클래스 */}
                 <input
-                  className={styles['form-input']}
+                  className={`${styles['form-input']} sentry-mask`}
                   type="text"
                   autoComplete="one-time-code"
                   placeholder="인증번호를 입력해주세요."
@@ -932,7 +1066,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   [styles['modify__button--phone']]: true,
                   [styles['modify__button--active']]: codeNumber !== '',
                 })}
-                onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                onClick={() =>
+                  verifyCode.mutate({ phone_number: normalizedPhoneNumber, verification_code: codeNumber })
+                }
                 disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
               >
                 인증하기
@@ -945,7 +1081,6 @@ const PhoneInput = React.forwardRef((props, ref) => {
                   })}
                 >
                   {verificationMessage.type === 'success' && <CorrectIcon />}
-                  {verificationMessage.type === 'error' && <ErrorIcon />}
                   {verificationMessage.type === 'warning' && <WarningIcon />}
                   {verificationMessage.content}
                 </p>
@@ -954,6 +1089,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
           )}
         </>
       )}
+      <p className={styles['validation-status']} role="status" aria-live="polite" aria-atomic="true">
+        {verificationMessage?.content ?? phoneMessage?.content ?? ''}
+      </p>
     </>
   );
 });
@@ -986,6 +1124,7 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     if (email === '' && userInfo?.email) {
       valid = true;
     }
+
     return {
       value: email === '' ? null : fullEmail,
       valid,
@@ -1017,8 +1156,9 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
         이메일(선택)
       </label>
       <div className={styles['form-input__email-wrapper']}>
+        {/* sentry-mask: Session Replay에서 이메일을 가리기 위한 마스킹 클래스 */}
         <input
-          className={styles['form-input__email']}
+          className={`${styles['form-input__email']} sentry-mask`}
           type={isStudent ? 'text' : 'email'}
           autoComplete="email"
           placeholder="이메일 (선택)"
@@ -1068,6 +1208,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     setName(currentName);
     if (currentName.trim() === '') {
       setIsValid((prev) => ({ ...prev, isNameValid: false }));
+
       return;
     }
 
@@ -1095,6 +1236,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     if (name === userInfo?.name) {
       setIsValid((prev) => ({ ...prev, isNameValid: true }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 초기값만 1회 비교
   }, []);
 
   return (
@@ -1103,8 +1245,9 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
         이름
         <span className={styles['form-input__required']}>*</span>
       </label>
+      {/* sentry-mask: Session Replay에서 이름을 가리기 위한 마스킹 클래스 */}
       <input
-        className={styles['form-input']}
+        className={`${styles['form-input']} sentry-mask`}
         type="text"
         autoComplete="name"
         placeholder="이름을 입력해주세요."
@@ -1148,6 +1291,7 @@ const useModifyInfoForm = () => {
     }
     mutate(payload);
   };
+
   return { submitForm, status };
 };
 
@@ -1188,6 +1332,7 @@ function ModifyInfoDefaultPage() {
     if (!isAuthenticated) {
       router.replace(ROUTES.Main());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Next.js router는 안정적인 참조라 의존성에서 제외
   }, [isAuthenticated, openModal]);
 
   return (
@@ -1228,8 +1373,9 @@ function ModifyInfoDefaultPage() {
             아이디
             <span className={styles['form-input__required']}>*</span>
           </label>
+          {/* sentry-mask: Session Replay에서 아이디를 가리기 위한 마스킹 클래스 */}
           <input
-            className={styles['form-input']}
+            className={`${styles['form-input']} sentry-mask`}
             type="text"
             readOnly
             disabled

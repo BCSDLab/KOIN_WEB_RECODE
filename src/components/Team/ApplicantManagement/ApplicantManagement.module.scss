@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.mobileHeader {
+.mobile-header {
   display: none;
 
   @include media.media-breakpoint(mobile) {
@@ -62,7 +62,7 @@
   text-align: center;
 }
 
-.chatButton {
+.chat-button {
   position: relative;
   z-index: 2;
   display: flex;
@@ -90,7 +90,7 @@
   }
 }
 
-.recruitmentStatus {
+.recruitment-status {
   flex-shrink: 0;
   color: #b611f5;
   font-weight: 500;

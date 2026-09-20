@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
@@ -9,14 +10,15 @@ import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { backButtonTapped } from 'utils/ts/iosBridge';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -25,7 +27,6 @@ interface MobileHeaderProps {
 }
 
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
-  useResetHeaderButton();
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
@@ -48,11 +49,11 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         team: 'BUSINESS',
         event_label: 'shop_detail_view_back',
         value: response.name,
-        event_category: 'click',
         current_page: isomorphicSessionStorage.getItem('cameFrom') || '',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enter_storeDetail'))) / 1000,
+        duration_time: getElapsedSeconds('enter_storeDetail'),
       }); // 상점 내 뒤로가기 버튼 로깅
       router.back();
+
       return;
     }
     if (pathname === '/timetable') {
@@ -62,7 +63,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         value: '뒤로가기버튼',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(isomorphicSessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: getElapsedSeconds('enterTimetablePage'),
       });
     }
 
@@ -72,6 +73,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
       (pathname === ROUTES.Club() || params.hot === 'true')
     ) {
       backButtonTapped();
+
       return;
     }
     // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
@@ -88,7 +90,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const useLightHeader = isClubRoute || isArticleRoute;
+  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
+  const useLightHeader = isClubRoute || isArticleRoute || isCafeteriaRoute;
 
   return (
     <>
@@ -121,7 +124,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             !isClubRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
-              .sort((a, b) => b.link.length - a.link.length)[0]?.title ?? '')}
+              .sort((a, b) => b.link.length - a.link.length)[0]?.title ??
+              '')}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
           {pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 수정'}

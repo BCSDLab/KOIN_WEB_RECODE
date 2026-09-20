@@ -1,11 +1,7 @@
-import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-  PreviewData,
-} from 'next';
-import { getServerRequestContext } from 'utils/ts/serverRequestContext';
+import type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, PreviewData } from 'next';
 import type { ParsedUrlQuery } from 'node:querystring';
+
+import { getServerRequestContext } from 'utils/ts/serverRequestContext';
 
 export const PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300';
 export const STORE_PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=1800';
@@ -46,13 +42,16 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
   });
 
   const setCookieHeader = context.res.getHeader('Set-Cookie');
-  const hasSetCookieHeader = Array.isArray(setCookieHeader) ? setCookieHeader.length > 0 : setCookieHeader !== undefined;
+  const hasSetCookieHeader = Array.isArray(setCookieHeader)
+    ? setCookieHeader.length > 0
+    : setCookieHeader !== undefined;
   const hasCacheControlHeader = context.res.getHeader('Cache-Control') !== undefined;
 
   // Redirect/notFound 응답은 제외하고, props 응답은 명시적인 캐시 정책을 부여합니다.
   if ('props' in result && !hasCacheControlHeader) {
     // 쿠키를 갱신하는 응답은 공용 캐시에 저장하면 안 되므로 private로 고정합니다.
-    const cacheControl = shouldCachePublicResponse && !hasSetCookieHeader ? publicCacheControl : PRIVATE_SSR_CACHE_CONTROL;
+    const cacheControl =
+      shouldCachePublicResponse && !hasSetCookieHeader ? publicCacheControl : PRIVATE_SSR_CACHE_CONTROL;
     context.res.setHeader('Cache-Control', cacheControl);
   }
 
@@ -60,6 +59,7 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
   // "비로그인 데스크톱"으로 렌더하고 클라이언트가 마운트 후 그 DOM을 통째로 갈아치운다.
   if ('props' in result) {
     const props = await result.props;
+
     return { ...result, props: { ...props, serverRequest: getServerRequestContext(context) } };
   }
 

@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { putClubInroduction } from 'api/club';
-import { ClubIntroductionData } from 'api/club/entity';
+import type { ClubIntroductionData } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -22,7 +22,7 @@ export default function useClubDetail(clubId: number, serverToken?: string | nul
 
   const { status: clubIntroductionEditStatus, mutateAsync: clubIntroductionEditMutateAsync } = useMutation({
     mutationFn: async (data: ClubIntroductionData) => {
-      await putClubInroduction(token, clubId!, data);
+      await putClubInroduction(token, clubId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clubQueries.detail(Number(clubId), token).queryKey });

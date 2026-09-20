@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useQuery } from '@tanstack/react-query';
-import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
+import type { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import CarIcon from 'assets/svg/Callvan/car.svg';
@@ -13,6 +14,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {
@@ -62,6 +64,7 @@ export default function CallvanPageLayout({
   const getBackEventLabel = () => {
     if (router.pathname === ROUTES.Callvan()) return 'callvan_back';
     if (router.pathname === ROUTES.CallvanAdd()) return 'callvan_write_back';
+
     return '';
   };
 

@@ -1,4 +1,4 @@
-import { Semester, Term } from 'api/timetable/entity';
+import type { Semester, Term } from 'api/timetable/entity';
 
 type QueryValue = string | string[] | undefined;
 
@@ -24,6 +24,7 @@ export function resolveTimetableSemester(year: QueryValue, term: QueryValue, use
   const querySemester = getSemesterFromQuery(year, term);
   if (querySemester) return querySemester;
   if (userSemester) return userSemester;
+
   return null;
 }
 
@@ -64,10 +65,7 @@ export function getRecentSemester(): Semester {
 }
 
 /** 선택된 학기가 아직 선택 가능한 목록에 있는지. 없으면 목록의 첫 학기로 되돌려야 한다. */
-export function isSemesterInList(
-  semesterOptionList: { value: Semester }[],
-  semester: Semester,
-): boolean {
+export function isSemesterInList(semesterOptionList: Array<{ value: Semester }>, semester: Semester): boolean {
   return semesterOptionList.some(
     (option) => option.value.year === semester.year && option.value.term === semester.term,
   );

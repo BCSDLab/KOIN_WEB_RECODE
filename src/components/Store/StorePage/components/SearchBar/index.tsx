@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
@@ -8,6 +9,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {
@@ -17,34 +19,32 @@ export default function SearchBar() {
   const isMobile = useMediaQuery();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [toggle, setToggle] = useState(true);
+
   return (
-    <div className={styles.search_bar}>
-      {toggle
-      && (
-      <button
-        className={styles.search_bar__input}
-        type="button"
-        onClick={() => {
-          if (!isMobile) setToggle(false);
-          const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
-          if (categories) {
-            logger.actionEventClick(
-              {
+    <div className={styles['search-bar']}>
+      {toggle && (
+        <button
+          className={styles['search-bar__input']}
+          type="button"
+          onClick={() => {
+            if (!isMobile) setToggle(false);
+            const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
+            if (categories) {
+              logger.actionEventClick({
                 team: 'BUSINESS',
                 event_label: 'shop_categories_search',
                 value: `search in ${categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기'}`,
-              },
-            );
-          }
-          openModal();
-        }}
-      >
-        {searchParams.get('storeName') || '검색어를 입력하세요'}
-      </button>
+              });
+            }
+            openModal();
+          }}
+        >
+          {searchParams.get('storeName') || '검색어를 입력하세요'}
+        </button>
       )}
       {/* <input
         ref={storeRef}
-        className={styles.search_bar__input}
+        className={styles['search-bar__input']}
         defaultValue={
           searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
         }
@@ -65,7 +65,7 @@ export default function SearchBar() {
         }}
       /> */}
       <button
-        className={styles.search_bar__icon}
+        className={styles['search-bar__icon']}
         type="button"
         onClick={() => {
           // setParams('storeName', storeRef.current?.value ?? '', {

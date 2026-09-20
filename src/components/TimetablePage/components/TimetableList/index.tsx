@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
+
 import { cn } from '@bcsdlab/utils';
-import { TimetableFrameInfo } from 'api/timetable/entity';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import BookMarkIcon from 'assets/svg/book-mark.svg';
 import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
 import SettingIcon from 'assets/svg/setting-icon.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import SemesterList from 'components/TimetablePage/components/SemesterList';
 import TimetableSettingModal from 'components/TimetablePage/components/TimetableList/TimetableSettingModal';
 import useAddTimetableFrame from 'components/TimetablePage/hooks/useAddTimetableFrame';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
-import { toast } from 'react-toastify';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
+
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {
@@ -56,7 +58,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
   const handleAddTimetableClick = () => {
     if (token) {
       if (mySemester?.semesters.length === 0) {
-        toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+        showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {
         addTimetableFrame(semester, {
           onSuccess: (newTimetable) => {
@@ -84,7 +86,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
     }
   }, [data, setCurrentFrameIndex, currentFrameIndex]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
   useEffect(() => () => portalManager.close(), []);
 
   return (

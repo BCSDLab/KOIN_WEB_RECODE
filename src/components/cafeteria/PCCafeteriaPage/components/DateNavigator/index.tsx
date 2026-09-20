@@ -7,6 +7,7 @@ import RightArrow from 'assets/svg/right-angle-bracket.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {

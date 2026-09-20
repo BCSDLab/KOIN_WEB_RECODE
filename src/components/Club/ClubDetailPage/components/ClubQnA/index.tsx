@@ -1,8 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+
 import ClubQnACard from 'components/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './ClubQnA.module.scss';
 
 interface ClubQnAProps {
@@ -31,6 +33,7 @@ export default function ClubQnA({ isManager, openModal, clubId, openAuthModal, s
       openModal();
     }
   };
+
   return (
     <div className={styles.layout}>
       {!isManager && (
