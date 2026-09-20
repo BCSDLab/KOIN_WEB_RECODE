@@ -1,3 +1,4 @@
+import { formatChatDate } from 'utils/ts/chatTime';
 import type { TeamChatMessage } from 'api/team/entity';
 
 export interface TeamChatMessageGroup {
@@ -6,8 +7,6 @@ export interface TeamChatMessageGroup {
   messages: TeamChatMessage[];
 }
 
-const toDateLabel = (timestamp: string) =>
-  `${timestamp.slice(0, 4)}년 ${Number(timestamp.slice(5, 7))}월 ${Number(timestamp.slice(8, 10))}일`;
 
 export default function groupChatMessagesByDate(messages: TeamChatMessage[]): TeamChatMessageGroup[] {
   return messages.reduce<TeamChatMessageGroup[]>((groups, message) => {
@@ -21,7 +20,7 @@ export default function groupChatMessagesByDate(messages: TeamChatMessage[]): Te
 
     groups.push({
       date,
-      label: toDateLabel(message.timestamp),
+      label: formatChatDate(message.timestamp),
       messages: [message],
     });
     return groups;

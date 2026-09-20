@@ -13,11 +13,7 @@ import PersonIcon from 'assets/svg/Articles/person.svg';
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
-import {
-  formatDate,
-  formatISODateToKoreanDate,
-  formatISODateToTime,
-} from 'components/Articles/LostItemChatPage/utils/date';
+
 import {
   ChatLayout,
   ChatMessageInput,
@@ -34,6 +30,7 @@ import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
+import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import styles from './LostItemChatPage.module.scss';
 
@@ -131,7 +128,7 @@ function LostItemChatPage({ token }: { token: string }) {
       key: `${chat_room_id}-${article_id}`,
       href: `${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`,
       title: article_title,
-      timeLabel: formatDate(last_message_at),
+      timeLabel: formatChatRoomListTime(last_message_at),
       preview: recent_message_content,
       unreadCount: unread_message_count,
       avatar: lost_item_image_url ? (
@@ -150,13 +147,13 @@ function LostItemChatPage({ token }: { token: string }) {
   );
 
   const messageGroups = (messages ?? []).reduce<ChatMessageListGroup[]>((groups, message, index, allMessages) => {
-    const dateLabel = formatISODateToKoreanDate(message.timestamp);
-    const timeLabel = formatISODateToTime(message.timestamp);
+    const dateLabel = formatChatDate(message.timestamp);
+    const timeLabel = formatChatTime(message.timestamp);
     const previousMessage = allMessages[index - 1];
     const showSender =
       !previousMessage ||
       message.user_id !== previousMessage.user_id ||
-      timeLabel !== formatISODateToTime(previousMessage.timestamp);
+      timeLabel !== formatChatTime(previousMessage.timestamp);
     const normalizedMessage = {
       key: `${message.timestamp}-${index}`,
       isMine: message.user_id === userInfo?.id,

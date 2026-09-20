@@ -1,4 +1,4 @@
-export default function formatChatTime(timestamp: string) {
+export function formatChatTime(timestamp: string) {
   return timestamp.slice(11, 16);
 }
 
@@ -24,4 +24,9 @@ export function formatChatRoomListTime(timestamp: string) {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${month}월 ${day}일`;
+}
+
+// 채팅 API의 timestamp는 시간대 오프셋 없는 한국 날짜·시간입니다.
+export function formatChatDate(timestamp: string) {
+  return `${timestamp.slice(0, 4)}년 ${Number(timestamp.slice(5, 7))}월 ${Number(timestamp.slice(8, 10))}일`;
 }
