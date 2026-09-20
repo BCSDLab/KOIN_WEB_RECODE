@@ -7,8 +7,10 @@ import {
   type RefObject,
 } from 'react';
 import Link from 'next/link';
+
 import ImageUploadIcon from 'assets/svg/common/chat-photo.svg';
 import SendIcon from 'assets/svg/common/chat-send.svg';
+
 import styles from './Chat.module.scss';
 
 interface ChatRoomListItem {
@@ -87,7 +89,7 @@ interface ChatLayoutProps {
   panelClassName?: string;
 }
 
-const joinClassNames = (...classNames: (string | false | undefined)[]) => classNames.filter(Boolean).join(' ');
+const joinClassNames = (...classNames: Array<string | false | undefined>) => classNames.filter(Boolean).join(' ');
 
 export function ChatLayout({
   sidebar,
@@ -101,46 +103,46 @@ export function ChatLayout({
   return (
     <div
       className={joinClassNames(
-        styles.chatLayout,
-        !hasSidebar && styles['chatLayout--withoutSidebar'],
+        styles['chat-layout'],
+        !hasSidebar && styles['chat-layout--without-sidebar'],
         className,
       )}
     >
       {hasSidebar && (
-        <aside className={joinClassNames(styles.chatLayout__sidebar, sidebarClassName)} aria-label="채팅방 목록">
+        <aside className={joinClassNames(styles['chat-layout__sidebar'], sidebarClassName)} aria-label="채팅방 목록">
           {sidebar}
         </aside>
       )}
-      {children && <section className={joinClassNames(styles.chatLayout__panel, panelClassName)}>{children}</section>}
+      {children && <section className={joinClassNames(styles['chat-layout__panel'], panelClassName)}>{children}</section>}
     </div>
   );
 }
 
 export function ChatRoomList({ items }: ChatRoomListProps) {
   if (items.length === 0) {
-    return <div className={styles.roomList__empty}>채팅방이 없습니다.🧐</div>;
+    return <div className={styles['room-list__empty']}>채팅방이 없습니다.🧐</div>;
   }
 
   return items.map((item) => (
     <Link
       key={item.key}
       href={item.href}
-      className={joinClassNames(styles.roomList__item, item.isActive && styles['roomList__item--active'])}
+      className={joinClassNames(styles['room-list__item'], item.isActive && styles['room-list__item--active'])}
       aria-current={item.isActive ? 'page' : undefined}
       onClick={item.onClick}
     >
-      <div className={styles.roomList__avatar} aria-hidden={item.avatarAriaHidden}>
+      <div className={styles['room-list__avatar']} aria-hidden={item.avatarAriaHidden}>
         {item.avatar}
       </div>
-      <div className={styles.roomList__content}>
-        <div className={styles.roomList__header}>
-          <div className={styles.roomList__title}>{item.title}</div>
-          {item.timeLabel && <div className={styles.roomList__time}>{item.timeLabel}</div>}
+      <div className={styles['room-list__content']}>
+        <div className={styles['room-list__header']}>
+          <div className={styles['room-list__title']}>{item.title}</div>
+          {item.timeLabel && <div className={styles['room-list__time']}>{item.timeLabel}</div>}
         </div>
-        <div className={styles.roomList__previewRow}>
-          <div className={styles.roomList__preview}>{item.preview}</div>
+        <div className={styles['room-list__preview-row']}>
+          <div className={styles['room-list__preview']}>{item.preview}</div>
           {item.unreadCount > 0 && (
-            <div className={styles.roomList__unreadCount}>{item.unreadCount}</div>
+            <div className={styles['room-list__unread-count']}>{item.unreadCount}</div>
           )}
         </div>
       </div>
@@ -154,18 +156,18 @@ export function ChatMessageList({
 }: ChatMessageListProps) {
   const renderMessage = (message: ChatMessageListItem) => {
     let bubbleClassName = message.isMine
-      ? joinClassNames(styles.messageList__bubble, styles['messageList__bubble--mine'], classNames.bubbleMine)
-      : joinClassNames(styles.messageList__bubble, styles['messageList__bubble--other'], classNames.bubbleOthers);
-    if (message.isImage) bubbleClassName = joinClassNames(styles.messageList__imageBubble, classNames.imageBubble);
+      ? joinClassNames(styles['message-list__bubble'], styles['message-list__bubble--mine'], classNames.bubbleMine)
+      : joinClassNames(styles['message-list__bubble'], styles['message-list__bubble--other'], classNames.bubbleOthers);
+    if (message.isImage) bubbleClassName = joinClassNames(styles['message-list__image-bubble'], classNames.imageBubble);
 
     const bubble = (
       <div className={bubbleClassName}>
         {message.isImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
+          // eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지의 원본 비율을 유지하고 CSS로 표시 크기를 제한함
           <img
             src={message.content}
             alt="전송된 이미지"
-            className={styles.messageList__image}
+            className={styles['message-list__image']}
           />
         ) : (
           message.content
@@ -176,13 +178,13 @@ export function ChatMessageList({
     const metaContent = (
       <>
         {(message.unreadCount ?? 0) > 0 && (
-          <span className={styles.messageList__unreadCount}>{message.unreadCount}</span>
+          <span className={styles['message-list__unread-count']}>{message.unreadCount}</span>
         )}
-        <span className={styles.messageList__time}>{message.timeLabel}</span>
+        <span className={styles['message-list__time']}>{message.timeLabel}</span>
       </>
     );
     const meta = (
-      <div className={joinClassNames(styles.messageList__meta, message.isMine && styles['messageList__meta--mine'])}>
+      <div className={joinClassNames(styles['message-list__meta'], message.isMine && styles['message-list__meta--mine'])}>
         {metaContent}
       </div>
     );
@@ -191,7 +193,7 @@ export function ChatMessageList({
       return (
         <div
           key={message.key}
-          className={joinClassNames(styles.messageList__item, styles['messageList__item--mine'])}
+          className={joinClassNames(styles['message-list__item'], styles['message-list__item--mine'])}
           data-message-id={message.messageId}
         >
           {meta}
@@ -204,19 +206,19 @@ export function ChatMessageList({
       <div
         key={message.key}
         className={joinClassNames(
-          styles.messageList__item,
-          styles['messageList__item--other'],
-          !message.showSender && styles['messageList__item--consecutive'],
+          styles['message-list__item'],
+          styles['message-list__item--other'],
+          !message.showSender && styles['message-list__item--consecutive'],
         )}
         data-message-id={message.messageId}
       >
         {message.showSender && (
-          <div className={styles.messageList__sender}>
+          <div className={styles['message-list__sender']}>
             {message.senderAvatar}
-            <span className={styles.messageList__senderName}>{message.senderName}</span>
+            <span className={styles['message-list__sender-name']}>{message.senderName}</span>
           </div>
         )}
-        <div className={styles.messageList__row}>
+        <div className={styles['message-list__row']}>
           {bubble}
           {meta}
         </div>
@@ -226,8 +228,8 @@ export function ChatMessageList({
 
   return groups.map((group) => (
     <div key={group.key}>
-      <div className={joinClassNames(styles.messageList__date, classNames.dateContainer)}>
-        <span className={joinClassNames(styles.messageList__dateLabel, classNames.dateLabel)}>
+      <div className={joinClassNames(styles['message-list__date'], classNames.dateContainer)}>
+        <span className={joinClassNames(styles['message-list__date-label'], classNames.dateLabel)}>
           {group.dateLabel}
         </span>
       </div>
@@ -280,10 +282,10 @@ export function ChatMessageInput({
   };
 
   return (
-    <div className={joinClassNames(styles.messageInput, classNames.container)}>
+    <div className={joinClassNames(styles['message-input'], classNames.container)}>
       <button
         type="button"
-        className={joinClassNames(styles.messageInput__imageButton, classNames.imageControl)}
+        className={joinClassNames(styles['message-input__image-button'], classNames.imageControl)}
         aria-label="이미지 전송"
         onClick={() => resolvedFileInputRef.current?.click()}
         disabled={disabled}
@@ -295,14 +297,14 @@ export function ChatMessageInput({
         type="file"
         accept="image/*"
         multiple={imageInputMultiple}
-        className={styles.messageInput__file}
+        className={styles['message-input__file']}
         onChange={onImageChange}
         disabled={disabled}
         aria-label="이미지 파일 선택"
       />
       <textarea
         ref={textareaRef}
-        className={joinClassNames(styles.messageInput__textarea, classNames.textarea)}
+        className={joinClassNames(styles['message-input__textarea'], classNames.textarea)}
         placeholder={placeholder}
         aria-label="메시지 입력"
         rows={1}
@@ -313,7 +315,7 @@ export function ChatMessageInput({
       />
       <button
         type="button"
-        className={joinClassNames(styles.messageInput__sendButton, classNames.sendButton)}
+        className={joinClassNames(styles['message-input__send-button'], classNames.sendButton)}
         aria-label="전송"
         onClick={handleSend}
         disabled={disabled}

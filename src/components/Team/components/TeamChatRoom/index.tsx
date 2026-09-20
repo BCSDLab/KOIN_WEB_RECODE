@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
@@ -18,7 +20,7 @@ import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import { formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
-import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
+
 import styles from './TeamChatRoom.module.scss';
 
 interface TeamChatRoomProps {
@@ -31,6 +33,7 @@ const BOTTOM_STICK_THRESHOLD = 80;
 
 const getChatRoomPreview = (room: TeamChatRoomListItem) => {
   if (room.last_message_is_image) return '사진을 보냈습니다.';
+
   return room.last_message_content ?? '';
 };
 

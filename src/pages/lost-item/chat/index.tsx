@@ -10,11 +10,9 @@ import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 // eslint-disable-next-line import/no-duplicates -- 위 FIXME 참고, 문자열 URL을 얻으려던 의도였음
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
-
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
-
 import {
   ChatLayout,
   ChatMessageInput,
@@ -33,6 +31,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
+
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
@@ -74,6 +73,7 @@ function LostItemChatPage({ token }: { token: string }) {
     try {
       if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
+
         return;
       }
 
@@ -99,6 +99,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
     sendChatMessage({ content: inputValue });
     setInputValue('');
+
     return true;
   };
 
@@ -173,6 +174,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
     if (lastGroup?.dateLabel === dateLabel) {
       lastGroup.messages.push(normalizedMessage);
+
       return groups;
     }
 
@@ -181,6 +183,7 @@ function LostItemChatPage({ token }: { token: string }) {
       dateLabel,
       messages: [normalizedMessage],
     });
+
     return groups;
   }, []);
 

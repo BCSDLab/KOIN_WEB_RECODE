@@ -1,5 +1,5 @@
-import { formatChatDate } from 'utils/ts/chatTime';
 import type { TeamChatMessage } from 'api/team/entity';
+import { formatChatDate } from 'utils/ts/chatTime';
 
 export interface TeamChatMessageGroup {
   date: string;

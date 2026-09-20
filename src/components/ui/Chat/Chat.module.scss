@@ -1,12 +1,12 @@
 @use "src/utils/scss/media" as media;
 
-.chatLayout {
+.chat-layout {
   display: grid;
   grid-template-columns: 384px minmax(0, 1fr);
   width: 100%;
   height: 851px;
 
-  &--withoutSidebar {
+  &--without-sidebar {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -29,7 +29,7 @@
   }
 }
 
-.roomList {
+.room-list {
   &__item {
     box-sizing: border-box;
     display: flex;
@@ -74,7 +74,7 @@
   }
 
   &__header,
-  &__previewRow {
+  &__preview-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -111,7 +111,7 @@
     white-space: nowrap;
   }
 
-  &__unreadCount {
+  &__unread-count {
     box-sizing: border-box;
     display: flex;
     flex-shrink: 0;
@@ -139,14 +139,14 @@
   }
 }
 
-.messageList {
+.message-list {
   &__date {
     display: flex;
     justify-content: center;
     padding: 16px 24px;
   }
 
-  &__dateLabel {
+  &__date-label {
     padding: 4px 12px;
     border-radius: 16px;
     background: #eee;
@@ -183,7 +183,7 @@
     gap: 8px;
   }
 
-  &__senderName {
+  &__sender-name {
     overflow: hidden;
     color: #4b4b4b;
     font-size: 12px;
@@ -218,7 +218,7 @@
     }
   }
 
-  &__imageBubble {
+  &__image-bubble {
     display: flex;
     max-width: 360px;
     overflow: hidden;
@@ -245,7 +245,7 @@
     }
   }
 
-  &__unreadCount {
+  &__unread-count {
     color: #1f1f1f;
     font-size: 12px;
     line-height: 160%;
@@ -258,7 +258,7 @@
   }
 }
 
-.messageInput {
+.message-input {
   box-sizing: border-box;
   display: flex;
   flex-shrink: 0;
@@ -270,8 +270,8 @@
   border-top: 1px solid #eee;
   background-color: #f5f5f5;
 
-  &__imageButton,
-  &__sendButton {
+  &__image-button,
+  &__send-button {
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -301,7 +301,7 @@
     }
   }
 
-  &__imageButton {
+  &__image-button {
     svg {
       width: 20px;
       height: 20px;
@@ -347,7 +347,7 @@
     }
   }
 
-  &__sendButton {
+  &__send-button {
     svg {
       width: 21px;
       height: 18px;

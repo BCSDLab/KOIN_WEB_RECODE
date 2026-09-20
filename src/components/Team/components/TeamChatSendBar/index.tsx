@@ -1,5 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
+
 import { ChatMessageInput } from 'components/ui/Chat';
+
 import styles from './TeamChatSendBar.module.scss';
 
 interface TeamChatSendBarProps {
