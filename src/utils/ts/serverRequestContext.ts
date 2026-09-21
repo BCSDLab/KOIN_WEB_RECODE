@@ -10,14 +10,9 @@ export type DeviceClass = 'mobile' | 'desktop';
 export interface ServerRequestContext {
   device: DeviceClass;
   isLoggedIn: boolean;
-  /**
-   * access는 HttpOnly 쿠키라 프론트가 값을 읽거나 props/hydration으로 내려보낼 수 없다
-   * (web-cookie-auth.md). 과거 raw JWT를 여기 담아 쿼리 키로 쓰던 필드였지만, 이제는 항상
-   * `''`이다 — 남겨둔 이유는 이 필드를 여전히 폴백으로 참조하는 레거시 훅(`useTokenState` 등,
-   * Phase 3에서 제거 예정)과의 호환성 때문이다.
-   */
+  /** access는 HttpOnly라 항상 `''` — `useTokenState` 등 레거시 폴백 호환용으로만 남겨뒀다(Phase 3에서 제거). */
   token: string;
-  /** 로그인 상태일 때만 의미 있다. `GET /user/auth`로 서버가 직접 확인한 값이다. */
+  /** `GET /user/auth`로 서버가 직접 확인한 값. 로그인 상태일 때만 의미 있다. */
   userType: UserType | null;
   /**
    * 서버 렌더 시각(ISO). 시각 파생 렌더의 공통 기준값이다.
@@ -49,8 +44,7 @@ export function getDeviceClass(userAgent: string | undefined): DeviceClass {
  * 인증 상태를 SSR에 반영해도 캐시는 안전하다. nginx가 인증 쿠키가 있으면
  * `proxy_cache_bypass`/`proxy_no_cache`로 캐시를 우회한다.
  *
- * access는 HttpOnly라 프론트가 직접 디코딩할 수 없다 — 로그인 여부·회원 유형은 원본 Cookie를
- * 그대로 실어 `GET /user/auth`를 호출해 백엔드가 직접 확인한다(web-cookie-auth.md).
+ * access는 HttpOnly라 직접 디코딩할 수 없으므로, 원본 Cookie를 그대로 실어 `GET /user/auth`로 백엔드가 확인한다.
  */
 export async function getServerRequestContext(context: GetServerSidePropsContext): Promise<ServerRequestContext> {
   const device = getDeviceClass(context.req.headers['user-agent']);

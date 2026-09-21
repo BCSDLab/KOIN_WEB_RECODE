@@ -47,9 +47,7 @@ function AutoLogin() {
   return null;
 }
 
-// access·refresh는 HttpOnly라 브라우저 JS가 값을 읽을 수 없다. CSRF 쿠키(로그인·리프레시와
-// 같은 시점에 발급, 로그아웃 시 삭제)의 존재 여부를 "세션이 있을 가능성" 낙관적 신호로 쓴다.
-// 실제 인증 실패는 API 401 → apiClient의 redirectToLogin()이 최종적으로 처리한다.
+// CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
 const useAuthGuard = (requireAuth: boolean | undefined) => {
   const router = useRouter();
   const isMount = useMount();
