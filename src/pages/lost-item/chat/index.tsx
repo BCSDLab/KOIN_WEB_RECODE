@@ -25,7 +25,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useMount from 'utils/hooks/state/useMount';
 import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
@@ -269,9 +268,8 @@ function LostItemChatPage() {
 
 export default function LostItemChatPageWrapper() {
   const isLoggedIn = useIsLoggedIn();
-  const mounted = useMount();
 
-  if (!mounted || !isLoggedIn) return null;
+  if (!isLoggedIn) return null;
 
   return <LostItemChatPage />;
 }
