@@ -21,7 +21,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   try {
     if (token) {
-      await queryClient.prefetchQuery(callvanQueries.postDetail(token, postId));
+      await queryClient.prefetchQuery(callvanQueries.postDetail(postId, Boolean(token)));
     }
   } catch (error) {
     console.error('[SSR] callvan post detail prefetch failed:', error);
@@ -31,14 +31,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     props: {
       dehydratedState: dehydrate(queryClient),
       postId,
-      token: token ?? '',
     },
   };
 };
 
 export default function CallvanParticipantsPage({
   postId,
-  token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const isMobile = useMediaQuery();
@@ -56,7 +54,7 @@ export default function CallvanParticipantsPage({
 
   return (
     <Suspense fallback={null}>
-      <ParticipantsList postId={postId} token={token} />
+      <ParticipantsList postId={postId} />
     </Suspense>
   );
 }
