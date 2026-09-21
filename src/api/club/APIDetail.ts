@@ -30,8 +30,6 @@ export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequ
   path = '/clubs/categories';
 
   response!: R;
-
-  constructor(public authorization?: string) {}
 }
 
 export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
@@ -49,7 +47,6 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
   };
 
   constructor(
-    public authorization?: string,
     public categoryId?: number,
     public sortType?: string,
     public isRecruiting?: boolean,
@@ -99,10 +96,7 @@ export class PostClub<R extends PostClubResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public data: NewClubData,
-  ) {}
+  constructor(public data: NewClubData) {}
 }
 
 export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
@@ -114,10 +108,7 @@ export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number,
-  ) {
+  constructor(public clubId: number) {
     this.path = `/clubs/${clubId}`;
   }
 }
@@ -132,7 +123,6 @@ export class PutClubInroduction<R extends ClubDetailResponse> implements APIRequ
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number | string,
     public data: ClubIntroductionData,
   ) {
@@ -149,10 +139,7 @@ export class PutClubLike<R extends PutClubLikeResponse> implements APIRequest<R>
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number | string,
-  ) {
+  constructor(public clubId: number | string) {
     this.path = `/clubs/${clubId}/like`;
   }
 }
@@ -166,10 +153,7 @@ export class DeleteClubLike<R extends DeleteClubLikeResponse> implements APIRequ
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number | string,
-  ) {
+  constructor(public clubId: number | string) {
     this.path = `/clubs/${clubId}/like/cancel`;
   }
 }
@@ -184,7 +168,6 @@ export class PostClubQnA<R extends PostClubQnAResponse> implements APIRequest<R>
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number | string,
     public data: ClubNewQnA,
   ) {
@@ -201,10 +184,7 @@ export class GetClubQnA<R extends ClubQnAData> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number | string,
-  ) {
+  constructor(public clubId: number | string) {
     this.path = `/clubs/${clubId}/qna`;
   }
 }
@@ -219,7 +199,6 @@ export class DeleteClubQnA<R extends DeleteClubQnAResponse> implements APIReques
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number | string,
     public qnaId: number | string,
   ) {
@@ -237,7 +216,6 @@ export class PutClub<R extends PostClubResponse> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public data: NewClubData,
     public clubId: number | string,
   ) {
@@ -254,10 +232,7 @@ export class PutNewClubManager<R extends NewClubManagerResponse> implements APIR
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public data: NewClubManager,
-  ) {}
+  constructor(public data: NewClubManager) {}
 }
 
 export class GetRecruitmentClub<R extends ClubRecruitmentResponse> implements APIRequest<R> {
@@ -282,7 +257,6 @@ export class GetClubEventList<R extends ClubEventListResponse> implements APIReq
   constructor(
     public clubId: string | number,
     public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED',
-    public authorization?: string,
   ) {
     this.path = `/clubs/${clubId}/events?eventType=${eventType}`;
   }
@@ -313,7 +287,6 @@ export class PostClubRecruitment<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public data: ClubRecruitmentRequest,
   ) {
@@ -331,7 +304,6 @@ export class PutClubRecruitment<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public data: ClubRecruitmentRequest,
   ) {
@@ -348,10 +320,7 @@ export class DeleteClubRecruitment<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number,
-  ) {
+  constructor(public clubId: number) {
     this.path = `/clubs/${clubId}/recruitment`;
   }
 }
@@ -366,7 +335,6 @@ export class PostClubEvent<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public data: ClubEventRequest,
   ) {
@@ -384,7 +352,6 @@ export class PutClubEvent<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public eventId: number,
     public data: ClubEventRequest,
@@ -403,7 +370,6 @@ export class DeleteClubEvent<R extends object> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public eventId: number,
   ) {
@@ -420,10 +386,7 @@ export class PostClubRecruitmentNotification<R extends object> implements APIReq
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number,
-  ) {
+  constructor(public clubId: number) {
     this.path = `/clubs/${clubId}/recruitment/notification`;
   }
 }
@@ -437,10 +400,7 @@ export class DeleteClubRecruitmentNotification<R extends object> implements APIR
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public clubId: number,
-  ) {
+  constructor(public clubId: number) {
     this.path = `/clubs/${clubId}/recruitment/notification`;
   }
 }
@@ -455,7 +415,6 @@ export class PostClubEventNotification<R extends object> implements APIRequest<R
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public eventId: number,
   ) {
@@ -473,7 +432,6 @@ export class DeleteClubEventNotification<R extends object> implements APIRequest
   auth = true;
 
   constructor(
-    public authorization: string,
     public clubId: number,
     public eventId: number,
   ) {
