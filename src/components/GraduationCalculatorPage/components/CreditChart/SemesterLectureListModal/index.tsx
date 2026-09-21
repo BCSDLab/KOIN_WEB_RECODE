@@ -11,6 +11,7 @@ import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useSelect from 'components/TimetablePage/hooks/useSelect';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { pick } from 'utils/ts/object';
@@ -49,6 +50,7 @@ export default function SemesterLectureListModal({
 }) {
   const semesters = useAllSemesters();
   const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const allMyLectures = useAllMyLectures(token);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
@@ -64,7 +66,9 @@ export default function SemesterLectureListModal({
   const { value: lectureStatus, onChangeSelect: onChangeLectureStatus } = useSelect(lectureStatusOptions[0].value);
   const { value: department, onChangeSelect: onChangeDepartment } = useSelect(academicInfo?.department);
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
-  const { data: generalCourses } = useSuspenseQuery(graduationCalculatorQueries.courseType(token, semester, course!));
+  const { data: generalCourses } = useSuspenseQuery(
+    graduationCalculatorQueries.courseType(semester, course!, undefined, isLoggedIn),
+  );
 
   const allMyLecturesInfo = (allMyLectures ?? [])
     .filter((myLecture) => myLecture.course_type === course)

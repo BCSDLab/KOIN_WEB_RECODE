@@ -10,7 +10,7 @@ import useAgreeGraduationCreidts from './useAgreeGraduationCreidts';
 
 export default function useUpdateAcademicInfo(token: string) {
   const queryClient = useQueryClient();
-  const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts(token);
+  const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts();
 
   return useMutation({
     mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(token, data),
