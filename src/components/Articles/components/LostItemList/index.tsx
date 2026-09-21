@@ -27,6 +27,14 @@ const HEADER_ROW: HeaderRowInfo = {
   stat: '물품 상태',
 };
 
+const CATEGORY_BADGE_COLOR: Record<string, { background: string; text: string }> = {
+  전자제품: { background: '#e4f2ff', text: '#3a70e2' },
+  카드: { background: '#e5f5ec', text: '#0c9d61' },
+  지갑: { background: '#ead3fe', text: '#980ac9' },
+  신분증: { background: '#fff9ee', text: '#ffad0d' },
+  기타: { background: '#ffebee', text: '#f64c4c' },
+};
+
 export default function LostItemList({ articles }: LostItemListProps) {
   // NEW 뱃지 기준일. 서버가 확정한 값이 있으면 그것을 쓴다(하이드레이션 일치).
   const serverRequest = useServerRequest();
@@ -84,9 +92,21 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list-mobile__title']}>
           <div className={styles['lost-item-list-mobile__titleMeta']}>
-            <span className={styles['lost-item-list-mobile__badge']}>{article.category}</span>
+            <span
+              className={styles['lost-item-list-mobile__badge']}
+              style={
+                CATEGORY_BADGE_COLOR[article.category]
+                  ? {
+                      backgroundColor: CATEGORY_BADGE_COLOR[article.category].background,
+                      color: CATEGORY_BADGE_COLOR[article.category].text,
+                    }
+                  : undefined
+              }
+            >
+              {article.category}
+            </span>
             <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
-            <div>|</div>
+            <div className={styles['lost-item-list-mobile__line']}>|</div>
             <div className={styles['lost-item-list-mobile__foundDate']}>{article.found_date}</div>
           </div>
           <FoundChip isFound={article.is_found} size="xs" />
@@ -141,7 +161,19 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list__title']}>
           <div className={styles['lost-item-list__titleMeta']}>
-            <span className={styles['lost-item-list__badge']}>{article.category}</span>
+            <span
+              className={styles['lost-item-list__badge']}
+              style={
+                CATEGORY_BADGE_COLOR[article.category]
+                  ? {
+                      backgroundColor: CATEGORY_BADGE_COLOR[article.category].background,
+                      color: CATEGORY_BADGE_COLOR[article.category].text,
+                    }
+                  : undefined
+              }
+            >
+              {article.category}
+            </span>
             <div className={styles['lost-item-list__place']}>{article.found_place}</div>
             <div>|</div>
             <div className={styles['lost-item-list__foundDate']}>{article.found_date}</div>

@@ -27,7 +27,23 @@
 
     @include media.media-breakpoint(mobile) {
       display: flex;
-      padding: 10px 12px;
+      width: 73px;
+      height: 36px;
+      padding: 4px 12px;
+      gap: 4px;
+      align-self: stretch;
+      border-radius: 24px;
+      background-color: #b611f5;
+      box-shadow:
+        0 1px 1px 0 rgb(0 0 0 / 2%),
+        0 2px 4px 0 rgb(0 0 0 / 4%);
+      font-weight: 600;
+      line-height: 160%;
+      color: #fff;
+
+      svg path {
+        fill: #fff;
+      }
     }
   }
 
@@ -47,12 +63,24 @@
 
     @include media.media-breakpoint(mobile) {
       position: fixed;
+      display: inline-flex;
+      border-color: #b611f5;
       right: 24px;
       bottom: 45px;
       padding: 8px 12px;
-      border-radius: 24px;
+      color: #b611f5;
+      border-radius: 999px;
       font-size: 16px;
       z-index: 15;
+
+      svg {
+        width: 24px;
+        height: 24px;
+
+        path {
+          fill: #b611f5;
+        }
+      }
     }
   }
 }

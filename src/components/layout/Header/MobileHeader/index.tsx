@@ -92,7 +92,9 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const useLightHeader = isClubRoute || isArticleRoute;
+  const isLostItemLightRoute = [ROUTES.LostItems(), ROUTES.LostItemLost(), ROUTES.LostItemFound()].includes(pathname);
+  const isLostItemWriteRoute = [ROUTES.LostItemLost(), ROUTES.LostItemFound()].includes(pathname);
+  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute;
 
   return (
     <>
@@ -120,9 +122,10 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           })}
         >
           {isMain && <KoinServiceLogo />}
-          {!isMain && isClubRoute && customTitle}
+          {!isMain && (isClubRoute || isLostItemWriteRoute) && customTitle}
           {!isMain &&
             !isClubRoute &&
+            !isLostItemWriteRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
               .sort((a, b) => b.link.length - a.link.length)[0]?.title ??

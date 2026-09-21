@@ -6,6 +6,7 @@ import SearchIcon from 'assets/svg/Articles/search.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 
 import styles from './LostItemPageLayout.module.scss';
@@ -14,6 +15,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
   useScrollToTop();
 
   const router = useRouter();
+  const isMobile = useMediaQuery();
 
   const keywordFromQuery = (Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword) ?? '';
   const [keyword, setKeyword] = useState(String(keywordFromQuery));
@@ -42,7 +44,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
 
         <div className={styles.index}>
           <div className={styles['search-container']}>
-            <SearchIcon />
+            {!isMobile && <SearchIcon />}
             <input
               className={styles['search-container__input']}
               value={keyword}
@@ -53,6 +55,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
                 if (e.key === 'Enter') applySearch();
               }}
             />
+            {isMobile && <SearchIcon />}
           </div>
 
           <div className={styles.index__rightButton}>
