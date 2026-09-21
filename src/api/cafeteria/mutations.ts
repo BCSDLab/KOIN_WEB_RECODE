@@ -7,15 +7,15 @@ const invalidateDinings = (queryClient: QueryClient, date: string) =>
   queryClient.invalidateQueries({ queryKey: cafeteriaQueryKeys.dinings(date) });
 
 export const cafeteriaMutations = {
-  likeDining: (queryClient: QueryClient, token: string, date: string) =>
+  likeDining: (queryClient: QueryClient, date: string) =>
     mutationOptions({
-      mutationFn: (diningId: number) => likeCafeteriaDining(diningId, token),
+      mutationFn: (diningId: number) => likeCafeteriaDining(diningId),
       onSuccess: () => invalidateDinings(queryClient, date),
     }),
 
-  cancelLikeDining: (queryClient: QueryClient, token: string, date: string) =>
+  cancelLikeDining: (queryClient: QueryClient, date: string) =>
     mutationOptions({
-      mutationFn: (diningId: number) => cancelCafeteriaDiningLike(diningId, token),
+      mutationFn: (diningId: number) => cancelCafeteriaDiningLike(diningId),
       onSuccess: () => invalidateDinings(queryClient, date),
     }),
 };
