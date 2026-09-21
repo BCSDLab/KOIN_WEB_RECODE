@@ -59,8 +59,9 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
   // "비로그인 데스크톱"으로 렌더하고 클라이언트가 마운트 후 그 DOM을 통째로 갈아치운다.
   if ('props' in result) {
     const props = await result.props;
+    const serverRequest = await getServerRequestContext(context);
 
-    return { ...result, props: { ...props, serverRequest: getServerRequestContext(context) } };
+    return { ...result, props: { ...props, serverRequest } };
   }
 
   return result;
