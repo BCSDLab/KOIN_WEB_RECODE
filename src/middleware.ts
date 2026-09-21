@@ -1,12 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import ROUTES, { PROTECTED_ROUTES } from 'static/routes';
-import { COOKIE_DOMAIN, COOKIE_KEY } from 'static/url';
-import { isTokenExpired } from 'utils/ts/auth';
-
-function isLocalhost(hostname: string): boolean {
-  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
-}
+import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -31,50 +26,18 @@ function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
 }
 
+// access·refresh는 HttpOnly라 미들웨어에서도 값을 신뢰할 근거가 없다(서버가 검증해야 진짜 유효성을
+// 안다). CSRF 쿠키는 로그인·리프레시와 같은 시점에 발급되고 로그아웃 시 함께 삭제되므로, 여기서는
+// "세션이 있을 가능성"을 보는 낙관적 신호로만 쓴다. 실제 인증 실패는 API 401 응답과 그에 따른
+// 클라이언트 redirectToLogin()이 최종적으로 처리한다.
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get(COOKIE_KEY.AUTH_TOKEN)?.value;
-  const isExpired = !!token && isTokenExpired(token);
+  const hasSession = Boolean(request.cookies.get(WEB_AUTH_CSRF_COOKIE_KEY)?.value);
 
-  if (isProtectedPath(request.nextUrl.pathname) && (!token || isExpired)) {
+  if (isProtectedPath(request.nextUrl.pathname) && !hasSession) {
     const loginUrl = new URL(ROUTES.Auth(), request.url);
     loginUrl.searchParams.set('redirect', `${request.nextUrl.pathname}${request.nextUrl.search}`);
 
     return NextResponse.redirect(loginUrl);
-  }
-
-  if (token && isExpired) {
-    // 만료된 토큰을 SSR 요청에서도 제거해 getServerSideProps의 500 오류를 방지
-    const requestHeaders = new Headers(request.headers);
-    const remainingCookies = request.cookies
-      .getAll()
-      .filter((cookie) => cookie.name !== COOKIE_KEY.AUTH_TOKEN && cookie.name !== COOKIE_KEY.AUTH_USER_TYPE)
-      .map((cookie) => `${cookie.name}=${cookie.value}`)
-      .join('; ');
-
-    if (remainingCookies) {
-      requestHeaders.set('cookie', remainingCookies);
-    } else {
-      requestHeaders.delete('cookie');
-    }
-
-    const response = NextResponse.next({ request: { headers: requestHeaders } });
-
-    const hostname = request.nextUrl.hostname;
-    const baseOptions = `Path=/; Max-Age=0; Expires=${new Date(0).toUTCString()}; SameSite=Lax`;
-
-    // host-only 쿠키와 domain 쿠키를 모두 삭제 (host-only 쿠키가 남아있는 사용자가 있을 수 있어 임시로 둔 후 추후 제거하도록 하겠습니다.)
-    const cookieStrings = [COOKIE_KEY.AUTH_TOKEN, COOKIE_KEY.AUTH_USER_TYPE].flatMap((name) => {
-      const hostOnly = `${name}=; ${baseOptions}`;
-      if (isLocalhost(hostname)) return [hostOnly];
-
-      return [hostOnly, `${name}=; Domain=${COOKIE_DOMAIN}; ${baseOptions}`];
-    });
-
-    const [first, ...rest] = cookieStrings;
-    response.headers.set('Set-Cookie', first);
-    rest.forEach((cookie) => response.headers.append('Set-Cookie', cookie));
-
-    return response;
   }
 
   return NextResponse.next();

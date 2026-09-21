@@ -28,12 +28,6 @@ export function redirectToMain(currentPath?: string) {
   window.location.href = ROUTES.Main();
 }
 
-export function redirectToClub(currentPath?: string) {
-  const pathToSave = currentPath || window.location.pathname;
-  setRedirectPath(pathToSave);
-  window.location.href = ROUTES.Club();
-}
-
 export function isTokenExpired(token: string): boolean {
   try {
     const payload = token.split('.')[1];
