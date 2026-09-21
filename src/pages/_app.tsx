@@ -19,7 +19,6 @@ import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -79,24 +78,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   const pageTitle = getPageTitle();
 
-  // ios 브릿지
   useEffect(() => {
-    // 앱 로드 시 토큰 요청 정의
-    const initializeTokens = async () => {
-      const tokens = await requestTokensFromNative();
-      if (tokens.access || tokens.refresh) {
-        setTokensFromNative(tokens.access, tokens.refresh);
-      }
-    };
-    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
-      // 네이티브에서 토큰을 전달받을 함수 등록
-      window.setTokens = setTokensFromNative;
-
-      const currentPath = window.location.pathname;
-      if (!currentPath.startsWith('/auth')) {
-        initializeTokens();
-      }
-    }
     // 로깅을 위한 userId 전달 및 gtag 함수 정의
     if (typeof window !== 'undefined') {
       const userId = isomorphicLocalStorage.getItem('uuid') || '';
