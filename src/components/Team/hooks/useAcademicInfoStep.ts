@@ -30,7 +30,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const deptOptionList = deptList.map((dept) => ({ label: dept.name, value: dept.name }));
 
   const { mutate: loadUserInfo, isPending: isLoadingUserInfo } = useMutation({
-    mutationFn: () => getUserAcademicInfo(token),
+    mutationFn: () => getUserAcademicInfo(),
     onSuccess: (data) => {
       setValue('nickname', data.nickname ?? '', { shouldValidate: true });
       setValue('studentNumber', data.student_number ?? '', { shouldValidate: true });
@@ -70,7 +70,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
 
   const { mutate: saveAcademicInfo, isPending: isSaving } = useMutation({
     mutationFn: (data: { department: string; studentNumber: string }) =>
-      updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
+      updateAcademicInfo({ department: data.department, student_number: data.studentNumber }),
     onSuccess: () => {
       actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.NEXT, value: '다음' });
       onSaved();

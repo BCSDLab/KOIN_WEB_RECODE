@@ -11,7 +11,7 @@ import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import ClubMobileViewB from './ClubMobileViewB';
 import styles from './IndexClub.module.scss';
@@ -45,8 +45,8 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
 
 function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
   const clubLinkCardData = getClubLinkCardData(hotClubInfo);
-  const token = useTokenState();
-  const ABView = useABTestView('a_main_club_ui', token);
+  const isLoggedIn = useIsLoggedIn();
+  const ABView = useABTestView('a_main_club_ui', '');
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
@@ -113,7 +113,7 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
             key={key}
             className={styles.card}
             onClick={(e) => {
-              if (!token && key === 'addClub') {
+              if (!isLoggedIn && key === 'addClub') {
                 e.preventDefault();
                 openAuthModal();
               } else {

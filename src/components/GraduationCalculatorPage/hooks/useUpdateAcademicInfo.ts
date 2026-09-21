@@ -13,7 +13,7 @@ export default function useUpdateAcademicInfo(token: string) {
   const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts();
 
   return useMutation({
-    mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(token, data),
+    mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(data),
 
     onSuccess: () => {
       agreeGraduationCredits();
