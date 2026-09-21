@@ -8,14 +8,12 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { CATEGORY, type Category, type Submenu, type SubmenuTitle } from 'static/category';
 import ROUTES from 'static/routes';
-import { useServerRequest } from 'utils/context/serverRequest';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 
@@ -72,19 +70,13 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logout = useLogout();
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
-  const token = useTokenState();
   const portalManager = useModalPortal();
   const router = useRouter();
   const { asPath } = router;
   const pathname = asPath.split('?')[0] || '/';
   const search = asPath.includes('?') ? `?${asPath.split('?')[1]}` : '';
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
-  const mounted = useMount();
-  const serverRequest = useServerRequest();
-
-  // 마운트 전에는 서버가 판정한 로그인 여부를 쓴다. 이게 없으면 서버는 항상 비로그인 UI를
-  // 그리고 클라이언트가 마운트 후 로그인 UI로 교체한다(a → button).
-  const isLoggedin = mounted ? !!token : (serverRequest?.isLoggedIn ?? false);
+  const isLoggedin = useIsLoggedIn();
 
   const logShortcut = (title: SubmenuTitle) => {
     const info = SHORTCUT_LOGGING_MAP[title];
@@ -152,7 +144,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: SubmenuTitle) => {
     logShortcut(title);
-    if (!token && title === '쪽지') {
+    if (!isLoggedin && title === '쪽지') {
       e.preventDefault();
       openLoginModal();
     }

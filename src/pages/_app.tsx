@@ -15,7 +15,6 @@ import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import { ServerRequestProvider } from 'utils/context/serverRequest';
-import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
@@ -40,12 +39,6 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
-
-function AutoLogin() {
-  useAutoLogin();
-
-  return null;
-}
 
 // access·refresh는 HttpOnly라 브라우저 JS가 값을 읽을 수 없다. CSRF 쿠키(로그인·리프레시와
 // 같은 시점에 발급, 로그아웃 시 삭제)의 존재 여부를 "세션이 있을 가능성" 낙관적 신호로 쓴다.
@@ -126,7 +119,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
           <ServerRequestProvider value={pageProps.serverRequest ?? null}>
             <PortalProvider>
               <Seo title={pageTitle} />
-              <AutoLogin />
               {getLayout(<Component {...pageProps} />)}
               <Toast />
             </PortalProvider>
