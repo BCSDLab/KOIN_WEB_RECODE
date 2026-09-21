@@ -5,10 +5,8 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
-import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
 import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
-import WebChatIcon from 'assets/svg/Team/web_chat.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDate';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
@@ -21,6 +19,7 @@ import { formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 
+import TeamChatSenderAvatar from './TeamChatSenderAvatar';
 import styles from './TeamChatRoom.module.scss';
 
 interface TeamChatRoomProps {
@@ -97,19 +96,10 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       unreadCount: message.unread_count,
       senderId: message.user_id,
       senderName: message.user_nickname,
-      senderAvatar: (
-        <>
-          <span className={styles['chat-room__desktopSenderIcon']} aria-hidden="true">
-            <WebChatIcon />
-          </span>
-          <span className={styles['chat-room__mobileSenderIcon']} aria-hidden="true">
-            <ChatAvatarIcon />
-          </span>
-        </>
-      ),
+      senderAvatar: <TeamChatSenderAvatar />,
     })),
   }));
-  const memberCount = isTeamRoom ? (
+  const memberCount = isTeamRoom && (
     <span
       className={cn({
         [styles['chat-room__memberCount']]: true,
@@ -119,17 +109,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       <PeopleIcon />
       {chatRoom.member_count}/{chatRoom.max_member_count}
     </span>
-const memberCount = isTeamRoom && (
-<span
-className={cn({
-[styles['chat-room__memberCount']]: true,
-[styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
-})}
->
-<PeopleIcon />
-{chatRoom.member_count}/{chatRoom.max_member_count}
-</span>
-);
+  );
 
   const loadPreviousMessages = async () => {
     const container = messagesContainerRef.current;
