@@ -35,7 +35,7 @@ export const useLogin = (state: IsAutoLogin) => {
       // 이전 사용자의 시간표·쪽지 같은 캐시가 그대로 렌더된다. 로그인은 client-side
       // 이동이라(useLoginRedirect의 router.replace) 캐시가 살아남는다. 아예 비운다.
       queryClient.clear();
-      // access·refresh는 서버가 HttpOnly 쿠키로 발급한다 — 프론트는 회원 유형만 반영하면 된다.
+
       setUserType(data.user_type);
       redirectAfterLogin();
     },

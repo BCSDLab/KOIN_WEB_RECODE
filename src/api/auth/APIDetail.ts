@@ -120,8 +120,6 @@ export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
   constructor(public data: RefreshRequest) {}
 }
 
-// 웹 전용 HttpOnly 쿠키 인증 (KOIN_API_V2#2425). access·refresh·CSRF 쿠키는 서버가
-// Set-Cookie로 발급/삭제하므로 이 요청들은 자격 정보를 body/header로 되돌려주지 않는다.
 export class WebLogin<R extends WebAuthResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 

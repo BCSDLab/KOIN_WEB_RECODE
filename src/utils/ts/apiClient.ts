@@ -133,9 +133,6 @@ export default class APIClient {
 
   private refreshPromise: Promise<void> | null = null;
 
-  // access 쿠키 갱신. refresh 쿠키는 브라우저가 자동으로 실어 보내므로 인자가 필요 없다.
-  // 응답 바디에는 새 토큰 값이 담기지 않는다 — 쿠키는 서버의 Set-Cookie가 갱신하고,
-  // 프론트는 userType만 다시 동기화하면 된다.
   private async refreshAccessToken() {
     // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
     if (this.refreshPromise) {
@@ -177,8 +174,6 @@ export default class APIClient {
     try {
       const originalRequest = error.config;
 
-      // 재요청 실행 및 결과 반환 — 쿠키 인증은 withCredentials로 이미 자동 전송되므로
-      // 헤더를 다시 채울 필요가 없다.
       const route = normalizeApiPath(originalRequest?.url);
 
       return await Sentry.startSpan(
