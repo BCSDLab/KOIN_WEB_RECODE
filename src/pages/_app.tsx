@@ -15,7 +15,6 @@ import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import { ServerRequestProvider } from 'utils/context/serverRequest';
-import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
 import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
@@ -40,12 +39,6 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
-
-function AutoLogin() {
-  useAutoLogin();
-
-  return null;
-}
 
 // CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
 const useAuthGuard = (requireAuth: boolean | undefined) => {
@@ -124,7 +117,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
           <ServerRequestProvider value={pageProps.serverRequest ?? null}>
             <PortalProvider>
               <Seo title={pageTitle} />
-              <AutoLogin />
               {getLayout(<Component {...pageProps} />)}
               <Toast />
             </PortalProvider>
