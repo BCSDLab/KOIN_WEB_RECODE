@@ -12,7 +12,6 @@ import formatApplicationStatus from 'components/Team/utils/formatApplicationStat
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
 
 import styles from './ApplicantCard.module.scss';
 
@@ -31,7 +30,6 @@ interface ApplicantCardProps {
 
 export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCardProps) {
   const router = useRouter();
-  const token = useTokenState();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const {
@@ -44,7 +42,7 @@ export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCar
   } = applicant;
 
   const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
-    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
+    teamMutations.createDirectChatRoom(Number(recruitmentId)),
   );
 
   const handleCardClick = () => {
