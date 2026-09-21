@@ -8,18 +8,17 @@ import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
-import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDate';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
-import { formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
+import { formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 
-import TeamChatSenderAvatar from './TeamChatSenderAvatar';
+import mapTeamChatMessageGroups from './mapTeamChatMessageGroups';
 import styles from './TeamChatRoom.module.scss';
 
 interface TeamChatRoomProps {
@@ -83,22 +82,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   }));
 
   const isTeamRoom = chatRoom.room_type === 'TEAM';
-  const messageGroups = groupChatMessagesByDate(mergedMessages).map((group) => ({
-    key: group.date,
-    dateLabel: group.label,
-    messages: group.messages.map((message) => ({
-      key: message.message_id,
-      messageId: message.message_id,
-      isMine: message.user_id === user?.id,
-      content: message.content,
-      isImage: message.is_image,
-      timeLabel: formatChatTime(message.timestamp),
-      unreadCount: message.unread_count,
-      senderId: message.user_id,
-      senderName: message.user_nickname,
-      senderAvatar: <TeamChatSenderAvatar />,
-    })),
-  }));
+  const messageGroups = mapTeamChatMessageGroups(mergedMessages, user?.id);
   const memberCount = isTeamRoom && (
     <span
       className={cn({
