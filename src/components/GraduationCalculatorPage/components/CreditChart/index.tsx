@@ -26,7 +26,7 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
     ...graduationCalculatorQueries.creditsByCourseType(isLoggedIn),
     enabled: isLoggedIn,
   });
-  const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
+  const { data: multiMajorLecture } = useGetMultiMajorLecture();
 
   const onClickBar = (courseType: string) => {
     logger.actionEventClick({

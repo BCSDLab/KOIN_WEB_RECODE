@@ -14,7 +14,7 @@ import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMut
 import { Selector } from 'components/ui/Selector';
 import { DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME } from 'static/timetable';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
@@ -352,7 +352,7 @@ function TimeSpaceInput({
 }
 
 function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
   const { myLectures } = useMyLectures(timetableFrameId, semester);
@@ -624,11 +624,11 @@ function CustomLecture({ timetableFrameId, semester }: { timetableFrameId: numbe
       onSubmit={(e) => handleSubmitLecture(e)}
       className={cn({
         [styles['form-container']]: true,
-        [styles['form-container--non-login']]: !token,
+        [styles['form-container--non-login']]: !isLoggedIn,
       })}
     >
       <div className={styles.inputbox}>
-        {!token && <div className={styles.inputbox__instruction}>로그인이 필요한 서비스입니다.</div>}
+        {!isLoggedIn && <div className={styles.inputbox__instruction}>로그인이 필요한 서비스입니다.</div>}
         <div>
           <div
             className={cn({

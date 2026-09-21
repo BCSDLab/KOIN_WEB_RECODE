@@ -36,7 +36,7 @@ function GraduationCalculatorComponent() {
   const isLoggedIn = useIsLoggedIn();
   const semester = useSemester();
   const { lock, unlock } = useScrollLock(false);
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts();

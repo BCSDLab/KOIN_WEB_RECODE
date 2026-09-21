@@ -107,7 +107,7 @@ function CoursePage() {
     initialSemester: semester.term,
   });
 
-  const { data: timetableFrameList } = useTimetableFrameList(token, currentSemester);
+  const { data: timetableFrameList } = useTimetableFrameList(currentSemester);
   const mainFrame = timetableFrameList?.find((frame) => frame.is_main);
   const timetableFrameId = mainFrame?.id ?? 0;
   const hasValidFrameId = !!mainFrame?.id;

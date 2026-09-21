@@ -15,7 +15,7 @@ import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
@@ -29,10 +29,10 @@ interface TimetableListProps {
 export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex }: TimetableListProps) {
   const portalManager = useModalPortal();
   const semester = useSemester();
-  const token = useTokenState();
-  const { data } = useTimetableFrameList(token, semester);
-  const { data: mySemester } = useSemesterCheck(token);
-  const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
+  const isLoggedIn = useIsLoggedIn();
+  const { data } = useTimetableFrameList(semester);
+  const { data: mySemester } = useSemesterCheck();
+  const { mutate: addTimetableFrame } = useAddTimetableFrame(isLoggedIn);
 
   const [focusFrame, setFocusFrame] = useState<TimetableFrameInfo | null>(null);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -41,7 +41,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
   const timetableFrameList = data.filter((frame) => !frame.is_main);
 
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
-    if (token) {
+    if (isLoggedIn) {
       setFocusFrame(frame);
       openModal();
     } else {
@@ -56,7 +56,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
   };
 
   const handleAddTimetableClick = () => {
-    if (token) {
+    if (isLoggedIn) {
       if (mySemester?.semesters.length === 0) {
         showToast('error', '학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {

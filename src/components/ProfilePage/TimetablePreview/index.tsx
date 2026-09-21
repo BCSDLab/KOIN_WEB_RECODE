@@ -7,7 +7,6 @@ import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOpt
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import { BACKGROUND_COLOR, BORDER_TOP_COLOR } from 'static/timetable';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 
@@ -70,8 +69,7 @@ export function LoggedInTimetablePreview() {
   const { updateSemester } = useSemesterAction();
   const semesterOptionList = useSemesterOptionList();
   const semester = useSemester();
-  const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
   const isClient = useMount();
 

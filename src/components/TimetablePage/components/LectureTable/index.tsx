@@ -7,7 +7,7 @@ import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
@@ -58,7 +58,7 @@ function LectureTable({
   const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { containerRef } = useOutsideClick({
     onOutsideClick: () => {
       updateTempLecture(null);
@@ -67,7 +67,7 @@ function LectureTable({
   });
 
   const handleEditLectureClick = (lectureIndex: number) => {
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
 
       return;
