@@ -121,7 +121,7 @@ function StoreDetailPage({ id }: Props) {
   const queryClient = useQueryClient();
   const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
-  const testValue = useABTestView('business_call', '');
+  const testValue = useABTestView('business_call');
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: parallelData } = useSuspenseQuery({

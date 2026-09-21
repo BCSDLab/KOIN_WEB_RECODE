@@ -46,7 +46,7 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
 function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
   const clubLinkCardData = getClubLinkCardData(hotClubInfo);
   const isLoggedIn = useIsLoggedIn();
-  const ABView = useABTestView('a_main_club_ui', '');
+  const ABView = useABTestView('a_main_club_ui');
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
