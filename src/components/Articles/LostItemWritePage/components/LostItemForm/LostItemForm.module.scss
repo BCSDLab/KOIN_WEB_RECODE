@@ -89,6 +89,10 @@
       height: 30px;
       font-size: 14px;
       line-height: 1.6;
+      border-radius: 999px;
+      border: 1px solid #b611f5;
+      background-color: #fff;
+      color: #b611f5;
     }
   }
 
@@ -106,6 +110,10 @@
           display: block;
           width: 20px;
           height: 20px;
+
+          path {
+            fill: #b611f5;
+          }
         }
       }
     }

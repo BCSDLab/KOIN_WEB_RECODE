@@ -85,7 +85,10 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list-mobile__title']}>
           <div className={styles['lost-item-list-mobile__titleMeta']}>
-            <span className={styles['lost-item-list-mobile__badge']} style={getCategoryBadgeStyle(article.category)}>
+            <span
+              className={styles['lost-item-list-mobile__badge']}
+              style={isMobile ? getCategoryBadgeStyle(article.category) : undefined}
+            >
               {article.category}
             </span>
             <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
@@ -144,7 +147,10 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list__title']}>
           <div className={styles['lost-item-list__titleMeta']}>
-            <span className={styles['lost-item-list__badge']} style={getCategoryBadgeStyle(article.category)}>
+            <span
+              className={styles['lost-item-list__badge']}
+              style={isMobile ? getCategoryBadgeStyle(article.category) : undefined}
+            >
               {article.category}
             </span>
             <div className={styles['lost-item-list__place']}>{article.found_place}</div>

@@ -194,7 +194,12 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
             <div className={styles.header__top}>
               <div className={styles.header__title}>
                 <span className={styles.header__type}>{isMobile ? mobileTypeLabel : typeLabel}</span>
-                <span className={styles.header__category} style={getCategoryBadgeStyle(category)}>{category}</span>
+                <span
+                  className={styles.header__category}
+                  style={isMobile ? getCategoryBadgeStyle(category) : undefined}
+                >
+                  {category}
+                </span>
                 <span className={styles.header__location}>
                   <span className={styles.header__place} title={found_place}>
                     {found_place}

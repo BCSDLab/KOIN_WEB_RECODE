@@ -54,6 +54,11 @@
     font-size: 14px;
     line-height: 1.6;
 
+    &:focus {
+      outline: 1.5px solid #b611f5;
+      outline-offset: -1.5px;
+    }
+
     @include media.media-breakpoint(mobile) {
       width: 100%;
       font-size: 12px;

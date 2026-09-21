@@ -15,6 +15,7 @@
   font-size: 18px;
   font-weight: 600;
   color: #175c8e;
+
   @include media.media-breakpoint(mobile) {
     color: #b611f5;
   }

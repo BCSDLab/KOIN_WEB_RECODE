@@ -44,6 +44,7 @@
     flex-direction: column;
     padding: 32px 0;
     gap: 8px;
+
     @include media.media-breakpoint(mobile) {
       padding: 0;
     }
@@ -55,6 +56,7 @@
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
+
     @include media.media-breakpoint(mobile) {
       font-size: 18px;
       font-weight: 500;
@@ -70,6 +72,7 @@
     line-height: 1.6;
     text-align: center;
     color: #727272;
+
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
       color: #8e8e8e;
@@ -98,6 +101,7 @@
       &:active {
         background-color: #cacaca;
       }
+
       @include media.media-breakpoint(mobile) {
         background-color: #fff;
         padding: 12px;
@@ -121,6 +125,7 @@
       color: #fff;
       text-align: center;
       cursor: pointer;
+
       @include media.media-breakpoint(mobile) {
         background-color: #b611f5;
         flex: 1;

@@ -44,6 +44,7 @@
     flex-shrink: 0;
     color: #10477a;
     font-weight: 600;
+
     @include media.media-breakpoint(mobile) {
       color: #b611f5;
     }

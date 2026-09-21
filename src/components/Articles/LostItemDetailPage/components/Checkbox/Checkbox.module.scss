@@ -73,6 +73,7 @@
 
   &__counter-etc {
     color: #8e8e8e;
+
     &--max {
       @include media.media-breakpoint(mobile) {
         color: #b611f5;
