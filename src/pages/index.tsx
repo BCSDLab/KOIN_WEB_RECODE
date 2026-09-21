@@ -21,7 +21,7 @@ import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import type { UserType } from 'utils/zustand/auth';
 
@@ -31,10 +31,11 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
   const isMobile = getDeviceClass(context.req.headers['user-agent']) === 'mobile';
 
+  // 백엔드가 쿠키 수명을 전담하므로(web-cookie-auth.md) SSR에서 Set-Cookie를 위조해
+  // 만료시키지 않는다 — 이 요청의 렌더에서만 로그아웃 상태로 취급한다.
   const resetAuthContext = () => {
     token = '';
     userType = '';
-    clearServerAuthCookies(context);
   };
 
   const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {
