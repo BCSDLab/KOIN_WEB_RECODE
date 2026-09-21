@@ -7,8 +7,8 @@ import { getCourseSearch, getPreCourseList } from './index';
 export const courseQueryKeys = {
   all: ['course'] as const,
   search: (params: CourseRequestParams) => [...courseQueryKeys.all, 'search', params] as const,
-  preCourseList: (timetableFrameId: number, token?: string | null) =>
-    [...courseQueryKeys.all, 'pre-course-list', timetableFrameId, getViewerScope(token)] as const,
+  preCourseList: (timetableFrameId: number, isLoggedIn?: boolean) =>
+    [...courseQueryKeys.all, 'pre-course-list', timetableFrameId, getViewerScope(isLoggedIn)] as const,
 };
 
 export const courseQueries = {
@@ -19,10 +19,10 @@ export const courseQueries = {
         getCourseSearch(params.name || undefined, params.department || undefined, params.year, params.semester),
     }),
 
-  preCourseList: (token: string, timetableFrameId: number) =>
+  preCourseList: (timetableFrameId: number, isLoggedIn?: boolean) =>
     queryOptions({
-      queryKey: courseQueryKeys.preCourseList(timetableFrameId, token),
-      queryFn: () => getPreCourseList(token, timetableFrameId),
+      queryKey: courseQueryKeys.preCourseList(timetableFrameId, isLoggedIn),
+      queryFn: () => getPreCourseList(timetableFrameId),
       gcTime: 0,
     }),
 };
