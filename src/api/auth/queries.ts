@@ -4,7 +4,9 @@ import { queryOptions } from '@tanstack/react-query';
 import type { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
 import { getGeneralUser, getUser, getUserAcademicInfo } from './index';
 
-type AuthUserType = 'STUDENT' | 'GENERAL';
+// 로그인 전에는 프론트가 회원 유형을 알 수 없어 빈 문자열이 들어올 수 있다 — 이 경우
+// queryFn이 token 부재로 먼저 null을 반환하므로 getUserInfo까지 도달하지 않는다.
+type AuthUserType = 'STUDENT' | 'GENERAL' | '';
 type AuthUserInfoResponse = UserResponse | GeneralUserResponse;
 
 const getUserInfo = (token: string, userType: AuthUserType): Promise<AuthUserInfoResponse> => {

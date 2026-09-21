@@ -8,13 +8,13 @@ export type UserType = 'STUDENT' | 'GENERAL';
 interface State {
   token: string;
   refreshToken: string;
-  userType: UserType;
+  userType: UserType | null;
 }
 
 interface Actions {
   setToken: (token: string) => void;
   setRefreshToken: (refreshToken: string) => void;
-  setUserType: (userType: UserType) => void;
+  setUserType: (userType: UserType | null) => void;
 }
 
 export const useTokenStore = create(
@@ -22,7 +22,7 @@ export const useTokenStore = create(
     (set) => ({
       token: getCookie(COOKIE_KEY.AUTH_TOKEN) || '',
       refreshToken: '',
-      userType: (getCookie(COOKIE_KEY.AUTH_USER_TYPE) || null) as UserType,
+      userType: (getCookie(COOKIE_KEY.AUTH_USER_TYPE) || null) as UserType | null,
       setToken: (token) => set({ token }),
       setRefreshToken: (refreshToken) => set({ refreshToken }),
       setUserType: (userType) => set({ userType }),
