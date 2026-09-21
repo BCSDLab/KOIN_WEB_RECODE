@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 
-export default function useRollbackLecture(token: string, timetableFrameId: number) {
+export default function useRollbackLecture(isLoggedIn: boolean, timetableFrameId: number) {
   const queryClient = useQueryClient();
-  const mutation = timetableMutations.rollbackLecture(queryClient, token, timetableFrameId);
+  const mutation = timetableMutations.rollbackLecture(queryClient, isLoggedIn, timetableFrameId);
 
   return useMutation({
     ...mutation,

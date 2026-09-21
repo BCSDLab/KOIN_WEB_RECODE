@@ -9,7 +9,7 @@ import type {
   TimetableRegularLecture,
 } from 'api/timetable/entity';
 import useToast from 'components/feedback/Toast/useToast';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import showToast from 'utils/ts/showToast';
 import { useLecturesAction } from 'utils/zustand/myLectures';
@@ -28,25 +28,25 @@ interface RemoveMyLectureProps {
 }
 
 export default function useTimetableMutation(timetableFrameId: number, semesterOverride?: Semester) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const storedSemester = useSemester();
   const semester = semesterOverride ?? storedSemester;
   const toast = useToast();
 
-  const { mutate: mutateAddWithServerCustom } = useAddTimetableLectureCustom(token);
-  const { mutate: mutateAddWithServerRegular } = useAddTimetableLectureRegular(token);
+  const { mutate: mutateAddWithServerCustom } = useAddTimetableLectureCustom(isLoggedIn);
+  const { mutate: mutateAddWithServerRegular } = useAddTimetableLectureRegular(isLoggedIn);
 
   const { mutate: mutateEditWithServerCustom } = useEditTimetableLectureCustom();
   const { mutate: mutateEditWithServerRegular } = useEditTimetableLectureRegular();
 
-  const { mutate: rollbackLecture } = useRollbackLecture(token, timetableFrameId);
+  const { mutate: rollbackLecture } = useRollbackLecture(isLoggedIn, timetableFrameId);
 
   const { addLecture: addLectureFromLocalStorage, removeLecture: removeLectureFromLocalStorage } = useLecturesAction();
 
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture();
 
   const addMyLecture = (clickedLecture: AddTimetableCustomLecture | Lecture) => {
-    if (token) {
+    if (isLoggedIn) {
       if ('name' in clickedLecture) {
         mutateAddWithServerRegular({
           timetable_frame_id: timetableFrameId,
@@ -98,7 +98,7 @@ export default function useTimetableMutation(timetableFrameId: number, semesterO
           course_type: editedLecture.course_type,
           general_education_area: editedLecture.general_education_area,
         },
-        token,
+        isLoggedIn,
       });
     } else {
       mutateEditWithServerCustom({
@@ -109,7 +109,7 @@ export default function useTimetableMutation(timetableFrameId: number, semesterO
           lecture_infos: editedLecture.lecture_infos,
           professor: editedLecture.professor,
         },
-        token,
+        isLoggedIn,
       });
     }
   };

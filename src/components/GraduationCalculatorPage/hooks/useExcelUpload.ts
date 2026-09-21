@@ -22,7 +22,7 @@ export function useExcelUpload() {
     mutate(formData as unknown as GraduationExcelUploadForPost, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
-        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(token) });
+        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(Boolean(token)) });
         showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
       },
       onError: () => {

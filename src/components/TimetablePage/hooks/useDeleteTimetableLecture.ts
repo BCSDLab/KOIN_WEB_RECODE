@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 
-export default function useDeleteTimetableLecture(authorization: string) {
+export default function useDeleteTimetableLecture() {
   const queryClient = useQueryClient();
-  const mutation = timetableMutations.deleteLecture(queryClient, authorization);
+  const mutation = timetableMutations.deleteLecture(queryClient);
 
   return useMutation({
     ...mutation,
