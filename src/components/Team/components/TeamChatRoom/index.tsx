@@ -119,7 +119,17 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       <PeopleIcon />
       {chatRoom.member_count}/{chatRoom.max_member_count}
     </span>
-  ) : undefined;
+const memberCount = isTeamRoom && (
+<span
+className={cn({
+[styles['chat-room__memberCount']]: true,
+[styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
+})}
+>
+<PeopleIcon />
+{chatRoom.member_count}/{chatRoom.max_member_count}
+</span>
+);
 
   const loadPreviousMessages = async () => {
     const container = messagesContainerRef.current;
