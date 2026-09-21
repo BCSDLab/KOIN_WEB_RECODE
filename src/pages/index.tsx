@@ -97,7 +97,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     const [banners, categoriesResponse] = await Promise.all([
       queryClient.fetchQuery(bannerQueries.categories()),
       queryClient.fetchQuery(storeQueries.categories()),
-      queryClient.prefetchQuery(articleQueries.list(token, '1')),
+      queryClient.prefetchQuery(articleQueries.list(Boolean(token), '1')),
       queryClient.prefetchQuery(timetableQueries.semesterInfo()),
       queryClient.prefetchQuery(articleQueries.lostItemStat()),
     ]);
