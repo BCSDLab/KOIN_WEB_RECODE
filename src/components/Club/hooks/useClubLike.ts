@@ -4,7 +4,6 @@ import { clubMutations } from 'api/club/mutations';
 import showToast from 'utils/ts/showToast';
 
 interface ClubLikeProps {
-  token: string;
   isLiked: boolean;
   clubId: number;
 }
