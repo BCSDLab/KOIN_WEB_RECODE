@@ -6,6 +6,11 @@ import type {
   NicknameDuplicateCheckResponse,
   RefreshRequest,
   RefreshResponse,
+  WebLoginRequest,
+  WebAuthResponse,
+  WebLogoutResponse,
+  WebCsrfTokenResponse,
+  UserAuthResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -113,6 +118,60 @@ export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public data: RefreshRequest) {}
+}
+
+// 웹 전용 HttpOnly 쿠키 인증 (KOIN_API_V2#2425). access·refresh·CSRF 쿠키는 서버가
+// Set-Cookie로 발급/삭제하므로 이 요청들은 자격 정보를 body/header로 되돌려주지 않는다.
+export class WebLogin<R extends WebAuthResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v2/web/auth/login';
+
+  response!: R;
+
+  constructor(public data: WebLoginRequest) {}
+}
+
+export class WebRefresh<R extends WebAuthResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v2/web/auth/refresh';
+
+  response!: R;
+
+  constructor() {}
+}
+
+export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v2/web/auth/logout';
+
+  response!: R;
+
+  constructor() {}
+}
+
+export class WebCsrf<R extends WebCsrfTokenResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v2/web/auth/csrf';
+
+  response!: R;
+
+  constructor() {}
+}
+
+// 쿠키(또는 Bearer) 인증으로 로그인 상태·회원 유형을 확인한다. 문서(web-cookie-auth.md)가
+// "웹의 로그인 상태 확인은 쿠키와 함께 /user/auth를 사용한다"고 명시한 기존 엔드포인트.
+export class UserAuth<R extends UserAuthResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/user/auth';
+
+  response!: R;
+
+  constructor() {}
 }
 
 export class User<R extends UserResponse> implements APIRequest<R> {

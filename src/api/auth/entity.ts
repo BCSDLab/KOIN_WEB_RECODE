@@ -76,6 +76,27 @@ export interface RefreshResponse extends APIResponse {
   refresh_token: string;
 }
 
+export interface WebLoginRequest {
+  login_id: string;
+  login_pw: string;
+  auto_login?: boolean;
+}
+
+export interface WebAuthResponse extends APIResponse {
+  user_type: 'STUDENT' | 'GENERAL';
+  csrf_token: string;
+}
+
+export type WebLogoutResponse = APIResponse;
+
+export interface WebCsrfTokenResponse extends APIResponse {
+  csrf_token: string;
+}
+
+export interface UserAuthResponse extends APIResponse {
+  user_type: 'STUDENT' | 'GENERAL';
+}
+
 export interface UserResponse extends APIResponse {
   id: number;
   login_id: string;
