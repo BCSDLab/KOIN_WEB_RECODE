@@ -26,10 +26,7 @@ function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
 }
 
-// access·refresh는 HttpOnly라 미들웨어에서도 값을 신뢰할 근거가 없다(서버가 검증해야 진짜 유효성을
-// 안다). CSRF 쿠키는 로그인·리프레시와 같은 시점에 발급되고 로그아웃 시 함께 삭제되므로, 여기서는
-// "세션이 있을 가능성"을 보는 낙관적 신호로만 쓴다. 실제 인증 실패는 API 401 응답과 그에 따른
-// 클라이언트 redirectToLogin()이 최종적으로 처리한다.
+// CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
 export function middleware(request: NextRequest) {
   const hasSession = Boolean(request.cookies.get(WEB_AUTH_CSRF_COOKIE_KEY)?.value);
 

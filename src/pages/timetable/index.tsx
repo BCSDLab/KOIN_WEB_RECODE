@@ -98,8 +98,6 @@ async function prefetchTimetableData(
     const isAuthError = isServerAuthError(error);
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
-    // 백엔드가 쿠키 수명을 전담하므로(web-cookie-auth.md) SSR에서 Set-Cookie를 위조해
-    // 만료시키지 않는다 — 이 요청의 렌더에서만 로그아웃 상태로 취급한다.
     setDefaultTimetableFrameList(
       queryClient,
       token,
