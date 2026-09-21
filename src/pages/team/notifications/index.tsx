@@ -14,15 +14,15 @@ import TeamNotificationHeader from 'components/Team/components/TeamNotificationH
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
 
 import styles from './TeamNotificationsPage.module.scss';
 
 export default function TeamNotificationsPage() {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
   const queryClient = useQueryClient();
   const isMounted = useMount();
@@ -31,8 +31,8 @@ export default function TeamNotificationsPage() {
   const pendingNotificationIdsRef = useRef(new Set<number>());
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    ...teamQueries.infiniteNotifications(token ?? ''),
-    enabled: !!token,
+    ...teamQueries.infiniteNotifications(isLoggedIn),
+    enabled: isLoggedIn,
   });
 
   const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
@@ -40,7 +40,7 @@ export default function TeamNotificationsPage() {
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
   const { mutate: markRead } = useMutation({
-    ...teamMutations.markNotificationRead(queryClient, token ?? ''),
+    ...teamMutations.markNotificationRead(queryClient),
     onMutate: (notificationId) => {
       pendingNotificationIdsRef.current.add(notificationId);
     },
@@ -50,11 +50,11 @@ export default function TeamNotificationsPage() {
     },
   });
   const { mutate: markAllRead, isPending: isMarkAllReadPending } = useMutation({
-    ...teamMutations.markAllNotificationsRead(queryClient, token ?? ''),
+    ...teamMutations.markAllNotificationsRead(queryClient),
     onError: () => showToast('error', '알림을 모두 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
   });
   const { mutate: deleteAllNotifications, isPending: isDeleteAllPending } = useMutation({
-    ...teamMutations.deleteAllNotifications(queryClient, token ?? ''),
+    ...teamMutations.deleteAllNotifications(queryClient),
     onError: () => showToast('error', '알림을 모두 삭제하지 못했어요. 다시 시도해 주세요.'),
   });
 

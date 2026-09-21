@@ -10,7 +10,7 @@ import toRecruitmentRequestBody from 'components/Team/NewTeamRecruitment/toRecru
 import type { TeamRecruitmentProgressType } from 'components/Team/NewTeamRecruitment/types';
 import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 import styles from './EditTeamRecruitment.module.scss';
@@ -49,16 +49,16 @@ const toFormValues = (recruitment: TeamRecruitmentDetailResponse): TeamRecruitme
 export default function EditTeamRecruitment() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.detail(recruitmentId, token),
+    ...teamQueries.detail(recruitmentId, isLoggedIn),
     enabled: router.isReady && isValidRecruitmentId,
   });
   const { mutateAsync: updateRecruitment } = useMutation(
-    teamMutations.updateRecruitment(queryClient, token ?? '', recruitmentId),
+    teamMutations.updateRecruitment(queryClient, recruitmentId, isLoggedIn),
   );
 
   const handleSubmit = async (values: TeamRecruitmentFormValues) => {

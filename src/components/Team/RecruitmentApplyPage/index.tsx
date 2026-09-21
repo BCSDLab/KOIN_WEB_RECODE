@@ -19,7 +19,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 import ApplicationStep from './Steps/ApplicationStep';
@@ -48,7 +48,7 @@ const toProfileRequestBody = (values: ApplicationFormValues): UpsertTeamRecruitm
 
 export default function RecruitmentApplyPage() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
   const { actionEventClick } = useLogger();
   const [pendingValues, setPendingValues] = useState<ApplicationFormValues | null>(null);
@@ -71,13 +71,13 @@ export default function RecruitmentApplyPage() {
     isLoading: isRecruitmentLoading,
     isError: isRecruitmentError,
   } = useQuery({
-    ...teamQueries.detail(recruitmentId, token),
+    ...teamQueries.detail(recruitmentId, isLoggedIn),
     enabled: router.isReady && isValidRecruitmentId,
   });
 
   const { data: existingProfile } = useQuery({
-    ...teamRecruitmentProfileQueries.me(token),
-    enabled: !!token,
+    ...teamRecruitmentProfileQueries.me(isLoggedIn),
+    enabled: isLoggedIn,
   });
 
   const canApply = !!recruitment && (recruitment.can_apply || recruitment.apply_block_reason === 'PROFILE_REQUIRED');
@@ -145,7 +145,7 @@ export default function RecruitmentApplyPage() {
 
   const { mutate: upsertProfile, isPending: isProfilePending } = useUpsertTeamRecruitmentProfileMutation();
   const { mutate: submitApplication, isPending: isApplicationPending } = useMutation(
-    teamMutations.submitApplication(queryClient, token, recruitmentId),
+    teamMutations.submitApplication(queryClient, recruitmentId),
   );
   const isSubmitting = isProfilePending || isApplicationPending;
 

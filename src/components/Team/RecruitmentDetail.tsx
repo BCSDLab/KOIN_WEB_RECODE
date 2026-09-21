@@ -19,7 +19,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 import styles from './RecruitmentDetail.module.scss';
@@ -280,18 +280,16 @@ export default function RecruitmentDetail() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.detail(recruitmentId, token),
+    ...teamQueries.detail(recruitmentId, isLoggedIn),
     enabled: router.isReady && isValidRecruitmentId,
   });
-  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(
-    teamMutations.deleteRecruitment(queryClient, token ?? ''),
-  );
+  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(teamMutations.deleteRecruitment(queryClient));
 
   const handleEdit = () => {
     logger.actionEventClick({

@@ -25,7 +25,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 
 import styles from './MyCreatedPostsPage.module.scss';
@@ -46,9 +46,9 @@ function CreatedPostsListSection({
   onChatClick,
 }: CreatedPostsListSectionProps) {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    teamQueries.infiniteMyCreated(token, requestParams),
+    teamQueries.infiniteMyCreated(isLoggedIn, requestParams),
   );
 
   const recruitments = data.pages.flatMap((page) => page.recruitments);
@@ -188,7 +188,6 @@ function CreatedPostsListSection({
 export default function MyCreatedPostsPage() {
   const logger = useLogger();
   const router = useRouter();
-  const token = useTokenState();
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
@@ -199,9 +198,7 @@ export default function MyCreatedPostsPage() {
   });
   const [closeTarget, setCloseTarget] = useState<MyCreatedTeamRecruitment | null>(null);
 
-  const { mutate: closeRecruitment, isPending: isClosing } = useMutation(
-    teamMutations.closeRecruitment(queryClient, token),
-  );
+  const { mutate: closeRecruitment, isPending: isClosing } = useMutation(teamMutations.closeRecruitment(queryClient));
 
   const handleApplyFilter = (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => {
     setRequestParams(filter);
