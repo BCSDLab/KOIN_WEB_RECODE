@@ -6,7 +6,30 @@
   cursor: pointer;
   gap: 8px;
 
-  &__input {
+  &__input,
+  &__input-etc {
+    @include media.desktop-only;
+
+    width: 16px;
+    height: 16px;
+  }
+
+  &__circle {
+    @include media.mobile-only;
+
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #cacaca;
+    border-radius: 999px;
+    background-color: #fff;
+  }
+
+  &__icon {
+    @include media.mobile-only;
+
+    flex-shrink: 0;
     width: 16px;
     height: 16px;
   }
@@ -46,6 +69,15 @@
 
   &__container-etc {
     width: 100%;
+  }
+
+  &__counter-etc {
+    color: #8e8e8e;
+    &--max {
+      @include media.media-breakpoint(mobile) {
+        color: #b611f5;
+      }
+    }
   }
 
   &__labelheader-etc {

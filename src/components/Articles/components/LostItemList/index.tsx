@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { LostItemArticleForGetDTO } from 'api/articles/entity';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
+import { getCategoryBadgeStyle } from 'components/Articles/utils/lostItemCategoryBadge';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
 import { useServerRequest } from 'utils/context/serverRequest';
@@ -25,14 +26,6 @@ const HEADER_ROW: HeaderRowInfo = {
   author: '작성자',
   date: '날짜',
   stat: '물품 상태',
-};
-
-const CATEGORY_BADGE_COLOR: Record<string, { background: string; text: string }> = {
-  전자제품: { background: '#e4f2ff', text: '#3a70e2' },
-  카드: { background: '#e5f5ec', text: '#0c9d61' },
-  지갑: { background: '#ead3fe', text: '#980ac9' },
-  신분증: { background: '#fff9ee', text: '#ffad0d' },
-  기타: { background: '#ffebee', text: '#f64c4c' },
 };
 
 export default function LostItemList({ articles }: LostItemListProps) {
@@ -92,17 +85,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list-mobile__title']}>
           <div className={styles['lost-item-list-mobile__titleMeta']}>
-            <span
-              className={styles['lost-item-list-mobile__badge']}
-              style={
-                CATEGORY_BADGE_COLOR[article.category]
-                  ? {
-                      backgroundColor: CATEGORY_BADGE_COLOR[article.category].background,
-                      color: CATEGORY_BADGE_COLOR[article.category].text,
-                    }
-                  : undefined
-              }
-            >
+            <span className={styles['lost-item-list-mobile__badge']} style={getCategoryBadgeStyle(article.category)}>
               {article.category}
             </span>
             <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
@@ -161,17 +144,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list__title']}>
           <div className={styles['lost-item-list__titleMeta']}>
-            <span
-              className={styles['lost-item-list__badge']}
-              style={
-                CATEGORY_BADGE_COLOR[article.category]
-                  ? {
-                      backgroundColor: CATEGORY_BADGE_COLOR[article.category].background,
-                      color: CATEGORY_BADGE_COLOR[article.category].text,
-                    }
-                  : undefined
-              }
-            >
+            <span className={styles['lost-item-list__badge']} style={getCategoryBadgeStyle(article.category)}>
               {article.category}
             </span>
             <div className={styles['lost-item-list__place']}>{article.found_place}</div>

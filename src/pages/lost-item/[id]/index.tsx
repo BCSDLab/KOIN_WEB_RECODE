@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 
@@ -17,6 +18,7 @@ import LostItemSEO from 'components/Articles/LostItemDetailPage/components/LostI
 import ReportModal from 'components/Articles/LostItemDetailPage/components/ReportModal';
 import usePostFoundLostItem from 'components/Articles/LostItemDetailPage/hooks/usePostFoundLostItem';
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
+import { getCategoryBadgeStyle } from 'components/Articles/utils/lostItemCategoryBadge';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
@@ -88,6 +90,14 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
   const [isFoundModalOpen, openFoundModal, closeFoundModal] = useBooleanState(false);
 
+  // 데스크톱에서 신고 모달을 연 채로 모바일 폭이 되면, 모바일 전용 신고 페이지로 넘긴다.
+  useEffect(() => {
+    if (isReportModalOpen && isMobile) {
+      closeReportModal();
+      navigate(ROUTES.LostItemReport({ id: String(articleId) }));
+    }
+  }, [isReportModalOpen, isMobile, closeReportModal, navigate, articleId]);
+
   const {
     category,
     found_place,
@@ -102,6 +112,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     organization,
   } = article;
   const typeLabel = type === 'FOUND' ? '[습득물]' : '[분실물]';
+  const mobileTypeLabel = type === 'FOUND' ? '습득물' : '분실물';
 
   const requireLogin = (
     modalTitle: string,
@@ -182,8 +193,8 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
           <div className={styles.header}>
             <div className={styles.header__top}>
               <div className={styles.header__title}>
-                <span className={styles.header__type}>{typeLabel}</span>
-                <span className={styles.header__category}>{category}</span>
+                <span className={styles.header__type}>{isMobile ? mobileTypeLabel : typeLabel}</span>
+                <span className={styles.header__category} style={getCategoryBadgeStyle(category)}>{category}</span>
                 <span className={styles.header__location}>
                   <span className={styles.header__place} title={found_place}>
                     {found_place}

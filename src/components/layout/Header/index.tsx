@@ -17,9 +17,7 @@ function Header() {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = [ROUTES.LostItems(), ROUTES.LostItemLost(), ROUTES.LostItemFound()].includes(
-    router.pathname,
-  );
+  const isLostItemLightRoute = router.pathname.startsWith(ROUTES.LostItems());
 
   return (
     <header

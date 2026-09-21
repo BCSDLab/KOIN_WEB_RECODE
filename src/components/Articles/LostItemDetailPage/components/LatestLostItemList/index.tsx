@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
+import { getCategoryBadgeStyle } from 'components/Articles/utils/lostItemCategoryBadge';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
@@ -33,7 +34,9 @@ function LatestLostItemList() {
               <div className={styles.item__content}>
                 <span className={styles.item__type}>{article.type === 'LOST' ? '분실물' : '습득물'}</span>
                 <div className={styles.item__info}>
-                  <span className={styles.item__category}>{article.category}</span>
+                  <span className={styles.item__category} style={getCategoryBadgeStyle(article.category)}>
+                    {article.category}
+                  </span>
                   <span className={styles.item__place}>{article.found_place}</span>
                   <span className={styles.item__date}>| {article.found_date}</span>
                 </div>

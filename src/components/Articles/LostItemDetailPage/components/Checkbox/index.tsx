@@ -1,5 +1,8 @@
 import { useState, useRef } from 'react';
 
+import { cn } from '@bcsdlab/utils';
+import CheckedIcon from 'assets/svg/mobile-checked-icon.svg';
+
 import styles from './Checkbox.module.scss';
 
 interface CheckboxProps {
@@ -42,9 +45,19 @@ export default function Checkbox({ value, label, subtitle, name, checked, onChan
                 onChange={onChange}
                 id={id}
               />
+              {checked ? (
+                <CheckedIcon className={styles.checkbox__icon} />
+              ) : (
+                <span className={styles.checkbox__circle} />
+              )}
               <div className={styles['checkbox__label-etc']}>{label}</div>
             </div>
-            <div>
+            <div
+              className={cn({
+                [styles['checkbox__counter-etc']]: true,
+                [styles['checkbox__counter-etc--max']]: text.length === 150,
+              })}
+            >
               {text.length}
               /150
             </div>
@@ -68,6 +81,7 @@ export default function Checkbox({ value, label, subtitle, name, checked, onChan
             onChange={onChange}
             id={id}
           />
+          {checked ? <CheckedIcon className={styles.checkbox__icon} /> : <span className={styles.checkbox__circle} />}
           <div className={styles.checkbox__content}>
             <div className={styles.checkbox__label}>{label}</div>
             <div className={styles.checkbox__subtitle}>{subtitle}</div>

@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .background {
   position: fixed;
   display: flex;
@@ -23,6 +25,12 @@
   border-radius: 16px;
   background: #fff;
 
+  @include media.media-breakpoint(mobile) {
+    width: 301px;
+    height: 208px;
+    padding: 24px 32px;
+  }
+
   &__icon {
     display: flex;
     justify-content: flex-end;
@@ -36,6 +44,9 @@
     flex-direction: column;
     padding: 32px 0;
     gap: 8px;
+    @include media.media-breakpoint(mobile) {
+      padding: 0;
+    }
   }
 
   &__title {
@@ -44,6 +55,12 @@
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+      font-weight: 500;
+      color: #4b4b4b;
+      line-height: 160%;
+    }
   }
 
   &__detail {
@@ -53,6 +70,10 @@
     line-height: 1.6;
     text-align: center;
     color: #727272;
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      color: #8e8e8e;
+    }
   }
 
   &__button {
@@ -60,6 +81,11 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    margin-top: 24px;
+
+    @include media.media-breakpoint(mobile) {
+      flex-direction: row-reverse;
+    }
 
     &--cancel {
       padding: 4px 12px;
@@ -71,6 +97,14 @@
 
       &:active {
         background-color: #cacaca;
+      }
+      @include media.media-breakpoint(mobile) {
+        background-color: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cacaca;
+        height: 50px;
+        flex: 1;
       }
     }
 
@@ -87,6 +121,11 @@
       color: #fff;
       text-align: center;
       cursor: pointer;
+      @include media.media-breakpoint(mobile) {
+        background-color: #b611f5;
+        flex: 1;
+        border-radius: 8px;
+      }
 
       &:active {
         background-color: #10477a;

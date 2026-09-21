@@ -1,8 +1,30 @@
+import { useEffect } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 
 import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
+import Layout from 'components/layout';
+import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMount from 'utils/hooks/state/useMount';
+import { getDeviceClass } from 'utils/ts/serverRequestContext';
 
 import styles from './ReportPage.module.scss';
+
+// 신고하기는 모바일 전용 화면이기에 데스크톱에서는 게시물 상세로 리다이랙션한다
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  const { id } = context.params ?? {};
+
+  if (!id || Array.isArray(id)) {
+    return { notFound: true };
+  }
+
+  if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
+    return { redirect: { destination: ROUTES.LostItemDetail({ id }), permanent: false } };
+  }
+
+  return { props: {} };
+};
 
 function ReportPage({ id }: { id: string }) {
   const router = useRouter();
@@ -21,6 +43,15 @@ function ReportPage({ id }: { id: string }) {
 export default function ReportPageWrapper() {
   const router = useRouter();
   const { id } = router.query;
+  const isMobile = useMediaQuery();
+  const mounted = useMount();
+
+  // 서버가 이미 걸러내지만, 창 크기를 줄여 모바일 폭이 된 뒤 넓히는 경우를 위해 남긴다.
+  useEffect(() => {
+    if (mounted && !isMobile && typeof id === 'string') {
+      router.replace(ROUTES.LostItemDetail({ id }));
+    }
+  }, [mounted, isMobile, id, router]);
 
   if (!id || Array.isArray(id)) {
     return null;
@@ -28,3 +59,5 @@ export default function ReportPageWrapper() {
 
   return <ReportPage id={id} />;
 }
+
+ReportPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
