@@ -4,15 +4,15 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 
 import styles from './LatestLostItemList.module.scss';
 
 function LatestLostItemList() {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    articleQueries.lostItemInfiniteList(token, {
+    articleQueries.lostItemInfiniteList(isLoggedIn, {
       limit: 10,
       sort: 'LATEST',
     }),

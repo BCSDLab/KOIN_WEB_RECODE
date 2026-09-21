@@ -10,8 +10,8 @@ import Pagination from 'components/Articles/components/Pagination';
 import { type LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { selectLostItemPaginationData } from 'components/Articles/utils/selectArticlesData';
 import { SSRLayout } from 'components/layout';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
@@ -34,7 +34,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const apiParams = toLostItemArticlesRequest(params);
 
-  await queryClient.prefetchQuery(articleQueries.lostItemList(token ?? '', apiParams));
+  await queryClient.prefetchQuery(articleQueries.lostItemList(Boolean(token), apiParams));
 
   if (!token) {
     cacheControl.enablePublicCache();
@@ -70,7 +70,7 @@ export default function LostItemArticleListPage({
   initialParams,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const params = useLostItemParams(initialParams);
   const apiParams = toLostItemArticlesRequest(params);
@@ -81,7 +81,7 @@ export default function LostItemArticleListPage({
   const isSearching = keyword.length > 0;
 
   const { data: lostItemData } = useQuery({
-    ...articleQueries.lostItemList(token, apiParams),
+    ...articleQueries.lostItemList(isLoggedIn, apiParams),
     placeholderData: keepPreviousData,
     select: selectLostItemPaginationData,
   });

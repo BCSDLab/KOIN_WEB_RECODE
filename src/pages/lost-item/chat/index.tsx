@@ -24,9 +24,9 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
 import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
@@ -34,7 +34,7 @@ import showToast from 'utils/ts/showToast';
 
 import styles from './LostItemChatPage.module.scss';
 
-function LostItemChatPage({ token }: { token: string }) {
+function LostItemChatPage() {
   const isMobile = useMediaQuery();
   const isOnline = useNetworkStatus();
   const { searchParams } = useParamsHandler();
@@ -60,7 +60,6 @@ function LostItemChatPage({ token }: { token: string }) {
     sendMessage: sendChatMessage,
     sendMessageAsync: sendChatMessageAsync,
   } = useChatPolling({
-    token,
     articleId: searchParams.get('articleId'),
     chatroomId: chatroomIdParam,
     isOnline,
@@ -269,12 +268,12 @@ function LostItemChatPage({ token }: { token: string }) {
 }
 
 export default function LostItemChatPageWrapper() {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const mounted = useMount();
 
-  if (!mounted || !token) return null;
+  if (!mounted || !isLoggedIn) return null;
 
-  return <LostItemChatPage token={token} />;
+  return <LostItemChatPage />;
 }
 
 LostItemChatPageWrapper.requireAuth = true;

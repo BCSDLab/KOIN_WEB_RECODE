@@ -23,7 +23,7 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
@@ -43,8 +43,8 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
 
   await Promise.all([
-    queryClient.prefetchQuery(articleQueries.lostItemDetail(token ?? '', articleId)),
-    queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(token ?? '', latestLostItemParams)),
+    queryClient.prefetchQuery(articleQueries.lostItemDetail(Boolean(token), articleId)),
+    queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(Boolean(token), latestLostItemParams)),
   ]);
 
   if (!token) {
@@ -69,9 +69,9 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const navigate = router.push;
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
-  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(isLoggedIn, articleId));
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { mutate: toggleFound, isPending: isToggling } = usePostFoundLostItem(articleId);
   const {
@@ -108,7 +108,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     onSuccess: () => void,
     logCallbacks?: { onLogin?: () => void; onCancel?: () => void },
   ) => {
-    if (token) {
+    if (isLoggedIn) {
       onSuccess();
 
       return;
