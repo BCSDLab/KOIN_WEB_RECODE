@@ -13,7 +13,7 @@ import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
+import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import { ServerRequestProvider } from 'utils/context/serverRequest';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
@@ -47,6 +47,9 @@ function AutoLogin() {
   return null;
 }
 
+// access·refresh는 HttpOnly라 브라우저 JS가 값을 읽을 수 없다. CSRF 쿠키(로그인·리프레시와
+// 같은 시점에 발급, 로그아웃 시 삭제)의 존재 여부를 "세션이 있을 가능성" 낙관적 신호로 쓴다.
+// 실제 인증 실패는 API 401 → apiClient의 redirectToLogin()이 최종적으로 처리한다.
 const useAuthGuard = (requireAuth: boolean | undefined) => {
   const router = useRouter();
   const isMount = useMount();
@@ -54,8 +57,10 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
   useEffect(() => {
     if (!requireAuth) return;
     if (!isMount) return;
-    const token = getCookie(COOKIE_KEY.AUTH_TOKEN);
-    if (!token) {
+
+    const hasSession = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
+
+    if (!hasSession) {
       // 하이드레이션 경합 방지
       router.replace(ROUTES.Main());
     }
