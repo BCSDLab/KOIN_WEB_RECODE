@@ -121,7 +121,6 @@ function StoreDetailPage({ id }: Props) {
   const queryClient = useQueryClient();
   const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
-  // AB 테스트 버킷팅은 이 도메인 정리 범위가 아니다 — 기존과 동일하게 인증 없이 호출한다.
   const testValue = useABTestView('business_call', '');
   const logger = useLogger();
   // waterfall 현상 막기
