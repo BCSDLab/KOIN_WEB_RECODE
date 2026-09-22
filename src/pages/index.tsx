@@ -87,7 +87,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     await Promise.all([
       queryClient.prefetchQuery(weatherQueries.info()),
       queryClient.prefetchQuery(
-        callvanQueries.list('', { statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
+        callvanQueries.list({ statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
       ),
       queryClient.prefetchQuery(storeQueries.counts()),
       queryClient.prefetchQuery(storeQueries.eventCount()),

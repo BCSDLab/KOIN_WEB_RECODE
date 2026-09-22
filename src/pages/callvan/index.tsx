@@ -10,8 +10,8 @@ import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
 import { type CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
@@ -58,12 +58,14 @@ export const getServerSideProps = withCacheControl<{
   const params = parseCallvanQuery(query, DEFAULT_PARAMS);
   const apiParams = toCallvanApiParams(params);
 
+  const isLoggedIn = Boolean(token);
+
   try {
     await Promise.all([
-      queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(token ?? '', apiParams)),
-      token
-        ? queryClient.prefetchQuery(callvanQueries.notifications(token))
-        : queryClient.setQueryData(callvanQueryKeys.notifications(''), []),
+      queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(apiParams, isLoggedIn)),
+      isLoggedIn
+        ? queryClient.prefetchQuery(callvanQueries.notifications(isLoggedIn))
+        : queryClient.setQueryData(callvanQueryKeys.notifications(isLoggedIn), []),
     ]);
   } catch (error) {
     console.error('[SSR] callvan prefetch failed:', error);
@@ -109,12 +111,12 @@ interface CallvanContentProps {
 
 function CallvanContent({ params }: CallvanContentProps) {
   const [searchTitle, setSearchTitle] = useState(params.title);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const apiParams = toCallvanApiParams(params);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    ...callvanQueries.infiniteList(token ?? '', apiParams),
-    enabled: !!token,
+    ...callvanQueries.infiniteList(apiParams, isLoggedIn),
+    enabled: isLoggedIn,
   });
 
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];

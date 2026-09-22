@@ -8,10 +8,12 @@ import CallvanRestrictionModal from 'components/Callvan/components/CallvanRestri
 import { isCallvanRestrictedError } from 'components/Callvan/utils/callvanRestriction';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
-export default function useCallvanRestrictionModal(token: string) {
+export default function useCallvanRestrictionModal() {
   const portalManager = useModalPortal();
   const queryClient = useQueryClient();
+  const isLoggedIn = useIsLoggedIn();
 
   const open = useCallback(
     (restriction: RestrictedCallvanResponse) => {
@@ -26,10 +28,10 @@ export default function useCallvanRestrictionModal(token: string) {
     async (error: unknown) => {
       if (!isCallvanRestrictedError(error)) return false;
 
-      if (!token) return false;
+      if (!isLoggedIn) return false;
 
       try {
-        const restriction = await queryClient.fetchQuery(callvanQueries.restriction(token));
+        const restriction = await queryClient.fetchQuery(callvanQueries.restriction(isLoggedIn));
         if (restriction.is_restricted) {
           open(restriction);
 
@@ -43,7 +45,7 @@ export default function useCallvanRestrictionModal(token: string) {
         return false;
       }
     },
-    [open, queryClient, token],
+    [open, queryClient, isLoggedIn],
   );
 
   return { openFromError };
