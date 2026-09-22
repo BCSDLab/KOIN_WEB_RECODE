@@ -1,3 +1,4 @@
+import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
 
 import type { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
@@ -24,7 +25,18 @@ export const authQueries = {
   userInfo: (token: string, userType: AuthUserType) =>
     queryOptions<AuthUserInfoResponse | null>({
       queryKey: authQueryKeys.userInfo(token, userType),
-      queryFn: () => (token ? getUserInfo(token, userType) : null),
+      queryFn: async () => {
+        if (!token) return null;
+
+        try {
+          return await getUserInfo(token, userType);
+        } catch (error) {
+          if (isKoinError(error) && (error.status === 401 || error.status === 403)) {
+            return null;
+          }
+          throw error;
+        }
+      },
     }),
 
   userAcademicInfo: (token: string) =>

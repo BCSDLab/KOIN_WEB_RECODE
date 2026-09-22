@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import useMount from 'utils/hooks/state/useMount';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
@@ -9,6 +10,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 type Completion = (typeof COMPLETION_STATUS)[keyof typeof COMPLETION_STATUS];
 
 export default function useUserInfoModal() {
+  const isMounted = useMount();
   const { token } = useTokenStore();
   const { data: userInfo } = useUser();
 
@@ -29,7 +31,8 @@ export default function useUserInfoModal() {
   const canOpen = !!token && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
 
   const isFirstTime = completion !== COMPLETION_STATUS.SKIPPED;
-  const isModalOpen = canOpen;
+  // 서버와 브라우저의 첫 렌더를 동일하게 유지한 뒤 로그인 상태에 따라 모달을 표시합니다.
+  const isModalOpen = isMounted && canOpen;
   const showCloseButton = canOpen ? !isFirstTime : false;
 
   useEffect(() => {

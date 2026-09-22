@@ -39,9 +39,9 @@ export default function MobileMealImage({ dining, handleImageClick }: MobileMeal
           className={styles.image__img}
           src={dining.image_url!}
           alt="식단 사진"
-          width={202}
-          height={135}
-          sizes="202px"
+          width={310}
+          height={222}
+          sizes="310px"
         />
       ) : (
         <NoPhoto />

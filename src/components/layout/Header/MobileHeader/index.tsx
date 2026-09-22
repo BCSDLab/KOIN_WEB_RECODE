@@ -10,7 +10,6 @@ import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -28,7 +27,6 @@ interface MobileHeaderProps {
 }
 
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
-  useResetHeaderButton();
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
@@ -97,6 +95,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
   const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute;
+  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
+  const useLightHeader = isClubRoute || isArticleRoute || isCafeteriaRoute;
 
   return (
     <>

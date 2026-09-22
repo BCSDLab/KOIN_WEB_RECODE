@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
-import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import MobileRemoveImageIcon from 'assets/svg/mobile-delete-button.svg';
+import PhotoIcon from 'assets/svg/common/chat-photo.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
