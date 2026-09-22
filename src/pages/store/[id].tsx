@@ -31,7 +31,7 @@ import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
@@ -119,13 +119,13 @@ function StoreDetailPage({ id }: Props) {
   const isMobile = useMediaQuery();
   const enterCategoryTimeRef = useRef<number | null>(null);
   const queryClient = useQueryClient();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
-  const testValue = useABTestView('business_call', token);
+  const testValue = useABTestView('business_call', '');
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: parallelData } = useSuspenseQuery({
-    queryKey: storeQueryKeys.detailPage(id, token),
+    queryKey: storeQueryKeys.detailPage(id, isLoggedIn),
     queryFn: () =>
       Promise.all([
         queryClient.fetchQuery(storeQueries.detail(id)),
@@ -135,7 +135,7 @@ function StoreDetailPage({ id }: Props) {
             shopId: Number(id),
             page: 1,
             sorter: 'LATEST',
-            token,
+            isLoggedIn,
           }),
         ),
       ]),
