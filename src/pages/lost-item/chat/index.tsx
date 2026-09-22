@@ -14,13 +14,16 @@ import PersonIcon from 'assets/svg/Articles/person.svg';
 import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import SendIcon from 'assets/svg/Articles/send.svg';
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
+import ChatHeaderMenu from 'components/Articles/LostItemChatPage/components/ChatHeaderMenu';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
 import {
   formatDate,
+  formatISODateToFullDate,
   formatISODateToMonthAndDay,
   formatISODateToTime,
 } from 'components/Articles/LostItemChatPage/utils/date';
+import Layout from 'components/layout';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -31,6 +34,8 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
 import styles from './LostItemChatPage.module.scss';
 
@@ -66,6 +71,20 @@ function LostItemChatPage({ token }: { token: string }) {
     isOnline,
     autoSelectFirst: showDetail,
   });
+
+  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
+  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+
+  useEffect(() => {
+    setCustomTitle(showDetail && chatroomDetail ? chatroomDetail.article_title : '쪽지');
+  }, [showDetail, chatroomDetail, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
+
+  useEffect(() => {
+    if (showDetail && chatroomDetail) {
+      setButtonContent(<ChatHeaderMenu onBlockClick={openDeleteModal} />);
+    }
+  }, [showDetail, chatroomDetail, openDeleteModal, setButtonContent]);
 
   const prevMessagesLengthRef = useRef(0);
 
@@ -222,8 +241,9 @@ function LostItemChatPage({ token }: { token: string }) {
 
                 <div className={styles['message-container']} ref={chatContainerRef}>
                   {(messages ?? []).reduce((acc, message, index) => {
-                    const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                    const prevDate = formatISODateToMonthAndDay((messages ?? [])[index - 1]?.timestamp);
+                    const formatMessageDate = isMobile ? formatISODateToFullDate : formatISODateToMonthAndDay;
+                    const messageDate = formatMessageDate(message.timestamp);
+                    const prevDate = formatMessageDate((messages ?? [])[index - 1]?.timestamp);
                     const messageTime = formatISODateToTime(message.timestamp);
                     const prevTime = formatISODateToTime((messages ?? [])[index - 1]?.timestamp);
                     const isSenderChanged = message.user_id !== (messages ?? [])[index - 1]?.user_id;
@@ -352,3 +372,4 @@ export default function LostItemChatPageWrapper() {
 }
 
 LostItemChatPageWrapper.requireAuth = true;
+LostItemChatPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;

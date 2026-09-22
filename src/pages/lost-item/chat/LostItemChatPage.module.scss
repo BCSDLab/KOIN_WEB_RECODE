@@ -209,7 +209,7 @@
   background: #fff;
 
   @include media.media-breakpoint(mobile) {
-    padding: 8px 12px;
+    display: none;
   }
 
   & > div:first-child {
@@ -285,6 +285,11 @@
   height: 45px;
   max-height: calc(45px * 4);
   overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &::placeholder {
     color: #727272;
@@ -323,6 +328,10 @@
   line-height: 160%; /* 22.4px */
   width: fit-content;
   margin: 16px auto;
+
+  @include media.media-breakpoint(mobile) {
+    color: #4b4b4b;
+  }
 }
 
 .message-item-container {
@@ -346,6 +355,10 @@
   gap: 10px;
   border-radius: 8px;
   background: #175c8e;
+
+  @include media.media-breakpoint(mobile) {
+    background-color: #b611f5;
+  }
 }
 
 .message-item--name {
@@ -378,6 +391,10 @@
   background: #f1f8ff;
   width: fit-content;
   max-width: 360px;
+
+  @include media.media-breakpoint(mobile) {
+    background-color: #f5ebff;
+  }
 
   &__right {
     display: block;
@@ -421,6 +438,18 @@
   font-weight: 500;
   border-radius: 4px;
   margin-bottom: 8px;
+}
+
+.message-button {
+  @include media.media-breakpoint(mobile) {
+    background-color: #fff;
+
+    svg {
+      path {
+        fill: #980ac9;
+      }
+    }
+  }
 }
 
 .message-button--disabled {

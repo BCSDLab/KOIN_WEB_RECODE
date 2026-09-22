@@ -34,6 +34,12 @@ export const formatISODateToMonthAndDay = (timestamp: string): string => {
   return `${(date.getMonth() + 1).toString().padStart(2, '0')}월 ${date.getDate().toString().padStart(2, '0')}일`;
 };
 
+export const formatISODateToFullDate = (timestamp: string): string => {
+  const date = new Date(timestamp);
+
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+};
+
 export const formatISODateToTime = (timestamp: string): string => {
   const date = new Date(timestamp);
 

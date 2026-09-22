@@ -46,7 +46,7 @@ function LatestLostItemList() {
                   <span className={styles.item__date}>| {article.found_date}</span>
                 </div>
               </div>
-              <FoundChip isFound={article.is_found} size="small" />
+              <FoundChip isFound={article.is_found} size="xs" />
             </Link>
           ))
         )}

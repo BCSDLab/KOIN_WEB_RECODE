@@ -8,11 +8,13 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './ReportPage.module.scss';
 
 // 신고하기는 모바일 전용 화면이기에 데스크톱에서는 게시물 상세로 리다이랙션한다
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+// eslint-disable-next-line @typescript-eslint/require-await -- withCacheControl 타입이 Promise 반환을 요구하지만 이 핸들러는 동기 리다이렉트 판단만 한다
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext) => {
   const { id } = context.params ?? {};
 
   if (!id || Array.isArray(id)) {
@@ -24,7 +26,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   }
 
   return { props: {} };
-};
+});
 
 function ReportPage({ id }: { id: string }) {
   const router = useRouter();

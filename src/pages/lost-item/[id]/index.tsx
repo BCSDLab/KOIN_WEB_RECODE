@@ -208,7 +208,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
                   <span className={styles.header__dateText}>{found_date}</span>
                 </span>
               </div>
-              <FoundChip isFound={is_found} />
+              <FoundChip isFound={is_found} size={isMobile ? 'xs' : 'large'} />
             </div>
             <div className={styles.header__info}>
               <div className={styles.header__author}>{author}</div>

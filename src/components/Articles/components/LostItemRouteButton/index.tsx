@@ -147,13 +147,8 @@ export default function LostItemRouteButton() {
       return (
         <>
           <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
-            {!isMobile && (
-              <PencilIcon />
-            )}
             글쓰기
-            {isMobile && (
-              <PencilIcon />
-            )}
+            <PencilIcon />
           </button>
 
           <LostItemWriteBottomSheet
