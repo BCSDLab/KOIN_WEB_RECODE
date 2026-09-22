@@ -14,13 +14,8 @@ import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
 import ChatHeaderMenu from 'components/Articles/LostItemChatPage/components/ChatHeaderMenu';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
-import {
-  formatDate,
-  formatISODateToFullDate,
-  formatISODateToMonthAndDay,
-  formatISODateToTime,
-} from 'components/Articles/LostItemChatPage/utils/date';
 import Layout from 'components/layout';
+import {
   ChatLayout,
   ChatMessageInput,
   ChatMessageList,

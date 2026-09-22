@@ -94,9 +94,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const isLostItemCustomTitleRoute =
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute;
   const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isCafeteriaRoute;
+  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
 
   return (
     <>
