@@ -6,7 +6,6 @@ import SemesterListbox from 'components/TimetablePage/components/SemesterList';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
@@ -21,8 +20,7 @@ interface MobilePageProps {
 function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
   const logger = useLogger();
   const semester = useSemester();
-  const token = useTokenState();
-  const { data } = useTimetableFrameList(token, semester);
+  const { data } = useTimetableFrameList(semester);
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

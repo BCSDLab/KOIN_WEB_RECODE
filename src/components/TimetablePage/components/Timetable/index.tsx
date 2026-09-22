@@ -10,7 +10,7 @@ import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMut
 import ROUTES from 'static/routes';
 import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
@@ -50,12 +50,12 @@ function Timetable({
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const { timeString, setTimeString } = useTimeString();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const modifyType = router.query.type;
 
   const handleEditLectureClick = (lectureIndex: number) => {
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
 
       return;

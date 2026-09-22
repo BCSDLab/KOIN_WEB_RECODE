@@ -15,7 +15,7 @@ import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOpt
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
@@ -27,7 +27,7 @@ import styles from './SemesterList.module.scss';
 function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const logger = useLogger();
   const semester = useSemester();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
   const semesterOptionList = useSemesterOptionList();
   const { updateSemester } = useSemesterAction();
@@ -39,7 +39,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(isLoggedIn, selectedSemester);
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -64,13 +64,13 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     closePopup();
   };
 
-  const { mutate: addSemester } = useAddSemester(token);
-  const { data: mySemester } = useSemesterCheck(token);
+  const { mutate: addSemester } = useAddSemester(isLoggedIn);
+  const { data: mySemester } = useSemesterCheck();
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if (token) {
+    if (isLoggedIn) {
       setModalOpenTrue();
       portalManager.open((portalOption: Portal) => (
         <AddSemesterModal
@@ -101,7 +101,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
 
   const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: Semester) => {
     e.stopPropagation();
-    if (token) {
+    if (isLoggedIn) {
       setSelectedSemester(semes);
       setModalOpenTrue();
       portalManager.open((portalOption: Portal) => (

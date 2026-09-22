@@ -37,14 +37,14 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   };
 
   const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {
-    queryClient.setQueryData(timetableQueryKeys.frameList(semester, token), createDefaultTimetableFrameList());
+    queryClient.setQueryData(timetableQueryKeys.frameList(semester, Boolean(token)), createDefaultTimetableFrameList());
   };
 
   const fetchMySemester = async () => {
     if (!token || userType !== 'STUDENT') return null;
 
     try {
-      return await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
+      return await queryClient.fetchQuery(timetableQueries.mySemester(Boolean(token), { userType }));
     } catch (error) {
       if (isServerAuthError(error)) {
         resetAuthContext();
@@ -111,12 +111,12 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
       } else {
         try {
           const timetableFrameList = await queryClient.fetchQuery(
-            timetableQueries.frameList(token, userSemester, { userType }),
+            timetableQueries.frameList(Boolean(token), userSemester, { userType }),
           );
           const mainFrame = timetableFrameList.find((frame) => frame.is_main);
           const activeMainFrameId = mainFrame?.id;
           if (typeof activeMainFrameId === 'number') {
-            await queryClient.prefetchQuery(timetableQueries.lectureInfo(token, activeMainFrameId));
+            await queryClient.prefetchQuery(timetableQueries.lectureInfo(Boolean(token), activeMainFrameId));
           }
         } catch (error) {
           if (isServerAuthError(error)) {

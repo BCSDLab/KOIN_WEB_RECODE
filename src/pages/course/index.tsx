@@ -19,7 +19,6 @@ import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFr
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { setRedirectPath } from 'utils/ts/auth';
 import { useSemester } from 'utils/zustand/semester';
@@ -97,7 +96,6 @@ function PreCoursesTableContent({ isLoggedIn, timetableFrameId, onAddCourse }: P
 
 function CoursePage() {
   const router = useRouter();
-  const token = useTokenState();
   const isLoggedIn = useIsLoggedIn();
   const semester = useSemester();
   const currentSemester = getRecentSemester();
@@ -107,7 +105,7 @@ function CoursePage() {
     initialSemester: semester.term,
   });
 
-  const { data: timetableFrameList } = useTimetableFrameList(token, currentSemester);
+  const { data: timetableFrameList } = useTimetableFrameList(currentSemester);
   const mainFrame = timetableFrameList?.find((frame) => frame.is_main);
   const timetableFrameId = mainFrame?.id ?? 0;
   const hasValidFrameId = !!mainFrame?.id;

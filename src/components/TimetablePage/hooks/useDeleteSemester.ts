@@ -5,11 +5,11 @@ import { timetableMutations } from 'api/timetable/mutations';
 import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 
-export default function useDeleteSemester(token: string, semester: Semester) {
+export default function useDeleteSemester(isLoggedIn: boolean, semester: Semester) {
   const queryClient = useQueryClient();
   const slicedSemester = `${semester.year} ${semester.term}`;
   const toast = useToast();
-  const mutation = timetableMutations.deleteSemester(queryClient, token, semester);
+  const mutation = timetableMutations.deleteSemester(queryClient, isLoggedIn, semester);
 
   return useMutation({
     ...mutation,

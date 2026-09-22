@@ -51,7 +51,7 @@ export default function SemesterLectureListModal({
   const semesters = useAllSemesters();
   const token = useTokenState();
   const isLoggedIn = useIsLoggedIn();
-  const allMyLectures = useAllMyLectures(token);
+  const allMyLectures = useAllMyLectures();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({

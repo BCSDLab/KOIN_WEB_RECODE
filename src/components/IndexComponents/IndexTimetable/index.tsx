@@ -8,7 +8,6 @@ import TimetableGridPlaceholder from 'components/TimetablePage/components/Timeta
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 
 import styles from './IndexTimetable.module.scss';
 
@@ -26,8 +25,7 @@ interface IndexTimeTableProps {
 export default function IndexTimeTable({ serverSemester }: IndexTimeTableProps) {
   const logger = useLogger();
   const semester = serverSemester;
-  const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
   const hasValidCurrentFrameId = isValidTimetableFrameId(currentFrameId);

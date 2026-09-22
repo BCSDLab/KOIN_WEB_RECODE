@@ -20,7 +20,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { useSemester } from 'utils/zustand/semester';
@@ -32,11 +31,10 @@ const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/co
 });
 
 function GraduationCalculatorComponent() {
-  const token = useTokenState();
   const isLoggedIn = useIsLoggedIn();
   const semester = useSemester();
   const { lock, unlock } = useScrollLock(false);
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts();

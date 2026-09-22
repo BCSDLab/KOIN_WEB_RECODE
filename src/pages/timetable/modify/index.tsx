@@ -19,15 +19,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE];
   const timetableFrameId = Number(query.id);
   let currentSemester = getSemesterFromQuery(query.year, query.term) ?? getRecentSemester();
+  const isLoggedIn = Boolean(token);
 
   if (token && userType === 'STUDENT') {
     try {
-      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
+      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
       const userSemester = mySemesterData?.semesters?.[0];
       const semester = resolveTimetableSemester(query.year, query.term, userSemester);
       currentSemester = semester ?? currentSemester;
 
-      const prefetchPromises = [queryClient.prefetchQuery(timetableQueries.lectureInfo(token, timetableFrameId))];
+      const prefetchPromises = [
+        queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, timetableFrameId)),
+      ];
 
       if (semester) {
         prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureList(semester)));

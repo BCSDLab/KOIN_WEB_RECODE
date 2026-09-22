@@ -4,10 +4,10 @@ import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
-export default function useAddTimetableFrame(token: string) {
+export default function useAddTimetableFrame(isLoggedIn: boolean) {
   const queryClient = useQueryClient();
   const semester = useSemester();
-  const mutation = timetableMutations.addFrame(queryClient, token, semester);
+  const mutation = timetableMutations.addFrame(queryClient, isLoggedIn, semester);
 
   return useMutation({
     ...mutation,
