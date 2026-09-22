@@ -21,7 +21,12 @@ export default function ChatHeaderMenu({ onBlockClick }: ChatHeaderMenuProps) {
 
   return (
     <div className={styles['header-menu']} ref={containerRef}>
-      <button type="button" className={styles['header-menu__trigger']} aria-label="더보기" onClick={() => setIsOpen((prev) => !prev)}>
+      <button
+        type="button"
+        className={styles['header-menu__trigger']}
+        aria-label="더보기"
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
         <KebabIcon />
       </button>
       {isOpen && (
