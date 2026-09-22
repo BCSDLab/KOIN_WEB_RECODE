@@ -16,10 +16,7 @@ export class DiningLikePatcher<R extends APIResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    diningId: number,
-    public authorization: string,
-  ) {
+  constructor(diningId: number) {
     this.params = {
       diningId,
     };
@@ -39,10 +36,7 @@ export class CancelDiningLikePatcher<R extends APIResponse> implements APIReques
 
   auth = true;
 
-  constructor(
-    diningId: number,
-    public authorization: string,
-  ) {
+  constructor(diningId: number) {
     this.params = {
       diningId,
     };
@@ -60,10 +54,7 @@ export default class DiningResponse<R extends DiningResponseType> implements API
 
   auth = false;
 
-  constructor(
-    date: string,
-    public authorization?: string,
-  ) {
+  constructor(date: string) {
     this.params = {
       date,
     };

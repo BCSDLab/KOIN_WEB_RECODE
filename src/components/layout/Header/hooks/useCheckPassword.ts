@@ -4,14 +4,12 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPassword } from 'api/auth';
 import type { CheckPasswordRequest } from 'api/auth/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const useCheckPassword = () => {
-  const token = useTokenState();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, error } = useMutation({
-    mutationFn: (password: CheckPasswordRequest) => checkPassword(token, password),
+    mutationFn: (password: CheckPasswordRequest) => checkPassword(password),
     onSuccess: () => {
       showToast('success', '비밀번호 확인이 완료되었습니다.');
     },

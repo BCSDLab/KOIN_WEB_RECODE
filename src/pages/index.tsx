@@ -73,7 +73,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   ]);
 
   if (token) {
-    await queryClient.prefetchQuery(authQueries.userInfo(token, userType as UserType));
+    await queryClient.prefetchQuery(authQueries.userInfo(true, userType as UserType));
   }
 
   const userSemester = mySemester?.semesters?.[0];
