@@ -3,9 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { LostItemArticleForGetDTO } from 'api/articles/entity';
+import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
-import { getCategoryBadgeStyle } from 'components/Articles/utils/lostItemCategoryBadge';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
 import { useServerRequest } from 'utils/context/serverRequest';
@@ -85,12 +85,11 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list-mobile__title']}>
           <div className={styles['lost-item-list-mobile__titleMeta']}>
-            <span
+            <CategoryBadge
+              category={article.category}
+              isMobile={isMobile}
               className={styles['lost-item-list-mobile__badge']}
-              style={isMobile ? getCategoryBadgeStyle(article.category) : undefined}
-            >
-              {article.category}
-            </span>
+            />
             <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
             <div className={styles['lost-item-list-mobile__line']}>|</div>
             <div className={styles['lost-item-list-mobile__foundDate']}>{article.found_date}</div>
@@ -147,12 +146,11 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list__title']}>
           <div className={styles['lost-item-list__titleMeta']}>
-            <span
+            <CategoryBadge
+              category={article.category}
+              isMobile={isMobile}
               className={styles['lost-item-list__badge']}
-              style={isMobile ? getCategoryBadgeStyle(article.category) : undefined}
-            >
-              {article.category}
-            </span>
+            />
             <div className={styles['lost-item-list__place']}>{article.found_place}</div>
             <div>|</div>
             <div className={styles['lost-item-list__foundDate']}>{article.found_date}</div>

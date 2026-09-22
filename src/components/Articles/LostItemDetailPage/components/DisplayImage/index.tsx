@@ -14,9 +14,10 @@ interface DisplayImageProps {
   images: LostItemImageDTO[];
 }
 
-export default function DisplayImage({ images }: DisplayImageProps) {
+export default function DisplayImage({ images: rawImages }: DisplayImageProps) {
+  const images = rawImages.filter((img) => Boolean(img.image_url));
   const [image, setImage] = useState(images[0]);
-  const imageIndex = images.findIndex((img) => img.id === image.id);
+  const imageIndex = image ? images.findIndex((img) => img.id === image.id) : -1;
 
   const handleArrowButtonClick = (diff: 1 | -1) => {
     setImage(images[(imageIndex + diff) % images.length]);
@@ -26,7 +27,14 @@ export default function DisplayImage({ images }: DisplayImageProps) {
     <div className={styles.container}>
       {images.length > 0 && (
         <div className={styles.images}>
-          <Image className={styles.images__image} src={image.image_url} alt="분실물 이미지" width={586} height={527} />
+          <Image
+            className={styles.images__image}
+            src={image.image_url}
+            alt="분실물 이미지"
+            width={586}
+            height={527}
+            priority
+          />
           <button
             className={cn({
               [styles.images__button]: true,

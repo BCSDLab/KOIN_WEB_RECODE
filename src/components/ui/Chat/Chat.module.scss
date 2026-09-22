@@ -154,6 +154,10 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      color: #4b4b4b;
+    }
   }
 
   &__item {
@@ -288,6 +292,14 @@
       fill: #10477a;
     }
 
+    @include media.media-breakpoint(mobile) {
+      background-color: #fff;
+
+      svg path {
+        fill: #980ac9;
+      }
+    }
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -302,9 +314,14 @@
   }
 
   &__image-button {
-    svg {
-      width: 20px;
-      height: 20px;
+    svg path {
+      stroke: #10477a;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      svg path {
+        stroke: #980ac9;
+      }
     }
   }
 

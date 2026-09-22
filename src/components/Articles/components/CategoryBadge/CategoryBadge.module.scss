@@ -1,0 +1,29 @@
+// 소비하는 쪽 레이아웃 클래스에도 기본 background-color/color가 박혀있는 경우가 있어
+// (`.badge`만으로는 특이도가 같아 CSS 모듈 번들 순서에 따라 승패가 갈린다),
+// `.badge`와 modifier 클래스를 함께 요구해 특이도를 높여 항상 이기게 한다.
+.badge {
+  &.badge--electronics {
+    background-color: #e4f2ff;
+    color: #3a70e2;
+  }
+
+  &.badge--card {
+    background-color: #e5f5ec;
+    color: #0c9d61;
+  }
+
+  &.badge--wallet {
+    background-color: #ead3fe;
+    color: #980ac9;
+  }
+
+  &.badge--id {
+    background-color: #fff9ee;
+    color: #ffad0d;
+  }
+
+  &.badge--etc {
+    background-color: #ffebee;
+    color: #f64c4c;
+  }
+}

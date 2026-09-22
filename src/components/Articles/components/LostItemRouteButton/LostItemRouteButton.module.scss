@@ -23,6 +23,7 @@
     svg {
       width: 18px;
       height: 18px;
+      color: #10477a;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -41,8 +42,8 @@
       line-height: 160%;
       color: #fff;
 
-      svg path {
-        fill: #fff;
+      svg {
+        color: #fff;
       }
     }
   }

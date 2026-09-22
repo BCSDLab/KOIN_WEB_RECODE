@@ -6,6 +6,7 @@ import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { articleQueries } from 'api/articles/queries';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import ReportIcon from 'assets/svg/Articles/report.svg';
+import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import HotArticles from 'components/Articles/components/HotArticle';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import DeleteModal from 'components/Articles/LostItemDetailPage/components/DeleteModal';
@@ -18,7 +19,6 @@ import LostItemSEO from 'components/Articles/LostItemDetailPage/components/LostI
 import ReportModal from 'components/Articles/LostItemDetailPage/components/ReportModal';
 import usePostFoundLostItem from 'components/Articles/LostItemDetailPage/hooks/usePostFoundLostItem';
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
-import { getCategoryBadgeStyle } from 'components/Articles/utils/lostItemCategoryBadge';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
@@ -194,12 +194,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
             <div className={styles.header__top}>
               <div className={styles.header__title}>
                 <span className={styles.header__type}>{isMobile ? mobileTypeLabel : typeLabel}</span>
-                <span
-                  className={styles.header__category}
-                  style={isMobile ? getCategoryBadgeStyle(category) : undefined}
-                >
-                  {category}
-                </span>
+                <CategoryBadge category={category} isMobile={isMobile} className={styles.header__category} />
                 <span className={styles.header__location}>
                   <span className={styles.header__place} title={found_place}>
                     {found_place}
@@ -216,7 +211,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
             </div>
           </div>
           <div className={styles.article}>
-            <DisplayImage images={images} />
+            <DisplayImage key={articleId} images={images} />
             <div className={styles.article__content}>{content}</div>
             {organization && (
               <div className={styles.article__guide}>

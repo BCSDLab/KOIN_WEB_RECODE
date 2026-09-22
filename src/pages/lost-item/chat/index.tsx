@@ -73,6 +73,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
 
   useEffect(() => {
     setCustomTitle(showDetail && chatroomDetail ? chatroomDetail.article_title : '쪽지');
@@ -83,7 +84,9 @@ function LostItemChatPage({ token }: { token: string }) {
     if (showDetail && chatroomDetail) {
       setButtonContent(<ChatHeaderMenu onBlockClick={openDeleteModal} />);
     }
-  }, [showDetail, chatroomDetail, openDeleteModal, setButtonContent]);
+
+    return resetButtonContent;
+  }, [showDetail, chatroomDetail, openDeleteModal, setButtonContent, resetButtonContent]);
 
   const prevMessagesLengthRef = useRef(0);
 
