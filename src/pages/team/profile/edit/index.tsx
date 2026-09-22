@@ -18,7 +18,7 @@ export const getServerSideProps = withCacheControl<{
   const { token } = parseServerSideParams(context);
 
   if (token) {
-    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(token));
+    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(Boolean(token)));
   }
 
   return {

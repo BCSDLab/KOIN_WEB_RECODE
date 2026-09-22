@@ -10,8 +10,6 @@ export class TeamRecruitmentProfileDetail<R extends TeamRecruitmentProfileRespon
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class UpsertTeamRecruitmentProfile<R extends TeamRecruitmentProfileResponse> implements APIRequest<R> {
@@ -25,10 +23,7 @@ export class UpsertTeamRecruitmentProfile<R extends TeamRecruitmentProfileRespon
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    data: UpsertTeamRecruitmentProfileRequest,
-  ) {
+  constructor(data: UpsertTeamRecruitmentProfileRequest) {
     this.data = data;
   }
 }

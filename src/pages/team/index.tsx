@@ -25,7 +25,7 @@ import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
@@ -76,7 +76,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const { token } = parseServerSideParams(context);
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, token));
+  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, Boolean(token)));
 
   if (!token) {
     cacheControl.enablePublicCache();
@@ -91,7 +91,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
 export default function TeamListPage() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
@@ -103,7 +103,7 @@ export default function TeamListPage() {
   const requestParams = createRequestParams(appliedFilter, searchKeyword);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-    teamQueries.infiniteList(requestParams, token),
+    teamQueries.infiniteList(requestParams, isLoggedIn),
   );
 
   const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
@@ -148,7 +148,7 @@ export default function TeamListPage() {
       value: '프로필',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       setRedirectPath(router.asPath);
       await router.push(ROUTES.Auth());
       showToast('warning', '로그인이 필요한 기능입니다.');
@@ -165,7 +165,7 @@ export default function TeamListPage() {
       value: '모집하기',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       redirectToLogin(router.asPath);
 
       return;

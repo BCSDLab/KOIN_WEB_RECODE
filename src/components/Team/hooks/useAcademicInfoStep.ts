@@ -4,6 +4,7 @@ import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
 import { useFormContext } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -21,6 +22,7 @@ interface AcademicInfoLoggingTitle {
 
 export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTitle, onSaved: () => void) {
   const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { actionEventClick } = useLogger();
   const { setValue } = useFormContext<AcademicInfoFormValues>();
 
@@ -58,7 +60,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
       value: '회원정보 불러오기',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('warning', '로그인 후 이용해주세요.');
 
       return;
@@ -85,7 +87,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   });
 
   const handleSaveAcademicInfo = (data: { department: string; studentNumber: string }) => {
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('warning', '로그인 후 이용해주세요.');
 
       return;
