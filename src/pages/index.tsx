@@ -21,7 +21,7 @@ import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import type { UserType } from 'utils/zustand/auth';
 
@@ -34,7 +34,6 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const resetAuthContext = () => {
     token = '';
     userType = '';
-    clearServerAuthCookies(context);
   };
 
   const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {

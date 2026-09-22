@@ -10,7 +10,7 @@ import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
@@ -38,7 +38,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) {
         throw error;
       }
-      if (isServerAuthError(error)) clearServerAuthCookies(context);
     }
   }
 

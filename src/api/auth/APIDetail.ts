@@ -169,7 +169,8 @@ export class UserAuth<R extends UserAuthResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor() {}
+  // SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
+  constructor(public headers?: Record<string, string>) {}
 }
 
 export class User<R extends UserResponse> implements APIRequest<R> {

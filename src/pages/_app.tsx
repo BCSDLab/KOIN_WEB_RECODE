@@ -13,7 +13,7 @@ import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
+import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import { ServerRequestProvider } from 'utils/context/serverRequest';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
@@ -47,6 +47,7 @@ function AutoLogin() {
   return null;
 }
 
+// CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
 const useAuthGuard = (requireAuth: boolean | undefined) => {
   const router = useRouter();
   const isMount = useMount();
@@ -54,8 +55,10 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
   useEffect(() => {
     if (!requireAuth) return;
     if (!isMount) return;
-    const token = getCookie(COOKIE_KEY.AUTH_TOKEN);
-    if (!token) {
+
+    const hasSession = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
+
+    if (!hasSession) {
       // 하이드레이션 경합 방지
       router.replace(ROUTES.Main());
     }

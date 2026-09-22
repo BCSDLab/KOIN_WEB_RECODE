@@ -1,22 +1,19 @@
 import type { GetServerSidePropsContext } from 'next';
 
-import { COOKIE_KEY } from 'static/url';
+import { UserAuth } from 'api/auth/APIDetail';
+import { KOIN_BASE_URL } from 'static/url';
+import APIClient from 'utils/ts/apiClient';
+import type { UserType } from 'utils/zustand/auth';
 
 export type DeviceClass = 'mobile' | 'desktop';
 
 export interface ServerRequestContext {
   device: DeviceClass;
   isLoggedIn: boolean;
-  /**
-   * SSR 렌더용 토큰. `useTokenStore`는 서버에서 쿠키를 못 읽어 `''`을 반환하므로,
-   * 토큰이 쿼리 키에 들어가는 훅들이 서버에서 데이터를 찾지 못한다.
-   *
-   * 로그인 응답은 `withCacheControl`이 `private, no-store`로 고정하고 nginx도
-   * `proxy_no_cache $skip_cache`로 저장하지 않으므로 공유 캐시에 실리지 않는다.
-   */
+  /** access는 HttpOnly라 항상 `''` — `useTokenState` 등 레거시 폴백 호환용으로만 남겨뒀다(Phase 3에서 제거). */
   token: string;
-  /** 토큰과 함께 요청 엔드포인트를 결정한다. 빠뜨리면 잘못된 엔드포인트로 403이 난다. */
-  userType: string;
+  /** `GET /user/auth`로 서버가 직접 확인한 값. 로그인 상태일 때만 의미 있다. */
+  userType: UserType | null;
   /**
    * 서버 렌더 시각(ISO). 시각 파생 렌더의 공통 기준값이다.
    *
@@ -46,15 +43,23 @@ export function getDeviceClass(userAgent: string | undefined): DeviceClass {
  *
  * 인증 상태를 SSR에 반영해도 캐시는 안전하다. nginx가 인증 쿠키가 있으면
  * `proxy_cache_bypass`/`proxy_no_cache`로 캐시를 우회한다.
+ *
+ * access는 HttpOnly라 직접 디코딩할 수 없으므로, 원본 Cookie를 그대로 실어 `GET /user/auth`로 백엔드가 확인한다.
  */
-export function getServerRequestContext(context: GetServerSidePropsContext): ServerRequestContext {
-  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] ?? '';
+export async function getServerRequestContext(context: GetServerSidePropsContext): Promise<ServerRequestContext> {
+  const device = getDeviceClass(context.req.headers['user-agent']);
+  const now = new Date().toISOString();
+  const cookie = context.req.headers.cookie;
 
-  return {
-    device: getDeviceClass(context.req.headers['user-agent']),
-    isLoggedIn: Boolean(token),
-    token,
-    userType: context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] ?? '',
-    now: new Date().toISOString(),
-  };
+  if (!cookie) {
+    return { device, isLoggedIn: false, token: '', userType: null, now };
+  }
+
+  try {
+    const { user_type: userType } = await APIClient.request(new UserAuth({ Cookie: cookie, Origin: KOIN_BASE_URL }));
+
+    return { device, isLoggedIn: true, token: '', userType, now };
+  } catch {
+    return { device, isLoggedIn: false, token: '', userType: null, now };
+  }
 }

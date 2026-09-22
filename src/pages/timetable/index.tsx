@@ -22,7 +22,7 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
 
@@ -98,7 +98,6 @@ async function prefetchTimetableData(
     const isAuthError = isServerAuthError(error);
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
-    if (isAuthError) clearServerAuthCookies(context);
     setDefaultTimetableFrameList(
       queryClient,
       token,
