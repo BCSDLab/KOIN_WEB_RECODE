@@ -5,7 +5,6 @@ import { deptQueries } from 'api/dept/queries';
 import { useFormContext } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 interface AcademicInfoFormValues {
@@ -21,7 +20,6 @@ interface AcademicInfoLoggingTitle {
 }
 
 export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTitle, onSaved: () => void) {
-  const token = useTokenState();
   const isLoggedIn = useIsLoggedIn();
   const { actionEventClick } = useLogger();
   const { setValue } = useFormContext<AcademicInfoFormValues>();
