@@ -12,7 +12,7 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 
 import GeneralCourseListModal from './GeneralCourseListModal';
@@ -31,10 +31,10 @@ function GeneralCourse() {
   const { lock, unlock } = useScrollLock(false);
   const portalManager = useModalPortal();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data: generalEducation } = useQuery({
-    ...graduationCalculatorQueries.generalEducation(token),
-    enabled: !!token,
+    ...graduationCalculatorQueries.generalEducation(isLoggedIn),
+    enabled: isLoggedIn,
   });
   const requiredEducationArea = generalEducation?.general_education_area || [];
 

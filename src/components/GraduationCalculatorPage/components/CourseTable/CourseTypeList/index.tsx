@@ -6,7 +6,7 @@ import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 
@@ -30,10 +30,10 @@ function CourseTypeList({
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data: generalEducation } = useQuery({
-    ...graduationCalculatorQueries.generalEducation(token),
-    enabled: !!token,
+    ...graduationCalculatorQueries.generalEducation(isLoggedIn),
+    enabled: isLoggedIn,
   });
   // '교양선택'은 교양 세부 영역 리스트에서 제외
   const generalCourseType = generalEducation?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
