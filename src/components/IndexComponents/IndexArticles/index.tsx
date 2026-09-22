@@ -7,7 +7,7 @@ import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './IndexArticles.module.scss';
 
@@ -17,9 +17,9 @@ interface IndexArticlesProps {
 }
 
 export default function IndexArticles({ serverNow }: IndexArticlesProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data: articlesData } = useQuery({
-    ...articleQueries.list(token, '1'),
+    ...articleQueries.list(isLoggedIn, '1'),
     select: createArticlesWithNewSelector(serverNow),
   });
   const logger = useLogger();

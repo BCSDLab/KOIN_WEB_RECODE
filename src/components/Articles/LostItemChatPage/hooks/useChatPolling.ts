@@ -12,29 +12,24 @@ import {
 import { postLeaveLostItemChatroomV2, postLostItemChatroomMessageV2 } from 'api/articles';
 import { articleQueries, articleQueryKeys } from 'api/articles/queries';
 import { getCachedMessages, cacheMessages, clearChatroomCache } from 'utils/db/chatDB';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 const POLLING_INTERVAL_MS = 10_000;
 
 interface UseChatPollingOptions {
-  token: string;
   articleId: number | string | null;
   chatroomId: number | string | null;
   isOnline?: boolean;
   autoSelectFirst?: boolean;
 }
 
-const useChatPolling = ({
-  token,
-  articleId,
-  chatroomId,
-  isOnline = true,
-  autoSelectFirst = true,
-}: UseChatPollingOptions) => {
+const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirst = true }: UseChatPollingOptions) => {
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
 
   const { data: chatroomList } = useSuspenseQuery({
-    ...articleQueries.lostItemChatroomList(token),
+    ...articleQueries.lostItemChatroomList(isLoggedIn),
     staleTime: isOnline ? 0 : Infinity,
     refetchInterval: isOnline ? POLLING_INTERVAL_MS : false,
     refetchIntervalInBackground: false,
@@ -59,7 +54,7 @@ const useChatPolling = ({
   useEffect(() => {
     if (numericArticleId == null || numericChatroomId == null) return;
 
-    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token);
+    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn);
     const existing = queryClient.getQueryData(queryKey);
     if (existing) return;
 
@@ -68,13 +63,13 @@ const useChatPolling = ({
         queryClient.setQueryData(queryKey, cached);
       }
     });
-  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId, token]);
+  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId, isLoggedIn]);
 
   const { data: chatroomDetail } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
-      ? articleQueries.lostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
+      ? articleQueries.lostItemChatroomDetail(isLoggedIn, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId, token),
+          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId, isLoggedIn),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -82,9 +77,9 @@ const useChatPolling = ({
 
   const { data: messages } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
-      ? articleQueries.lostItemChatroomMessages(token, Number(defaultArticleId), Number(defaultChatroomId))
+      ? articleQueries.lostItemChatroomMessages(isLoggedIn, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
+          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -105,14 +100,14 @@ const useChatPolling = ({
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
       }
 
-      return postLostItemChatroomMessageV2(token, Number(defaultArticleId), Number(defaultChatroomId), {
+      return postLostItemChatroomMessageV2(Number(defaultArticleId), Number(defaultChatroomId), {
         content,
         is_image: isImage,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
+        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
       });
     },
     onError: (error) => {
@@ -131,14 +126,14 @@ const useChatPolling = ({
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
       }
 
-      return postLeaveLostItemChatroomV2(token, Number(defaultArticleId), Number(defaultChatroomId));
+      return postLeaveLostItemChatroomV2(Number(defaultArticleId), Number(defaultChatroomId));
     },
     onSuccess: () => {
       if (numericArticleId != null && numericChatroomId != null) {
         clearChatroomCache(numericArticleId, numericChatroomId);
       }
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomList(token),
+        queryKey: articleQueryKeys.lostItemChatroomList(isLoggedIn),
       });
     },
     onError: (error) => {
@@ -153,7 +148,7 @@ const useChatPolling = ({
 
   const leaveRoom = useCallback(
     (aId: number, cId: number) => {
-      postLeaveLostItemChatroomV2(token, aId, cId).catch((error: unknown) => {
+      postLeaveLostItemChatroomV2(aId, cId).catch((error: unknown) => {
         if (isKoinError(error)) {
           showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
         } else {
@@ -162,7 +157,7 @@ const useChatPolling = ({
         }
       });
     },
-    [token],
+    [],
   );
 
   const prevRoomRef = useRef<{ articleId: number; chatroomId: number } | null>(null);
@@ -188,15 +183,15 @@ const useChatPolling = ({
 
   const invalidateChatroomList = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomList(token),
+      queryKey: articleQueryKeys.lostItemChatroomList(isLoggedIn),
     });
-  }, [queryClient, token]);
+  }, [queryClient, isLoggedIn]);
 
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, token),
+      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
     });
-  }, [queryClient, defaultArticleId, defaultChatroomId, token]);
+  }, [queryClient, defaultArticleId, defaultChatroomId, isLoggedIn]);
 
   return {
     chatroomList,

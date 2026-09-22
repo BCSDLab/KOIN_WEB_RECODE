@@ -11,8 +11,8 @@ import MobileArticleTabMenu from 'components/Articles/components/MobileArticleTa
 import Pagination from 'components/Articles/components/Pagination';
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import HomeLayout from 'components/layout/HomeLayout';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
@@ -27,7 +27,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const prefetchPromises = [
     queryClient.prefetchQuery(articleQueries.hot()),
-    queryClient.prefetchQuery(articleQueries.list(token ?? '', pageNumber, boardId)),
+    queryClient.prefetchQuery(articleQueries.list(Boolean(token), pageNumber, boardId)),
   ];
 
   await Promise.all(prefetchPromises);
@@ -71,12 +71,12 @@ export default function ArticleListPage({
   initialBoardId,
   serverNow,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const paramsPage = usePageParams(initialPage);
   const boardId = useBoardIdParams(initialBoardId);
 
   const { data: articlesData } = useQuery({
-    ...articleQueries.list(token, paramsPage, boardId),
+    ...articleQueries.list(isLoggedIn, paramsPage, boardId),
     placeholderData: keepPreviousData,
     select: createArticlesWithNewSelector(serverNow),
   });

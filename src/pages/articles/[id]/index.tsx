@@ -19,7 +19,7 @@ import {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const { articles } = await withStaticFetchRetry('article.paths', () => getArticles('', '1'));
+    const { articles } = await withStaticFetchRetry('article.paths', () => getArticles('1'));
 
     return {
       paths: articles.slice(0, ARTICLE_HOT_PATH_LIMIT).map((article) => ({

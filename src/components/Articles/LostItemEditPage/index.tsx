@@ -10,7 +10,7 @@ import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import usePutLostItemArticle from 'components/Articles/LostItemEditPage/hooks/usePutLostItemArticle';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 
 interface LostItemEditPageProps {
@@ -32,9 +32,9 @@ const EDIT_TITLES = {
 
 export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { logLostItemModifyComplete } = useArticlesLogger();
-  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(isLoggedIn, articleId));
   const { status, mutateAsync: putLostItem } = usePutLostItemArticle(articleId);
 
   const type = article.type as 'FOUND' | 'LOST';

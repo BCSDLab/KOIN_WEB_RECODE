@@ -4,14 +4,12 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { articleMutations } from 'api/articles/mutations';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const useDeleteLostItemChatroom = () => {
-  const token = useTokenState();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const mutation = articleMutations.blockLostItemChatroom(queryClient, token);
+  const mutation = articleMutations.blockLostItemChatroom(queryClient);
 
   const { mutate } = useMutation({
     ...mutation,
