@@ -23,8 +23,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import {
   createQueryParser,
   parseQueryBoolean,
@@ -85,7 +84,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     queryClient.prefetchQuery(clubQueries.categories()),
     queryClient.prefetchQuery(
       clubQueries.list({
-        token,
+        isLoggedIn: Boolean(token),
         categoryId: params.categoryId ?? undefined,
         sortType: params.sortType,
         isRecruiting: params.isRecruiting,
@@ -102,26 +101,19 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     props: {
       dehydratedState: dehydrate(queryClient),
       initialQuery: params,
-      serverToken: token ?? null,
     },
   };
 });
 
-function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();
-  const clientToken = useTokenState();
-  const isMounted = useMount();
+  const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
   const navigate = (path: string) => {
     router.push(path);
   };
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
-
-  // useTokenState()는 SSR에서 ''을 반환하므로 `??`로는 serverToken 폴백이 동작하지 않는다.
-  // 하이드레이션 중에만 폴백하고, 마운트 이후에는 클라이언트 상태만 신뢰한다.
-  const hydrationFallbackToken = isMounted ? null : serverToken;
-  const token = clientToken || hydrationFallbackToken || null;
 
   const { searchParams, setParams: setSearchParams } = useParamsHandler();
 
@@ -138,7 +130,7 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
   const { mutate: clubLikeMutate } = useClubLike();
   const { data: clubListData } = useQuery(
     clubQueries.list({
-      token,
+      isLoggedIn,
       categoryId: selectedCategoryId,
       sortType: sortValue,
       isRecruiting: isRecruitingParam,
@@ -156,7 +148,7 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
       event_label: 'club_main_create',
       value: '생성하기',
     });
-    if (!token) {
+    if (!isLoggedIn) {
       openAuthModal();
     } else {
       navigate('/clubs/new');
@@ -218,7 +210,7 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
 
   const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>, isLiked: boolean, clubId: number, name: string) => {
     e.stopPropagation();
-    if (!token) {
+    if (!isLoggedIn) {
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal
           title="좋아요 기능을 사용하기"
@@ -243,7 +235,6 @@ function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType
       });
     }
     clubLikeMutate({
-      token,
       isLiked,
       clubId,
     });
