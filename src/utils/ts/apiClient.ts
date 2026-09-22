@@ -1,19 +1,17 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
-import { Refresh } from 'api/auth/APIDetail';
+import { UserAuth, WebRefresh } from 'api/auth/APIDetail';
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { APIResponse } from 'interfaces/APIResponse';
-import { COOKIE_KEY } from 'static/url';
+import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
-import { redirectToClub, redirectToLogin } from './auth';
-import { deleteCookie, getCookieDomain, setCookie } from './cookie';
-import { isomorphicLocalStorage } from './env';
-import { saveTokensToNative } from './iosBridge';
+import { redirectToLogin } from './auth';
+import { getCookie } from './cookie';
 import { queryClient } from './queryClient';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
@@ -72,6 +70,7 @@ export default class APIClient {
           baseURL: request.baseURL || this.baseURL,
           headers: this.createHeaders(request),
           responseType: 'json',
+          withCredentials: true,
         })
         .then((data: AxiosResponse<U>) => {
           const response = Sentry.startSpan(
@@ -130,11 +129,11 @@ export default class APIClient {
     });
   }
 
-  static refresh = this.of(Refresh);
+  static webRefresh = this.of(WebRefresh);
 
   private refreshPromise: Promise<void> | null = null;
 
-  private async refreshAccessToken(refreshToken: string) {
+  private async refreshAccessToken() {
     // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
     if (this.refreshPromise) {
       await this.refreshPromise;
@@ -143,29 +142,13 @@ export default class APIClient {
     }
 
     // 새 refresh 요청을 진행
-    this.refreshPromise = APIClient.refresh({ refresh_token: refreshToken })
+    this.refreshPromise = APIClient.webRefresh()
       .then((result) => {
-        const domain = getCookieDomain();
-
-        setCookie(COOKIE_KEY.AUTH_TOKEN, result.token, domain ? { domain: domain } : undefined);
-        useTokenStore.getState().setToken(result.token);
-
-        if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-          const currentRefreshToken = useTokenStore.getState().refreshToken || refreshToken;
-          saveTokensToNative(result.token, currentRefreshToken);
-        }
+        useTokenStore.getState().setUserType(result.user_type);
       })
       .catch(() => {
-        useTokenStore.getState().setToken('');
-        useTokenStore.getState().setRefreshToken('');
+        useTokenStore.getState().setUserType(null);
         queryClient.clear();
-
-        if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-          saveTokensToNative('', ''); // 네이티브 상태도 동기화
-          redirectToClub();
-
-          return;
-        }
         redirectToLogin();
       })
       .finally(() => {
@@ -190,13 +173,7 @@ export default class APIClient {
     if (!axios.isAxiosError(error)) return Promise.reject(error as Error);
     try {
       const originalRequest = error.config;
-      const newToken = useTokenStore.getState().token;
 
-      if (originalRequest?.headers) {
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-      }
-
-      // 재요청 실행 및 결과 반환
       const route = normalizeApiPath(originalRequest?.url);
 
       return await Sentry.startSpan(
@@ -217,37 +194,21 @@ export default class APIClient {
     if (typeof window === 'undefined') return null;
 
     if (error.response?.status === 401) {
-      const domain = getCookieDomain();
-      deleteCookie(COOKIE_KEY.AUTH_TOKEN); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
-      deleteCookie(COOKIE_KEY.AUTH_TOKEN, domain ? { domain } : undefined);
-
       try {
-        const storage = isomorphicLocalStorage.getJSONItem<{ state?: { refreshToken?: string } } | null>(
-          'refresh-token-storage',
-          null,
+        await Sentry.startSpan(
+          {
+            name: 'Refresh API access token',
+            op: 'koin.api.auth_refresh',
+            onlyIfParent: true,
+            attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+          },
+          () => this.refreshAccessToken(),
         );
-        const refreshToken = storage?.state?.refreshToken ?? null;
 
-        if (refreshToken) {
-          await Sentry.startSpan(
-            {
-              name: 'Refresh API access token',
-              op: 'koin.api.auth_refresh',
-              onlyIfParent: true,
-              attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-            },
-            () => this.refreshAccessToken(refreshToken),
-          );
-
-          return await this.retryRequest(error);
-        }
+        return await this.retryRequest(error);
       } catch {
-        useTokenStore.getState().setToken('');
-        useTokenStore.getState().setRefreshToken('');
+        useTokenStore.getState().setUserType(null);
         queryClient.clear();
-        if (window.webkit?.messageHandlers != null) {
-          saveTokensToNative('', '');
-        }
       }
 
       redirectToLogin();
@@ -256,27 +217,21 @@ export default class APIClient {
     }
 
     if (error.response?.status === 403) {
-      const currentToken = useTokenStore.getState().token;
-      if (currentToken) {
-        try {
-          const response = await Sentry.startSpan(
-            {
-              name: 'Revalidate API user type',
-              op: 'koin.api.user_revalidation',
-              onlyIfParent: true,
-              attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-            },
-            () =>
-              axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
-                headers: { Authorization: `Bearer ${currentToken}` },
-              }),
-          );
-          useTokenStore.getState().setUserType(response.data.user_type);
+      try {
+        const response = await Sentry.startSpan(
+          {
+            name: 'Revalidate API user type',
+            op: 'koin.api.user_revalidation',
+            onlyIfParent: true,
+            attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+          },
+          () => APIClient.of(UserAuth)(),
+        );
+        useTokenStore.getState().setUserType(response.user_type);
 
-          return await this.retryRequest(error);
-        } catch {
-          return null;
-        }
+        return await this.retryRequest(error);
+      } catch {
+        return null;
       }
     }
 
@@ -334,9 +289,16 @@ export default class APIClient {
   // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): Record<string, string> {
     const headers: Record<string, string> = {};
-    // 인증 토큰 삽입
+    // 인증 토큰 삽입 (레거시 Bearer 인증 — 쿠키 인증으로 전환된 엔드포인트에는 더 이상 채워지지 않는다)
     if (request.authorization) {
       headers.Authorization = `Bearer ${request.authorization}`;
+    }
+
+    // 쿠키 인증 상태변경 요청은 CSRF 쿠키 값을 헤더로 되돌려 보내야 한다 (web-cookie-auth.md).
+    // 쿠키가 아직 없는 요청(로그인 등)이나 SSR에서는 getCookie가 undefined를 반환해 자연히 생략된다.
+    if (request.method !== HTTP_METHOD.GET) {
+      const csrfToken = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
+      if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
     }
 
     // json body 사용 (FormData는 axios가 multipart boundary를 자동 설정)

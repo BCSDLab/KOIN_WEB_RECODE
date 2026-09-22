@@ -4,6 +4,11 @@ import {
   Login,
   NicknameDuplicateCheck,
   Refresh,
+  WebLogin,
+  WebRefresh,
+  WebLogout,
+  WebCsrf,
+  UserAuth,
   SignupStudent,
   SignupGeneral,
   User,
@@ -42,6 +47,16 @@ export const signupStudent = APIClient.of(SignupStudent);
 export const signupGeneral = APIClient.of(SignupGeneral);
 
 export const refresh = APIClient.of(Refresh);
+
+export const webLogin = APIClient.of(WebLogin);
+
+export const webRefresh = APIClient.of(WebRefresh);
+
+export const webLogout = APIClient.of(WebLogout);
+
+export const webCsrf = APIClient.of(WebCsrf);
+
+export const getUserAuth = APIClient.of(UserAuth);
 
 export const getUser = APIClient.of(User);
 

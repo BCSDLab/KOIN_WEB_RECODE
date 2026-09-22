@@ -11,6 +11,9 @@ export const COOKIE_KEY = {
   AUTH_USER_TYPE: IS_STAGE ? 'STAGE_AUTH_USER_TYPE' : 'AUTH_USER_TYPE',
 } as const;
 
+// 백엔드가 발급하는 쿠키 이름.
+export const WEB_AUTH_CSRF_COOKIE_KEY = IS_STAGE ? '__Secure-koin-stage-web-csrf' : '__Secure-koin-web-csrf';
+
 const ORDER_URL = `https://order.${BASE_DOMAIN}`;
 const ORDER_STAGE_URL = `https://order.${STAGE_DOMAIN}`;
 

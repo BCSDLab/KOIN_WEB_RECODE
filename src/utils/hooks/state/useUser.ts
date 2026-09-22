@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
 import { authQueries } from 'api/auth/queries';
 import { useServerRequest } from 'utils/context/serverRequest';
-import { useTokenStore } from 'utils/zustand/auth';
+import { parseUserType, useTokenStore } from 'utils/zustand/auth';
 
 type GeneralUserWithAnonymousNickname = GeneralUserResponse & {
   anonymous_nickname: string;
@@ -16,7 +16,8 @@ export const useUser = () => {
   // useTokenStore는 SSR에서 ''을 반환한다. 토큰이 쿼리 키에 들어가므로 서버 토큰으로
   // 폴백하지 않으면 서버와 클라이언트가 서로 다른 캐시를 본다.
   const effectiveToken = token || serverRequest?.token || '';
-  const effectiveUserType = userType || serverRequest?.userType || '';
+  // serverRequest.userType은 쿠키 원문(임의 문자열)이라 STUDENT/GENERAL로 좁혀서 넘겨야 한다.
+  const effectiveUserType = userType || parseUserType(serverRequest?.userType);
 
   const { data, isError } = useSuspenseQuery({
     ...authQueries.userInfo(effectiveToken, effectiveUserType),

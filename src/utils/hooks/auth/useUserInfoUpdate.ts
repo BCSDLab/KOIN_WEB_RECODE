@@ -5,15 +5,14 @@ import type { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+import type { UserType } from 'utils/zustand/auth';
 
 interface UserUpdateOption {
   onSuccess?: () => void;
   onError?: () => void;
 }
 
-type UserType = 'STUDENT' | 'GENERAL';
-
-const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateOption = {}) => {
+const useUserInfoUpdate = <T = unknown>(userType: UserType | null, options: UserUpdateOption = {}) => {
   const token = useTokenState();
   const logger = useLogger();
   const { status, mutate } = useMutation<
