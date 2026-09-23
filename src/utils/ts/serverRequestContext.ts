@@ -10,8 +10,6 @@ export type DeviceClass = 'mobile' | 'desktop';
 export interface ServerRequestContext {
   device: DeviceClass;
   isLoggedIn: boolean;
-  /** access는 HttpOnly라 항상 `''` — `useTokenState` 등 레거시 폴백 호환용으로만 남겨뒀다(Phase 3에서 제거). */
-  token: string;
   /** `GET /user/auth`로 서버가 직접 확인한 값. 로그인 상태일 때만 의미 있다. */
   userType: UserType | null;
   /**
@@ -52,14 +50,14 @@ export async function getServerRequestContext(context: GetServerSidePropsContext
   const cookie = context.req.headers.cookie;
 
   if (!cookie) {
-    return { device, isLoggedIn: false, token: '', userType: null, now };
+    return { device, isLoggedIn: false, userType: null, now };
   }
 
   try {
     const { user_type: userType } = await APIClient.request(new UserAuth({ Cookie: cookie, Origin: KOIN_BASE_URL }));
 
-    return { device, isLoggedIn: true, token: '', userType, now };
+    return { device, isLoggedIn: true, userType, now };
   } catch {
-    return { device, isLoggedIn: false, token: '', userType: null, now };
+    return { device, isLoggedIn: false, userType: null, now };
   }
 }

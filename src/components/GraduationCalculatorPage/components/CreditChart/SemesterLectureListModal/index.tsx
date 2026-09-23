@@ -12,7 +12,6 @@ import useSelect from 'components/TimetablePage/hooks/useSelect';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { pick } from 'utils/ts/object';
 
@@ -49,11 +48,10 @@ export default function SemesterLectureListModal({
   initialCourse: string;
 }) {
   const semesters = useAllSemesters();
-  const token = useTokenState();
   const isLoggedIn = useIsLoggedIn();
   const allMyLectures = useAllMyLectures();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(Boolean(token)));
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(isLoggedIn));
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
     value: `${semesterInfo.year}년 ${semesterInfo.term}`,

@@ -1,5 +1,3 @@
-import { COOKIE_KEY } from 'static/url';
-import { getCookie } from 'utils/ts/cookie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -12,34 +10,21 @@ export const parseUserType = (value: string | null | undefined): UserType | null
   value === 'STUDENT' || value === 'GENERAL' ? value : null;
 
 interface State {
-  token: string;
-  refreshToken: string;
   userType: UserType | null;
 }
 
 interface Actions {
-  setToken: (token: string) => void;
-  setRefreshToken: (refreshToken: string) => void;
   setUserType: (userType: UserType | null) => void;
 }
 
 export const useTokenStore = create(
   persist<State & Actions>(
     (set) => ({
-      token: getCookie(COOKIE_KEY.AUTH_TOKEN) || '',
-      refreshToken: '',
-      userType: parseUserType(getCookie(COOKIE_KEY.AUTH_USER_TYPE)),
-      setToken: (token) => set({ token }),
-      setRefreshToken: (refreshToken) => set({ refreshToken }),
+      userType: null,
       setUserType: (userType) => set({ userType }),
     }),
     {
       name: 'refresh-token-storage',
-      partialize: (state) =>
-        ({
-          refreshToken: state.refreshToken,
-          userType: state.userType,
-        }) as State & Actions,
     },
   ),
 );
