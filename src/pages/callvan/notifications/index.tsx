@@ -17,7 +17,6 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
@@ -25,15 +24,14 @@ import styles from './CallvanNotifications.module.scss';
 
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
-}>(async (context: GetServerSidePropsContext) => {
+}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다.
   if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
     return { redirect: { destination: ROUTES.Main(), permanent: false } };
   }
 
   const queryClient = new QueryClient();
-  const { token } = parseServerSideParams(context);
-  const isLoggedIn = Boolean(token);
+  const { isLoggedIn } = serverRequest;
 
   try {
     if (isLoggedIn) {

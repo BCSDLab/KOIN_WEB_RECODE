@@ -8,11 +8,14 @@ import ParticipantsList from 'components/Callvan/components/ParticipantsList';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps = withCacheControl<{
+  dehydratedState: ReturnType<typeof dehydrate>;
+  postId: number;
+}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  const { token } = parseServerSideParams(context);
+  const { isLoggedIn } = serverRequest;
   const postId = Number(context.params?.postId);
 
   if (!postId || Number.isNaN(postId)) {
@@ -20,8 +23,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   try {
-    if (token) {
-      await queryClient.prefetchQuery(callvanQueries.postDetail(postId, Boolean(token)));
+    if (isLoggedIn) {
+      await queryClient.prefetchQuery(callvanQueries.postDetail(postId, isLoggedIn));
     }
   } catch (error) {
     console.error('[SSR] callvan post detail prefetch failed:', error);
@@ -33,7 +36,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       postId,
     },
   };
-};
+});
 
 export default function CallvanParticipantsPage({
   postId,

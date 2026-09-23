@@ -25,13 +25,11 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './LostItemDetailPage.module.scss';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token } = parseServerSideParams(context);
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const id = context.query.id;
   if (typeof id !== 'string') {
     return { notFound: true };
@@ -43,11 +41,13 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
 
   await Promise.all([
-    queryClient.prefetchQuery(articleQueries.lostItemDetail(Boolean(token), articleId)),
-    queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(Boolean(token), latestLostItemParams)),
+    queryClient.prefetchQuery(articleQueries.lostItemDetail(serverRequest.isLoggedIn, articleId)),
+    queryClient.prefetchInfiniteQuery(
+      articleQueries.lostItemInfiniteList(serverRequest.isLoggedIn, latestLostItemParams),
+    ),
   ]);
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 

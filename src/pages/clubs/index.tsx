@@ -24,13 +24,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import {
-  createQueryParser,
-  parseQueryBoolean,
-  parseQueryNumber,
-  parseQueryString,
-  parseServerSideParams,
-} from 'utils/ts/parseServerSideParams';
+import { createQueryParser, parseQueryBoolean, parseQueryNumber, parseQueryString } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './ClubListPage.module.scss';
@@ -74,9 +68,8 @@ export const parseClubListQuery = createQueryParser<ClubListQuery>({
   },
 });
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token, query } = parseServerSideParams(context);
-  const params = parseClubListQuery(query);
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+  const params = parseClubListQuery(context.query);
 
   const queryClient = new QueryClient();
 
@@ -84,7 +77,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     queryClient.prefetchQuery(clubQueries.categories()),
     queryClient.prefetchQuery(
       clubQueries.list({
-        isLoggedIn: Boolean(token),
+        isLoggedIn: serverRequest.isLoggedIn,
         categoryId: params.categoryId ?? undefined,
         sortType: params.sortType,
         isRecruiting: params.isRecruiting,
@@ -93,7 +86,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     ),
   ]);
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 

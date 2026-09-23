@@ -36,7 +36,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
@@ -60,9 +59,8 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const { params, query } = context;
-  const { token } = parseServerSideParams(context);
   const id = params?.id;
 
   if (!id || Array.isArray(id)) {
@@ -84,7 +82,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(clubQueries.detail(clubId, Boolean(token))),
+    queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
     queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
   ]);
 
@@ -92,7 +90,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
   }
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 
