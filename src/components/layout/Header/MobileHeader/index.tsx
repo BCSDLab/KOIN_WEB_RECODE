@@ -90,8 +90,12 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
+  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
+  const isLostItemCustomTitleRoute =
+    [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
+    pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
   const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isCafeteriaRoute;
+  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
 
   return (
     <>
@@ -119,9 +123,10 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           })}
         >
           {isMain && <KoinServiceLogo />}
-          {!isMain && isClubRoute && customTitle}
+          {!isMain && (isClubRoute || isLostItemCustomTitleRoute) && customTitle}
           {!isMain &&
             !isClubRoute &&
+            !isLostItemCustomTitleRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
               .sort((a, b) => b.link.length - a.link.length)[0]?.title ??

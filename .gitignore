@@ -52,3 +52,6 @@ tsconfig.tsbuildinfo
 # next-sitemap 생성 파일 (postbuild)
 public/sitemap*.xml
 public/robots.txt
+
+# Playwright MCP 디버그 산출물
+.playwright-mcp/

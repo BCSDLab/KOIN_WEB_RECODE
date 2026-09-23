@@ -54,9 +54,18 @@
     font-size: 14px;
     font-weight: 500;
 
+    @include media.media-breakpoint(mobile) {
+      border-color: #b611f5;
+      color: #b611f5;
+    }
+
     &--selected {
       background-color: #175c8e;
       color: #fff;
+
+      @include media.media-breakpoint(mobile) {
+        background-color: #b611f5;
+      }
     }
   }
 

@@ -2,8 +2,10 @@ import Link from 'next/link';
 
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
+import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 
@@ -11,6 +13,7 @@ import styles from './LatestLostItemList.module.scss';
 
 function LatestLostItemList() {
   const token = useTokenState();
+  const isMobile = useMediaQuery();
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
     articleQueries.lostItemInfiniteList(token, {
       limit: 10,
@@ -33,12 +36,12 @@ function LatestLostItemList() {
               <div className={styles.item__content}>
                 <span className={styles.item__type}>{article.type === 'LOST' ? '분실물' : '습득물'}</span>
                 <div className={styles.item__info}>
-                  <span className={styles.item__category}>{article.category}</span>
+                  <CategoryBadge category={article.category} isMobile={isMobile} className={styles.item__category} />
                   <span className={styles.item__place}>{article.found_place}</span>
                   <span className={styles.item__date}>| {article.found_date}</span>
                 </div>
               </div>
-              <FoundChip isFound={article.is_found} size="small" />
+              <FoundChip isFound={article.is_found} size="xs" />
             </Link>
           ))
         )}

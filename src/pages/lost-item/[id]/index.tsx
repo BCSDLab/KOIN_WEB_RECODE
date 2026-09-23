@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 
@@ -5,6 +6,7 @@ import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { articleQueries } from 'api/articles/queries';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import ReportIcon from 'assets/svg/Articles/report.svg';
+import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import HotArticles from 'components/Articles/components/HotArticle';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import DeleteModal from 'components/Articles/LostItemDetailPage/components/DeleteModal';
@@ -88,6 +90,14 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
   const [isFoundModalOpen, openFoundModal, closeFoundModal] = useBooleanState(false);
 
+  // 데스크톱에서 신고 모달을 연 채로 모바일 폭이 되면, 모바일 전용 신고 페이지로 넘긴다.
+  useEffect(() => {
+    if (isReportModalOpen && isMobile) {
+      closeReportModal();
+      navigate(ROUTES.LostItemReport({ id: String(articleId) }));
+    }
+  }, [isReportModalOpen, isMobile, closeReportModal, navigate, articleId]);
+
   const {
     category,
     found_place,
@@ -102,6 +112,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     organization,
   } = article;
   const typeLabel = type === 'FOUND' ? '[습득물]' : '[분실물]';
+  const mobileTypeLabel = type === 'FOUND' ? '습득물' : '분실물';
 
   const requireLogin = (
     modalTitle: string,
@@ -182,8 +193,8 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
           <div className={styles.header}>
             <div className={styles.header__top}>
               <div className={styles.header__title}>
-                <span className={styles.header__type}>{typeLabel}</span>
-                <span className={styles.header__category}>{category}</span>
+                <span className={styles.header__type}>{isMobile ? mobileTypeLabel : typeLabel}</span>
+                <CategoryBadge category={category} isMobile={isMobile} className={styles.header__category} />
                 <span className={styles.header__location}>
                   <span className={styles.header__place} title={found_place}>
                     {found_place}
@@ -192,7 +203,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
                   <span className={styles.header__dateText}>{found_date}</span>
                 </span>
               </div>
-              <FoundChip isFound={is_found} />
+              <FoundChip isFound={is_found} size={isMobile ? 'xs' : 'large'} />
             </div>
             <div className={styles.header__info}>
               <div className={styles.header__author}>{author}</div>
@@ -200,7 +211,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
             </div>
           </div>
           <div className={styles.article}>
-            <DisplayImage images={images} />
+            <DisplayImage key={articleId} images={images} />
             <div className={styles.article__content}>{content}</div>
             {organization && (
               <div className={styles.article__guide}>

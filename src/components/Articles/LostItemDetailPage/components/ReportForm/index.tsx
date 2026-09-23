@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
@@ -6,6 +6,7 @@ import useReportLostItemArticle from 'components/Articles/hooks/useReportLostIte
 import CheckboxGroup from 'components/Articles/LostItemDetailPage/components/CheckboxGroup';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 import styles from './ReportForm.module.scss';
 
@@ -29,6 +30,12 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
   const [selectedReason, setSelectedReason] = useState<string[]>([]);
   const router = useRouter();
   const navigate = router.push;
+  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
+
+  useEffect(() => {
+    if (!isModal) setCustomTitle('게시글 신고하기');
+  }, [isModal, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   const handleReportClick = async () => {
     if (selectedReason.length === 0) {

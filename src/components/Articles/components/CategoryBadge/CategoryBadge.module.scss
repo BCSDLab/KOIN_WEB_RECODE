@@ -1,0 +1,26 @@
+.badge {
+  &.badge--electronics {
+    background-color: #e4f2ff !important;
+    color: #3a70e2 !important;
+  }
+
+  &.badge--card {
+    background-color: #e5f5ec !important;
+    color: #0c9d61 !important;
+  }
+
+  &.badge--wallet {
+    background-color: #ead3fe !important;
+    color: #980ac9 !important;
+  }
+
+  &.badge--id {
+    background-color: #fff9ee !important;
+    color: #ffad0d !important;
+  }
+
+  &.badge--etc {
+    background-color: #ffebee !important;
+    color: #f64c4c !important;
+  }
+}

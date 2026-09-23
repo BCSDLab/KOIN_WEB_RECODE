@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import PhotoIcon from 'assets/svg/common/chat-photo.svg';
+import MobileRemoveImageIcon from 'assets/svg/mobile-delete-button.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
@@ -71,7 +72,7 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
                 aria-label="이미지 삭제"
                 onClick={() => deleteImage(url)}
               >
-                <RemoveImageIcon />
+                {isMobile ? <MobileRemoveImageIcon /> : <RemoveImageIcon />}
               </button>
             </li>
           ))}

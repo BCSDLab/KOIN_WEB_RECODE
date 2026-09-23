@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { setRedirectPath } from 'utils/ts/auth';
 
@@ -25,6 +26,7 @@ export default function LoginRequiredModal({
   enableRedirect = true,
 }: LoginRequiredProps) {
   const router = useRouter();
+  const isMobile = useMediaQuery();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const sentences = description.split('.');
@@ -44,9 +46,11 @@ export default function LoginRequiredModal({
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
-        <button className={styles.container__icon} type="button" aria-label="닫기 버튼" onClick={onClose}>
-          <CloseIcon />
-        </button>
+        {!isMobile && (
+          <button className={styles.container__icon} type="button" aria-label="닫기 버튼" onClick={onClose}>
+            <CloseIcon />
+          </button>
+        )}
         <div className={styles.container__header}>
           <div className={styles.container__title}>
             {title}

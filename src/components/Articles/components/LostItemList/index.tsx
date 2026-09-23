@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { LostItemArticleForGetDTO } from 'api/articles/entity';
+import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
@@ -84,9 +85,13 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list-mobile__title']}>
           <div className={styles['lost-item-list-mobile__titleMeta']}>
-            <span className={styles['lost-item-list-mobile__badge']}>{article.category}</span>
+            <CategoryBadge
+              category={article.category}
+              isMobile={isMobile}
+              className={styles['lost-item-list-mobile__badge']}
+            />
             <div className={styles['lost-item-list-mobile__place']}>{article.found_place}</div>
-            <div>|</div>
+            <div className={styles['lost-item-list-mobile__line']}>|</div>
             <div className={styles['lost-item-list-mobile__foundDate']}>{article.found_date}</div>
           </div>
           <FoundChip isFound={article.is_found} size="xs" />
@@ -141,7 +146,11 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
         <div className={styles['lost-item-list__title']}>
           <div className={styles['lost-item-list__titleMeta']}>
-            <span className={styles['lost-item-list__badge']}>{article.category}</span>
+            <CategoryBadge
+              category={article.category}
+              isMobile={isMobile}
+              className={styles['lost-item-list__badge']}
+            />
             <div className={styles['lost-item-list__place']}>{article.found_place}</div>
             <div>|</div>
             <div className={styles['lost-item-list__foundDate']}>{article.found_date}</div>
