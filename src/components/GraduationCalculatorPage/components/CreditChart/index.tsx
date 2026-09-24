@@ -9,7 +9,7 @@ import useGetMultiMajorLecture from 'components/TimetablePage/hooks/useGetMultiM
 import { motion, AnimatePresence } from 'framer-motion';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 
 import SemesterLectureListModal from './SemesterLectureListModal';
@@ -17,14 +17,14 @@ import styles from './CreditChart.module.scss';
 
 function CreditChart({ totalGrades }: { totalGrades: number }) {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
   const { lock, unlock } = useScrollLock(false);
   const { data: calculateCredits } = useQuery({
-    ...graduationCalculatorQueries.creditsByCourseType(token),
-    enabled: !!token,
+    ...graduationCalculatorQueries.creditsByCourseType(isLoggedIn),
+    enabled: isLoggedIn,
   });
-  const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
+  const { data: multiMajorLecture } = useGetMultiMajorLecture();
 
   const onClickBar = (courseType: string) => {
     logger.actionEventClick({

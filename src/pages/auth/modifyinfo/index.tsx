@@ -34,7 +34,6 @@ import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { normalizePhoneNumber } from 'utils/ts/formatPhoneNumber';
@@ -1296,7 +1295,6 @@ const useModifyInfoForm = () => {
 };
 
 function ModifyInfoDefaultPage() {
-  const token = useTokenState();
   const router = useRouter();
   const navigate = router.push;
   const portalManager = useModalPortal();
@@ -1314,7 +1312,7 @@ function ModifyInfoDefaultPage() {
 
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    deleteUser(token);
+    deleteUser();
     navigate(ROUTES.Main());
   };
 

@@ -55,90 +55,90 @@ const invalidateEventListQueries = async (queryClient: QueryClient, clubId: numb
 export const clubMutations = {
   toggleLikeForList: (queryClient: QueryClient, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: ({ token, clubId, isLiked }: { token: string; clubId: number; isLiked: boolean }) =>
-        isLiked ? deleteClubLike(token, clubId) : putClubLike(token, clubId),
+      mutationFn: ({ clubId, isLiked }: { clubId: number; isLiked: boolean }) =>
+        isLiked ? deleteClubLike(clubId) : putClubLike(clubId),
       onSuccess: async () => {
         await invalidateClubListQueries(queryClient);
         await callbacks.onSuccess?.();
       },
     }),
 
-  likeForDetail: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  likeForDetail: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => putClubLike(token, clubId),
+      mutationFn: () => putClubLike(clubId),
       onSuccess: async () => {
         await invalidateClubDetailAndListQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  unlikeForDetail: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  unlikeForDetail: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => deleteClubLike(token, clubId),
+      mutationFn: () => deleteClubLike(clubId),
       onSuccess: async () => {
         await invalidateClubDetailAndListQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  create: (queryClient: QueryClient, token: string, callbacks: ClubMutationCallbacks = {}) =>
+  create: (queryClient: QueryClient, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: NewClubData) => postClub(token, data),
+      mutationFn: (data: NewClubData) => postClub(data),
       onSuccess: async () => {
         await invalidateClubListQueries(queryClient);
         await callbacks.onSuccess?.();
       },
     }),
 
-  update: (queryClient: QueryClient, token: string, clubId: number | string, callbacks: ClubMutationCallbacks = {}) =>
+  update: (queryClient: QueryClient, clubId: number | string, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: NewClubData) => putClubDetail(token, data, clubId),
+      mutationFn: (data: NewClubData) => putClubDetail(data, clubId),
       onSuccess: async () => {
         await invalidateClubDetailAndListQueries(queryClient, Number(clubId), true);
         await callbacks.onSuccess?.();
       },
     }),
 
-  createRecruitment: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  createRecruitment: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: ClubRecruitmentRequest) => postClubRecruitment(token, clubId, data),
+      mutationFn: (data: ClubRecruitmentRequest) => postClubRecruitment(clubId, data),
       onSuccess: async () => {
         await invalidateRecruitmentQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  updateRecruitment: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  updateRecruitment: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: ClubRecruitmentRequest) => putClubRecruitment(token, clubId, data),
+      mutationFn: (data: ClubRecruitmentRequest) => putClubRecruitment(clubId, data),
       onSuccess: async () => {
         await invalidateRecruitmentQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  deleteRecruitment: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  deleteRecruitment: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => deleteClubRecruitment(token, clubId),
+      mutationFn: () => deleteClubRecruitment(clubId),
       onSuccess: async () => {
         await invalidateRecruitmentQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  createEvent: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  createEvent: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: ClubEventRequest) => postClubEvent(token, clubId, data),
+      mutationFn: (data: ClubEventRequest) => postClubEvent(clubId, data),
       onSuccess: async () => {
         await invalidateEventListQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  updateEvent: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  updateEvent: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
       mutationFn: ({ eventId, data }: { eventId: number; data: ClubEventRequest }) =>
-        putClubEvent(token, clubId, eventId, data),
+        putClubEvent(clubId, eventId, data),
       onSuccess: async (_, variables) => {
         await Promise.all([
           invalidateEventListQueries(queryClient, clubId),
@@ -148,9 +148,9 @@ export const clubMutations = {
       },
     }),
 
-  deleteEvent: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  deleteEvent: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (eventId: number) => deleteClubEvent(token, clubId, eventId),
+      mutationFn: (eventId: number) => deleteClubEvent(clubId, eventId),
       onSuccess: async (_, eventId) => {
         await Promise.all([
           invalidateEventListQueries(queryClient, clubId),
@@ -160,23 +160,18 @@ export const clubMutations = {
       },
     }),
 
-  mandateManager: (queryClient: QueryClient, token: string, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
+  mandateManager: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: NewClubManager) => putNewClubManager(token, data),
+      mutationFn: (data: NewClubManager) => putNewClubManager(data),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: clubQueryKeys.detailRoot(clubId) });
         await callbacks.onSuccess?.();
       },
     }),
 
-  subscribeRecruitmentNotification: (
-    queryClient: QueryClient,
-    token: string,
-    clubId: number,
-    callbacks: ClubMutationCallbacks = {},
-  ) =>
+  subscribeRecruitmentNotification: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => postClubRecruitmentNotification(token, clubId),
+      mutationFn: () => postClubRecruitmentNotification(clubId),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: clubQueryKeys.detailRoot(clubId) });
         await callbacks.onSuccess?.();
@@ -185,40 +180,29 @@ export const clubMutations = {
 
   unsubscribeRecruitmentNotification: (
     queryClient: QueryClient,
-    token: string,
     clubId: number,
     callbacks: ClubMutationCallbacks = {},
   ) =>
     mutationOptions({
-      mutationFn: () => deleteClubRecruitmentNotification(token, clubId),
+      mutationFn: () => deleteClubRecruitmentNotification(clubId),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: clubQueryKeys.detailRoot(clubId) });
         await callbacks.onSuccess?.();
       },
     }),
 
-  subscribeEventNotification: (
-    queryClient: QueryClient,
-    token: string,
-    clubId: number,
-    callbacks: ClubMutationCallbacks = {},
-  ) =>
+  subscribeEventNotification: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (eventId: number) => postClubEventNotification(token, clubId, eventId),
+      mutationFn: (eventId: number) => postClubEventNotification(clubId, eventId),
       onSuccess: async () => {
         await invalidateEventListQueries(queryClient, clubId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  unsubscribeEventNotification: (
-    queryClient: QueryClient,
-    token: string,
-    clubId: number,
-    callbacks: ClubMutationCallbacks = {},
-  ) =>
+  unsubscribeEventNotification: (queryClient: QueryClient, clubId: number, callbacks: ClubMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (eventId: number) => deleteClubEventNotification(token, clubId, eventId),
+      mutationFn: (eventId: number) => deleteClubEventNotification(clubId, eventId),
       onSuccess: async () => {
         await invalidateEventListQueries(queryClient, clubId);
         await callbacks.onSuccess?.();

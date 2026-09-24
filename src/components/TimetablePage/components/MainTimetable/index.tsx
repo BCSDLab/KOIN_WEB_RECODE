@@ -17,7 +17,6 @@ import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFr
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
@@ -86,11 +85,10 @@ function MainTimetableLayout({
 }
 
 function InvalidMainTimetable() {
-  const token = useTokenState();
   const semester = useSemester();
-  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timeTableFrameList } = useTimetableFrameList(semester);
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
-  const { data: mySemester } = useSemesterCheck(token);
+  const { data: mySemester } = useSemesterCheck();
 
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -116,14 +114,13 @@ function InvalidMainTimetable() {
 
 function ValidMainTimetable({ timetableFrameId }: { readonly timetableFrameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-  const token = useTokenState();
   const semester = useSemester();
   const logger = useLogger();
   const router = useRouter();
-  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timeTableFrameList } = useTimetableFrameList(semester);
   const { myLectures } = useMyLectures(timetableFrameId);
   const { data: deptList } = useSuspenseQuery(deptQueries.list());
-  const { data: mySemester } = useSemesterCheck(token);
+  const { data: mySemester } = useSemesterCheck();
 
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

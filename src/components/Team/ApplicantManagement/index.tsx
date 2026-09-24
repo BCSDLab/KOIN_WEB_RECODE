@@ -10,21 +10,21 @@ import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import ApplicantCard from './components/ApplicantCard';
 import styles from './ApplicantManagement.module.scss';
 
 export default function ApplicantManagement() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isMobile = useMediaQuery();
   const { postId } = router.query;
   const recruitmentId = typeof postId === 'string' ? postId : '';
 
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.applicants(recruitmentId, token),
-    enabled: !!token && !!recruitmentId,
+    ...teamQueries.applicants(recruitmentId, isLoggedIn),
+    enabled: isLoggedIn && !!recruitmentId,
   });
 
   const handleGroupChatClick = () => {

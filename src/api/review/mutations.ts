@@ -19,24 +19,18 @@ const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: st
 };
 
 export const reviewMutations = {
-  add: (queryClient: QueryClient, token: string, shopId: string, callbacks: ReviewMutationCallbacks = {}) =>
+  add: (queryClient: QueryClient, shopId: string, callbacks: ReviewMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (reviewData: ReviewRequest) => postStoreReview(token, shopId, reviewData),
+      mutationFn: (reviewData: ReviewRequest) => postStoreReview(shopId, reviewData),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  edit: (
-    queryClient: QueryClient,
-    token: string,
-    shopId: string,
-    reviewId: string,
-    callbacks: ReviewMutationCallbacks = {},
-  ) =>
+  edit: (queryClient: QueryClient, shopId: string, reviewId: string, callbacks: ReviewMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (reviewData: ReviewRequest) => putStoreReview(token, shopId, reviewId, reviewData),
+      mutationFn: (reviewData: ReviewRequest) => putStoreReview(shopId, reviewId, reviewData),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();

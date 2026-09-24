@@ -12,7 +12,7 @@ import { ParticipantAvatarIcon } from 'components/Callvan/components/Participant
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 
 import styles from './CallvanChatRoom.module.scss';
@@ -48,9 +48,9 @@ function formatKoreanDateString(dateStr: string): string {
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
   const logger = useLogger();
-  const token = useTokenState();
-  const { data } = useSuspenseQuery(callvanQueries.chat(token ?? '', postId));
-  const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(token ?? '', postId));
+  const isLoggedIn = useIsLoggedIn();
+  const { data } = useSuspenseQuery(callvanQueries.chat(postId, isLoggedIn));
+  const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(postId, isLoggedIn));
 
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
   const [inputValue, setInputValue] = useState('');

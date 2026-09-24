@@ -11,15 +11,14 @@ import MobileArticleTabMenu from 'components/Articles/components/MobileArticleTa
 import Pagination from 'components/Articles/components/Pagination';
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import HomeLayout from 'components/layout/HomeLayout';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 const DEFAULT_BOARD_ID = 4;
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token, query } = parseServerSideParams(context);
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+  const { query } = context;
   const pageNumber = typeof query.page === 'string' ? query.page : '1';
   const boardId = typeof query.boardId === 'string' ? Number(query.boardId) : DEFAULT_BOARD_ID;
 
@@ -27,12 +26,12 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const prefetchPromises = [
     queryClient.prefetchQuery(articleQueries.hot()),
-    queryClient.prefetchQuery(articleQueries.list(token ?? '', pageNumber, boardId)),
+    queryClient.prefetchQuery(articleQueries.list(serverRequest.isLoggedIn, pageNumber, boardId)),
   ];
 
   await Promise.all(prefetchPromises);
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 
@@ -71,12 +70,12 @@ export default function ArticleListPage({
   initialBoardId,
   serverNow,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const paramsPage = usePageParams(initialPage);
   const boardId = useBoardIdParams(initialBoardId);
 
   const { data: articlesData } = useQuery({
-    ...articleQueries.list(token, paramsPage, boardId),
+    ...articleQueries.list(isLoggedIn, paramsPage, boardId),
     placeholderData: keepPreviousData,
     select: createArticlesWithNewSelector(serverNow),
   });

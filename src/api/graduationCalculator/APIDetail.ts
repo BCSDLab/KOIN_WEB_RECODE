@@ -18,8 +18,6 @@ export class GraduationAgreement<R extends GraduationAgree> implements APIReques
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class GeneralEducation<R extends GeneralEducationResponse> implements APIRequest<R> {
@@ -30,8 +28,6 @@ export class GeneralEducation<R extends GeneralEducationResponse> implements API
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class CourseType<R extends CourseTypeResponse> implements APIRequest<R> {
@@ -44,7 +40,6 @@ export class CourseType<R extends CourseTypeResponse> implements APIRequest<R> {
   auth = true;
 
   constructor(
-    public authorization: string,
     public semester: Semester,
     public name: string,
     public general_education_area: string | undefined,
@@ -64,10 +59,7 @@ export class GraduationExcelUpload<R extends GraduationExcelUploadResponse> impl
 
   auth = true;
 
-  constructor(
-    public data: GraduationExcelUploadRequest,
-    public authorization: string,
-  ) {}
+  constructor(public data: GraduationExcelUploadRequest) {}
 }
 
 export class GradesByCourseType<R extends GradesByCourseTypeResponse> implements APIRequest<R> {
@@ -78,6 +70,4 @@ export class GradesByCourseType<R extends GradesByCourseTypeResponse> implements
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }

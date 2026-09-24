@@ -1,5 +1,5 @@
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
@@ -18,7 +18,7 @@ export default function ClubNotificationModal({
   variant,
   type = 'subscribed',
 }: ClubNotificationModalProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const notifyType = variant === 'recruit' ? '모집' : '행사';
   const infoText = `${notifyType} 알림을 ${type === 'unsubscribed' ? '취소하시겠어요?' : '받으시겠어요?'}`;
@@ -27,7 +27,7 @@ export default function ClubNotificationModal({
   useEscapeKeyDown({ onEscape: closeModal });
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
 
-  if (!token) {
+  if (!isLoggedIn) {
     return (
       <LoginRequiredModal
         title={`${notifyType} 알림 기능을 사용하기`}

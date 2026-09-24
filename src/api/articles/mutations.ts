@@ -23,58 +23,59 @@ const invalidateLostItemChatroomAll = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemChatroomAll });
 
 export const articleMutations = {
-  createLostItem: (queryClient: QueryClient, token: string) =>
+  createLostItem: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: async (data: LostItemArticlesRequestDTO) => {
-        const response = await postLostItemArticle(token, data);
+        const response = await postLostItemArticle(data);
 
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  updateLostItem: (queryClient: QueryClient, token: string, articleId: number) =>
+  updateLostItem: (queryClient: QueryClient, articleId: number) =>
     mutationOptions({
       mutationFn: async (data: UpdateLostItemArticleRequestDTO) => {
-        const response = await putLostItemArticle(token, articleId, data);
+        const response = await putLostItemArticle(articleId, data);
 
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  deleteLostItem: (queryClient: QueryClient, token: string) =>
+  deleteLostItem: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (articleId: number) => deleteLostItemArticle(token, articleId),
+      mutationFn: (articleId: number) => deleteLostItemArticle(articleId),
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  reportLostItem: (queryClient: QueryClient, token: string) =>
+  reportLostItem: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: ({ articleId, reports }: { articleId: number; reports: ReportItemArticleRequestDTO['reports'] }) =>
-        postReportLostItemArticle(token, articleId, { reports }),
+        postReportLostItemArticle(articleId, { reports }),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: articleQueryKeys.all });
         await invalidateLostItemAll(queryClient);
       },
     }),
 
-  toggleLostItemFound: (queryClient: QueryClient, token: string, articleId: number) =>
+  toggleLostItemFound: (queryClient: QueryClient, isLoggedIn: boolean, articleId: number) =>
     mutationOptions({
-      mutationFn: () => postFoundLostItem(token, articleId),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId, token) }),
+      mutationFn: () => postFoundLostItem(articleId),
+      onSuccess: () =>
+        queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId, isLoggedIn) }),
     }),
 
-  createLostItemChatroom: (queryClient: QueryClient, token: string) =>
+  createLostItemChatroom: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (articleId: number) => postLostItemChatroom(token, articleId),
+      mutationFn: (articleId: number) => postLostItemChatroom(articleId),
       onSuccess: () => invalidateLostItemChatroomAll(queryClient),
     }),
 
-  blockLostItemChatroom: (queryClient: QueryClient, token: string) =>
+  blockLostItemChatroom: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: ({ articleId, chatroomId }: { articleId: number; chatroomId: number }) =>
-        postBlockLostItemChatroom(token, articleId, chatroomId),
+        postBlockLostItemChatroom(articleId, chatroomId),
       onSuccess: () => invalidateLostItemChatroomAll(queryClient),
     }),
 };

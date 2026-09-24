@@ -24,7 +24,7 @@ import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './CategoryPage.module.scss';
 
@@ -228,7 +228,7 @@ function CategoryIconBox({ Icon }: { Icon?: IconComponent }) {
 
 function CategoryPage() {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
 
   const handleCategoryClick = (logging: CategoryLogging) => {
@@ -243,7 +243,7 @@ function CategoryPage() {
 
   const handleMenuClick = (e: MouseEvent<HTMLAnchorElement>, item: CategoryItem) => {
     handleCategoryClick(item.logging);
-    if (!token && item.href === ROUTES.LostItemChat()) {
+    if (!isLoggedIn && item.href === ROUTES.LostItemChat()) {
       e.preventDefault();
       openLoginModal();
     }

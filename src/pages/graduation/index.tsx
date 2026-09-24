@@ -19,7 +19,7 @@ import useTotalGrades from 'components/TimetablePage/hooks/useTotalGrades';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { useSemester } from 'utils/zustand/semester';
@@ -31,13 +31,13 @@ const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/co
 });
 
 function GraduationCalculatorComponent() {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const semester = useSemester();
   const { lock, unlock } = useScrollLock(false);
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts();
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const { data: totalGrades } = useTotalGrades(currentFrameIndex);
   const portalManager = useModalPortal();
@@ -52,15 +52,15 @@ function GraduationCalculatorComponent() {
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!isLoggedIn) return;
 
     agreeGraduationCreidts();
     openTooltip();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 실행 (token은 이 시점 값만 확인)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 실행 (isLoggedIn은 이 시점 값만 확인)
   }, []);
 
   useEffect(() => {
-    if (!token) return;
+    if (!isLoggedIn) return;
 
     const isFirstVisit = isomorphicSessionStorage.getItem('visitedGraduationPage');
 
@@ -69,8 +69,8 @@ function GraduationCalculatorComponent() {
 
       portalManager.open(() => <CalculatorHelpModal closeInfo={closeInfo} />);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- token 변경 시에만 최초 방문 여부를 재확인
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- isLoggedIn 변경 시에만 최초 방문 여부를 재확인
+  }, [isLoggedIn]);
 
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
@@ -168,7 +168,7 @@ function GraduationCalculatorComponent() {
           </div>
         </div>
       </div>
-      {!token && <GraduationCalculatorAuthModal />}
+      {!isLoggedIn && <GraduationCalculatorAuthModal />}
     </div>
   );
 }

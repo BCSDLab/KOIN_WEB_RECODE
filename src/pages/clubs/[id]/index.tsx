@@ -34,9 +34,8 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
@@ -60,9 +59,8 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const { params, query } = context;
-  const { token } = parseServerSideParams(context);
   const id = params?.id;
 
   if (!id || Array.isArray(id)) {
@@ -84,7 +82,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(clubQueries.detail(clubId, token)),
+    queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
     queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
   ]);
 
@@ -92,7 +90,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
   }
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 
@@ -102,30 +100,23 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
       initialClubId: clubId,
       initialTab,
       initialEventId: numericEventId,
-      serverToken: token ?? null,
     },
   };
 });
 
 interface ClubDetailPageProps {
-  serverToken: string | null;
   initialClubId: number;
   initialTab: TabType;
   initialEventId: number;
 }
 
-export default function ClubDetailPage({
-  initialClubId,
-  initialTab,
-  initialEventId,
-  serverToken,
-}: ClubDetailPageProps) {
+export default function ClubDetailPage({ initialClubId, initialTab, initialEventId }: ClubDetailPageProps) {
   const router = useRouter();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
 
-  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId, serverToken);
+  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
   const { data: clubRecruitmentData } = useSuspenseQuery(clubQueries.recruitment(initialClubId));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
@@ -147,7 +138,7 @@ export default function ClubDetailPage({
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } =
     useClubLikeMutation(initialClubId);
@@ -174,7 +165,7 @@ export default function ClubDetailPage({
 
   const handleToggleLike = async () => {
     if (!initialClubId || isPending) return;
-    if (!token) {
+    if (!isLoggedIn) {
       openAuthModal();
 
       return;
@@ -341,7 +332,7 @@ export default function ClubDetailPage({
   };
 
   const handleClickRecruitNotifyButton = () => {
-    if (!token) return openAuthModal();
+    if (!isLoggedIn) return openAuthModal();
     openRecruitNotifyModal();
   };
 

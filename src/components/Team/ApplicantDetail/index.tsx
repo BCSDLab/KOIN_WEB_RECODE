@@ -12,7 +12,7 @@ import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 import ActivityHistoryDetailModal from './components/ActivityHistoryDetailModal';
@@ -51,7 +51,7 @@ const DECISION_MODAL_COPY: Record<TeamRecruitmentApplicationDecision, DecisionMo
 
 export default function ApplicantDetail() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const logger = useLogger();
   const queryClient = useQueryClient();
 
@@ -60,22 +60,22 @@ export default function ApplicantDetail() {
   const applicationId = typeof applicantId === 'string' ? applicantId : '';
 
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.applicantDetail(recruitmentId, applicationId, token),
-    enabled: !!token && !!recruitmentId && !!applicationId,
+    ...teamQueries.applicantDetail(recruitmentId, applicationId, isLoggedIn),
+    enabled: isLoggedIn && !!recruitmentId && !!applicationId,
   });
 
   const recruitmentIdNumber = Number(recruitmentId);
   const { data: recruitment } = useQuery({
-    ...teamQueries.detail(recruitmentIdNumber, token),
-    enabled: !!token && !!recruitmentId,
+    ...teamQueries.detail(recruitmentIdNumber, isLoggedIn),
+    enabled: isLoggedIn && !!recruitmentId,
   });
 
   const { mutate: decideApplication, isPending: isDeciding } = useMutation(
-    teamMutations.decideApplication(queryClient, token, recruitmentId),
+    teamMutations.decideApplication(queryClient, recruitmentId),
   );
 
   const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
-    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
+    teamMutations.createDirectChatRoom(Number(recruitmentId)),
   );
 
   const [decisionAction, setDecisionAction] = useState<TeamRecruitmentApplicationDecision | null>(null);

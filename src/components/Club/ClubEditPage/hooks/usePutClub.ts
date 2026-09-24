@@ -4,11 +4,9 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function usePutClub(clubId: number | string | undefined) {
-  const token = useTokenState();
   const queryClient = useQueryClient();
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
@@ -16,7 +14,7 @@ export default function usePutClub(clubId: number | string | undefined) {
     navigate('/clubs');
   }
   const { status, mutateAsync } = useMutation({
-    ...clubMutations.update(queryClient, token, clubId!, {
+    ...clubMutations.update(queryClient, clubId!, {
       onSuccess: () => {
         showToast('success', '동아리 정보 수정 요청이 완료되었습니다.');
         navigate(ROUTES.ClubDetail({ id: String(clubId) }));

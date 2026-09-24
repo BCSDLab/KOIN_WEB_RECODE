@@ -6,14 +6,14 @@ import { deptQueries } from 'api/dept/queries';
 import useUpdateAcademicInfo from 'components/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
   const logger = useLogger();
-  const token = useTokenState();
-  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
+  const isLoggedIn = useIsLoggedIn();
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(isLoggedIn));
   const { data: deptMajorList } = useSuspenseQuery(deptQueries.majorList());
 
   const [studentNumber, setStudentNumber] = useState<string>(academicInfo?.student_number ?? '');
@@ -43,7 +43,7 @@ function StudentForm() {
     setMajor('');
   };
 
-  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
+  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo();
 
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

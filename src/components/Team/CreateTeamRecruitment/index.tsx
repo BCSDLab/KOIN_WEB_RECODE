@@ -6,14 +6,12 @@ import NewTeamRecruitment from 'components/Team/NewTeamRecruitment';
 import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
 import toRecruitmentRequestBody from 'components/Team/NewTeamRecruitment/toRecruitmentRequestBody';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function CreateTeamRecruitment() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const token = useTokenState();
-  const { mutateAsync: createRecruitment } = useMutation(teamMutations.createRecruitment(queryClient, token));
+  const { mutateAsync: createRecruitment } = useMutation(teamMutations.createRecruitment(queryClient));
 
   const handleSubmit = async (values: TeamRecruitmentFormValues) => {
     try {

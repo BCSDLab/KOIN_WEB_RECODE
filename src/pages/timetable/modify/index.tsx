@@ -7,27 +7,28 @@ import type { Semester } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
-import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
 
-  const { token, query } = parseServerSideParams(context);
-  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE];
+  const { query } = context;
+  const { isLoggedIn, userType } = serverRequest;
   const timetableFrameId = Number(query.id);
   let currentSemester = getSemesterFromQuery(query.year, query.term) ?? getRecentSemester();
 
-  if (token && userType === 'STUDENT') {
+  if (isLoggedIn && userType === 'STUDENT') {
     try {
-      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
+      const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
       const userSemester = mySemesterData?.semesters?.[0];
       const semester = resolveTimetableSemester(query.year, query.term, userSemester);
       currentSemester = semester ?? currentSemester;
 
-      const prefetchPromises = [queryClient.prefetchQuery(timetableQueries.lectureInfo(token, timetableFrameId))];
+      const prefetchPromises = [
+        queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, timetableFrameId)),
+      ];
 
       if (semester) {
         prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureList(semester)));
@@ -38,7 +39,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) {
         throw error;
       }
-      if (isServerAuthError(error)) clearServerAuthCookies(context);
     }
   }
 
@@ -48,7 +48,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       semester: currentSemester,
     },
   };
-}
+});
 
 export default function ModifyTimetablePageWrapper({ semester }: { semester: Semester }) {
   const router = useRouter();

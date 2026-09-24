@@ -17,35 +17,31 @@ import { weatherQueries } from 'api/weather/queries';
 import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
 import HomePage from 'components/IndexComponents/HomePage';
 import HomeLayout from 'components/layout/HomeLayout';
-import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
+import { isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
-import type { UserType } from 'utils/zustand/auth';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  let token = parseServerSideParams(context).token ?? '';
-  let userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
+  let isLoggedIn = serverRequest.isLoggedIn;
+  let userType = serverRequest.userType;
   const isMobile = getDeviceClass(context.req.headers['user-agent']) === 'mobile';
 
   const resetAuthContext = () => {
-    token = '';
-    userType = '';
-    clearServerAuthCookies(context);
+    isLoggedIn = false;
+    userType = null;
   };
 
   const setDefaultTimetableFrameList = (semester: Semester = getRecentSemester()) => {
-    queryClient.setQueryData(timetableQueryKeys.frameList(semester, token), createDefaultTimetableFrameList());
+    queryClient.setQueryData(timetableQueryKeys.frameList(semester, isLoggedIn), createDefaultTimetableFrameList());
   };
 
   const fetchMySemester = async () => {
-    if (!token || userType !== 'STUDENT') return null;
+    if (!isLoggedIn || userType !== 'STUDENT') return null;
 
     try {
-      return await queryClient.fetchQuery(timetableQueries.mySemester(token, { userType }));
+      return await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
     } catch (error) {
       if (isServerAuthError(error)) {
         resetAuthContext();
@@ -73,8 +69,8 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     queryClient.prefetchQuery(cafeteriaQueries.dinings(convertDateToSimpleString(diningDate))),
   ]);
 
-  if (token) {
-    await queryClient.prefetchQuery(authQueries.userInfo(token, userType as UserType));
+  if (isLoggedIn) {
+    await queryClient.prefetchQuery(authQueries.userInfo(true, userType));
   }
 
   const userSemester = mySemester?.semesters?.[0];
@@ -88,7 +84,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     await Promise.all([
       queryClient.prefetchQuery(weatherQueries.info()),
       queryClient.prefetchQuery(
-        callvanQueries.list('', { statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
+        callvanQueries.list({ statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
       ),
       queryClient.prefetchQuery(storeQueries.counts()),
       queryClient.prefetchQuery(storeQueries.eventCount()),
@@ -98,7 +94,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     const [banners, categoriesResponse] = await Promise.all([
       queryClient.fetchQuery(bannerQueries.categories()),
       queryClient.fetchQuery(storeQueries.categories()),
-      queryClient.prefetchQuery(articleQueries.list(token, '1')),
+      queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
       queryClient.prefetchQuery(timetableQueries.semesterInfo()),
       queryClient.prefetchQuery(articleQueries.lostItemStat()),
     ]);
@@ -106,18 +102,18 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     bannerCategoryId = Number(banners.banner_categories[0].id);
     bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
 
-    if (token && userType === 'STUDENT') {
+    if (isLoggedIn && userType === 'STUDENT') {
       if (!userSemester) {
         setDefaultTimetableFrameList();
       } else {
         try {
           const timetableFrameList = await queryClient.fetchQuery(
-            timetableQueries.frameList(token, userSemester, { userType }),
+            timetableQueries.frameList(isLoggedIn, userSemester, { userType }),
           );
           const mainFrame = timetableFrameList.find((frame) => frame.is_main);
           const activeMainFrameId = mainFrame?.id;
           if (typeof activeMainFrameId === 'number') {
-            await queryClient.prefetchQuery(timetableQueries.lectureInfo(token, activeMainFrameId));
+            await queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, activeMainFrameId));
           }
         } catch (error) {
           if (isServerAuthError(error)) {
@@ -132,7 +128,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     }
   }
 
-  if (!token) {
+  if (!isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 interface ClubEventListProps {
   clubId: string | number | undefined;
@@ -11,13 +11,13 @@ interface ClubEventListProps {
 }
 
 export function useClubEventList({ clubId, eventType }: ClubEventListProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
 
   if (!clubId) {
     router.push(ROUTES.Club());
   }
-  const { data: clubEventList } = useSuspenseQuery(clubQueries.eventList(clubId!, eventType, token));
+  const { data: clubEventList } = useSuspenseQuery(clubQueries.eventList(clubId!, eventType, isLoggedIn));
 
   return { clubEventList };
 }

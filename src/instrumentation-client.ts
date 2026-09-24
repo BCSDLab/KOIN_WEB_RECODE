@@ -132,7 +132,7 @@ Sentry.init({
 
     const koinError = asKoinError(error);
     if (koinError) {
-      // 401: 토큰 만료. 미들웨어와 useAutoLogin이 처리하는 정상 흐름이다.
+      // 401: 인증 만료. apiClient의 리프레시/재로그인 흐름이 처리하는 정상 흐름이다.
       // 404: 삭제된 게시글 등에 접근. 페이지에서 안내하므로 알림 대상이 아니다.
       if (koinError.status === 401 || koinError.status === 404) return null;
 

@@ -6,7 +6,7 @@ import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
 import styles from './GeneralCourseListModal.module.scss';
@@ -17,7 +17,7 @@ export interface GeneralCourseListModalProps {
 }
 
 function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const semesters = useAllSemesters();
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
@@ -31,7 +31,7 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
   }>({ year: semesters[0].year, term: semesters[0].term });
 
   const { data: generalCourses } = useSuspenseQuery(
-    graduationCalculatorQueries.courseType(token, semester, '교양선택', courseType ?? undefined),
+    graduationCalculatorQueries.courseType(semester, '교양선택', courseType ?? undefined, isLoggedIn),
   );
   const generalCourseLectures = generalCourses?.lectures ?? [];
 

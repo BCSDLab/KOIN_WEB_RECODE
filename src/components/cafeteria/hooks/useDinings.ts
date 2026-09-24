@@ -3,12 +3,10 @@ import { cafeteriaMutations } from 'api/cafeteria/mutations';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import type { Dining, OriginalDining } from 'api/dinings/entity';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
-import useTokenState from 'utils/hooks/state/useTokenState';
 
 function useDinings(date: Date) {
   const convertedDate = convertDateToSimpleString(date);
   const queryClient = useQueryClient();
-  const token = useTokenState();
 
   const { data: dinings } = useSuspenseQuery({
     ...cafeteriaQueries.dinings(convertedDate),
@@ -23,8 +21,8 @@ function useDinings(date: Date) {
       })) as Dining[];
     },
   });
-  const likeMutation = cafeteriaMutations.likeDining(queryClient, token, convertedDate);
-  const cancelLikeMutation = cafeteriaMutations.cancelLikeDining(queryClient, token, convertedDate);
+  const likeMutation = cafeteriaMutations.likeDining(queryClient, convertedDate);
+  const cancelLikeMutation = cafeteriaMutations.cancelLikeDining(queryClient, convertedDate);
 
   const likeDiningMutation = useMutation({
     ...likeMutation,

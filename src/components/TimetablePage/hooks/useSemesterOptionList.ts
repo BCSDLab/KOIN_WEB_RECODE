@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { timetableQueries } from 'api/timetable/queries';
-import useTokenState from 'utils/hooks/state/useTokenState';
 
 import useSemesterCheck from './useMySemester';
 
@@ -17,9 +16,8 @@ export const useAllSemesters = () => {
 };
 
 const useSemesterOptionList = () => {
-  const token = useTokenState();
   const allSemesters = useAllSemesters();
-  const { data: mySemesterList } = useSemesterCheck(token);
+  const { data: mySemesterList } = useSemesterCheck();
   const semesterList = mySemesterList?.semesters ?? allSemesters;
 
   const semesterOptionList = (semesterList ?? []).map((semesterInfo) => ({

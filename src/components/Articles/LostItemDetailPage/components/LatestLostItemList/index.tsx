@@ -6,16 +6,16 @@ import CategoryBadge from 'components/Articles/components/CategoryBadge';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 
 import styles from './LatestLostItemList.module.scss';
 
 function LatestLostItemList() {
-  const token = useTokenState();
   const isMobile = useMediaQuery();
+  const isLoggedIn = useIsLoggedIn();
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    articleQueries.lostItemInfiniteList(token, {
+    articleQueries.lostItemInfiniteList(isLoggedIn, {
       limit: 10,
       sort: 'LATEST',
     }),

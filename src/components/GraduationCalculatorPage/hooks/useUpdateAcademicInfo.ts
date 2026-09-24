@@ -8,12 +8,12 @@ import showToast from 'utils/ts/showToast';
 
 import useAgreeGraduationCreidts from './useAgreeGraduationCreidts';
 
-export default function useUpdateAcademicInfo(token: string) {
+export default function useUpdateAcademicInfo() {
   const queryClient = useQueryClient();
-  const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts(token);
+  const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts();
 
   return useMutation({
-    mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(token, data),
+    mutationFn: (data: UpdateAcademicInfoRequest) => updateAcademicInfo(data),
 
     onSuccess: () => {
       agreeGraduationCredits();

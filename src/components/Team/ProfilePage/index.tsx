@@ -17,7 +17,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 import { PROFILE_LOG_MODE } from './constants';
@@ -236,7 +236,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
 }
 
 export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isEditMode = mode === 'edit';
 
   // _app.tsx의 QueryClient는 SSR 중 모든 쿼리를 기본적으로 enabled:false로 끈다(전역 기본값).
@@ -245,8 +245,8 @@ export default function TeamProfileForm({ mode }: TeamProfileFormProps) {
   // getServerSideProps가 이미 이 쿼리를 prefetch+dehydrate해뒀으므로, 서버·클라이언트 모두 첫 렌더부터
   // 캐시에서 동기적으로 값을 읽는다 — "빈 폼으로 시작했다가 나중에 채워지는" 창 자체가 없다.
   const { data: existingProfile } = useQuery({
-    ...teamRecruitmentProfileQueries.me(token),
-    enabled: isEditMode && !!token,
+    ...teamRecruitmentProfileQueries.me(isLoggedIn),
+    enabled: isEditMode && isLoggedIn,
   });
 
   return (
