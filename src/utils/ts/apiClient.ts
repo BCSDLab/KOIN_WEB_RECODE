@@ -14,7 +14,9 @@ import { redirectToLogin } from './auth';
 import { getCookie } from './cookie';
 import { queryClient } from './queryClient';
 
-const API_URL = process.env.NEXT_PUBLIC_API_PATH;
+const isBrowser = typeof window !== 'undefined';
+const isLocalDev = isBrowser && process.env.NODE_ENV === 'development';
+const API_URL = isLocalDev ? '/api/proxy' : process.env.NEXT_PUBLIC_API_PATH;
 
 function normalizeApiPath(path: string | undefined): string {
   if (!path) return 'unknown';
