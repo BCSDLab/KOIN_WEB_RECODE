@@ -20,7 +20,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { isServerAuthError } from 'utils/ts/ssrAuth';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
@@ -50,11 +49,10 @@ const setDefaultTimetableFrameList = (
 async function prefetchTimetableData(
   queryClient: QueryClient,
   context: GetServerSidePropsContext,
-  token: string,
+  isLoggedIn: boolean,
   query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
-  const isLoggedIn = Boolean(token);
   try {
     const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn));
     const userSemester = mySemesterData?.semesters?.[0];
@@ -107,14 +105,14 @@ async function prefetchTimetableData(
   }
 }
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  const { token, query } = parseServerSideParams(context);
+  const { query } = context;
   const frameId = Number(query.timetableFrameId);
   const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
-  if (token) {
-    await prefetchTimetableData(queryClient, context, token, query, validatedFrameId);
+  if (serverRequest.isLoggedIn) {
+    await prefetchTimetableData(queryClient, context, serverRequest.isLoggedIn, query, validatedFrameId);
   } else {
     setDefaultTimetableFrameList(queryClient, false);
     cacheControl.enablePublicCache();

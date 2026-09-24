@@ -28,7 +28,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
@@ -72,13 +71,12 @@ const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): T
 
 const INITIAL_REQUEST_PARAMS = createRequestParams(INITIAL_FILTER);
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token } = parseServerSideParams(context);
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, Boolean(token)));
+  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, serverRequest.isLoggedIn));
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 

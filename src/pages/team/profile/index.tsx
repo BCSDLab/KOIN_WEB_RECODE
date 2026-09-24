@@ -11,7 +11,6 @@ import TeamProfileMobile from 'components/Team/TeamProfilePage/TeamProfileMobile
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './TeamProfilePage.module.scss';
@@ -21,12 +20,11 @@ import styles from './TeamProfilePage.module.scss';
 // 겪지 않고 처음부터 확정된 데이터로 렌더한다 — "프로필 없음"이 잠깐 보이는 깜빡임이 구조적으로 불가능해진다.
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
-}>(async (context: GetServerSidePropsContext) => {
+}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  const { token } = parseServerSideParams(context);
 
-  if (token) {
-    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(Boolean(token)));
+  if (serverRequest.isLoggedIn) {
+    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(serverRequest.isLoggedIn));
   }
 
   return {

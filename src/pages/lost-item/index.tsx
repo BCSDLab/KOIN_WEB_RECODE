@@ -12,14 +12,13 @@ import { selectLostItemPaginationData } from 'components/Articles/utils/selectAr
 import { SSRLayout } from 'components/layout';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './LostItemArticleListPage.module.scss';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  const { token, query } = parseServerSideParams(context);
+  const { query } = context;
 
   const fallback: LostItemParams = {
     page: 1,
@@ -34,9 +33,9 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const apiParams = toLostItemArticlesRequest(params);
 
-  await queryClient.prefetchQuery(articleQueries.lostItemList(Boolean(token), apiParams));
+  await queryClient.prefetchQuery(articleQueries.lostItemList(serverRequest.isLoggedIn, apiParams));
 
-  if (!token) {
+  if (!serverRequest.isLoggedIn) {
     cacheControl.enablePublicCache();
   }
 

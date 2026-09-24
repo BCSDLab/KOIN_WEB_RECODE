@@ -7,21 +7,19 @@ import type { Semester } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
-import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import { isServerAuthError } from 'utils/ts/ssrAuth';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
 
-  const { token, query } = parseServerSideParams(context);
-  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE];
+  const { query } = context;
+  const { isLoggedIn, userType } = serverRequest;
   const timetableFrameId = Number(query.id);
   let currentSemester = getSemesterFromQuery(query.year, query.term) ?? getRecentSemester();
-  const isLoggedIn = Boolean(token);
 
-  if (token && userType === 'STUDENT') {
+  if (isLoggedIn && userType === 'STUDENT') {
     try {
       const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
       const userSemester = mySemesterData?.semesters?.[0];
@@ -50,7 +48,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       semester: currentSemester,
     },
   };
-}
+});
 
 export default function ModifyTimetablePageWrapper({ semester }: { semester: Semester }) {
   const router = useRouter();
