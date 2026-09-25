@@ -28,7 +28,8 @@ export default function useUserInfoModal() {
       })
     : false;
 
-  const canOpen = isLoggedIn && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
+  const canOpen =
+    isLoggedIn && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
 
   const isFirstTime = completion !== COMPLETION_STATUS.SKIPPED;
   // 서버와 브라우저의 첫 렌더를 동일하게 유지한 뒤 로그인 상태에 따라 모달을 표시합니다.

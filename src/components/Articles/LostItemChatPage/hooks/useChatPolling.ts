@@ -146,19 +146,16 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
     },
   });
 
-  const leaveRoom = useCallback(
-    (aId: number, cId: number) => {
-      postLeaveLostItemChatroomV2(aId, cId).catch((error: unknown) => {
-        if (isKoinError(error)) {
-          showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
-        } else {
-          showToast('error', '채팅방 퇴장을 실패하였습니다');
-          sendClientError(error);
-        }
-      });
-    },
-    [],
-  );
+  const leaveRoom = useCallback((aId: number, cId: number) => {
+    postLeaveLostItemChatroomV2(aId, cId).catch((error: unknown) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
+      } else {
+        showToast('error', '채팅방 퇴장을 실패하였습니다');
+        sendClientError(error);
+      }
+    });
+  }, []);
 
   const prevRoomRef = useRef<{ articleId: number; chatroomId: number } | null>(null);
 

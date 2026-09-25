@@ -9,10 +9,7 @@ export class GetStoreReview<R extends ReviewResponse> implements APIRequest<R> {
 
   path: string;
 
-  constructor(
-    shopId: string,
-    reviewId: string,
-  ) {
+  constructor(shopId: string, reviewId: string) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
   }
 }
@@ -41,11 +38,7 @@ export class EditStoreReview<R extends ReviewRequest> implements APIRequest<R> {
 
   data: ReviewRequest;
 
-  constructor(
-    shopId: string,
-    reviewId: string,
-    data: ReviewRequest,
-  ) {
+  constructor(shopId: string, reviewId: string, data: ReviewRequest) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
     this.data = data;
   }

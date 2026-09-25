@@ -105,25 +105,27 @@ async function prefetchTimetableData(
   }
 }
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const queryClient = new QueryClient();
-  const { query } = context;
-  const frameId = Number(query.timetableFrameId);
-  const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
+    const { query } = context;
+    const frameId = Number(query.timetableFrameId);
+    const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
-  if (serverRequest.isLoggedIn) {
-    await prefetchTimetableData(queryClient, context, serverRequest.isLoggedIn, query, validatedFrameId);
-  } else {
-    setDefaultTimetableFrameList(queryClient, false);
-    cacheControl.enablePublicCache();
-  }
+    if (serverRequest.isLoggedIn) {
+      await prefetchTimetableData(queryClient, context, serverRequest.isLoggedIn, query, validatedFrameId);
+    } else {
+      setDefaultTimetableFrameList(queryClient, false);
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+);
 
 function TimetablePage() {
   const isMobile = useMediaQuery();

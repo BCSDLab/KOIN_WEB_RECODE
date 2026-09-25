@@ -19,12 +19,7 @@ const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: st
 };
 
 export const storeMutations = {
-  deleteReview: (
-    queryClient: QueryClient,
-    reviewId: number,
-    shopId: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  deleteReview: (queryClient: QueryClient, reviewId: number, shopId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
       mutationFn: () => deleteReview(reviewId, shopId),
       onSuccess: async () => {
@@ -33,12 +28,7 @@ export const storeMutations = {
       },
     }),
 
-  reportReview: (
-    queryClient: QueryClient,
-    shopId: string,
-    reviewId: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  reportReview: (queryClient: QueryClient, shopId: string, reviewId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
       mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data),
       onSuccess: async () => {

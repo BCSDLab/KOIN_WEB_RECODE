@@ -38,9 +38,7 @@ export const getServerSideProps = withCacheControl<{
   };
 });
 
-export default function CallvanParticipantsPage({
-  postId,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function CallvanParticipantsPage({ postId }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const mounted = useMount();

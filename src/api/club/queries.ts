@@ -121,11 +121,7 @@ export const clubQueries = {
       },
     }),
 
-  eventList: (
-    clubId: string | number,
-    eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED',
-    isLoggedIn?: boolean,
-  ) =>
+  eventList: (clubId: string | number, eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED', isLoggedIn?: boolean) =>
     queryOptions({
       queryKey: clubQueryKeys.eventList(clubId, eventType, isLoggedIn),
       queryFn: () => getClubEventList(clubId, eventType),

@@ -59,50 +59,52 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const { params, query } = context;
-  const id = params?.id;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const { params, query } = context;
+    const id = params?.id;
 
-  if (!id || Array.isArray(id)) {
+    if (!id || Array.isArray(id)) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const clubId = Number(id);
+    const tab = query.tab as TabType | undefined;
+    const eventId = query.eventId as string | undefined;
+    const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
+
+    let initialTab: TabType = tab ?? 'intro';
+    if (!tab && eventId) {
+      initialTab = 'event';
+    }
+
+    const queryClient = new QueryClient();
+
+    await Promise.all([
+      queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
+      queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
+    ]);
+
+    if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
+      await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
+    }
+
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
+
     return {
-      notFound: true,
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        initialClubId: clubId,
+        initialTab,
+        initialEventId: numericEventId,
+      },
     };
-  }
-
-  const clubId = Number(id);
-  const tab = query.tab as TabType | undefined;
-  const eventId = query.eventId as string | undefined;
-  const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
-
-  let initialTab: TabType = tab ?? 'intro';
-  if (!tab && eventId) {
-    initialTab = 'event';
-  }
-
-  const queryClient = new QueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
-    queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
-  ]);
-
-  if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
-    await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
-  }
-
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      initialClubId: clubId,
-      initialTab,
-      initialEventId: numericEventId,
-    },
-  };
-});
+  },
+);
 
 interface ClubDetailPageProps {
   initialClubId: number;

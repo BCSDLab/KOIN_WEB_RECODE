@@ -71,21 +71,23 @@ const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): T
 
 const INITIAL_REQUEST_PARAMS = createRequestParams(INITIAL_FILTER);
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const queryClient = new QueryClient();
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
 
-  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, serverRequest.isLoggedIn));
+    await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, serverRequest.isLoggedIn));
 
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+);
 
 export default function TeamListPage() {
   const router = useRouter();
