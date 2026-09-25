@@ -115,7 +115,8 @@ export const teamMutations = {
 
   submitApplication: (queryClient: QueryClient, recruitmentId: number) =>
     mutationOptions({
-      mutationFn: (data: PostTeamRecruitmentApplicationRequest) => submitTeamRecruitmentApplication(recruitmentId, data),
+      mutationFn: (data: PostTeamRecruitmentApplicationRequest) =>
+        submitTeamRecruitmentApplication(recruitmentId, data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: teamQueryKeys.myApplicationsRoot });
         queryClient.invalidateQueries({ queryKey: teamQueryKeys.detailRoot });

@@ -65,12 +65,8 @@ export const teamQueryKeys = {
     [...teamQueryKeys.chatRoot, 'room', getViewerScope(isLoggedIn), recruitmentId, chatRoomId] as const,
   chatMessagesRoot: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number) =>
     [...teamQueryKeys.chatRoot, 'messages', getViewerScope(isLoggedIn), recruitmentId, chatRoomId] as const,
-  chatMessages: (
-    isLoggedIn: boolean,
-    recruitmentId: number,
-    chatRoomId: number,
-    params: TeamChatMessageListRequest,
-  ) => [...teamQueryKeys.chatMessagesRoot(isLoggedIn, recruitmentId, chatRoomId), params] as const,
+  chatMessages: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest) =>
+    [...teamQueryKeys.chatMessagesRoot(isLoggedIn, recruitmentId, chatRoomId), params] as const,
 };
 
 export const teamQueries = {
@@ -104,8 +100,7 @@ export const teamQueries = {
     infiniteQueryOptions({
       queryKey: teamQueryKeys.infiniteNotifications(isLoggedIn),
       initialPageParam: 1,
-      queryFn: ({ pageParam }) =>
-        getTeamRecruitmentNotifications({ page: pageParam, limit: TEAM_NOTIFICATION_LIMIT }),
+      queryFn: ({ pageParam }) => getTeamRecruitmentNotifications({ page: pageParam, limit: TEAM_NOTIFICATION_LIMIT }),
       getNextPageParam: (lastPage) => {
         if (lastPage.current_page < lastPage.total_page) {
           return lastPage.current_page + 1;

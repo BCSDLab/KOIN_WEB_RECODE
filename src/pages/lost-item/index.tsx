@@ -16,36 +16,38 @@ import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './LostItemArticleListPage.module.scss';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const queryClient = new QueryClient();
-  const { query } = context;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
+    const { query } = context;
 
-  const fallback: LostItemParams = {
-    page: 1,
-    type: null,
-    category: [],
-    foundStatus: 'ALL',
-    sort: 'LATEST',
-    author: 'ALL',
-  };
+    const fallback: LostItemParams = {
+      page: 1,
+      type: null,
+      category: [],
+      foundStatus: 'ALL',
+      sort: 'LATEST',
+      author: 'ALL',
+    };
 
-  const params = parseLostItemQuery(query, fallback);
+    const params = parseLostItemQuery(query, fallback);
 
-  const apiParams = toLostItemArticlesRequest(params);
+    const apiParams = toLostItemArticlesRequest(params);
 
-  await queryClient.prefetchQuery(articleQueries.lostItemList(serverRequest.isLoggedIn, apiParams));
+    await queryClient.prefetchQuery(articleQueries.lostItemList(serverRequest.isLoggedIn, apiParams));
 
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      initialParams: params,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        initialParams: params,
+      },
+    };
+  },
+);
 
 function useLostItemParams(initialParams: LostItemParams) {
   const router = useRouter();

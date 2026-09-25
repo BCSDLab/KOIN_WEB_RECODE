@@ -17,33 +17,35 @@ import { withCacheControl } from 'utils/ts/withCacheControl';
 
 const DEFAULT_BOARD_ID = 4;
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const { query } = context;
-  const pageNumber = typeof query.page === 'string' ? query.page : '1';
-  const boardId = typeof query.boardId === 'string' ? Number(query.boardId) : DEFAULT_BOARD_ID;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const { query } = context;
+    const pageNumber = typeof query.page === 'string' ? query.page : '1';
+    const boardId = typeof query.boardId === 'string' ? Number(query.boardId) : DEFAULT_BOARD_ID;
 
-  const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-  const prefetchPromises = [
-    queryClient.prefetchQuery(articleQueries.hot()),
-    queryClient.prefetchQuery(articleQueries.list(serverRequest.isLoggedIn, pageNumber, boardId)),
-  ];
+    const prefetchPromises = [
+      queryClient.prefetchQuery(articleQueries.hot()),
+      queryClient.prefetchQuery(articleQueries.list(serverRequest.isLoggedIn, pageNumber, boardId)),
+    ];
 
-  await Promise.all(prefetchPromises);
+    await Promise.all(prefetchPromises);
 
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      initialPage: pageNumber,
-      serverNow: new Date().toISOString(),
-      initialBoardId: boardId,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        initialPage: pageNumber,
+        serverNow: new Date().toISOString(),
+        initialBoardId: boardId,
+      },
+    };
+  },
+);
 
 function usePageParams(initialPage: string) {
   const router = useRouter();

@@ -24,7 +24,12 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { createQueryParser, parseQueryBoolean, parseQueryNumber, parseQueryString } from 'utils/ts/parseServerSideParams';
+import {
+  createQueryParser,
+  parseQueryBoolean,
+  parseQueryNumber,
+  parseQueryString,
+} from 'utils/ts/parseServerSideParams';
 import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './ClubListPage.module.scss';
@@ -68,35 +73,37 @@ export const parseClubListQuery = createQueryParser<ClubListQuery>({
   },
 });
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const params = parseClubListQuery(context.query);
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const params = parseClubListQuery(context.query);
 
-  const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-  await Promise.all([
-    queryClient.prefetchQuery(clubQueries.categories()),
-    queryClient.prefetchQuery(
-      clubQueries.list({
-        isLoggedIn: serverRequest.isLoggedIn,
-        categoryId: params.categoryId ?? undefined,
-        sortType: params.sortType,
-        isRecruiting: params.isRecruiting,
-        clubName: params.clubName,
-      }),
-    ),
-  ]);
+    await Promise.all([
+      queryClient.prefetchQuery(clubQueries.categories()),
+      queryClient.prefetchQuery(
+        clubQueries.list({
+          isLoggedIn: serverRequest.isLoggedIn,
+          categoryId: params.categoryId ?? undefined,
+          sortType: params.sortType,
+          isRecruiting: params.isRecruiting,
+          clubName: params.clubName,
+        }),
+      ),
+    ]);
 
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      initialQuery: params,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        initialQuery: params,
+      },
+    };
+  },
+);
 
 function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();

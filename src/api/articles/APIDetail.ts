@@ -33,10 +33,7 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    page: string | undefined,
-    boardId: number = 4,
-  ) {
+  constructor(page: string | undefined, boardId: number = 4) {
     this.path = `/articles?boardId=${boardId}&page=${page}&limit=10`;
   }
 }
@@ -192,10 +189,7 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
 
   auth = true;
 
-  constructor(
-    articleId: number,
-    chatroomId: number,
-  ) {
+  constructor(articleId: number, chatroomId: number) {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}`;
   }
 }
@@ -211,10 +205,7 @@ export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailM
 
   auth = true;
 
-  constructor(
-    articleId: number,
-    chatroomId: number,
-  ) {
+  constructor(articleId: number, chatroomId: number) {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/messages`;
   }
 }
@@ -228,10 +219,7 @@ export class PostBlockLostItemChatroom<R extends object> implements APIRequest<R
 
   auth = true;
 
-  constructor(
-    articleId: number,
-    chatroomId: number,
-  ) {
+  constructor(articleId: number, chatroomId: number) {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/block`;
   }
 }

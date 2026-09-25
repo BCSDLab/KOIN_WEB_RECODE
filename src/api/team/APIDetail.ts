@@ -171,10 +171,7 @@ export class GetTeamRecruitmentApplicants<R extends TeamRecruitmentApplicantList
 
   params: TeamRecruitmentApplicantListRequest;
 
-  constructor(
-    recruitmentId: string,
-    params: TeamRecruitmentApplicantListRequest = {},
-  ) {
+  constructor(recruitmentId: string, params: TeamRecruitmentApplicantListRequest = {}) {
     this.path = `/team-recruitments/${recruitmentId}/applications`;
     this.params = {
       ...(params.statuses?.length && { statuses: params.statuses }),
@@ -248,10 +245,7 @@ export class GetTeamRecruitmentChatRoom<R extends TeamChatRoomResponse> implemen
 
   auth = true;
 
-  constructor(
-    recruitmentId: number,
-    chatRoomId: number,
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}`;
   }
 }
@@ -277,11 +271,7 @@ export class GetTeamRecruitmentChatMessages<R extends TeamChatMessageListRespons
 
   params: TeamChatMessageListRequest;
 
-  constructor(
-    recruitmentId: number,
-    chatRoomId: number,
-    params: TeamChatMessageListRequest = {},
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest = {}) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
 
     this.params = {
@@ -303,11 +293,7 @@ export class PostTeamRecruitmentChatMessage<R extends TeamChatMessage> implement
 
   data: TeamChatMessageSendRequest;
 
-  constructor(
-    recruitmentId: number,
-    chatRoomId: number,
-    data: TeamChatMessageSendRequest,
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number, data: TeamChatMessageSendRequest) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
     this.data = data;
   }
@@ -322,10 +308,7 @@ export class PostTeamRecruitmentDirectChatRoom<R extends TeamChatDirectRoomRespo
 
   auth = true;
 
-  constructor(
-    recruitmentId: number,
-    applicationId: number,
-  ) {
+  constructor(recruitmentId: number, applicationId: number) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/applications/${applicationId}/direct`;
   }
 }
@@ -355,10 +338,7 @@ export class GetTeamRecruitmentApplicantDetail<R extends TeamRecruitmentApplican
 
   auth = true;
 
-  constructor(
-    recruitmentId: string,
-    applicationId: string,
-  ) {
+  constructor(recruitmentId: string, applicationId: string) {
     this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}`;
   }
 }
@@ -374,10 +354,7 @@ export class PostTeamRecruitmentApplication<R extends PostTeamRecruitmentApplica
 
   data: PostTeamRecruitmentApplicationRequest;
 
-  constructor(
-    recruitmentId: number,
-    data: PostTeamRecruitmentApplicationRequest,
-  ) {
+  constructor(recruitmentId: number, data: PostTeamRecruitmentApplicationRequest) {
     this.path = `/team-recruitments/${recruitmentId}/applications`;
     this.data = data;
   }
@@ -394,11 +371,7 @@ export class PutTeamRecruitmentApplicationStatus<R extends object> implements AP
 
   data: TeamRecruitmentApplicationStatusUpdateRequest;
 
-  constructor(
-    recruitmentId: string,
-    applicationId: string,
-    data: TeamRecruitmentApplicationStatusUpdateRequest,
-  ) {
+  constructor(recruitmentId: string, applicationId: string, data: TeamRecruitmentApplicationStatusUpdateRequest) {
     this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}/status`;
     this.data = data;
   }

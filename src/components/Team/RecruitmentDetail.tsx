@@ -289,7 +289,9 @@ export default function RecruitmentDetail() {
     ...teamQueries.detail(recruitmentId, isLoggedIn),
     enabled: router.isReady && isValidRecruitmentId,
   });
-  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(teamMutations.deleteRecruitment(queryClient));
+  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(
+    teamMutations.deleteRecruitment(queryClient),
+  );
 
   const handleEdit = () => {
     logger.actionEventClick({

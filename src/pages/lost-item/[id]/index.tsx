@@ -31,35 +31,37 @@ import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './LostItemDetailPage.module.scss';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  const id = context.query.id;
-  if (typeof id !== 'string') {
-    return { notFound: true };
-  }
-  const articleId = Number(id);
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const id = context.query.id;
+    if (typeof id !== 'string') {
+      return { notFound: true };
+    }
+    const articleId = Number(id);
 
-  const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-  const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
+    const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
 
-  await Promise.all([
-    queryClient.prefetchQuery(articleQueries.lostItemDetail(serverRequest.isLoggedIn, articleId)),
-    queryClient.prefetchInfiniteQuery(
-      articleQueries.lostItemInfiniteList(serverRequest.isLoggedIn, latestLostItemParams),
-    ),
-  ]);
+    await Promise.all([
+      queryClient.prefetchQuery(articleQueries.lostItemDetail(serverRequest.isLoggedIn, articleId)),
+      queryClient.prefetchInfiniteQuery(
+        articleQueries.lostItemInfiniteList(serverRequest.isLoggedIn, latestLostItemParams),
+      ),
+    ]);
 
-  if (!serverRequest.isLoggedIn) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      articleId,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        articleId,
+      },
+    };
+  },
+);
 
 interface LostItemDetailPageProps {
   articleId: number;
