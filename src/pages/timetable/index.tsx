@@ -18,10 +18,10 @@ import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFr
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { isServerAuthError } from 'utils/ssr/authError';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { isServerAuthError } from 'utils/ts/ssrAuth';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetablePage.module.scss';

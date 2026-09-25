@@ -7,9 +7,9 @@ import type { Semester } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
+import { isServerAuthError } from 'utils/ssr/authError';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
-import { isServerAuthError } from 'utils/ts/ssrAuth';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 
 export const getServerSideProps = withCacheControl(
   async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {

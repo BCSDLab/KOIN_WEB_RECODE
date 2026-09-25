@@ -12,7 +12,7 @@ import { selectLostItemPaginationData } from 'components/Articles/utils/selectAr
 import { SSRLayout } from 'components/layout';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './LostItemArticleListPage.module.scss';
 

@@ -24,13 +24,13 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import {
   createQueryParser,
   parseQueryBoolean,
   parseQueryNumber,
   parseQueryString,
 } from 'utils/ts/parseServerSideParams';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './ClubListPage.module.scss';
 

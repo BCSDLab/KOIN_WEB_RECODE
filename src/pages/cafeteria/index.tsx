@@ -10,7 +10,7 @@ import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './Cafeteria.module.scss';
 

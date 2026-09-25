@@ -13,7 +13,7 @@ import { createArticlesWithNewSelector } from 'components/Articles/utils/selectA
 import HomeLayout from 'components/layout/HomeLayout';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 const DEFAULT_BOARD_ID = 4;
 

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { ServerRequestContext } from 'utils/ts/serverRequestContext';
+import type { ServerRequestContext } from 'utils/ssr/requestContext';
 
 /**
  * 서버가 렌더에 사용한 요청 정보. `withCacheControl`이 props에 넣고 `_app`이 여기에 흘린다.

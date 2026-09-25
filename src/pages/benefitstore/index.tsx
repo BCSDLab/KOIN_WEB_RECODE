@@ -18,7 +18,7 @@ import { STORE_PAGE } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
+import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './StoreBenefitPage.module.scss';
 

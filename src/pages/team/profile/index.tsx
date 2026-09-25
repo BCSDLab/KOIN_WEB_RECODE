@@ -11,7 +11,7 @@ import TeamProfileMobile from 'components/Team/TeamProfilePage/TeamProfileMobile
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './TeamProfilePage.module.scss';
 

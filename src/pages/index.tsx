@@ -17,10 +17,10 @@ import { weatherQueries } from 'api/weather/queries';
 import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
 import HomePage from 'components/IndexComponents/HomePage';
 import HomeLayout from 'components/layout/HomeLayout';
+import { isServerAuthError } from 'utils/ssr/authError';
+import { getDeviceClass } from 'utils/ssr/requestContext';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
-import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { isServerAuthError } from 'utils/ts/ssrAuth';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 
 export const getServerSideProps = withCacheControl(
   async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {

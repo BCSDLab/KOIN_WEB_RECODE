@@ -6,6 +6,7 @@ import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { APIResponse } from 'interfaces/APIResponse';
 import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
+import { getServerRequestHeaders } from 'utils/ssr/cookieForwarding';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
@@ -27,19 +28,52 @@ function normalizeApiPath(path: string | undefined): string {
     .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
 }
 
+// 새 헤더 관심사가 생기면 createHeaders 본문을 늘리는 대신 이 파이프라인에 추가
+type HeaderContributor = (request: APIRequest<APIResponse>, headers: Record<string, string>) => void;
+
+const withSSRCookieForwarding: HeaderContributor = (_request, headers) => {
+  if (isBrowser) return;
+  const serverRequestHeaders = getServerRequestHeaders();
+  if (serverRequestHeaders?.cookie) headers.Cookie = serverRequestHeaders.cookie;
+  if (serverRequestHeaders?.origin) headers.Origin = serverRequestHeaders.origin;
+};
+
+const withCsrfToken: HeaderContributor = (request, headers) => {
+  if (request.method === HTTP_METHOD.GET) return;
+  const csrfToken = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
+  if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+};
+
+const withJsonContentType: HeaderContributor = (request, headers) => {
+  const isJsonBodyMethod = request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT;
+  if (isJsonBodyMethod && !(request.data instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+};
+
+const withCustomHeaders: HeaderContributor = (request, headers) => {
+  if (request.headers) Object.assign(headers, request.headers);
+};
+
+// withCustomHeaders가 마지막에 와야 호출부가 위 기본값을 덮어쓸 수 있음
+const HEADER_CONTRIBUTORS: HeaderContributor[] = [
+  withSSRCookieForwarding,
+  withCsrfToken,
+  withJsonContentType,
+  withCustomHeaders,
+];
+
 type Constructor<T> = new (...args: never[]) => T;
 
 type ResponseType<T> = T extends APIRequest<infer U> ? U : never;
 
 export default class APIClient {
-  // API Client Singleton
   static shared = new APIClient();
 
   static request<U extends APIResponse>(request: APIRequest<U>): Promise<U> {
     return APIClient.shared.request(request);
   }
 
-  /** API를 받아서 호출할 수 있는 함수로 변환합니다. */
   static toCallable<T extends Constructor<APIRequest<APIResponse>>>(api: T) {
     return (...args: ConstructorParameters<T>) =>
       APIClient.request<ResponseType<InstanceType<T>>>(
@@ -47,13 +81,10 @@ export default class APIClient {
       );
   }
 
-  /** API를 호출할 수 있는 함수로 변환합니다. `toCallable`의 alias */
   static of = APIClient.toCallable;
 
-  // Local Server 또는 API Endpoint
   baseURL = API_URL;
 
-  // 타임 아웃
   timeout: number = 20 * 1000;
 
   request<U extends APIResponse>(request: APIRequest<U>): Promise<U> {
@@ -136,14 +167,12 @@ export default class APIClient {
   private refreshPromise: Promise<void> | null = null;
 
   private async refreshAccessToken() {
-    // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
     if (this.refreshPromise) {
       await this.refreshPromise;
 
       return;
     }
 
-    // 새 refresh 요청을 진행
     this.refreshPromise = APIClient.webRefresh()
       .then((result) => {
         useTokenStore.getState().setUserType(result.user_type);
@@ -164,7 +193,6 @@ export default class APIClient {
     return JSON.stringify(data);
   }
 
-  // Default parser
   private parse<U extends APIResponse>(data: AxiosResponse<U>): U {
     return data.data;
   }
@@ -192,52 +220,72 @@ export default class APIClient {
     }
   }
 
-  private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
-    if (typeof window === 'undefined') return null;
+  private handleUnauthorized = async (error: AxiosError): Promise<AxiosResponse | null> => {
+    try {
+      await Sentry.startSpan(
+        {
+          name: 'Refresh API access token',
+          op: 'koin.api.auth_refresh',
+          onlyIfParent: true,
+          attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+        },
+        () => this.refreshAccessToken(),
+      );
 
-    if (error.response?.status === 401) {
-      try {
-        await Sentry.startSpan(
-          {
-            name: 'Refresh API access token',
-            op: 'koin.api.auth_refresh',
-            onlyIfParent: true,
-            attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-          },
-          () => this.refreshAccessToken(),
-        );
-
-        return await this.retryRequest(error);
-      } catch {
-        useTokenStore.getState().setUserType(null);
-        queryClient.clear();
-      }
-
-      redirectToLogin();
-
-      return null;
+      return await this.retryRequest(error);
+    } catch {
+      useTokenStore.getState().setUserType(null);
+      queryClient.clear();
     }
 
-    if (error.response?.status === 403) {
-      try {
-        const response = await Sentry.startSpan(
-          {
-            name: 'Revalidate API user type',
-            op: 'koin.api.user_revalidation',
-            onlyIfParent: true,
-            attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-          },
-          () => APIClient.of(UserAuth)(),
-        );
-        useTokenStore.getState().setUserType(response.user_type);
+    redirectToLogin();
 
-        return await this.retryRequest(error);
-      } catch {
-        return null;
-      }
+    return null;
+  };
+
+  private handleForbidden = async (error: AxiosError): Promise<AxiosResponse | null> => {
+    try {
+      const response = await Sentry.startSpan(
+        {
+          name: 'Revalidate API user type',
+          op: 'koin.api.user_revalidation',
+          onlyIfParent: true,
+          attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+        },
+        () => APIClient.of(UserAuth)(),
+      );
+      useTokenStore.getState().setUserType(response.user_type);
+
+      return await this.retryRequest(error);
+    } catch {
+      return null;
+    }
+  };
+
+  private readonly clientErrorStrategies: Record<number, (error: AxiosError) => Promise<AxiosResponse | null>> = {
+    401: this.handleUnauthorized,
+    403: this.handleForbidden,
+  };
+
+  // SSR은 refresh를 할 수 없어 그대로 401을 던지는 게 정상 흐름이지만, Cookie 컨텍스트 자체가
+  // 없어서 401이 난 경우(withCacheControl로 감싸지 않은 페이지 등)는 원인을 바로 알 수 있어야 한다.
+  private handleServerSideError(error: AxiosError): null {
+    if (error.response?.status === 401 && !getServerRequestHeaders()?.cookie) {
+      console.warn(
+        `[apiClient] SSR 요청 헤더 컨텍스트 없이 401 발생: ${normalizeApiPath(error.config?.url)}. ` +
+          'getServerSideProps가 withCacheControl로 감싸져 있는지 확인하세요.',
+      );
     }
 
     return null;
+  }
+
+  private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+    if (typeof window === 'undefined') return this.handleServerSideError(error);
+
+    const strategy = error.response?.status !== undefined ? this.clientErrorStrategies[error.response.status] : null;
+
+    return strategy ? strategy(error) : null;
   }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
@@ -288,33 +336,9 @@ export default class APIClient {
     );
   }
 
-  // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): Record<string, string> {
     const headers: Record<string, string> = {};
-    // 인증 토큰 삽입 (레거시 Bearer 인증 — 쿠키 인증으로 전환된 엔드포인트에는 더 이상 채워지지 않는다)
-    if (request.authorization) {
-      headers.Authorization = `Bearer ${request.authorization}`;
-    }
-
-    // 쿠키 인증 상태변경 요청은 CSRF 쿠키 값을 헤더로 되돌려 보내야 한다 (web-cookie-auth.md).
-    // 쿠키가 아직 없는 요청(로그인 등)이나 SSR에서는 getCookie가 undefined를 반환해 자연히 생략된다.
-    if (request.method !== HTTP_METHOD.GET) {
-      const csrfToken = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
-      if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
-    }
-
-    // json body 사용 (FormData는 axios가 multipart boundary를 자동 설정)
-    if (
-      (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) &&
-      !(request.data instanceof FormData)
-    ) {
-      headers['Content-Type'] = 'application/json';
-    }
-
-    // 기타 헤더 삽입
-    if (request.headers) {
-      Object.assign(headers, request.headers);
-    }
+    HEADER_CONTRIBUTORS.forEach((contribute) => contribute(request as unknown as APIRequest<APIResponse>, headers));
 
     return headers;
   }

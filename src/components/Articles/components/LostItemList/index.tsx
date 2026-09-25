@@ -8,8 +8,8 @@ import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
-import { useServerRequest } from 'utils/context/serverRequest';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useServerRequest } from 'utils/ssr/useServerRequest';
 import showToast from 'utils/ts/showToast';
 
 import styles from './LostItemList.module.scss';

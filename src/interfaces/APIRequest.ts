@@ -19,7 +19,6 @@ export interface APIRequest<R extends APIResponse> {
   params?: Record<string, unknown>;
   data?: unknown;
   baseURL?: string;
-  authorization?: string;
   headers?: Record<string, string | number>;
   parse?: (data: AxiosResponse<R>) => R;
   convertBody?: (data: unknown) => string;

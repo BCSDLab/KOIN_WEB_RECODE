@@ -7,8 +7,8 @@ import Layout from 'components/layout';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
-import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { getDeviceClass } from 'utils/ssr/requestContext';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './ReportPage.module.scss';
 

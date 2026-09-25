@@ -27,9 +27,9 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 
 import styles from './TeamListPage.module.scss';
 

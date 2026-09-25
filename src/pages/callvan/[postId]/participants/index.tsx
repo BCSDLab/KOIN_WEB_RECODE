@@ -8,7 +8,7 @@ import ParticipantsList from 'components/Callvan/components/ParticipantsList';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;

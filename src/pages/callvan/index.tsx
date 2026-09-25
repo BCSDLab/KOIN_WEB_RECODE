@@ -13,8 +13,8 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import { getDeviceClass } from 'utils/ts/serverRequestContext';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { getDeviceClass } from 'utils/ssr/requestContext';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
 

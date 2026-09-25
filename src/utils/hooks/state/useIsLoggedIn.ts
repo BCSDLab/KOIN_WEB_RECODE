@@ -1,4 +1,4 @@
-import { useServerRequest } from 'utils/context/serverRequest';
+import { useServerRequest } from 'utils/ssr/useServerRequest';
 import { useTokenStore } from 'utils/zustand/auth';
 
 import useMount from './useMount';

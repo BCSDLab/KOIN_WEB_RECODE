@@ -35,9 +35,9 @@ import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
-import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 import styles from './ClubDetailPage.module.scss';

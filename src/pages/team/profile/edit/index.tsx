@@ -6,7 +6,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import Layout from 'components/layout';
 import TeamProfileForm from 'components/Team/ProfilePage';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 // 로그인은 middleware.ts가 보장한다. 기존 프로필을 서버에서 미리 prefetch해 내려줘야
 // 폼이 "빈 값으로 시작했다가 나중에 채워지는" 하이드레이션 불일치 없이 처음부터 채워진 채로 렌더된다.
