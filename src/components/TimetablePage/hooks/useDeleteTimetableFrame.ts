@@ -8,13 +8,13 @@ import { useSemester } from 'utils/zustand/semester';
 
 import useRollbackTimetableFrame from './useRollbackTimetableFrame';
 
-export default function useDeleteTimetableFrame(token: string, frameInfo: TimetableFrameInfo) {
+export default function useDeleteTimetableFrame(isLoggedIn: boolean, frameInfo: TimetableFrameInfo) {
   const queryClient = useQueryClient();
   const toast = useToast();
   const semester = useSemester();
-  const { mutate: rollbackFrame } = useRollbackTimetableFrame(token);
+  const { mutate: rollbackFrame } = useRollbackTimetableFrame(isLoggedIn);
   const recoverFrame = () => rollbackFrame(frameInfo.id!);
-  const mutation = timetableMutations.deleteFrame(queryClient, token, semester);
+  const mutation = timetableMutations.deleteFrame(queryClient, isLoggedIn, semester);
 
   return useMutation({
     ...mutation,

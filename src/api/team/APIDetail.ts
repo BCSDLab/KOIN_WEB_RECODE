@@ -38,10 +38,7 @@ export class PostTeamRecruitment<R extends TeamRecruitmentCreateResponse> implem
 
   data: TeamRecruitmentUpdateRequest;
 
-  constructor(
-    public authorization: string,
-    data: TeamRecruitmentUpdateRequest,
-  ) {
+  constructor(data: TeamRecruitmentUpdateRequest) {
     this.data = data;
   }
 }
@@ -55,10 +52,7 @@ export class GetTeamRecruitmentDetail<R extends TeamRecruitmentDetailResponse> i
 
   auth = false;
 
-  constructor(
-    public authorization: string | undefined,
-    recruitmentId: number,
-  ) {
+  constructor(recruitmentId: number) {
     this.path = `/team-recruitments/${recruitmentId}`;
   }
 }
@@ -72,10 +66,7 @@ export class DeleteTeamRecruitment<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-  ) {
+  constructor(recruitmentId: number) {
     this.path = `/team-recruitments/${recruitmentId}`;
   }
 }
@@ -90,7 +81,6 @@ export class PutTeamRecruitment<R extends TeamRecruitmentDetailResponse> impleme
   auth = true;
 
   constructor(
-    public authorization: string,
     recruitmentId: number,
     public data: TeamRecruitmentUpdateRequest,
   ) {
@@ -111,10 +101,7 @@ export class GetTeamRecruitmentList<R extends TeamRecruitmentListResponse> imple
 
   params: TeamRecruitmentListRequest;
 
-  constructor(
-    public authorization?: string,
-    params: TeamRecruitmentListRequest = {},
-  ) {
+  constructor(params: TeamRecruitmentListRequest = {}) {
     const keyword = params.keyword?.trim();
 
     this.params = {
@@ -142,10 +129,7 @@ export class GetTeamRecruitmentNotifications<R extends TeamRecruitmentNotificati
 
   params: TeamRecruitmentNotificationListRequest;
 
-  constructor(
-    public authorization: string,
-    params: TeamRecruitmentNotificationListRequest = {},
-  ) {
+  constructor(params: TeamRecruitmentNotificationListRequest = {}) {
     this.params = {
       page: params.page ?? 1,
       limit: params.limit ?? 10,
@@ -166,10 +150,7 @@ export class GetMyTeamRecruitmentApplications<R extends MyTeamRecruitmentApplica
 
   params: MyTeamRecruitmentApplicationListRequest;
 
-  constructor(
-    public authorization: string,
-    params: MyTeamRecruitmentApplicationListRequest = {},
-  ) {
+  constructor(params: MyTeamRecruitmentApplicationListRequest = {}) {
     this.params = {
       ...(params.statuses?.length && { statuses: params.statuses }),
       ...(params.sort && { sort: params.sort }),
@@ -190,11 +171,7 @@ export class GetTeamRecruitmentApplicants<R extends TeamRecruitmentApplicantList
 
   params: TeamRecruitmentApplicantListRequest;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: string,
-    params: TeamRecruitmentApplicantListRequest = {},
-  ) {
+  constructor(recruitmentId: string, params: TeamRecruitmentApplicantListRequest = {}) {
     this.path = `/team-recruitments/${recruitmentId}/applications`;
     this.params = {
       ...(params.statuses?.length && { statuses: params.statuses }),
@@ -213,10 +190,7 @@ export class PostTeamRecruitmentNotificationRead<R extends object> implements AP
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    notificationId: number,
-  ) {
+  constructor(notificationId: number) {
     this.path = `/team-recruitments/notifications/${notificationId}/read`;
   }
 }
@@ -229,8 +203,6 @@ export class PostTeamRecruitmentNotificationsMarkAllRead<R extends object> imple
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class DeleteTeamRecruitmentNotifications<R extends object> implements APIRequest<R> {
@@ -241,8 +213,6 @@ export class DeleteTeamRecruitmentNotifications<R extends object> implements API
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class GetMyCreatedTeamRecruitments<R extends MyCreatedTeamRecruitmentListResponse> implements APIRequest<R> {
@@ -256,10 +226,7 @@ export class GetMyCreatedTeamRecruitments<R extends MyCreatedTeamRecruitmentList
 
   params: MyCreatedTeamRecruitmentListRequest;
 
-  constructor(
-    public authorization: string,
-    params: MyCreatedTeamRecruitmentListRequest = {},
-  ) {
+  constructor(params: MyCreatedTeamRecruitmentListRequest = {}) {
     this.params = {
       ...(params.status && { status: params.status }),
       ...(params.sort && { sort: params.sort }),
@@ -278,11 +245,7 @@ export class GetTeamRecruitmentChatRoom<R extends TeamChatRoomResponse> implemen
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-    chatRoomId: number,
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}`;
   }
 }
@@ -295,8 +258,6 @@ export class GetTeamRecruitmentChatRoomList<R extends TeamChatRoomListResponse> 
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class GetTeamRecruitmentChatMessages<R extends TeamChatMessageListResponse> implements APIRequest<R> {
@@ -310,12 +271,7 @@ export class GetTeamRecruitmentChatMessages<R extends TeamChatMessageListRespons
 
   params: TeamChatMessageListRequest;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-    chatRoomId: number,
-    params: TeamChatMessageListRequest = {},
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest = {}) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
 
     this.params = {
@@ -337,12 +293,7 @@ export class PostTeamRecruitmentChatMessage<R extends TeamChatMessage> implement
 
   data: TeamChatMessageSendRequest;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-    chatRoomId: number,
-    data: TeamChatMessageSendRequest,
-  ) {
+  constructor(recruitmentId: number, chatRoomId: number, data: TeamChatMessageSendRequest) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/${chatRoomId}/messages`;
     this.data = data;
   }
@@ -357,11 +308,7 @@ export class PostTeamRecruitmentDirectChatRoom<R extends TeamChatDirectRoomRespo
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-    applicationId: number,
-  ) {
+  constructor(recruitmentId: number, applicationId: number) {
     this.path = `/chatroom/team-recruitment/${recruitmentId}/applications/${applicationId}/direct`;
   }
 }
@@ -375,10 +322,7 @@ export class PutCloseTeamRecruitment<R extends object> implements APIRequest<R> 
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-  ) {
+  constructor(recruitmentId: number) {
     this.path = `/team-recruitments/${recruitmentId}/close`;
   }
 }
@@ -394,11 +338,7 @@ export class GetTeamRecruitmentApplicantDetail<R extends TeamRecruitmentApplican
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: string,
-    applicationId: string,
-  ) {
+  constructor(recruitmentId: string, applicationId: string) {
     this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}`;
   }
 }
@@ -414,11 +354,7 @@ export class PostTeamRecruitmentApplication<R extends PostTeamRecruitmentApplica
 
   data: PostTeamRecruitmentApplicationRequest;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: number,
-    data: PostTeamRecruitmentApplicationRequest,
-  ) {
+  constructor(recruitmentId: number, data: PostTeamRecruitmentApplicationRequest) {
     this.path = `/team-recruitments/${recruitmentId}/applications`;
     this.data = data;
   }
@@ -435,12 +371,7 @@ export class PutTeamRecruitmentApplicationStatus<R extends object> implements AP
 
   data: TeamRecruitmentApplicationStatusUpdateRequest;
 
-  constructor(
-    public authorization: string,
-    recruitmentId: string,
-    applicationId: string,
-    data: TeamRecruitmentApplicationStatusUpdateRequest,
-  ) {
+  constructor(recruitmentId: string, applicationId: string, data: TeamRecruitmentApplicationStatusUpdateRequest) {
     this.path = `/team-recruitments/${recruitmentId}/applications/${applicationId}/status`;
     this.data = data;
   }

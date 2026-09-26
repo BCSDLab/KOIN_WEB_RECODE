@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useMandateClubManagerMutation(clubId: number | string | undefined) {
@@ -14,10 +13,9 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   if (!clubId) {
     router.push(ROUTES.Club());
   }
-  const token = useTokenState();
   const queryClient = useQueryClient();
   const { status: mandateClubManagerStatus, mutateAsync: mandateClubManagerMutateAsync } = useMutation({
-    ...clubMutations.mandateManager(queryClient, token, Number(clubId), {
+    ...clubMutations.mandateManager(queryClient, Number(clubId), {
       onSuccess: () => {
         logger.actionEventClick({
           team: 'CAMPUS',

@@ -15,12 +15,12 @@ import { isomorphicLocalStorage } from 'utils/ts/env';
  * 따라서 렌더 결과만 고정하는 것으로는 부족하고 `요청 자체`를 마운트 이후로 미뤄야 한다.
  * useSuspenseQuery 는 enabled 를 무시하므로 useQuery 를 쓴다.
  */
-export const useABTestView = (title: string, authorization?: string) => {
+export const useABTestView = (title: string) => {
   const isMounted = useMount();
   const accessHistoryId = isMounted ? isomorphicLocalStorage.getItem('access_history_id') : null;
 
   const { data: abTestView } = useQuery({
-    ...abTestQueries.assign(title, authorization, accessHistoryId),
+    ...abTestQueries.assign(title, accessHistoryId),
     enabled: isMounted,
   });
 

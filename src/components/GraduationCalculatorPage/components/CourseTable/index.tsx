@@ -13,7 +13,6 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
@@ -25,15 +24,14 @@ import styles from './CourseTable.module.scss';
 
 function CourseTable({ frameId }: { frameId: number }) {
   const logger = useLogger();
-  const token = useTokenState();
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures }: { myLectures: Array<MyLectureInfo | Lecture> } = useMyLectures(frameId);
-  const allMyLectures = useAllMyLectures(token);
+  const allMyLectures = useAllMyLectures();
   const isUnSelectedCourseType = (allMyLectures ?? []).find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);
   const semester = useSemester();
-  const { data: mySemester } = useSemesterCheck(token);
+  const { data: mySemester } = useSemesterCheck();
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
 

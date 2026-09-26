@@ -11,11 +11,7 @@ export class GetLostItemChatroomMessagesV2<R extends LostItemChatroomDetailMessa
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    articleId: number,
-    chatRoomId: number,
-  ) {
+  constructor(articleId: number, chatRoomId: number) {
     this.path = `/v2/chatroom/lost-item/${articleId}/${chatRoomId}/messages`;
   }
 }
@@ -30,7 +26,6 @@ export class PostLostItemChatroomMessageV2<R extends LostItemChatroomDetailMessa
   auth = true;
 
   constructor(
-    public authorization: string,
     articleId: number,
     chatRoomId: number,
     public data: {
@@ -51,11 +46,7 @@ export class PostLeaveLostItemChatroomV2<R extends object> implements APIRequest
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    articleId: number,
-    chatRoomId: number,
-  ) {
+  constructor(articleId: number, chatRoomId: number) {
     this.path = `/v2/chatroom/lost-item/${articleId}/${chatRoomId}/leave`;
   }
 }

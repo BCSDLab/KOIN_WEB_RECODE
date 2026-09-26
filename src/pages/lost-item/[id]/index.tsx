@@ -25,41 +25,43 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './LostItemDetailPage.module.scss';
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token } = parseServerSideParams(context);
-  const id = context.query.id;
-  if (typeof id !== 'string') {
-    return { notFound: true };
-  }
-  const articleId = Number(id);
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const id = context.query.id;
+    if (typeof id !== 'string') {
+      return { notFound: true };
+    }
+    const articleId = Number(id);
 
-  const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-  const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
+    const latestLostItemParams = { limit: 10, sort: 'LATEST' as const };
 
-  await Promise.all([
-    queryClient.prefetchQuery(articleQueries.lostItemDetail(token ?? '', articleId)),
-    queryClient.prefetchInfiniteQuery(articleQueries.lostItemInfiniteList(token ?? '', latestLostItemParams)),
-  ]);
+    await Promise.all([
+      queryClient.prefetchQuery(articleQueries.lostItemDetail(serverRequest.isLoggedIn, articleId)),
+      queryClient.prefetchInfiniteQuery(
+        articleQueries.lostItemInfiniteList(serverRequest.isLoggedIn, latestLostItemParams),
+      ),
+    ]);
 
-  if (!token) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      articleId,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        articleId,
+      },
+    };
+  },
+);
 
 interface LostItemDetailPageProps {
   articleId: number;
@@ -71,9 +73,9 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const navigate = router.push;
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
-  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(isLoggedIn, articleId));
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { mutate: toggleFound, isPending: isToggling } = usePostFoundLostItem(articleId);
   const {
@@ -119,7 +121,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     onSuccess: () => void,
     logCallbacks?: { onLogin?: () => void; onCancel?: () => void },
   ) => {
-    if (token) {
+    if (isLoggedIn) {
       onSuccess();
 
       return;

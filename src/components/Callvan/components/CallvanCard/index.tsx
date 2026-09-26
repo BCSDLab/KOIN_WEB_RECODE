@@ -20,7 +20,7 @@ import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { redirectToLogin } from 'utils/ts/auth';
 
 import styles from './CallvanCard.module.scss';
@@ -52,7 +52,7 @@ function formatTime(timeStr: string): string {
 
 export default function CallvanCard({ post }: CallvanCardProps) {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const logger = useLogger();
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
   const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
@@ -251,7 +251,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         })}
         onClick={(e) => {
           e.stopPropagation();
-          if (!token) {
+          if (!isLoggedIn) {
             openLoginModal();
           } else {
             openJoinModal();

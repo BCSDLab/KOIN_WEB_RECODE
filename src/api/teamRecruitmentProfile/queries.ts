@@ -5,22 +5,22 @@ import type {
   TeamRecruitmentProfileResponse,
   UpsertTeamRecruitmentProfileRequest,
 } from 'api/teamRecruitmentProfile/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { getViewerScope } from 'utils/ts/getViewerScope';
 import showToast from 'utils/ts/showToast';
 
 export const teamRecruitmentProfileQueryKeys = {
   all: ['team-recruitment-profile'] as const,
-  me: (token: string) => [...teamRecruitmentProfileQueryKeys.all, 'me', getViewerScope(token)] as const,
+  me: (isLoggedIn?: boolean) => [...teamRecruitmentProfileQueryKeys.all, 'me', getViewerScope(isLoggedIn)] as const,
 };
 
 export const teamRecruitmentProfileQueries = {
-  me: (token: string) =>
+  me: (isLoggedIn?: boolean) =>
     queryOptions<TeamRecruitmentProfileResponse | null>({
-      queryKey: teamRecruitmentProfileQueryKeys.me(token),
+      queryKey: teamRecruitmentProfileQueryKeys.me(isLoggedIn),
       queryFn: async () => {
         try {
-          return await getTeamRecruitmentProfile(token);
+          return await getTeamRecruitmentProfile();
         } catch (error) {
           if (isKoinError(error) && error.status === 404) {
             return null;
@@ -38,13 +38,13 @@ interface UseUpsertTeamRecruitmentProfileMutationOptions {
 export const useUpsertTeamRecruitmentProfileMutation = ({
   onSuccess,
 }: UseUpsertTeamRecruitmentProfileMutationOptions = {}) => {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpsertTeamRecruitmentProfileRequest) => upsertTeamRecruitmentProfile(token, data),
+    mutationFn: (data: UpsertTeamRecruitmentProfileRequest) => upsertTeamRecruitmentProfile(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: teamRecruitmentProfileQueryKeys.me(token) });
+      queryClient.invalidateQueries({ queryKey: teamRecruitmentProfileQueryKeys.me(isLoggedIn) });
       onSuccess?.();
     },
     onError: (error) => {

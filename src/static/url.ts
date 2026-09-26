@@ -5,11 +5,8 @@ const STAGE_DOMAIN = `stage.${BASE_DOMAIN}`;
 
 export const COOKIE_DOMAIN = IS_STAGE ? `.${STAGE_DOMAIN}` : `.${BASE_DOMAIN}`;
 
-// 환경별 쿠키 키 (stage와 production 쿠키 분리)
-export const COOKIE_KEY = {
-  AUTH_TOKEN: IS_STAGE ? 'STAGE_AUTH_TOKEN_KEY' : 'AUTH_TOKEN_KEY',
-  AUTH_USER_TYPE: IS_STAGE ? 'STAGE_AUTH_USER_TYPE' : 'AUTH_USER_TYPE',
-} as const;
+// 백엔드가 발급하는 쿠키 이름.
+export const WEB_AUTH_CSRF_COOKIE_KEY = IS_STAGE ? '__Secure-koin-stage-web-csrf' : '__Secure-koin-web-csrf';
 
 const ORDER_URL = `https://order.${BASE_DOMAIN}`;
 const ORDER_STAGE_URL = `https://order.${STAGE_DOMAIN}`;

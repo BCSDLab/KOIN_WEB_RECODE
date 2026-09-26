@@ -19,30 +19,18 @@ const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: st
 };
 
 export const storeMutations = {
-  deleteReview: (
-    queryClient: QueryClient,
-    reviewId: number,
-    shopId: string,
-    token: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  deleteReview: (queryClient: QueryClient, reviewId: number, shopId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => deleteReview(reviewId, shopId, token),
+      mutationFn: () => deleteReview(reviewId, shopId),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  reportReview: (
-    queryClient: QueryClient,
-    shopId: string,
-    reviewId: string,
-    token: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  reportReview: (queryClient: QueryClient, shopId: string, reviewId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data, token),
+      mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data),
       onSuccess: async () => {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),

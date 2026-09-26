@@ -25,7 +25,7 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 
 import styles from './MyApplicationsPage.module.scss';
@@ -44,9 +44,9 @@ interface ApplicationsListSectionProps {
 
 function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: ApplicationsListSectionProps) {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    teamQueries.infiniteMyApplications(token, requestParams),
+    teamQueries.infiniteMyApplications(isLoggedIn, requestParams),
   );
 
   const applications = data.pages.flatMap((page) => page.applications);

@@ -41,10 +41,7 @@ export class PreCourseList<R extends PreCourseResponse> implements APIRequest<R>
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    timetable_frame_id: number,
-  ) {
+  constructor(timetable_frame_id: number) {
     this.params = { timetable_frame_id };
   }
 }

@@ -23,69 +23,69 @@ const invalidateCallvanNotifications = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: ['callvan', 'notifications'] });
 
 export const callvanMutations = {
-  create: (queryClient: QueryClient, token: string) =>
+  create: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (data: CreateCallvanRequest) => createCallvan(token, data),
+      mutationFn: (data: CreateCallvanRequest) => createCallvan(data),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  join: (queryClient: QueryClient, token: string) =>
+  join: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (postId: number) => joinCallvan(token, postId),
+      mutationFn: (postId: number) => joinCallvan(postId),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  cancel: (queryClient: QueryClient, token: string) =>
+  cancel: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (postId: number) => cancelCallvan(token, postId),
+      mutationFn: (postId: number) => cancelCallvan(postId),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  close: (queryClient: QueryClient, token: string) =>
+  close: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (postId: number) => closeCallvanPost(token, postId),
+      mutationFn: (postId: number) => closeCallvanPost(postId),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  reopen: (queryClient: QueryClient, token: string) =>
+  reopen: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (postId: number) => reopenCallvanPost(token, postId),
+      mutationFn: (postId: number) => reopenCallvanPost(postId),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  complete: (queryClient: QueryClient, token: string) =>
+  complete: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (postId: number) => completeCallvanPost(token, postId),
+      mutationFn: (postId: number) => completeCallvanPost(postId),
       onSuccess: () => invalidateCallvanInfiniteList(queryClient),
     }),
 
-  report: (queryClient: QueryClient, token: string, postId: number) =>
+  report: (queryClient: QueryClient, postId: number) =>
     mutationOptions({
-      mutationFn: (data: CallvanReportRequest) => reportCallvanParticipant(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId, token) }),
+      mutationFn: (data: CallvanReportRequest) => reportCallvanParticipant(postId, data),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.postDetail(postId) }),
     }),
 
-  markAllNotificationsRead: (queryClient: QueryClient, token: string) =>
+  markAllNotificationsRead: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: () => markAllNotificationsRead(token),
+      mutationFn: () => markAllNotificationsRead(),
       onSuccess: () => invalidateCallvanNotifications(queryClient),
     }),
 
-  markNotificationRead: (queryClient: QueryClient, token: string) =>
+  markNotificationRead: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (notificationId: number) => markNotificationRead(token, notificationId),
+      mutationFn: (notificationId: number) => markNotificationRead(notificationId),
       onSuccess: () => invalidateCallvanNotifications(queryClient),
     }),
 
-  deleteAllNotifications: (queryClient: QueryClient, token: string) =>
+  deleteAllNotifications: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: () => deleteAllNotifications(token),
+      mutationFn: () => deleteAllNotifications(),
       onSuccess: () => invalidateCallvanNotifications(queryClient),
     }),
 
-  sendChat: (queryClient: QueryClient, token: string, postId: number) =>
+  sendChat: (queryClient: QueryClient, postId: number) =>
     mutationOptions({
-      mutationFn: (data: SendChatRequest) => sendCallvanChat(token, postId, data),
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId, token) }),
+      mutationFn: (data: SendChatRequest) => sendCallvanChat(postId, data),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: callvanQueryKeys.chat(postId) }),
     }),
 };

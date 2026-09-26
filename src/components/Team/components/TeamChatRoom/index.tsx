@@ -11,7 +11,7 @@ import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import { formatChatRoomListTime } from 'utils/ts/chatTime';
@@ -36,12 +36,12 @@ const getChatRoomPreview = (room: TeamChatRoomListItem) => {
 };
 
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
   const { data: user } = useUser();
-  const { data: chatRooms } = useSuspenseQuery(teamQueries.chatRoomList(token));
-  const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(token, recruitmentId, chatRoomId));
-  const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(token, recruitmentId, chatRoomId));
+  const { data: chatRooms } = useSuspenseQuery(teamQueries.chatRoomList(isLoggedIn));
+  const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(isLoggedIn, recruitmentId, chatRoomId));
+  const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(isLoggedIn, recruitmentId, chatRoomId));
   const { uploadFile, isPending: isUploading } = useUploadFile();
   const [previousMessages, setPreviousMessages] = useState<TeamChatMessage[]>([]);
   const [hasPreviousMessages, setHasPreviousMessages] = useState(messages.length >= TEAM_CHAT_MESSAGE_LIMIT);
@@ -51,7 +51,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const hasInitialScrollRef = useRef(false);
 
   const { mutate: sendMessage, isPending: isSending } = useMutation({
-    ...teamMutations.sendChatMessage(queryClient, token, recruitmentId, chatRoomId),
+    ...teamMutations.sendChatMessage(queryClient, isLoggedIn, recruitmentId, chatRoomId),
     onError: () => showToast('error', '메시지를 보내지 못했어요. 다시 시도해 주세요.'),
   });
   const mergedMessages = mergeChatMessages(previousMessages, messages);
@@ -106,7 +106,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
 
     try {
       const fetchedMessages = await queryClient.fetchQuery(
-        teamQueries.chatMessages(token, recruitmentId, chatRoomId, {
+        teamQueries.chatMessages(isLoggedIn, recruitmentId, chatRoomId, {
           beforeMessageId: oldestMessageId,
           limit: TEAM_CHAT_MESSAGE_LIMIT,
         }),

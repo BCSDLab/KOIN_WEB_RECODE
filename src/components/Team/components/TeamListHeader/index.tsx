@@ -7,8 +7,8 @@ import NotificationIcon from 'assets/svg/Team/notification.svg';
 import ProfileIcon from 'assets/svg/Team/profile.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { setRedirectPath } from 'utils/ts/auth';
 import showToast from 'utils/ts/showToast';
 
@@ -16,13 +16,13 @@ import styles from './TeamListHeader.module.scss';
 
 export default function TeamListHeader() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isMounted = useMount();
   const logger = useLogger();
 
   const { data: notificationData } = useQuery({
-    ...teamQueries.notifications(token ?? '', { limit: 1 }),
-    enabled: !!token,
+    ...teamQueries.notifications(isLoggedIn, { limit: 1 }),
+    enabled: isLoggedIn,
   });
 
   const hasUnreadNotifications = isMounted && (notificationData?.unread_count ?? 0) > 0;
@@ -45,7 +45,7 @@ export default function TeamListHeader() {
   const handleProfileClick = async () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'team_recruitment_profile', value: '프로필' });
 
-    if (!token) {
+    if (!isLoggedIn) {
       setRedirectPath(router.asPath);
       await router.push(ROUTES.Auth());
       showToast('warning', '로그인이 필요한 기능입니다.');

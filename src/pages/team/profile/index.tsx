@@ -10,9 +10,8 @@ import TeamProfileDesktop from 'components/Team/TeamProfilePage/TeamProfileDeskt
 import TeamProfileMobile from 'components/Team/TeamProfilePage/TeamProfileMobile';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './TeamProfilePage.module.scss';
 
@@ -21,12 +20,11 @@ import styles from './TeamProfilePage.module.scss';
 // 겪지 않고 처음부터 확정된 데이터로 렌더한다 — "프로필 없음"이 잠깐 보이는 깜빡임이 구조적으로 불가능해진다.
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
-}>(async (context: GetServerSidePropsContext) => {
+}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
-  const { token } = parseServerSideParams(context);
 
-  if (token) {
-    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(token));
+  if (serverRequest.isLoggedIn) {
+    await queryClient.prefetchQuery(teamRecruitmentProfileQueries.me(serverRequest.isLoggedIn));
   }
 
   return {
@@ -38,15 +36,15 @@ export const getServerSideProps = withCacheControl<{
 
 function TeamProfilePage() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const logger = useLogger();
   // _app.tsx의 QueryClient는 SSR 중 모든 쿼리를 기본적으로 enabled:false로 끈다(전역 기본값).
   // useSuspenseQuery는 enabled를 지원하지 않아 이 기본값을 개별적으로 못 덮어써서 서버에서 빈 데이터로
   // 취급되므로, enabled를 명시할 수 있는 일반 useQuery를 쓴다. 위 getServerSideProps가 이미 이 쿼리를
   // prefetch+dehydrate해뒀으므로, 서버·클라이언트 모두 첫 렌더부터 캐시에서 동기적으로 값을 읽는다.
   const { data: profile } = useQuery({
-    ...teamRecruitmentProfileQueries.me(token),
-    enabled: !!token,
+    ...teamRecruitmentProfileQueries.me(isLoggedIn),
+    enabled: isLoggedIn,
   });
 
   const handleModifyClick = () => {

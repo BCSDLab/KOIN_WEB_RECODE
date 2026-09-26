@@ -3,18 +3,15 @@ import { updateUser, updateGeneralUser } from 'api/auth';
 import type { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
 import type { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
+import type { UserType } from 'utils/zustand/auth';
 
 interface UserUpdateOption {
   onSuccess?: () => void;
   onError?: () => void;
 }
 
-type UserType = 'STUDENT' | 'GENERAL';
-
-const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateOption = {}) => {
-  const token = useTokenState();
+const useUserInfoUpdate = <T = unknown>(userType: UserType | null, options: UserUpdateOption = {}) => {
   const logger = useLogger();
   const { status, mutate } = useMutation<
     T,
@@ -23,8 +20,8 @@ const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateO
   >({
     mutationFn: (data) =>
       userType === 'STUDENT'
-        ? (updateUser(token, data as UserUpdateRequest) as Promise<T>)
-        : (updateGeneralUser(token, data as GeneralUserUpdateRequest) as Promise<T>),
+        ? (updateUser(data as UserUpdateRequest) as Promise<T>)
+        : (updateGeneralUser(data as GeneralUserUpdateRequest) as Promise<T>),
     onSuccess: () => {
       options.onSuccess?.();
       logger.actionEventClick({

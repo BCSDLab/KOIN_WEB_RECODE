@@ -1,7 +1,9 @@
 import type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, PreviewData } from 'next';
 import type { ParsedUrlQuery } from 'node:querystring';
 
-import { getServerRequestContext } from 'utils/ts/serverRequestContext';
+import { KOIN_BASE_URL } from 'static/url';
+import { runWithServerRequestHeaders } from 'utils/ssr/cookieForwarding';
+import { getServerRequestContext, type ServerRequestContext } from 'utils/ssr/requestContext';
 
 export const PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300';
 export const STORE_PUBLIC_SSR_CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=1800';
@@ -20,6 +22,7 @@ export type GetServerSidePropsWithCacheControl<
 > = (
   context: GetServerSidePropsContext<Params, Preview>,
   cacheControl: SSRCacheControl,
+  serverRequest: ServerRequestContext,
 ) => Promise<GetServerSidePropsResult<Props>>;
 
 export type WithCacheControl = <
@@ -34,12 +37,29 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
   let shouldCachePublicResponse = false;
   let publicCacheControl = PUBLIC_SSR_CACHE_CONTROL;
 
-  const result = await getServerSideProps(context, {
-    enablePublicCache: (cacheControl) => {
-      shouldCachePublicResponse = true;
-      publicCacheControl = cacheControl ?? PUBLIC_SSR_CACHE_CONTROL;
-    },
-  });
+  const serverRequest = await getServerRequestContext(context);
+
+  const result = await runWithServerRequestHeaders(
+    { cookie: context.req.headers.cookie ?? '', origin: KOIN_BASE_URL },
+    () =>
+      getServerSideProps(
+        context,
+        {
+          enablePublicCache: (cacheControl) => {
+            if (serverRequest.isLoggedIn) {
+              console.warn(
+                `[withCacheControl] 로그인 상태에서 enablePublicCache()가 호출되어 무시합니다: ${context.resolvedUrl}`,
+              );
+
+              return;
+            }
+            shouldCachePublicResponse = true;
+            publicCacheControl = cacheControl ?? PUBLIC_SSR_CACHE_CONTROL;
+          },
+        },
+        serverRequest,
+      ),
+  );
 
   const setCookieHeader = context.res.getHeader('Set-Cookie');
   const hasSetCookieHeader = Array.isArray(setCookieHeader)
@@ -60,7 +80,7 @@ export const withCacheControl: WithCacheControl = (getServerSideProps) => async 
   if ('props' in result) {
     const props = await result.props;
 
-    return { ...result, props: { ...props, serverRequest: getServerRequestContext(context) } };
+    return { ...result, props: { ...props, serverRequest } };
   }
 
   return result;

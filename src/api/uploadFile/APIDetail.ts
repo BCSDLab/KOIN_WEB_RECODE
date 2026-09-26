@@ -12,11 +12,7 @@ export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<
 
   response!: R;
 
-  constructor(
-    public authorization: string,
-    domain: UploadDomain,
-    fileData: FileData,
-  ) {
+  constructor(domain: UploadDomain, fileData: FileData) {
     this.path = `${domain}/upload/url`;
     this.data = fileData;
   }

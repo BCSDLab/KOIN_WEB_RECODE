@@ -11,7 +11,7 @@ import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './Footer.module.scss';
 
@@ -20,7 +20,7 @@ function Footer() {
   const logger = useLogger();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
   const portalManager = useModalPortal();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const router = useRouter();
   const { pathname } = router; // 현재 URL의 경로
@@ -47,7 +47,7 @@ function Footer() {
 
   const handleClickMenu = (e: React.MouseEvent<HTMLAnchorElement>, title: SubmenuTitle) => {
     logShortcut(title);
-    if (!token && title === '쪽지') {
+    if (!isLoggedIn && title === '쪽지') {
       e.preventDefault();
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal

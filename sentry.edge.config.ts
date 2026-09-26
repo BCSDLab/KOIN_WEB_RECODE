@@ -2,7 +2,6 @@ import { maskSensitive } from 'utils/ts/maskSensitive';
 import * as Sentry from '@sentry/nextjs';
 
 const environment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
-const isProduction = environment === 'production';
 
 /** 민감 파일을 탐색하는 봇 요청 경로. 애플리케이션 결함이 아니므로 이슈로 만들지 않는다. */
 const BOT_PROBE_PATTERN = /\/(\.env|\.git|\.aws|wp-admin|wp-login|phpmyadmin|\.well-known\/security)/i;
@@ -41,7 +40,7 @@ Sentry.init({
   },
 
   enableLogs: true,
-  tracesSampleRate: isProduction ? 0.7 : 0.1,
+  tracesSampleRate: 1.0,
   // 자격증명급 위험이 있는 항목만 최소로 차단한다. cookie 헤더는 httpHeaders가 아니라
   // 별도의 cookies 옵션으로 처리되므로 여기 deny에 넣어도 효과가 없다.
   // frameContextLines: 7은 sendDefaultPii: true 시절의 기본값을 그대로 유지한 것이다.

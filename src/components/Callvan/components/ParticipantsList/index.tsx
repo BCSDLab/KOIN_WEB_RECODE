@@ -14,6 +14,7 @@ import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
 import { ParticipantAvatarFilledIcon, ParticipantAvatarIcon } from './ParticipantAvatarIcon';
@@ -107,14 +108,14 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
 
 interface ParticipantsListProps {
   postId: number;
-  token: string;
 }
 
-export default function ParticipantsList({ postId, token }: ParticipantsListProps) {
+export default function ParticipantsList({ postId }: ParticipantsListProps) {
   const router = useRouter();
   const logger = useLogger();
+  const isLoggedIn = useIsLoggedIn();
 
-  const { data: post } = useSuspenseQuery(callvanQueries.postDetail(token, postId));
+  const { data: post } = useSuspenseQuery(callvanQueries.postDetail(postId, isLoggedIn));
 
   const colorIndexMap = new Map(post.participants.filter((p) => !p.is_me).map((p, i) => [p.user_id, i]));
 

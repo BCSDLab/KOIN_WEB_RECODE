@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 
-import { useServerRequest } from 'utils/context/serverRequest';
+import { useServerRequest } from 'utils/ssr/useServerRequest';
 
 const MOBILE_QUERY = '(max-width: 576px)';
 

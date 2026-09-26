@@ -76,7 +76,7 @@ function MobileHomeRedesign() {
   const { data: userInfo } = useUser();
   const { data: weatherData } = useSuspenseQuery(weatherQueries.info());
   const { data: callvanData } = useSuspenseQuery({
-    ...callvanQueries.list('', {
+    ...callvanQueries.list({
       statuses: ['RECRUITING'],
       sort: 'LATEST_DESC',
       page: 1,

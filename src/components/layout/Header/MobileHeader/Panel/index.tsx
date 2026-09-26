@@ -11,7 +11,7 @@ import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -34,7 +34,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
 
   const logShortcut = (title: string) => {
@@ -97,7 +97,7 @@ export default function Panel({ openModal }: PanelProps) {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
 
-    if (!token && submenu.title === '쪽지') {
+    if (!isLoggedIn && submenu.title === '쪽지') {
       openLoginModal();
 
       return;

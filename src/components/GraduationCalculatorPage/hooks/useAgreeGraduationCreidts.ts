@@ -4,11 +4,11 @@ import { agreeGraduationCredits } from 'api/graduationCalculator';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
 import showToast from 'utils/ts/showToast';
 
-export default function useAgreeGraduationCreidts(token: string) {
+export default function useAgreeGraduationCreidts() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => agreeGraduationCredits(token),
+    mutationFn: () => agreeGraduationCredits(),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
