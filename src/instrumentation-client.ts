@@ -202,12 +202,11 @@ Sentry.init({
   ],
 
   enableLogs: true,
-  tracesSampleRate: isProduction ? 0.7 : 1.0,
-  // tracesSampleRate 로 샘플링된 트랜잭션에 대한 상대 비율이다.
+  tracesSampleRate: 1.0,
   // UI Profile Hours 는 월 150시간으로, Logs(5TB)와 달리 실제로 한정된 쿼터다.
-  // 월 페이지뷰 약 69만 x 트레이스 0.7 = 48만 트랜잭션이므로 1.0 으로 두면 며칠 만에 소진된다.
-  // 0.1 이면 월 약 4.8만 프로파일(약 67시간)로 여유 있게 들어온다.
-  profilesSampleRate: isProduction ? 0.1 : 1.0,
+  // 실측(Sentry MCP로 확인, 2026-09): 기존 trace 0.7 / profile 0.1 기준 월 사용량이 약 32분(0.4%)이었다.
+  // trace·profile 둘 다 1.0으로 올려도 ×14 수준(약 7~8시간/월, 5%대)이라 여유가 충분하다.
+  profilesSampleRate: 1.0,
   replaysSessionSampleRate: isProduction ? 0.3 : 0.0,
   replaysOnErrorSampleRate: 1.0,
   // 자격증명급 위험이 있는 항목만 최소로 차단한다. cookie 헤더는 httpHeaders가 아니라
