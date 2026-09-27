@@ -28,6 +28,12 @@ export const BUS_TYPES = [
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
 
+export const SHUTTLE_ROUTE_TYPE_CLASS: Record<string, string> = {
+  순환: 'bus-type--circulation',
+  주중: 'bus-type--weekday',
+  주말: 'bus-type--weekend',
+};
+
 export const SHUTTLE_COURSES = [
   {
     bus_type: 'commuting',

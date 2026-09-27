@@ -12,7 +12,7 @@ import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/Shu
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
-import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
+import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES, SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -225,7 +225,9 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
           >
             <span className={styles['template-shuttle__list']}>
               <div className={styles['template-shuttle__list_header']}>
-                <span className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}>
+                <span
+                  className={`${styles['template-shuttle__list_type']} ${styles[SHUTTLE_ROUTE_TYPE_CLASS[route.type]] ?? ''}`}
+                >
                   {route.type}
                 </span>
                 <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>

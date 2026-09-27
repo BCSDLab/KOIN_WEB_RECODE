@@ -8,6 +8,7 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
+import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -38,6 +39,7 @@ export default function ShuttleDetailPage() {
 
   if (!shuttleTimetableDetail) return null;
 
+  const routeTypeClass = styles[SHUTTLE_ROUTE_TYPE_CLASS[shuttleTimetableDetail.route_type]];
   const rowLength = shuttleTimetableDetail.node_info.length + 1;
   const fallbackName = shuttleTimetableDetail.route_info[0]?.name ?? '';
   const selectedName = selectedDetail ?? fallbackName;
@@ -55,7 +57,7 @@ export default function ShuttleDetailPage() {
           <div className={styles['time-table-title']}>
             <div className={styles['bus-icon']}>
               {!isMobile && <BusIcon />}
-              <div className={`${styles['bus-type']} ${styles[`type-${shuttleTimetableDetail.route_type}`]}`}>
+              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>
                 {shuttleTimetableDetail.route_type}
               </div>
             </div>
@@ -164,7 +166,7 @@ export default function ShuttleDetailPage() {
           <div className={styles['time-table-title']}>
             <div className={styles['bus-icon']}>
               <BusIcon />
-              <div className={`${styles['bus-type']} ${styles[`type-${shuttleTimetableDetail.route_type}`]}`}>
+              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>
                 {shuttleTimetableDetail.route_type}
               </div>
             </div>
