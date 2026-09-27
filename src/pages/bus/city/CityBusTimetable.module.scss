@@ -22,7 +22,7 @@
   width: 100%;
 
   @include media.media-breakpoint(mobile) {
-    width: 100vw;
+    background-color: #fff;
     border-radius: 0;
   }
 }
@@ -46,7 +46,16 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      font-weight: 500;
+      line-height: 160%;
+      border-radius: 50px;
+
+      &:not(.city-label__button--selected) {
+        box-shadow: inset 0 0 0 1px #e1e1e1;
+      }
+
+      &--byeongcheon {
+        order: -1;
+      }
     }
 
     &--selected {
@@ -57,17 +66,19 @@
       line-height: 160%;
 
       @include media.media-breakpoint(mobile) {
-        padding: 6px 16px;
-        font-weight: 600;
+        background: #b611f5;
       }
     }
   }
 
+  &__title {
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
   @include media.media-breakpoint(mobile) {
-    width: 100%;
-    border-radius: 0;
-    padding: 0 24px;
-    gap: 0;
-    margin: 7px 0;
+    padding: 12px 24px;
+    gap: 4px;
   }
 }
