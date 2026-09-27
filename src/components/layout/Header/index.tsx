@@ -19,6 +19,9 @@ function Header() {
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
   const isLostItemLightRoute = router.pathname.startsWith(ROUTES.LostItems());
   const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
+  const isBusTimetableRoute = [ROUTES.BusCourseShuttle(), ROUTES.BusCourseExpress(), ROUTES.BusCourseCity()].some(
+    (path) => router.pathname === path || router.pathname.startsWith(`${path}/`),
+  );
 
   return (
     <header
@@ -26,7 +29,8 @@ function Header() {
         [styles.header]: true,
         [styles['header--main']]: isMain,
         [styles['header--new-club']]: isClubRoute,
-        [styles['header--mobile-light']]: isArticleRoute || isLostItemLightRoute || isCafeteriaRoute,
+        [styles['header--mobile-light']]: isArticleRoute || isLostItemLightRoute || isCafeteriaRoute || isBusTimetableRoute,
+        [styles['header--bus-timetable']]: isBusTimetableRoute,
       })}
     >
       <nav className={styles.header__content}>
@@ -34,7 +38,7 @@ function Header() {
           <PCHeader openModal={openModal} />
         </div>
         <div className={styles['header__mobile']}>
-          <MobileHeader openModal={openModal} />
+          <MobileHeader openModal={openModal} isBusTimetableRoute={isBusTimetableRoute} />
         </div>
       </nav>
       {isModalOpen && <AuthenticateUserModal onClose={closeModal} />}
