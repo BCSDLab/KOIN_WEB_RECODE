@@ -74,9 +74,7 @@ export default function ShuttleDetailPage() {
           <div className={styles['time-table-title']}>
             <div className={styles['bus-icon']}>
               <BusIcon />
-              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>
-                {shuttleTimetableDetail.route_type}
-              </div>
+              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>{shuttleTimetableDetail.route_type}</div>
             </div>
             <div className={styles.header__title}>{shuttleTimetableDetail.route_name} 시간표</div>
             {shuttleTimetableDetail.sub_name && (
@@ -148,9 +146,7 @@ export default function ShuttleDetailPage() {
           <div className={styles['time-table-title']}>
             <div className={styles['bus-icon']}>
               <BusIcon />
-              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>
-                {shuttleTimetableDetail.route_type}
-              </div>
+              <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>{shuttleTimetableDetail.route_type}</div>
             </div>
             <div className={styles.header__title}>{shuttleTimetableDetail.route_name} 시간표</div>
             {shuttleTimetableDetail.sub_name && (

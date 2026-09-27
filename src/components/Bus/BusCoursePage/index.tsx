@@ -28,8 +28,7 @@ export default function BusCoursePage({ children }: { children: React.ReactNode 
 
   const isMobileSafe = isMount ? isMobile : false;
   const mobileTitle = MOBILE_TIMETABLE_TITLES[router.pathname] ?? '셔틀버스 시간표';
-  const showBoardingGuide =
-    router.pathname === ROUTES.BusCourseExpress() || router.pathname === ROUTES.BusCourseCity();
+  const showBoardingGuide = router.pathname === ROUTES.BusCourseExpress() || router.pathname === ROUTES.BusCourseCity();
 
   return (
     <main className={styles['root-container']}>

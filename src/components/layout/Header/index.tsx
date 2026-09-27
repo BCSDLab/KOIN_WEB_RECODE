@@ -29,7 +29,8 @@ function Header() {
         [styles.header]: true,
         [styles['header--main']]: isMain,
         [styles['header--new-club']]: isClubRoute,
-        [styles['header--mobile-light']]: isArticleRoute || isLostItemLightRoute || isCafeteriaRoute || isBusTimetableRoute,
+        [styles['header--mobile-light']]:
+          isArticleRoute || isLostItemLightRoute || isCafeteriaRoute || isBusTimetableRoute,
         [styles['header--bus-timetable']]: isBusTimetableRoute,
       })}
     >
