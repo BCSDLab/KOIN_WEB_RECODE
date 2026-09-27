@@ -47,7 +47,7 @@ export default function ExpressBusTimetable() {
     <BusCoursePage>
       <div className={styles['timetable-container']}>
         <div className={styles['course-category']}>
-          <div className={styles['course-category__button']}>운행</div>
+          <div className={`${styles['course-category__button']} ${styles['course-category__label']}`}>운행</div>
           {EXPRESS_COURSES.map((course, index) => (
             <button
               key={course.name}
