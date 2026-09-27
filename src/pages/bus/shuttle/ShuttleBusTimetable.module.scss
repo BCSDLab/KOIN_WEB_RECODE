@@ -245,6 +245,10 @@ $template-shuttle-colors: (
   padding: 8px 24px;
   margin-bottom: 140px;
 
+  .info-footer__text {
+    font-size: 12px;
+  }
+
   &__text {
     font-family: Pretendard, sans-serif;
     font-size: 14px;

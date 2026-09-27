@@ -6,7 +6,7 @@ import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/re
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import BusCoursePage, { useBusCourse } from 'components/Bus/BusCoursePage';
+import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
@@ -60,7 +60,7 @@ export default function ShuttleBusTimetable() {
   const category = categoryFromURL ?? '전체';
 
   const logger = useLogger();
-  const { isMobile } = useBusCourse();
+  const isMobile = useMediaQuery();
   const isMount = useMount();
 
   const { data: shuttleCourse } = useSuspenseQuery(busQueries.shuttleCourse());
@@ -133,7 +133,7 @@ export default function ShuttleBusTimetable() {
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
                 {displaySemester}({shuttleCourse.semester_info.from} ~ {shuttleCourse.semester_info.to}
-                )
+                )의
                 <br />
                 시간표가 제공됩니다.
               </div>
