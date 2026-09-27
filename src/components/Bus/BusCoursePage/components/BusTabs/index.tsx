@@ -32,7 +32,7 @@ export default function BusTabs() {
 
   return (
     <section className={styles.template}>
-      <BusNotice loggingLocation={selectedTab} />
+      <BusNotice loggingLocation={selectedTab} variant="timetable" />
       <ul className={styles.tabs} role="tablist">
         {BUS_TYPES.map((type) => (
           <li key={type.key} role="tab" aria-selected={selectedTab === type.key}>
