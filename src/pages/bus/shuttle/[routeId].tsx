@@ -5,9 +5,9 @@ import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
-import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
+import ShuttleDetailMobile from 'components/Bus/ShuttleDetailMobile';
 import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -44,6 +44,23 @@ export default function ShuttleDetailPage() {
   const fallbackName = shuttleTimetableDetail.route_info[0]?.name ?? '';
   const selectedName = selectedDetail ?? fallbackName;
 
+  if (isMobile) {
+    return (
+      <ShuttleDetailMobile
+        timetable={shuttleTimetableDetail}
+        selectedName={selectedName}
+        onSelect={(name) => {
+          setSelectedDetail(name);
+          logger.actionEventClick({
+            team: 'CAMPUS',
+            event_label: name === '등교' ? 'go_to_school' : 'go_home',
+            value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
+          });
+        }}
+      />
+    );
+  }
+
   return (
     <BusCoursePage>
       {/* 카테고리 버튼 */}
@@ -56,7 +73,7 @@ export default function ShuttleDetailPage() {
         <div className={styles['time-table-wrapper']}>
           <div className={styles['time-table-title']}>
             <div className={styles['bus-icon']}>
-              {!isMobile && <BusIcon />}
+              <BusIcon />
               <div className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>
                 {shuttleTimetableDetail.route_type}
               </div>
@@ -65,34 +82,6 @@ export default function ShuttleDetailPage() {
             {shuttleTimetableDetail.sub_name && (
               <div className={styles.header__subtitle}>{shuttleTimetableDetail.sub_name}</div>
             )}
-            {!isMobile && ( // PC 뷰에서만 표시
-              <div className={styles['detail__button-wrapper']}>
-                {shuttleTimetableDetail.route_info.map(({ name }) => (
-                  <button
-                    key={name}
-                    type="button"
-                    className={cn({
-                      [styles.detail__button]: true,
-                      [styles['detail__button--selected']]: selectedName === name,
-                    })}
-                    onClick={() => {
-                      setSelectedDetail(name);
-                      logger.actionEventClick({
-                        team: 'CAMPUS',
-                        event_label: name === '등교' ? 'go_to_school' : 'go_home',
-                        value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
-                      });
-                    }}
-                  >
-                    {name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* 모바일 뷰에서는 time-table-title 밖으로 이동 */}
-          {isMobile && (
             <div className={styles['detail__button-wrapper']}>
               {shuttleTimetableDetail.route_info.map(({ name }) => (
                 <button
@@ -115,7 +104,7 @@ export default function ShuttleDetailPage() {
                 </button>
               ))}
             </div>
-          )}
+          </div>
 
           <div className={styles['time-table-main-wrapper']}>
             <div
@@ -150,13 +139,6 @@ export default function ShuttleDetailPage() {
                 </div>
               ))}
             </div>
-
-            {isMobile && (
-              <div className={styles['info-footer-mobile-detail']}>
-                <InformationIcon />
-                <div>정보가 정확하지 않나요?</div>
-              </div>
-            )}
           </div>
         </div>
       )}

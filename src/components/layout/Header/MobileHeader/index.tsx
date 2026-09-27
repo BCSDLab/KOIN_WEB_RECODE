@@ -102,7 +102,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
   if (isBusTimetableRoute) {
     return (
       <SubPageHeader
-        title="버스 시간표"
+        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
         size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--bus-timetable']}
