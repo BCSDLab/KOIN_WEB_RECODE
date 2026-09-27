@@ -29,14 +29,22 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      font-weight: 600;
+      line-height: 160%;
+      white-space: nowrap;
+      border-radius: 50px;
+      box-shadow: inset 0 0 0 1px #e1e1e1;
+
+      &--selected {
+        background: #b611f5;
+        box-shadow: none;
+      }
     }
   }
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    background-color: #fff;
     border-radius: 0;
-    padding: 8px 24px;
-    gap: 0;
+    gap: 4px;
   }
 }
