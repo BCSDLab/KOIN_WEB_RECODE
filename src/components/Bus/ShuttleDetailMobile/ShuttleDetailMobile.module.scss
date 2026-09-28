@@ -1,6 +1,5 @@
 .detail {
   background-color: #fff;
-  padding-bottom: 140px;
   line-height: 1.6;
 
   &__heading {
@@ -11,7 +10,10 @@
     min-height: 113px;
     box-sizing: border-box;
     padding: 16px 24px;
-    border-bottom: 1px solid #cacaca;
+
+    &--divided {
+      border-bottom: 1px solid #cacaca;
+    }
   }
 
   &__title {
@@ -33,6 +35,7 @@
     padding: 12px 16px;
     color: #727272;
     font-size: 14px;
+    line-height: 1.6;
 
     &--selected {
       color: #b611f5;
@@ -50,6 +53,7 @@
     align-items: center;
     gap: 4px;
     margin: 40px 24px 0;
+    padding-bottom: 24px;
     color: #727272;
     font-size: 12px;
   }

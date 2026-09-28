@@ -19,6 +19,7 @@ export default function ShuttleDetailMobile({ timetable, selectedName, onSelect 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
   const logger = useLogger();
   const isMultiple = timetable.route_info.length > 2;
+  const showDirections = !isMultiple && timetable.route_info.length > 1;
   const selectedRoute = timetable.route_info.find(({ name }) => name === selectedName);
   const routeTypeClass = styles[SHUTTLE_ROUTE_TYPE_CLASS[timetable.route_type]];
 
@@ -30,13 +31,18 @@ export default function ShuttleDetailMobile({ timetable, selectedName, onSelect 
 
   return (
     <main className={styles.detail}>
-      <div className={styles.detail__heading}>
+      <div
+        className={cn({
+          [styles.detail__heading]: true,
+          [styles['detail__heading--divided']]: !showDirections,
+        })}
+      >
         <span className={`${styles['bus-type']} ${routeTypeClass ?? ''}`}>{timetable.route_type}</span>
         <h2 className={styles.detail__title}>{timetable.route_name} 시간표</h2>
         {timetable.sub_name && <p className={styles.detail__subtitle}>{timetable.sub_name}</p>}
       </div>
 
-      {!isMultiple && timetable.route_info.length > 1 && (
+      {showDirections && (
         <div className={styles.detail__directions}>
           {timetable.route_info.map(({ name }) => (
             <button
