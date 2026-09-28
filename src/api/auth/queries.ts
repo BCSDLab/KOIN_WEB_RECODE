@@ -1,7 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
-import type { UserType } from 'utils/zustand/auth';
+import { useTokenStore, type UserType } from 'utils/zustand/auth';
 
 import type { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
 import { getGeneralUser, getUser, getUserAcademicInfo } from './index';
@@ -35,6 +35,10 @@ export const authQueries = {
           return await getUserInfo(userType);
         } catch (error) {
           if (isKoinError(error) && (error.status === 401 || error.status === 403 || error.status === 404)) {
+            // 여기서 확인되는 무효 세션은 apiClient의 401/403 갱신 흐름을 거치지 않은 경우(예: 404)까지
+            // 포함하므로, stale한 userType이 로그인 상태로 계속 남지 않도록 직접 초기화한다.
+            useTokenStore.getState().setUserType(null);
+
             return null;
           }
           throw error;
