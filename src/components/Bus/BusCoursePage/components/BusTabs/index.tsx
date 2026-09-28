@@ -49,8 +49,7 @@ export default function BusTabs() {
                 [styles['tabs__tab--selected']]: selectedTab === type.key,
               })}
             >
-              <span className={styles['tabs__label--desktop']}>{type.tabName}</span>
-              <span className={styles['tabs__label--mobile']}>{type.tabValue}</span>
+              {type.tabName}
             </button>
           </li>
         ))}

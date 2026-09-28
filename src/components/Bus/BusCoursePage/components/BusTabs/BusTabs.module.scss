@@ -60,18 +60,4 @@
       }
     }
   }
-
-  &__label--desktop {
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
-  &__label--mobile {
-    display: none;
-
-    @include media.media-breakpoint(mobile) {
-      display: inline;
-    }
-  }
 }

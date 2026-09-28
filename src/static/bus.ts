@@ -8,7 +8,7 @@ import ROUTES from './routes';
 export const BUS_TYPES = [
   {
     key: 'shuttle',
-    tabName: '학교',
+    tabName: '셔틀',
     tabValue: '셔틀',
     tableHeaders: ['승차장소', '시간'],
   },
