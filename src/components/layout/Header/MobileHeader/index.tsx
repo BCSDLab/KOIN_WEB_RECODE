@@ -7,6 +7,7 @@ import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
+import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -24,9 +25,10 @@ import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
+  isBusTimetableRoute: boolean;
 }
 
-export default function MobileHeader({ openModal }: MobileHeaderProps) {
+export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
@@ -96,6 +98,17 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
   const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
   const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
+
+  if (isBusTimetableRoute) {
+    return (
+      <SubPageHeader
+        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
+        size="medium"
+        onBack={backInDetailPage}
+        className={styles['mobileheader--bus-timetable']}
+      />
+    );
+  }
 
   return (
     <>

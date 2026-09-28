@@ -8,7 +8,7 @@ import ROUTES from './routes';
 export const BUS_TYPES = [
   {
     key: 'shuttle',
-    tabName: '학교',
+    tabName: '셔틀',
     tabValue: '셔틀',
     tableHeaders: ['승차장소', '시간'],
   },
@@ -27,6 +27,12 @@ export const BUS_TYPES = [
 ] as const;
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
+
+export const SHUTTLE_ROUTE_TYPE_CLASS: Record<string, string> = {
+  순환: 'bus-type--circulation',
+  주중: 'bus-type--weekday',
+  주말: 'bus-type--weekend',
+};
 
 export const SHUTTLE_COURSES = [
   {

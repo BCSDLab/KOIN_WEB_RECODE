@@ -6,13 +6,13 @@ import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/re
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import BusCoursePage, { useBusCourse } from 'components/Bus/BusCoursePage';
+import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
-import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
+import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES, SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -60,7 +60,7 @@ export default function ShuttleBusTimetable() {
   const category = categoryFromURL ?? '전체';
 
   const logger = useLogger();
-  const { isMobile } = useBusCourse();
+  const isMobile = useMediaQuery();
   const isMount = useMount();
 
   const { data: shuttleCourse } = useSuspenseQuery(busQueries.shuttleCourse());
@@ -133,7 +133,7 @@ export default function ShuttleBusTimetable() {
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
                 {displaySemester}({shuttleCourse.semester_info.from} ~ {shuttleCourse.semester_info.to}
-                )
+                )의
                 <br />
                 시간표가 제공됩니다.
               </div>
@@ -225,14 +225,16 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
           >
             <span className={styles['template-shuttle__list']}>
               <div className={styles['template-shuttle__list_header']}>
-                <span className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}>
+                <span
+                  className={`${styles['template-shuttle__list_type']} ${styles[SHUTTLE_ROUTE_TYPE_CLASS[route.type]] ?? ''}`}
+                >
                   {route.type}
                 </span>
                 <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>
               </div>
               <div className={styles['template-shuttle__list_sub_name']}>{route.sub_name}</div>
             </span>
-            <RightArrow />
+            <RightArrow className={styles['template-shuttle__arrow']} />
           </button>
         ))}
         {isMobile && <div className={styles['main-timetable-mobile__line']} />}

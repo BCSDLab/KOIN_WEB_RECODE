@@ -50,9 +50,9 @@
 }
 
 $template-shuttle-colors: (
-  "순환": #4ed92c,
-  "주중": #ffb443,
-  "주말": #34adff,
+  "circulation": #4ed92c,
+  "weekday": #ffb443,
+  "weekend": #34adff,
 );
 
 .bus-type {
@@ -62,7 +62,7 @@ $template-shuttle-colors: (
 }
 
 @each $type, $color in $template-shuttle-colors {
-  .type-#{$type} {
+  .bus-type--#{$type} {
     background-color: $color;
   }
 }

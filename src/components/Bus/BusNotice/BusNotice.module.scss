@@ -42,3 +42,47 @@
     }
   }
 }
+
+.container--timetable {
+  @include media.media-breakpoint(mobile) {
+    padding: 0 24px;
+    margin-bottom: 8px;
+
+    .notice {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+      background-color: #fff;
+      box-shadow:
+        0 8px 32px rgb(0 0 0 / 8%),
+        0 2px 20px rgb(0 0 0 / 4%);
+
+      &__description {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        color: #b611f5;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &__close {
+        flex-shrink: 0;
+
+        svg {
+          display: block;
+          width: 24px;
+          height: 24px;
+
+          path {
+            fill: #727272;
+          }
+        }
+      }
+    }
+  }
+}

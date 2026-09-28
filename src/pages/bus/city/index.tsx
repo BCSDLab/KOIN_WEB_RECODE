@@ -88,11 +88,11 @@ export default function CityBusTimetable() {
   ]);
 
   return (
-    <BusCoursePage>
+    <BusCoursePage boardingLocation={selectedDirectionType === 'from' ? '코리아텍' : '천안 터미널'}>
       <div className={styles['timetable-container']}>
         <div className={styles['city-container']}>
           <div className={styles['city-label']}>
-            <div className={styles['city-label__button']}>노선</div>
+            <div className={`${styles['city-label__button']} ${styles['city-label__title']}`}>노선</div>
             {CITY_COURSES.slice(0, 3).map((cityCourse) => (
               <button
                 key={cityCourse.bus_number}
@@ -116,13 +116,14 @@ export default function CityBusTimetable() {
           </div>
 
           <div className={styles['city-label']}>
-            <div className={styles['city-label__button']}>운행</div>
+            <div className={`${styles['city-label__button']} ${styles['city-label__title']}`}>운행</div>
             {cityBusDirections.map((cityBusDirection) => (
               <button
                 key={cityBusDirection.value}
                 className={cn({
                   [styles['city-label__button']]: true,
                   [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirectionType,
+                  [styles['city-label__button--byeongcheon']]: cityBusDirection.value === 'to',
                 })}
                 type="button"
                 onClick={() => handleDirectionButton(cityBusDirection)}
