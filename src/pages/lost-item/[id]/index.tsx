@@ -176,7 +176,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
       '쪽지를 보내려면',
       async () => {
         const chatroomInfo = await searchChatroom(articleId);
-        navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+        navigate(ROUTES.LostItemChat({ articleId: String(articleId), chatRoomId: String(chatroomInfo.chat_room_id) }));
       },
       {
         onLogin: () => logLostItemMessageLoginRequest('로그인하기'),

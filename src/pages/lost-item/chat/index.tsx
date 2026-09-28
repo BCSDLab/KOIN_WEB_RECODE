@@ -50,7 +50,7 @@ function LostItemChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
-  const chatroomIdParam = searchParams.get('chatroomId');
+  const chatroomIdParam = searchParams.get('chatRoomId') ?? searchParams.get('chatroomId');
   const showList = !isMobile || !chatroomIdParam;
   const showDetail = !isMobile || !!chatroomIdParam;
 
@@ -147,7 +147,7 @@ function LostItemChatPage() {
       unread_message_count,
     }) => ({
       key: `${chat_room_id}-${article_id}`,
-      href: `${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`,
+      href: ROUTES.LostItemChat({ articleId: String(article_id), chatRoomId: String(chat_room_id) }),
       title: article_title,
       timeLabel: formatChatRoomListTime(last_message_at),
       preview: recent_message_content,
