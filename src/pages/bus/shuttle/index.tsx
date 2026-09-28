@@ -234,7 +234,7 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
               </div>
               <div className={styles['template-shuttle__list_sub_name']}>{route.sub_name}</div>
             </span>
-            <RightArrow />
+            <RightArrow className={styles['template-shuttle__arrow']} />
           </button>
         ))}
         {isMobile && <div className={styles['main-timetable-mobile__line']} />}

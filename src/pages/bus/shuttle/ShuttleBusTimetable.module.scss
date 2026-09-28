@@ -111,10 +111,8 @@ $template-shuttle-colors: (
     padding: 0;
     margin: 0;
 
-    &__list_wrapper {
-      svg path {
-        stroke: #727272;
-      }
+    &__arrow {
+      color: #727272;
     }
 
     &__list_header {
