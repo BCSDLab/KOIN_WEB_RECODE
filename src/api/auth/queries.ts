@@ -34,7 +34,7 @@ export const authQueries = {
         try {
           return await getUserInfo(userType);
         } catch (error) {
-          if (isKoinError(error) && (error.status === 401 || error.status === 403)) {
+          if (isKoinError(error) && (error.status === 401 || error.status === 403 || error.status === 404)) {
             return null;
           }
           throw error;
