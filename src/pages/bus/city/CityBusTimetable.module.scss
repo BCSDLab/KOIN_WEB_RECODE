@@ -46,7 +46,7 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      line-height: 160%;
+      line-height: 1.6;
       border-radius: 50px;
 
       &:not(.city-label__button--selected) {
@@ -63,7 +63,7 @@
       background: #175c8e;
       color: #fff;
       font-weight: 600;
-      line-height: 160%;
+      line-height: 1.6;
 
       @include media.media-breakpoint(mobile) {
         background: #b611f5;

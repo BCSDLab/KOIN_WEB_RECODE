@@ -42,7 +42,7 @@
     @include media.media-breakpoint(mobile) {
       justify-content: flex-start;
       color: #4b4b4b;
-      line-height: 160%;
+      line-height: 1.6;
     }
   }
 }
@@ -86,7 +86,7 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
       font-size: 18px;
@@ -104,7 +104,7 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
       color: #4ba1ff;

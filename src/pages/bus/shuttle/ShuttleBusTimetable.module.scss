@@ -51,7 +51,7 @@ $template-shuttle-colors: (
   &__title {
     font-size: 18px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
     padding: 16px 24px;
     font-family: Pretendard, sans-serif;
   }
@@ -84,7 +84,7 @@ $template-shuttle-colors: (
     padding: 0 4px;
     border-radius: 4px;
     font-size: 11px;
-    line-height: 160%;
+    line-height: 1.6;
 
     @each $type, $color in $template-shuttle-colors {
       &.bus-type--#{$type} {
@@ -96,7 +96,7 @@ $template-shuttle-colors: (
   &__list_name {
     font-size: 16px;
     font-weight: 500;
-    line-height: 160%;
+    line-height: 1.6;
   }
 
   &__list_sub_name {
@@ -136,7 +136,7 @@ $template-shuttle-colors: (
     }
 
     &__list_sub_name {
-      line-height: 160%;
+      line-height: 1.6;
     }
   }
 }
@@ -181,7 +181,7 @@ $template-shuttle-colors: (
       background: #175c8e;
       color: #fff;
       font-weight: 600;
-      line-height: 160%;
+      line-height: 1.6;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -208,7 +208,7 @@ $template-shuttle-colors: (
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 160%;
+  line-height: 1.6;
 
   &__date {
     display: flex;
@@ -229,7 +229,7 @@ $template-shuttle-colors: (
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 160%;
+  line-height: 1.6;
 }
 
 .info-footer-mobile {
@@ -250,7 +250,7 @@ $template-shuttle-colors: (
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
     white-space: pre-wrap;
   }
 
@@ -262,6 +262,6 @@ $template-shuttle-colors: (
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
   }
 }

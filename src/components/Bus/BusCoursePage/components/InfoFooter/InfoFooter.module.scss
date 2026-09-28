@@ -30,7 +30,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
@@ -44,7 +44,7 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
