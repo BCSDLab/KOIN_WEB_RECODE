@@ -21,14 +21,18 @@ export const BusCourseContext = createContext<{ isMobile: boolean }>({
 
 export const useBusCourse = () => useContext(BusCourseContext);
 
-export default function BusCoursePage({ children }: { children: React.ReactNode }) {
+interface BusCoursePageProps {
+  children: React.ReactNode;
+  boardingLocation?: string;
+}
+
+export default function BusCoursePage({ children, boardingLocation }: BusCoursePageProps) {
   const router = useRouter();
   const isMount = useMount();
   const isMobile = useMediaQuery();
 
   const isMobileSafe = isMount ? isMobile : false;
   const mobileTitle = MOBILE_TIMETABLE_TITLES[router.pathname] ?? '셔틀버스 시간표';
-  const showBoardingGuide = router.pathname === ROUTES.BusCourseExpress() || router.pathname === ROUTES.BusCourseCity();
 
   return (
     <main className={styles['root-container']}>
@@ -37,9 +41,9 @@ export default function BusCoursePage({ children }: { children: React.ReactNode 
           <header className={styles['mobile-guide']}>
             <div className={styles['mobile-guide__title']}>
               <span>{mobileTitle}</span>
-              {showBoardingGuide && (
+              {boardingLocation && (
                 <span className={styles['mobile-guide__boarding']}>
-                  천안 터미널 승차
+                  {boardingLocation} 승차
                   <BusStopIcon aria-hidden="true" />
                 </span>
               )}

@@ -88,7 +88,7 @@ export default function CityBusTimetable() {
   ]);
 
   return (
-    <BusCoursePage>
+    <BusCoursePage boardingLocation={selectedDirectionType === 'from' ? '코리아텍' : '천안 터미널'}>
       <div className={styles['timetable-container']}>
         <div className={styles['city-container']}>
           <div className={styles['city-label']}>
