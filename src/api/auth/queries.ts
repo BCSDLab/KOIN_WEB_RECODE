@@ -1,7 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
-import type { UserType } from 'utils/zustand/auth';
+import { useTokenStore, type UserType } from 'utils/zustand/auth';
 
 import type { GeneralUserResponse, UserAcademicInfoResponse, UserResponse } from './entity';
 import { getGeneralUser, getUser, getUserAcademicInfo } from './index';
@@ -34,7 +34,9 @@ export const authQueries = {
         try {
           return await getUserInfo(userType);
         } catch (error) {
-          if (isKoinError(error) && (error.status === 401 || error.status === 403)) {
+          if (isKoinError(error) && (error.status === 401 || error.status === 403 || error.status === 404)) {
+            useTokenStore.getState().setUserType(null);
+
             return null;
           }
           throw error;
