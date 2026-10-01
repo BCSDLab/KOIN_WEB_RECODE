@@ -18,7 +18,7 @@ import useMount from 'utils/hooks/state/useMount';
 import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
 import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import { queryClient } from 'utils/ts/queryClient';
+import { createQueryClient, queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
 interface PageProps {
@@ -61,7 +61,9 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
 // 메인 App 컴포넌트
 export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const router = useRouter();
-  const [client] = React.useState(queryClient);
+  // 서버에서는 요청마다 새 QueryClient를 쓴다. 모듈 싱글턴을 공유하면 HydrationBoundary가 캐시에 이미 있는
+  // 쿼리의 하이드레이션을 effect로 미루는데(서버에선 실행되지 않음), 그 결과 이전 요청 사용자의 데이터가 렌더된다.
+  const [client] = React.useState(() => (typeof window === 'undefined' ? createQueryClient() : queryClient));
   const isMaintenance = useServerStateStore((state) => state.isMaintenance);
 
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
