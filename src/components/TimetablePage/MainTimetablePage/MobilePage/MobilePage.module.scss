@@ -1,73 +1,42 @@
-@use "utils/scss/media.scss" as media;
-
 .page {
-  &__timetable-wrap {
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding: 0 24px 24px;
 
   &__header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
   }
 
   &__semester {
-    width: 150px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    white-space: nowrap;
   }
 
   &__button {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    border: 1px solid rgb(23 92 142);
-    padding: 1px 6px;
-    width: 170px;
-    height: 45px;
-    background-color: rgb(23 92 142);
-    font-size: 15px;
+    gap: 8px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    background-color: #fff;
+    font-size: 14px;
     line-height: 1.6;
-    color: rgb(253 253 253);
+    white-space: nowrap;
     cursor: pointer;
-
-    & > img {
-      width: 24px;
-      height: 24px;
-    }
   }
 
   &__timetable {
     display: flex;
+    cursor: pointer;
   }
-}
-
-.edit-timetable {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid rgb(23 92 142);
-  padding: 1px 6px;
-  width: 100%;
-  height: 45px;
-  background-color: rgb(253 253 253);
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgb(23 92 142);
-  margin-top: 17px;
-  cursor: pointer;
-}
-
-.dropdown-loading-spinner {
-  margin: 1px auto;
-  background-color: white;
-  width: 50px;
-  height: 50px;
-}
-
-.top-loading-spinner {
-  margin: 208px auto;
-  background-color: white;
-  width: 100px;
-  height: 100px;
 }

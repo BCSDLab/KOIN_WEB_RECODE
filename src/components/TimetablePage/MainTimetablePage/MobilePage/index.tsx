@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import Image from 'next/image';
 
-import LoadingSpinner from 'assets/svg/loading-spinner.svg';
-import SemesterListbox from 'components/TimetablePage/components/SemesterList';
+import TimetableDownloadIcon from 'assets/svg/timetable-download-icon.svg';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -40,52 +38,44 @@ function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
     }
   }, [data, setCurrentFrameId, timetableFrameId]);
 
+  const currentFrame = data.find((frame) => frame.id === timetableFrameId);
+  const semesterLabel = [semester && `${semester.year}년 ${semester.term}`, currentFrame?.name]
+    .filter(Boolean)
+    .join(' / ');
+
+  const handleTimetableClick = () => {
+    showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.');
+  };
+
   return (
-    <>
-      <div className={styles['page__timetable-wrap']}>
-        <div className={styles.page__header}>
-          <div className={styles.page__semester}>
-            <React.Suspense
-              fallback={
-                <div className={styles['dropdown-loading-spinner']}>
-                  <LoadingSpinner />
-                </div>
-              }
-            >
-              <SemesterListbox />
-            </React.Suspense>
-          </div>
-          <button type="button" className={styles.page__button} onClick={(e) => handleImageDownloadClick(e)}>
-            <Image
-              src="https://static.koreatech.in/assets/img/ic-image.png"
-              alt="이미지"
-              width={24}
-              height={24}
-              loading="lazy"
-            />
-            이미지로 저장하기
-          </button>
-        </div>
-        <div ref={timetableRef} className={styles.page__timetable}>
-          <Timetable
-            timetableFrameId={timetableFrameId}
-            columnWidth={55}
-            firstColumnWidth={52}
-            rowHeight={21}
-            totalHeight={439}
-          />
-        </div>
+    <div className={styles.page}>
+      <div className={styles.page__header}>
+        <div className={styles.page__semester}>{semesterLabel}</div>
+        <button type="button" className={styles.page__button} onClick={handleImageDownloadClick}>
+          시간표 다운로드
+          <TimetableDownloadIcon />
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={() => {
-          showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.');
+      <div
+        ref={timetableRef}
+        className={styles.page__timetable}
+        role="button"
+        tabIndex={0}
+        aria-label="시간표"
+        onClick={handleTimetableClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') handleTimetableClick();
         }}
-        className={styles['edit-timetable']}
       >
-        시간표 편집하기
-      </button>
-    </>
+        <Timetable
+          timetableFrameId={timetableFrameId}
+          columnWidth={62}
+          firstColumnWidth={17}
+          rowHeight={35}
+          totalHeight={716}
+        />
+      </div>
+    </div>
   );
 }
 
