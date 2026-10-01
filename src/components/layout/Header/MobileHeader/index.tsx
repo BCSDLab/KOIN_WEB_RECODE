@@ -6,6 +6,8 @@ import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
+import TimetableBackIcon from 'assets/svg/timetable-back-icon.svg';
+import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
@@ -16,6 +18,7 @@ import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { backButtonTapped } from 'utils/ts/iosBridge';
+import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
@@ -26,9 +29,10 @@ import styles from './MobileHeader.module.scss';
 interface MobileHeaderProps {
   openModal: () => void;
   isBusTimetableRoute: boolean;
+  isTimetableRoute: boolean;
 }
 
-export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileHeaderProps) {
+export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetableRoute }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
@@ -105,7 +109,29 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
         title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
         size="medium"
         onBack={backInDetailPage}
-        className={styles['mobileheader--bus-timetable']}
+        className={styles['mobileheader--sub-page']}
+      />
+    );
+  }
+
+  if (isTimetableRoute) {
+    return (
+      <SubPageHeader
+        title="시간표"
+        backIcon={<TimetableBackIcon />}
+        size="medium"
+        onBack={backInDetailPage}
+        className={styles['mobileheader--sub-page']}
+        rightAction={
+          <button
+            type="button"
+            className={styles['mobileheader__action-button']}
+            aria-label="시간표 수정"
+            onClick={() => showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
+          >
+            <TimetableSquarePenIcon />
+          </button>
+        }
       />
     );
   }
