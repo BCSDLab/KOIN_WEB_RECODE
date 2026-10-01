@@ -173,7 +173,6 @@
   }
 }
 
-// 모바일 레이아웃. 열 폭은 17 + 5 x 62 = 327 (375px 화면 기준 Figma)로 맞춘다.
 @include media.media-breakpoint(mobile) {
   .timetable {
     --first-column-width: 17px;
@@ -185,7 +184,6 @@
     border-radius: 10px;
     overflow: hidden;
 
-    // 바깥 테두리는 폭을 차지하지 않도록 오버레이로 그린다. 열 폭이 정수로 떨어져 선이 어긋나지 않는다.
     &::after {
       content: "";
       position: absolute;
@@ -222,7 +220,6 @@
       }
     }
 
-    // 기존과 같은 1px 오프셋을 유지해 가로선이 시간 눈금 열의 선과 같은 높이에 놓이게 한다.
     .timetable__row-container {
       border-top: 1px solid transparent;
     }
@@ -231,7 +228,6 @@
       border-bottom-color: #e1e1e1;
     }
 
-    // 첫 줄은 헤더 행의 아래 테두리와 겹치므로 그리지 않는다.
     .timetable__row-line:first-child::after {
       border-bottom: none;
     }
@@ -250,7 +246,6 @@
       }
     }
 
-    // 시간 눈금 열: 30분 선이 가로지르지 않도록 셀을 흰 배경으로 덮고, 한 시간 단위 선만 그린다.
     .timetable__content--time {
       box-sizing: border-box;
       position: relative;
