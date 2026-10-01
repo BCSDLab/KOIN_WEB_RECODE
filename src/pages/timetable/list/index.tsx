@@ -16,20 +16,22 @@ export const getServerSideProps = withCacheControl(async (_context, cacheControl
   }
 
   const queryClient = new QueryClient();
+  const { userType } = serverRequest;
   let isMember = false;
 
   if (serverRequest.isLoggedIn) {
     try {
-      const mySemester = await queryClient.fetchQuery(timetableQueries.mySemester(true));
+      const mySemester = await queryClient.fetchQuery(timetableQueries.mySemester(true, { userType }));
       if (mySemester) {
         isMember = true;
         await Promise.all(
           mySemester.semesters.map((semester) =>
-            queryClient.prefetchQuery(timetableQueries.frameList(true, semester, { fallbackOnError: true })),
+            queryClient.prefetchQuery(timetableQueries.frameList(true, semester, { fallbackOnError: true, userType })),
           ),
         );
       }
     } catch (error) {
+      // userType 가드로 학생이 아닌 사용자는 요청 자체를 건너뛰지만, 판별 실패 등으로 요청이 나간 경우의 방어선이다.
       const isForbiddenError = isKoinError(error) && error.status === 403;
       if (!isServerAuthError(error) && !isForbiddenError) throw error;
     }
