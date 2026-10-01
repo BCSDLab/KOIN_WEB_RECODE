@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 
 import TimetableDownloadIcon from 'assets/svg/timetable-download-icon.svg';
 import Timetable from 'components/TimetablePage/components/Timetable';
+import useResetInvalidSemester from 'components/TimetablePage/hooks/useResetInvalidSemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import showToast from 'utils/ts/showToast';
@@ -13,6 +16,13 @@ import styles from './MobilePage.module.scss';
 interface MobilePageProps {
   timetableFrameId: number;
   setCurrentFrameId?: (index: number) => void;
+}
+
+// 학기 목록 로딩이 화면을 막지 않도록 Suspense 안에서 따로 실행한다.
+function SemesterGuard() {
+  useResetInvalidSemester();
+
+  return null;
 }
 
 function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
@@ -38,7 +48,7 @@ function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
     }
   }, [data, setCurrentFrameId, timetableFrameId]);
 
-  const currentFrame = data.find((frame) => frame.id === timetableFrameId);
+  const currentFrame = data.find((frame) => frame.id === timetableFrameId) ?? data.find((frame) => frame.is_main);
   const semesterLabel = [semester && `${semester.year}년 ${semester.term}`, currentFrame?.name]
     .filter(Boolean)
     .join(' / ');
@@ -49,8 +59,13 @@ function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
 
   return (
     <div className={styles.page}>
+      <React.Suspense fallback={null}>
+        <SemesterGuard />
+      </React.Suspense>
       <div className={styles.page__header}>
-        <div className={styles.page__semester}>{semesterLabel}</div>
+        <Link href={ROUTES.TimetableList()} className={styles.page__semester}>
+          {semesterLabel}
+        </Link>
         <button type="button" className={styles.page__button} onClick={handleImageDownloadClick}>
           시간표 다운로드
           <TimetableDownloadIcon />
