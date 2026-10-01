@@ -2,7 +2,7 @@ import type { Semester, TimetableFrameInfo } from 'api/timetable/entity';
 import useDeleteTimetableFrame from 'components/TimetablePage/hooks/useDeleteTimetableFrame';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import getObjectParticle from 'utils/ts/josa';
+import { getObjectParticle } from 'utils/ts/josa';
 
 import styles from './TimetableModal.module.scss';
 

@@ -116,6 +116,20 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
 
   if (isTimetableRoute) {
     const isTimetableList = pathname === ROUTES.TimetableList();
+    const getRightAction = () => {
+      if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
+
+      return (
+        <button
+          type="button"
+          className={styles['mobileheader__action-button']}
+          aria-label="시간표 수정"
+          onClick={() => showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
+        >
+          <TimetableSquarePenIcon />
+        </button>
+      );
+    };
 
     return (
       <SubPageHeader
@@ -124,18 +138,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
         size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
-        rightAction={
-          isTimetableList ? undefined : (
-            <button
-              type="button"
-              className={styles['mobileheader__action-button']}
-              aria-label="시간표 수정"
-              onClick={() => showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
-            >
-              <TimetableSquarePenIcon />
-            </button>
-          )
-        }
+        rightAction={getRightAction()}
       />
     );
   }
