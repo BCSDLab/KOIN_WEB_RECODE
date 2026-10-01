@@ -22,18 +22,22 @@ import { sortSemestersNewestFirst } from 'utils/timetable/semester';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useSemesterAction } from 'utils/zustand/semester';
 
+import DeleteTimetableModal from './DeleteTimetableModal';
+import TimetableSettingModal from './TimetableSettingModal';
 import styles from './MobileTimetableListPage.module.scss';
 
 type RequireLogin = (actionTitle: string) => void;
+type OpenSetting = (semester: Semester, frame: TimetableFrameInfo) => void;
 
 interface SemesterSectionProps {
   semester: Semester;
   frames: TimetableFrameInfo[];
   isMember: boolean;
   onRequireLogin: RequireLogin;
+  onOpenSetting: OpenSetting;
 }
 
-function SemesterSection({ semester, frames, isMember, onRequireLogin }: SemesterSectionProps) {
+function SemesterSection({ semester, frames, isMember, onRequireLogin, onOpenSetting }: SemesterSectionProps) {
   const router = useRouter();
   const logger = useLogger();
   const { updateSemester } = useSemesterAction();
@@ -86,11 +90,12 @@ function SemesterSection({ semester, frames, isMember, onRequireLogin }: Semeste
               {frame.name}
               {frame.is_main && isMember && <BookmarkIcon />}
             </button>
-            {isMember && (
+            {isMember && frame.id && (
               <button
                 type="button"
-                className={`${styles['icon-button']} ${styles.frame__setting}`}
+                className={styles.frame__setting}
                 aria-label={`${frame.name} 설정`}
+                onClick={() => onOpenSetting(semester, frame)}
               >
                 <SettingIcon />
               </button>
@@ -102,7 +107,13 @@ function SemesterSection({ semester, frames, isMember, onRequireLogin }: Semeste
   );
 }
 
-function MemberList({ semesters, onRequireLogin }: { semesters: Semester[]; onRequireLogin: RequireLogin }) {
+interface MemberListProps {
+  semesters: Semester[];
+  onRequireLogin: RequireLogin;
+  onOpenSetting: OpenSetting;
+}
+
+function MemberList({ semesters, onRequireLogin, onOpenSetting }: MemberListProps) {
   const { userType } = useTokenStore();
   const results = useSuspenseQueries({
     queries: semesters.map((semester) =>
@@ -119,13 +130,20 @@ function MemberList({ semesters, onRequireLogin }: { semesters: Semester[]; onRe
           frames={results[index].data}
           isMember
           onRequireLogin={onRequireLogin}
+          onOpenSetting={onOpenSetting}
         />
       ))}
     </div>
   );
 }
 
-function GuestList({ isLoggedIn, onRequireLogin }: { isLoggedIn: boolean; onRequireLogin: RequireLogin }) {
+interface GuestListProps {
+  isLoggedIn: boolean;
+  onRequireLogin: RequireLogin;
+  onOpenSetting: OpenSetting;
+}
+
+function GuestList({ isLoggedIn, onRequireLogin, onOpenSetting }: GuestListProps) {
   const semesters = sortSemestersNewestFirst(useAllSemesters());
   const frames = createDefaultTimetableFrameList();
 
@@ -149,6 +167,7 @@ function GuestList({ isLoggedIn, onRequireLogin }: { isLoggedIn: boolean; onRequ
             frames={frames}
             isMember={false}
             onRequireLogin={onRequireLogin}
+            onOpenSetting={onOpenSetting}
           />
         ))}
       </div>
@@ -184,6 +203,22 @@ export default function MobileTimetableListPage() {
     ));
   };
 
+  const handleOpenSetting: OpenSetting = (semester, frame) => {
+    const openDeleteModal = () =>
+      portalManager.open((portalOption: Portal) => (
+        <DeleteTimetableModal semester={semester} frame={frame} onClose={portalOption.close} />
+      ));
+
+    portalManager.open((portalOption: Portal) => (
+      <TimetableSettingModal
+        semester={semester}
+        frame={frame}
+        onClose={portalOption.close}
+        onRequestDelete={openDeleteModal}
+      />
+    ));
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리
   useEffect(() => () => portalManager.close(), []);
 
@@ -195,7 +230,7 @@ export default function MobileTimetableListPage() {
         {semesters.length === 0 ? (
           <EmptyState />
         ) : (
-          <MemberList semesters={semesters} onRequireLogin={handleRequireLogin} />
+          <MemberList semesters={semesters} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
         )}
       </div>
     );
@@ -203,7 +238,7 @@ export default function MobileTimetableListPage() {
 
   return (
     <div className={styles.page}>
-      <GuestList isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} />
+      <GuestList isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
     </div>
   );
 }

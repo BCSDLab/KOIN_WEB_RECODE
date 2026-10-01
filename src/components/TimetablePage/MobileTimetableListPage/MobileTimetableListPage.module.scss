@@ -73,7 +73,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 32px;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 0 20px 0 32px;
 
   &__select {
     display: flex;
@@ -106,6 +108,16 @@
   &__setting {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    background: none;
+    cursor: pointer;
   }
 }
 

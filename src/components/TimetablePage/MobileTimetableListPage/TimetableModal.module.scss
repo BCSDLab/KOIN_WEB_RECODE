@@ -1,0 +1,133 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #00000026;
+  z-index: 21;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: min(327px, calc(100% - 48px));
+  border-radius: 4px;
+  background-color: #fff;
+
+  &--setting {
+    gap: 10px;
+    padding: 26px 24px;
+  }
+
+  &--delete {
+    gap: 48px;
+    padding: 24px 32px;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #000;
+}
+
+.message {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #000;
+  text-align: center;
+  word-break: keep-all;
+
+  & > strong {
+    font-weight: 600;
+  }
+}
+
+.name {
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 16px;
+  background-color: #f5f5f5;
+  box-shadow: inset 0 0 0 1px #e1e1e1;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #727272;
+  outline: none;
+
+  &:focus {
+    box-shadow: inset 0 0 0 1px #b611f5;
+    color: #000;
+  }
+}
+
+.checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #000;
+  cursor: pointer;
+
+  &__input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  & > svg {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.button {
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+  cursor: pointer;
+
+  &--outline {
+    background-color: #fff;
+    box-shadow: inset 0 0 0 1px #8e8e8e;
+    color: #4b4b4b;
+  }
+
+  &--primary {
+    background-color: #b611f5;
+    color: #fff;
+  }
+
+  &--danger {
+    background-color: #ec2d30;
+    color: #fff;
+  }
+}
