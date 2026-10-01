@@ -137,7 +137,8 @@ function TimetablePage() {
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const mainFrameId = isValidTimetableFrameId(mainFrame?.id) ? mainFrame.id : 0;
   const queryFrameId = typeof timetableFrameId === 'string' ? Number(timetableFrameId) : Number.NaN;
-  const initialFrameId = isValidTimetableFrameId(queryFrameId) ? queryFrameId : mainFrameId;
+  const hasQueryFrame = timetableFrameList.some((frame) => frame.id === queryFrameId);
+  const initialFrameId = hasQueryFrame ? queryFrameId : mainFrameId;
   const [currentFrameIndex, setCurrentFrameIndex] = useState(initialFrameId);
   const resolvedCurrentFrameIndex = timetableFrameList.some((frame) => frame.id === currentFrameIndex)
     ? currentFrameIndex
