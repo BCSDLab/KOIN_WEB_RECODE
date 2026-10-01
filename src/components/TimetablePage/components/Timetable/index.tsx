@@ -54,6 +54,16 @@ function Timetable({
 
   const modifyType = router.query.type;
 
+  const lectureMetrics = isMobile
+    ? { fontSize: 10, placeFontSize: 9, lineHeight: 14, padding: 4, gap: 2 }
+    : {
+        fontSize: rowHeight / 3 + 1,
+        placeFontSize: rowHeight / 3 - 1,
+        lineHeight: rowHeight / 2,
+        padding: rowHeight / 4,
+        gap: rowHeight / 5.5,
+      };
+
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!isLoggedIn) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
@@ -109,12 +119,12 @@ function Timetable({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const calculateMinHeight = (block: number, kind: string) => {
-    if (block === 1) return kind === 'name' ? rowHeight / 2 : 0;
+    if (block === 1) return kind === 'name' ? lectureMetrics.lineHeight : 0;
 
-    if (block === 2) return kind === 'name' || kind === 'professor' ? rowHeight / 2 : 0;
+    if (block === 2) return kind === 'name' || kind === 'professor' ? lectureMetrics.lineHeight : 0;
 
     if (block === 3) {
-      if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
+      if (kind === 'name' || kind === 'professor' || kind === 'place') return lectureMetrics.lineHeight;
     }
 
     return rowHeight;
@@ -253,8 +263,8 @@ function Timetable({
                         top: `${(info.start_time % 100) * rowHeight + 1}px`,
                         width: isMobile ? undefined : `${columnWidth}px`,
                         height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight - 1}px`,
-                        padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
-                        gap: `${rowHeight / 5.5}px`,
+                        padding: `${lectureMetrics.padding}px ${lectureMetrics.padding}px ${lectureMetrics.padding - 2}px ${lectureMetrics.padding}px`,
+                        gap: `${lectureMetrics.gap}px`,
                       }}
                       onMouseEnter={() => setIsMouseOver(`${day}-${info.start_time % 100}-${info.end_time % 100}`)}
                       onMouseLeave={() => setIsMouseOver('')}
@@ -282,8 +292,8 @@ function Timetable({
                       <div
                         className={styles['timetable__lecture-name']}
                         style={{
-                          fontSize: `${rowHeight / 3 + 1}px`,
-                          lineHeight: `${rowHeight / 2}px`,
+                          fontSize: `${lectureMetrics.fontSize}px`,
+                          lineHeight: `${lectureMetrics.lineHeight}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'name')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (info.end_time % 100) - (info.start_time % 100) + 1,
@@ -298,9 +308,9 @@ function Timetable({
                       <span
                         className={styles['timetable__lecture-professor']}
                         style={{
-                          fontSize: `${rowHeight / 3 + 1}px`,
-                          lineHeight: `${rowHeight / 2}px`,
-                          height: `${rowHeight / 2}px`,
+                          fontSize: `${lectureMetrics.fontSize}px`,
+                          lineHeight: `${lectureMetrics.lineHeight}px`,
+                          height: `${lectureMetrics.lineHeight}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'professor')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (info.end_time % 100) - (info.start_time % 100) + 1,
@@ -316,9 +326,9 @@ function Timetable({
                         className={styles['timetable__lecture-place']}
                         style={{
                           display: `${(info.end_time % 100) - (info.start_time % 100) + 1 > 2 ? '-webkit-box' : 'none'}`,
-                          fontSize: `${rowHeight / 3 - 1}px`,
-                          lineHeight: `${rowHeight / 2}px`,
-                          height: `${rowHeight / 2}px`,
+                          fontSize: `${lectureMetrics.placeFontSize}px`,
+                          lineHeight: `${lectureMetrics.lineHeight}px`,
+                          height: `${lectureMetrics.lineHeight}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'place')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (((info.end_time % 100) - (info.start_time % 100)) % 100) + 1,
