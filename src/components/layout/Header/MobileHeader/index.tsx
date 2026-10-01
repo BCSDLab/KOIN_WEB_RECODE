@@ -84,7 +84,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
     }
     // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
     if (window.history.state?.idx === 0) {
-      router.push(ROUTES.Main());
+      router.push(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
     } else {
       router.back();
     }
@@ -115,22 +115,26 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
   }
 
   if (isTimetableRoute) {
+    const isTimetableList = pathname === ROUTES.TimetableList();
+
     return (
       <SubPageHeader
-        title="시간표"
+        title={isTimetableList ? '시간표 목록' : '시간표'}
         backIcon={<TimetableBackIcon />}
         size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
         rightAction={
-          <button
-            type="button"
-            className={styles['mobileheader__action-button']}
-            aria-label="시간표 수정"
-            onClick={() => showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
-          >
-            <TimetableSquarePenIcon />
-          </button>
+          isTimetableList ? undefined : (
+            <button
+              type="button"
+              className={styles['mobileheader__action-button']}
+              aria-label="시간표 수정"
+              onClick={() => showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
+            >
+              <TimetableSquarePenIcon />
+            </button>
+          )
         }
       />
     );

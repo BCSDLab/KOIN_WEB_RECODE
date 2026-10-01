@@ -22,7 +22,7 @@ function Header() {
   const isBusTimetableRoute = [ROUTES.BusCourseShuttle(), ROUTES.BusCourseExpress(), ROUTES.BusCourseCity()].some(
     (path) => router.pathname === path || router.pathname.startsWith(`${path}/`),
   );
-  const isTimetableRoute = router.pathname === ROUTES.Timetable();
+  const isTimetableRoute = [ROUTES.Timetable(), ROUTES.TimetableList()].includes(router.pathname);
 
   return (
     <header

@@ -5,6 +5,7 @@ const ROUTES = {
   Category: () => '/category',
   NotFound: () => '*',
   Timetable: () => '/timetable',
+  TimetableList: () => '/timetable/list',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
     `/timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
   GraduationCalculator: () => '/graduation',
