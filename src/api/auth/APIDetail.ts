@@ -9,8 +9,9 @@ import type {
   WebLoginRequest,
   WebAuthResponse,
   WebLogoutResponse,
-  WebCsrfTokenResponse,
+  WebSessionResponse,
   UserAuthResponse,
+  UserProfileResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -156,16 +157,20 @@ export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
   constructor() {}
 }
 
-export class WebCsrf<R extends WebCsrfTokenResponse> implements APIRequest<R> {
+// 웹 로그인 세션 상태. 비로그인도 200이고, 세션이 유효하면 CSRF 쿠키를 복구한다.
+// SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
+export class WebSession<R extends WebSessionResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/v2/web/auth/csrf';
+  path = '/v2/web/auth/session';
+
+  authOptional = true;
 
   skipAuthRefresh = true;
 
   response!: R;
 
-  constructor() {}
+  constructor(public headers?: Record<string, string>) {}
 }
 
 // 쿠키(또는 Bearer) 인증으로 로그인 상태·회원 유형을 확인한다. 문서(web-cookie-auth.md)가
@@ -183,28 +188,14 @@ export class UserAuth<R extends UserAuthResponse> implements APIRequest<R> {
   constructor(public headers?: Record<string, string>) {}
 }
 
-export class User<R extends UserResponse> implements APIRequest<R> {
+export class UserProfile<R extends UserProfileResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/user/student/me';
+  path = '/v3/users/me';
 
   authOptional = true;
 
   response!: R;
-
-  auth = false;
-}
-
-export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/v2/users/me';
-
-  authOptional = true;
-
-  response!: R;
-
-  auth = false;
 }
 
 // 추후 User 클래스명으로 아래 API로 통일할 것

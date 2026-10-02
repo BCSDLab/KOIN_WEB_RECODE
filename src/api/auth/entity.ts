@@ -89,8 +89,26 @@ export interface WebAuthResponse extends APIResponse {
 
 export type WebLogoutResponse = APIResponse;
 
-export interface WebCsrfTokenResponse extends APIResponse {
-  csrf_token: string;
+// 비로그인도 오류가 아니라 authenticated=false인 200으로 응답한다.
+export interface WebSessionResponse extends APIResponse {
+  authenticated: boolean;
+  user_type: 'STUDENT' | 'GENERAL' | 'COUNCIL' | null;
+  csrf_token: string | null;
+}
+
+// GET /v3/users/me — 회원 유형과 무관한 내 정보. 학생·총학생회만 student_number, major가 있다.
+export interface UserProfileResponse extends APIResponse {
+  id: number;
+  login_id: string;
+  anonymous_nickname: string | null;
+  email: string;
+  gender: 0 | 1;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  user_type: 'STUDENT' | 'GENERAL' | 'COUNCIL';
+  student_number: string | null;
+  major: string | null;
 }
 
 export interface UserAuthResponse extends APIResponse {
@@ -114,6 +132,7 @@ export interface UserResponse extends APIResponse {
 export interface GeneralUserResponse extends APIResponse {
   id: number;
   login_id: string;
+  anonymous_nickname?: string;
   email: string;
   gender: 0 | 1;
   name: string;

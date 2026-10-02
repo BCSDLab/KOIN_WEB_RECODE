@@ -1,27 +1,18 @@
-import { isKoinError } from '@bcsdlab/koin';
-import { getUserAuth, webCsrf } from 'api/auth';
+import { getWebSession } from 'api/auth';
 
-import { ANONYMOUS_SESSION, authenticatedSession, hasSessionCookie, type Session } from './session';
+import { ANONYMOUS_SESSION, authenticatedSession, hasSessionCookie, type Session, toUserType } from './session';
 import { useSessionHintStore } from './sessionHint';
 
 /**
- * 서버(`/user/auth`)로 세션을 확인한다.
- * - CSRF 쿠키도 힌트도 없으면 요청 없이 anonymous.
- * - CSRF 쿠키만 없고 힌트가 있으면 refresh 쿠키(HttpOnly라 볼 수 없다)가 남았을 수 있어 `/csrf`로 복구한 뒤 확인한다.
- * - 401(갱신까지 실패)은 "세션 없음"이라는 이 엔드포인트의 정상 응답이므로 anonymous. 그 외 실패는 판정 불가라 던진다.
+ * 서버(`GET /v2/web/auth/session`)로 세션을 확인한다. 비로그인도 오류가 아닌 200이라 오류 해석이 필요 없다.
+ * 서버는 refresh 세션이 유효하면 access가 만료돼도 로그인으로 응답하고, CSRF 쿠키를 복구한다.
+ * CSRF 쿠키도 힌트도 없으면 세션이 없다고 보고 요청하지 않는다(서버가 세션 소멸 시 쿠키를 함께 지운다).
  */
 export default async function fetchSession(): Promise<Session> {
-  try {
-    if (!hasSessionCookie()) {
-      if (!useSessionHintStore.getState().userType) return ANONYMOUS_SESSION;
-      await webCsrf();
-    }
+  if (!hasSessionCookie() && !useSessionHintStore.getState().userType) return ANONYMOUS_SESSION;
 
-    const { user_type: userType } = await getUserAuth();
+  const { authenticated, user_type: userType } = await getWebSession();
+  const resolved = authenticated ? toUserType(userType) : null;
 
-    return authenticatedSession(userType);
-  } catch (error) {
-    if (isKoinError(error) && error.status === 401) return ANONYMOUS_SESSION;
-    throw error;
-  }
+  return resolved ? authenticatedSession(resolved) : ANONYMOUS_SESSION;
 }

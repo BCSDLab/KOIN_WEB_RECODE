@@ -13,7 +13,15 @@ export const SESSION_QUERY_KEY = ['auth', 'session'] as const;
 
 export const authenticatedSession = (userType: UserType): Session => ({ status: 'authenticated', userType });
 
-/** 서버가 `GET /user/auth`로 확인한 값에서 세션을 만든다. */
+/** 백엔드 회원 유형을 웹이 구분하는 유형으로 좁힌다. 총학생회는 학생 정보를 가지므로 학생으로 다룬다. */
+export const toUserType = (value: string | null | undefined): UserType | null => {
+  if (value === 'GENERAL') return 'GENERAL';
+  if (value === 'STUDENT' || value === 'COUNCIL') return 'STUDENT';
+
+  return null;
+};
+
+/** 서버가 세션 조회로 확인한 값에서 세션을 만든다. */
 export const toSession = (serverRequest: ServerRequestContext | null): Session =>
   serverRequest?.isLoggedIn && serverRequest.userType ? authenticatedSession(serverRequest.userType) : ANONYMOUS_SESSION;
 

@@ -1,6 +1,6 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
-import { UserAuth, WebCsrf, WebRefresh } from 'api/auth/APIDetail';
+import { UserAuth, WebRefresh, WebSession } from 'api/auth/APIDetail';
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
@@ -166,7 +166,7 @@ export default class APIClient {
 
   static webRefresh = this.of(WebRefresh);
 
-  static webCsrf = this.of(WebCsrf);
+  static webSession = this.of(WebSession);
 
   private refreshPromise: Promise<boolean> | null = null;
 
@@ -181,8 +181,8 @@ export default class APIClient {
 
   private async refreshOnce(): Promise<boolean> {
     try {
-      // refresh는 X-CSRF-Token이 필수인데 CSRF 쿠키만 사라질 수 있다. 먼저 `/csrf`로 복구한다.
-      if (!hasSessionCookie()) await APIClient.webCsrf();
+      // refresh는 X-CSRF-Token이 필수인데 CSRF 쿠키만 사라질 수 있다. 세션 조회가 세션이 유효할 때 이를 복구한다.
+      if (!hasSessionCookie() && !(await APIClient.webSession()).authenticated) return false;
       const result = await APIClient.webRefresh();
       markSessionAuthenticated(result.user_type);
 
