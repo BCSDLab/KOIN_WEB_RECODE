@@ -12,7 +12,6 @@ import { getServerRequestHeaders } from 'utils/ssr/cookieForwarding';
 import qsStringify from 'utils/ts/qsStringfy';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
-
 import { getCookie } from './cookie';
 
 const isBrowser = typeof window !== 'undefined';
@@ -170,7 +169,7 @@ export default class APIClient {
 
   private refreshPromise: Promise<boolean> | null = null;
 
-  // 실패해도 던지지 않고 성공 여부만 돌려준다. 세션 종료 처리는 호출부가 sessionControl로 한다.
+  // 실패해도 던지지 않고 성공 여부만 돌려준다.
   private refreshAccessToken(): Promise<boolean> {
     this.refreshPromise ??= this.refreshOnce().finally(() => {
       this.refreshPromise = null;
@@ -181,7 +180,7 @@ export default class APIClient {
 
   private async refreshOnce(): Promise<boolean> {
     try {
-      // refresh는 X-CSRF-Token이 필수인데 CSRF 쿠키만 사라질 수 있다. 세션 조회가 세션이 유효할 때 이를 복구한다.
+      // refresh는 X-CSRF-Token이 필수라, CSRF 쿠키가 없으면 세션 조회로 복구한다.
       if (!hasSessionCookie() && !(await APIClient.webSession()).authenticated) return false;
       const result = await APIClient.webRefresh();
       markSessionAuthenticated(result.user_type);
@@ -243,7 +242,7 @@ export default class APIClient {
     try {
       return await this.retryRequest(error);
     } catch (retryError) {
-      // 갱신 직후에도 401이면 세션이 끝난 것이다. 다른 실패(5xx 등)는 세션과 무관하므로 원래 에러를 그대로 올린다.
+      // 갱신 직후에도 401이면 세션이 끝난 것이다. 5xx 등은 세션과 무관하다.
       if (axios.isAxiosError(retryError) && retryError.response?.status === 401) markSessionExpired(request);
 
       return null;

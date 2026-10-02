@@ -39,9 +39,7 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
-// 로그인이 필요한 페이지. 서버 확인으로 비로그인이 확정되면 메인으로 보낸다.
-// 확정 전에는 서버가 그린 anonymous를 믿지 않는다(access가 만료됐어도 refresh로 로그인일 수 있다).
-// 확정 이후의 인증 실패는 API 401 + redirectToLogin()이 처리한다.
+// 서버 확인으로 비로그인이 확정되면 메인으로 보낸다. 확정 전의 anonymous는 믿지 않는다(refresh로 로그인일 수 있다).
 function AuthGuard({ requireAuth }: { requireAuth: boolean | undefined }) {
   const router = useRouter();
   const { session, resolved } = useSessionState();
@@ -97,7 +95,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
   useEffect(() => {
     clearLegacySessionStorage();
   }, []);
-
 
   if (isMaintenance) {
     return <MaintenancePage />;

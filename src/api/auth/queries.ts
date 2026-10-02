@@ -27,8 +27,7 @@ export const authQueries = {
       queryFn: fetchSession,
     }),
 
-  // 로그인 상태에서만 요청한다. 비로그인은 세션이 정한다. 요청이 401이면 진행 중에 세션이 끝난 것이므로
-  // apiClient가 세션을 anonymous로 뒤집었고 키가 곧 바뀐다 — 그 사이 에러 대신 비로그인 값을 준다.
+  // 401이면 진행 중에 세션이 끝난 것이다(apiClient가 세션을 anonymous로 바꿨다). 에러 대신 비로그인 값을 준다.
   userInfo: (isLoggedIn: boolean) =>
     queryOptions<UserProfileResponse | null>({
       queryKey: authQueryKeys.userInfo(isLoggedIn),

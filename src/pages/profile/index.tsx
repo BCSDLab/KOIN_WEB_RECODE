@@ -107,10 +107,7 @@ export const getServerSideProps = withCacheControl(async (context, cacheControl,
     }
   };
 
-  await Promise.all([
-    queryClient.prefetchQuery(authQueries.userInfo(true)),
-    prefetchTimetable(),
-  ]);
+  await Promise.all([queryClient.prefetchQuery(authQueries.userInfo(true)), prefetchTimetable()]);
 
   return {
     props: {

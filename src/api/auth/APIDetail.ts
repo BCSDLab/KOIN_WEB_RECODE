@@ -156,7 +156,6 @@ export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
   constructor() {}
 }
 
-// 웹 로그인 세션 상태. 비로그인도 200이고, 세션이 유효하면 CSRF 쿠키를 복구한다.
 // SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
 export class WebSession<R extends WebSessionResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
