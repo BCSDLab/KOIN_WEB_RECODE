@@ -13,11 +13,9 @@ import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
-import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
 import { clearLegacySessionStorage } from 'utils/auth/legacyStorage';
-import useMount from 'utils/hooks/state/useMount';
+import { useSessionState } from 'utils/hooks/auth/useSession';
 import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
-import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { createQueryClient, queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
@@ -41,23 +39,19 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
-// CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
-const useAuthGuard = (requireAuth: boolean | undefined) => {
+// 로그인이 필요한 페이지. 서버 확인으로 비로그인이 확정되면 메인으로 보낸다.
+// 확정 전에는 서버가 그린 anonymous를 믿지 않는다(access가 만료됐어도 refresh로 로그인일 수 있다).
+// 확정 이후의 인증 실패는 API 401 + redirectToLogin()이 처리한다.
+function AuthGuard({ requireAuth }: { requireAuth: boolean | undefined }) {
   const router = useRouter();
-  const isMount = useMount();
+  const { session, resolved } = useSessionState();
 
   useEffect(() => {
-    if (!requireAuth) return;
-    if (!isMount) return;
+    if (requireAuth && resolved && session.status === 'anonymous') router.replace(ROUTES.Main());
+  }, [requireAuth, resolved, session.status, router]);
 
-    const hasSession = getCookie(WEB_AUTH_CSRF_COOKIE_KEY);
-
-    if (!hasSession) {
-      // 하이드레이션 경합 방지
-      router.replace(ROUTES.Main());
-    }
-  }, [isMount, requireAuth, router]);
-};
+  return null;
+}
 
 // 메인 App 컴포넌트
 export default function App({ Component, pageProps }: AppPropsWithAuth) {
@@ -104,8 +98,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     clearLegacySessionStorage();
   }, []);
 
-  const needAuth = Component.requireAuth;
-  useAuthGuard(needAuth);
 
   if (isMaintenance) {
     return <MaintenancePage />;
@@ -123,6 +115,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
           <ServerRequestProvider value={pageProps.serverRequest ?? null}>
             <PortalProvider>
+              <AuthGuard requireAuth={Component.requireAuth} />
               <Seo title={pageTitle} />
               {getLayout(<Component {...pageProps} />)}
               <Toast />
