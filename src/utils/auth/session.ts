@@ -26,7 +26,7 @@ export const toSession = (serverRequest: ServerRequestContext | null): Session =
   serverRequest?.isLoggedIn && serverRequest.userType ? authenticatedSession(serverRequest.userType) : ANONYMOUS_SESSION;
 
 /**
- * CSRF 쿠키는 일반 쿠키이고 refresh와 만료 시각이 같다. 없다고 세션이 없다는 보장은 없고(다른 쿠키만 남을 수 있다),
- * 있다고 유효하다는 보장도 없다(서버에서 폐기될 수 있다). 최종 판정은 `/user/auth`가 한다.
+ * CSRF 쿠키는 일반 쿠키이고 refresh와 만료 시각이 같으며, 서버가 세션 소멸 시 함께 지운다. 없으면 세션이 없다고 본다.
+ * 있다고 유효하다는 보장은 없다(서버에서 폐기될 수 있다). 최종 판정은 세션 조회(`/v2/web/auth/session`)가 한다.
  */
 export const hasSessionCookie = () => typeof document !== 'undefined' && !!getCookie(WEB_AUTH_CSRF_COOKIE_KEY);

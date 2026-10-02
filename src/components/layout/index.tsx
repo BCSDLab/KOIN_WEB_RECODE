@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import RetryBoundary from 'components/boundary/RetryBoundary';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -13,10 +12,8 @@ interface LayoutProps {
 export function SSRLayout({ children }: { children: React.ReactNode }) {
   return (
     <div id="root">
-      <RetryBoundary fallback={null}>
-        <Header />
-      </RetryBoundary>
-      <RetryBoundary>{children}</RetryBoundary>
+      <Header />
+      {children}
       <Footer />
     </div>
   );
@@ -27,19 +24,15 @@ export default function Layout({ children, hideLayout = false }: LayoutProps) {
   const isNativeWebView = typeof window !== 'undefined' && !!window.webkit?.messageHandlers;
 
   if (isMobile && hideLayout) {
-    return <RetryBoundary>{children}</RetryBoundary>;
+    return <>{children}</>;
   }
 
   return (
     <div id="root">
-      <RetryBoundary fallback={null}>
-        <Suspense fallback={null}>
-          <Header />
-        </Suspense>
-      </RetryBoundary>
-      <RetryBoundary>
-        <Suspense fallback={null}>{children}</Suspense>
-      </RetryBoundary>
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
+      <Suspense fallback={null}>{children}</Suspense>
       {!isNativeWebView && <Footer />}
     </div>
   );

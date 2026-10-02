@@ -1,6 +1,6 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
-import { UserAuth, WebRefresh, WebSession } from 'api/auth/APIDetail';
+import { WebRefresh, WebSession } from 'api/auth/APIDetail';
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
@@ -250,33 +250,6 @@ export default class APIClient {
     }
   };
 
-  private handleForbidden = async (error: AxiosError): Promise<AxiosResponse | null> => {
-    try {
-      const response = await Sentry.startSpan(
-        {
-          name: 'Revalidate API user type',
-          op: 'koin.api.user_revalidation',
-          onlyIfParent: true,
-          attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-        },
-        () => APIClient.of(UserAuth)(),
-      );
-      markSessionAuthenticated(response.user_type);
-
-      return await this.retryRequest(error);
-    } catch {
-      return null;
-    }
-  };
-
-  private readonly clientErrorStrategies: Record<
-    number,
-    (error: AxiosError, request: AuthFlags) => Promise<AxiosResponse | null>
-  > = {
-    401: this.handleUnauthorized,
-    403: this.handleForbidden,
-  };
-
   // SSR은 refresh를 할 수 없어 그대로 401을 던지는 게 정상 흐름이지만, Cookie 컨텍스트 자체가
   // 없어서 401이 난 경우(withCacheControl로 감싸지 않은 페이지 등)는 원인을 바로 알 수 있어야 한다.
   private handleServerSideError(error: AxiosError): null {
@@ -295,9 +268,7 @@ export default class APIClient {
 
     if (request.skipAuthRefresh) return null;
 
-    const strategy = error.response?.status !== undefined ? this.clientErrorStrategies[error.response.status] : null;
-
-    return strategy ? strategy(error, request) : null;
+    return error.response?.status === 401 ? this.handleUnauthorized(error, request) : null;
   }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {

@@ -1,15 +1,6 @@
-import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
-import type { UnionUserResponse } from 'utils/hooks/state/useUser';
+import type { UserInfo } from 'api/auth/entity';
 
-// utils/ts/userTypeGuards.ts
-export function isStudentUser(
-  user: UnionUserResponse | null | undefined,
-): user is UserResponse & { user_type: 'STUDENT' } {
-  return !!user && 'user_type' in user && user.user_type === 'STUDENT';
-}
-
-export function isGeneralUser(
-  user: GeneralUserResponse | null | undefined,
-): user is UserResponse & { user_type: 'GENERAL' } {
-  return !!user && 'user_type' in user && user.user_type === 'GENERAL';
+// 학생·총학생회는 학번을 가진다. 회원 유형 문자열 대신 데이터가 있는지로 판단해 총학생회도 학생으로 다룬다.
+export function isStudentUser(user: UserInfo | null | undefined): user is UserInfo & { student_number: string } {
+  return !!user && user.student_number !== null;
 }

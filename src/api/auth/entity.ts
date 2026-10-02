@@ -111,9 +111,8 @@ export interface UserProfileResponse extends APIResponse {
   major: string | null;
 }
 
-export interface UserAuthResponse extends APIResponse {
-  user_type: 'STUDENT' | 'GENERAL';
-}
+// 화면에서 쓰는 내 정보. 익명 닉네임은 서버 값이 없으면 클라이언트가 만들어 항상 채운다.
+export type UserInfo = Omit<UserProfileResponse, 'anonymous_nickname'> & { anonymous_nickname: string };
 
 export interface UserResponse extends APIResponse {
   id: number;
@@ -132,7 +131,6 @@ export interface UserResponse extends APIResponse {
 export interface GeneralUserResponse extends APIResponse {
   id: number;
   login_id: string;
-  anonymous_nickname?: string;
   email: string;
   gender: 0 | 1;
   name: string;

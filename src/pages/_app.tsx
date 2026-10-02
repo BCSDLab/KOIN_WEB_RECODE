@@ -14,7 +14,7 @@ import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
 import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
-import { useSyncSessionHint } from 'utils/hooks/auth/useSession';
+import { clearLegacySessionStorage } from 'utils/auth/legacyStorage';
 import useMount from 'utils/hooks/state/useMount';
 import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
 import { getCookie } from 'utils/ts/cookie';
@@ -59,13 +59,6 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
   }, [isMount, requireAuth, router]);
 };
 
-// QueryClientProvider 안에서 확인된 세션을 힌트 저장소에 반영한다.
-function SessionSync() {
-  useSyncSessionHint();
-
-  return null;
-}
-
 // 메인 App 컴포넌트
 export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const router = useRouter();
@@ -107,6 +100,10 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     }
   }, []);
 
+  useEffect(() => {
+    clearLegacySessionStorage();
+  }, []);
+
   const needAuth = Component.requireAuth;
   useAuthGuard(needAuth);
 
@@ -126,7 +123,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
           <ServerRequestProvider value={pageProps.serverRequest ?? null}>
             <PortalProvider>
-              <SessionSync />
               <Seo title={pageTitle} />
               {getLayout(<Component {...pageProps} />)}
               <Toast />

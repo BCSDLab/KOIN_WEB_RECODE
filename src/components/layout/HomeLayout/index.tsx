@@ -1,5 +1,4 @@
 import { cn } from '@bcsdlab/utils';
-import RetryBoundary from 'components/boundary/RetryBoundary';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 import MobileHomeRedesignHeader from 'components/layout/Header/MobileHomeRedesignHeader';
@@ -26,7 +25,7 @@ function HomeLayout({ children, whiteMobileBg }: HomeLayoutProps) {
       })}
     >
       {isMobile ? <MobileHomeRedesignHeader /> : <Header />}
-      <RetryBoundary>{children}</RetryBoundary>
+      {children}
       {isMobile && <MobileBottomNavigation />}
       <Footer />
     </div>

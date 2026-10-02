@@ -8,7 +8,6 @@ import {
   WebRefresh,
   WebLogout,
   WebSession,
-  UserAuth,
   SignupStudent,
   SignupGeneral,
   UserProfile,
@@ -54,8 +53,6 @@ export const webRefresh = APIClient.of(WebRefresh);
 export const webLogout = APIClient.of(WebLogout);
 
 export const getWebSession = APIClient.of(WebSession);
-
-export const getUserAuth = APIClient.of(UserAuth);
 
 export const getUserProfile = APIClient.of(UserProfile);
 
