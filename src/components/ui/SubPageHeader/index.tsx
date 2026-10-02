@@ -13,11 +13,19 @@ interface SubPageHeaderProps {
   title: string;
   onBack?: () => void;
   rightAction?: ReactNode;
+  backIcon?: ReactNode;
   className?: string;
   size?: 'small' | 'medium';
 }
 
-export default function SubPageHeader({ title, onBack, rightAction, className, size = 'small' }: SubPageHeaderProps) {
+export default function SubPageHeader({
+  title,
+  onBack,
+  rightAction,
+  backIcon,
+  className,
+  size = 'small',
+}: SubPageHeaderProps) {
   const router = useRouter();
   const headerRef = useRef<HTMLDivElement>(null);
   const backButtonRef = useRef<HTMLButtonElement>(null);
@@ -65,7 +73,7 @@ export default function SubPageHeader({ title, onBack, rightAction, className, s
         onClick={handleBack}
         aria-label="뒤로가기"
       >
-        <ArrowBackIcon />
+        {backIcon ?? <ArrowBackIcon />}
       </button>
       <h1
         className={cn({

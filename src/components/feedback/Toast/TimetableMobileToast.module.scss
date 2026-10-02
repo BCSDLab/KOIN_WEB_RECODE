@@ -1,0 +1,15 @@
+.toast.toast {
+  --toastify-toast-width: calc(100% - 48px);
+  --toastify-toast-min-height: 0;
+  --toastify-toast-padding: 20px 16px;
+
+  margin: 0 auto 24px;
+  border-radius: 5px;
+  background-color: rgb(114 114 114 / 70%);
+  box-shadow: none;
+  backdrop-filter: blur(2px);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: normal;
+  color: #fff;
+}

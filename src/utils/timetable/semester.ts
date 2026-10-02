@@ -64,6 +64,15 @@ export function getRecentSemester(): Semester {
   };
 }
 
+const TERM_ORDER: Record<Term, number> = { '1학기': 0, 여름학기: 1, '2학기': 2, 겨울학기: 3 };
+
+export const getSemesterKey = (semester: Semester) => `${semester.year}${semester.term}`;
+
+/** 최신 학기 순으로 정렬한 새 배열 (같은 해는 겨울 → 2학기 → 여름 → 1학기). */
+export function sortSemestersNewestFirst(semesters: Semester[]): Semester[] {
+  return [...semesters].sort((a, b) => b.year - a.year || TERM_ORDER[b.term] - TERM_ORDER[a.term]);
+}
+
 /** 선택된 학기가 아직 선택 가능한 목록에 있는지. 없으면 목록의 첫 학기로 되돌려야 한다. */
 export function isSemesterInList(semesterOptionList: Array<{ value: Semester }>, semester: Semester): boolean {
   return semesterOptionList.some(

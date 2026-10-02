@@ -96,6 +96,18 @@
   }
 }
 
-.mobileheader--bus-timetable {
+.mobileheader--sub-page {
   flex: 1;
+}
+
+.mobileheader__action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  background: none;
+  cursor: pointer;
 }

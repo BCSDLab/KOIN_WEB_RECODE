@@ -19,6 +19,7 @@ import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage'
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isServerAuthError } from 'utils/ssr/authError';
+import type { ServerRequestContext } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -50,11 +51,12 @@ async function prefetchTimetableData(
   queryClient: QueryClient,
   context: GetServerSidePropsContext,
   isLoggedIn: boolean,
+  userType: ServerRequestContext['userType'],
   query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
   try {
-    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn));
+    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
@@ -68,7 +70,7 @@ async function prefetchTimetableData(
     let timetableFrameList: TimetableFrameListResponse;
 
     try {
-      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(isLoggedIn, semester));
+      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(isLoggedIn, semester, { userType }));
     } catch (error) {
       if (!(isKoinError(error) && error.status === 404)) {
         throw error;
@@ -113,7 +115,14 @@ export const getServerSideProps = withCacheControl(
     const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
     if (serverRequest.isLoggedIn) {
-      await prefetchTimetableData(queryClient, context, serverRequest.isLoggedIn, query, validatedFrameId);
+      await prefetchTimetableData(
+        queryClient,
+        context,
+        serverRequest.isLoggedIn,
+        serverRequest.userType,
+        query,
+        validatedFrameId,
+      );
     } else {
       setDefaultTimetableFrameList(queryClient, false);
       cacheControl.enablePublicCache();
@@ -137,7 +146,8 @@ function TimetablePage() {
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const mainFrameId = isValidTimetableFrameId(mainFrame?.id) ? mainFrame.id : 0;
   const queryFrameId = typeof timetableFrameId === 'string' ? Number(timetableFrameId) : Number.NaN;
-  const initialFrameId = isValidTimetableFrameId(queryFrameId) ? queryFrameId : mainFrameId;
+  const hasQueryFrame = timetableFrameList.some((frame) => frame.id === queryFrameId);
+  const initialFrameId = hasQueryFrame ? queryFrameId : mainFrameId;
   const [currentFrameIndex, setCurrentFrameIndex] = useState(initialFrameId);
   const resolvedCurrentFrameIndex = timetableFrameList.some((frame) => frame.id === currentFrameIndex)
     ? currentFrameIndex
