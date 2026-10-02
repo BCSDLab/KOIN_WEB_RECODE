@@ -1,9 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
 import { authQueries } from 'api/auth/queries';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { useServerRequest } from 'utils/ssr/useServerRequest';
-import { useTokenStore } from 'utils/zustand/auth';
+import useSession from 'utils/hooks/auth/useSession';
 
 type GeneralUserWithAnonymousNickname = GeneralUserResponse & {
   anonymous_nickname: string;
@@ -12,13 +10,12 @@ type GeneralUserWithAnonymousNickname = GeneralUserResponse & {
 export type UnionUserResponse = UserResponse | GeneralUserWithAnonymousNickname;
 
 export const useUser = () => {
-  const { userType } = useTokenStore();
-  const serverRequest = useServerRequest();
-  const isLoggedIn = useIsLoggedIn();
-  const effectiveUserType = userType || serverRequest?.userType || null;
+  const session = useSession();
+  const isLoggedIn = session.status === 'authenticated';
+  const userType = session.status === 'authenticated' ? session.userType : null;
 
-  const { data, isError } = useSuspenseQuery({
-    ...authQueries.userInfo(isLoggedIn, effectiveUserType),
+  const { data } = useSuspenseQuery({
+    ...authQueries.userInfo(isLoggedIn, userType),
     select: (rawData) => {
       if (!rawData) return null;
 
@@ -36,7 +33,5 @@ export const useUser = () => {
     },
   });
 
-  return {
-    data: isError ? null : data,
-  };
+  return { data };
 };

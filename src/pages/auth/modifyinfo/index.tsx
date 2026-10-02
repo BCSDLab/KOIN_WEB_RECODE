@@ -31,6 +31,7 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
+import useUserType from 'utils/hooks/auth/useUserType';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -39,7 +40,6 @@ import { isomorphicLocalStorage } from 'utils/ts/env';
 import { normalizePhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
-import { useTokenStore } from 'utils/zustand/auth';
 import { useAuthentication } from 'utils/zustand/authentication';
 
 import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
@@ -1098,7 +1098,7 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
 const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const { isValid, setIsValid } = useValidationContext();
-  const { userType } = useTokenStore();
+  const userType = useUserType();
 
   const isStudent = userType === 'STUDENT';
 
@@ -1268,7 +1268,7 @@ const useModifyInfoForm = () => {
     showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
   };
-  const { userType } = useTokenStore();
+  const userType = useUserType();
   const isStudent = userType === 'STUDENT';
   const { status, mutate } = useUserInfoUpdate(userType, { onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {

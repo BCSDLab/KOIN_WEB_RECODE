@@ -125,6 +125,8 @@ export class WebLogin<R extends WebAuthResponse> implements APIRequest<R> {
 
   path = '/v2/web/auth/login';
 
+  skipAuthRefresh = true;
+
   response!: R;
 
   constructor(public data: WebLoginRequest) {}
@@ -134,6 +136,8 @@ export class WebRefresh<R extends WebAuthResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v2/web/auth/refresh';
+
+  skipAuthRefresh = true;
 
   response!: R;
 
@@ -145,6 +149,8 @@ export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
 
   path = '/v2/web/auth/logout';
 
+  skipAuthRefresh = true;
+
   response!: R;
 
   constructor() {}
@@ -154,6 +160,8 @@ export class WebCsrf<R extends WebCsrfTokenResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v2/web/auth/csrf';
+
+  skipAuthRefresh = true;
 
   response!: R;
 
@@ -167,6 +175,8 @@ export class UserAuth<R extends UserAuthResponse> implements APIRequest<R> {
 
   path = '/user/auth';
 
+  authOptional = true;
+
   response!: R;
 
   // SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
@@ -178,6 +188,8 @@ export class User<R extends UserResponse> implements APIRequest<R> {
 
   path = '/user/student/me';
 
+  authOptional = true;
+
   response!: R;
 
   auth = false;
@@ -187,6 +199,8 @@ export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R>
   method = HTTP_METHOD.GET;
 
   path = '/v2/users/me';
+
+  authOptional = true;
 
   response!: R;
 

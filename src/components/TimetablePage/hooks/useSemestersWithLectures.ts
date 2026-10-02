@@ -1,12 +1,12 @@
 import { useQueries } from '@tanstack/react-query';
 import type { Semester } from 'api/timetable/entity';
 import { isValidTimetableFrameId, timetableQueries } from 'api/timetable/queries';
+import useUserType from 'utils/hooks/auth/useUserType';
 import { getSemesterKey } from 'utils/timetable/semester';
-import { useTokenStore } from 'utils/zustand/auth';
 
 /** 강의가 하나라도 들어 있는 시간표가 있는 학기의 키(getSemesterKey) 집합. */
 export default function useSemestersWithLectures(semesters: Semester[]) {
-  const { userType } = useTokenStore();
+  const userType = useUserType();
   const frameResults = useQueries({
     queries: semesters.map((semester) =>
       timetableQueries.frameList(true, semester, { fallbackOnError: true, hasUserSemester: true, userType }),

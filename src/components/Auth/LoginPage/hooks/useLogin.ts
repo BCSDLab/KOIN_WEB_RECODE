@@ -3,10 +3,10 @@ import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { webLogin } from 'api/auth';
 import type { WebAuthResponse } from 'api/auth/entity';
+import { authenticatedSession, SESSION_QUERY_KEY } from 'utils/auth/session';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import showToast from 'utils/ts/showToast';
-import { useTokenStore } from 'utils/zustand/auth';
 
 interface IsAutoLogin {
   isAutoLoginFlag: boolean;
@@ -18,7 +18,6 @@ interface UserInfo {
 }
 
 export const useLogin = (state: IsAutoLogin) => {
-  const { setUserType } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
   const queryClient = useQueryClient();
   const logger = useLogger();
@@ -36,7 +35,8 @@ export const useLogin = (state: IsAutoLogin) => {
       // 이동이라(useLoginRedirect의 router.replace) 캐시가 살아남는다. 아예 비운다.
       queryClient.clear();
 
-      setUserType(data.user_type);
+      // clear가 세션까지 지우므로 반드시 clear 뒤에 로그인 세션을 심는다.
+      queryClient.setQueryData(SESSION_QUERY_KEY, authenticatedSession(data.user_type));
       redirectAfterLogin();
     },
     onError: (error) => {

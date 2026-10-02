@@ -17,11 +17,11 @@ import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useUserType from 'utils/hooks/auth/useUserType';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { sortSemestersNewestFirst } from 'utils/timetable/semester';
 import { getTopicParticle } from 'utils/ts/josa';
-import { useTokenStore } from 'utils/zustand/auth';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useSemesterAction } from 'utils/zustand/semester';
 
@@ -118,7 +118,7 @@ interface MemberListProps {
 }
 
 function MemberList({ semesters, onRequireLogin, onOpenSetting }: MemberListProps) {
-  const { userType } = useTokenStore();
+  const userType = useUserType();
   const results = useSuspenseQueries({
     queries: semesters.map((semester) =>
       timetableQueries.frameList(true, semester, { fallbackOnError: true, hasUserSemester: true, userType }),

@@ -2,8 +2,8 @@ import type { GetServerSidePropsContext } from 'next';
 
 import { UserAuth } from 'api/auth/APIDetail';
 import { KOIN_BASE_URL } from 'static/url';
+import type { UserType } from 'utils/auth/session';
 import APIClient from 'utils/ts/apiClient';
-import type { UserType } from 'utils/zustand/auth';
 
 export type DeviceClass = 'mobile' | 'desktop';
 
