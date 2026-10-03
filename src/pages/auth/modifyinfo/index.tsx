@@ -30,6 +30,7 @@ import Layout from 'components/layout';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
+import useSession from 'utils/hooks/auth/useSession';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import useUserType from 'utils/hooks/auth/useUserType';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -1440,6 +1441,12 @@ function ModifyInfoDefaultPage() {
 }
 
 function ModifyInfoPage() {
+  const session = useSession();
+
+  // 서버 요청 컨텍스트가 없는 페이지라 첫 렌더는 비로그인이다. 폼 상태가 빈 프로필로 굳지 않게 세션이 확정된 뒤 마운트한다.
+  // 비로그인이 확정되면 AuthGuard가 메인으로 보낸다.
+  if (session.status !== 'authenticated') return <LoadingSpinner size="40px" />;
+
   return (
     <Suspense fallback={<LoadingSpinner size="40px" />}>
       <ModifyFormValidationProvider>
