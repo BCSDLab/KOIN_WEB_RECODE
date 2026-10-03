@@ -1,19 +1,18 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import * as Sentry from '@sentry/nextjs';
-import { UserAuth, WebRefresh } from 'api/auth/APIDetail';
+import { WebRefresh, WebSession } from 'api/auth/APIDetail';
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { APIResponse } from 'interfaces/APIResponse';
 import { WEB_AUTH_CSRF_COOKIE_KEY } from 'static/url';
+import { hasSessionCookie } from 'utils/auth/session';
+import { markSessionAuthenticated, markSessionExpired } from 'utils/auth/sessionControl';
 import { getServerRequestHeaders } from 'utils/ssr/cookieForwarding';
 import qsStringify from 'utils/ts/qsStringfy';
-import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
-import { redirectToLogin } from './auth';
 import { getCookie } from './cookie';
-import { queryClient } from './queryClient';
 
 const isBrowser = typeof window !== 'undefined';
 const isLocalDev = isBrowser && process.env.NODE_ENV === 'development';
@@ -62,6 +61,8 @@ const HEADER_CONTRIBUTORS: HeaderContributor[] = [
   withJsonContentType,
   withCustomHeaders,
 ];
+
+type AuthFlags = Pick<APIRequest<APIResponse>, 'authOptional' | 'skipAuthRefresh'>;
 
 type Constructor<T> = new (...args: never[]) => T;
 
@@ -130,7 +131,7 @@ export default class APIClient {
           }
           try {
             if (axios.isAxiosError(err)) {
-              const handledResponse = await this.errorMiddleware(err);
+              const handledResponse = await this.errorMiddleware(err, request);
 
               if (handledResponse) {
                 const response = Sentry.startSpan(
@@ -164,29 +165,30 @@ export default class APIClient {
 
   static webRefresh = this.of(WebRefresh);
 
-  private refreshPromise: Promise<void> | null = null;
+  static webSession = this.of(WebSession);
 
-  private async refreshAccessToken() {
-    if (this.refreshPromise) {
-      await this.refreshPromise;
+  private refreshPromise: Promise<boolean> | null = null;
 
-      return;
+  // 실패해도 던지지 않고 성공 여부만 돌려준다.
+  private refreshAccessToken(): Promise<boolean> {
+    this.refreshPromise ??= this.refreshOnce().finally(() => {
+      this.refreshPromise = null;
+    });
+
+    return this.refreshPromise;
+  }
+
+  private async refreshOnce(): Promise<boolean> {
+    try {
+      // refresh는 X-CSRF-Token이 필수라, CSRF 쿠키가 없으면 세션 조회로 복구한다.
+      if (!hasSessionCookie() && !(await APIClient.webSession()).authenticated) return false;
+      const result = await APIClient.webRefresh();
+      markSessionAuthenticated(result.user_type);
+
+      return true;
+    } catch {
+      return false;
     }
-
-    this.refreshPromise = APIClient.webRefresh()
-      .then((result) => {
-        useTokenStore.getState().setUserType(result.user_type);
-      })
-      .catch(() => {
-        useTokenStore.getState().setUserType(null);
-        queryClient.clear();
-        redirectToLogin();
-      })
-      .finally(() => {
-        this.refreshPromise = null;
-      });
-
-    await this.refreshPromise;
   }
 
   private convertBody(data: unknown) {
@@ -220,51 +222,31 @@ export default class APIClient {
     }
   }
 
-  private handleUnauthorized = async (error: AxiosError): Promise<AxiosResponse | null> => {
-    try {
-      await Sentry.startSpan(
-        {
-          name: 'Refresh API access token',
-          op: 'koin.api.auth_refresh',
-          onlyIfParent: true,
-          attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-        },
-        () => this.refreshAccessToken(),
-      );
+  private handleUnauthorized = async (error: AxiosError, request: AuthFlags) => {
+    const refreshed = await Sentry.startSpan(
+      {
+        name: 'Refresh API access token',
+        op: 'koin.api.auth_refresh',
+        onlyIfParent: true,
+        attributes: { 'api.route': normalizeApiPath(error.config?.url) },
+      },
+      () => this.refreshAccessToken(),
+    );
 
-      return await this.retryRequest(error);
-    } catch {
-      useTokenStore.getState().setUserType(null);
-      queryClient.clear();
-    }
+    if (!refreshed) {
+      markSessionExpired(request);
 
-    redirectToLogin();
-
-    return null;
-  };
-
-  private handleForbidden = async (error: AxiosError): Promise<AxiosResponse | null> => {
-    try {
-      const response = await Sentry.startSpan(
-        {
-          name: 'Revalidate API user type',
-          op: 'koin.api.user_revalidation',
-          onlyIfParent: true,
-          attributes: { 'api.route': normalizeApiPath(error.config?.url) },
-        },
-        () => APIClient.of(UserAuth)(),
-      );
-      useTokenStore.getState().setUserType(response.user_type);
-
-      return await this.retryRequest(error);
-    } catch {
       return null;
     }
-  };
 
-  private readonly clientErrorStrategies: Record<number, (error: AxiosError) => Promise<AxiosResponse | null>> = {
-    401: this.handleUnauthorized,
-    403: this.handleForbidden,
+    try {
+      return await this.retryRequest(error);
+    } catch (retryError) {
+      // 갱신 직후에도 401이면 세션이 끝난 것이다. 5xx 등은 세션과 무관하다.
+      if (axios.isAxiosError(retryError) && retryError.response?.status === 401) markSessionExpired(request);
+
+      return null;
+    }
   };
 
   // SSR은 refresh를 할 수 없어 그대로 401을 던지는 게 정상 흐름이지만, Cookie 컨텍스트 자체가
@@ -280,12 +262,12 @@ export default class APIClient {
     return null;
   }
 
-  private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+  private async errorMiddleware(error: AxiosError, request: AuthFlags): Promise<AxiosResponse | null> {
     if (typeof window === 'undefined') return this.handleServerSideError(error);
 
-    const strategy = error.response?.status !== undefined ? this.clientErrorStrategies[error.response.status] : null;
+    if (request.skipAuthRefresh) return null;
 
-    return strategy ? strategy(error) : null;
+    return error.response?.status === 401 ? this.handleUnauthorized(error, request) : null;
   }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {

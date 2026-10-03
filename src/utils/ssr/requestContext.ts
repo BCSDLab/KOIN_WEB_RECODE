@@ -1,16 +1,16 @@
 import type { GetServerSidePropsContext } from 'next';
 
-import { UserAuth } from 'api/auth/APIDetail';
+import { WebSession } from 'api/auth/APIDetail';
 import { KOIN_BASE_URL } from 'static/url';
+import { toUserType, type UserType } from 'utils/auth/session';
 import APIClient from 'utils/ts/apiClient';
-import type { UserType } from 'utils/zustand/auth';
 
 export type DeviceClass = 'mobile' | 'desktop';
 
 export interface ServerRequestContext {
   device: DeviceClass;
   isLoggedIn: boolean;
-  /** `GET /user/auth`로 서버가 직접 확인한 값. 로그인 상태일 때만 의미 있다. */
+  /** `GET /v2/web/auth/session`으로 서버가 직접 확인한 값. 로그인 상태일 때만 의미 있다. */
   userType: UserType | null;
   /**
    * 서버 렌더 시각(ISO). 시각 파생 렌더의 공통 기준값이다.
@@ -42,7 +42,7 @@ export function getDeviceClass(userAgent: string | undefined): DeviceClass {
  * 인증 상태를 SSR에 반영해도 캐시는 안전하다. nginx가 인증 쿠키가 있으면
  * `proxy_cache_bypass`/`proxy_no_cache`로 캐시를 우회한다.
  *
- * access는 HttpOnly라 직접 디코딩할 수 없으므로, 원본 Cookie를 그대로 실어 `GET /user/auth`로 백엔드가 확인한다.
+ * access는 HttpOnly라 직접 디코딩할 수 없으므로, 원본 Cookie를 그대로 실어 세션 조회(`GET /v2/web/auth/session`)로 백엔드가 확인한다.
  */
 export async function getServerRequestContext(context: GetServerSidePropsContext): Promise<ServerRequestContext> {
   const device = getDeviceClass(context.req.headers['user-agent']);
@@ -54,9 +54,10 @@ export async function getServerRequestContext(context: GetServerSidePropsContext
   }
 
   try {
-    const { user_type: userType } = await APIClient.request(new UserAuth({ Cookie: cookie, Origin: KOIN_BASE_URL }));
+    const session = await APIClient.request(new WebSession({ Cookie: cookie, Origin: KOIN_BASE_URL }));
+    const userType = session.authenticated ? toUserType(session.user_type) : null;
 
-    return { device, isLoggedIn: true, userType, now };
+    return { device, isLoggedIn: userType !== null, userType, now };
   } catch {
     return { device, isLoggedIn: false, userType: null, now };
   }

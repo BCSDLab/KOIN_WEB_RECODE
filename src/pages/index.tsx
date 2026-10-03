@@ -71,7 +71,7 @@ export const getServerSideProps = withCacheControl(
     ]);
 
     if (isLoggedIn) {
-      await queryClient.prefetchQuery(authQueries.userInfo(true, userType));
+      await queryClient.prefetchQuery(authQueries.userInfo(true));
     }
 
     const userSemester = mySemester?.semesters?.[0];

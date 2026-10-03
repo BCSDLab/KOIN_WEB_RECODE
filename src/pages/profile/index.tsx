@@ -38,7 +38,7 @@ export const getServerSideProps = withCacheControl(async (context, cacheControl,
 
   if (!isLoggedIn) {
     // 공용 캐시에 저장되는 응답이므로 학기 쿠키 같은 방문자별 값은 읽지 않는다. 비로그인은 시간표를 그리지 않는다.
-    queryClient.setQueryData(authQueries.userInfo(false, userType).queryKey, null);
+    queryClient.setQueryData(authQueries.userInfo(false).queryKey, null);
     cacheControl.enablePublicCache();
 
     return {
@@ -107,11 +107,7 @@ export const getServerSideProps = withCacheControl(async (context, cacheControl,
     }
   };
 
-  await Promise.all([
-    // useUser는 userType으로 조회 엔드포인트를 고르므로 같은 userType으로 키를 맞춘다.
-    queryClient.prefetchQuery(authQueries.userInfo(true, userType)),
-    prefetchTimetable(),
-  ]);
+  await Promise.all([queryClient.prefetchQuery(authQueries.userInfo(true)), prefetchTimetable()]);
 
   return {
     props: {
