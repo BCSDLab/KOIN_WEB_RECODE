@@ -8,6 +8,8 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import ShuttleDetailMobile from 'components/Bus/ShuttleDetailMobile';
+import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -19,15 +21,17 @@ function asString(value: string | string[]): string {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function useShuttleTimetableDetail() {
+  const { routeId } = useRouter().query;
+
+  return useQuery({
+    ...busQueries.shuttleTimetableDetail(routeId ? asString(routeId) : null),
+  });
+}
+
 export default function ShuttleDetailPage() {
   const router = useRouter();
-  const { routeId } = router.query;
-
-  const shuttleTimetableId = routeId ? asString(routeId) : null;
-  const { data: shuttleTimetableDetail } = useQuery({
-    ...busQueries.shuttleTimetableDetail(shuttleTimetableId),
-    staleTime: 1000 * 60 * 10,
-  });
+  const { data: shuttleTimetableDetail } = useShuttleTimetableDetail();
 
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
@@ -184,3 +188,13 @@ export default function ShuttleDetailPage() {
     </BusCoursePage>
   );
 }
+
+function ShuttleDetailTitle() {
+  const { data } = useShuttleTimetableDetail();
+
+  return <>{data ? `${data.route_name} 시간표` : '버스 시간표'}</>;
+}
+
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: ShuttleDetailTitle };
+
+ShuttleDetailPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;

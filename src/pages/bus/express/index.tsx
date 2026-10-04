@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -7,6 +8,8 @@ import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
+import { BUS_TIMETABLE_MOBILE_HEADER } from 'components/Bus/BusCoursePage/mobileHeader';
+import Layout from 'components/layout';
 import dayjs from 'dayjs';
 import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -92,3 +95,5 @@ export default function ExpressBusTimetable() {
     </BusCoursePage>
   );
 }
+
+ExpressBusTimetable.getLayout = (page: ReactNode) => <Layout mobileHeader={BUS_TIMETABLE_MOBILE_HEADER}>{page}</Layout>;
