@@ -5,7 +5,6 @@ import ComputerIcon from 'assets/svg/Team/computer.svg';
 import KeyframesDoubleIcon from 'assets/svg/Team/keyframes-double.svg';
 import UserGroupIcon from 'assets/svg/Team/user-group-02.svg';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import PageHeader from 'components/ui/PageHeader';
 import { Controller, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -253,9 +252,6 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        <div className={styles['mobile-header']}>
-          <PageHeader title={headerTitle} className={styles.header} />
-        </div>
         <h1 className={styles.title}>{headerTitle}</h1>
 
         <div className={styles.form}>

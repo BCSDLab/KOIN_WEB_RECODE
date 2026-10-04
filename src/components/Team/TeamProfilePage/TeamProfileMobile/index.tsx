@@ -6,7 +6,6 @@ import ListEndIcon from 'assets/svg/Team/list-end-icon.svg';
 import NoteIcon from 'assets/svg/Team/note-icon.svg';
 import UserIcon from 'assets/svg/Team/profile-avatar-icon.svg';
 import type { TeamProfileViewProps } from 'components/Team/TeamProfilePage/types';
-import PageHeader from 'components/ui/PageHeader';
 
 import styles from './TeamProfileMobile.module.scss';
 
@@ -42,8 +41,6 @@ export default function TeamProfileMobile({
 }: TeamProfileViewProps) {
   return (
     <div className={styles.page}>
-      <PageHeader title="팀원 모집 프로필" />
-
       <div className={styles.page__content}>
         {profile ? (
           <div className={styles['summary-card']}>

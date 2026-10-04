@@ -13,7 +13,6 @@ import {
 } from 'api/teamRecruitmentProfile/queries';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
-import PageHeader from 'components/ui/PageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -34,7 +33,6 @@ interface TeamProfileFormProps {
 const MODE_TEXT: Record<
   TeamProfileFormMode,
   {
-    title: string;
     desktopTitle: string;
     submitLabel: string;
     confirmMessage: string;
@@ -43,7 +41,6 @@ const MODE_TEXT: Record<
   }
 > = {
   create: {
-    title: '팀원 모집 프로필 작성',
     desktopTitle: '프로필 작성',
     submitLabel: '저장',
     confirmMessage: '프로필을 저장하시겠어요?',
@@ -51,7 +48,6 @@ const MODE_TEXT: Record<
     successMessage: '프로필이 저장되었습니다.',
   },
   edit: {
-    title: '팀원 모집 프로필 수정',
     desktopTitle: '프로필 수정',
     submitLabel: '수정하기',
     confirmMessage: '프로필을 수정하시겠어요?',
@@ -200,9 +196,6 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles['mobile-header']}>
-          <PageHeader title={MODE_TEXT[mode].title} />
-        </div>
         <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>
 
         <FormProvider {...methods}>

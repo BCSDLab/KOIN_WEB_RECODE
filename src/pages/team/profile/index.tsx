@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import TeamProfileDesktop from 'components/Team/TeamProfilePage/TeamProfileDesktop';
 import TeamProfileMobile from 'components/Team/TeamProfilePage/TeamProfileMobile';
 import ROUTES from 'static/routes';
@@ -33,6 +34,8 @@ export const getServerSideProps = withCacheControl<{
     },
   };
 });
+
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '팀원 모집 프로필', background: 'gray' };
 
 function TeamProfilePage() {
   const router = useRouter();
@@ -109,6 +112,6 @@ function TeamProfilePage() {
   );
 }
 
-TeamProfilePage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamProfilePage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
 
 export default TeamProfilePage;

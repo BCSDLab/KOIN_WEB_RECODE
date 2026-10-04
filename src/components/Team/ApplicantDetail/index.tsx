@@ -9,7 +9,6 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
-import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -146,10 +145,6 @@ export default function ApplicantDetail() {
 
   return (
     <>
-      <div className={styles['mobile-header']}>
-        <PageHeader title="지원자 상세" className={styles.header} />
-      </div>
-
       <div className={styles.page}>
         <div className={styles.content}>
           {isLoading && <LoadingSpinner size="50px" />}

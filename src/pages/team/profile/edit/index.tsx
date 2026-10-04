@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { teamRecruitmentProfileQueries } from 'api/teamRecruitmentProfile/queries';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import TeamProfileForm from 'components/Team/ProfilePage';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
@@ -26,6 +27,8 @@ export const getServerSideProps = withCacheControl<{
   };
 });
 
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '팀원 모집 프로필 수정', background: 'gray' };
+
 function TeamProfileEditPage() {
   return (
     <>
@@ -39,6 +42,6 @@ function TeamProfileEditPage() {
   );
 }
 
-TeamProfileEditPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamProfileEditPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
 
 export default TeamProfileEditPage;
