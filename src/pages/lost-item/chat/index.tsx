@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- 이미지가 동적으로 바뀌고 크기·비율이 제각각이라 sizes/fill 설정 비용 대비 이득이 작음 */
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
 // FIXME: svg 웹팩 로더가 쿼리와 무관하게 항상 컴포넌트를 반환해, addErrorImage의 img.src에 대입되는
@@ -289,8 +290,22 @@ function LostItemChatPage() {
 
 export default function LostItemChatPageWrapper() {
   const isLoggedIn = useIsLoggedIn();
+  const router = useRouter();
+  const articleId = router.query.articleId;
+  const chatRoomId = router.query.chatRoomId ?? router.query.chatroomId;
+  const isList = articleId === undefined && chatRoomId === undefined;
+  const hasValidRoom = [articleId, chatRoomId].every(
+    (id) => typeof id === 'string' && /^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0,
+  );
+  const hasInvalidParams = !isList && !hasValidRoom;
 
-  if (!isLoggedIn) return null;
+  useEffect(() => {
+    if (router.isReady && hasInvalidParams) {
+      void router.replace(ROUTES.LostItemChat());
+    }
+  }, [router, hasInvalidParams]);
+
+  if (!isLoggedIn || !router.isReady || hasInvalidParams) return null;
 
   return <LostItemChatPage />;
 }
