@@ -16,17 +16,10 @@
   @include media.media-breakpoint(mobile) {
     width: 100%;
     max-width: 576px;
-    min-height: 100dvh;
+    flex: 1;
+    min-height: auto;
     padding: 0;
     background: #f8f8fa;
-  }
-}
-
-.mobile-header {
-  display: none;
-
-  @include media.media-breakpoint(mobile) {
-    display: block;
   }
 }
 
