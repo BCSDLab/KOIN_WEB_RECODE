@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
+import ClubDetailTitle from 'components/Club/ClubDetailPage/components/ClubDetailTitle';
 import ClubEventList from 'components/Club/ClubDetailPage/components/ClubEventList';
 import ClubIntroduction from 'components/Club/ClubDetailPage/components/ClubIntrodution';
 import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
@@ -27,6 +28,7 @@ import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDelete
 import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { SSRLayout } from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { NO_SELECTED_EVENT_ID } from 'static/club';
 import ROUTES from 'static/routes';
@@ -37,8 +39,8 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import { backButtonTapped } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 import styles from './ClubDetailPage.module.scss';
 
@@ -137,8 +139,6 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   const [QnAType, setQnAType] = useState('');
   const [introType, setintroType] = useState('');
   const [replyId, setReplyId] = useState(-1);
-
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
   const isLoggedIn = useIsLoggedIn();
 
@@ -337,11 +337,6 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
     if (!isLoggedIn) return openAuthModal();
     openRecruitNotifyModal();
   };
-
-  useEffect(() => {
-    if (clubDetail?.name) setCustomTitle(clubDetail.name);
-  }, [clubDetail?.name, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   return (
     <div className={styles.layout}>
@@ -819,4 +814,19 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   );
 }
 
-ClubDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;
+const MOBILE_HEADER: MobileHeaderConfig = {
+  type: 'page',
+  title: ClubDetailTitle,
+  // 앱 웹뷰에서 인기 동아리로 바로 열린 화면은 앱으로 돌려보낸다
+  onBack: ({ router, goBack }) => {
+    if (window.webkit?.messageHandlers != null && router.query.hot === 'true') {
+      backButtonTapped();
+
+      return;
+    }
+
+    goBack();
+  },
+};
+
+ClubDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout mobileHeader={MOBILE_HEADER}>{page}</SSRLayout>;
