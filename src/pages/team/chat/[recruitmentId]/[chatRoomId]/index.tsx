@@ -1,45 +1,22 @@
-import { Suspense } from 'react';
-import type { ReactNode } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import ROUTES from 'static/routes';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import Layout from 'components/layout';
-import TeamChat from 'components/Team/components/TeamChat';
+// eslint-disable-next-line @typescript-eslint/require-await -- withCacheControl 타입이 Promise 반환을 요구하지만 이 핸들러는 동기 리다이렉트 판단만 한다
+export const getServerSideProps = withCacheControl(async ({ params }) => {
+  const recruitmentId = params?.recruitmentId;
+  const chatRoomId = params?.chatRoomId;
 
-import styles from './TeamChatPage.module.scss';
+  return {
+    redirect: {
+      destination:
+        typeof recruitmentId === 'string' && typeof chatRoomId === 'string'
+          ? ROUTES.TeamChat({ recruitmentId, chatRoomId })
+          : ROUTES.TeamChat(),
+      permanent: false,
+    },
+  };
+});
 
-export default function TeamChatPage() {
-  const router = useRouter();
-  const recruitmentId = Number(router.query.recruitmentId);
-  const chatRoomId = Number(router.query.chatRoomId);
-
-  return (
-    <>
-      <Head>
-        <title>팀원 모집 채팅 | KOIN</title>
-      </Head>
-      <main className={styles.page}>
-        <h1 className={styles.page__title}>팀원모집</h1>
-        <div className={styles.page__content}>
-          {!!recruitmentId && !!chatRoomId && (
-            <ErrorBoundary fallbackClassName={styles.error}>
-              <Suspense
-                fallback={
-                  <div className={styles.loading} role="status" aria-label="채팅방을 불러오는 중입니다.">
-                    <LoadingSpinner size="50px" />
-                  </div>
-                }
-              >
-                <TeamChat selectedRoom={{ recruitmentId, chatRoomId }} />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </div>
-      </main>
-    </>
-  );
+export default function LegacyTeamChatPage() {
+  return null;
 }
-
-TeamChatPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;

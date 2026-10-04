@@ -2,16 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import type { TeamChatMessage } from 'api/team/entity';
+import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
+import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
-import { ChatMessageList } from 'components/ui/Chat';
+import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
+import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
+import { formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 
@@ -26,10 +29,17 @@ interface TeamChatRoomProps {
 const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
+const getChatRoomPreview = (room: TeamChatRoomListItem) => {
+  if (room.last_message_is_image) return '사진을 보냈습니다.';
+
+  return room.last_message_content ?? '';
+};
+
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {
   const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
   const { data: user } = useUser();
+  const { data: chatRooms } = useSuspenseQuery(teamQueries.chatRoomList(isLoggedIn));
   const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(isLoggedIn, recruitmentId, chatRoomId));
   const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(isLoggedIn, recruitmentId, chatRoomId));
   const { uploadFile, isPending: isUploading } = useUploadFile();
@@ -55,6 +65,21 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       hasInitialScrollRef.current = true;
     }
   }, [lastMessageId]);
+
+  const sidebarItems = chatRooms.map((room) => ({
+    key: `${room.recruitment_id}-${room.chat_room_id}`,
+    href: ROUTES.TeamChat({
+      recruitmentId: String(room.recruitment_id),
+      chatRoomId: String(room.chat_room_id),
+    }),
+    title: room.room_name,
+    timeLabel: room.last_message_at ? formatChatRoomListTime(room.last_message_at) : undefined,
+    preview: getChatRoomPreview(room),
+    unreadCount: room.unread_message_count,
+    avatar: <DefaultPhotoIcon />,
+    avatarAriaHidden: true,
+    isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
+  }));
 
   const isTeamRoom = chatRoom.room_type === 'TEAM';
   const messageGroups = mapTeamChatMessageGroups(mergedMessages, user?.id);
@@ -136,7 +161,12 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   };
 
   return (
-    <>
+    <ChatLayout
+      className={styles.chat}
+      sidebarClassName={styles.chat__sidebar}
+      panelClassName={styles['chat-room']}
+      sidebar={<ChatRoomList items={sidebarItems} />}
+    >
       <div className={styles['chat-room__mobileHeader']}>
         <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
       </div>
@@ -157,6 +187,6 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
         />
       </div>
       <TeamChatSendBar disabled={isSending || isUploading} onSend={handleSend} onImageSelect={handleImageSelect} />
-    </>
+    </ChatLayout>
   );
 }

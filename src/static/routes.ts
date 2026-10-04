@@ -82,8 +82,13 @@ const ROUTES = {
   TeamNotifications: () => '/team/notifications',
   TeamMyApplications: () => '/team/my-applications',
   TeamMyCreatedPosts: () => '/team/my-created-posts',
-  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
-    `/team/chat/${recruitmentId}/${chatRoomId}`,
+  TeamChat: (params?: { recruitmentId: string; chatRoomId: string }) => {
+    if (!params) return '/team/chat';
+
+    const query = new URLSearchParams({ recruitmentId: params.recruitmentId, chatRoomId: params.chatRoomId });
+
+    return `/team/chat?${query.toString()}`;
+  },
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
