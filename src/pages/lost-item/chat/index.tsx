@@ -11,10 +11,11 @@ import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
-import ChatHeaderMenu from 'components/Articles/LostItemChatPage/components/ChatHeaderMenu';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
+import { LostItemChatMenu, LostItemChatTitle } from 'components/Articles/LostItemChatPage/headerSlots';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import {
   ChatLayout,
   ChatMessageInput,
@@ -32,10 +33,10 @@ import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
 import styles from './LostItemChatPage.module.scss';
+
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: LostItemChatTitle, rightAction: LostItemChatMenu };
 
 function LostItemChatPage() {
   const isMobile = useMediaQuery();
@@ -68,23 +69,6 @@ function LostItemChatPage() {
     isOnline,
     autoSelectFirst: showDetail,
   });
-
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
-
-  useEffect(() => {
-    setCustomTitle(showDetail && chatroomDetail ? chatroomDetail.article_title : '쪽지');
-  }, [showDetail, chatroomDetail, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
-
-  useEffect(() => {
-    if (showDetail && chatroomDetail) {
-      setButtonContent(<ChatHeaderMenu onBlockClick={openDeleteModal} />);
-    }
-
-    return resetButtonContent;
-  }, [showDetail, chatroomDetail, openDeleteModal, setButtonContent, resetButtonContent]);
 
   const prevMessagesLengthRef = useRef(0);
 
@@ -296,4 +280,4 @@ export default function LostItemChatPageWrapper() {
 }
 
 LostItemChatPageWrapper.requireAuth = true;
-LostItemChatPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+LostItemChatPageWrapper.getLayout = (page: React.ReactElement) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
