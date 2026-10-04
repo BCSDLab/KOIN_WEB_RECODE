@@ -8,23 +8,21 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import TeamChatRoom from 'components/Team/components/TeamChatRoom';
 import ROUTES from 'static/routes';
+import { parseQueryId } from 'utils/ts/parseServerSideParams';
 
 import styles from './TeamChatPage.module.scss';
 
 export default function TeamChatPage() {
   const router = useRouter();
-  const hasValidRoom = [router.query.recruitmentId, router.query.chatRoomId].every(
-    (id) => typeof id === 'string' && /^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0,
-  );
+  const recruitmentId = parseQueryId(router.query.recruitmentId);
+  const chatRoomId = parseQueryId(router.query.chatRoomId);
+  const hasValidRoom = recruitmentId !== null && chatRoomId !== null;
 
   useEffect(() => {
     if (router.isReady && !hasValidRoom) {
       void router.replace(ROUTES.Team());
     }
   }, [router, hasValidRoom]);
-
-  const recruitmentId = Number(router.query.recruitmentId);
-  const chatRoomId = Number(router.query.chatRoomId);
 
   return (
     <>

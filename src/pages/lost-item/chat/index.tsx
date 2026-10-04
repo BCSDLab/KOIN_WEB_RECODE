@@ -32,6 +32,7 @@ import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
+import { parseQueryId } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
@@ -294,9 +295,8 @@ export default function LostItemChatPageWrapper() {
   const articleId = router.query.articleId;
   const chatRoomId = router.query.chatRoomId ?? router.query.chatroomId;
   const isList = articleId === undefined && chatRoomId === undefined;
-  const hasValidRoom = (articleId === undefined ? [chatRoomId] : [articleId, chatRoomId]).every(
-    (id) => typeof id === 'string' && /^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0,
-  );
+  const hasValidRoom =
+    parseQueryId(chatRoomId) !== null && (articleId === undefined || parseQueryId(articleId) !== null);
   const hasInvalidParams = !isList && !hasValidRoom;
 
   useEffect(() => {
