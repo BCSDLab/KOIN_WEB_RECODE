@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
-import TeamChatRoom from 'components/Team/components/TeamChatRoom';
+import TeamChat from 'components/Team/components/TeamChat';
 
 import styles from './TeamChatPage.module.scss';
 
@@ -32,11 +32,7 @@ export default function TeamChatPage() {
                   </div>
                 }
               >
-                <TeamChatRoom
-                  key={`${recruitmentId}-${chatRoomId}`}
-                  recruitmentId={recruitmentId}
-                  chatRoomId={chatRoomId}
-                />
+                <TeamChat selectedRoom={{ recruitmentId, chatRoomId }} />
               </Suspense>
             </ErrorBoundary>
           )}

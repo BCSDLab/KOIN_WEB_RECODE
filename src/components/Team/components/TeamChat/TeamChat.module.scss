@@ -1,0 +1,47 @@
+@use "src/utils/scss/media" as media;
+
+.chat {
+  * {
+    box-sizing: border-box;
+  }
+
+  &__panel {
+    overflow: hidden;
+  }
+
+  &__status {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+    text-align: center;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+    height: 100dvh;
+
+    &__sidebar {
+      height: 100%;
+    }
+
+    &__panel {
+      display: none;
+      height: 100dvh;
+      border: 0;
+      background-color: #fff;
+    }
+
+    &--selected &__sidebar {
+      display: none;
+    }
+
+    &--selected &__panel {
+      display: flex;
+    }
+  }
+}
