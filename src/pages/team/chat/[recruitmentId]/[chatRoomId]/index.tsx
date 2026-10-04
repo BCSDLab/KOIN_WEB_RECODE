@@ -11,7 +11,7 @@ export const getServerSideProps = withCacheControl(async ({ params }) => {
       destination:
         typeof recruitmentId === 'string' && typeof chatRoomId === 'string'
           ? ROUTES.TeamChat({ recruitmentId, chatRoomId })
-          : ROUTES.TeamChat(),
+          : ROUTES.Team(),
       permanent: false,
     },
   };
