@@ -25,7 +25,6 @@ import {
 } from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
@@ -39,10 +38,14 @@ import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
 import styles from './LostItemChatPage.module.scss';
 
-function LostItemChatPage() {
+interface LostItemChatPageProps {
+  articleIdParam: string | null;
+  chatRoomIdParam: string | null;
+}
+
+function LostItemChatPage({ articleIdParam, chatRoomIdParam }: LostItemChatPageProps) {
   const isMobile = useMediaQuery();
   const isOnline = useNetworkStatus();
-  const { searchParams } = useParamsHandler();
   const { data: userInfo } = useUser();
 
   const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
@@ -52,9 +55,8 @@ function LostItemChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
-  const chatroomIdParam = searchParams.get('chatRoomId') ?? searchParams.get('chatroomId');
-  const showList = !isMobile || !chatroomIdParam;
-  const showDetail = !isMobile || !!chatroomIdParam;
+  const showList = !isMobile || !chatRoomIdParam;
+  const showDetail = !isMobile || !!chatRoomIdParam;
 
   const {
     chatroomDetail,
@@ -65,8 +67,8 @@ function LostItemChatPage() {
     sendMessage: sendChatMessage,
     sendMessageAsync: sendChatMessageAsync,
   } = useChatPolling({
-    articleId: searchParams.get('articleId'),
-    chatroomId: chatroomIdParam,
+    articleId: articleIdParam,
+    chatroomId: chatRoomIdParam,
     isOnline,
     autoSelectFirst: showDetail,
   });
@@ -307,7 +309,12 @@ export default function LostItemChatPageWrapper() {
 
   if (!isLoggedIn || !router.isReady || hasInvalidParams) return null;
 
-  return <LostItemChatPage />;
+  return (
+    <LostItemChatPage
+      articleIdParam={typeof articleId === 'string' ? articleId : null}
+      chatRoomIdParam={typeof chatRoomId === 'string' ? chatRoomId : null}
+    />
+  );
 }
 
 LostItemChatPageWrapper.requireAuth = true;
