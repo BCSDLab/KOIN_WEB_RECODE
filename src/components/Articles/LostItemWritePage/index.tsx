@@ -10,7 +10,6 @@ import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 const MAX_ITEMS = 10;
 
@@ -36,12 +35,6 @@ export default function LostItemWritePage() {
   const { title, subtitle, description } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem, removeLostItem, validateAndUpdateItems, checkArticleFormFull } =
     useLostItemForm({ defaultType: type });
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-
-  useEffect(() => {
-    setCustomTitle(title);
-  }, [title, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   useEffect(() => {
     if (user?.name) {

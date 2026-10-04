@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
@@ -27,6 +28,8 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   return { props: {} };
 });
+
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '게시글 신고하기' };
 
 function ReportPage({ id }: { id: string }) {
   const router = useRouter();
@@ -62,4 +65,4 @@ export default function ReportPageWrapper() {
   return <ReportPage id={id} />;
 }
 
-ReportPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+ReportPageWrapper.getLayout = (page: React.ReactElement) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
