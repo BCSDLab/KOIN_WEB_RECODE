@@ -17,7 +17,7 @@ import { clearLegacySessionStorage } from 'utils/auth/legacyStorage';
 import { useSessionState } from 'utils/hooks/auth/useSession';
 import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import { markInAppNavigation } from 'utils/ts/inAppNavigation';
+import { recordEntryHistory } from 'utils/ts/inAppNavigation';
 import { createQueryClient, queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -98,10 +98,8 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
   }, []);
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', markInAppNavigation);
-
-    return () => router.events.off('routeChangeComplete', markInAppNavigation);
-  }, [router.events]);
+    recordEntryHistory();
+  }, []);
 
   if (isMaintenance) {
     return <MaintenancePage />;
