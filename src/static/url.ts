@@ -7,6 +7,7 @@ export const COOKIE_DOMAIN = IS_STAGE ? `.${STAGE_DOMAIN}` : `.${BASE_DOMAIN}`;
 
 // 백엔드가 발급하는 쿠키 이름.
 export const WEB_AUTH_CSRF_COOKIE_KEY = IS_STAGE ? '__Secure-koin-stage-web-csrf' : '__Secure-koin-web-csrf';
+export const WEB_AUTH_ACCESS_COOKIE_KEY = IS_STAGE ? '__Secure-koin-stage-web-access' : '__Secure-koin-web-access';
 
 // 프론트가 쓰는 쿠키 이름.
 // 시간표에서 선택한 학기. localStorage(zustand)에만 두면 서버가 몰라 SSR과 클라이언트 렌더가 갈린다.
