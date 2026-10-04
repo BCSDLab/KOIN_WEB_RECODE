@@ -1,49 +1,14 @@
 import { useRouter } from 'next/router';
 
-import KebabMenu from 'components/Team/components/KebabMenu';
+import TeamNotificationMenu from 'components/Team/components/TeamNotificationMenu';
 import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 
-interface TeamNotificationHeaderProps {
-  showMenu: boolean;
-  onMarkAllRead: () => void;
-  onDeleteAll: () => void;
-  isMarkAllReadPending: boolean;
-  isDeleteAllPending: boolean;
-}
-
-export default function TeamNotificationHeader({
-  showMenu,
-  onMarkAllRead,
-  onDeleteAll,
-  isMarkAllReadPending,
-  isDeleteAllPending,
-}: TeamNotificationHeaderProps) {
+// 데스크톱 전용. 모바일은 레이아웃 헤더가 같은 메뉴를 그린다
+export default function TeamNotificationHeader() {
   const router = useRouter();
 
-  const menu = (
-    <KebabMenu
-      triggerAriaLabel="알림 메뉴"
-      menuAriaLabel="알림 메뉴"
-      items={[
-        {
-          key: 'mark-all-read',
-          label: '모두 읽음으로 표시',
-          onClick: onMarkAllRead,
-          disabled: isMarkAllReadPending,
-        },
-        {
-          key: 'delete-all',
-          label: '알림 전체 삭제',
-          onClick: onDeleteAll,
-          disabled: isDeleteAllPending,
-          danger: true,
-        },
-      ]}
-    />
-  );
-
   return (
-    <PageHeader title="알림" onBack={() => router.replace(ROUTES.Team())} rightAction={showMenu ? menu : undefined} />
+    <PageHeader title="알림" onBack={() => router.replace(ROUTES.Team())} rightAction={<TeamNotificationMenu />} />
   );
 }

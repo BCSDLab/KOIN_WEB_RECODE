@@ -1,8 +1,19 @@
+@use "src/utils/scss/media" as media;
+
+.desktop-only {
+  @include media.desktop-only;
+}
+
 .page {
   display: flex;
   flex-direction: column;
   min-height: calc(100dvh - 56px);
   background: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    flex: 1;
+    min-height: auto;
+  }
 }
 
 .list {

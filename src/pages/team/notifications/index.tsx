@@ -9,8 +9,10 @@ import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import NotificationCard from 'components/Team/components/NotificationCard';
 import TeamNotificationHeader from 'components/Team/components/TeamNotificationHeader';
+import TeamNotificationMenu from 'components/Team/components/TeamNotificationMenu';
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -20,6 +22,13 @@ import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
 
 import styles from './TeamNotificationsPage.module.scss';
+
+const MOBILE_HEADER: MobileHeaderConfig = {
+  type: 'page',
+  title: '알림',
+  rightAction: TeamNotificationMenu,
+  onBack: ({ router }) => router.replace(ROUTES.Team()),
+};
 
 export default function TeamNotificationsPage() {
   const isLoggedIn = useIsLoggedIn();
@@ -48,14 +57,6 @@ export default function TeamNotificationsPage() {
     onSettled: (_data, _error, notificationId) => {
       pendingNotificationIdsRef.current.delete(notificationId);
     },
-  });
-  const { mutate: markAllRead, isPending: isMarkAllReadPending } = useMutation({
-    ...teamMutations.markAllNotificationsRead(queryClient),
-    onError: () => showToast('error', '알림을 모두 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
-  });
-  const { mutate: deleteAllNotifications, isPending: isDeleteAllPending } = useMutation({
-    ...teamMutations.deleteAllNotifications(queryClient),
-    onError: () => showToast('error', '알림을 모두 삭제하지 못했어요. 다시 시도해 주세요.'),
   });
 
   const handleNotificationClick = (notification: TeamRecruitmentNotification) => {
@@ -101,13 +102,9 @@ export default function TeamNotificationsPage() {
         <title>팀원 모집 알림 | KOIN</title>
       </Head>
 
-      <TeamNotificationHeader
-        showMenu={notifications.length > 0}
-        onMarkAllRead={markAllRead}
-        onDeleteAll={deleteAllNotifications}
-        isMarkAllReadPending={isMarkAllReadPending}
-        isDeleteAllPending={isDeleteAllPending}
-      />
+      <div className={styles['desktop-only']}>
+        <TeamNotificationHeader />
+      </div>
 
       <main className={styles.page}>
         {isLoading && <p className={styles.loading}>알림을 불러오는 중입니다.</p>}
@@ -149,4 +146,4 @@ export default function TeamNotificationsPage() {
   );
 }
 
-TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
