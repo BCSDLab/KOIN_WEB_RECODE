@@ -6,7 +6,6 @@ import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
 import type { DepartmentViewProps } from 'components/Department/types';
 import IconBox from 'components/ui/IconBox';
-import PageHeader from 'components/ui/PageHeader';
 import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 
@@ -70,8 +69,6 @@ export default function DepartmentMobile({
 
   return (
     <div className={styles.page}>
-      <PageHeader title="학교 부서 정보" />
-
       <div className={styles.page__content}>
         <SearchBar value={searchValue} onChange={onSearchChange} onSearch={onSearchSubmit} label="학교 부서 검색" />
 
