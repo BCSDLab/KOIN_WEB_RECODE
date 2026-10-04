@@ -3,11 +3,14 @@ import type { GetServerSidePropsContext } from 'next';
 import { dehydrate, type DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { coopshopQueries } from 'api/coopshop/queries';
+import CafeteriaInfoButton from 'components/cafeteria/components/CafeteriaInfoButton';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
+import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
@@ -39,6 +42,8 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   };
 });
 
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '식단', rightAction: CafeteriaInfoButton };
+
 function Cafeteria() {
   const isMobile = useMediaQuery();
   const { date } = useCafeteriaParams();
@@ -68,3 +73,5 @@ export default function CafeteriaPage({ dehydratedState, serverNowISO }: Cafeter
     </HydrationBoundary>
   );
 }
+
+CafeteriaPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
