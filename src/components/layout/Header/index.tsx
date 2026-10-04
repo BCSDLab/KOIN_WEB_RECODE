@@ -2,50 +2,81 @@ import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
-import ROUTES from 'static/routes';
+import PageHeader from 'components/ui/PageHeader';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 
 import MobileHeader from './MobileHeader';
+import { getLegacyRoute } from './MobileHeader/legacyRoute';
+import type { LegacyRoute } from './MobileHeader/legacyRoute';
+import type { MobileHeaderConfig } from './mobileHeaderConfig';
+import MobileHomeRedesignHeader from './MobileHomeRedesignHeader';
 import PCHeader from './PCHeader';
 import styles from './Header.module.scss';
 
-function Header() {
-  const router = useRouter();
-  const pathname = router.asPath || router.pathname;
-  const isMain = pathname === '/';
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+function getLegacyClassNames(route: LegacyRoute) {
+  const isPage = route.isBusTimetable || route.isTimetable;
 
-  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
-  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = router.pathname.startsWith(ROUTES.LostItems());
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const isBusTimetableRoute = [ROUTES.BusCourseShuttle(), ROUTES.BusCourseExpress(), ROUTES.BusCourseCity()].some(
-    (path) => router.pathname === path || router.pathname.startsWith(`${path}/`),
-  );
-  const isTimetableRoute = [ROUTES.Timetable(), ROUTES.TimetableList()].includes(router.pathname);
+  return {
+    [styles['header--main']]: route.isMain,
+    [styles['header--mobile-light']]: route.isLight || isPage,
+    [styles['header--page']]: isPage,
+  };
+}
+
+function getClassNames(config: MobileHeaderConfig) {
+  if (config.type === 'home') return { [styles['header--mobile-home']]: true };
+
+  return {
+    [styles['header--mobile-light']]: true,
+    [styles['header--page']]: true,
+    [styles['header--mobile-gray']]: config.background === 'gray',
+  };
+}
+
+interface HeaderProps {
+  mobileHeader?: MobileHeaderConfig;
+}
+
+function Header({ mobileHeader }: HeaderProps) {
+  const router = useRouter();
+  const logger = useLogger();
+  const goBack = useGoBack();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const legacyRoute = mobileHeader ? null : getLegacyRoute(router.pathname);
+
+  const renderMobileHeader = () => {
+    if (legacyRoute) {
+      return <MobileHeader openModal={openModal} route={legacyRoute} />;
+    }
+
+    if (mobileHeader?.type !== 'page') return <MobileHomeRedesignHeader />;
+
+    const { title: Title, rightAction: RightAction, onBack } = mobileHeader;
+
+    return (
+      <PageHeader
+        title={typeof Title === 'string' ? Title : <Title />}
+        rightAction={RightAction && <RightAction />}
+        onBack={onBack && (() => onBack({ router, logger, goBack }))}
+        className={styles['header__page-header']}
+      />
+    );
+  };
 
   return (
     <header
       className={cn({
         [styles.header]: true,
-        [styles['header--main']]: isMain,
-        [styles['header--new-club']]: isClubRoute,
-        [styles['header--mobile-light']]:
-          isArticleRoute || isLostItemLightRoute || isCafeteriaRoute || isBusTimetableRoute || isTimetableRoute,
-        [styles['header--sub-page']]: isBusTimetableRoute || isTimetableRoute,
+        ...(legacyRoute ? getLegacyClassNames(legacyRoute) : mobileHeader && getClassNames(mobileHeader)),
       })}
     >
       <nav className={styles.header__content}>
         <div className={styles['header__desktop']}>
           <PCHeader openModal={openModal} />
         </div>
-        <div className={styles['header__mobile']}>
-          <MobileHeader
-            openModal={openModal}
-            isBusTimetableRoute={isBusTimetableRoute}
-            isTimetableRoute={isTimetableRoute}
-          />
-        </div>
+        <div className={styles['header__mobile']}>{renderMobileHeader()}</div>
       </nav>
       {isModalOpen && <AuthenticateUserModal onClose={closeModal} />}
     </header>

@@ -16,12 +16,16 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 1148px;
-  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 
   @include media.media-breakpoint(mobile) {
     min-width: 360px;
   }
+}
+
+// 레이아웃이 페이지별로 덮어쓸 수 있게 특이도를 0으로 둔다
+:where(#root) {
+  min-height: 100vh;
 }
 
 a,

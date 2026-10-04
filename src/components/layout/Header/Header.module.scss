@@ -19,7 +19,7 @@
     border-bottom: none;
     animation: slide-left-enter 0.3s ease-out;
 
-    &--sub-page {
+    &--page {
       height: auto;
     }
 
@@ -29,13 +29,21 @@
       box-shadow: 0 2px 4px 0 rgb(0 0 0 / 34%);
     }
 
-    &--new-club {
-      background-color: #fff;
-    }
-
     &--mobile-light {
       background-color: #fff;
       color: #000;
+    }
+
+    &--mobile-gray {
+      background-color: #f8f8fa;
+    }
+
+    &--mobile-home {
+      position: static;
+      height: auto;
+      background: none;
+      color: inherit;
+      animation: none;
     }
   }
 
@@ -57,6 +65,10 @@
     @include media.media-breakpoint(mobile) {
       display: none;
     }
+  }
+
+  &__page-header {
+    flex: 1;
   }
 
   &__mobile {

@@ -22,23 +22,22 @@ import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
+import type { LegacyRoute } from './legacyRoute';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
-  isBusTimetableRoute: boolean;
-  isTimetableRoute: boolean;
+  route: LegacyRoute;
 }
 
-export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetableRoute }: MobileHeaderProps) {
+export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
-  const isMain = pathname === ROUTES.Main();
   const isCustomButton = buttonState.type === 'custom';
   const logger = useLogger();
   const { id } = router.query;
@@ -93,16 +92,12 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
     openSidebar();
   };
 
-  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
-  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
+  const { isMain, isClub: isClubRoute, isLight: useLightHeader } = route;
   const isLostItemCustomTitleRoute =
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
 
-  if (isBusTimetableRoute) {
+  if (route.isBusTimetable) {
     return (
       <PageHeader
         title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
@@ -112,7 +107,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
     );
   }
 
-  if (isTimetableRoute) {
+  if (route.isTimetable) {
     const isTimetableList = pathname === ROUTES.TimetableList();
     const getRightAction = () => {
       if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
