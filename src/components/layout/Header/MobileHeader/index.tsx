@@ -16,8 +16,6 @@ import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { backButtonTapped } from 'utils/ts/iosBridge';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
 import type { LegacyRoute } from './legacyRoute';
@@ -35,13 +33,8 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const goBack = useGoBack();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
-  const buttonState = useHeaderButtonStore((state) => state.buttonState);
-
-  const isCustomButton = buttonState.type === 'custom';
   const logger = useLogger();
   const { id } = router.query;
-
-  const { customTitle } = useHeaderTitle();
 
   const { params } = useParamsHandler();
 
@@ -76,9 +69,6 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   };
 
   const { isMain, isClub: isClubRoute, isLight: useLightHeader } = route;
-  const isLostItemCustomTitleRoute =
-    [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
-    pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
 
   return (
     <>
@@ -106,10 +96,8 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
           })}
         >
           {isMain && <KoinServiceLogo />}
-          {!isMain && (isClubRoute || isLostItemCustomTitleRoute) && customTitle}
           {!isMain &&
             !isClubRoute &&
-            !isLostItemCustomTitleRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
               .sort((a, b) => b.link.length - a.link.length)[0]?.title ??
@@ -123,29 +111,18 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
           {pathname.startsWith('/clubs/event/edit') && '동아리 행사 수정'}
           {pathname.startsWith('/clubs/event') && !pathname.startsWith('/clubs/event/edit') && '동아리 행사 생성'}
         </span>
-        {isCustomButton ? (
-          <span
-            className={cn({
-              [styles.mobileheader__icon]: true,
-              [styles['mobileheader__icon--right']]: true,
-            })}
-          >
-            {buttonState.content}
-          </span>
-        ) : (
-          <button
-            className={cn({
-              [styles.mobileheader__icon]: true,
-              [styles['mobileheader__icon--right']]: true,
-              [styles['mobileheader__icon--none']]: useLightHeader,
-            })}
-            type="button"
-            aria-label="메뉴 버튼"
-            onClick={handleHamburgerClick}
-          >
-            <HamburgerIcon />
-          </button>
-        )}
+        <button
+          className={cn({
+            [styles.mobileheader__icon]: true,
+            [styles['mobileheader__icon--right']]: true,
+            [styles['mobileheader__icon--none']]: useLightHeader,
+          })}
+          type="button"
+          aria-label="메뉴 버튼"
+          onClick={handleHamburgerClick}
+        >
+          <HamburgerIcon />
+        </button>
       </div>
       {mounted && createPortal(<Panel openModal={openModal} />, document.body)}
     </>
