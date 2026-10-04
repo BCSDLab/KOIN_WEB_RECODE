@@ -14,6 +14,8 @@ import {
   timetableQueryKeys,
 } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
+import { TimetableEditButton } from 'components/TimetablePage/components/MobileHeaderActions';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -23,6 +25,7 @@ import type { ServerRequestContext } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetablePage.module.scss';
@@ -31,6 +34,23 @@ const MobilePage = dynamic(
   () => import('components/TimetablePage/MainTimetablePage/MobilePage').then((mod) => mod.MobilePage),
   { ssr: true },
 );
+
+const MOBILE_HEADER: MobileHeaderConfig = {
+  type: 'page',
+  title: '시간표',
+  rightAction: TimetableEditButton,
+  onBack: ({ logger, goBack }) => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'timetable_back',
+      value: '뒤로가기버튼',
+      previous_page: '시간표',
+      current_page: '메인',
+      duration_time: getElapsedSeconds('enterTimetablePage'),
+    });
+    goBack();
+  },
+};
 
 const prefetchBaseTimetableData = async (queryClient: QueryClient) => {
   await Promise.all([
@@ -170,4 +190,4 @@ function TimetablePage() {
 
 export default TimetablePage;
 
-TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader={MOBILE_HEADER}>{page}</SSRLayout>;

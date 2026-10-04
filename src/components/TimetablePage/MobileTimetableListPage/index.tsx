@@ -9,11 +9,10 @@ import TimetableEmptyIllustration from 'assets/svg/timetable-empty-illustration.
 import BookmarkIcon from 'assets/svg/timetable-list-bookmark-icon.svg';
 import PlusIcon from 'assets/svg/timetable-list-plus-icon.svg';
 import SettingIcon from 'assets/svg/timetable-list-setting-icon.svg';
-import PenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import useAddTimetableFrame from 'components/TimetablePage/hooks/useAddTimetableFrame';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useRequireLogin from 'components/TimetablePage/hooks/useRequireLogin';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -21,12 +20,9 @@ import useUserType from 'utils/hooks/auth/useUserType';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { sortSemestersNewestFirst } from 'utils/timetable/semester';
-import { getTopicParticle } from 'utils/ts/josa';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useSemesterAction } from 'utils/zustand/semester';
 
 import DeleteTimetableModal from './DeleteTimetableModal';
-import SemesterEditModal from './SemesterEditModal';
 import TimetableSettingModal from './TimetableSettingModal';
 import styles from './MobileTimetableListPage.module.scss';
 
@@ -197,15 +193,7 @@ export default function MobileTimetableListPage() {
   const isLoggedIn = useIsLoggedIn();
   const { data: mySemester } = useSemesterCheck();
 
-  const handleRequireLogin: RequireLogin = (actionTitle) => {
-    portalManager.open((portalOption: Portal) => (
-      <InducingLoginModal
-        actionTitle={actionTitle}
-        detailExplanation={`${actionTitle}${getTopicParticle(actionTitle)} 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)`}
-        onClose={portalOption.close}
-      />
-    ));
-  };
+  const handleRequireLogin = useRequireLogin();
 
   const handleOpenSetting: OpenSetting = (semester, frame) => {
     const openDeleteModal = () =>
@@ -222,28 +210,6 @@ export default function MobileTimetableListPage() {
       />
     ));
   };
-
-  const handleEditSemester = () => {
-    if (!mySemester) {
-      handleRequireLogin('학기 편집');
-
-      return;
-    }
-    portalManager.open((portalOption: Portal) => <SemesterEditModal onClose={portalOption.close} />);
-  };
-
-  const setHeaderButton = useHeaderButtonStore((state) => state.setButtonContent);
-  const resetHeaderButton = useHeaderButtonStore((state) => state.resetButtonContent);
-
-  useEffect(() => {
-    setHeaderButton(
-      <button type="button" className={styles['header-button']} aria-label="학기 편집" onClick={handleEditSemester}>
-        <PenIcon />
-      </button>,
-    );
-
-    return resetHeaderButton;
-  });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리
   useEffect(() => () => portalManager.close(), []);
