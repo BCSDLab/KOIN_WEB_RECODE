@@ -14,8 +14,7 @@ import styles from './Header.module.scss';
 function getLegacyClassNames(route: LegacyRoute) {
   return {
     [styles['header--main']]: route.isMain,
-    [styles['header--mobile-light']]: route.isLight || route.isTimetable,
-    [styles['header--page']]: route.isTimetable,
+    [styles['header--mobile-light']]: route.isLight,
   };
 }
 
