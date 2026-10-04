@@ -294,7 +294,7 @@ export default function LostItemChatPageWrapper() {
   const articleId = router.query.articleId;
   const chatRoomId = router.query.chatRoomId ?? router.query.chatroomId;
   const isList = articleId === undefined && chatRoomId === undefined;
-  const hasValidRoom = [articleId, chatRoomId].every(
+  const hasValidRoom = (articleId === undefined ? [chatRoomId] : [articleId, chatRoomId]).every(
     (id) => typeof id === 'string' && /^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0,
   );
   const hasInvalidParams = !isList && !hasValidRoom;
