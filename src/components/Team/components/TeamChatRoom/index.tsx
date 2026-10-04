@@ -9,7 +9,7 @@ import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
@@ -168,7 +168,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       sidebar={<ChatRoomList items={sidebarItems} />}
     >
       <div className={styles['chat-room__mobileHeader']}>
-        <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
+        <PageHeader title={chatRoom.room_name} rightAction={memberCount} />
       </div>
       <div className={styles['chat-room__desktopHeader']}>
         <h2>{chatRoom.room_name}</h2>

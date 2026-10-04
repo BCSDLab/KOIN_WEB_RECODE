@@ -15,7 +15,7 @@ import DeleteConfirmModal from 'components/Team/components/DeleteConfirmModal';
 import OwnerActionMenu from 'components/Team/components/OwnerActionMenu';
 import { RecruitmentBadges } from 'components/Team/components/RecruitmentCard';
 import { formatRecruitmentDate, MEETING_TYPE_LABEL } from 'components/Team/utils/recruitmentDisplay';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -341,7 +341,7 @@ export default function RecruitmentDetail() {
   return (
     <div className={styles.page}>
       <div className={styles['mobile-header']}>
-        <SubPageHeader
+        <PageHeader
           title="팀원 모집"
           rightAction={
             data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined

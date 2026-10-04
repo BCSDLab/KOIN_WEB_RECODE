@@ -21,7 +21,7 @@ import Layout from 'components/layout';
 import MyCreatedPostFilterPanel from 'components/Team/components/MyCreatedPostFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -276,7 +276,7 @@ export default function MyCreatedPostsPage() {
       </Head>
 
       <div className={styles['mobile-header']}>
-        <SubPageHeader
+        <PageHeader
           title="내가 작성한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
           className={styles.header}

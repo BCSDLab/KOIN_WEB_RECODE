@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 import KebabMenu from 'components/Team/components/KebabMenu';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 
 interface TeamNotificationHeaderProps {
@@ -44,10 +44,6 @@ export default function TeamNotificationHeader({
   );
 
   return (
-    <SubPageHeader
-      title="알림"
-      onBack={() => router.replace(ROUTES.Team())}
-      rightAction={showMenu ? menu : undefined}
-    />
+    <PageHeader title="알림" onBack={() => router.replace(ROUTES.Team())} rightAction={showMenu ? menu : undefined} />
   );
 }

@@ -7,7 +7,7 @@ import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -47,7 +47,7 @@ export default function ApplicantManagement() {
   return (
     <>
       <div className={styles['mobile-header']}>
-        <SubPageHeader title="지원자 관리" className={styles.header} />
+        <PageHeader title="지원자 관리" className={styles.header} />
       </div>
 
       <main className={styles.page}>

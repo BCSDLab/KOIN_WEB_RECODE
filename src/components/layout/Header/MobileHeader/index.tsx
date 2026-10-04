@@ -6,11 +6,10 @@ import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
-import TimetableBackIcon from 'assets/svg/timetable-back-icon.svg';
 import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -105,9 +104,8 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
 
   if (isBusTimetableRoute) {
     return (
-      <SubPageHeader
+      <PageHeader
         title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
       />
@@ -132,10 +130,8 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
     };
 
     return (
-      <SubPageHeader
+      <PageHeader
         title={isTimetableList ? '시간표 목록' : '시간표'}
-        backIcon={<TimetableBackIcon />}
-        size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
         rightAction={getRightAction()}

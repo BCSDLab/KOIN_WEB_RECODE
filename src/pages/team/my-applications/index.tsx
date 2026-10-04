@@ -21,7 +21,7 @@ import Layout from 'components/layout';
 import MyApplicationFilterPanel from 'components/Team/components/MyApplicationFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -169,7 +169,7 @@ export default function MyApplicationsPage() {
       </Head>
 
       <div className={styles['mobile-header']}>
-        <SubPageHeader
+        <PageHeader
           title="내가 지원한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
           className={styles.header}

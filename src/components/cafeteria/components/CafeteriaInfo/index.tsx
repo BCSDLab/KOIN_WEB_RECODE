@@ -1,6 +1,6 @@
 import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -56,7 +56,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.box}>
-        {isMobile && <SubPageHeader title="학생식당정보" onBack={closeInfo} />}
+        {isMobile && <PageHeader title="학생식당정보" onBack={closeInfo} />}
         <div className={styles.header}>
           <div className={styles.header__title}>
             <span className={styles.header__main}>
