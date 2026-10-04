@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
-import PeopleIcon from 'assets/svg/Team/people.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
-import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
@@ -18,6 +15,7 @@ import { formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
 
+import { ChatRoomMemberCount } from './headerSlots';
 import mapTeamChatMessageGroups from './mapTeamChatMessageGroups';
 import styles from './TeamChatRoom.module.scss';
 
@@ -81,19 +79,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
   }));
 
-  const isTeamRoom = chatRoom.room_type === 'TEAM';
   const messageGroups = mapTeamChatMessageGroups(mergedMessages, user?.id);
-  const memberCount = isTeamRoom && (
-    <span
-      className={cn({
-        [styles['chat-room__memberCount']]: true,
-        [styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
-      })}
-    >
-      <PeopleIcon />
-      {chatRoom.member_count}/{chatRoom.max_member_count}
-    </span>
-  );
 
   const loadPreviousMessages = async () => {
     const container = messagesContainerRef.current;
@@ -167,12 +153,9 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       panelClassName={styles['chat-room']}
       sidebar={<ChatRoomList items={sidebarItems} />}
     >
-      <div className={styles['chat-room__mobileHeader']}>
-        <PageHeader title={chatRoom.room_name} rightAction={memberCount} />
-      </div>
       <div className={styles['chat-room__desktopHeader']}>
         <h2>{chatRoom.room_name}</h2>
-        {memberCount}
+        <ChatRoomMemberCount chatRoom={chatRoom} />
       </div>
       <div ref={messagesContainerRef} className={styles['chat-room__messages']} onScroll={handleMessagesScroll}>
         <ChatMessageList

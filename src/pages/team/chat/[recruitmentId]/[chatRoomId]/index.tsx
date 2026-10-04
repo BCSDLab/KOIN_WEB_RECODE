@@ -6,9 +6,17 @@ import { useRouter } from 'next/router';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
+import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import TeamChatRoom from 'components/Team/components/TeamChatRoom';
+import { TeamChatRoomMemberCount, TeamChatRoomTitle } from 'components/Team/components/TeamChatRoom/headerSlots';
 
 import styles from './TeamChatPage.module.scss';
+
+const MOBILE_HEADER: MobileHeaderConfig = {
+  type: 'page',
+  title: TeamChatRoomTitle,
+  rightAction: TeamChatRoomMemberCount,
+};
 
 export default function TeamChatPage() {
   const router = useRouter();
@@ -46,4 +54,8 @@ export default function TeamChatPage() {
   );
 }
 
-TeamChatPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamChatPage.getLayout = (page: ReactNode) => (
+  <Layout mobileHeader={MOBILE_HEADER} fitViewport>
+    {page}
+  </Layout>
+);
