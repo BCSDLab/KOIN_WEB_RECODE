@@ -94,16 +94,6 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
 
-  if (route.isBusTimetable) {
-    return (
-      <PageHeader
-        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-      />
-    );
-  }
-
   if (route.isTimetable) {
     const isTimetableList = pathname === ROUTES.TimetableList();
     const getRightAction = () => {

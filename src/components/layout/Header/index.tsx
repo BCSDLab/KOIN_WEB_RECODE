@@ -12,12 +12,10 @@ import PCHeader from './PCHeader';
 import styles from './Header.module.scss';
 
 function getLegacyClassNames(route: LegacyRoute) {
-  const isPage = route.isBusTimetable || route.isTimetable;
-
   return {
     [styles['header--main']]: route.isMain,
-    [styles['header--mobile-light']]: route.isLight || isPage,
-    [styles['header--page']]: isPage,
+    [styles['header--mobile-light']]: route.isLight || route.isTimetable,
+    [styles['header--page']]: route.isTimetable,
   };
 }
 
