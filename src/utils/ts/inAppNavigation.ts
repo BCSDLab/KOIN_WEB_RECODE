@@ -2,7 +2,7 @@
 // push는 새 key를 만들고 replace(shallow 포함)는 유지하므로 첫 진입 key와 비교해 이전 항목 유무를 판단한다
 let entryKey: string | undefined;
 
-const getCurrentKey = (): string | undefined => window.history.state?.key;
+const getCurrentKey = (): string | undefined => (typeof window === 'undefined' ? undefined : window.history.state?.key);
 
 export function recordEntryHistory() {
   entryKey ??= getCurrentKey();

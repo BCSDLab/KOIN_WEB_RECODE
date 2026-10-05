@@ -13,6 +13,7 @@ import PageHeader from 'components/ui/PageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -34,6 +35,7 @@ interface MobileHeaderProps {
 export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
+  const goBack = useGoBack();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
@@ -80,12 +82,7 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
 
       return;
     }
-    // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
-    if (window.history.state?.idx === 0) {
-      router.push(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
-    } else {
-      router.back();
-    }
+    goBack(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
   };
 
   const handleHamburgerClick = () => {
