@@ -26,4 +26,6 @@ export interface APIRequest<R extends APIResponse> {
   authOptional?: boolean;
   /** 인증 갱신 자체이거나 쿠키 인증과 무관한 요청. 401이어도 refresh·재시도를 하지 않는다. */
   skipAuthRefresh?: boolean;
+  /** 서비스 쿠키를 보내면 안 되는 요청(예: S3 presigned URL로의 직접 업로드). 기본값 true. */
+  withCredentials?: boolean;
 }

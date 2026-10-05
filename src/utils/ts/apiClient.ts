@@ -104,7 +104,7 @@ export default class APIClient {
           baseURL: request.baseURL || this.baseURL,
           headers: this.createHeaders(request),
           responseType: 'json',
-          withCredentials: true,
+          withCredentials: request.withCredentials ?? true,
         })
         .then((data: AxiosResponse<U>) => {
           const response = Sentry.startSpan(
