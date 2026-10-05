@@ -15,7 +15,6 @@ function useArrowKeyNavigation({ navigateImage }: KeyboardEventProps): void {
     };
 
     window.addEventListener('keydown', handleKeyPress);
-
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };

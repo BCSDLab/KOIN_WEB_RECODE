@@ -1,27 +1,25 @@
 import { useRouter } from 'next/router';
-
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { deleteClubQnA, postClubQnA } from 'api/club';
-import type { ClubNewQnA } from 'api/club/entity';
+import { ClubNewQnA } from 'api/club/entity';
 import { clubQueries } from 'api/club/queries';
-import ROUTES from 'static/routes';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useClubQnA(clubId: number | string | undefined) {
   const router = useRouter();
   if (!clubId) {
-    router.push(ROUTES.Club());
+    router.push('/clubs');
   }
   const queryClient = useQueryClient();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const { status: postClubQnAStatus, mutateAsync: postClubQnAMutateAsync } = useMutation({
     mutationFn: async (data: ClubNewQnA) => {
-      await postClubQnA(clubId!, data);
+      await postClubQnA(token, clubId!, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, isLoggedIn).queryKey });
+      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, token).queryKey });
     },
     onError: (e) => {
       if (isKoinError(e)) {
@@ -30,14 +28,14 @@ export default function useClubQnA(clubId: number | string | undefined) {
     },
   });
 
-  const { data: clubQnAData } = useSuspenseQuery(clubQueries.qna(clubId!, isLoggedIn));
+  const { data: clubQnAData } = useSuspenseQuery(clubQueries.qna(clubId!, token));
 
   const { status: deleteClubQnAStatus, mutateAsync: deleteClubQnAMutateAsync } = useMutation({
     mutationFn: async (qnaId: number) => {
-      await deleteClubQnA(clubId!, qnaId);
+      await deleteClubQnA(token, clubId!, qnaId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, isLoggedIn).queryKey });
+      queryClient.invalidateQueries({ queryKey: clubQueries.qna(clubId!, token).queryKey });
     },
     onError: (e) => {
       if (isKoinError(e)) {

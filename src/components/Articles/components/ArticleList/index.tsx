@@ -1,12 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-import type { ArticleWithNew } from 'api/articles/entity';
 import MobileArticleList from 'components/Articles/components/MobileArticleList';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
-
+import type { ArticleWithNew } from 'api/articles/entity';
 import styles from './ArticleList.module.scss';
 
 interface ArticleListProps {
@@ -15,7 +13,6 @@ interface ArticleListProps {
 
 const parseLostItemTitle = (title: string) => {
   const parts = title.split('|').map((part) => part.trim());
-
   return {
     type: parts[0] || '',
     content: parts[1] || '',
@@ -27,7 +24,6 @@ const formatDate = (time: string) => {
   if (typeof time !== 'string') {
     return '';
   }
-
   return time.split(' ')[0].replaceAll('-', '.');
 };
 

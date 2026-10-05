@@ -14,9 +14,8 @@ export default function qsStringify<T extends QueryParams>(params: T, prefix?: s
         return value.map((item) => `${encodedKey}=${encodeURIComponent(String(item))}`).join('&');
       }
       if (typeof value === 'object' && value !== null) {
-        return qsStringify(value, encodedKey);
+        return qsStringify(value as QueryParams, encodedKey);
       }
-
       return `${encodedKey}=${encodeURIComponent(String(value))}`;
     })
     .filter((part) => part.length > 0)

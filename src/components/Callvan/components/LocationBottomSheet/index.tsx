@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { cn } from '@bcsdlab/utils';
-import { CALLVAN_POST_LOCATION_LABEL, type CallvanPostLocationType } from 'api/callvan/entity';
+import { CALLVAN_POST_LOCATION_LABEL, CallvanPostLocationType } from 'api/callvan/entity';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
-
 import styles from './LocationBottomSheet.module.scss';
 
 const CHIP_ROWS: CallvanPostLocationType[][] = [
@@ -72,7 +70,6 @@ function LocationBottomSheetContent({
         <div className={styles.sheet__content}>
           <div className={styles['chip-group']}>
             {CHIP_ROWS.map((row, rowIndex) => (
-              // eslint-disable-next-line react/no-array-index-key -- CHIP_ROWS는 고정 정적 배열이다.
               <div key={rowIndex} className={styles['chip-row']}>
                 {row.map((locationType) => (
                   <button
@@ -121,6 +118,5 @@ function LocationBottomSheetContent({
 
 export default function LocationBottomSheet({ isOpen, ...props }: LocationBottomSheetProps) {
   if (!isOpen) return null;
-
   return <LocationBottomSheetContent {...props} />;
 }

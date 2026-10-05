@@ -1,5 +1,4 @@
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { CoopShopDetailResponse, CoopShopResponse } from './entity';
 
 const COOPSHOP_IDS = {

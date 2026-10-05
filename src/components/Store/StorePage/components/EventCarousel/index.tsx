@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
@@ -9,7 +8,6 @@ import Suspense from 'components/ssr/SSRSuspense';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-
 import { useCarouselController } from './hooks/useCarouselController';
 import styles from './EventCarousel.module.scss';
 
@@ -86,7 +84,6 @@ export default function EventCarousel() {
   const editedEvents = (() => {
     if (isMobile) return events.slice(0, 10);
     if (events.length % 2 === 0) return events;
-
     return [...events, DUMMY_EVENT];
   })();
 

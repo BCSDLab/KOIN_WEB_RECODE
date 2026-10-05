@@ -1,7 +1,6 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
@@ -16,22 +15,23 @@ import ClubSearchContainer from 'components/Club/ClubListPage/components/ClubSea
 import useClubLike from 'components/Club/hooks/useClubLike';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
+import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import {
   createQueryParser,
   parseQueryBoolean,
   parseQueryNumber,
   parseQueryString,
+  parseServerSideParams,
 } from 'utils/ts/parseServerSideParams';
-
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -73,47 +73,53 @@ export const parseClubListQuery = createQueryParser<ClubListQuery>({
   },
 });
 
-export const getServerSideProps = withCacheControl(
-  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-    const params = parseClubListQuery(context.query);
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+  const { token, query } = parseServerSideParams(context);
+  const params = parseClubListQuery(query);
 
-    const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
 
-    await Promise.all([
-      queryClient.prefetchQuery(clubQueries.categories()),
-      queryClient.prefetchQuery(
-        clubQueries.list({
-          isLoggedIn: serverRequest.isLoggedIn,
-          categoryId: params.categoryId ?? undefined,
-          sortType: params.sortType,
-          isRecruiting: params.isRecruiting,
-          clubName: params.clubName,
-        }),
-      ),
-    ]);
+  await Promise.all([
+    queryClient.prefetchQuery(clubQueries.categories()),
+    queryClient.prefetchQuery(
+      clubQueries.list({
+        token,
+        categoryId: params.categoryId ?? undefined,
+        sortType: params.sortType,
+        isRecruiting: params.isRecruiting,
+        clubName: params.clubName,
+      }),
+    ),
+  ]);
 
-    if (!serverRequest.isLoggedIn) {
-      cacheControl.enablePublicCache();
-    }
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
 
-    return {
-      props: {
-        dehydratedState: dehydrate(queryClient),
-        initialQuery: params,
-      },
-    };
-  },
-);
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialQuery: params,
+      serverToken: token ?? null,
+    },
+  };
+});
 
-function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
+  const clientToken = useTokenState();
+  const isMounted = useMount();
   const router = useRouter();
   const navigate = (path: string) => {
     router.push(path);
   };
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
+
+  // useTokenState()는 SSR에서 ''을 반환하므로 `??`로는 serverToken 폴백이 동작하지 않는다.
+  // 하이드레이션 중에만 폴백하고, 마운트 이후에는 클라이언트 상태만 신뢰한다.
+  const hydrationFallbackToken = isMounted ? null : serverToken;
+  const token = clientToken || hydrationFallbackToken || null;
 
   const { searchParams, setParams: setSearchParams } = useParamsHandler();
 
@@ -130,7 +136,7 @@ function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getSe
   const { mutate: clubLikeMutate } = useClubLike();
   const { data: clubListData } = useQuery(
     clubQueries.list({
-      isLoggedIn,
+      token,
       categoryId: selectedCategoryId,
       sortType: sortValue,
       isRecruiting: isRecruitingParam,
@@ -148,7 +154,7 @@ function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getSe
       event_label: 'club_main_create',
       value: '생성하기',
     });
-    if (!isLoggedIn) {
+    if (!token) {
       openAuthModal();
     } else {
       navigate('/clubs/new');
@@ -210,7 +216,7 @@ function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getSe
 
   const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>, isLiked: boolean, clubId: number, name: string) => {
     e.stopPropagation();
-    if (!isLoggedIn) {
+    if (!token) {
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal
           title="좋아요 기능을 사용하기"
@@ -218,7 +224,6 @@ function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getSe
           onClose={portalOption.close}
         />
       ));
-
       return;
     }
     if (isLiked) {
@@ -235,6 +240,7 @@ function ClubListPage({ initialQuery }: InferGetServerSidePropsType<typeof getSe
       });
     }
     clubLikeMutate({
+      token,
       isLiked,
       clubId,
     });

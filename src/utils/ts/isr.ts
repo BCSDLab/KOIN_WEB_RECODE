@@ -17,7 +17,9 @@ export function isNotFoundKoinError(error: unknown): boolean {
   return isKoinError(error) && error.status === 404;
 }
 
-function hasAxiosErrorResponse(error: object): error is {
+function hasAxiosErrorResponse(
+  error: object,
+): error is {
   type: 'AXIOS_ERROR';
   response?: {
     status?: number;
@@ -74,7 +76,6 @@ export async function withStaticFetchRetry<T>(resource: string, task: () => Prom
           try {
             const result = await task();
             span.setAttribute('retry.result', 'success');
-
             return result;
           } catch (error) {
             span.setAttribute('retry.result', 'error');

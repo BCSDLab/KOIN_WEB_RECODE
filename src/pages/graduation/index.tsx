@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
@@ -19,11 +19,10 @@ import useTotalGrades from 'components/TimetablePage/hooks/useTotalGrades';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { useSemester } from 'utils/zustand/semester';
-
 import styles from './GraduationCalculatorPage.module.scss';
 
 const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/components/CreditChart'), {
@@ -31,13 +30,13 @@ const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/co
 });
 
 function GraduationCalculatorComponent() {
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const semester = useSemester();
   const { lock, unlock } = useScrollLock(false);
-  const { data: timetableFrameList } = useTimetableFrameList(semester);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts();
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const { data: totalGrades } = useTotalGrades(currentFrameIndex);
   const portalManager = useModalPortal();
@@ -52,15 +51,14 @@ function GraduationCalculatorComponent() {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!token) return;
 
     agreeGraduationCreidts();
     openTooltip();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 실행 (isLoggedIn은 이 시점 값만 확인)
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!token) return;
 
     const isFirstVisit = isomorphicSessionStorage.getItem('visitedGraduationPage');
 
@@ -69,8 +67,7 @@ function GraduationCalculatorComponent() {
 
       portalManager.open(() => <CalculatorHelpModal closeInfo={closeInfo} />);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- isLoggedIn 변경 시에만 최초 방문 여부를 재확인
-  }, [isLoggedIn]);
+  }, [token]);
 
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
@@ -81,7 +78,6 @@ function GraduationCalculatorComponent() {
         value: '탈출_OS 스와이프',
       });
       history.back();
-
       return;
     }
     logger.actionEventClick({
@@ -93,11 +89,9 @@ function GraduationCalculatorComponent() {
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
-
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 리스너 등록 (handlePopState는 React Compiler가 참조를 안정화함)
   }, []);
 
   return (
@@ -168,7 +162,7 @@ function GraduationCalculatorComponent() {
           </div>
         </div>
       </div>
-      {!isLoggedIn && <GraduationCalculatorAuthModal />}
+      {!token && <GraduationCalculatorAuthModal />}
     </div>
   );
 }

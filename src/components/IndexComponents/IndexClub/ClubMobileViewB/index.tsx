@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
@@ -10,7 +9,6 @@ import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-
 import styles from './ClubMobileViewB.module.scss';
 
 function ClubMobileViewB() {
@@ -58,5 +56,4 @@ function ClubMobileViewB() {
     </div>
   );
 }
-
 export default ClubMobileViewB;

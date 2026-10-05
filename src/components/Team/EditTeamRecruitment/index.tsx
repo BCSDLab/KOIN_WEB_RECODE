@@ -1,18 +1,17 @@
 import { useRouter } from 'next/router';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { TeamRecruitmentDetailResponse, TeamRecruitmentMeetingType } from 'api/team/entity';
+
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import NewTeamRecruitment from 'components/Team/NewTeamRecruitment';
-import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
 import toRecruitmentRequestBody from 'components/Team/NewTeamRecruitment/toRecruitmentRequestBody';
-import type { TeamRecruitmentProgressType } from 'components/Team/NewTeamRecruitment/types';
 import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import ROUTES from 'static/routes';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-
+import type { TeamRecruitmentDetailResponse, TeamRecruitmentMeetingType } from 'api/team/entity';
+import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
+import type { TeamRecruitmentProgressType } from 'components/Team/NewTeamRecruitment/types';
 import styles from './EditTeamRecruitment.module.scss';
 
 const PROGRESS_TYPE_BY_MEETING_TYPE: Record<TeamRecruitmentMeetingType, TeamRecruitmentProgressType> = {
@@ -23,7 +22,6 @@ const PROGRESS_TYPE_BY_MEETING_TYPE: Record<TeamRecruitmentMeetingType, TeamRecr
 
 const parseApiDate = (date: string) => {
   const [year, month, day] = date.split('-').map(Number);
-
   return new Date(year, month - 1, day);
 };
 
@@ -49,16 +47,16 @@ const toFormValues = (recruitment: TeamRecruitmentDetailResponse): TeamRecruitme
 export default function EditTeamRecruitment() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.detail(recruitmentId, isLoggedIn),
+    ...teamQueries.detail(recruitmentId, token),
     enabled: router.isReady && isValidRecruitmentId,
   });
   const { mutateAsync: updateRecruitment } = useMutation(
-    teamMutations.updateRecruitment(queryClient, recruitmentId, isLoggedIn),
+    teamMutations.updateRecruitment(queryClient, token ?? '', recruitmentId),
   );
 
   const handleSubmit = async (values: TeamRecruitmentFormValues) => {
@@ -85,6 +83,11 @@ export default function EditTeamRecruitment() {
   }
 
   return (
-    <NewTeamRecruitment key={recruitmentId} mode="edit" initialValues={toFormValues(data)} onSubmit={handleSubmit} />
+    <NewTeamRecruitment
+      key={recruitmentId}
+      mode="edit"
+      initialValues={toFormValues(data)}
+      onSubmit={handleSubmit}
+    />
   );
 }

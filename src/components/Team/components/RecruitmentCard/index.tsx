@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-
 import { cn } from '@bcsdlab/utils';
-import type { TeamRecruitmentCard as TeamRecruitment } from 'api/team/entity';
+
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
@@ -15,7 +14,7 @@ import {
 } from 'components/Team/utils/recruitmentDisplay';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-
+import type { TeamRecruitmentCard as TeamRecruitment } from 'api/team/entity';
 import styles from './RecruitmentCard.module.scss';
 
 interface RecruitmentBadgesProps {

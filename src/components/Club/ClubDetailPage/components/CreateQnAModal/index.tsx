@@ -1,9 +1,7 @@
 import { useState } from 'react';
-
-import type { ClubNewQnA } from 'api/club/entity';
+import { ClubNewQnA } from 'api/club/entity';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
 import useLogger from 'utils/hooks/analytics/useLogger';
-
 import styles from './CreateQnAModal.module.scss';
 
 interface CreateQnAModalProps {
@@ -42,7 +40,6 @@ export default function CreateQnAModal({ closeModal, clubId, type, replyId }: Cr
     await deleteClubQnAMutateAsync(replyId);
     closeModal();
   };
-
   return (
     <div className={styles['modal-background']} onClick={closeModal} role="button" tabIndex={0} onKeyDown={() => {}}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="presentation">

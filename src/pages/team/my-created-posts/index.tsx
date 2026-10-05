@@ -3,14 +3,7 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import type {
-  MyCreatedTeamRecruitment,
-  MyCreatedTeamRecruitmentListRequest,
-  TeamRecruitmentSort,
-  TeamRecruitmentStatusFilter,
-} from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -25,9 +18,14 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-
+import type {
+  MyCreatedTeamRecruitment,
+  MyCreatedTeamRecruitmentListRequest,
+  TeamRecruitmentSort,
+  TeamRecruitmentStatusFilter,
+} from 'api/team/entity';
 import styles from './MyCreatedPostsPage.module.scss';
 
 interface CreatedPostsListSectionProps {
@@ -46,9 +44,9 @@ function CreatedPostsListSection({
   onChatClick,
 }: CreatedPostsListSectionProps) {
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    teamQueries.infiniteMyCreated(isLoggedIn, requestParams),
+    teamQueries.infiniteMyCreated(token, requestParams),
   );
 
   const recruitments = data.pages.flatMap((page) => page.recruitments);
@@ -79,11 +77,11 @@ function CreatedPostsListSection({
 
   return (
     <>
-      <div className={styles['summary-row']}>
-        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
+      <div className={styles.summaryRow}>
+        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
-          <span className={styles['filter-button__label']}>필터</span>
+        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
+          <span className={styles.filterButton__label}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -109,7 +107,7 @@ function CreatedPostsListSection({
               const chatButton = canChat && (
                 <button
                   type="button"
-                  className={styles['chat-button']}
+                  className={styles.chatButton}
                   aria-label="팀 채팅방으로 이동"
                   onClick={onChatClick(recruitment)}
                 >
@@ -126,12 +124,12 @@ function CreatedPostsListSection({
                   recruitment={recruitment}
                   rightSlot={
                     <>
-                      <div className={styles['mobile-only']}>{chatButton}</div>
-                      <div className={styles['desktop-only']}>
-                        <div className={styles['desktop-actions']}>
+                      <div className={styles.mobileOnly}>{chatButton}</div>
+                      <div className={styles.desktopOnly}>
+                        <div className={styles.desktopActions}>
                           <button
                             type="button"
-                            className={styles['desktop-action-button']}
+                            className={styles.desktopActionButton}
                             onClick={handleApplicantClick(recruitment)}
                           >
                             지원자 관리
@@ -140,7 +138,7 @@ function CreatedPostsListSection({
                           {recruitment.can_close && (
                             <button
                               type="button"
-                              className={styles['desktop-action-button']}
+                              className={styles.desktopActionButton}
                               onClick={handleCloseClick(recruitment)}
                             >
                               모집마감
@@ -153,21 +151,17 @@ function CreatedPostsListSection({
                     </>
                   }
                   actionSlot={
-                    <div className={styles['action-row']}>
+                    <div className={styles.actionRow}>
                       <button
                         type="button"
-                        className={styles['action-button']}
+                        className={styles.actionButton}
                         onClick={handleApplicantClick(recruitment)}
                       >
                         지원자 관리
                       </button>
 
                       {recruitment.can_close && (
-                        <button
-                          type="button"
-                          className={styles['action-button']}
-                          onClick={handleCloseClick(recruitment)}
-                        >
+                        <button type="button" className={styles.actionButton} onClick={handleCloseClick(recruitment)}>
                           모집 마감
                         </button>
                       )}
@@ -177,7 +171,7 @@ function CreatedPostsListSection({
               );
             })}
 
-            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
+            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
           </div>
         )}
       </div>
@@ -188,6 +182,7 @@ function CreatedPostsListSection({
 export default function MyCreatedPostsPage() {
   const logger = useLogger();
   const router = useRouter();
+  const token = useTokenState();
   const queryClient = useQueryClient();
 
   const [isFilterOpen, openFilter, closeFilter] = useBooleanState(false);
@@ -198,7 +193,9 @@ export default function MyCreatedPostsPage() {
   });
   const [closeTarget, setCloseTarget] = useState<MyCreatedTeamRecruitment | null>(null);
 
-  const { mutate: closeRecruitment, isPending: isClosing } = useMutation(teamMutations.closeRecruitment(queryClient));
+  const { mutate: closeRecruitment, isPending: isClosing } = useMutation(
+    teamMutations.closeRecruitment(queryClient, token),
+  );
 
   const handleApplyFilter = (filter: { status: TeamRecruitmentStatusFilter; sort: TeamRecruitmentSort }) => {
     setRequestParams(filter);
@@ -275,7 +272,7 @@ export default function MyCreatedPostsPage() {
         <meta name="description" content="내가 작성한 팀원 모집 게시글과 지원자 현황을 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles['mobile-header']}>
+      <div className={styles.mobileHeader}>
         <SubPageHeader
           title="내가 작성한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
@@ -287,7 +284,7 @@ export default function MyCreatedPostsPage() {
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 작성한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
             <Suspense fallback={null}>
               <CreatedPostsListSection
                 requestParams={requestParams}

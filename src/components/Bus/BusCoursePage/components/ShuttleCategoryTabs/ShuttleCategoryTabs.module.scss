@@ -24,28 +24,19 @@
       background: #175c8e;
       color: #fff;
       font-weight: 600;
-      line-height: 1.6;
+      line-height: 160%;
     }
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      line-height: 1.6;
-      white-space: nowrap;
-      border-radius: 50px;
-      box-shadow: inset 0 0 0 1px #e1e1e1;
-
-      &--selected {
-        background: #b611f5;
-        box-shadow: none;
-      }
+      font-weight: 600;
     }
   }
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
-    background-color: #fff;
     border-radius: 0;
-    gap: 4px;
-    flex-wrap: wrap;
+    padding: 8px 24px;
+    gap: 0;
   }
 }

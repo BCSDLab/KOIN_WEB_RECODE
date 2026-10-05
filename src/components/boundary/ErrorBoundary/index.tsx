@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { sendClientError } from '@bcsdlab/koin';
 import * as Sentry from '@sentry/nextjs';
-import type { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 
 interface Props {
@@ -61,7 +60,6 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         </div>
       );
     }
-
     return children;
   }
 }

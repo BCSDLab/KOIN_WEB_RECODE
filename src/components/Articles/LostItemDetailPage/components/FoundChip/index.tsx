@@ -1,8 +1,7 @@
 import { cn } from '@bcsdlab/utils';
-
 import styles from './FoundChip.module.scss';
 
-type ChipSize = 'xs' | 'large';
+type ChipSize = 'xs' | 'small' | 'large';
 
 interface FoundChipProps {
   isFound: boolean;

@@ -1,25 +1,26 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import { getStoreDetailInfo } from 'api/store';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
-import { CATEGORY, type Category, type Submenu, type SubmenuTitle } from 'static/category';
+import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
+import { useServerRequest } from 'utils/context/serverRequest';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
-
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import type { SubmenuTitle } from 'static/category';
 import styles from './PCHeader.module.scss';
 
-const ID: Record<string, string> = {
+const ID: { [key: string]: string } = {
   PANEL: 'megamenu-panel',
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
@@ -70,13 +71,19 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logout = useLogout();
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
+  const token = useTokenState();
   const portalManager = useModalPortal();
   const router = useRouter();
   const { asPath } = router;
   const pathname = asPath.split('?')[0] || '/';
   const search = asPath.includes('?') ? `?${asPath.split('?')[1]}` : '';
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
-  const isLoggedin = useIsLoggedIn();
+  const mounted = useMount();
+  const serverRequest = useServerRequest();
+
+  // 마운트 전에는 서버가 판정한 로그인 여부를 쓴다. 이게 없으면 서버는 항상 비로그인 UI를
+  // 그리고 클라이언트가 마운트 후 로그인 UI로 교체한다(a → button).
+  const isLoggedin = mounted ? !!token : (serverRequest?.isLoggedIn ?? false);
 
   const logShortcut = (title: SubmenuTitle) => {
     const info = SHORTCUT_LOGGING_MAP[title];
@@ -126,7 +133,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
   };
 
-  const escapeByheader = (title: string) => {
+  const escapeByheader = async (title: string) => {
     if (pathname === ROUTES.GraduationCalculator()) {
       logger.actionEventClick({
         team: 'USER',
@@ -144,7 +151,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: SubmenuTitle) => {
     logShortcut(title);
-    if (!isLoggedin && title === '쪽지') {
+    if (!token && title === '쪽지') {
       e.preventDefault();
       openLoginModal();
     }
@@ -157,7 +164,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   return (
     <>
       <Link className={styles.header__logo} href={ROUTES.Main()} tabIndex={0} onClick={escapeByLogo}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- 작은 정적 로고라 최적화 이점 대비 설정 비용이 큼 */}
+        {/* 헤더 로고는 작은 정적 이미지라 Next/Image 프록시/도메인 설정 대비 이득이 작아 img 유지 */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://static.koreatech.in/assets/img/logo_white.png"
           alt="KOIN service logo"
@@ -210,7 +218,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               .map((menu) => {
                 const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
                 const href = preferred ?? ROUTES.Main();
-
                 return (
                   <li className={styles.megamenu__menu} key={menu.title}>
                     {/* TODO: 키보드 Focus 접근성 향상 */}

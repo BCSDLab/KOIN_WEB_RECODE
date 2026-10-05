@@ -35,12 +35,7 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      line-height: 1.6;
-      border-radius: 50px;
-
-      &:not(.course-category__button--selected) {
-        box-shadow: inset 0 0 0 1px #e1e1e1;
-      }
+      font-weight: 500;
     }
 
     &--selected {
@@ -48,24 +43,18 @@
       background: #175c8e;
       color: #fff;
       font-weight: 600;
-      line-height: 1.6;
+      line-height: 160%;
 
       @include media.media-breakpoint(mobile) {
-        background: #b611f5;
+        font-weight: 600;
       }
     }
   }
 
-  &__label {
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
   @include media.media-breakpoint(mobile) {
-    background-color: #fff;
+    width: 100%;
     border-radius: 0;
-    padding: 12px 24px;
-    gap: 4px;
+    padding: 8px 24px;
+    gap: 0;
   }
 }

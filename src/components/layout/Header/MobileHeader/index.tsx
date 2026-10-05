@@ -1,19 +1,15 @@
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
-import TimetableBackIcon from 'assets/svg/timetable-back-icon.svg';
-import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
-import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -22,17 +18,15 @@ import { backButtonTapped } from 'utils/ts/iosBridge';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
-
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
-  isBusTimetableRoute: boolean;
-  isTimetableRoute: boolean;
 }
 
-export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetableRoute }: MobileHeaderProps) {
+export default function MobileHeader({ openModal }: MobileHeaderProps) {
+  useResetHeaderButton();
   const mounted = useMount();
   const router = useRouter();
   const { pathname } = router;
@@ -59,7 +53,6 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
         duration_time: getElapsedSeconds('enter_storeDetail'),
       }); // 상점 내 뒤로가기 버튼 로깅
       router.back();
-
       return;
     }
     if (pathname === '/timetable') {
@@ -79,12 +72,11 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
       (pathname === ROUTES.Club() || params.hot === 'true')
     ) {
       backButtonTapped();
-
       return;
     }
     // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
     if (window.history.state?.idx === 0) {
-      router.push(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
+      router.push(ROUTES.Main());
     } else {
       router.back();
     }
@@ -96,52 +88,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
-  const isLostItemCustomTitleRoute =
-    [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
-    pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
-
-  if (isBusTimetableRoute) {
-    return (
-      <SubPageHeader
-        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        size="medium"
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-      />
-    );
-  }
-
-  if (isTimetableRoute) {
-    const isTimetableList = pathname === ROUTES.TimetableList();
-    const getRightAction = () => {
-      if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
-
-      return (
-        <button
-          type="button"
-          className={styles['mobileheader__action-button']}
-          aria-label="시간표 수정"
-          onClick={() => showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
-        >
-          <TimetableSquarePenIcon />
-        </button>
-      );
-    };
-
-    return (
-      <SubPageHeader
-        title={isTimetableList ? '시간표 목록' : '시간표'}
-        backIcon={<TimetableBackIcon />}
-        size="medium"
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-        rightAction={getRightAction()}
-      />
-    );
-  }
+  const useLightHeader = isClubRoute || isArticleRoute;
 
   return (
     <>
@@ -169,14 +116,12 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
           })}
         >
           {isMain && <KoinServiceLogo />}
-          {!isMain && (isClubRoute || isLostItemCustomTitleRoute) && customTitle}
+          {!isMain && isClubRoute && customTitle}
           {!isMain &&
             !isClubRoute &&
-            !isLostItemCustomTitleRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
-              .sort((a, b) => b.link.length - a.link.length)[0]?.title ??
-              '')}
+              .sort((a, b) => b.link.length - a.link.length)[0]?.title ?? '')}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
           {pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 수정'}

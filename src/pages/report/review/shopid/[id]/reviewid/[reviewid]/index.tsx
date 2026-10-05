@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import CheckBox from 'components/Store/StoreDetailPage/components/Review/components/CheckBox';
 import ReportingLabel from 'components/Store/StoreDetailPage/components/Review/components/ReportingLabel';
 import useReviewReport from 'components/Store/StoreDetailPage/components/Review/components/ReviewReporting/query/useReviewReport';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
+import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import showToast from 'utils/ts/showToast';
-
 import styles from './ReviewReporting.module.scss';
 
 interface RequestOption {
@@ -56,7 +54,6 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: s
       return { ...REVIEW_CONTEXT.etc, content: etcDescription };
     }
     const { title, content } = REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT];
-
     return { title, content };
   });
 
@@ -75,9 +72,8 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: s
 
   const handleReport = () => {
     if (selectOptions.includes('etc') && etcDescription.trim() === '') {
-      showToast('error', '신고 사유를 입력해주세요.');
+      toast.error('신고 사유를 입력해주세요.');
       setEtcDescription('');
-
       return;
     }
     const reportData = { reports: requestOptions };
@@ -154,7 +150,6 @@ export default function ReviewReportingPageWrapper() {
   const router = useRouter();
   const { id, reviewid } = router.query;
   if (typeof id !== 'string' || typeof reviewid !== 'string') return null;
-
   return <ReviewReportingPage shopid={id} reviewid={reviewid} />;
 }
 

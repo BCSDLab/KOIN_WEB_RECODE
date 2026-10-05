@@ -1,10 +1,8 @@
-import type { Dispatch, SetStateAction } from 'react';
-
+import { Dispatch, SetStateAction } from 'react';
 import ClubQnACard from 'components/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './ClubQnA.module.scss';
 
 interface ClubQnAProps {
@@ -18,7 +16,7 @@ interface ClubQnAProps {
 
 export default function ClubQnA({ isManager, openModal, clubId, openAuthModal, setQnA, setReplyId }: ClubQnAProps) {
   const { clubQnAData } = useClubQnA(clubId);
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const logger = useLogger();
   const hadleClickAddButton = () => {
     logger.actionEventClick({
@@ -26,14 +24,13 @@ export default function ClubQnA({ isManager, openModal, clubId, openAuthModal, s
       event_label: 'club_Q&A_add',
       value: 'Q&A',
     });
-    if (!isLoggedIn) {
+    if (!token) {
       openAuthModal();
     } else {
       setQnA('create');
       openModal();
     }
   };
-
   return (
     <div className={styles.layout}>
       {!isManager && (

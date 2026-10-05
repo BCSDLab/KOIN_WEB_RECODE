@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
-import type { CallvanPost } from 'api/callvan/entity';
+import { CallvanPost } from 'api/callvan/entity';
 import ChatIcon from 'assets/svg/Callvan/chat.svg';
 import ChevronRightIcon from 'assets/svg/Callvan/chevron-right.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
 import PhoneCallingIcon from 'assets/svg/Callvan/phone-calling.svg';
 import RouteIndicatorIcon from 'assets/svg/Callvan/route-indicator.svg';
 import CallvanActionModal from 'components/Callvan/components/CallvanActionModal';
+import CloseConfirmModal from 'components/Callvan/components/CloseConfirmModal';
 import CompleteConfirmModal from 'components/Callvan/components/CompleteConfirmModal';
-import ConfirmModal from 'components/Callvan/components/ConfirmModal';
+import ReopenConfirmModal from 'components/Callvan/components/ReopenConfirmModal';
 import useCancelCallvan from 'components/Callvan/hooks/useCancelCallvan';
 import useCloseCallvan from 'components/Callvan/hooks/useCloseCallvan';
 import useCompleteCallvan from 'components/Callvan/hooks/useCompleteCallvan';
@@ -20,9 +20,8 @@ import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { redirectToLogin } from 'utils/ts/auth';
-
 import styles from './CallvanCard.module.scss';
 
 const CALLVAN_CATEGORY = '11';
@@ -33,7 +32,6 @@ interface CallvanCardProps {
 
 function getDayOfWeek(dateStr: string): string {
   const date = new Date(dateStr);
-
   return DAYS[date.getDay()];
 }
 
@@ -42,7 +40,6 @@ function formatDate(dateStr: string): string {
   const month = parts[1];
   const day = parts[2];
   const dayOfWeek = getDayOfWeek(dateStr);
-
   return `${month}.${day} (${dayOfWeek})`;
 }
 
@@ -52,7 +49,7 @@ function formatTime(timeStr: string): string {
 
 export default function CallvanCard({ post }: CallvanCardProps) {
   const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const logger = useLogger();
   const [isCloseModalOpen, openCloseModal, closeCloseModal] = useBooleanState(false);
   const [isReopenModalOpen, openReopenModal, closeReopenModal] = useBooleanState(false);
@@ -125,7 +122,6 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </button>
       );
     }
-
     return <span className={styles['card__phone-placeholder']} />;
   };
 
@@ -146,7 +142,6 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         </button>
       );
     }
-
     return (
       <div className={styles.card__count}>
         <PeopleIcon />
@@ -210,7 +205,6 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           </div>
         );
       }
-
       return null;
     }
 
@@ -251,7 +245,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
         })}
         onClick={(e) => {
           e.stopPropagation();
-          if (!isLoggedIn) {
+          if (!token) {
             openLoginModal();
           } else {
             openJoinModal();
@@ -319,20 +313,8 @@ export default function CallvanCard({ post }: CallvanCardProps) {
           </div>
         </div>
       </div>
-      {isCloseModalOpen && (
-        <ConfirmModal
-          title="해당 콜밴팟 모집을 마감할까요?"
-          onConfirm={handleCloseConfirm}
-          onCancel={closeCloseModal}
-        />
-      )}
-      {isReopenModalOpen && (
-        <ConfirmModal
-          title="해당 콜밴팟을 다시 모집할까요?"
-          onConfirm={handleReopenConfirm}
-          onCancel={closeReopenModal}
-        />
-      )}
+      {isCloseModalOpen && <CloseConfirmModal onConfirm={handleCloseConfirm} onCancel={closeCloseModal} />}
+      {isReopenModalOpen && <ReopenConfirmModal onConfirm={handleReopenConfirm} onCancel={closeReopenModal} />}
       {isCompleteModalOpen && <CompleteConfirmModal onConfirm={handleCompleteConfirm} onCancel={closeCompleteModal} />}
       {isLoginModalOpen && (
         <CallvanActionModal

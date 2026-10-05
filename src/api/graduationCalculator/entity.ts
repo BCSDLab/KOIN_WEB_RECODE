@@ -1,4 +1,4 @@
-import type { APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type GraduationAgree = APIResponse;
 
@@ -38,11 +38,11 @@ export interface GraduationExcelUploadRequest {
   file: File;
 }
 
-export interface GradesByCourseType {
+export type GradesByCourseType = {
   course_type: string;
   required_grades: number;
   grades: number;
-}
+};
 
 export interface GradesByCourseTypeResponse {
   course_types: GradesByCourseType[];

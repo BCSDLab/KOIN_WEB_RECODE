@@ -1,8 +1,7 @@
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
-import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
-
+import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
 import styles from './CategoryDetailDesktop.module.scss';
 
 export default function CategoryDetailDesktop({

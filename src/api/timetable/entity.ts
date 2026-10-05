@@ -1,12 +1,12 @@
-import type { APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 // v3-semester
 export type Term = '1학기' | '여름학기' | '2학기' | '겨울학기';
 
-export interface Semester {
+export type Semester = {
   year: number;
   term: Term;
-}
+};
 
 export type SemestersResponse = Semester[];
 
@@ -16,12 +16,12 @@ export interface SemesterCheckResponse extends APIResponse {
 }
 
 // v3-lecture
-export interface LectureInfo {
+export type LectureInfo = {
   day: number;
   start_time: number;
   end_time: number;
   place: string;
-}
+};
 
 export interface Lecture {
   id: number;
@@ -136,11 +136,11 @@ export interface RollbackTimetableLectureRequest {
 }
 
 // v3-timetables-frame
-export interface TimetableFrameInfo {
+export type TimetableFrameInfo = {
   id: number | null;
   name: string;
   is_main: boolean;
-}
+};
 
 export type DeleteTimetableLectureResponse = APIResponse;
 

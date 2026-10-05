@@ -1,6 +1,5 @@
 import CloseIcon from 'assets/svg/tooltip-close-icon.svg';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-
 import styles from './IntroToolTip.module.scss';
 
 interface IntroToolTipProps {
@@ -13,7 +12,6 @@ export default function IntroToolTip({ content, closeTooltip }: IntroToolTipProp
     isomorphicLocalStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
-
   return (
     <div className={styles.tooltip}>
       {content}

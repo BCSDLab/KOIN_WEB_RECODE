@@ -1,8 +1,6 @@
 import Image from 'next/image';
-
 import ViewIcon from 'assets/svg/Login/eye-open.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-
 import styles from './ArticleHeader.module.scss';
 
 interface ArticleHeaderProps {
@@ -23,7 +21,6 @@ const formatMobileDate = (time: string) => {
   if (!year || !month || !day) return date.replaceAll('-', '.');
 
   const weekday = WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
-
   return `${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')} ${weekday}`;
 };
 

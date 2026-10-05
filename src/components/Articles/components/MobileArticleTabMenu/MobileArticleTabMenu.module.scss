@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.tab-menu {
+.tabMenu {
   display: none;
 
   @include media.media-breakpoint(mobile) {

@@ -1,8 +1,6 @@
 import Link from 'next/link';
-
-import type { LandList } from 'api/room/entity';
+import { LandList } from 'api/room/entity';
 import ROUTES from 'static/routes';
-
 import styles from './RoomList.module.scss';
 
 interface RoomListProps {
@@ -11,7 +9,6 @@ interface RoomListProps {
 
 function RoomList(props: RoomListProps) {
   const { lands } = props;
-
   return (
     <ul className={styles.list}>
       {lands?.map((room) => (

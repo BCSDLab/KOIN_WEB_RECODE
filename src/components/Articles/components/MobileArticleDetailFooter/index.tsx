@@ -1,9 +1,7 @@
 import Link from 'next/link';
-
-import type { HotArticle } from 'api/articles/entity';
+import { HotArticle } from 'api/articles/entity';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
-
 import styles from './MobileArticleDetailFooter.module.scss';
 
 interface MobileArticleDetailFooterProps {

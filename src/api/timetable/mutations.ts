@@ -1,7 +1,6 @@
-import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+import { mutationOptions, QueryClient } from '@tanstack/react-query';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
-
-import type {
+import {
   AddTimetableFrameRequest,
   AddTimetableLectureCustomRequest,
   AddTimetableLectureRegularRequest,
@@ -11,6 +10,7 @@ import type {
   TimetableFrameInfo,
   TimetableRegularLecture,
 } from './entity';
+import { timetableQueryKeys } from './queries';
 import {
   addTimetableFrame,
   addTimetableLectureCustom,
@@ -24,160 +24,122 @@ import {
   rollbackTimetableFrame,
   rollbackTimetableLecture,
 } from './index';
-import { timetableQueries, timetableQueryKeys } from './queries';
 
-export interface SemesterChanges {
-  toAdd: Semester[];
-  toRemove: Semester[];
-}
-
-interface DeleteTimetableFrameVariables {
+type DeleteTimetableFrameVariables = {
   id: number;
-}
+};
 
-interface EditTimetableLectureRegularVariables {
+type EditTimetableLectureRegularVariables = {
   timetableFrameId: number;
   editedLecture: TimetableRegularLecture;
-  isLoggedIn: boolean;
-}
+  token: string;
+};
 
-interface EditTimetableLectureCustomVariables {
+type EditTimetableLectureCustomVariables = {
   timetableFrameId: number;
   editedLecture: TimetableCustomLecture;
-  isLoggedIn: boolean;
-}
+  token: string;
+};
 
-const invalidateFrameList = (queryClient: QueryClient, semester: Semester, isLoggedIn: boolean) =>
-  queryClient.invalidateQueries({ queryKey: timetableQueryKeys.frameList(semester, isLoggedIn) });
+const invalidateFrameList = (queryClient: QueryClient, semester: Semester) =>
+  queryClient.invalidateQueries({ queryKey: timetableQueryKeys.frameList(semester) });
 
 export const timetableMutations = {
-  addSemester: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
+  addSemester: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
-      mutationFn: (data: AddTimetableFrameRequest) => addTimetableFrame(data),
+      mutationFn: (data: AddTimetableFrameRequest) => addTimetableFrame(data, token),
       onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(isLoggedIn) });
-        await invalidateFrameList(queryClient, semester, isLoggedIn);
+        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester() });
+        await invalidateFrameList(queryClient, semester);
       },
     }),
 
-  applySemesterChanges: (queryClient: QueryClient, isLoggedIn: boolean) =>
+  addFrame: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
-      mutationFn: async ({ toAdd, toRemove }: SemesterChanges) => {
-        // 서버가 학기 목록을 갱신하는 도중 겹치지 않도록 한 번에 하나씩 보낸다.
-        for (const semester of toAdd) {
-          await addTimetableFrame(semester);
-        }
-        for (const semester of toRemove) {
-          await deleteSemester(semester);
-        }
-      },
-      onSettled: async (_data, _error, { toAdd, toRemove }) => {
-        await Promise.all(
-          toAdd.map((semester) =>
-            queryClient
-              .fetchQuery({
-                ...timetableQueries.frameList(isLoggedIn, semester, { fallbackOnError: true }),
-                staleTime: 0,
-              })
-              .catch(() => undefined),
-          ),
-        );
-        await Promise.all(toRemove.map((semester) => invalidateFrameList(queryClient, semester, isLoggedIn)));
-        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(isLoggedIn) });
-        if (toRemove.length > 0) await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
-      },
+      mutationFn: (data: AddTimetableFrameRequest) => addTimetableFrame(data, token),
+      onSuccess: () => invalidateFrameList(queryClient, semester),
     }),
 
-  addFrame: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
-    mutationOptions({
-      mutationFn: (data: AddTimetableFrameRequest) => addTimetableFrame(data),
-      onSuccess: () => invalidateFrameList(queryClient, semester, isLoggedIn),
-    }),
-
-  updateFrame: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
+  updateFrame: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
       mutationFn: (frameInfo: TimetableFrameInfo) =>
-        editTimetableFrame(frameInfo.id!, { name: frameInfo.name, is_main: frameInfo.is_main }),
-      onSuccess: () => invalidateFrameList(queryClient, semester, isLoggedIn),
+        editTimetableFrame(token, frameInfo.id!, { name: frameInfo.name, is_main: frameInfo.is_main }),
+      onSuccess: () => invalidateFrameList(queryClient, semester),
     }),
 
-  deleteFrame: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
+  deleteFrame: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
-      mutationFn: ({ id }: DeleteTimetableFrameVariables) => deleteTimetableFrame(id),
-      onSuccess: () => invalidateFrameList(queryClient, semester, isLoggedIn),
+      mutationFn: ({ id }: DeleteTimetableFrameVariables) => deleteTimetableFrame(token, id),
+      onSuccess: () => invalidateFrameList(queryClient, semester),
     }),
 
-  rollbackFrame: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
+  rollbackFrame: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
-      mutationFn: (timetableFrameId: number) => rollbackTimetableFrame(timetableFrameId),
-      onSuccess: () => invalidateFrameList(queryClient, semester, isLoggedIn),
+      mutationFn: (timetableFrameId: number) => rollbackTimetableFrame(token, timetableFrameId),
+      onSuccess: () => invalidateFrameList(queryClient, semester),
     }),
 
-  deleteSemester: (queryClient: QueryClient, isLoggedIn: boolean, semester: Semester) =>
+  deleteSemester: (queryClient: QueryClient, token: string, semester: Semester) =>
     mutationOptions({
-      mutationFn: () => deleteSemester(semester),
+      mutationFn: () => deleteSemester(token, semester),
       onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(isLoggedIn) });
-        await invalidateFrameList(queryClient, semester, isLoggedIn);
+        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester() });
+        await invalidateFrameList(queryClient, semester);
         await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
       },
     }),
 
-  addLectureRegular: (queryClient: QueryClient, isLoggedIn: boolean) =>
+  addLectureRegular: (queryClient: QueryClient, token: string) =>
     mutationOptions({
-      mutationFn: (data: AddTimetableLectureRegularRequest) => addTimetableLectureRegular(data),
+      mutationFn: (data: AddTimetableLectureRegularRequest) => addTimetableLectureRegular(data, token),
       onSuccess: (data, variables) => {
-        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetable_frame_id, isLoggedIn), data);
+        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetable_frame_id), data);
       },
     }),
 
-  addLectureCustom: (queryClient: QueryClient, isLoggedIn: boolean) =>
+  addLectureCustom: (queryClient: QueryClient, token: string) =>
     mutationOptions({
-      mutationFn: (data: AddTimetableLectureCustomRequest) => addTimetableLectureCustom(data),
+      mutationFn: (data: AddTimetableLectureCustomRequest) => addTimetableLectureCustom(data, token),
       onSuccess: (data, variables) => {
-        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetable_frame_id, isLoggedIn), data);
+        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetable_frame_id), data);
       },
     }),
 
   editLectureRegular: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: ({ timetableFrameId, editedLecture }: EditTimetableLectureRegularVariables) =>
-        editTimetableLectureRegular({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }),
+      mutationFn: ({ timetableFrameId, editedLecture, token }: EditTimetableLectureRegularVariables) =>
+        editTimetableLectureRegular(
+          { timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture },
+          token,
+        ),
       onSuccess: async (data, variables) => {
-        queryClient.setQueryData(
-          timetableQueryKeys.lectureInfo(variables.timetableFrameId, variables.isLoggedIn),
-          data,
-        );
+        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetableFrameId), data);
         await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
-        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.allLectures(variables.isLoggedIn) });
+        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.allLectures });
       },
     }),
 
   editLectureCustom: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: ({ timetableFrameId, editedLecture }: EditTimetableLectureCustomVariables) =>
-        editTimetableLectureCustom({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }),
+      mutationFn: ({ timetableFrameId, editedLecture, token }: EditTimetableLectureCustomVariables) =>
+        editTimetableLectureCustom({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }, token),
       onSuccess: (data, variables) => {
-        queryClient.setQueryData(
-          timetableQueryKeys.lectureInfo(variables.timetableFrameId, variables.isLoggedIn),
-          data,
-        );
+        queryClient.setQueryData(timetableQueryKeys.lectureInfo(variables.timetableFrameId), data);
       },
     }),
 
-  deleteLecture: (queryClient: QueryClient) =>
+  deleteLecture: (queryClient: QueryClient, authorization: string) =>
     mutationOptions({
-      mutationFn: (id: number) => deleteTimetableLecture(id),
+      mutationFn: (id: number) => deleteTimetableLecture(authorization, id),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lectureInfoAll });
         await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
       },
     }),
 
-  rollbackLecture: (queryClient: QueryClient, isLoggedIn: boolean, timetableFrameId: number) =>
+  rollbackLecture: (queryClient: QueryClient, token: string, timetableFrameId: number) =>
     mutationOptions({
-      mutationFn: (data: RollbackTimetableLectureRequest) => rollbackTimetableLecture(data),
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lectureInfo(timetableFrameId, isLoggedIn) }),
+      mutationFn: (data: RollbackTimetableLectureRequest) => rollbackTimetableLecture(data, token),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lectureInfo(timetableFrameId) }),
     }),
 };

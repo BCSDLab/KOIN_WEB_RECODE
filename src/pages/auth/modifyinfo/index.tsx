@@ -1,10 +1,12 @@
+// 리팩토링 작업중이라 임시로 비활성화
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import type { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
+import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
 import { authQueryKeys } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
 import BlindIcon from 'assets/svg/blind-icon.svg';
@@ -27,34 +29,31 @@ import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS, MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
-import useSession from 'utils/hooks/auth/useSession';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
-import useUserType from 'utils/hooks/auth/useUserType';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { normalizePhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { useTokenStore } from 'utils/zustand/auth';
 import { useAuthentication } from 'utils/zustand/authentication';
-
 import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
-type IFormType = Record<
-  string,
-  {
+interface IFormType {
+  [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldRefs가 여러 필드 타입을 섞어 담음
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
-  }
->;
+  };
+}
 
 interface ICustomFormInput {
   value: unknown;
@@ -67,7 +66,6 @@ interface NicknameMessage {
 }
 
 interface IRegisterOption {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, fieldsRefs가 여러 필드 타입을 섞어 담음
   validFunction?: (value: unknown, fieldsRefs: { current: any }) => string | true;
   required?: boolean;
 }
@@ -79,13 +77,14 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 리팩토링 중인 폼 시스템, formValue가 필드마다 다른 타입을 가짐
-  (formValue: Record<string, any>): void;
+  (formValue: { [key: string]: any }): void;
 }
 
 type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
 
-type MappedFields = Record<string, keyof UserResponseKeys>;
+interface MappedFields {
+  [key: string]: keyof UserResponseKeys;
+}
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
@@ -123,7 +122,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 필드마다 값 타입이 달라 순회 중엔 특정할 수 없음
       let inputValue: any;
       const studentInfo = {
         studentNumber: '',
@@ -159,7 +157,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
     if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
       showToast('error', '변경된 정보가 없습니다.');
-
       return;
     }
 
@@ -177,16 +174,13 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
           return [nameValue[0], nameValue[1].ref.value];
         }
-
         return [nameValue[0], undefined];
       });
       submitForm(Object.fromEntries(formValue));
-
       return;
     }
     showToast('error', invalidFormEntry[1]);
   };
-
   return {
     register,
     onSubmit,
@@ -222,7 +216,6 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
-
     return {
       valid,
       value: password,
@@ -236,42 +229,36 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (!value) {
       dispatchValidation({ type: 'EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (value.length < 6 || value.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (!PASSWORD_REGEX.test(value)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (passwordConfirmValue === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (value !== passwordConfirmValue) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
@@ -286,35 +273,30 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (password.length < 6 || password.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (value.includes(' ')) {
       dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (!PASSWORD_REGEX.test(password)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (value === '') {
       dispatchValidation({ type: 'CONFIRM_EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
     if (password !== value) {
       dispatchValidation({ type: 'MISMATCH' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-
       return;
     }
 
@@ -422,7 +404,6 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const showNicknameWarning = (content: string) => {
     if (isMobile) {
       setNicknameMessage({ type: 'warning', content });
-
       return;
     }
     showToast('error', content);
@@ -434,13 +415,11 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     setNicknameMessage(null);
     if (newNickname === '' && userInfo?.nickname) {
       setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
-
       return;
     }
 
     if (newNickname === '') {
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
-
       return;
     }
 
@@ -454,18 +433,15 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
       showNicknameWarning('사용할 수 없는 닉네임입니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
-
       return;
     }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
-
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
       showNicknameWarning('닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
-
       return;
     }
     setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
@@ -503,7 +479,6 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         valid: '닉네임 중복확인을 해주세요.',
       };
     }
-
     return {
       value: currentNicknameValue,
       valid: true,
@@ -643,7 +618,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     } else {
       valid = true;
     }
-
     return { value: { studentNumber, major }, valid };
   }, [studentNumber, major]);
 
@@ -827,14 +801,17 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
     }));
   }, [isPhoneNumberUnchanged, isVerified, setIsValid]);
 
-  useImperativeHandle(ref, () => {
-    const valid: string | true =
-      isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
+  useImperativeHandle(
+    ref,
+    () => {
+      const valid: string | true = isPhoneNumberUnchanged || REGEX.PHONE_NUMBER.test(normalizedPhoneNumber)
         ? true
         : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
 
-    return { value: normalizedPhoneNumber, valid };
-  }, [isPhoneNumberUnchanged, normalizedPhoneNumber]);
+      return { value: normalizedPhoneNumber, valid };
+    },
+    [isPhoneNumberUnchanged, normalizedPhoneNumber],
+  );
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextPhoneNumber = e.target.value;
@@ -1099,7 +1076,7 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
 const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const { isValid, setIsValid } = useValidationContext();
-  const userType = useUserType();
+  const { userType } = useTokenStore();
 
   const isStudent = userType === 'STUDENT';
 
@@ -1124,7 +1101,6 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     if (email === '' && userInfo?.email) {
       valid = true;
     }
-
     return {
       value: email === '' ? null : fullEmail,
       valid,
@@ -1208,7 +1184,6 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     setName(currentName);
     if (currentName.trim() === '') {
       setIsValid((prev) => ({ ...prev, isNameValid: false }));
-
       return;
     }
 
@@ -1236,7 +1211,6 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     if (name === userInfo?.name) {
       setIsValid((prev) => ({ ...prev, isNameValid: true }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 초기값만 1회 비교
   }, []);
 
   return (
@@ -1269,7 +1243,7 @@ const useModifyInfoForm = () => {
     showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
   };
-  const userType = useUserType();
+  const { userType } = useTokenStore();
   const isStudent = userType === 'STUDENT';
   const { status, mutate } = useUserInfoUpdate(userType, { onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
@@ -1291,11 +1265,11 @@ const useModifyInfoForm = () => {
     }
     mutate(payload);
   };
-
   return { submitForm, status };
 };
 
 function ModifyInfoDefaultPage() {
+  const token = useTokenState();
   const router = useRouter();
   const navigate = router.push;
   const portalManager = useModalPortal();
@@ -1313,7 +1287,7 @@ function ModifyInfoDefaultPage() {
 
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    deleteUser();
+    deleteUser(token);
     navigate(ROUTES.Main());
   };
 
@@ -1331,7 +1305,6 @@ function ModifyInfoDefaultPage() {
     if (!isAuthenticated) {
       router.replace(ROUTES.Main());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Next.js router는 안정적인 참조라 의존성에서 제외
   }, [isAuthenticated, openModal]);
 
   return (
@@ -1441,12 +1414,6 @@ function ModifyInfoDefaultPage() {
 }
 
 function ModifyInfoPage() {
-  const session = useSession();
-
-  // 서버 요청 컨텍스트가 없는 페이지라 첫 렌더는 비로그인이다. 폼 상태가 빈 프로필로 굳지 않게 세션이 확정된 뒤 마운트한다.
-  // 비로그인이 확정되면 AuthGuard가 메인으로 보낸다.
-  if (session.status !== 'authenticated') return <LoadingSpinner size="40px" />;
-
   return (
     <Suspense fallback={<LoadingSpinner size="40px" />}>
       <ModifyFormValidationProvider>

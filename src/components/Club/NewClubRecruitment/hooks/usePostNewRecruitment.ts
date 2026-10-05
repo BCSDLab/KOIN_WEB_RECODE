@@ -1,17 +1,18 @@
 import { useRouter } from 'next/router';
-
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
 import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function usePostNewRecruitment(clubId: number | undefined) {
+  const token = useTokenState();
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { mutateAsync } = useMutation({
-    ...clubMutations.createRecruitment(queryClient, clubId!, {
+    ...clubMutations.createRecruitment(queryClient, token, clubId!, {
       onSuccess: () => {
         showToast('success', '동아리 모집이 생성되었습니다.');
         router.push(ROUTES.ClubDetail({ id: String(clubId) }));
@@ -23,6 +24,5 @@ export default function usePostNewRecruitment(clubId: number | undefined) {
       } else sendClientError(e);
     },
   });
-
   return { mutateAsync };
 }

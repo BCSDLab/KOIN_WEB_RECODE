@@ -1,8 +1,7 @@
 import { startTransition, useState } from 'react';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'api/auth/queries';
-import type { LectureInfo } from 'api/graduationCalculator/entity';
+import { LectureInfo } from 'api/graduationCalculator/entity';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
@@ -11,10 +10,9 @@ import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import useSelect from 'components/TimetablePage/hooks/useSelect';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { pick } from 'utils/ts/object';
-
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -48,10 +46,10 @@ export default function SemesterLectureListModal({
   initialCourse: string;
 }) {
   const semesters = useAllSemesters();
-  const isLoggedIn = useIsLoggedIn();
-  const allMyLectures = useAllMyLectures();
+  const token = useTokenState();
+  const allMyLectures = useAllMyLectures(token);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(isLoggedIn));
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
     value: `${semesterInfo.year}년 ${semesterInfo.term}`,
@@ -64,9 +62,7 @@ export default function SemesterLectureListModal({
   const { value: lectureStatus, onChangeSelect: onChangeLectureStatus } = useSelect(lectureStatusOptions[0].value);
   const { value: department, onChangeSelect: onChangeDepartment } = useSelect(academicInfo?.department);
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
-  const { data: generalCourses } = useSuspenseQuery(
-    graduationCalculatorQueries.courseType(semester, course!, undefined, isLoggedIn),
-  );
+  const { data: generalCourses } = useSuspenseQuery(graduationCalculatorQueries.courseType(token, semester, course!));
 
   const allMyLecturesInfo = (allMyLectures ?? [])
     .filter((myLecture) => myLecture.course_type === course)
@@ -101,11 +97,11 @@ export default function SemesterLectureListModal({
         ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
-    <span key={`${lecture.code}-name`}>{lecture.name}</span>,
-    <span key={`${lecture.code}-professor`}>{lecture.professor ? lecture.professor : ''}</span>,
-    <span key={`${lecture.code}-grades`}>{lecture.grades}</span>,
-    <span key={`${lecture.code}-course`}>{course}</span>,
-    <span key={`${lecture.code}-empty`} />,
+    <span>{lecture.name}</span>,
+    <span>{lecture.professor ? lecture.professor : ''}</span>,
+    <span>{lecture.grades}</span>,
+    <span>{course}</span>,
+    <span>{}</span>,
   ]);
 
   return (
@@ -171,11 +167,7 @@ export default function SemesterLectureListModal({
           </div>
         </div>
         <div className={styles['container__lecture-table']}>
-          <SemesterCourseTable
-            tableData={tableData}
-            rowKeys={filteredLectureByLectureStatus.map((lecture) => lecture.code)}
-            hasProfessor={lectureStatus === '수강한 강의'}
-          />
+          <SemesterCourseTable tableData={tableData} hasProfessor={lectureStatus === '수강한 강의'} />
         </div>
       </div>
     </div>

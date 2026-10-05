@@ -1,11 +1,9 @@
 import { useState } from 'react';
-
 import { isKoinError } from '@bcsdlab/koin';
 import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
-import { type ContactType, MESSAGES } from 'static/auth';
+import { ContactType, MESSAGES } from 'static/auth';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
-
 import styles from './MobileVerifyPhone.module.scss';
 
 interface MobileFindPasswordProps {

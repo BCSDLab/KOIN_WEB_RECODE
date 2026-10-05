@@ -1,5 +1,4 @@
 import ErrorIcon from 'assets/svg/Club/input-error-icon.svg';
-
 import styles from './ClubInputErrorCondition.module.scss';
 
 export default function ClubInputErrorCondition() {

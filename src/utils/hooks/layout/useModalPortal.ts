@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { PortalContext } from 'utils/context/portal';
+import { PortalContext } from 'components/modal/Modal/PortalProvider';
 
 const useModalPortal = () => {
   const context = React.useContext(PortalContext);

@@ -1,7 +1,6 @@
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import type { APIResponse } from 'interfaces/APIResponse';
-
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { FileData, UploadDomain, UploadURLResponse } from './entity';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
@@ -12,7 +11,11 @@ export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<
 
   response!: R;
 
-  constructor(domain: UploadDomain, fileData: FileData) {
+  constructor(
+    public authorization: string,
+    domain: UploadDomain,
+    fileData: FileData,
+  ) {
     this.path = `${domain}/upload/url`;
     this.data = fileData;
   }
@@ -29,11 +32,9 @@ export class UploadToS3<R extends APIResponse> implements APIRequest<R> {
 
   baseURL = '';
 
-  withCredentials = false;
-
   headers: Record<string, string>;
 
-  convertBody = (data: unknown) => data as string;
+  convertBody = (data: unknown) => data as unknown as string;
 
   constructor(presignedUrl: string, file: Blob) {
     this.path = presignedUrl;

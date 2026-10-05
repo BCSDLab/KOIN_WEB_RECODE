@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-
-import type { FindUserCategory } from './useArticlesLogger';
+import { FindUserCategory } from './useArticlesLogger';
 
 export interface LostItem {
   id: number;
@@ -10,7 +9,7 @@ export interface LostItem {
   foundPlace: string;
   content: string;
   author: string;
-  images: string[];
+  images: Array<string>;
   registered_at: string;
   updated_at: string;
   hasDateBeenSelected: boolean;
@@ -26,7 +25,7 @@ export interface LostItemHandler {
   setFoundPlace: (foundPlace: string) => void;
   setContent: (content: string) => void;
   setAuthor: (author: string) => void;
-  setImages: (image: string[]) => void;
+  setImages: (image: Array<string>) => void;
   setHasDateBeenSelected: () => void;
   checkIsCategorySelected: () => void;
   checkIsDateSelected: () => void;
@@ -57,13 +56,12 @@ interface UseLostItemFormOptions {
 
 export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOptions) => {
   const idCounter = useRef(initialItems?.length ?? 1);
-  const [lostItems, setLostItems] = useState<LostItem[]>(initialItems ?? [createInitialForm(0, defaultType)]);
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(initialItems ?? [createInitialForm(0, defaultType)]);
 
   const updateItem = (index: number, updates: Partial<LostItem>) => {
     setLostItems((prev) => {
       const newItems = [...prev];
       newItems[index] = { ...newItems[index], ...updates };
-
       return newItems;
     });
   };
@@ -82,7 +80,6 @@ export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOp
         const newItems = [...prev];
         const item = newItems[key];
         newItems[key] = { ...item, isCategorySelected: item.category.trim() !== '' };
-
         return newItems;
       });
     },
@@ -91,7 +88,6 @@ export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOp
         const newItems = [...prev];
         const item = newItems[key];
         newItems[key] = { ...item, isDateSelected: item.hasDateBeenSelected };
-
         return newItems;
       });
     },
@@ -100,7 +96,6 @@ export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOp
         const newItems = [...prev];
         const item = newItems[key];
         newItems[key] = { ...item, isFoundPlaceSelected: item.foundPlace.trim() !== '' };
-
         return newItems;
       });
     },
@@ -121,7 +116,6 @@ export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOp
 
   const checkArticleFormFull = () => {
     const isValid = lostItems.every(isItemValid);
-
     return isValid;
   };
 

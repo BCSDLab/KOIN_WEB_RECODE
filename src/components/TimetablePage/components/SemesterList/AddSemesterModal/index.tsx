@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { cn } from '@bcsdlab/utils';
-import type { UseMutateFunction } from '@tanstack/react-query';
-import type {
+import { UseMutateFunction } from '@tanstack/react-query';
+import {
   AddTimetableFrameRequest,
   SemesterCheckResponse,
   Term,
@@ -12,7 +11,6 @@ import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { Selector } from 'components/ui/Selector';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
-
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
@@ -26,7 +24,6 @@ const currentYear = new Date().getFullYear();
 const startYear = 2019;
 const years = Array.from({ length: currentYear - startYear + 1 }, (_, index) => {
   const year = currentYear - index;
-
   return { label: `${year}년도`, value: `${year}년도` };
 });
 

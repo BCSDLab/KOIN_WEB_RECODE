@@ -2,7 +2,6 @@ const convertDate = (time: string) => {
   if (typeof time !== 'string') {
     return '';
   }
-
   return time.split(' ')[0].replaceAll('-', '.');
 };
 
@@ -20,9 +19,7 @@ const NEW_ARTICLE_DAYS = 4;
  * 다른 값을 써서 하이드레이션이 갈린다.
  */
 export const isNewArticle = (registeredAt: string, currentDate: Date) => {
-  const [year, month, day] = convertDate(registeredAt)
-    .split('.')
-    .map((item: string) => parseInt(item, 10));
+  const [year, month, day] = convertDate(registeredAt).split('.').map((item: string) => parseInt(item, 10));
 
   if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
     return false;
@@ -43,7 +40,6 @@ export const isNewArticle = (registeredAt: string, currentDate: Date) => {
 const setArticleRegisteredDate = (registeredAt: string, currentDate: Date | null): [string, boolean] => {
   const formattedDate = convertDate(registeredAt);
   const isNew = currentDate ? isNewArticle(registeredAt, currentDate) : false;
-
   return [formattedDate, isNew];
 };
 

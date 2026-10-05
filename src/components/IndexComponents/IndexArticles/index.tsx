@@ -1,5 +1,4 @@
 import Link from 'next/link';
-
 import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import RightArrow from 'assets/svg/right-arrow.svg';
@@ -7,8 +6,7 @@ import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './IndexArticles.module.scss';
 
 interface IndexArticlesProps {
@@ -17,9 +15,9 @@ interface IndexArticlesProps {
 }
 
 export default function IndexArticles({ serverNow }: IndexArticlesProps) {
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const { data: articlesData } = useQuery({
-    ...articleQueries.list(isLoggedIn, '1'),
+    ...articleQueries.list(token, '1'),
     select: createArticlesWithNewSelector(serverNow),
   });
   const logger = useLogger();
@@ -57,7 +55,8 @@ export default function IndexArticles({ serverNow }: IndexArticlesProps) {
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
               {article.isNew && (
-                // eslint-disable-next-line @next/next/no-img-element -- 고정 크기 소형 정적 이미지라 최적화 이점이 거의 없음
+                // NOTE: NEW 아이콘은 98x98 고정 크기의 소형 정적 이미지라 next/image 최적화 이점이 거의 없어 <img> 유지
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   className={styles['list__item-tag']}
                   src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"

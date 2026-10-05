@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
+import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import { busQueries } from 'api/bus/queries';
 import BusRoute from 'components/Bus/BusRoutePage/components/BusRoute';
-import type { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { transformBusRoute } from 'components/Bus/BusRoutePage/utils/transform';
-
 import styles from './RouteList.module.scss';
 
 interface RouteListProps {

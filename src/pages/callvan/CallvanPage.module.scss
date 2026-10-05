@@ -1,0 +1,9 @@
+@use "src/utils/scss/media" as media;
+
+.pagination {
+  padding: 24px 0;
+
+  @include media.media-breakpoint(mobile) {
+    margin-bottom: 100px;
+  }
+}

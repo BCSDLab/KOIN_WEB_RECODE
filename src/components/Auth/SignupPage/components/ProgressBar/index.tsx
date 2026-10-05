@@ -1,5 +1,4 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-
 import styles from './ProgressBar.module.scss';
 
 interface Steps {
@@ -34,6 +33,5 @@ export default function ProgressBar({ steps, currentIndex }: ProgressBarProps) {
       </div>
     );
   }
-
   return null;
 }

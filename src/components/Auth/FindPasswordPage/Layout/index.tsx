@@ -8,7 +8,6 @@ function FindPWLayout({ children }: { children: React.ReactNode }) {
   if (isMobile) {
     return <AuthLayout>{children}</AuthLayout>;
   }
-
   return <Layout>{children}</Layout>;
 }
 

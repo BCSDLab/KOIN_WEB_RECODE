@@ -1,8 +1,6 @@
-import type React from 'react';
-import { useState } from 'react';
-
-import type { CourseRequestParams } from 'api/course/entity';
-import type { Term } from 'api/timetable/entity';
+import React, { useState } from 'react';
+import { CourseRequestParams } from 'api/course/entity';
+import { Term } from 'api/timetable/entity';
 
 interface UseCourseSearchFormOptions {
   initialYear: number;

@@ -23,7 +23,6 @@ const generateAlphaString = (length: number): string => {
   const result = Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join(
     '',
   );
-
   return result;
 };
 
@@ -39,7 +38,6 @@ const getSessionId = (session_name: string, is_login: LoginStatus, sessionLifeti
   const minutes = sessionLifetime;
   const day = minutes / (60 * 24); // 15분을 일 단위로 변환
   setCookie(`custom_session_id_${session_name}`, newSessionId, day);
-
   return newSessionId;
 };
 

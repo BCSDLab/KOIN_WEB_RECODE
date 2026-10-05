@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { sendClientError } from '@bcsdlab/koin';
 import * as Sentry from '@sentry/nextjs';
 

@@ -22,7 +22,7 @@
   }
 }
 
-.mobile-header {
+.mobileHeader {
   display: none;
 
   @include media.media-breakpoint(mobile) {
@@ -53,7 +53,7 @@
   }
 }
 
-.summary-row {
+.summaryRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -97,7 +97,7 @@
   }
 }
 
-.manage-button {
+.manageButton {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -264,7 +264,7 @@
   }
 }
 
-.role-card {
+.roleCard {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -397,7 +397,7 @@
   }
 }
 
-.owner-actions {
+.ownerActions {
   display: flex;
   gap: 20px;
   margin-top: 68px;

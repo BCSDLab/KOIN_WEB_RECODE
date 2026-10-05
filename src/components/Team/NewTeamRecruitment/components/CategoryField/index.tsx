@@ -1,7 +1,6 @@
 import { TEAM_RECRUITMENT_CATEGORY_OPTIONS } from 'components/Team/NewTeamRecruitment/constants';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
-
 import styles from './CategoryField.module.scss';
 
 interface CategoryFieldProps {

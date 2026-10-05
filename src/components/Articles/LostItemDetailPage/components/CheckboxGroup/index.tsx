@@ -1,5 +1,4 @@
 import Checkbox from 'components/Articles/LostItemDetailPage/components/Checkbox';
-
 import styles from './CheckboxGroup.module.scss';
 
 interface CheckboxOption {

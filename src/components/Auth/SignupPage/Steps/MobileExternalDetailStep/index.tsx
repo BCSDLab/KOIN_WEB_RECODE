@@ -1,23 +1,14 @@
+/* eslint-disable no-restricted-imports */
 import { useState } from 'react';
-
 import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
-import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
-import type { InputMessage } from 'interfaces/InputMessage';
-import {
-  Controller,
-  type ControllerRenderProps,
-  type FieldError,
-  useFormContext,
-  useFormState,
-  useWatch,
-} from 'react-hook-form';
+import { Controller, ControllerRenderProps, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
-
+import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileExternalDetailStep.module.scss';
 
 interface MobileExternalDetailStepProps {
@@ -40,8 +31,8 @@ interface GeneralFormValues {
 
 function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const { control, getValues, handleSubmit, trigger } = useFormContext<GeneralFormValues>();
-  const nicknameControl = useWatch({ control, name: 'nickname' }) ?? '';
-  const loginId = useWatch({ control, name: 'login_id' }) ?? '';
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
   const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });
@@ -116,7 +107,6 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
-
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 

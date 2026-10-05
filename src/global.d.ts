@@ -23,7 +23,12 @@ declare module '*.svg?url' {
   export default content;
 }
 
-type NativeCallbackResult = boolean | void;
+interface NativeTokens {
+  access: string;
+  refresh: string;
+}
+
+type NativeCallbackResult = NativeTokens | boolean | void;
 
 declare global {
   interface Window {
@@ -33,6 +38,7 @@ declare global {
       };
     };
     onNativeCallback?: (callbackId: string, result: NativeCallbackResult) => void;
+    setTokens?: (access: string, refresh: string) => void;
     NativeBridge?: {
       call: <T extends NativeCallbackResult>(methodName: string, ...args: unknown[]) => Promise<T>;
       handleCallback: (callbackId: string, result: NativeCallbackResult) => void;

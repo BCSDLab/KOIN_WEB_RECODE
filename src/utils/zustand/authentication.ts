@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 
-interface State {
+type State = {
   isAuthenticated: boolean;
-}
+};
 
-interface Action {
+type Action = {
   action: {
     updateAuthentication: (isAuthenticated: State['isAuthenticated']) => void;
   };
-}
+};
 
 const useAuthenticationStore = create<State & Action>((set) => ({
   isAuthenticated: false,

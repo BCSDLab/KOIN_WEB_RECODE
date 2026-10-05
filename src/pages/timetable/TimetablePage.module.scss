@@ -6,9 +6,8 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
-    min-height: 0;
     background-color: white;
-    margin: 0 auto;
-    padding: 8px 0 16px;
+    margin: 15px auto 16px;
+    padding: 0;
   }
 }

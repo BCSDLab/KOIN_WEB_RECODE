@@ -1,14 +1,12 @@
 import { startTransition, useState } from 'react';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { graduationCalculatorQueries } from 'api/graduationCalculator/queries';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {
@@ -17,7 +15,7 @@ export interface GeneralCourseListModalProps {
 }
 
 function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalProps) {
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const semesters = useAllSemesters();
   const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
     label: `${semesterInfo.year}년 ${semesterInfo.term}`,
@@ -31,16 +29,16 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
   }>({ year: semesters[0].year, term: semesters[0].term });
 
   const { data: generalCourses } = useSuspenseQuery(
-    graduationCalculatorQueries.courseType(semester, '교양선택', courseType ?? undefined, isLoggedIn),
+    graduationCalculatorQueries.courseType(token, semester, '교양선택', courseType ?? undefined),
   );
   const generalCourseLectures = generalCourses?.lectures ?? [];
 
   const tableData = generalCourseLectures.map((lecture) => [
-    <span key={`${lecture.code}-name`}>{lecture.name}</span>,
-    <span key={`${lecture.code}-professor`} />, // 개설 목록 테이블에서는 '교수명' 비활성화
-    <span key={`${lecture.code}-grades`}>{lecture.grades}</span>,
-    <span key={`${lecture.code}-course`}>교양선택</span>,
-    <span key={`${lecture.code}-delete`} />, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
+    <span>{lecture.name}</span>,
+    <span>{}</span>, // 개설 목록 테이블에서는 '교수명' 비활성화
+    <span>{lecture.grades}</span>,
+    <span>교양선택</span>,
+    <span>{}</span>, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
   ]);
 
   return (
@@ -70,11 +68,7 @@ function GeneralCourseListModal({ courseType, onClose }: GeneralCourseListModalP
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
           <div className={styles.content__table}>
-            <SemesterCourseTable
-              tableData={tableData}
-              rowKeys={generalCourseLectures.map((lecture) => lecture.code)}
-              hasProfessor={false}
-            />
+            <SemesterCourseTable tableData={tableData} hasProfessor={false} />
           </div>
         </div>
       </div>

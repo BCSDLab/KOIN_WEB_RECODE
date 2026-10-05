@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
@@ -15,29 +14,29 @@ import useMarkAllNotificationsRead from 'components/Callvan/hooks/useMarkAllNoti
 import useMarkNotificationRead from 'components/Callvan/hooks/useMarkNotificationRead';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { getDeviceClass } from 'utils/ssr/requestContext';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { getDeviceClass } from 'utils/ts/serverRequestContext';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './CallvanNotifications.module.scss';
 
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
-}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
+}>(async (context: GetServerSidePropsContext) => {
   // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다.
   if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
     return { redirect: { destination: ROUTES.Main(), permanent: false } };
   }
 
   const queryClient = new QueryClient();
-  const { isLoggedIn } = serverRequest;
+  const { token } = parseServerSideParams(context);
 
   try {
-    if (isLoggedIn) {
-      await queryClient.prefetchQuery(callvanQueries.notifications(isLoggedIn));
+    if (token) {
+      await queryClient.prefetchQuery(callvanQueries.notifications(token));
     } else {
-      queryClient.setQueryData(callvanQueryKeys.notifications(isLoggedIn), []);
+      queryClient.setQueryData(callvanQueryKeys.notifications(''), []);
     }
   } catch (error) {
     console.error('[SSR] callvan notifications prefetch failed:', error);
@@ -54,7 +53,7 @@ export default function CallvanNotificationsPage() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const mounted = useMount();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -66,8 +65,8 @@ export default function CallvanNotificationsPage() {
   }, [mounted, isMobile, router]);
 
   const { data: notifications } = useQuery({
-    ...callvanQueries.notifications(isLoggedIn),
-    enabled: isLoggedIn,
+    ...callvanQueries.notifications(token ?? ''),
+    enabled: !!token,
   });
   const { mutate: markAllRead } = useMarkAllNotificationsRead();
   const { mutate: markRead } = useMarkNotificationRead();
@@ -80,6 +79,8 @@ export default function CallvanNotificationsPage() {
     markRead(id);
   };
 
+  // 서버 요청 컨텍스트로 토큰이 채워지므로 SSR도 실제 조회 결과를 갖는다.
+  // undefined는 아직 조회 전이라는 뜻이라 "알림 없음"과 구분한다.
   const isResolved = notifications !== undefined;
   const hasNotifications = isResolved && notifications.length > 0;
 
@@ -119,8 +120,8 @@ export default function CallvanNotificationsPage() {
       </div>
 
       <div className={styles['notification-page__content']}>
-        {isResolved &&
-          (hasNotifications ? (
+        {isResolved
+          && (hasNotifications ? (
             <div className={styles['notification-page__list']}>
               {notifications.map((notification, index) => (
                 <div key={notification.id}>

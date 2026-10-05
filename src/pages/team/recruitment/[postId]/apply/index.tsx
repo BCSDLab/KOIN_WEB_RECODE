@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
-
 import Layout from 'components/layout';
 import RecruitmentApplyPage from 'components/Team/RecruitmentApplyPage';
 

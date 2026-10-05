@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
@@ -9,7 +8,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './DeleteModal.module.scss';
 
 interface DeleteModalProps {

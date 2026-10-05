@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-
 import { cn } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
@@ -9,7 +8,6 @@ import ROUTES from 'static/routes';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-
 import styles from './LoginForm.module.scss';
 
 interface IClassUser {

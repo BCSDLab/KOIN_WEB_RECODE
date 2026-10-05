@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useAddStoreReview } from 'components/Store/StoreReviewPage/hooks/useAddStoreReview';
 import ReviewForm from 'components/Store/StoreReviewPage/ReviewForm/ReviewForm';
@@ -7,7 +6,6 @@ import ReviewForm from 'components/Store/StoreReviewPage/ReviewForm/ReviewForm';
 function AddReviewComponent({ id }: { id: string }) {
   const { storeDetail } = useStoreDetail(id);
   const { mutate } = useAddStoreReview(String(storeDetail.id));
-
   return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={{}} />;
 }
 

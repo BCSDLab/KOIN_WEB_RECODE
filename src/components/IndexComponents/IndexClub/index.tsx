@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-import type { HotClubResponse } from 'api/club/entity';
+import { HotClubResponse } from 'api/club/entity';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
@@ -11,8 +10,7 @@ import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
 import ClubMobileViewB from './ClubMobileViewB';
 import styles from './IndexClub.module.scss';
 
@@ -45,8 +43,8 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
 
 function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
   const clubLinkCardData = getClubLinkCardData(hotClubInfo);
-  const isLoggedIn = useIsLoggedIn();
-  const ABView = useABTestView('a_main_club_ui');
+  const token = useTokenState();
+  const ABView = useABTestView('a_main_club_ui', token);
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
@@ -72,22 +70,65 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
       });
     }
   };
-
-  const renderCards = () => {
-    if (isMobile && ABView === 'hot') {
-      return (
+  return (
+    <section className={styles.template}>
+      <Link className={styles.template__title} href={ROUTES.Club()}>
+        동아리
+      </Link>
+      {}
+      {isMobile ? (
+        ABView === 'hot' ? (
+          <div className={styles.cards}>
+            {clubLinkCardData.slice(0, 2).map(({ key, title, subtitle, link, icon, img }) => (
+              <Link href={link} key={key} className={styles.card} onClick={() => handleClickLog(key)}>
+                <div className={styles.card__segment}>
+                  {icon ?? (
+                    <Image
+                      src={img}
+                      alt={title}
+                      width={60}
+                      height={60}
+                      sizes="60px"
+                      className={styles.card__thumb}
+                      priority={key === 'popularClub'}
+                    />
+                  )}
+                  <div className={styles.card__guide}>
+                    <span className={styles.card__title}>{title}</span>
+                    <span className={styles.card__subtitle}>{subtitle}</span>
+                  </div>
+                </div>
+                <ChevronRight />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <ClubMobileViewB />
+        )
+      ) : (
         <div className={styles.cards}>
-          {clubLinkCardData.slice(0, 2).map(({ key, title, subtitle, link, icon, img }) => (
-            <Link href={link} key={key} className={styles.card} onClick={() => handleClickLog(key)}>
+          {clubLinkCardData.map(({ key, title, subtitle, link, icon, img }) => (
+            <Link
+              href={link}
+              key={key}
+              className={styles.card}
+              onClick={(e) => {
+                if (!token && key === 'addClub') {
+                  e.preventDefault();
+                  openAuthModal();
+                } else {
+                  handleClickLog(key);
+                }
+              }}
+            >
               <div className={styles.card__segment}>
                 {icon ?? (
                   <Image
+                    className={styles.card__thumb}
                     src={img}
                     alt={title}
                     width={60}
                     height={60}
-                    sizes="60px"
-                    className={styles.card__thumb}
                     priority={key === 'popularClub'}
                   />
                 )}
@@ -100,56 +141,7 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
             </Link>
           ))}
         </div>
-      );
-    }
-
-    if (isMobile) return <ClubMobileViewB />;
-
-    return (
-      <div className={styles.cards}>
-        {clubLinkCardData.map(({ key, title, subtitle, link, icon, img }) => (
-          <Link
-            href={link}
-            key={key}
-            className={styles.card}
-            onClick={(e) => {
-              if (!isLoggedIn && key === 'addClub') {
-                e.preventDefault();
-                openAuthModal();
-              } else {
-                handleClickLog(key);
-              }
-            }}
-          >
-            <div className={styles.card__segment}>
-              {icon ?? (
-                <Image
-                  className={styles.card__thumb}
-                  src={img}
-                  alt={title}
-                  width={60}
-                  height={60}
-                  priority={key === 'popularClub'}
-                />
-              )}
-              <div className={styles.card__guide}>
-                <span className={styles.card__title}>{title}</span>
-                <span className={styles.card__subtitle}>{subtitle}</span>
-              </div>
-            </div>
-            <ChevronRight />
-          </Link>
-        ))}
-      </div>
-    );
-  };
-
-  return (
-    <section className={styles.template}>
-      <Link className={styles.template__title} href={ROUTES.Club()}>
-        동아리
-      </Link>
-      {renderCards()}
+      )}
       {isAuthModalOpen && (
         <LoginRequiredModal title="동아리를 생성하기" description="로그인 후 이용해주세요." onClose={closeAuthModal} />
       )}

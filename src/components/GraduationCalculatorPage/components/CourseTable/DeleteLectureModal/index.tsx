@@ -1,7 +1,6 @@
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './DeleteLectureModal.module.scss';
 
 export interface DeleteLectureModalProps {

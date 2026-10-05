@@ -1,5 +1,4 @@
 import { queryOptions } from '@tanstack/react-query';
-
 import { getBannerCategoryList, getBanners } from './index';
 
 export const bannerQueryKeys = {

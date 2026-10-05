@@ -1,17 +1,15 @@
 import Image from 'next/image';
-
 import { useQuery } from '@tanstack/react-query';
-import type { StoreEvent } from 'api/store/entity';
+import { StoreEvent } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import EventCard from 'components/Store/StoreDetailPage/components/EventCard';
-
 import styles from './EventTable.module.scss';
 
 export default function EventTable({ id }: { id: string }) {
   const { data: storeEventList, isError: isStoreEventListError } = useQuery(storeQueries.eventList(id));
 
   return (
-    <div className={styles['event-container']}>
+    <div className={styles.eventContainer}>
       {!isStoreEventListError && storeEventList && storeEventList.events.length > 0 ? (
         storeEventList.events.map((event: StoreEvent) => <EventCard key={event.title} event={event} />)
       ) : (

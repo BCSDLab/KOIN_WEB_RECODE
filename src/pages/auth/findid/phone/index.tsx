@@ -5,7 +5,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 function FindIdPage() {
   const isMobile = useMediaQuery();
-
   return isMobile ? <MobileFindIdByPhone /> : <PCFindIdByPhone />;
 }
 

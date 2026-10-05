@@ -6,7 +6,6 @@ type StorageVariant = 'local' | 'session';
 const stringifyStorageValue = (value: unknown): string | null => {
   try {
     const serializedValue = JSON.stringify(value);
-
     return typeof serializedValue === 'string' ? serializedValue : null;
   } catch {
     return null;

@@ -1,10 +1,10 @@
-import { mutationOptions, type QueryClient } from '@tanstack/react-query';
-
-import type {
+import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import {
   LostItemArticlesRequestDTO,
   ReportItemArticleRequestDTO,
   UpdateLostItemArticleRequestDTO,
 } from './entity';
+import { articleQueryKeys } from './queries';
 import {
   deleteLostItemArticle,
   postBlockLostItemChatroom,
@@ -14,7 +14,6 @@ import {
   postReportLostItemArticle,
   putLostItemArticle,
 } from './index';
-import { articleQueryKeys } from './queries';
 
 const invalidateLostItemAll = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemAll });
@@ -23,59 +22,56 @@ const invalidateLostItemChatroomAll = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemChatroomAll });
 
 export const articleMutations = {
-  createLostItem: (queryClient: QueryClient) =>
+  createLostItem: (queryClient: QueryClient, token: string) =>
     mutationOptions({
       mutationFn: async (data: LostItemArticlesRequestDTO) => {
-        const response = await postLostItemArticle(data);
-
+        const response = await postLostItemArticle(token, data);
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  updateLostItem: (queryClient: QueryClient, articleId: number) =>
+  updateLostItem: (queryClient: QueryClient, token: string, articleId: number) =>
     mutationOptions({
       mutationFn: async (data: UpdateLostItemArticleRequestDTO) => {
-        const response = await putLostItemArticle(articleId, data);
-
+        const response = await putLostItemArticle(token, articleId, data);
         return response.id;
       },
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  deleteLostItem: (queryClient: QueryClient) =>
+  deleteLostItem: (queryClient: QueryClient, token: string) =>
     mutationOptions({
-      mutationFn: (articleId: number) => deleteLostItemArticle(articleId),
+      mutationFn: (articleId: number) => deleteLostItemArticle(token, articleId),
       onSuccess: () => invalidateLostItemAll(queryClient),
     }),
 
-  reportLostItem: (queryClient: QueryClient) =>
+  reportLostItem: (queryClient: QueryClient, token: string) =>
     mutationOptions({
       mutationFn: ({ articleId, reports }: { articleId: number; reports: ReportItemArticleRequestDTO['reports'] }) =>
-        postReportLostItemArticle(articleId, { reports }),
+        postReportLostItemArticle(token, articleId, { reports }),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: articleQueryKeys.all });
         await invalidateLostItemAll(queryClient);
       },
     }),
 
-  toggleLostItemFound: (queryClient: QueryClient, isLoggedIn: boolean, articleId: number) =>
+  toggleLostItemFound: (queryClient: QueryClient, token: string, articleId: number) =>
     mutationOptions({
-      mutationFn: () => postFoundLostItem(articleId),
-      onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId, isLoggedIn) }),
+      mutationFn: () => postFoundLostItem(token, articleId),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: articleQueryKeys.lostItemDetail(articleId) }),
     }),
 
-  createLostItemChatroom: (queryClient: QueryClient) =>
+  createLostItemChatroom: (queryClient: QueryClient, token: string) =>
     mutationOptions({
-      mutationFn: (articleId: number) => postLostItemChatroom(articleId),
+      mutationFn: (articleId: number) => postLostItemChatroom(token, articleId),
       onSuccess: () => invalidateLostItemChatroomAll(queryClient),
     }),
 
-  blockLostItemChatroom: (queryClient: QueryClient) =>
+  blockLostItemChatroom: (queryClient: QueryClient, token: string) =>
     mutationOptions({
       mutationFn: ({ articleId, chatroomId }: { articleId: number; chatroomId: number }) =>
-        postBlockLostItemChatroom(articleId, chatroomId),
+        postBlockLostItemChatroom(token, articleId, chatroomId),
       onSuccess: () => invalidateLostItemChatroomAll(queryClient),
     }),
 };

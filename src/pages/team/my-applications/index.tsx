@@ -3,15 +3,8 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import type {
-  MyTeamRecruitmentApplication,
-  MyTeamRecruitmentApplicationListRequest,
-  TeamApplicationStatus,
-  TeamRecruitmentSort,
-} from 'api/team/entity';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
@@ -25,9 +18,14 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-
+import type {
+  MyTeamRecruitmentApplication,
+  MyTeamRecruitmentApplicationListRequest,
+  TeamApplicationStatus,
+  TeamRecruitmentSort,
+} from 'api/team/entity';
 import styles from './MyApplicationsPage.module.scss';
 
 const APPLICATION_STATUS_CLASS = {
@@ -44,9 +42,9 @@ interface ApplicationsListSectionProps {
 
 function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: ApplicationsListSectionProps) {
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    teamQueries.infiniteMyApplications(isLoggedIn, requestParams),
+    teamQueries.infiniteMyApplications(token, requestParams),
   );
 
   const applications = data.pages.flatMap((page) => page.applications);
@@ -61,11 +59,11 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
 
   return (
     <>
-      <div className={styles['summary-row']}>
-        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
+      <div className={styles.summaryRow}>
+        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
-          <span className={styles['filter-button__label']}>필터</span>
+        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
+          <span className={styles.filterButton__label}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -93,7 +91,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                 rightSlot={
                   <span
                     className={cn({
-                      [styles['application-status']]: true,
+                      [styles.applicationStatus]: true,
                       [styles[APPLICATION_STATUS_CLASS[application.status]]]: true,
                     })}
                   >
@@ -105,7 +103,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                   application.team_chat_room_id !== null && (
                     <button
                       type="button"
-                      className={styles['chat-button']}
+                      className={styles.chatButton}
                       aria-label="팀 채팅방으로 이동"
                       onClick={onChatClick(application)}
                     >
@@ -116,7 +114,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
               />
             ))}
 
-            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
+            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
           </div>
         )}
       </div>
@@ -168,7 +166,7 @@ export default function MyApplicationsPage() {
         <meta name="description" content="내가 지원한 팀원 모집 게시글과 지원 상태를 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles['mobile-header']}>
+      <div className={styles.mobileHeader}>
         <SubPageHeader
           title="내가 지원한 모집글"
           onBack={() => router.replace(ROUTES.TeamProfile())}
@@ -180,7 +178,7 @@ export default function MyApplicationsPage() {
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 지원한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
             <Suspense fallback={null}>
               <ApplicationsListSection
                 requestParams={requestParams}

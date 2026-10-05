@@ -1,14 +1,6 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { getViewerScope } from 'utils/ts/getViewerScope';
-
-import type { CallvanListRequest } from './entity';
-import {
-  getCallvanChat,
-  getCallvanList,
-  getCallvanNotifications,
-  getCallvanPostDetail,
-  getCallvanRestriction,
-} from './index';
+import { CallvanListRequest } from './entity';
+import { getCallvanChat, getCallvanList, getCallvanNotifications, getCallvanPostDetail, getCallvanRestriction } from './index';
 
 const CALLVAN_LIST_LIMIT = 10;
 
@@ -17,31 +9,28 @@ type CallvanInfiniteListParams = Omit<CallvanListRequest, 'page' | 'limit'>;
 export const callvanQueryKeys = {
   all: ['callvan'] as const,
   listRoot: ['callvan', 'list'] as const,
-  list: (params: CallvanListRequest, isLoggedIn?: boolean) =>
-    [...callvanQueryKeys.listRoot, params, getViewerScope(isLoggedIn)] as const,
+  list: (params: CallvanListRequest) => [...callvanQueryKeys.listRoot, params] as const,
   infiniteListRoot: ['callvan', 'infinite-list'] as const,
-  infiniteList: (params: CallvanInfiniteListParams, isLoggedIn?: boolean) =>
-    [...callvanQueryKeys.infiniteListRoot, params, getViewerScope(isLoggedIn)] as const,
-  notifications: (isLoggedIn?: boolean) => ['callvan', 'notifications', getViewerScope(isLoggedIn)] as const,
-  restriction: (isLoggedIn?: boolean) => ['callvan', 'restriction', getViewerScope(isLoggedIn)] as const,
-  postDetail: (postId: number, isLoggedIn?: boolean) =>
-    ['callvan', 'post-detail', postId, getViewerScope(isLoggedIn)] as const,
-  chat: (postId: number, isLoggedIn?: boolean) => ['callvan', 'chat', postId, getViewerScope(isLoggedIn)] as const,
+  infiniteList: (params: CallvanInfiniteListParams) => [...callvanQueryKeys.infiniteListRoot, params] as const,
+  notifications: (token: string) => ['callvan', 'notifications', token] as const,
+  restriction: (token: string) => ['callvan', 'restriction', token] as const,
+  postDetail: (postId: number) => ['callvan', 'post-detail', postId] as const,
+  chat: (postId: number) => ['callvan', 'chat', postId] as const,
 };
 
 export const callvanQueries = {
-  list: (params: CallvanListRequest, isLoggedIn?: boolean) =>
+  list: (token: string, params: CallvanListRequest) =>
     queryOptions({
-      queryKey: callvanQueryKeys.list(params, isLoggedIn),
-      queryFn: () => getCallvanList(params),
+      queryKey: callvanQueryKeys.list(params),
+      queryFn: () => getCallvanList(token, params),
     }),
 
-  infiniteList: (params: CallvanInfiniteListParams, isLoggedIn?: boolean) =>
+  infiniteList: (token: string, params: CallvanInfiniteListParams) =>
     infiniteQueryOptions({
-      queryKey: callvanQueryKeys.infiniteList(params, isLoggedIn),
+      queryKey: callvanQueryKeys.infiniteList(params),
       initialPageParam: 1,
       queryFn: ({ pageParam }) =>
-        getCallvanList({
+        getCallvanList(token, {
           ...params,
           page: pageParam,
           limit: CALLVAN_LIST_LIMIT,
@@ -55,31 +44,31 @@ export const callvanQueries = {
       },
     }),
 
-  notifications: (isLoggedIn?: boolean) =>
+  notifications: (token: string) =>
     queryOptions({
-      queryKey: callvanQueryKeys.notifications(isLoggedIn),
-      queryFn: () => getCallvanNotifications(),
+      queryKey: callvanQueryKeys.notifications(token),
+      queryFn: () => getCallvanNotifications(token),
       staleTime: 60000,
     }),
 
-  restriction: (isLoggedIn?: boolean) =>
+  restriction: (token: string) =>
     queryOptions({
-      queryKey: callvanQueryKeys.restriction(isLoggedIn),
-      queryFn: () => getCallvanRestriction(),
+      queryKey: callvanQueryKeys.restriction(token),
+      queryFn: () => getCallvanRestriction(token),
       staleTime: 0,
     }),
 
-  postDetail: (postId: number, isLoggedIn?: boolean) =>
+  postDetail: (token: string, postId: number) =>
     queryOptions({
-      queryKey: callvanQueryKeys.postDetail(postId, isLoggedIn),
-      queryFn: () => getCallvanPostDetail(postId),
+      queryKey: callvanQueryKeys.postDetail(postId),
+      queryFn: () => getCallvanPostDetail(token, postId),
       staleTime: 60000,
     }),
 
-  chat: (postId: number, isLoggedIn?: boolean) =>
+  chat: (token: string, postId: number) =>
     queryOptions({
-      queryKey: callvanQueryKeys.chat(postId, isLoggedIn),
-      queryFn: () => getCallvanChat(postId),
+      queryKey: callvanQueryKeys.chat(postId),
+      queryFn: () => getCallvanChat(token, postId),
       staleTime: 0,
       refetchInterval: 1000,
     }),

@@ -1,17 +1,17 @@
 import type { APIResponse } from 'interfaces/APIResponse';
 
-export interface BannerCategories {
+export type BannerCategories = {
   id: number;
   name: string;
-}
+};
 
-export interface Banner {
+export type Banner = {
   id: number;
   title: string;
   image_url: string;
   redirect_link: string | null;
   version: string | null;
-}
+};
 
 export interface BannerCategoriesResponse extends APIResponse {
   banner_categories: BannerCategories[];

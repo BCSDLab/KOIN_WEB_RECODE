@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { HydrationBoundary, QueryClientProvider } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { pretendard } from 'assets/font';
 import Toast from 'components/feedback/Toast';
 import Layout from 'components/layout';
@@ -13,11 +12,13 @@ import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import Seo from 'components/seo/Seo';
 import ROUTES from 'static/routes';
-import { clearLegacySessionStorage } from 'utils/auth/legacyStorage';
-import { useSessionState } from 'utils/hooks/auth/useSession';
-import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
+import { COOKIE_KEY } from 'static/url';
+import { ServerRequestProvider } from 'utils/context/serverRequest';
+import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
+import useMount from 'utils/hooks/state/useMount';
+import { getCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import { createQueryClient, queryClient } from 'utils/ts/queryClient';
+import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
 interface PageProps {
@@ -36,40 +37,73 @@ type AppPropsWithAuth = Omit<AppProps, 'Component'> & {
   Component: NextPageWithAuth;
 };
 
+// React Query 클라이언트 설정
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnReconnect: true,
+      retry: false,
+      enabled: typeof window !== 'undefined',
+      staleTime: 60 * 1000, // 1 minutes
+    },
+  },
+});
+
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
-// 서버 확인으로 비로그인이 확정되면 메인으로 보낸다. 확정 전의 anonymous는 믿지 않는다(refresh로 로그인일 수 있다).
-function AuthGuard({ requireAuth }: { requireAuth: boolean | undefined }) {
-  const router = useRouter();
-  const { session, resolved } = useSessionState();
-
-  useEffect(() => {
-    if (requireAuth && resolved && session.status === 'anonymous') router.replace(ROUTES.Main());
-  }, [requireAuth, resolved, session.status, router]);
-
+function AutoLogin() {
+  useAutoLogin();
   return null;
 }
+
+const useAuthGuard = (requireAuth: boolean | undefined) => {
+  const router = useRouter();
+  const isMount = useMount();
+
+  useEffect(() => {
+    if (!requireAuth) return;
+    if (!isMount) return;
+    const token = getCookie(COOKIE_KEY.AUTH_TOKEN);
+    if (!token) {
+      // 하이드레이션 경합 방지
+      router.replace(ROUTES.Main());
+    }
+  }, [isMount, requireAuth, router]);
+};
 
 // 메인 App 컴포넌트
 export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const router = useRouter();
-  // 서버에서는 요청마다 새 QueryClient를 쓴다. 모듈 싱글턴을 공유하면 HydrationBoundary가 캐시에 이미 있는
-  // 쿼리의 하이드레이션을 effect로 미루는데(서버에선 실행되지 않음), 그 결과 이전 요청 사용자의 데이터가 렌더된다.
-  const [client] = React.useState(() => (typeof window === 'undefined' ? createQueryClient() : queryClient));
+  const [client] = React.useState(queryClient);
   const isMaintenance = useServerStateStore((state) => state.isMaintenance);
 
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
-  const getPageTitle = (): string | undefined => {
-    if (!Component.title) return undefined;
+  const pageTitle = !Component.title
+    ? undefined
+    : typeof Component.title === 'function'
+      ? Component.title(router.asPath)
+      : Component.title;
 
-    return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
-  };
-
-  const pageTitle = getPageTitle();
-
+  // ios 브릿지
   useEffect(() => {
+    // 앱 로드 시 토큰 요청 정의
+    const initializeTokens = async () => {
+      const tokens = await requestTokensFromNative();
+      if (tokens.access || tokens.refresh) {
+        setTokensFromNative(tokens.access, tokens.refresh);
+      }
+    };
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      // 네이티브에서 토큰을 전달받을 함수 등록
+      window.setTokens = setTokensFromNative;
+
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
     // 로깅을 위한 userId 전달 및 gtag 함수 정의
     if (typeof window !== 'undefined') {
       const userId = isomorphicLocalStorage.getItem('uuid') || '';
@@ -92,9 +126,8 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     }
   }, []);
 
-  useEffect(() => {
-    clearLegacySessionStorage();
-  }, []);
+  const needAuth = Component.requireAuth;
+  useAuthGuard(needAuth);
 
   if (isMaintenance) {
     return <MaintenancePage />;
@@ -112,8 +145,8 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
           <ServerRequestProvider value={pageProps.serverRequest ?? null}>
             <PortalProvider>
-              <AuthGuard requireAuth={Component.requireAuth} />
               <Seo title={pageTitle} />
+              <AutoLogin />
               {getLayout(<Component {...pageProps} />)}
               <Toast />
             </PortalProvider>

@@ -1,5 +1,4 @@
 import type { GetStaticProps } from 'next';
-
 import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
 import { roomQueries } from 'api/room/queries';
 import { SSRLayout } from 'components/layout';
@@ -10,7 +9,6 @@ import useNaverMapScript from 'components/Room/RoomPage/hooks/useNaverMapScript'
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { ROOM_ISR_REVALIDATE_SECONDS, withStaticFetchRetry } from 'utils/ts/isr';
-
 import styles from './RoomPage.module.scss';
 
 const LOCATION = { latitude: 36.764617, longitude: 127.283154 };

@@ -51,7 +51,6 @@ export default function useToastTimer({ autoCloseTime, onClose }: ToastTimerProp
 
   useEffect(() => {
     startTimer();
-
     return () => {
       if (timerId.current) {
         clearTimeout(timerId.current);

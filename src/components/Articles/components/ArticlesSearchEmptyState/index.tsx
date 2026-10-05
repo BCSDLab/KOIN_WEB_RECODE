@@ -1,5 +1,4 @@
 import SleepIcon from 'assets/svg/common/sleep-bbico.svg';
-
 import styles from './ArticlesSearchEmptyState.module.scss';
 
 export default function ArticlesSearchEmptyState() {

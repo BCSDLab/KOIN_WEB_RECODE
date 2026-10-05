@@ -53,9 +53,8 @@
     color: #000;
 
     &--today {
-      color: #b611f5;
-      outline: 1px solid #b611f5;
-      outline-offset: -1px;
+      color: #175c8e;
+      outline: 1px solid #175c8e;
     }
 
     &--before {
@@ -64,14 +63,14 @@
 
     &--selected {
       color: #fff !important;
-      background-color: #b611f5;
+      background-color: #175c8e;
     }
 
     &--selector {
       position: absolute;
       width: 12px;
       height: 2px;
-      background-color: #b611f5;
+      background-color: #175c8e;
       top: 110%;
     }
   }

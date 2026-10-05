@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
@@ -10,7 +9,6 @@ import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 const MAX_ITEMS = 10;
 
@@ -36,12 +34,6 @@ export default function LostItemWritePage() {
   const { title, subtitle, description } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem, removeLostItem, validateAndUpdateItems, checkArticleFormFull } =
     useLostItemForm({ defaultType: type });
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-
-  useEffect(() => {
-    setCustomTitle(title);
-  }, [title, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   useEffect(() => {
     if (user?.name) {
@@ -80,7 +72,6 @@ export default function LostItemWritePage() {
 
     if (lostItems.length === 0) {
       showToast('error', '물품을 추가해주세요.');
-
       return;
     }
 

@@ -1,9 +1,7 @@
 import Link from 'next/link';
-
-import type { Article } from 'api/articles/entity';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
-
+import type { Article } from 'api/articles/entity';
 import styles from './ArticlesSearchResultList.module.scss';
 
 interface ArticlesSearchResultListProps {
@@ -15,7 +13,6 @@ interface ArticlesSearchResultListProps {
 
 const formatDate = (time: string) => {
   if (typeof time !== 'string') return '';
-
   return time.split(' ')[0].replaceAll('-', '.');
 };
 
@@ -30,7 +27,11 @@ export default function ArticlesSearchResultList({
   return (
     <div className={styles.list}>
       {articles.map((article) => (
-        <Link key={article.id} href={ROUTES.ArticlesDetail({ id: String(article.id) })} className={styles.item}>
+        <Link
+          key={article.id}
+          href={ROUTES.ArticlesDetail({ id: String(article.id) })}
+          className={styles.item}
+        >
           <span className={styles.item__tag}>{formatTag(article.board_id)}</span>
           <p className={styles.item__title}>{article.title}</p>
           <div className={styles.item__meta}>
@@ -40,7 +41,12 @@ export default function ArticlesSearchResultList({
         </Link>
       ))}
       {hasNextPage && (
-        <button type="button" className={styles['load-more']} onClick={onLoadMore} disabled={isFetchingNextPage}>
+        <button
+          type="button"
+          className={styles['load-more']}
+          onClick={onLoadMore}
+          disabled={isFetchingNextPage}
+        >
           게시물 더보기
         </button>
       )}

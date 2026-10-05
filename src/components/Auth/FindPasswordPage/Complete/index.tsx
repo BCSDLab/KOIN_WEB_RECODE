@@ -1,10 +1,8 @@
 import { useRouter } from 'next/router';
-
 import LogoIcon from 'assets/svg/Login/logo.svg';
 import CheckIcon from 'assets/svg/purple-check.svg';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-
 import styles from './Complete.module.scss';
 
 const TITLE = '비밀번호 변경 완료';
@@ -26,7 +24,7 @@ function CompletePage() {
       <div className={styles['title-container']}>
         <h2 className={styles.title}>{TITLE}</h2>
 
-        <div className={styles['sub-title-container']}>
+        <div className={styles['subTitle-container']}>
           {SUB_TITLE.map(({ key, text }) => (
             <div key={key} className={styles.subTitle}>
               {text}

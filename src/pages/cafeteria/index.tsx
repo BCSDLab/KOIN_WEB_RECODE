@@ -1,6 +1,5 @@
-import type { GetServerSidePropsContext } from 'next';
-
-import { dehydrate, type DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { GetServerSidePropsContext } from 'next';
+import { dehydrate, DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { coopshopQueries } from 'api/coopshop/queries';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
@@ -10,8 +9,7 @@ import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
-
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './Cafeteria.module.scss';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
