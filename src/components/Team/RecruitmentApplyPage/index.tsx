@@ -12,6 +12,7 @@ import {
   useUpsertTeamRecruitmentProfileMutation,
 } from 'api/teamRecruitmentProfile/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import { createApplicationFormSchema } from 'components/Team/RecruitmentApplyPage/schema';
@@ -221,6 +222,7 @@ export default function RecruitmentApplyPage() {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
+        <MobilePageHeader title="팀원 모집 지원" background="gray" />
         <h1 className={styles.title}>팀원 모집 지원</h1>
 
         {(!router.isReady || isRecruitmentLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}

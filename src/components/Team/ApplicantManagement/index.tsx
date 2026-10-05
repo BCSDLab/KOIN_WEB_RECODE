@@ -6,6 +6,7 @@ import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -45,6 +46,8 @@ export default function ApplicantManagement() {
 
   return (
     <>
+      <MobilePageHeader title="지원자 관리" background="gray" />
+
       <main className={styles.page}>
         <div className={styles.inner}>
           <h1 className={styles.title}>지원자 관리</h1>

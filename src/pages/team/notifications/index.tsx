@@ -9,7 +9,6 @@ import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import NotificationCard from 'components/Team/components/NotificationCard';
 import TeamNotificationHeader from 'components/Team/components/TeamNotificationHeader';
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
@@ -21,8 +20,6 @@ import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
 
 import styles from './TeamNotificationsPage.module.scss';
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 export default function TeamNotificationsPage() {
   const isLoggedIn = useIsLoggedIn();
@@ -152,4 +149,4 @@ export default function TeamNotificationsPage() {
   );
 }
 
-TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

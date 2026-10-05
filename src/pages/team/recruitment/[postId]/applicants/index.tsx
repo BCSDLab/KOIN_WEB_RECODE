@@ -2,10 +2,7 @@ import type { ReactNode } from 'react';
 import Head from 'next/head';
 
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import ApplicantManagement from 'components/Team/ApplicantManagement';
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '지원자 관리', background: 'gray' };
 
 function TeamApplicantManagementPage() {
   return (
@@ -20,6 +17,6 @@ function TeamApplicantManagementPage() {
   );
 }
 
-TeamApplicantManagementPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+TeamApplicantManagementPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamApplicantManagementPage;

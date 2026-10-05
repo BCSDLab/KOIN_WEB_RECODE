@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { DepartmentContactCategory } from 'api/departmentContact/entity';
 import { departmentContactQueries } from 'api/departmentContact/queries';
+import { DEPARTMENT_CATEGORIES } from 'components/Department/categories';
 import { formatUpdatedAt } from 'components/Department/formatUpdatedAt';
 import { BUS_FEEDBACK_FORM } from 'static/bus';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
@@ -56,7 +57,8 @@ export default function CategoryDetailPage({ category }: CategoryDetailPageProps
   };
 
   const viewProps = {
-    categoryName: data?.category_name ?? '',
+    // 서버 렌더에서도 타이틀이 보이도록 데이터 대신 고정 카테고리 이름을 쓴다
+    categoryName: DEPARTMENT_CATEGORIES.find((item) => item.category === category)?.title ?? '',
     searchValue,
     onSearchChange: handleSearchChange,
     departments: data?.departments ?? [],

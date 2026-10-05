@@ -6,6 +6,7 @@ import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
@@ -145,6 +146,8 @@ export default function ApplicantDetail() {
 
   return (
     <>
+      <MobilePageHeader title="지원자 상세" background="gray" />
+
       <div className={styles.page}>
         <div className={styles.content}>
           {isLoading && <LoadingSpinner size="50px" />}

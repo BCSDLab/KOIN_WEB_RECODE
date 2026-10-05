@@ -18,7 +18,7 @@ import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import MyApplicationFilterPanel from 'components/Team/components/MyApplicationFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
@@ -41,13 +41,6 @@ interface ApplicationsListSectionProps {
   onFilterOpen: (anchorRect: DOMRect) => void;
   onChatClick: (application: MyTeamRecruitmentApplication) => MouseEventHandler<HTMLButtonElement>;
 }
-
-const MOBILE_HEADER: MobileHeaderConfig = {
-  type: 'page',
-  title: '내가 지원한 모집글',
-  background: 'gray',
-  onBack: ({ router }) => router.replace(ROUTES.TeamProfile()),
-};
 
 function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: ApplicationsListSectionProps) {
   const logger = useLogger();
@@ -175,6 +168,12 @@ export default function MyApplicationsPage() {
         <meta name="description" content="내가 지원한 팀원 모집 게시글과 지원 상태를 확인할 수 있습니다." />
       </Head>
 
+      <MobilePageHeader
+        title="내가 지원한 모집글"
+        onBack={() => router.replace(ROUTES.TeamProfile())}
+        background="gray"
+      />
+
       <main className={styles.page}>
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 지원한 모집글</h1>
@@ -211,4 +210,4 @@ export default function MyApplicationsPage() {
   );
 }
 
-MyApplicationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+MyApplicationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

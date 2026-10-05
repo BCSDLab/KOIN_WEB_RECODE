@@ -6,12 +6,9 @@ import { useRouter } from 'next/router';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import TeamChatRoom from 'components/Team/components/TeamChatRoom';
 
 import styles from './TeamChatPage.module.scss';
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 export default function TeamChatPage() {
   const router = useRouter();
@@ -50,7 +47,7 @@ export default function TeamChatPage() {
 }
 
 TeamChatPage.getLayout = (page: ReactNode) => (
-  <Layout mobileHeader={MOBILE_HEADER} fitViewport>
+  <Layout mobileHeader="page" fitViewport>
     {page}
   </Layout>
 );

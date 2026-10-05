@@ -2,6 +2,7 @@ import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import type { CategoryDetailViewProps } from 'components/Department/CategoryDetail/types';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import SearchBar from 'components/ui/SearchBar';
 
 import styles from './CategoryDetailMobile.module.scss';
@@ -17,6 +18,8 @@ export default function CategoryDetailMobile({
 }: CategoryDetailViewProps) {
   return (
     <div className={styles.page}>
+      <MobilePageHeader title={categoryName} background="gray" />
+
       <div className={styles.page__content}>
         <SearchBar value={searchValue} onChange={onSearchChange} label={`${categoryName} 부서 검색`} />
 

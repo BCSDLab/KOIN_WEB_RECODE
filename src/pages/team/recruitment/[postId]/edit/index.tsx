@@ -2,10 +2,7 @@ import type { ReactNode } from 'react';
 import Head from 'next/head';
 
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import EditTeamRecruitment from 'components/Team/EditTeamRecruitment';
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '모집글 수정', background: 'gray' };
 
 export default function TeamRecruitmentEditPage() {
   return (
@@ -20,4 +17,4 @@ export default function TeamRecruitmentEditPage() {
   );
 }
 
-TeamRecruitmentEditPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+TeamRecruitmentEditPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

@@ -5,6 +5,7 @@ import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
 import SearchEmptyState from 'components/Department/SearchEmptyState';
 import type { DepartmentViewProps } from 'components/Department/types';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import IconBox from 'components/ui/IconBox';
 import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
@@ -69,6 +70,8 @@ export default function DepartmentMobile({
 
   return (
     <div className={styles.page}>
+      <MobilePageHeader title="학교 부서 정보" background="gray" />
+
       <div className={styles.page__content}>
         <SearchBar value={searchValue} onChange={onSearchChange} onSearch={onSearchSubmit} label="학교 부서 검색" />
 

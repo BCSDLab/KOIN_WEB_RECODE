@@ -2,10 +2,7 @@ import type { ReactNode } from 'react';
 import Head from 'next/head';
 
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import RecruitmentDetail from 'components/Team/RecruitmentDetail';
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 export default function TeamDetailPage() {
   return (
@@ -20,4 +17,4 @@ export default function TeamDetailPage() {
   );
 }
 
-TeamDetailPage.getLayout = (page: ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+TeamDetailPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
