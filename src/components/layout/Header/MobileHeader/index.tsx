@@ -6,10 +6,7 @@ import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
-import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
-import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
-import PageHeader from 'components/ui/PageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -62,17 +59,6 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
 
       return;
     }
-    if (pathname === '/timetable') {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'timetable_back',
-        value: '뒤로가기버튼',
-        previous_page: '시간표',
-        current_page: '메인',
-        duration_time: getElapsedSeconds('enterTimetablePage'),
-      });
-    }
-
     if (
       typeof window !== 'undefined' &&
       window.webkit?.messageHandlers != null &&
@@ -82,7 +68,7 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
 
       return;
     }
-    goBack(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
+    goBack();
   };
 
   const handleHamburgerClick = () => {
@@ -93,33 +79,6 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const isLostItemCustomTitleRoute =
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-
-  if (route.isTimetable) {
-    const isTimetableList = pathname === ROUTES.TimetableList();
-    const getRightAction = () => {
-      if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
-
-      return (
-        <button
-          type="button"
-          className={styles['mobileheader__action-button']}
-          aria-label="시간표 수정"
-          onClick={() => showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
-        >
-          <TimetableSquarePenIcon />
-        </button>
-      );
-    };
-
-    return (
-      <PageHeader
-        title={isTimetableList ? '시간표 목록' : '시간표'}
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-        rightAction={getRightAction()}
-      />
-    );
-  }
 
   return (
     <>

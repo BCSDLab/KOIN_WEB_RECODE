@@ -13,7 +13,6 @@ export function getLegacyRoute(pathname: string) {
       pathname.startsWith(ROUTES.Articles()) ||
       pathname.startsWith(ROUTES.LostItems()) ||
       pathname.startsWith(ROUTES.Cafeteria()),
-    isTimetable: [ROUTES.Timetable(), ROUTES.TimetableList()].includes(pathname),
   };
 }
 

@@ -10,19 +10,20 @@ import BookmarkIcon from 'assets/svg/timetable-list-bookmark-icon.svg';
 import PlusIcon from 'assets/svg/timetable-list-plus-icon.svg';
 import SettingIcon from 'assets/svg/timetable-list-setting-icon.svg';
 import PenIcon from 'assets/svg/timetable-square-pen-icon.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import useAddTimetableFrame from 'components/TimetablePage/hooks/useAddTimetableFrame';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useRequireLogin from 'components/TimetablePage/hooks/useRequireLogin';
 import { useAllSemesters } from 'components/TimetablePage/hooks/useSemesterOptionList';
+import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useUserType from 'utils/hooks/auth/useUserType';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { sortSemestersNewestFirst } from 'utils/timetable/semester';
-import { getTopicParticle } from 'utils/ts/josa';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useSemesterAction } from 'utils/zustand/semester';
 
 import DeleteTimetableModal from './DeleteTimetableModal';
@@ -197,15 +198,8 @@ export default function MobileTimetableListPage() {
   const isLoggedIn = useIsLoggedIn();
   const { data: mySemester } = useSemesterCheck();
 
-  const handleRequireLogin: RequireLogin = (actionTitle) => {
-    portalManager.open((portalOption: Portal) => (
-      <InducingLoginModal
-        actionTitle={actionTitle}
-        detailExplanation={`${actionTitle}${getTopicParticle(actionTitle)} 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)`}
-        onClose={portalOption.close}
-      />
-    ));
-  };
+  const handleRequireLogin = useRequireLogin();
+  const goBack = useGoBack();
 
   const handleOpenSetting: OpenSetting = (semester, frame) => {
     const openDeleteModal = () =>
@@ -232,39 +226,44 @@ export default function MobileTimetableListPage() {
     portalManager.open((portalOption: Portal) => <SemesterEditModal onClose={portalOption.close} />);
   };
 
-  const setHeaderButton = useHeaderButtonStore((state) => state.setButtonContent);
-  const resetHeaderButton = useHeaderButtonStore((state) => state.resetButtonContent);
-
-  useEffect(() => {
-    setHeaderButton(
-      <button type="button" className={styles['header-button']} aria-label="학기 편집" onClick={handleEditSemester}>
-        <PenIcon />
-      </button>,
-    );
-
-    return resetHeaderButton;
-  });
-
   // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리
   useEffect(() => () => portalManager.close(), []);
+
+  const header = (
+    <MobilePageHeader
+      title="시간표 목록"
+      onBack={() => goBack(ROUTES.Timetable())}
+      rightAction={
+        <HeaderIconButton aria-label="학기 편집" onClick={handleEditSemester}>
+          <PenIcon />
+        </HeaderIconButton>
+      }
+    />
+  );
 
   if (mySemester) {
     const semesters = sortSemestersNewestFirst(mySemester.semesters);
 
     return (
-      <div className={styles.page}>
-        {semesters.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <MemberList semesters={semesters} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
-        )}
-      </div>
+      <>
+        {header}
+        <div className={styles.page}>
+          {semesters.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <MemberList semesters={semesters} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
+          )}
+        </div>
+      </>
     );
   }
 
   return (
-    <div className={styles.page}>
-      <GuestList isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
-    </div>
+    <>
+      {header}
+      <div className={styles.page}>
+        <GuestList isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} onOpenSetting={handleOpenSetting} />
+      </div>
+    </>
   );
 }
