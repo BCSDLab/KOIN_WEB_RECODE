@@ -46,4 +46,8 @@ export default function TeamChatPage() {
   );
 }
 
-TeamChatPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamChatPage.getLayout = (page: ReactNode) => (
+  <Layout mobileHeader="page" fitViewport>
+    {page}
+  </Layout>
+);

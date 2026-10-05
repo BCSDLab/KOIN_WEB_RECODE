@@ -11,6 +11,7 @@ import FilterIcon from 'assets/svg/Team/filter.svg';
 import PencilIcon from 'assets/svg/Team/pencil.svg';
 import XIcon from 'assets/svg/Team/x.svg';
 import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import RecruitmentFilterPanel, {
   DEFAULT_TEAM_RECRUITMENT_FILTER,
@@ -20,7 +21,7 @@ import RecruitmentFilterPanel, {
   TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS,
   type TeamRecruitmentFilter,
 } from 'components/Team/components/RecruitmentFilterPanel';
-import TeamListHeader from 'components/Team/components/TeamListHeader';
+import TeamListHeaderActions from 'components/Team/components/TeamListHeaderActions';
 import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -180,7 +181,7 @@ export default function TeamListPage() {
         <meta name="description" content="한국기술교육대학교 팀원 모집 게시글을 확인하고 검색할 수 있습니다." />
       </Head>
 
-      {isMobile && <TeamListHeader />}
+      <MobilePageHeader title="팀원모집" background="gray" rightAction={<TeamListHeaderActions />} />
 
       <main className={styles.page}>
         {!isMobile && <h1 className={styles.title}>팀원모집</h1>}
@@ -309,4 +310,4 @@ export default function TeamListPage() {
   );
 }
 
-TeamListPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamListPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

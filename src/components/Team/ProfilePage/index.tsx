@@ -11,9 +11,9 @@ import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
 } from 'api/teamRecruitmentProfile/queries';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
-import PageHeader from 'components/ui/PageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -200,9 +200,7 @@ function ProfileFormBody({ mode, defaultValues }: ProfileFormBodyProps) {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles['mobile-header']}>
-          <PageHeader title={MODE_TEXT[mode].title} />
-        </div>
+        <MobilePageHeader title={MODE_TEXT[mode].title} background="gray" />
         <h1 className={styles.title}>{MODE_TEXT[mode].desktopTitle}</h1>
 
         <FormProvider {...methods}>

@@ -17,6 +17,6 @@ function TeamRecruitmentNewPage() {
   );
 }
 
-TeamRecruitmentNewPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamRecruitmentNewPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamRecruitmentNewPage;

@@ -18,10 +18,10 @@ import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import MyCreatedPostFilterPanel from 'components/Team/components/MyCreatedPostFilterPanel';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
-import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -275,13 +275,11 @@ export default function MyCreatedPostsPage() {
         <meta name="description" content="내가 작성한 팀원 모집 게시글과 지원자 현황을 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles['mobile-header']}>
-        <PageHeader
-          title="내가 작성한 모집글"
-          onBack={() => router.replace(ROUTES.TeamProfile())}
-          className={styles.header}
-        />
-      </div>
+      <MobilePageHeader
+        title="내가 작성한 모집글"
+        onBack={() => router.replace(ROUTES.TeamProfile())}
+        background="gray"
+      />
 
       <main className={styles.page}>
         <div className={styles.inner}>
@@ -332,4 +330,4 @@ export default function MyCreatedPostsPage() {
   );
 }
 
-MyCreatedPostsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+MyCreatedPostsPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

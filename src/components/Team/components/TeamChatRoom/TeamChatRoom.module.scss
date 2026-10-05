@@ -7,7 +7,7 @@
 
   @include media.media-breakpoint(mobile) {
     display: block;
-    height: 100dvh;
+    height: 100%;
 
     &__sidebar {
       display: none;
@@ -17,10 +17,6 @@
 
 .chat-room {
   overflow: hidden;
-
-  &__mobileHeader {
-    display: none;
-  }
 
   &__desktopHeader {
     display: flex;
@@ -139,13 +135,9 @@
   }
 
   @include media.media-breakpoint(mobile) {
-    height: 100dvh;
+    height: 100%;
     border: 0;
     background-color: #fff;
-
-    &__mobileHeader {
-      display: block;
-    }
 
     &__desktopHeader {
       display: none;

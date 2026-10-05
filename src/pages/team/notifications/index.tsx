@@ -149,4 +149,4 @@ export default function TeamNotificationsPage() {
   );
 }
 
-TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamNotificationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

@@ -7,9 +7,9 @@ import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
 import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
 import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
-import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
@@ -167,9 +167,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
       panelClassName={styles['chat-room']}
       sidebar={<ChatRoomList items={sidebarItems} />}
     >
-      <div className={styles['chat-room__mobileHeader']}>
-        <PageHeader title={chatRoom.room_name} rightAction={memberCount} />
-      </div>
+      <MobilePageHeader title={chatRoom.room_name} rightAction={memberCount} />
       <div className={styles['chat-room__desktopHeader']}>
         <h2>{chatRoom.room_name}</h2>
         {memberCount}

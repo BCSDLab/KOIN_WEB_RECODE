@@ -1,8 +1,11 @@
 import { useRouter } from 'next/router';
 
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import KebabMenu from 'components/Team/components/KebabMenu';
 import PageHeader from 'components/ui/PageHeader';
 import ROUTES from 'static/routes';
+
+import styles from './TeamNotificationHeader.module.scss';
 
 interface TeamNotificationHeaderProps {
   showMenu: boolean;
@@ -43,7 +46,15 @@ export default function TeamNotificationHeader({
     />
   );
 
+  const handleBack = () => router.replace(ROUTES.Team());
+  const rightAction = showMenu ? menu : undefined;
+
   return (
-    <PageHeader title="알림" onBack={() => router.replace(ROUTES.Team())} rightAction={showMenu ? menu : undefined} />
+    <>
+      <MobilePageHeader title="알림" onBack={handleBack} rightAction={rightAction} />
+      <div className={styles['desktop-only']}>
+        <PageHeader title="알림" onBack={handleBack} rightAction={rightAction} />
+      </div>
+    </>
   );
 }
