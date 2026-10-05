@@ -38,6 +38,10 @@
       background-color: #f8f8fa;
     }
 
+    &--mobile-none {
+      display: none;
+    }
+
     &--mobile-home {
       position: static;
       height: auto;

@@ -27,6 +27,7 @@ function getLegacyClassNames(route: LegacyRoute) {
 
 function getClassNames(config: MobileHeaderConfig) {
   if (config.type === 'home') return { [styles['header--mobile-home']]: true };
+  if (config.type === 'page-owned') return { [styles['header--mobile-none']]: true };
 
   return {
     [styles['header--mobile-light']]: true,
@@ -51,7 +52,8 @@ function Header({ mobileHeader }: HeaderProps) {
       return <MobileHeader openModal={openModal} route={legacyRoute} />;
     }
 
-    if (mobileHeader?.type !== 'page') return <MobileHomeRedesignHeader />;
+    if (mobileHeader?.type === 'home') return <MobileHomeRedesignHeader />;
+    if (mobileHeader?.type !== 'page') return null;
 
     const { title: Title, rightAction: RightAction, onBack } = mobileHeader;
 

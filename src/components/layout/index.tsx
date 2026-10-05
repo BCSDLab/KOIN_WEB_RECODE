@@ -19,7 +19,7 @@ interface LayoutProps extends SSRLayoutProps {
 }
 
 function getRootClassName(mobileHeader: MobileHeaderConfig | undefined, fitViewport: boolean | undefined) {
-  if (mobileHeader?.type !== 'page') return undefined;
+  if (mobileHeader?.type !== 'page' && mobileHeader?.type !== 'page-owned') return undefined;
 
   return cn({ [styles['root--page']]: true, [styles['root--fit-viewport']]: !!fitViewport });
 }
