@@ -10,7 +10,7 @@ import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
@@ -42,8 +42,6 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
   };
 });
 
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: '식단', rightAction: CafeteriaInfoButton };
-
 function Cafeteria() {
   const isMobile = useMediaQuery();
   const { date } = useCafeteriaParams();
@@ -51,11 +49,14 @@ function Cafeteria() {
   useScrollToTop();
 
   return (
-    <div className={styles.page}>
-      <div className={styles.page__content} key={date.key}>
-        {isMobile ? <MobileCafeteriaPage /> : <PCCafeteriaPage />}
+    <>
+      <MobilePageHeader title="식단" rightAction={<CafeteriaInfoButton />} />
+      <div className={styles.page}>
+        <div className={styles.page__content} key={date.key}>
+          {isMobile ? <MobileCafeteriaPage /> : <PCCafeteriaPage />}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -74,4 +75,4 @@ export default function CafeteriaPage({ dehydratedState, serverNowISO }: Cafeter
   );
 }
 
-CafeteriaPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+CafeteriaPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
