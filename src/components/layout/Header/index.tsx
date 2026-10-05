@@ -2,9 +2,6 @@ import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
-import PageHeader from 'components/ui/PageHeader';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useGoBack from 'utils/hooks/routing/useGoBack';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 
 import MobileHeader from './MobileHeader';
@@ -25,15 +22,9 @@ function getLegacyClassNames(route: LegacyRoute) {
   };
 }
 
+// 서브 헤더(`page`, `page-owned`)는 레이아웃이나 페이지가 MobilePageHeader로 그리므로 모바일에선 숨긴다
 function getClassNames(config: MobileHeaderConfig) {
-  if (config.type === 'home') return { [styles['header--mobile-home']]: true };
-  if (config.type === 'page-owned') return { [styles['header--mobile-none']]: true };
-
-  return {
-    [styles['header--mobile-light']]: true,
-    [styles['header--page']]: true,
-    [styles['header--mobile-gray']]: config.background === 'gray',
-  };
+  return config.type === 'home' ? { [styles['header--mobile-home']]: true } : { [styles['header--mobile-none']]: true };
 }
 
 interface HeaderProps {
@@ -42,8 +33,6 @@ interface HeaderProps {
 
 function Header({ mobileHeader }: HeaderProps) {
   const router = useRouter();
-  const logger = useLogger();
-  const goBack = useGoBack();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const legacyRoute = mobileHeader ? null : getLegacyRoute(router.pathname);
 
@@ -52,19 +41,7 @@ function Header({ mobileHeader }: HeaderProps) {
       return <MobileHeader openModal={openModal} route={legacyRoute} />;
     }
 
-    if (mobileHeader?.type === 'home') return <MobileHomeRedesignHeader />;
-    if (mobileHeader?.type !== 'page') return null;
-
-    const { title: Title, rightAction: RightAction, onBack } = mobileHeader;
-
-    return (
-      <PageHeader
-        title={typeof Title === 'string' ? Title : <Title />}
-        rightAction={RightAction && <RightAction />}
-        onBack={onBack && (() => onBack({ router, logger, goBack }))}
-        className={styles['header__page-header']}
-      />
-    );
+    return mobileHeader?.type === 'home' ? <MobileHomeRedesignHeader /> : null;
   };
 
   return (

@@ -34,10 +34,6 @@
       color: #000;
     }
 
-    &--mobile-gray {
-      background-color: #f8f8fa;
-    }
-
     &--mobile-none {
       display: none;
     }
@@ -69,10 +65,6 @@
     @include media.media-breakpoint(mobile) {
       display: none;
     }
-  }
-
-  &__page-header {
-    flex: 1;
   }
 
   &__mobile {
