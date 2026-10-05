@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
 import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
@@ -36,9 +37,12 @@ function ReportPage({ id }: { id: string }) {
   };
 
   return (
-    <div className={styles['report-page']}>
-      <ReportForm articleId={Number(id)} onClose={handleClose} isModal={false} />
-    </div>
+    <>
+      <MobilePageHeader title="게시글 신고하기" />
+      <div className={styles['report-page']}>
+        <ReportForm articleId={Number(id)} onClose={handleClose} isModal={false} />
+      </div>
+    </>
   );
 }
 
@@ -62,4 +66,4 @@ export default function ReportPageWrapper() {
   return <ReportPage id={id} />;
 }
 
-ReportPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+ReportPageWrapper.getLayout = (page: React.ReactElement) => <Layout mobileHeader="page">{page}</Layout>;

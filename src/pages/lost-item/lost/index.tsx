@@ -5,4 +5,4 @@ export default function LostItemLost() {
   return <LostItemWritePage />;
 }
 
-LostItemLost.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+LostItemLost.getLayout = (page: React.ReactElement) => <Layout mobileHeader="page">{page}</Layout>;
