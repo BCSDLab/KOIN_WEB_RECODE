@@ -1,19 +1,26 @@
 import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
+import { teamMutations } from 'api/team/mutations';
+import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
 import ClockIcon from 'assets/svg/Team/clock.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import ProfileIcon from 'assets/svg/Team/profile.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import DeleteConfirmModal from 'components/Team/components/DeleteConfirmModal';
+import OwnerActionMenu from 'components/Team/components/OwnerActionMenu';
 import { RecruitmentBadges } from 'components/Team/components/RecruitmentCard';
-import { useRecruitmentDetail, useRecruitmentOwnerActions } from 'components/Team/RecruitmentOwnerActions';
 import { formatRecruitmentDate, MEETING_TYPE_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import showToast from 'utils/ts/showToast';
 
 import styles from './RecruitmentDetail.module.scss';
 
@@ -271,16 +278,87 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
 
 export default function RecruitmentDetail() {
   const router = useRouter();
-  const { data, isLoading, isError, recruitmentId, isValidRecruitmentId } = useRecruitmentDetail();
-  const { onEdit, onDelete } = useRecruitmentOwnerActions(recruitmentId);
+  const queryClient = useQueryClient();
+  const logger = useLogger();
+  const isLoggedIn = useIsLoggedIn();
+  const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
+  const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
+  const recruitmentId = Number(postId);
+  const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
+  const { data, isLoading, isError } = useQuery({
+    ...teamQueries.detail(recruitmentId, isLoggedIn),
+    enabled: router.isReady && isValidRecruitmentId,
+  });
+  const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(
+    teamMutations.deleteRecruitment(queryClient),
+  );
+
+  const handleEdit = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_edit',
+      value: '편집하기',
+    });
+    router.push(ROUTES.TeamRecruitmentEdit({ postId: String(recruitmentId) }));
+  };
+
+  const handleDeleteClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete',
+      value: '삭제하기',
+    });
+    openDeleteModal();
+  };
+
+  const handleDeleteCancel = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete_cancel',
+      value: '취소하기',
+    });
+    closeDeleteModal();
+  };
+
+  const handleDeleteConfirm = () => {
+    if (!isValidRecruitmentId) return;
+
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'team_recruitment_post_delete_confirm',
+      value: '삭제하기',
+    });
+    deleteRecruitment(recruitmentId, {
+      onSuccess: () => {
+        closeDeleteModal();
+        showToast('success', '모집글이 삭제되었습니다.');
+        router.replace(ROUTES.Team());
+      },
+      onError: () => showToast('error', '모집글을 삭제하지 못했어요. 다시 시도해 주세요.'),
+    });
+  };
 
   return (
     <div className={styles.page}>
+      <MobilePageHeader
+        title="팀원 모집"
+        background="gray"
+        rightAction={data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined}
+      />
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
       {router.isReady && !data && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>
       )}
-      {data && <DetailContent recruitment={data} onEdit={onEdit} onDelete={onDelete} />}
+      {data && <DetailContent recruitment={data} onEdit={handleEdit} onDelete={handleDeleteClick} />}
+
+      {data?.is_author && isDeleteModalOpen && (
+        <DeleteConfirmModal
+          isPending={isDeletePending}
+          onCancel={handleDeleteCancel}
+          onClose={closeDeleteModal}
+          onConfirm={handleDeleteConfirm}
+        />
+      )}
     </div>
   );
 }

@@ -8,15 +8,10 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Layout from 'components/layout';
 import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import TeamChatRoom from 'components/Team/components/TeamChatRoom';
-import { TeamChatRoomMemberCount, TeamChatRoomTitle } from 'components/Team/components/TeamChatRoom/headerSlots';
 
 import styles from './TeamChatPage.module.scss';
 
-const MOBILE_HEADER: MobileHeaderConfig = {
-  type: 'page',
-  title: TeamChatRoomTitle,
-  rightAction: TeamChatRoomMemberCount,
-};
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 export default function TeamChatPage() {
   const router = useRouter();
