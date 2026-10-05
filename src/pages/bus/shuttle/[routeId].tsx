@@ -10,6 +10,7 @@ import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/Shu
 import ShuttleDetailMobile from 'components/Bus/ShuttleDetailMobile';
 import Layout from 'components/layout';
 import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -21,17 +22,15 @@ function asString(value: string | string[]): string {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function useShuttleTimetableDetail() {
-  const { routeId } = useRouter().query;
-
-  return useQuery({
-    ...busQueries.shuttleTimetableDetail(routeId ? asString(routeId) : null),
-  });
-}
-
 export default function ShuttleDetailPage() {
   const router = useRouter();
-  const { data: shuttleTimetableDetail } = useShuttleTimetableDetail();
+  const { routeId } = router.query;
+
+  const shuttleTimetableId = routeId ? asString(routeId) : null;
+  const { data: shuttleTimetableDetail } = useQuery({
+    ...busQueries.shuttleTimetableDetail(shuttleTimetableId),
+    staleTime: 1000 * 60 * 10,
+  });
 
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
@@ -41,7 +40,11 @@ export default function ShuttleDetailPage() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
-  if (!shuttleTimetableDetail) return null;
+  const header = (
+    <MobilePageHeader title={shuttleTimetableDetail ? `${shuttleTimetableDetail.route_name} 시간표` : '버스 시간표'} />
+  );
+
+  if (!shuttleTimetableDetail) return header;
 
   const routeTypeClass = styles[SHUTTLE_ROUTE_TYPE_CLASS[shuttleTimetableDetail.route_type]];
   const rowLength = shuttleTimetableDetail.node_info.length + 1;
@@ -50,18 +53,21 @@ export default function ShuttleDetailPage() {
 
   if (isMobile) {
     return (
-      <ShuttleDetailMobile
-        timetable={shuttleTimetableDetail}
-        selectedName={selectedName}
-        onSelect={(name) => {
-          setSelectedDetail(name);
-          logger.actionEventClick({
-            team: 'CAMPUS',
-            event_label: name === '등교' ? 'go_to_school' : 'go_home',
-            value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
-          });
-        }}
-      />
+      <>
+        {header}
+        <ShuttleDetailMobile
+          timetable={shuttleTimetableDetail}
+          selectedName={selectedName}
+          onSelect={(name) => {
+            setSelectedDetail(name);
+            logger.actionEventClick({
+              team: 'CAMPUS',
+              event_label: name === '등교' ? 'go_to_school' : 'go_home',
+              value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
+            });
+          }}
+        />
+      </>
     );
   }
 
@@ -189,12 +195,6 @@ export default function ShuttleDetailPage() {
   );
 }
 
-function ShuttleDetailTitle() {
-  const { data } = useShuttleTimetableDetail();
-
-  return <>{data ? `${data.route_name} 시간표` : '버스 시간표'}</>;
-}
-
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page', title: ShuttleDetailTitle };
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 ShuttleDetailPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
