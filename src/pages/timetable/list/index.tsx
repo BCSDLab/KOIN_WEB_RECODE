@@ -5,18 +5,12 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
-import { SemesterEditButton } from 'components/TimetablePage/components/MobileHeaderActions';
 import MobileTimetableListPage from 'components/TimetablePage/MobileTimetableListPage';
 import ROUTES from 'static/routes';
 import { isServerAuthError } from 'utils/ssr/authError';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
-const MOBILE_HEADER: MobileHeaderConfig = {
-  type: 'page',
-  title: '시간표 목록',
-  rightAction: SemesterEditButton,
-  onBack: ({ goBack }) => goBack(ROUTES.Timetable()),
-};
+const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
 
 export const getServerSideProps = withCacheControl(async (_context, cacheControl, serverRequest) => {
   // 모바일 전용 화면: 데스크탑은 시간표 페이지로 보낸다.
