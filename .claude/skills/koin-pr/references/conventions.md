@@ -17,15 +17,15 @@ There is no workflow that reads issue or PR body text to apply labels or assigne
 
 ## Work Type Mapping
 
-| Work type | Issue template | Commit type | Closest existing label |
-| --- | --- | --- | --- |
-| feature | `NEW_FEATURE.md` | `feat` | `✨ Feature` |
-| fix | `BUG_REPORT.md` | `fix` | `🐞 BugFix` |
-| refactor | `NEW_FEATURE.md` (repurposed) | `refactor` | `🔨 Refactor` |
-| test | `NEW_FEATURE.md` (repurposed) | `test` | `✅ Test` |
-| docs | `NEW_FEATURE.md` (repurposed) | `docs` | `📃 Docs` |
-| deploy | — (no issue needed) | `chore` | `🌏 Deploy` |
-| setting | `NEW_FEATURE.md` (repurposed) | `chore` | `⚙ Setting` |
+| Work type | Issue template                | Commit type | Closest existing label |
+| --------- | ----------------------------- | ----------- | ---------------------- |
+| feature   | `NEW_FEATURE.md`              | `feat`      | `✨ Feature`           |
+| fix       | `BUG_REPORT.md`               | `fix`       | `🐞 BugFix`            |
+| refactor  | `NEW_FEATURE.md` (repurposed) | `refactor`  | `🔨 Refactor`          |
+| test      | `NEW_FEATURE.md` (repurposed) | `test`      | `✅ Test`              |
+| docs      | `NEW_FEATURE.md` (repurposed) | `docs`      | `📃 Docs`              |
+| deploy    | — (no issue needed)           | `chore`     | `🌏 Deploy`            |
+| setting   | `NEW_FEATURE.md` (repurposed) | `chore`     | `⚙ Setting`           |
 
 Choose:
 
@@ -70,13 +70,13 @@ Domain labels — apply only when the change clearly and entirely belongs to one
 
 Both the issue title and the PR title carry a domain bracket. There are exactly five values:
 
-| Bracket | Scope |
-| --- | --- |
-| `[캠퍼스]` | 식단, 버스, 게시물(공지·분실물), 교내 시설물, 부서정보, 팀원 모집 등 — 대부분의 학교/캠퍼스 생활 기능 |
-| `[비즈니스]` | 주변상점, 사장님(업주) 관련 기능 |
-| `[유저]` | 회원가입, 로그인, 유저 프로필 등 인증/인가 관련 + 시간표 |
-| `[공통]` | 위 세 도메인 어디에도 명확히 속하지 않는 작업 (전역 설정, 배포, 공용 유틸/컴포넌트, 여러 도메인에 걸친 변경 등) |
-| `[hotfix]` | `main`을 베이스로 하는 hotfix 브랜치/PR. 도메인 대괄호 대신 이 값을 쓴다 |
+| Bracket      | Scope                                                                                                           |
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
+| `[캠퍼스]`   | 식단, 버스, 게시물(공지·분실물), 교내 시설물, 부서정보, 팀원 모집 등 — 대부분의 학교/캠퍼스 생활 기능           |
+| `[비즈니스]` | 주변상점, 사장님(업주) 관련 기능                                                                                |
+| `[유저]`     | 회원가입, 로그인, 유저 프로필 등 인증/인가 관련 + 시간표                                                        |
+| `[공통]`     | 위 세 도메인 어디에도 명확히 속하지 않는 작업 (전역 설정, 배포, 공용 유틸/컴포넌트, 여러 도메인에 걸친 변경 등) |
+| `[hotfix]`   | `main`을 베이스로 하는 hotfix 브랜치/PR. 도메인 대괄호 대신 이 값을 쓴다                                        |
 
 Classification procedure:
 
@@ -165,11 +165,13 @@ Write bug issue bodies with the exact `BUG_REPORT.md` structure:
 ## Environment
 
 **Desktop:**
+
 - OS: macOS
 - Browser: Chrome
 - Version: 128
 
 **Smartphone:**
+
 - Device: iPhone 15
 - OS: iOS 18
 - Browser: Safari

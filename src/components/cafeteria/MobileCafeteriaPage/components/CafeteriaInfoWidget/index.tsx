@@ -1,18 +1,21 @@
 import { useEffect } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+
 import styles from 'components/cafeteria/MobileCafeteriaPage/MobileCafeteriaPage.module.scss';
 
 export default function CafeteriaInfoWidget() {
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
@@ -21,7 +24,9 @@ export default function CafeteriaInfoWidget() {
         <InformationIcon />
       </button>,
     );
-  }, [setButtonContent, openCafeteriaInfo]);
+
+    return resetButtonContent;
+  }, [setButtonContent, resetButtonContent, openCafeteriaInfo]);
 
   return (
     <div

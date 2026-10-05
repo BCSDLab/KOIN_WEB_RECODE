@@ -1,11 +1,13 @@
 import { useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
-import { ContactType, MESSAGES } from 'static/auth';
+import { type ContactType, MESSAGES } from 'static/auth';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
+
 import styles from './PCVerifyPhone.module.scss';
 
 interface FindPasswordProps {

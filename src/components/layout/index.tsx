@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

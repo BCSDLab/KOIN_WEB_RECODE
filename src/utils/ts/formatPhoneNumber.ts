@@ -5,6 +5,7 @@ export function formatPhoneNumber(value: string): string {
   if (digits.startsWith('010') && digits.length >= 11) {
     return `010-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
   }
+
   return value;
 }
 
@@ -17,5 +18,6 @@ export const addHyphen = (raw: string) => {
   if (digits.length < 8) {
     return `${digits.slice(0, 3)}-${digits.slice(3)}`;
   }
+
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
 };

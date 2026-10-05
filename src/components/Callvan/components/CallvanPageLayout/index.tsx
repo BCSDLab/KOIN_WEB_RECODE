@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useQuery } from '@tanstack/react-query';
-import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
+import type { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import CarIcon from 'assets/svg/Callvan/car.svg';
@@ -11,8 +12,9 @@ import SearchIcon from 'assets/svg/Callvan/search.svg';
 import CallvanFilterPanel from 'components/Callvan/components/CallvanFilterPanel';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
+
 import styles from './CallvanPageLayout.module.scss';
 
 interface CallvanPageLayoutProps {
@@ -41,13 +43,12 @@ export default function CallvanPageLayout({
   const router = useRouter();
   const logger = useLogger();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data: notifications } = useQuery({
-    ...callvanQueries.notifications(token ?? ''),
-    enabled: !!token,
+    ...callvanQueries.notifications(isLoggedIn),
+    enabled: isLoggedIn,
   });
 
-  // 알림 쿼리 키에 토큰이 들어가 SSR(token='')과 클라이언트가 다른 캐시를 본다.
   const isMounted = useMount();
   const hasUnreadNotifications = isMounted && (notifications?.some((n) => !n.is_read) ?? false);
 
@@ -62,6 +63,7 @@ export default function CallvanPageLayout({
   const getBackEventLabel = () => {
     if (router.pathname === ROUTES.Callvan()) return 'callvan_back';
     if (router.pathname === ROUTES.CallvanAdd()) return 'callvan_write_back';
+
     return '';
   };
 

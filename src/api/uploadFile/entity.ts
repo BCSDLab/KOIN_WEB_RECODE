@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type UploadDomain = 'SHOPS' | 'LOST_ITEMS' | 'CLUB' | 'CALLVAN_REPORT' | 'CALLVAN_CHAT' | 'TEAM_RECRUITMENT';
 

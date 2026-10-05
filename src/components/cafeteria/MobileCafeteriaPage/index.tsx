@@ -1,15 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { DiningType } from 'api/dinings/entity';
+import type { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import CafeteriaInfoWidget from './components/CafeteriaInfoWidget';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
@@ -39,6 +42,7 @@ export default function MobileCafeteriaPage() {
       }
     };
     window.addEventListener('scroll', handleScroll);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -51,8 +55,9 @@ export default function MobileCafeteriaPage() {
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    router.push('/store');
+    router.push(ROUTES.Store());
   };
+
   useScrollToTop();
 
   return (

@@ -1,21 +1,26 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { getWebSession, webLogout } from 'api/auth';
 import { STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
-import { COOKIE_KEY } from 'static/url';
-import { deleteCookie, getCookieDomain } from 'utils/ts/cookie';
+import { ANONYMOUS_SESSION, hasSessionCookie, SESSION_QUERY_KEY } from 'utils/auth/session';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { useTokenStore } from 'utils/zustand/auth';
 
 export const useLogout = () => {
-  const { setToken, setRefreshToken } = useTokenStore();
-  const logout = () => {
-    const domain = getCookieDomain();
+  const queryClient = useQueryClient();
 
-    setRefreshToken('');
-    deleteCookie(COOKIE_KEY.AUTH_TOKEN); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
-    deleteCookie(COOKIE_KEY.AUTH_TOKEN, domain ? { domain: domain } : undefined);
+  const logout = async () => {
+    try {
+      // 로그아웃은 X-CSRF-Token이 필수라, CSRF 쿠키만 사라진 경우 세션 조회로 먼저 복구한다.
+      if (!hasSessionCookie()) await getWebSession();
+      await webLogout();
+    } catch {
+      // 세션이 이미 만료된 경우 등 — 서버 로그아웃이 실패해도 화면의 로그인 상태는 비운다.
+    }
     isomorphicSessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
-    setToken('');
+    queryClient.clear();
+    queryClient.setQueryData(SESSION_QUERY_KEY, ANONYMOUS_SESSION);
     window.location.href = ROUTES.Main();
   };
+
   return logout;
 };

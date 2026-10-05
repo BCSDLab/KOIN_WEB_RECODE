@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import useToastTimer from 'utils/hooks/ui/useToastTimer';
+
 import styles from './TimetableToast.module.scss';
 
 export interface Toast {

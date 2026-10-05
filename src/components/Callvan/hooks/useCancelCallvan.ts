@@ -1,13 +1,11 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { callvanMutations } from 'api/callvan/mutations';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const useCancelCallvan = () => {
-  const token = useTokenState();
   const queryClient = useQueryClient();
-  const mutation = callvanMutations.cancel(queryClient, token);
+  const mutation = callvanMutations.cancel(queryClient);
 
   const { mutate, isPending } = useMutation({
     ...mutation,

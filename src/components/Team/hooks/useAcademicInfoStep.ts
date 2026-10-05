@@ -4,7 +4,7 @@ import { getUserAcademicInfo, updateAcademicInfo } from 'api/auth';
 import { deptQueries } from 'api/dept/queries';
 import { useFormContext } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 interface AcademicInfoFormValues {
@@ -20,7 +20,7 @@ interface AcademicInfoLoggingTitle {
 }
 
 export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTitle, onSaved: () => void) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { actionEventClick } = useLogger();
   const { setValue } = useFormContext<AcademicInfoFormValues>();
 
@@ -28,7 +28,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   const deptOptionList = deptList.map((dept) => ({ label: dept.name, value: dept.name }));
 
   const { mutate: loadUserInfo, isPending: isLoadingUserInfo } = useMutation({
-    mutationFn: () => getUserAcademicInfo(token),
+    mutationFn: () => getUserAcademicInfo(),
     onSuccess: (data) => {
       setValue('nickname', data.nickname ?? '', { shouldValidate: true });
       setValue('studentNumber', data.student_number ?? '', { shouldValidate: true });
@@ -43,6 +43,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '회원정보를 불러오지 못했습니다.');
+
         return;
       }
       showToast('error', '회원정보를 불러오지 못했습니다.');
@@ -57,8 +58,9 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
       value: '회원정보 불러오기',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     loadUserInfo();
@@ -66,7 +68,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
 
   const { mutate: saveAcademicInfo, isPending: isSaving } = useMutation({
     mutationFn: (data: { department: string; studentNumber: string }) =>
-      updateAcademicInfo(token, { department: data.department, student_number: data.studentNumber }),
+      updateAcademicInfo({ department: data.department, student_number: data.studentNumber }),
     onSuccess: () => {
       actionEventClick({ team: 'CAMPUS', event_label: loggingTitle.NEXT, value: '다음' });
       onSaved();
@@ -74,6 +76,7 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '학적 정보 수정에 실패했습니다.');
+
         return;
       }
       showToast('error', '학적 정보 수정에 실패했습니다.');
@@ -82,8 +85,9 @@ export default function useAcademicInfoStep(loggingTitle: AcademicInfoLoggingTit
   });
 
   const handleSaveAcademicInfo = (data: { department: string; studentNumber: string }) => {
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('warning', '로그인 후 이용해주세요.');
+
       return;
     }
     saveAcademicInfo(data);

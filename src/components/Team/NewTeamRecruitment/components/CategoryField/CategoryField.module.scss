@@ -12,7 +12,7 @@
   }
 
   &__dropdown {
-    button:not([role='option']) {
+    button:not([role="option"]) {
       height: 40px;
       padding: 8px 12px;
       border: 1px solid #e1e1e1;
@@ -29,7 +29,7 @@
       }
     }
 
-    [role='listbox'] {
+    [role="listbox"] {
       margin-top: 4px;
       border: 1px solid #e1e1e1;
       border-radius: 8px;
@@ -41,7 +41,7 @@
       }
     }
 
-    [role='option'] {
+    [role="option"] {
       padding: 10px 12px;
       font-size: 14px;
       color: #000;
@@ -52,7 +52,7 @@
         background-color: #f5f5f5;
       }
 
-      &[aria-selected='true'] {
+      &[aria-selected="true"] {
         color: #175c8e;
         font-weight: 600;
 

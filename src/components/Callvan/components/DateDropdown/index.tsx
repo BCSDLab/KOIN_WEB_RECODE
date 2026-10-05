@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import ChevronDownIcon from 'assets/svg/Callvan/chevron-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { formatKoreanDate } from 'utils/ts/calendar';
+
 import styles from './DateDropdown.module.scss';
 
 const ITEM_HEIGHT = 32;
@@ -75,6 +77,7 @@ function getDaysInMonth(year: number, month: number): number {
 function buildYears(): number[] {
   const today = new Date();
   const currentYear = today.getFullYear();
+
   return [currentYear, currentYear + 1];
 }
 

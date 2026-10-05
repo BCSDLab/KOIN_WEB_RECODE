@@ -1,7 +1,9 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useRouter } from 'next/dist/client/components/navigation';
+
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import ROUTES from 'static/routes';
+
 import styles from './Mobile.module.scss';
 
 interface LayoutProps {

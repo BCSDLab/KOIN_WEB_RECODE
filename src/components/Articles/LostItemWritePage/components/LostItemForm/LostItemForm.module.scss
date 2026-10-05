@@ -66,7 +66,7 @@
   margin-bottom: 39px;
 
   @include media.media-breakpoint(mobile) {
-    gap: 10px;
+    gap: 0;
     margin-bottom: 0;
   }
 
@@ -89,6 +89,10 @@
       height: 30px;
       font-size: 14px;
       line-height: 1.6;
+      border-radius: 999px;
+      border: 1px solid #b611f5;
+      background-color: #fff;
+      color: #b611f5;
     }
   }
 
@@ -100,12 +104,16 @@
       align-items: center;
 
       @include media.media-breakpoint(mobile) {
-        padding-top: 4px;
+        padding: 4px 8px;
 
         svg {
           display: block;
           width: 20px;
           height: 20px;
+
+          path {
+            fill: #b611f5;
+          }
         }
       }
     }

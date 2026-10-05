@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+
 import useMount from 'utils/hooks/state/useMount';
 
 // hydration mismatch를 방지하도록 브라우저에서 렌더링

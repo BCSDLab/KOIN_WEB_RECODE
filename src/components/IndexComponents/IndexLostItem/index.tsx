@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ChevronRightIcon from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './IndexLostItem.module.scss';
 
 const SLIDE_INTERVAL = 5000;

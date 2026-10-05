@@ -1,4 +1,5 @@
 import WarnIcon from 'assets/svg/Articles/warn.svg';
+
 import styles from './FormFoundPlace.module.scss';
 
 const MAX_LENGTH = 20;

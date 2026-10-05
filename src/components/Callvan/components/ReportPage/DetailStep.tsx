@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
+
 import ImageUploadIcon from 'assets/svg/common/image-upload.svg';
+
 import styles from './ReportPage.module.scss';
 
 const MAX_DESCRIPTION_LENGTH = 1000;
@@ -59,8 +61,8 @@ export default function DetailStep({ description, images, onDescriptionChange, o
         <div className={styles['detail-step__image-box']}>
           <div className={styles['detail-step__image-slider']}>
             {images.map((file, index) => (
-              <div key={index} className={styles['image-item']}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+              <div key={`${file.name}-${file.size}-${file.lastModified}`} className={styles['image-item']}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- URL.createObjectURL의 blob: URL은 next/image가 최적화할 수 없음 */}
                 <img
                   src={URL.createObjectURL(file)}
                   alt={`첨부 이미지 ${index + 1}`}

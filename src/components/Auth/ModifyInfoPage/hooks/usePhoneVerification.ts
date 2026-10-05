@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { smsSend, smsVerify, checkPhone } from 'api/auth';
-import { MESSAGES } from 'static/auth';
-import { useVerificationTimer } from './useVerificationTimer';
 import type { SmsSendResponse } from 'api/auth/entity';
+import { MESSAGES } from 'static/auth';
+
+import { useVerificationTimer } from './useVerificationTimer';
 
 type VerificationMessageType = 'success' | 'warning' | 'error' | 'default';
 
@@ -37,14 +39,19 @@ export function usePhoneVerification(
   const [verificationMessage, setVerificationMessage] = useState<VerificationMessage | null>(null);
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendResponse | null>(null);
 
-  const { start, stop, reset: resetTimer, expire, formattedTime, timeLeft, isRunning } = useVerificationTimer(
-    VERIFICATION_DURATION_SECONDS,
-    () => {
-      if (!isVerified) {
-        setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
-      }
-    },
-  );
+  const {
+    start,
+    stop,
+    reset: resetTimer,
+    expire,
+    formattedTime,
+    timeLeft,
+    isRunning,
+  } = useVerificationTimer(VERIFICATION_DURATION_SECONDS, () => {
+    if (!isVerified) {
+      setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
+    }
+  });
 
   const sendSMS = useMutation({
     mutationFn: smsSend,

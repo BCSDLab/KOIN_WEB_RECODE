@@ -11,5 +11,10 @@ export default function StarList({ average_rating }: Props) {
 
   const rating = [...starList, ...emptyStarList];
 
-  return <div>{rating.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}</div>;
+  return (
+    <div>
+      {/* eslint-disable-next-line react/no-array-index-key -- 별점은 항상 고정 5칸이며 위치 자체가 의미를 가진다. */}
+      {rating.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
+    </div>
+  );
 }

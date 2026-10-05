@@ -1,6 +1,7 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { APIResponse } from 'interfaces/APIResponse';
-import { DiningResponseType } from './entity';
+import type { APIResponse } from 'interfaces/APIResponse';
+
+import type { DiningResponseType } from './entity';
 
 export class DiningLikePatcher<R extends APIResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PATCH;
@@ -15,10 +16,7 @@ export class DiningLikePatcher<R extends APIResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    diningId: number,
-    public authorization: string,
-  ) {
+  constructor(diningId: number) {
     this.params = {
       diningId,
     };
@@ -38,10 +36,7 @@ export class CancelDiningLikePatcher<R extends APIResponse> implements APIReques
 
   auth = true;
 
-  constructor(
-    diningId: number,
-    public authorization: string,
-  ) {
+  constructor(diningId: number) {
     this.params = {
       diningId,
     };
@@ -55,16 +50,11 @@ export default class DiningResponse<R extends DiningResponseType> implements API
 
   response!: R;
 
-  params: {
-    [index: string]: string;
-  };
+  params: Record<string, string>;
 
   auth = false;
 
-  constructor(
-    date: string,
-    public authorization?: string,
-  ) {
+  constructor(date: string) {
     this.params = {
       date,
     };

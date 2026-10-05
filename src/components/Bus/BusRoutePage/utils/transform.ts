@@ -1,5 +1,5 @@
-import { BusRouteInfoResponseDTO, ScheduleResponseDTO } from 'api/bus/entity';
-import { BusRoute, Schedule } from 'components/Bus/BusRoutePage/ts/types';
+import type { BusRouteInfoResponseDTO, ScheduleResponseDTO } from 'api/bus/entity';
+import type { BusRoute, Schedule } from 'components/Bus/BusRoutePage/ts/types';
 
 export const transformSchedule = (dto: ScheduleResponseDTO): Schedule => ({
   busType: dto.bus_type,

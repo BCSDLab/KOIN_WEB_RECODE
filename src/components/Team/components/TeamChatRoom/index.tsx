@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { TEAM_CHAT_MESSAGE_LIMIT, teamQueries } from 'api/team/queries';
-import ChatAvatarIcon from 'assets/svg/Team/chat-avatar.svg';
 import DefaultPhotoIcon from 'assets/svg/Team/default-photo.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
-import WebChatIcon from 'assets/svg/Team/web_chat.svg';
 import TeamChatSendBar from 'components/Team/components/TeamChatSendBar';
-import formatChatTime, { formatChatRoomListTime } from 'components/Team/utils/formatChatTime';
-import groupChatMessagesByDate from 'components/Team/utils/groupChatMessagesByDate';
+import { ChatLayout, ChatMessageList, ChatRoomList } from 'components/ui/Chat';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
+import { formatChatRoomListTime } from 'utils/ts/chatTime';
 import showToast from 'utils/ts/showToast';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
-import type { TeamChatMessage, TeamChatRoomListItem } from 'api/team/entity';
+
+import mapTeamChatMessageGroups from './mapTeamChatMessageGroups';
 import styles from './TeamChatRoom.module.scss';
 
 interface TeamChatRoomProps {
@@ -26,63 +26,22 @@ interface TeamChatRoomProps {
   chatRoomId: number;
 }
 
-interface ChatRoomSidebarListProps extends TeamChatRoomProps {
-  chatRooms: TeamChatRoomListItem[];
-}
-
 const PREVIOUS_MESSAGE_LOAD_THRESHOLD = 80;
 const BOTTOM_STICK_THRESHOLD = 80;
 
 const getChatRoomPreview = (room: TeamChatRoomListItem) => {
   if (room.last_message_is_image) return '사진을 보냈습니다.';
+
   return room.last_message_content ?? '';
 };
 
-function ChatRoomSidebarList({ chatRooms, recruitmentId, chatRoomId }: ChatRoomSidebarListProps) {
-  if (chatRooms.length === 0) {
-    return <p className={styles.chat__empty}>채팅방이 없습니다.</p>;
-  }
-
-  return chatRooms.map((room) => {
-    const isCurrentRoom = room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId;
-    const preview = getChatRoomPreview(room);
-
-    return (
-      <Link
-        key={`${room.recruitment_id}-${room.chat_room_id}`}
-        href={ROUTES.TeamChat({ recruitmentId: String(room.recruitment_id), chatRoomId: String(room.chat_room_id) })}
-        className={cn({ [styles.chat__roomItem]: true, [styles['chat__roomItem--active']]: isCurrentRoom })}
-        aria-current={isCurrentRoom ? 'page' : undefined}
-      >
-        <span className={styles.chat__roomAvatar} aria-hidden="true">
-          <DefaultPhotoIcon />
-        </span>
-        <span className={styles.chat__roomContent}>
-          <span className={styles.chat__roomHeader}>
-            <span className={styles.chat__roomName}>{room.room_name}</span>
-            {room.last_message_at && (
-              <span className={styles.chat__roomTime}>{formatChatRoomListTime(room.last_message_at)}</span>
-            )}
-          </span>
-          <span className={styles.chat__roomPreviewRow}>
-            <span className={styles.chat__roomPreview}>{preview}</span>
-            {room.unread_message_count > 0 && (
-              <span className={styles.chat__unreadCount}>{room.unread_message_count}</span>
-            )}
-          </span>
-        </span>
-      </Link>
-    );
-  });
-}
-
 export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoomProps) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
   const { data: user } = useUser();
-  const { data: chatRooms } = useSuspenseQuery(teamQueries.chatRoomList(token));
-  const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(token, recruitmentId, chatRoomId));
-  const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(token, recruitmentId, chatRoomId));
+  const { data: chatRooms } = useSuspenseQuery(teamQueries.chatRoomList(isLoggedIn));
+  const { data: chatRoom } = useSuspenseQuery(teamQueries.chatRoom(isLoggedIn, recruitmentId, chatRoomId));
+  const { data: messages } = useSuspenseQuery(teamQueries.chatMessages(isLoggedIn, recruitmentId, chatRoomId));
   const { uploadFile, isPending: isUploading } = useUploadFile();
   const [previousMessages, setPreviousMessages] = useState<TeamChatMessage[]>([]);
   const [hasPreviousMessages, setHasPreviousMessages] = useState(messages.length >= TEAM_CHAT_MESSAGE_LIMIT);
@@ -92,7 +51,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   const hasInitialScrollRef = useRef(false);
 
   const { mutate: sendMessage, isPending: isSending } = useMutation({
-    ...teamMutations.sendChatMessage(queryClient, token, recruitmentId, chatRoomId),
+    ...teamMutations.sendChatMessage(queryClient, isLoggedIn, recruitmentId, chatRoomId),
     onError: () => showToast('error', '메시지를 보내지 못했어요. 다시 시도해 주세요.'),
   });
   const mergedMessages = mergeChatMessages(previousMessages, messages);
@@ -107,19 +66,34 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
     }
   }, [lastMessageId]);
 
+  const sidebarItems = chatRooms.map((room) => ({
+    key: `${room.recruitment_id}-${room.chat_room_id}`,
+    href: ROUTES.TeamChat({
+      recruitmentId: String(room.recruitment_id),
+      chatRoomId: String(room.chat_room_id),
+    }),
+    title: room.room_name,
+    timeLabel: room.last_message_at ? formatChatRoomListTime(room.last_message_at) : undefined,
+    preview: getChatRoomPreview(room),
+    unreadCount: room.unread_message_count,
+    avatar: <DefaultPhotoIcon />,
+    avatarAriaHidden: true,
+    isActive: room.recruitment_id === recruitmentId && room.chat_room_id === chatRoomId,
+  }));
+
   const isTeamRoom = chatRoom.room_type === 'TEAM';
-  const messageGroups = groupChatMessagesByDate(mergedMessages);
-  const memberCount = isTeamRoom ? (
+  const messageGroups = mapTeamChatMessageGroups(mergedMessages, user?.id);
+  const memberCount = isTeamRoom && (
     <span
       className={cn({
-        [styles.chatRoom__memberCount]: true,
-        [styles['chatRoom__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
+        [styles['chat-room__memberCount']]: true,
+        [styles['chat-room__memberCount--full']]: chatRoom.member_count >= chatRoom.max_member_count,
       })}
     >
       <PeopleIcon />
       {chatRoom.member_count}/{chatRoom.max_member_count}
     </span>
-  ) : undefined;
+  );
 
   const loadPreviousMessages = async () => {
     const container = messagesContainerRef.current;
@@ -132,7 +106,7 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
 
     try {
       const fetchedMessages = await queryClient.fetchQuery(
-        teamQueries.chatMessages(token, recruitmentId, chatRoomId, {
+        teamQueries.chatMessages(isLoggedIn, recruitmentId, chatRoomId, {
           beforeMessageId: oldestMessageId,
           limit: TEAM_CHAT_MESSAGE_LIMIT,
         }),
@@ -187,116 +161,32 @@ export default function TeamChatRoom({ recruitmentId, chatRoomId }: TeamChatRoom
   };
 
   return (
-    <div className={styles.chat}>
-      <aside className={styles.chat__sidebar} aria-label="채팅방 목록">
-        <ChatRoomSidebarList chatRooms={chatRooms} recruitmentId={recruitmentId} chatRoomId={chatRoomId} />
-      </aside>
-
-      <section className={styles.chatRoom}>
-        <div className={styles.chatRoom__mobileHeader}>
-          <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
-        </div>
-        <div className={styles.chatRoom__desktopHeader}>
-          <h2>{chatRoom.room_name}</h2>
-          {memberCount}
-        </div>
-        <div ref={messagesContainerRef} className={styles.chatRoom__messages} onScroll={handleMessagesScroll}>
-          {messageGroups.map((group) => (
-            <div key={group.date}>
-              <div className={styles.chatRoom__dateChip}>
-                <span
-                  className={cn({
-                    [styles.chatRoom__dateLabel]: true,
-                    [styles['chatRoom__dateLabel--today']]: group.isToday,
-                  })}
-                >
-                  {group.label}
-                </span>
-              </div>
-              {group.messages.map((message, index) => {
-                const isMine = message.user_id === user?.id;
-                const isFirstOfSender = index === 0 || group.messages[index - 1].user_id !== message.user_id;
-
-                const bubble = message.is_image ? (
-                  <div className={styles.chatRoom__imageBubble}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={message.content} alt="전송된 이미지" />
-                  </div>
-                ) : (
-                  <div
-                    className={cn({
-                      [styles.chatRoom__bubble]: true,
-                      [styles['chatRoom__bubble--mine']]: isMine,
-                      [styles['chatRoom__bubble--others']]: !isMine,
-                    })}
-                  >
-                    {message.content}
-                  </div>
-                );
-
-                const meta = (
-                  <div
-                    className={cn({
-                      [styles.chatRoom__meta]: true,
-                      [styles['chatRoom__meta--mine']]: isMine,
-                    })}
-                  >
-                    {message.unread_count > 0 && (
-                      <span className={styles.chatRoom__unreadCount}>{message.unread_count}</span>
-                    )}
-                    <span className={styles.chatRoom__time}>{formatChatTime(message.timestamp)}</span>
-                  </div>
-                );
-
-                if (isMine) {
-                  return (
-                    <div
-                      key={message.message_id}
-                      className={styles['chatRoom__messageRow--mine']}
-                      data-message-id={message.message_id}
-                    >
-                      {meta}
-                      {bubble}
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={message.message_id}
-                    className={cn({
-                      [styles.chatRoom__messageGroup]: true,
-                      [styles['chatRoom__messageGroup--consecutive']]: !isFirstOfSender,
-                    })}
-                    data-message-id={message.message_id}
-                  >
-                    {isFirstOfSender && (
-                      <div className={styles.chatRoom__sender}>
-                        <span className={styles.chatRoom__desktopSenderIcon} aria-hidden="true">
-                          <WebChatIcon />
-                        </span>
-                        <span className={styles.chatRoom__mobileSenderIcon} aria-hidden="true">
-                          <ChatAvatarIcon />
-                        </span>
-                        <span className={styles.chatRoom__senderName}>{message.user_nickname}</span>
-                      </div>
-                    )}
-                    <div className={styles['chatRoom__messageRow--others']}>
-                      {bubble}
-                      {meta}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-        <TeamChatSendBar
-          disabled={isSending || isUploading}
-          onSend={handleSend}
-          onImageSelect={handleImageSelect}
+    <ChatLayout
+      className={styles.chat}
+      sidebarClassName={styles.chat__sidebar}
+      panelClassName={styles['chat-room']}
+      sidebar={<ChatRoomList items={sidebarItems} />}
+    >
+      <div className={styles['chat-room__mobileHeader']}>
+        <SubPageHeader title={chatRoom.room_name} size="medium" rightAction={memberCount} />
+      </div>
+      <div className={styles['chat-room__desktopHeader']}>
+        <h2>{chatRoom.room_name}</h2>
+        {memberCount}
+      </div>
+      <div ref={messagesContainerRef} className={styles['chat-room__messages']} onScroll={handleMessagesScroll}>
+        <ChatMessageList
+          groups={messageGroups}
+          classNames={{
+            dateContainer: styles['chat-room__dateChip'],
+            dateLabel: styles['chat-room__dateLabel'],
+            bubbleMine: styles['chat-room__bubble'],
+            bubbleOthers: styles['chat-room__bubble'],
+            imageBubble: styles['chat-room__imageBubble'],
+          }}
         />
-      </section>
-    </div>
+      </div>
+      <TeamChatSendBar disabled={isSending || isUploading} onSend={handleSend} onImageSelect={handleImageSelect} />
+    </ChatLayout>
   );
 }

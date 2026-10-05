@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import FaceIcon from 'assets/svg/face-icon.svg';
 import LockIcon from 'assets/svg/lock-icon.svg';
 import MagnifyingGlassIcon from 'assets/svg/Login/magnifying-glass.svg';
@@ -6,6 +7,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './AdditionalLink.module.scss';
 
 export default function AdditionalLink() {
@@ -67,11 +69,7 @@ export default function AdditionalLink() {
       <Link className={styles.help__link} href={ROUTES.AuthFindID()} onClick={onClickFindId}>
         아이디 찾기
       </Link>
-      <Link
-        className={styles.help__link}
-        href={ROUTES.AuthFindPW({ step: '계정인증' })}
-        onClick={onClickFindPassword}
-      >
+      <Link className={styles.help__link} href={ROUTES.AuthFindPW({ step: '계정인증' })} onClick={onClickFindPassword}>
         비밀번호 찾기
       </Link>
       <Link

@@ -1,6 +1,7 @@
-import { Attachment } from 'api/articles/entity';
+import type { Attachment } from 'api/articles/entity';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import { sanitizeHtml } from 'utils/ts/sanitize';
+
 import styles from './ArticleContent.module.scss';
 
 interface ArticleContentProps {
@@ -13,10 +14,7 @@ export default function ArticleContent({ content, attachments }: ArticleContentP
 
   return (
     <div className={styles.content}>
-      <div
-        dangerouslySetInnerHTML={{ __html: safeContent }}
-        className={`toastui-editor-contents ${styles.viewer}`}
-      />
+      <div dangerouslySetInnerHTML={{ __html: safeContent }} className={`toastui-editor-contents ${styles.viewer}`} />
       {attachments && attachments.length > 0 && (
         <div className={styles.attachments}>
           <span className={styles.attachments__title}>첨부파일</span>

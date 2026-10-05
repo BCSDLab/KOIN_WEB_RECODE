@@ -14,6 +14,7 @@ export const initializeCategoryEntryTime = () => initializeTime(CATEGORY_ENTRY_T
 const getTime = (key: string) => {
   const currentTime = new Date().getTime();
   const mainEntryTime = Number(isomorphicSessionStorage.getItem(key)) || currentTime;
+
   return (currentTime - mainEntryTime) / 1000;
 };
 

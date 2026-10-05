@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+
 import Layout from 'components/layout';
 import ApplicantManagement from 'components/Team/ApplicantManagement';
 

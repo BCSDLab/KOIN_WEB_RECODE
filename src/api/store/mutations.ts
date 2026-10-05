@@ -1,7 +1,8 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
-import { ReviewReportRequest } from './entity';
-import { storeQueryKeys } from './queries';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
+import type { ReviewReportRequest } from './entity';
 import { deleteReview, postReviewReport } from './index';
+import { storeQueryKeys } from './queries';
 
 interface StoreMutationCallbacks {
   onSuccess?: () => void | Promise<void>;
@@ -9,7 +10,7 @@ interface StoreMutationCallbacks {
 
 const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: string) => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.myReviews(shopId) }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.detail(shopId) }),
@@ -18,33 +19,21 @@ const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: st
 };
 
 export const storeMutations = {
-  deleteReview: (
-    queryClient: QueryClient,
-    reviewId: number,
-    shopId: string,
-    token: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  deleteReview: (queryClient: QueryClient, reviewId: number, shopId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: () => deleteReview(reviewId, shopId, token),
+      mutationFn: () => deleteReview(reviewId, shopId),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  reportReview: (
-    queryClient: QueryClient,
-    shopId: string,
-    reviewId: string,
-    token: string,
-    callbacks: StoreMutationCallbacks = {},
-  ) =>
+  reportReview: (queryClient: QueryClient, shopId: string, reviewId: string, callbacks: StoreMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data, token),
+      mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data),
       onSuccess: async () => {
         await Promise.all([
-          queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+          queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
           queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
         ]);
         await callbacks.onSuccess?.();

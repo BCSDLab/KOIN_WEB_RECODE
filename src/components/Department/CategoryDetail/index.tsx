@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { DepartmentContactCategory } from 'api/departmentContact/entity';
+import type { DepartmentContactCategory } from 'api/departmentContact/entity';
 import { departmentContactQueries } from 'api/departmentContact/queries';
 import { formatUpdatedAt } from 'components/Department/formatUpdatedAt';
 import { BUS_FEEDBACK_FORM } from 'static/bus';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import CategoryDetailDesktop from './CategoryDetailDesktop';
 import CategoryDetailMobile from './CategoryDetailMobile';
 

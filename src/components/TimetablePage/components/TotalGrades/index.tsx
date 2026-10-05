@@ -1,4 +1,5 @@
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo } from 'api/timetable/entity';
+
 import styles from './TotalGrades.module.scss';
 
 interface TotalGradesProps {

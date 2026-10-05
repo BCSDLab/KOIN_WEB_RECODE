@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './TimeDropdown.module.scss';
 
 const ITEM_HEIGHT = 32;
@@ -91,7 +93,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
   useLayoutEffect(() => {
     if (!ref.current) return;
     ref.current.scrollTop = (middleOffset + selectedIndex) * ITEM_HEIGHT;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 실행 (이후 변경은 아래 별도 effect가 처리)
   }, []);
 
   // 외부에서 selectedIndex가 변경될 때 (초기화 등) 스크롤 위치 복원
@@ -139,6 +141,7 @@ function InfiniteScrollColumn({ items, selectedIndex, onSelect }: InfiniteScroll
       {Array.from({ length: MINUTE_REPEAT }, (_, repeatIdx) =>
         items.map((item, itemIdx) => (
           <div
+            // eslint-disable-next-line react/no-array-index-key -- 무한 스크롤 연출을 위해 동일 항목을 반복 렌더링하므로 위치 외에 유일한 키가 없다.
             key={`${repeatIdx}-${itemIdx}`}
             role="button"
             tabIndex={0}

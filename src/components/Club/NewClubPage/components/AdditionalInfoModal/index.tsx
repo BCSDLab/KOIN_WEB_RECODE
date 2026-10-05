@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { NewClubData } from 'api/club/entity';
+
+import type { NewClubData } from 'api/club/entity';
 import usePostNewClub from 'components/Club/NewClubPage/hooks/usePostNewClub';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getClubCategoryName } from 'utils/ts/clubCategoryMapping';
+
 import styles from './AdditionalInfoModal.module.scss';
 
 interface AdditionalInfoModalProps {
@@ -43,6 +45,7 @@ export default function AdditionalInfoModal({ closeModal, formData, setFormData 
     await mutateAsync(submitData);
     closeModal();
   };
+
   return (
     <div className={styles['modal-background']} onClick={closeModal} role="button" tabIndex={0} onKeyDown={() => {}}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="presentation">

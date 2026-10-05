@@ -14,6 +14,11 @@
 
   &__date {
     font-size: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      gap: 4px;
+    }
   }
 
   &__icon {
@@ -25,12 +30,11 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
       justify-content: start;
-      margin-bottom: 30px;
     }
   }
 
@@ -40,12 +44,15 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
   }
 
   @include media.media-breakpoint(mobile) {
-    width: 100%;
     flex-direction: column;
-    padding: 8px 24px 140px;
+    padding: 8px 24px 24px;
   }
 }

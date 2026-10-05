@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
 import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
@@ -13,6 +14,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import styles from './ClubEventDetailView.module.scss';
 
 interface ClubEventDetailViewProps {
@@ -34,6 +36,7 @@ const formatDateTimeByDevice = (dateTimeStr: string, isMobile: boolean) => {
   if (isMobile) {
     return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
   }
+
   return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
 };
 
@@ -59,6 +62,7 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
 
   const getStatusLabel = (value: string) => {
     const option = statusOptions.find((opt) => opt.value === value);
+
     return option ? option.label : '최신 등록순';
   };
 
@@ -73,7 +77,7 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
     closeModal();
   };
 
-  const handleClickDeleteButton = async () => {
+  const handleClickDeleteButton = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_event_delete',

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { teamRecruitmentFormSchema, TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
+import { teamRecruitmentFormSchema, type TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
 import { useForm } from 'react-hook-form';
 
 function createInitialTeamRecruitmentForm(): TeamRecruitmentFormValues {

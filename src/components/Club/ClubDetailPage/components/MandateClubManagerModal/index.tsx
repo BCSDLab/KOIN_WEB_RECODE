@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { NewClubManager } from 'api/club/entity';
+
+import type { NewClubManager } from 'api/club/entity';
 import useMandateClubManagerMutation from 'components/Club/ClubDetailPage/hooks/useClubManager';
 import { useUser } from 'utils/hooks/state/useUser';
+
 import styles from './MandateClubManagerModal.module.scss';
 
 interface CreateQnAModalProps {
@@ -23,6 +25,7 @@ export default function MandateClubManagerModal({ closeModal, clubId, clubName }
     await mandateClubManagerMutateAsync(newManager);
     closeModal();
   };
+
   return (
     <div className={styles['modal-background']} onClick={closeModal} role="button" tabIndex={0} onKeyDown={() => {}}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="presentation">

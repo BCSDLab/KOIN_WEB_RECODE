@@ -1,21 +1,23 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import PersonIcon from 'assets/svg/person.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { CATEGORY, Submenu } from 'static/category';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { CATEGORY, type Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
+
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -32,7 +34,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
 
   const logShortcut = (title: string) => {
@@ -51,8 +53,10 @@ export default function Panel({ openModal }: PanelProps) {
       logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
     if (title === '쪽지') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
     if (title === '동아리') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '동아리' });
-    if (title === '콜밴팟 모집') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '콜밴팟 모집' });
-    if (title === '팀원 모집') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '팀원 모집' });
+    if (title === '콜밴팟 모집')
+      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '콜밴팟 모집' });
+    if (title === '팀원 모집')
+      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '팀원 모집' });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
@@ -93,8 +97,9 @@ export default function Panel({ openModal }: PanelProps) {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
 
-    if (!token && submenu.title === '쪽지') {
+    if (!isLoggedIn && submenu.title === '쪽지') {
       openLoginModal();
+
       return;
     }
 
@@ -102,6 +107,7 @@ export default function Panel({ openModal }: PanelProps) {
       const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
       router.push(targetUrl);
       closeSidebar();
+
       return;
     }
 

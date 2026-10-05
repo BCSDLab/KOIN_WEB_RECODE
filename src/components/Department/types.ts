@@ -1,4 +1,5 @@
 import type { ComponentType, SVGProps } from 'react';
+
 import type { DepartmentContactCategory, DepartmentContactCategoryGroup } from 'api/departmentContact/entity';
 
 export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;

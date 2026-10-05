@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
+import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { teamQueries, type TeamRecruitmentInfiniteListRequest } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import FilterIcon from 'assets/svg/Team/filter.svg';
@@ -25,12 +25,12 @@ import SearchBar from 'components/ui/SearchBar';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { redirectToLogin, setRedirectPath } from 'utils/ts/auth';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+
 import styles from './TeamListPage.module.scss';
 
 interface AppliedFilterChipProps {
@@ -40,14 +40,19 @@ interface AppliedFilterChipProps {
 
 function AppliedFilterChip({ label, onRemove }: AppliedFilterChipProps) {
   return (
-    <button type="button" className={styles.appliedFilterChip} onClick={onRemove} aria-label={`${label} 필터 해제`}>
+    <button
+      type="button"
+      className={styles['applied-filter-chip']}
+      onClick={onRemove}
+      aria-label={`${label} 필터 해제`}
+    >
       <span>{label}</span>
       <XIcon aria-hidden />
     </button>
   );
 }
 
-const getFilterLabel = <T extends string>(options: { value: T; label: string }[], value: T) =>
+const getFilterLabel = <T extends string>(options: Array<{ value: T; label: string }>, value: T) =>
   options.find((option) => option.value === value)?.label ?? value;
 
 const INITIAL_FILTER: TeamRecruitmentFilter = {
@@ -66,26 +71,27 @@ const createRequestParams = (filter: TeamRecruitmentFilter, keyword?: string): T
 
 const INITIAL_REQUEST_PARAMS = createRequestParams(INITIAL_FILTER);
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token } = parseServerSideParams(context);
-  const queryClient = new QueryClient();
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
 
-  await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, token));
+    await queryClient.prefetchInfiniteQuery(teamQueries.infiniteList(INITIAL_REQUEST_PARAMS, serverRequest.isLoggedIn));
 
-  if (!token) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+);
 
 export default function TeamListPage() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
@@ -97,7 +103,7 @@ export default function TeamListPage() {
   const requestParams = createRequestParams(appliedFilter, searchKeyword);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-    teamQueries.infiniteList(requestParams, token),
+    teamQueries.infiniteList(requestParams, isLoggedIn),
   );
 
   const recruitments = data?.pages.flatMap((page) => page.recruitments) ?? [];
@@ -142,10 +148,11 @@ export default function TeamListPage() {
       value: '프로필',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       setRedirectPath(router.asPath);
       await router.push(ROUTES.Auth());
       showToast('warning', '로그인이 필요한 기능입니다.');
+
       return;
     }
     router.push(ROUTES.TeamProfile());
@@ -158,8 +165,9 @@ export default function TeamListPage() {
       value: '모집하기',
     });
 
-    if (!token) {
+    if (!isLoggedIn) {
       redirectToLogin(router.asPath);
+
       return;
     }
     router.push(ROUTES.TeamRecruitmentNew());
@@ -177,7 +185,7 @@ export default function TeamListPage() {
       <main className={styles.page}>
         {!isMobile && <h1 className={styles.title}>팀원모집</h1>}
 
-        <div className={styles.searchRow}>
+        <div className={styles['search-row']}>
           <SearchBar
             value={searchTitle}
             onChange={setSearchTitle}
@@ -188,17 +196,17 @@ export default function TeamListPage() {
 
           <button
             type="button"
-            className={styles.filterButton}
+            className={styles['filter-button']}
             onClick={handleFilterClick}
             aria-haspopup="dialog"
             aria-expanded={isFilterOpen}
           >
-            <span className={styles.filterButton__label}>필터</span>
+            <span className={styles['filter-button__label']}>필터</span>
             <FilterIcon />
           </button>
 
           <div className={styles.actions}>
-            <button type="button" className={styles.profileButton} onClick={handleProfileClick}>
+            <button type="button" className={styles['profile-button']} onClick={handleProfileClick}>
               내 프로필
             </button>
 
@@ -210,7 +218,7 @@ export default function TeamListPage() {
         </div>
 
         {hasAppliedFilter && (
-          <div className={styles.appliedFilters}>
+          <div className={styles['applied-filters']}>
             {appliedFilter.status !== DEFAULT_TEAM_RECRUITMENT_FILTER.status && (
               <AppliedFilterChip
                 label={getFilterLabel(TEAM_RECRUITMENT_FILTER_STATUS_OPTIONS, appliedFilter.status)}
@@ -247,11 +255,11 @@ export default function TeamListPage() {
           </div>
         )}
 
-        <p className={styles.totalCount}>전체({totalCount})</p>
+        <p className={styles['total-count']}>전체({totalCount})</p>
 
         <div className={styles.content}>
           {isLoading && (
-            <p className={styles.loadingState} role="status">
+            <p className={styles['loading-state']} role="status">
               모집글을 불러오는 중입니다.
             </p>
           )}
@@ -263,11 +271,7 @@ export default function TeamListPage() {
                 <p className={styles.empty__message}>
                   {isError ? '모집글을 불러오지 못했습니다.' : '조건에 맞는 모집글이 없어요.'}
                 </p>
-                {!isError && (
-                  <p className={styles.empty__description}>
-                    직접 모집글을 작성하여 팀원을 모집해보세요.
-                  </p>
-                )}
+                {!isError && <p className={styles.empty__description}>직접 모집글을 작성하여 팀원을 모집해보세요.</p>}
               </div>
               {!isError && (
                 <button type="button" className={styles.empty__recruitButton} onClick={handleRecruitClick}>
@@ -287,9 +291,9 @@ export default function TeamListPage() {
                 />
               ))}
 
-              {isFetchingNextPage && <p className={styles.loadingIndicator}>모집글을 불러오는 중입니다.</p>}
+              {isFetchingNextPage && <p className={styles['loading-indicator']}>모집글을 불러오는 중입니다.</p>}
 
-              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+              <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
             </div>
           )}
         </div>

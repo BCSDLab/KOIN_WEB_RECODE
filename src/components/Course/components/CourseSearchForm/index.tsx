@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Semester } from 'api/timetable/entity';
+
+import type { Semester } from 'api/timetable/entity';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+
 import styles from './CourseSearchForm.module.scss';
 
 const DEPARTMENTS = [
@@ -70,7 +72,7 @@ export default function CourseSearchForm({
     <form onSubmit={handleSubmit}>
       <div className={styles.header}>
         <button type="submit" className={styles.header__button}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- next.config.mjs images.remotePatterns에 없는 외부 도메인이라 next/image 최적화 불가 */}
           <img
             className={styles.header__icon}
             src="https://kut90.koreatech.ac.kr/nxweb/images/common/Button/btn_search.png"
@@ -79,7 +81,7 @@ export default function CourseSearchForm({
           조회
         </button>
         <button type="button" className={styles.header__button}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- next.config.mjs images.remotePatterns에 없는 외부 도메인이라 next/image 최적화 불가 */}
           <img
             className={styles.header__icon}
             src="https://kut90.koreatech.ac.kr/nxweb/images/common/Button/btn_help.png"

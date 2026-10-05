@@ -1,5 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import useToastTimer from 'utils/hooks/ui/useToastTimer';
+
 import styles from './CallvanToast.module.scss';
 
 interface CallvanToastProps {

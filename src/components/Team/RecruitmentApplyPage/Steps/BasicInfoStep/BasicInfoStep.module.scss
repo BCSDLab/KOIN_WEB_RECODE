@@ -113,7 +113,7 @@
   }
 }
 
-.loadInfo {
+.load-info {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -223,7 +223,7 @@
   }
 }
 
-.activityCard {
+.activity-card {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -307,7 +307,7 @@
   }
 }
 
-.grayInput {
+.gray-input {
   color: #727272;
 
   &::placeholder {
@@ -316,12 +316,12 @@
 }
 
 // DeptSelect가 선택된 값에 색을 진하게 덮어써서 !important로 강제한다.
-.grayDropdown {
+.gray-dropdown {
   color: #727272 !important;
 }
 
 // 기존 프로필 프리필(reset())은 onInput을 안 거쳐서 자동 높이 조절 JS가 안 붙는다.
 // min-height로 여유를 둬서 긴 자기소개가 프리필돼도 잘려 보이지 않게 한다.
-.introductionControl {
+.introduction-control {
   min-height: 200px;
 }

@@ -3,10 +3,12 @@ import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import BackIcon from 'assets/svg/arrow-back.svg';
-import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import { Controller, useFormContext, useWatch, FieldError } from 'react-hook-form';
-import { ContactType, MESSAGES, REGEX } from 'static/auth';
+import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
+import type { InputMessage } from 'interfaces/InputMessage';
+import { Controller, useFormContext, useWatch, type FieldError } from 'react-hook-form';
+import { type ContactType, MESSAGES, REGEX } from 'static/auth';
 import showToast from 'utils/ts/showToast';
+
 import styles from './PCResetPasswordPhone.module.scss';
 
 interface PCResetPasswordPhoneProps {
@@ -44,6 +46,7 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
+
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 

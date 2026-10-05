@@ -45,9 +45,9 @@ export interface HotClubResponse extends APIResponse {
 export interface NewClubData {
   name: string;
   image_url: string;
-  club_managers: {
+  club_managers: Array<{
     user_id: string;
-  }[];
+  }>;
   club_category_id: number;
   location: string;
   description: string;
@@ -151,7 +151,7 @@ export interface ClubEvent {
 
 export interface ClubEventResponse extends ClubEvent, APIResponse {}
 
-export type ClubEventListResponse = (ClubEvent & { is_subscribed: boolean })[];
+export type ClubEventListResponse = Array<ClubEvent & { is_subscribed: boolean }>;
 
 export interface ClubRecruitment {
   start_date: string;

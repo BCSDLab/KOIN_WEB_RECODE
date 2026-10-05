@@ -1,11 +1,9 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubMutations } from 'api/club/mutations';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useClubNotification(clubId: number) {
-  const token = useTokenState();
   const queryClient = useQueryClient();
   const handleError = (error: unknown) => {
     if (isKoinError(error)) {
@@ -16,22 +14,22 @@ export default function useClubNotification(clubId: number) {
   };
 
   const { mutateAsync: subscribeRecruitmentNotification } = useMutation({
-    ...clubMutations.subscribeRecruitmentNotification(queryClient, token, clubId),
+    ...clubMutations.subscribeRecruitmentNotification(queryClient, clubId),
     onError: handleError,
   });
 
   const { mutateAsync: unsubscribeRecruitmentNotification } = useMutation({
-    ...clubMutations.unsubscribeRecruitmentNotification(queryClient, token, clubId),
+    ...clubMutations.unsubscribeRecruitmentNotification(queryClient, clubId),
     onError: handleError,
   });
 
   const { mutateAsync: subscribeEventNotification } = useMutation({
-    ...clubMutations.subscribeEventNotification(queryClient, token, clubId),
+    ...clubMutations.subscribeEventNotification(queryClient, clubId),
     onError: handleError,
   });
 
   const { mutateAsync: unsubscribeEventNotification } = useMutation({
-    ...clubMutations.unsubscribeEventNotification(queryClient, token, clubId),
+    ...clubMutations.unsubscribeEventNotification(queryClient, clubId),
     onError: handleError,
   });
 

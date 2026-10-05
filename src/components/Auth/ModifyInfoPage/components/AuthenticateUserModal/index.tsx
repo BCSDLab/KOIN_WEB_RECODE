@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
@@ -14,6 +15,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
+
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -71,6 +73,7 @@ export default function AuthenticateUserModal({ onClose, disabledClose = false }
     };
 
     window.addEventListener('unload', handleUnload);
+
     return () => {
       window.removeEventListener('unload', handleUnload);
     };

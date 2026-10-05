@@ -20,13 +20,8 @@
       "*": ["src/*"]
     },
     "plugins": [{ "name": "next" }],
-    "incremental": true,
+    "incremental": true
   },
-  "include": [
-    "next-env.d.ts", 
-    "src/**/*",
-    ".next/types/**/*.ts",
-    "src/types/**/*.d.ts",
-  ],
+  "include": ["next-env.d.ts", "src/**/*", ".next/types/**/*.ts", "src/types/**/*.d.ts"],
   "exclude": ["node_modules", ".next", ".yarn"]
 }

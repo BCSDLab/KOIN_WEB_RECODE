@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
@@ -9,15 +10,16 @@ import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import dayjs from 'dayjs';
 import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './ExpressBusTimetable.module.scss';
 
 const SKELETON_ROWS = Array.from({ length: 10 }, () => ['', '']);
 
-type ExpressBusTimetable = {
+interface ExpressBusTimetable {
   departure: string;
   arrival: string;
   charge: number;
-};
+}
 
 export default function ExpressBusTimetable() {
   const [selectedCourseId, setSelectedCourseId] = useState(0);
@@ -42,10 +44,12 @@ export default function ExpressBusTimetable() {
     isLoading || !timetable ? SKELETON_ROWS : buildArrivalList(timetable.bus_timetables as ExpressBusTimetable[]);
 
   return (
-    <BusCoursePage>
+    <BusCoursePage
+      boardingLocation={EXPRESS_COURSES[selectedCourseId].direction === 'from' ? '코리아텍' : '천안 터미널'}
+    >
       <div className={styles['timetable-container']}>
         <div className={styles['course-category']}>
-          <div className={styles['course-category__button']}>운행</div>
+          <div className={`${styles['course-category__button']} ${styles['course-category__label']}`}>운행</div>
           {EXPRESS_COURSES.map((course, index) => (
             <button
               key={course.name}

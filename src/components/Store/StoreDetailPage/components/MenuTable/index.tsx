@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { MenuCategory } from 'api/store/entity';
+import type { MenuCategory } from 'api/store/entity';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import MENU_CATEGORY from 'static/menu';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
@@ -44,6 +45,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
         }
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleScroll은 React Compiler가 참조를 안정화함
   }, [storeMenuCategories]);
 
   const scrollToTarget = (name: string) => {

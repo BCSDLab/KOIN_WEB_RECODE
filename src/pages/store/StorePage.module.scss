@@ -126,7 +126,7 @@
   &__image {
     width: 48px;
     height: 48px;
-    border-width: 50%;
+    border-radius: 50%;
     margin: 0 auto 13px;
 
     @include media.media-breakpoint(mobile) {

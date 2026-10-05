@@ -2,14 +2,12 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { callvanMutations } from 'api/callvan/mutations';
 import useCallvanRestrictionModal from 'components/Callvan/hooks/useCallvanRestrictionModal';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const useJoinCallvan = () => {
-  const token = useTokenState();
   const queryClient = useQueryClient();
-  const mutation = callvanMutations.join(queryClient, token);
-  const { openFromError } = useCallvanRestrictionModal(token);
+  const mutation = callvanMutations.join(queryClient);
+  const { openFromError } = useCallvanRestrictionModal();
 
   const { mutate, isPending } = useMutation({
     ...mutation,

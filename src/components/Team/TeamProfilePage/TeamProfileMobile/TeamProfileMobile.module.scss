@@ -16,7 +16,7 @@
   }
 }
 
-.summaryCard {
+.summary-card {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -86,7 +86,7 @@
   }
 }
 
-.emptyCard {
+.empty-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,14 +137,14 @@
   }
 }
 
-.menuList {
+.menu-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: 100%;
 }
 
-.menuCard {
+.menu-card {
   display: flex;
   align-items: center;
   gap: 12px;

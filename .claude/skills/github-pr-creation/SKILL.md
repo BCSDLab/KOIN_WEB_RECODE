@@ -34,6 +34,7 @@ git checkout -b fix/sonarcloud-quality-$(date +%Y%m%d)
 ## 커밋 규칙
 
 컨벤셔널 커밋 형식:
+
 ```
 feat: [기능명] 추가
 fix: [이슈] 수정
@@ -110,6 +111,7 @@ gh pr list --state open | head -5
 ## 브랜치 정리
 
 PR 머지 후:
+
 ```bash
 git checkout develop
 git branch -d feature/[기능명]

@@ -6,9 +6,9 @@
 실행 성공 여부와 관계없이 임시 스크립트를 제거한다. 따라서 저장소의 변경이 다음 배포부터
 실제 배포 절차에 반영된다.
 
-| 파일 | 선택 환경 | 서비스 | 포트 |
-| --- | --- | --- | --- |
-| `stage-deploy.sh` | stage | `koin-stage.service` | 3000 |
+| 파일                   | 선택 환경  | 서비스                    | 포트 |
+| ---------------------- | ---------- | ------------------------- | ---- |
+| `stage-deploy.sh`      | stage      | `koin-stage.service`      | 3000 |
 | `production-deploy.sh` | production | `koin-production.service` | 3001 |
 
 서버의 기존 `/usr/local/koin/<environment>/deploy/deploy.sh`는 호환용 사본이며 CI 실행 경로가 아니다.
@@ -34,10 +34,10 @@
 
 Sentry Uptime에서도 같은 endpoint를 사용한다.
 
-| 환경 | URL | Next.js upstream | 참조 설정 |
-| --- | --- | --- | --- |
-| production | `https://koreatech.in/api/health` | `127.0.0.1:3001` | `production-nginx-health.conf` |
-| stage | `https://stage.koreatech.in/api/health` | `127.0.0.1:3000` | `stage-nginx-health.conf` |
+| 환경       | URL                                     | Next.js upstream | 참조 설정                      |
+| ---------- | --------------------------------------- | ---------------- | ------------------------------ |
+| production | `https://koreatech.in/api/health`       | `127.0.0.1:3001` | `production-nginx-health.conf` |
+| stage      | `https://stage.koreatech.in/api/health` | `127.0.0.1:3000` | `stage-nginx-health.conf`      |
 
 - 참조 설정의 exact-match `location = /api/health`를 각 도메인의 실제 `server` 블록에 반영한다.
 - `proxy_cache off`, `proxy_no_cache 1`, `proxy_cache_bypass 1`을 유지한다.
@@ -50,11 +50,11 @@ Sentry Uptime에서도 같은 endpoint를 사용한다.
 
 서버 파일이라 저장소에 없지만, 앱 설정과 맞물리므로 구조를 남긴다.
 
-| 경로               | 설정 파일                                    | 캐시 존         | 수명 | 캐시 키                                  |
-| ------------------ | -------------------------------------------- | --------------- | ---- | ---------------------------------------- |
-| `/_next/static/`   | `sites-enabled/*.conf`                       | 없음(브라우저)  | 1년  | `immutable`                              |
-| `/_next/image`     | `sites-enabled/*.conf`                       | `koin_img_cache` | 30일 | `$scheme$proxy_host$request_uri`          |
-| 그 외 (`/`)        | `sites-enabled/*.conf`                       | `koin_cache`    | 60초 | `...$request_uri$device_class`             |
+| 경로             | 설정 파일              | 캐시 존          | 수명 | 캐시 키                          |
+| ---------------- | ---------------------- | ---------------- | ---- | -------------------------------- |
+| `/_next/static/` | `sites-enabled/*.conf` | 없음(브라우저)   | 1년  | `immutable`                      |
+| `/_next/image`   | `sites-enabled/*.conf` | `koin_img_cache` | 30일 | `$scheme$proxy_host$request_uri` |
+| 그 외 (`/`)      | `sites-enabled/*.conf` | `koin_cache`     | 60초 | `...$request_uri$device_class`   |
 
 - 존 정의는 `/etc/nginx/conf.d/proxy-cache.conf` 에 있다.
 - `/_next/image` 는 **기기·로그인 상태와 무관**하므로 `location /` 의 `$device_class` 키 분리와

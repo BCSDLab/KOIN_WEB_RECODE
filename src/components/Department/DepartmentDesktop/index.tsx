@@ -1,11 +1,13 @@
 import Link from 'next/link';
+
 import ChevronRightIcon from 'assets/svg/common/chevron-right-icon.svg';
 import SearchIcon from 'assets/svg/common/purple-search.svg';
 import AlertCircleIcon from 'assets/svg/department/alert-circle-icon.svg';
 import DepartmentCard from 'components/Department/DepartmentCard';
+import type { DepartmentViewProps } from 'components/Department/types';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
-import type { DepartmentViewProps } from 'components/Department/types';
+
 import styles from './DepartmentDesktop.module.scss';
 
 export default function DepartmentDesktop({
@@ -20,7 +22,51 @@ export default function DepartmentDesktop({
   updatedAt,
 }: DepartmentViewProps) {
   const searchResults = searchResultCategories.flatMap(({ category, departments }) =>
-    departments.map((department) => ({ category, department })));
+    departments.map((department) => ({ category, department })),
+  );
+
+  const renderBody = () => {
+    if (!isSearching) {
+      return (
+        <ul className={styles.menu}>
+          {categories.map(({ category, title, Icon }) => (
+            <li key={category}>
+              <Link
+                href={ROUTES.DepartmentCategory({ category })}
+                className={styles.menu__link}
+                onClick={() => onCategoryClick(category, title)}
+              >
+                <div className={styles.menu__content}>
+                  <IconBox className={styles['menu__icon-box']}>
+                    <Icon className={styles.menu__icon} />
+                  </IconBox>
+                  <span className={styles.menu__title}>{title}</span>
+                </div>
+                <ChevronRightIcon className={styles.chevron} aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    if (searchResults.length === 0) {
+      return (
+        <div className={styles['search-empty']}>
+          <p>검색 결과가 없습니다.</p>
+          <p>다른 검색어로 다시 검색해주세요.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles['search-result']}>
+        {searchResults.map(({ category, department }) => (
+          <DepartmentCard key={`${category}-${department.name}`} department={department} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -50,40 +96,7 @@ export default function DepartmentDesktop({
             </button>
           </div>
 
-          {isSearching ? (
-            searchResults.length === 0 ? (
-              <div className={styles['search-empty']}>
-                <p>검색 결과가 없습니다.</p>
-                <p>다른 검색어로 다시 검색해주세요.</p>
-              </div>
-            ) : (
-              <div className={styles['search-result']}>
-                {searchResults.map(({ category, department }) => (
-                  <DepartmentCard key={`${category}-${department.name}`} department={department} />
-                ))}
-              </div>
-            )
-          ) : (
-            <ul className={styles.menu}>
-              {categories.map(({ category, title, Icon }) => (
-                <li key={category}>
-                  <Link
-                    href={ROUTES.DepartmentCategory({ category })}
-                    className={styles.menu__link}
-                    onClick={() => onCategoryClick(category, title)}
-                  >
-                    <div className={styles.menu__content}>
-                      <IconBox className={styles['menu__icon-box']}>
-                        <Icon className={styles.menu__icon} />
-                      </IconBox>
-                      <span className={styles.menu__title}>{title}</span>
-                    </div>
-                    <ChevronRightIcon className={styles.chevron} aria-hidden />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+          {renderBody()}
         </div>
 
         <div className={styles.footer}>

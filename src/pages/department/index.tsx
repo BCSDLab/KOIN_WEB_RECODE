@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+
 import DepartmentPageContent from 'components/Department';
 import Layout from 'components/layout';
 

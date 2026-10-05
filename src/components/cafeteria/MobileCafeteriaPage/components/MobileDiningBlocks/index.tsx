@@ -1,13 +1,14 @@
-import { Dining, DiningType } from 'api/dinings/entity';
+import type { Dining, DiningType } from 'api/dinings/entity';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailImage from 'components/cafeteria/MobileCafeteriaPage/components/DetailImage';
 import MobileMealImage from 'components/cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { filterDinings } from 'components/cafeteria/utils/filter';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -39,29 +40,27 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
     <>
       {filteredDinings.map((dining) => (
         <div className={styles.category} key={dining.id}>
-          <ul className={styles['category__menu-list-row']}>
-            <div className={styles.category__header}>
-              <div className={styles.category__type}>
-                <div className={styles['category__type--title']}>
-                  {dining.place}
-                  <div className={styles.category__calorie}>
-                    {!!dining.kcal && `${dining.kcal}Kcal`}
-                    {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
-                  </div>
-                  <div className={styles.category__price}>
-                    {!!dining.price_cash && `${dining.price_cash}원/`}
-                    {!!dining.price_card && ` ${dining.price_card}원`}
-                  </div>
-                </div>
-                {dining.soldout_at && (
-                  <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>
-                )}
+          <div className={styles['category__menu-list-row']}>
+            <div className={styles.category__type}>
+              <div className={styles['category__type--title']}>
+                {dining.place}
+                {dining.soldout_at && <span className={styles['category__block--sold-out']}>품절</span>}
                 {!dining.soldout_at && dining.changed_at && (
-                  <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>
+                  <span className={styles['category__block--changed']}>변경됨</span>
                 )}
               </div>
+              <div className={styles.category__details}>
+                <div className={styles.category__calorie}>
+                  {!!dining.kcal && `${dining.kcal}Kcal`}
+                  {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
+                </div>
+                <div className={styles.category__price}>
+                  {!!dining.price_cash && `${dining.price_cash}원/`}
+                  {!!dining.price_card && ` ${dining.price_card}원`}
+                </div>
+              </div>
             </div>
-            <li className={styles['category__menu-list']}>
+            <div className={styles['category__menu-list']}>
               <ul>
                 {dining.menu.map((menuItem) => (
                   <li className={styles.category__menu} key={menuItem.id}>
@@ -70,8 +69,8 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                 ))}
               </ul>
               <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       ))}
     </>

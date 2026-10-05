@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { DiningType } from 'api/dinings/entity';
+
+import type { DiningType } from 'api/dinings/entity';
 import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLiveNow';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import { DINING_TYPES } from 'static/cafeteria';
@@ -25,9 +26,7 @@ export const useCafeteriaParams = () => {
     parsed.setUTCFullYear(year, month - 1, day);
     parsed.setUTCHours(0, 0, 0, 0);
 
-    return parsed.getUTCFullYear() === year
-      && parsed.getUTCMonth() === month - 1
-      && parsed.getUTCDate() === day
+    return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day
       ? parsed
       : null;
   };
@@ -59,19 +58,15 @@ export const useCafeteriaParams = () => {
   const diningType = DINING_TYPES.find((t) => t === query[TYPE_KEY]) ?? new DiningTime(renderToday).getType();
 
   const setDiningType = (type: DiningType) => {
-    router.replace(
-      { pathname: router.pathname, query: { ...router.query, [TYPE_KEY]: type } },
-      undefined,
-      { shallow: true },
-    );
+    router.replace({ pathname: router.pathname, query: { ...router.query, [TYPE_KEY]: type } }, undefined, {
+      shallow: true,
+    });
   };
 
   function updateDateQuery(value: string) {
-    router.replace(
-      { pathname: router.pathname, query: { ...router.query, [DATE_KEY]: value } },
-      undefined,
-      { shallow: true },
-    );
+    router.replace({ pathname: router.pathname, query: { ...router.query, [DATE_KEY]: value } }, undefined, {
+      shallow: true,
+    });
   }
 
   return { date, diningType, setDiningType };

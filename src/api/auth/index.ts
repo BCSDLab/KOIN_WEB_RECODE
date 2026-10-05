@@ -1,12 +1,16 @@
 import APIClient from 'utils/ts/apiClient';
+
 import {
   Login,
   NicknameDuplicateCheck,
   Refresh,
+  WebLogin,
+  WebRefresh,
+  WebLogout,
+  WebSession,
   SignupStudent,
   SignupGeneral,
-  User,
-  GeneralUser,
+  UserProfile,
   UserAcademicInfo,
   UpdateUser,
   UpdateGeneralUser,
@@ -42,9 +46,15 @@ export const signupGeneral = APIClient.of(SignupGeneral);
 
 export const refresh = APIClient.of(Refresh);
 
-export const getUser = APIClient.of(User);
+export const webLogin = APIClient.of(WebLogin);
 
-export const getGeneralUser = APIClient.of(GeneralUser);
+export const webRefresh = APIClient.of(WebRefresh);
+
+export const webLogout = APIClient.of(WebLogout);
+
+export const getWebSession = APIClient.of(WebSession);
+
+export const getUserProfile = APIClient.of(UserProfile);
 
 export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 

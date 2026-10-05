@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { DiningPlace } from 'api/dinings/entity';
+import type { DiningPlace } from 'api/dinings/entity';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import Close from 'assets/svg/close-icon-grey.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useDinings from 'components/cafeteria/hooks/useDinings';
+import type { ServerDining } from 'components/IndexComponents/HomePage/types';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import type { ServerDining } from 'components/IndexComponents/HomePage/types';
+
 import styles from './IndexCafeteria.module.scss';
 
 interface IndexCafeteriaProps {

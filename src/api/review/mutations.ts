@@ -1,6 +1,7 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 import { storeQueryKeys } from 'api/store/queries';
-import { ReviewRequest } from './entity';
+
+import type { ReviewRequest } from './entity';
 import { postStoreReview, putStoreReview } from './index';
 
 interface ReviewMutationCallbacks {
@@ -9,7 +10,7 @@ interface ReviewMutationCallbacks {
 
 const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: string) => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'public') }),
+    queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'guest') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.reviews(Number(shopId), 'auth') }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.myReviews(shopId) }),
     queryClient.invalidateQueries({ queryKey: storeQueryKeys.detail(shopId) }),
@@ -18,24 +19,18 @@ const invalidateStoreReviewQueries = async (queryClient: QueryClient, shopId: st
 };
 
 export const reviewMutations = {
-  add: (queryClient: QueryClient, token: string, shopId: string, callbacks: ReviewMutationCallbacks = {}) =>
+  add: (queryClient: QueryClient, shopId: string, callbacks: ReviewMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (reviewData: ReviewRequest) => postStoreReview(token, shopId, reviewData),
+      mutationFn: (reviewData: ReviewRequest) => postStoreReview(shopId, reviewData),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();
       },
     }),
 
-  edit: (
-    queryClient: QueryClient,
-    token: string,
-    shopId: string,
-    reviewId: string,
-    callbacks: ReviewMutationCallbacks = {},
-  ) =>
+  edit: (queryClient: QueryClient, shopId: string, reviewId: string, callbacks: ReviewMutationCallbacks = {}) =>
     mutationOptions({
-      mutationFn: (reviewData: ReviewRequest) => putStoreReview(token, shopId, reviewId, reviewData),
+      mutationFn: (reviewData: ReviewRequest) => putStoreReview(shopId, reviewId, reviewData),
       onSuccess: async () => {
         await invalidateStoreReviewQueries(queryClient, shopId);
         await callbacks.onSuccess?.();

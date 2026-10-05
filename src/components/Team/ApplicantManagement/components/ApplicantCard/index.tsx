@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
+import type { TeamRecruitmentApplicant } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import ChevronRightIcon from 'assets/svg/Team/chevron-right-icon.svg';
@@ -10,8 +12,7 @@ import formatApplicationStatus from 'components/Team/utils/formatApplicationStat
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import type { TeamRecruitmentApplicant } from 'api/team/entity';
+
 import styles from './ApplicantCard.module.scss';
 
 const STATUS_CLASS: Record<TeamRecruitmentApplicant['status'], string> = {
@@ -29,14 +30,19 @@ interface ApplicantCardProps {
 
 export default function ApplicantCard({ applicant, recruitmentId }: ApplicantCardProps) {
   const router = useRouter();
-  const token = useTokenState();
   const logger = useLogger();
   const isMobile = useMediaQuery();
-  const { nickname, department, student_year: studentYear, role, status, can_open_direct_chat: canOpenDirectChat } =
-    applicant;
+  const {
+    nickname,
+    department,
+    student_year: studentYear,
+    role,
+    status,
+    can_open_direct_chat: canOpenDirectChat,
+  } = applicant;
 
   const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
-    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
+    teamMutations.createDirectChatRoom(Number(recruitmentId)),
   );
 
   const handleCardClick = () => {

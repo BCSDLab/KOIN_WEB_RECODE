@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
@@ -42,6 +44,7 @@ export default function TimePicker({ onChange, onClose, hour, minute }: TimePick
   const getScrollOffset = (index: number, listLength: number) => {
     if (index <= 1) return index * ITEM_HEIGHT;
     if (index >= listLength - 2) return (listLength - 5 + (index - (listLength - 3))) * ITEM_HEIGHT;
+
     return (index - 2) * ITEM_HEIGHT;
   };
 
@@ -94,6 +97,7 @@ export default function TimePicker({ onChange, onClose, hour, minute }: TimePick
     if (diff === 0) return styles.selected;
     if (diff === 1) return styles.near;
     if (diff === 2) return styles.far;
+
     return styles.hidden;
   };
 

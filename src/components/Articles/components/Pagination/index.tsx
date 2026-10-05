@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import MobilePagination from 'components/Articles/components/MobilePagination';
 import usePagination from 'components/Articles/hooks/usePagination';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './Pagination.module.scss';
 
 interface PaginationProps {

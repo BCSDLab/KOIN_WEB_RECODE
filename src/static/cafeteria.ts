@@ -1,6 +1,6 @@
-import { DiningPlace, DiningTypes } from 'api/dinings/entity';
+import type { DiningPlace, DiningTypes } from 'api/dinings/entity';
 
-export const PLACE_ORDER: Array<DiningPlace> = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
+export const PLACE_ORDER: DiningPlace[] = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
 
 export const DINING_TYPES: DiningTypes = ['BREAKFAST', 'LUNCH', 'DINNER'];
 

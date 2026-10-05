@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
@@ -7,6 +8,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [
@@ -55,7 +57,9 @@ export default function HotArticles() {
               className={styles['hot-article__content']}
               href={ROUTES.ArticlesDetail({ id: String(article.id) })}
               key={article.id + article.board_id}
-              onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
+              onClick={() =>
+                logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })
+              }
             >
               <span className={styles['hot-article__rank']}>{index + 1}</span>
               <span className={styles['hot-article__item']}>{article.title}</span>

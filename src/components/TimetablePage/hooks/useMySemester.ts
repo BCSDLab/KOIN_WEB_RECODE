@@ -1,10 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { timetableQueries } from 'api/timetable/queries';
-import { useTokenStore } from 'utils/zustand/auth';
+import useUserType from 'utils/hooks/auth/useUserType';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
-function useSemesterCheck(token: string) {
-  const { userType } = useTokenStore();
-  const { data } = useSuspenseQuery(timetableQueries.mySemester(token, { userType }));
+function useSemesterCheck() {
+  const userType = useUserType();
+  const isLoggedIn = useIsLoggedIn();
+  const { data } = useSuspenseQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
 
   return { data };
 }

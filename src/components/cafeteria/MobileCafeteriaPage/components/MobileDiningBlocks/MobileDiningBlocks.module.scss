@@ -1,9 +1,10 @@
 .category {
-  display: block;
   background-color: #fff;
-  margin: 0 24px 16px;
   border-radius: 16px;
   overflow: hidden;
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 4%),
+    0 1px 1px rgb(0 0 0 / 2%);
 
   &__menu-list-row {
     display: flex;
@@ -11,43 +12,34 @@
     flex-direction: column;
   }
 
-  &__header {
-    padding: 0;
-    margin: 0;
-    border: none;
-  }
-
   &__type {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
     box-sizing: border-box;
-    align-items: baseline;
-    margin: 0;
-    padding: 16px 24px;
-    border: none;
+    padding: 16px;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: #000;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-align: center;
     line-height: 1.15;
-    background-color: rgb(255 255 255);
-    z-index: 1;
 
     &--title {
       display: flex;
+      align-items: center;
+      gap: 8px;
     }
   }
 
+  &__details {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
   &__calorie {
-    padding-left: 8px;
     font-size: 12px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.9;
     letter-spacing: -0.4px;
     text-align: left;
@@ -57,13 +49,10 @@
   &__price {
     font-size: 12px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.25;
     letter-spacing: -0.4px;
     text-align: left;
     color: rgb(126 126 126);
-    margin-top: 4px;
   }
 
   &__block {
@@ -73,8 +62,8 @@
       font-weight: 500;
       padding: 4px 8px;
       border-radius: 4px;
-      color: #ffa00d;
-      background-color: #fff7e1;
+      color: #b611f5;
+      background-color: #ead3fe;
     }
 
     &--changed {
@@ -92,24 +81,32 @@
     width: 100%;
     text-align: left;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column-reverse;
     justify-content: flex-end;
     box-sizing: border-box;
     gap: 12px;
-    padding: 0 24px 16px;
+    padding: 0 16px 16px;
     background-color: #fff;
     border-bottom: 1px solid #f5f5f5;
+
+    > ul {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 12px;
+
+      &:only-child {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 
   &__menu {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    word-break: break-all;
-    line-height: 1.67;
-    letter-spacing: -0.48px;
-    color: rgb(73 73 73);
+    overflow-wrap: break-word;
+    line-height: 1.6;
+    color: #000;
   }
 }
 

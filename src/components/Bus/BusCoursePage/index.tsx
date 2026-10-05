@@ -1,8 +1,19 @@
 import { createContext, useContext } from 'react';
+import { useRouter } from 'next/router';
+
+import BusStopIcon from 'assets/svg/Bus/bus-stop-icon.svg';
 import BusTabs from 'components/Bus/BusCoursePage/components/BusTabs';
+import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
+
 import styles from './BusCoursePage.module.scss';
+
+const MOBILE_TIMETABLE_TITLES: Record<string, string> = {
+  [ROUTES.BusCourseShuttle()]: '셔틀버스 시간표',
+  [ROUTES.BusCourseExpress()]: '대성고속 시간표',
+  [ROUTES.BusCourseCity()]: '시내버스 시간표',
+};
 
 export const BusCourseContext = createContext<{ isMobile: boolean }>({
   isMobile: false,
@@ -10,18 +21,33 @@ export const BusCourseContext = createContext<{ isMobile: boolean }>({
 
 export const useBusCourse = () => useContext(BusCourseContext);
 
-export default function BusCoursePage({ children }: { children: React.ReactNode }) {
+interface BusCoursePageProps {
+  children: React.ReactNode;
+  boardingLocation?: string;
+}
+
+export default function BusCoursePage({ children, boardingLocation }: BusCoursePageProps) {
+  const router = useRouter();
   const isMount = useMount();
   const isMobile = useMediaQuery();
 
   const isMobileSafe = isMount ? isMobile : false;
+  const mobileTitle = MOBILE_TIMETABLE_TITLES[router.pathname] ?? '셔틀버스 시간표';
 
   return (
     <main className={styles['root-container']}>
       <div className={styles.container}>
         {isMobileSafe ? (
           <header className={styles['mobile-guide']}>
-            <div className={styles['mobile-guide__title']}>셔틀버스 시간표</div>
+            <div className={styles['mobile-guide__title']}>
+              <span>{mobileTitle}</span>
+              {boardingLocation && (
+                <span className={styles['mobile-guide__boarding']}>
+                  {boardingLocation} 승차
+                  <BusStopIcon aria-hidden="true" />
+                </span>
+              )}
+            </div>
           </header>
         ) : (
           <header className={styles.guide}>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
+import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { busQueries } from 'api/bus/queries';
 import InformationIcon from 'assets/svg/Bus/info.svg';
@@ -8,10 +10,12 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
+
 import styles from './BusNotice.module.scss';
 
 export interface BusNoticeProps {
   loggingLocation?: string;
+  variant?: 'timetable';
 }
 
 const LOCATION = [
@@ -33,7 +37,7 @@ const LOCATION = [
   },
 ];
 
-export default function BusNotice({ loggingLocation }: BusNoticeProps) {
+export default function BusNotice({ loggingLocation, variant }: BusNoticeProps) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
@@ -76,14 +80,24 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
   }, [isUpdated, title, setLastBusNotice, setBusNoticeDismissed]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={cn({
+        [styles.container]: true,
+        [styles['container--timetable']]: variant === 'timetable',
+      })}
+    >
       {showNotice && (
         <div className={styles.notice}>
           {!isMobile && <InformationIcon />}
           <button className={styles.notice__description} type="button" onClick={handleClickNavigateNotice}>
             {title}
           </button>
-          <button type="button" onClick={handleClickDismissNotice} aria-label="공지 닫기">
+          <button
+            className={styles.notice__close}
+            type="button"
+            onClick={handleClickDismissNotice}
+            aria-label="공지 닫기"
+          >
             <CloseIcon aria-hidden="true" />
           </button>
         </div>

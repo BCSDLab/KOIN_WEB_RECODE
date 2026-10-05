@@ -27,6 +27,14 @@ jobs:
       - name: Check lint
         run: yarn lint
 
+  Format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Check format
+        run: yarn format:check
+
   TypeCheck:
     runs-on: ubuntu-latest
     steps:
@@ -34,3 +42,14 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Check types
         run: yarn typecheck
+
+  ComplexityReport:
+    # complexity/max-lines-per-function 측정 전용 작업이다. 위반 규모를 지켜보며 순차적으로
+    # eslint.config.mjs에 error로 전환할 예정이라 아직은 머지를 막지 않는다.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - name: Report complexity thresholds (non-blocking)
+        continue-on-error: true
+        run: yarn lint:complexity-report

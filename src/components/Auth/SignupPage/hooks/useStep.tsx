@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
+
 import ROUTES from 'static/routes';
 
 function useStep<T extends string>(steps: T[]) {

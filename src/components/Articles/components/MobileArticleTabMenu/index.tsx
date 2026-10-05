@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { BOARD_IDS } from 'components/Articles/utils/convertArticlesTag';
+
 import styles from './MobileArticleTabMenu.module.scss';
 
 const TABS = [
@@ -26,14 +28,14 @@ export default function MobileArticleTabMenu({ currentBoardId }: MobileArticleTa
   };
 
   return (
-    <nav className={styles.tabMenu}>
+    <nav className={styles['tab-menu']}>
       {TABS.map((tab) => (
         <button
           key={tab.boardId}
           type="button"
           className={cn({
-            [styles.tabMenu__tab]: true,
-            [styles['tabMenu__tab--active']]: currentBoardId === tab.boardId,
+            [styles['tab-menu__tab']]: true,
+            [styles['tab-menu__tab--active']]: currentBoardId === tab.boardId,
           })}
           onClick={() => handleTabClick(tab.boardId)}
         >

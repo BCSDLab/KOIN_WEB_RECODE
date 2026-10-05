@@ -1,6 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
+import type { Semester } from 'api/timetable/entity';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import Suspense from 'components/ssr/SSRSuspense';
@@ -12,7 +14,7 @@ import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import ROUTES from 'static/routes';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
-import type { Semester } from 'api/timetable/entity';
+
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
@@ -28,7 +30,7 @@ export default function DefaultPage({ timetableFrameId, semester }: { timetableF
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     navigate(
-      `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType })}&year=${semester?.year}&term=${semester?.term}`,
+      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType })}&year=${semester?.year}&term=${semester?.term}`,
     );
   };
   const modifyType = router.query.type;

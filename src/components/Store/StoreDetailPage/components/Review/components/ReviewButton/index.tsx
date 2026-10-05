@@ -1,10 +1,11 @@
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+
 import styles from './index.module.scss';
 
 export const REVEIW_LOGIN = ['리뷰를 작성하기 ', '리뷰 작성은 회원만 사용 가능합니다.'];

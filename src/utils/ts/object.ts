@@ -3,6 +3,7 @@ export function pick<T extends object, K extends keyof T>(object: T, keys: K[]):
     if (key in object) {
       return Object.assign(result, { [key]: object[key] });
     }
+
     return result;
   }, Object.create(null));
 }

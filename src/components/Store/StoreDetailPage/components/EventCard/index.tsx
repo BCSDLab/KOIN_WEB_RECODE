@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { StoreEvent } from 'api/store/entity';
+import type { StoreEvent } from 'api/store/entity';
 import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
 import EventContent from 'components/Store/StoreDetailPage/components/EventContent';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './EventCard.module.scss';
 
 export default function EventCard({ event }: { event: StoreEvent }) {
@@ -22,6 +24,12 @@ export default function EventCard({ event }: { event: StoreEvent }) {
     [styles['event-thumbnail--nonHidden']]: hiddenInfo === false,
   });
 
+  const getThumbnailSizes = () => {
+    if (hiddenInfo) return '75px';
+
+    return isMobile ? '100vw' : '30vw';
+  };
+
   const renderThumbnail = () => {
     if (event.thumbnail_images.length > 0) {
       return (
@@ -31,7 +39,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
             src={event.thumbnail_images[0]}
             alt={event.title}
             fill
-            sizes={hiddenInfo ? '75px' : isMobile ? '100vw' : '30vw'}
+            sizes={getThumbnailSizes()}
           />
         </div>
       );

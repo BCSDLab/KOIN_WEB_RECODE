@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type CallvanStatus = 'RECRUITING' | 'CLOSED' | 'COMPLETED';
 export type CallvanSort = 'DEPARTURE_ASC' | 'DEPARTURE_DESC' | 'LATEST_ASC' | 'LATEST_DESC';

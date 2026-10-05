@@ -26,14 +26,14 @@
   box-sizing: border-box;
 }
 
-.headerTitle {
+.header-title {
   color: #175c8e;
   font-size: 18px;
   font-weight: 600;
   line-height: 160%;
 }
 
-.closeButton {
+.close-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,7 +70,7 @@
   gap: 8px;
 }
 
-.sectionTitle {
+.section-title {
   margin: 0;
   color: #000;
   font-size: 16px;
@@ -78,7 +78,7 @@
   line-height: 160%;
 }
 
-.sectionBadges {
+.section-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
@@ -100,8 +100,8 @@
   padding: 32px 32px 12px;
 }
 
-.resetButton,
-.applyButton {
+.reset-button,
+.apply-button {
   height: 48px;
   border-radius: 8px;
   font-size: 16px;
@@ -110,7 +110,7 @@
   cursor: pointer;
 }
 
-.resetButton {
+.reset-button {
   display: flex;
   flex: 0 0 98px;
   align-items: center;
@@ -126,7 +126,7 @@
   }
 }
 
-.applyButton {
+.apply-button {
   flex: 1;
   border: 0;
   background: #175c8e;
@@ -166,11 +166,11 @@
     height: auto;
   }
 
-  .headerTitle {
+  .header-title {
     color: #b611f5;
   }
 
-  .closeButton:focus-visible {
+  .close-button:focus-visible {
     outline-color: #b611f5;
   }
 
@@ -179,7 +179,7 @@
     padding: 12px 32px;
   }
 
-  .sectionBadges > button {
+  .section-badges > button {
     &:hover,
     &[aria-pressed="true"] {
       border-color: #b611f5;
@@ -191,7 +191,7 @@
     padding: 16px 32px;
   }
 
-  .resetButton {
+  .reset-button {
     flex: 1;
     border-color: #b611f5;
     color: #b611f5;
@@ -206,7 +206,7 @@
     }
   }
 
-  .applyButton {
+  .apply-button {
     flex: 2;
     background: #b611f5;
 

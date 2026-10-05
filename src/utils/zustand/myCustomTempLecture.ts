@@ -1,26 +1,26 @@
 import { create } from 'zustand';
 
-type State = {
+interface State {
   customTempLecture: {
     class_title: string;
     professor: string;
-    lecture_infos: {
+    lecture_infos: Array<{
       id: string;
       days: string[];
       start_time: number;
       end_time: number;
       place: string;
-    }[];
+    }>;
     grades?: string;
     memo?: string;
   } | null;
-};
+}
 
-type Action = {
+interface Action {
   action: {
     updateCustomTempLecture: (customTempLecture: State['customTempLecture']) => void;
   };
-};
+}
 
 const useCustomTempLectureStore = create<State & Action>((set, get) => ({
   customTempLecture: {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) => {

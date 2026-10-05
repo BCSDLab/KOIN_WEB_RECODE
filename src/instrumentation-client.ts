@@ -20,6 +20,7 @@ interface KoinErrorLike {
 function asKoinError(error: unknown): KoinErrorLike | null {
   if (error == null || typeof error !== 'object') return null;
   const candidate = error as KoinErrorLike;
+
   return candidate.type === 'KOIN_ERROR' ? candidate : null;
 }
 
@@ -28,6 +29,7 @@ const BOT_USER_AGENT_PATTERN = /bot|crawler|spider|WebPageTest|HeadlessChrome|Ph
 
 function isBotUserAgent(): boolean {
   if (typeof window === 'undefined') return false;
+
   return BOT_USER_AGENT_PATTERN.test(window.navigator.userAgent);
 }
 
@@ -37,19 +39,19 @@ function getBrowserFamily(userAgent: string): string {
   if (/Chrome\//.test(userAgent)) return 'chrome';
   if (/Firefox\//.test(userAgent)) return 'firefox';
   if (/Safari\//.test(userAgent)) return 'safari';
+
   return 'other';
 }
 
 function normalizeRoute(pathname: string): string {
-  return pathname
-    .replace(/\/[0-9]+(?=\/|$)/g, '/:id')
-    .replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
+  return pathname.replace(/\/[0-9]+(?=\/|$)/g, '/:id').replace(/\/[0-9a-f]{8}-[0-9a-f-]{27,}(?=\/|$)/gi, '/:id');
 }
 
 function getTransactionKey(transaction: string | undefined): string | undefined {
   if (!transaction) return undefined;
   if (/\/_next\/image(?:\?|$)/.test(transaction)) return 'next_image';
   if (/\/articles\/(?:\[id\]|:id|[0-9]+)(?:\/|\?|$)/.test(transaction)) return 'article_detail';
+
   return undefined;
 }
 
@@ -101,6 +103,7 @@ Sentry.init({
     if (transactionKey) {
       event.tags = { ...event.tags, 'koin.transaction_key': transactionKey };
     }
+
     return event;
   },
 
@@ -109,10 +112,10 @@ Sentry.init({
 
     // Axios 네트워크/타임아웃/취소 에러
     if (
-      error != null
-      && typeof error === 'object'
-      && 'code' in error
-      && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
+      error != null &&
+      typeof error === 'object' &&
+      'code' in error &&
+      (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED')
     ) {
       return null;
     }
@@ -129,7 +132,7 @@ Sentry.init({
 
     const koinError = asKoinError(error);
     if (koinError) {
-      // 401: 토큰 만료. 미들웨어와 useAutoLogin이 처리하는 정상 흐름이다.
+      // 401: 인증 만료. apiClient의 리프레시/재로그인 흐름이 처리하는 정상 흐름이다.
       // 404: 삭제된 게시글 등에 접근. 페이지에서 안내하므로 알림 대상이 아니다.
       if (koinError.status === 401 || koinError.status === 404) return null;
 
@@ -153,6 +156,7 @@ Sentry.init({
 
   beforeSendLog(log) {
     if (log.level === 'debug') return null;
+
     // API가 인증 실패 응답에 토큰 원문을 실어 보내고, 그 메시지가 그대로 로그로 넘어온다.
     return maskSensitive(log);
   },
@@ -198,17 +202,24 @@ Sentry.init({
   ],
 
   enableLogs: true,
-  tracesSampleRate: isProduction ? 0.7 : 1.0,
-  // tracesSampleRate 로 샘플링된 트랜잭션에 대한 상대 비율이다.
+  tracesSampleRate: 1.0,
   // UI Profile Hours 는 월 150시간으로, Logs(5TB)와 달리 실제로 한정된 쿼터다.
-  // 월 페이지뷰 약 69만 x 트레이스 0.7 = 48만 트랜잭션이므로 1.0 으로 두면 며칠 만에 소진된다.
-  // 0.1 이면 월 약 4.8만 프로파일(약 67시간)로 여유 있게 들어온다.
-  profilesSampleRate: isProduction ? 0.1 : 1.0,
+  // 실측(Sentry MCP로 확인, 2026-09): 기존 trace 0.7 / profile 0.1 기준 월 사용량이 약 32분(0.4%)이었다.
+  // trace·profile 둘 다 1.0으로 올려도 ×14 수준(약 7~8시간/월, 5%대)이라 여유가 충분하다.
+  profilesSampleRate: 1.0,
   replaysSessionSampleRate: isProduction ? 0.3 : 0.0,
   replaysOnErrorSampleRate: 1.0,
-  // sendDefaultPii: true와 동일한 수집 범위. frameContextLines: 7은 그 레거시 기본값을
-  // 그대로 유지한 것 — dataCollection만 켜면 5로 바뀐다.
-  dataCollection: { frameContextLines: 7 },
+  // 자격증명급 위험이 있는 항목만 최소로 차단한다. cookie 헤더는 httpHeaders가 아니라
+  // 별도의 cookies 옵션으로 처리되므로 여기 deny에 넣어도 효과가 없다.
+  // frameContextLines: 7은 sendDefaultPii: true 시절의 기본값을 그대로 유지한 것이다.
+  dataCollection: {
+    cookies: false,
+    httpHeaders: {
+      request: { deny: ['authorization', 'referer'] },
+      response: { deny: ['authorization', 'referer'] },
+    },
+    frameContextLines: 7,
+  },
 });
 
 reportHydrationDiff();

@@ -1,11 +1,15 @@
 import { useRouter } from 'next/router';
+
 import FindIdLayout from 'components/Auth/FindIdPage/Mobile';
+import { STORAGE_KEY } from 'static/auth';
 import ROUTES from 'static/routes';
+import { useSessionStorage } from 'utils/hooks/state/useWebStorage';
+
 import styles from './ResultPage.module.scss';
 
 function ResultPage() {
   const router = useRouter();
-  const { userId } = router.query;
+  const [userId] = useSessionStorage<string | null>(STORAGE_KEY.FOUND_LOGIN_ID, null);
   const onClickLogin = () => {
     router.push(ROUTES.Auth());
   };

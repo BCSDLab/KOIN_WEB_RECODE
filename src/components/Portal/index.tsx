@@ -10,5 +10,6 @@ export default function Portal({ children, container }: PortalProps) {
   if (typeof window === 'undefined') return null;
 
   const target = container ?? document.body;
+
   return createPortal(children, target);
 }

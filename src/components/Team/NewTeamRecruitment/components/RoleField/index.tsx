@@ -7,9 +7,10 @@ import {
   TEAM_RECRUITMENT_MAX_ROLE_COUNT,
   TEAM_RECRUITMENT_ROLE_NAME_MAX_LENGTH,
 } from 'components/Team/NewTeamRecruitment/constants';
-import { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
-import { Control, Controller, UseFormTrigger, useFieldArray, useWatch } from 'react-hook-form';
+import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
+import { type Control, Controller, type UseFormTrigger, useFieldArray, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './RoleField.module.scss';
 
 interface RoleFieldProps {

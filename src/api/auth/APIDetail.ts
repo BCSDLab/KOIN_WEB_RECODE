@@ -1,10 +1,16 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   LoginRequest,
   LoginResponse,
   NicknameDuplicateCheckResponse,
   RefreshRequest,
   RefreshResponse,
+  WebLoginRequest,
+  WebAuthResponse,
+  WebLogoutResponse,
+  WebSessionResponse,
+  UserProfileResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -114,28 +120,61 @@ export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
   constructor(public data: RefreshRequest) {}
 }
 
-export class User<R extends UserResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
+export class WebLogin<R extends WebAuthResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
 
-  path = '/user/student/me';
+  path = '/v2/web/auth/login';
+
+  skipAuthRefresh = true;
 
   response!: R;
 
-  auth = false;
-
-  constructor(public authorization: string) {}
+  constructor(public data: WebLoginRequest) {}
 }
 
-export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
+export class WebRefresh<R extends WebAuthResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
 
-  path = '/v2/users/me';
+  path = '/v2/web/auth/refresh';
+
+  skipAuthRefresh = true;
 
   response!: R;
 
-  auth = false;
+  constructor() {}
+}
 
-  constructor(public authorization: string) {}
+export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v2/web/auth/logout';
+
+  skipAuthRefresh = true;
+
+  response!: R;
+
+  constructor() {}
+}
+
+// SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
+export class WebSession<R extends WebSessionResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v2/web/auth/session';
+
+  response!: R;
+
+  constructor(public headers?: Record<string, string>) {}
+}
+
+export class UserProfile<R extends UserProfileResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v3/users/me';
+
+  authOptional = true;
+
+  response!: R;
 }
 
 // 추후 User 클래스명으로 아래 API로 통일할 것
@@ -147,8 +186,6 @@ export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements API
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
@@ -162,10 +199,7 @@ export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    data: UserUpdateRequest,
-  ) {
+  constructor(data: UserUpdateRequest) {
     this.data = data;
   }
 }
@@ -181,10 +215,7 @@ export class UpdateGeneralUser<R extends GeneralUserResponse> implements APIRequ
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    data: GeneralUserUpdateRequest,
-  ) {
+  constructor(data: GeneralUserUpdateRequest) {
     this.data = data;
   }
 }
@@ -197,8 +228,6 @@ export class DeleteUser<R extends DeleteResponse> implements APIRequest<R> {
   path = '/user';
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class CheckId<R extends CheckIdResponse> implements APIRequest<R> {
@@ -238,10 +267,7 @@ export class CheckPassword<R extends CheckPasswordResponse> implements APIReques
 
   data: CheckPasswordRequest;
 
-  constructor(
-    public authorization: string,
-    data: CheckPasswordRequest,
-  ) {
+  constructor(data: CheckPasswordRequest) {
     this.data = data;
   }
 }
@@ -255,10 +281,7 @@ export class UpdateAcademicInfo<R extends UpdateAcademicInfoResponse> implements
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    public data: UpdateAcademicInfoRequest,
-  ) {}
+  constructor(public data: UpdateAcademicInfoRequest) {}
 }
 
 export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {

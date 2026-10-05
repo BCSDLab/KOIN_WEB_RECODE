@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+
 import styles from './SubPageHeader.module.scss';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -11,6 +13,7 @@ interface SubPageHeaderProps {
   title: string;
   onBack?: () => void;
   rightAction?: ReactNode;
+  backIcon?: ReactNode;
   className?: string;
   size?: 'small' | 'medium';
 }
@@ -19,6 +22,7 @@ export default function SubPageHeader({
   title,
   onBack,
   rightAction,
+  backIcon,
   className,
   size = 'small',
 }: SubPageHeaderProps) {
@@ -53,6 +57,7 @@ export default function SubPageHeader({
   const handleBack = () => {
     if (onBack) {
       onBack();
+
       return;
     }
 
@@ -68,7 +73,7 @@ export default function SubPageHeader({
         onClick={handleBack}
         aria-label="뒤로가기"
       >
-        <ArrowBackIcon />
+        {backIcon ?? <ArrowBackIcon />}
       </button>
       <h1
         className={cn({

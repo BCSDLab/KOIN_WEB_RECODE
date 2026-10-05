@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import MobileHeader from './MobileHeader';
 import PCHeader from './PCHeader';
 import styles from './Header.module.scss';
@@ -15,6 +17,12 @@ function Header() {
 
   const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
   const isArticleRoute = pathname.startsWith(ROUTES.Articles());
+  const isLostItemLightRoute = router.pathname.startsWith(ROUTES.LostItems());
+  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
+  const isBusTimetableRoute = [ROUTES.BusCourseShuttle(), ROUTES.BusCourseExpress(), ROUTES.BusCourseCity()].some(
+    (path) => router.pathname === path || router.pathname.startsWith(`${path}/`),
+  );
+  const isTimetableRoute = [ROUTES.Timetable(), ROUTES.TimetableList()].includes(router.pathname);
 
   return (
     <header
@@ -22,7 +30,9 @@ function Header() {
         [styles.header]: true,
         [styles['header--main']]: isMain,
         [styles['header--new-club']]: isClubRoute,
-        [styles['header--mobile-light']]: isArticleRoute,
+        [styles['header--mobile-light']]:
+          isArticleRoute || isLostItemLightRoute || isCafeteriaRoute || isBusTimetableRoute || isTimetableRoute,
+        [styles['header--sub-page']]: isBusTimetableRoute || isTimetableRoute,
       })}
     >
       <nav className={styles.header__content}>
@@ -30,7 +40,11 @@ function Header() {
           <PCHeader openModal={openModal} />
         </div>
         <div className={styles['header__mobile']}>
-          <MobileHeader openModal={openModal} />
+          <MobileHeader
+            openModal={openModal}
+            isBusTimetableRoute={isBusTimetableRoute}
+            isTimetableRoute={isTimetableRoute}
+          />
         </div>
       </nav>
       {isModalOpen && <AuthenticateUserModal onClose={closeModal} />}

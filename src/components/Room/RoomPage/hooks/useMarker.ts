@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { LandListResponse } from 'api/room/entity';
+
+import type { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/components/MarkerIcon';
 import ROUTES from 'static/routes';
 
@@ -31,6 +32,7 @@ function useMarker({ getMap, roomList }: MarkerProps) {
       marker.addListener('click', () => {
         router.push(ROUTES.RoomDetail({ id: String(land.id) }));
       });
+
       return marker;
     });
 
@@ -43,6 +45,7 @@ function useMarker({ getMap, roomList }: MarkerProps) {
   }, [getMap, roomList, router]);
 
   const getMarkerArray = () => markersRef.current;
+
   return { getMarkerArray };
 }
 

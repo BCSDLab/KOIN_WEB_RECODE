@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { ClubEvent } from 'api/club/entity';
+import type { ClubEvent } from 'api/club/entity';
 import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg';
 import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
 import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import styles from './ClubEventCard.module.scss';
 
 interface ClubEventCardProps {
@@ -27,6 +29,7 @@ const statusOptions = [
 
 const getStatusLabel = (value: string) => {
   const option = statusOptions.find((opt) => opt.value === value);
+
   return option?.label ?? '상태 없음';
 };
 
@@ -70,6 +73,7 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
   const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     if ((e.target as HTMLElement).closest('button')) {
       e.preventDefault();
+
       return;
     }
     logger.actionEventClick({

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Lecture, MyLectureInfo, Semester, LectureInfo } from 'api/timetable/entity';
+
+import type { Lecture, MyLectureInfo, Semester, LectureInfo } from 'api/timetable/entity';
 import SearchIcon from 'assets/svg/Club/search.svg';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/components/LectureTable';
 import ToggleButton from 'components/TimetablePage/components/ToggleButton';
@@ -12,6 +13,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -23,18 +25,19 @@ interface CurrentSemesterLectureListProps {
     department: string;
     search: string;
   };
-  myLectures: Array<MyLectureInfo>;
+  myLectures: MyLectureInfo[];
   timetableFrameId: number;
 }
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
-  myLectures: Array<MyLectureInfo>;
+  myLectures: MyLectureInfo[];
   timetableFrameId: number;
 }
 
 const useFlexibleWidth = (length: number, initialValue: number[]) => {
   const [widthInfo] = React.useState(() => initialValue);
+
   // TODO: flexible width 생성(mouseMove 이벤트)
   return {
     widthInfo,
@@ -74,6 +77,7 @@ function CurrentSemesterLectureList({
         clickedLecture.lecture_infos.some((clickedLectureInfo) => isOverlapping(clickedLectureInfo, myLectureInfo)),
       ),
     );
+
     return overlappingLecture;
   };
 
@@ -111,6 +115,7 @@ function CurrentSemesterLectureList({
         }
         if (!myLectures) {
           addMyLecture(clickedLecture);
+
           return;
         }
         const isContainedLecture = myLectures.some(
@@ -118,6 +123,7 @@ function CurrentSemesterLectureList({
         );
         if (isContainedLecture) {
           showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
+
           return;
         }
         const overlappingLecture = findOverlappingLecture(myLectures, clickedLecture);
@@ -131,6 +137,7 @@ function CurrentSemesterLectureList({
                 'error',
                 `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
+
               return;
             }
             showToast(
@@ -138,6 +145,7 @@ function CurrentSemesterLectureList({
               'error',
               `${alreadySelectedLectureName} 강의가 중복되어 추가할 수 없습니다.`,
             );
+
             return;
           }
           showToast(
@@ -155,7 +163,12 @@ function CurrentSemesterLectureList({
   );
 }
 
-function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId, semester }: MyLectureListBoxProps & { semester: Semester }) {
+function MyLectureListBox({
+  rowWidthList,
+  myLectures,
+  timetableFrameId,
+  semester,
+}: MyLectureListBoxProps & { semester: Semester }) {
   return myLectures.length !== 0 ? (
     <LectureTable
       rowWidthList={rowWidthList}

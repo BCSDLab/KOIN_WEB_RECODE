@@ -1,4 +1,4 @@
-import { Arrival, BusTypeResponse, Depart } from 'api/bus/entity';
+import type { Arrival, BusTypeResponse, Depart } from 'api/bus/entity';
 
 export type LocationDisplay = '코리아텍' | '천안역' | '천안터미널';
 

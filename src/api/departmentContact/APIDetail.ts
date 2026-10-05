@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   DepartmentCategoryContactsRequest,
   DepartmentCategoryContactsResponse,
   DepartmentContactCategory,
@@ -23,8 +24,7 @@ export class GetDepartmentContacts<R extends DepartmentContactsResponse> impleme
   }
 }
 
-export class GetDepartmentContactsByCategory<R extends DepartmentCategoryContactsResponse>
-implements APIRequest<R> {
+export class GetDepartmentContactsByCategory<R extends DepartmentCategoryContactsResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;

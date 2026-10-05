@@ -20,11 +20,13 @@ model: sonnet
 ## 검증 체크리스트
 
 ### 타입 정합성
+
 - [ ] API entity.ts의 응답 타입과 훅에서 사용하는 타입 일치 여부
 - [ ] 컴포넌트 props 타입과 실제 전달값 일치 여부
 - [ ] `undefined`/`null` 처리 누락 없음
 
 ### KOIN 컨벤션
+
 - [ ] 절대 경로 임포트 사용 (`../` 금지)
 - [ ] `isKoinError()` 타입 가드 사용
 - [ ] `COOKIE_KEY` 상수 사용
@@ -32,26 +34,31 @@ model: sonnet
 - [ ] `console.log` 없음
 
 ### SSR 안전성
+
 - [ ] `window`, `document`, `localStorage` 접근 시 브라우저 체크 존재
 - [ ] 올바른 레이아웃 사용 (`SSRLayout` / `Layout`)
 - [ ] React Query SSR hydration 키 일치
 
 ### 에러 핸들링
+
 - [ ] 모든 mutation `onError`에 `isKoinError()` 패턴 적용
 - [ ] `showToast()` 사용 (직접 `toast()` 호출 금지)
 
 ### 분석 로깅
+
 - [ ] 주요 사용자 인터랙션에 `useLogger()` 존재
 
 ## 입력
 
 검증할 소스 파일 목록:
+
 - SonarCloud 파이프라인: `_workspace/02_fixer_result.json`의 `changed_files`
 - 기능 파이프라인: `_workspace/02_implementer_result.json`의 `created_files` + `modified_files`
 
 ## 출력
 
 `_workspace/03_qa_result.json` 파일:
+
 ```json
 {
   "lint_passed": true,

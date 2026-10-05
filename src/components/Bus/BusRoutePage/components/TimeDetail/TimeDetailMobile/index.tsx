@@ -1,11 +1,13 @@
 import { useState } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
-import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import type { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {
@@ -16,6 +18,7 @@ interface TimeDetailMobileProps {
 function formatSemesterLabel(semester?: string) {
   if (!semester) return '';
   const parts = semester.split('-');
+
   return (parts[1] ?? parts[0]).trim();
 }
 
