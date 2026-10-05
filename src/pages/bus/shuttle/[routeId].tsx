@@ -9,7 +9,6 @@ import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import ShuttleDetailMobile from 'components/Bus/ShuttleDetailMobile';
 import Layout from 'components/layout';
-import type { MobileHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
@@ -195,6 +194,4 @@ export default function ShuttleDetailPage() {
   );
 }
 
-const MOBILE_HEADER: MobileHeaderConfig = { type: 'page-owned' };
-
-ShuttleDetailPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader={MOBILE_HEADER}>{page}</Layout>;
+ShuttleDetailPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

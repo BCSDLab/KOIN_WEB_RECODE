@@ -10,7 +10,6 @@ import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
-import { BUS_TIMETABLE_MOBILE_HEADER } from 'components/Bus/BusCoursePage/mobileHeader';
 import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES, SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
@@ -244,6 +243,4 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
   );
 }
 
-ShuttleBusTimetable.getLayout = (page: React.ReactNode) => (
-  <SSRLayout mobileHeader={BUS_TIMETABLE_MOBILE_HEADER}>{page}</SSRLayout>
-);
+ShuttleBusTimetable.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;
