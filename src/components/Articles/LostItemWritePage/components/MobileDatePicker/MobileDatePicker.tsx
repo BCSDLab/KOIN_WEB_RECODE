@@ -1,8 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-
 import { useScrollPicker } from 'utils/hooks/ui/useScrollPicker';
 import { clampDate, getDateRange } from 'utils/ts/calendar';
-
 import styles from './MobileDatePicker.module.scss';
 
 interface MobileDatePickerProps {
@@ -28,14 +26,12 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
   const { syncScrollPosition, createScrollHandler } = useScrollPicker({ itemHeight: ITEM_HEIGHT });
 
   const handleDateChange = (type: 'year' | 'month' | 'day', value: number) => {
-    let newDate: { year: number; month: number; day: number };
-    if (type === 'year') {
-      newDate = clampDate(value, currentMonth, currentDay, today);
-    } else if (type === 'month') {
-      newDate = clampDate(currentYear, value, currentDay, today);
-    } else {
-      newDate = { year: currentYear, month: currentMonth, day: value };
-    }
+    const newDate =
+      type === 'year'
+        ? clampDate(value, currentMonth, currentDay, today)
+        : type === 'month'
+          ? clampDate(currentYear, value, currentDay, today)
+          : { year: currentYear, month: currentMonth, day: value };
 
     setPendingDate(new Date(newDate.year, newDate.month - 1, newDate.day));
   };

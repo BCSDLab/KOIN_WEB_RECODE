@@ -1,19 +1,16 @@
 import Image from 'next/image';
-
+import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
-import PhotoIcon from 'assets/svg/common/chat-photo.svg';
-import MobileRemoveImageIcon from 'assets/svg/mobile-delete-button.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
-
 import styles from './FormImage.module.scss';
 
 const MAX_IMAGES_LENGTH = 10;
 
 interface FormImageProps {
-  images: string[];
-  setImages: (images: string[]) => void;
+  images: Array<string>;
+  setImages: (images: Array<string>) => void;
   type: 'FOUND' | 'LOST';
   formIndex: number;
 }
@@ -28,7 +25,6 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
   const saveImage = async () => {
     if (images.length >= MAX_IMAGES_LENGTH) {
       showToast('error', `파일은 ${MAX_IMAGES_LENGTH}개까지 등록할 수 있습니다.`);
-
       return;
     }
 
@@ -72,7 +68,7 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
                 aria-label="이미지 삭제"
                 onClick={() => deleteImage(url)}
               >
-                {isMobile ? <MobileRemoveImageIcon /> : <RemoveImageIcon />}
+                <RemoveImageIcon />
               </button>
             </li>
           ))}

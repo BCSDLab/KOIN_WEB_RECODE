@@ -1,15 +1,15 @@
-import type { Lecture } from 'api/timetable/entity';
+import { Lecture } from 'api/timetable/entity';
 import { create } from 'zustand';
 
-interface State {
+type State = {
   tempLecture: Lecture | null;
-}
+};
 
-interface Action {
+type Action = {
   action: {
     updateTempLecture: (tempLecture: State['tempLecture']) => void;
   };
-}
+};
 
 const useTempLectureStore = create<State & Action>((set, get) => ({
   tempLecture: null,
@@ -17,7 +17,6 @@ const useTempLectureStore = create<State & Action>((set, get) => ({
     updateTempLecture: (tempLecture) => {
       if (get().tempLecture === tempLecture) {
         set(() => ({ tempLecture: null }));
-
         return;
       }
       set(() => ({ tempLecture }));

@@ -1,7 +1,6 @@
 import { Suspense, useState } from 'react';
-
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import type { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
+import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import { busQueries } from 'api/bus/queries';
 import BusNotice from 'components/Bus/BusNotice';
 import BusGuide from 'components/Bus/BusRoutePage/components/BusGuide';
@@ -13,7 +12,6 @@ import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-
 import styles from './BusRoutePage.module.scss';
 
 /** 버스 공지는 자주 바뀌지 않는다. */

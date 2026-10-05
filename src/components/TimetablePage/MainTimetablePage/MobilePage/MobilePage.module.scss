@@ -1,45 +1,73 @@
+@use "utils/scss/media.scss" as media;
+
 .page {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  padding: 0 24px 24px;
+  &__timetable-wrap {
+    display: flex;
+    flex-direction: column;
+  }
 
   &__header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    margin-bottom: 14px;
   }
 
   &__semester {
-    display: block;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 8px 10px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #000;
-    white-space: nowrap;
-    box-shadow: inset 0 0 0 1px #e1e1e1;
+    width: 150px;
   }
 
   &__button {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    gap: 8px;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 10px;
-    background-color: #fff;
-    box-shadow: inset 0 0 0 1px #e1e1e1;
-    font-size: 14px;
+    border: 1px solid rgb(23 92 142);
+    padding: 1px 6px;
+    width: 170px;
+    height: 45px;
+    background-color: rgb(23 92 142);
+    font-size: 15px;
     line-height: 1.6;
-    white-space: nowrap;
+    color: rgb(253 253 253);
     cursor: pointer;
+
+    & > img {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   &__timetable {
     display: flex;
-    cursor: pointer;
   }
+}
+
+.edit-timetable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(23 92 142);
+  padding: 1px 6px;
+  width: 100%;
+  height: 45px;
+  background-color: rgb(253 253 253);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgb(23 92 142);
+  margin-top: 17px;
+  cursor: pointer;
+}
+
+.dropdown-loading-spinner {
+  margin: 1px auto;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+}
+
+.top-loading-spinner {
+  margin: 208px auto;
+  background-color: white;
+  width: 100px;
+  height: 100px;
 }

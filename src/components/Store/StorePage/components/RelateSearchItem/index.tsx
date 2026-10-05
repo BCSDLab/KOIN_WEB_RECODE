@@ -1,7 +1,6 @@
 import MenuIcon from 'assets/svg/Store/menu-icon.svg';
 import NavigateStoreIcon from 'assets/svg/Store/navigate-store-icon.svg';
 import StoreIcon from 'assets/svg/Store/store-icon.svg';
-
 import styles from './RelateSearchItem.module.scss';
 
 interface RelateSearchItemProps {
@@ -9,7 +8,6 @@ interface RelateSearchItemProps {
   content: string;
   onClick: () => void;
 }
-
 export default function RelateSearchItem({ url, content, onClick }: RelateSearchItemProps) {
   return (
     <button type="button" className={styles.item__box} onClick={onClick}>

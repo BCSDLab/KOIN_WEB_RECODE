@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
@@ -12,13 +10,13 @@ import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-
 import ActivityHistoryDetailModal from './components/ActivityHistoryDetailModal';
 import ActivityHistoryList from './components/ActivityHistoryList';
 import ApplicantActionBar from './components/ApplicantActionBar';
 import ApplicantProfileHeader from './components/ApplicantProfileHeader';
+import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import styles from './ApplicantDetail.module.scss';
 
 interface DecisionModalCopy {
@@ -51,7 +49,7 @@ const DECISION_MODAL_COPY: Record<TeamRecruitmentApplicationDecision, DecisionMo
 
 export default function ApplicantDetail() {
   const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const logger = useLogger();
   const queryClient = useQueryClient();
 
@@ -60,22 +58,22 @@ export default function ApplicantDetail() {
   const applicationId = typeof applicantId === 'string' ? applicantId : '';
 
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.applicantDetail(recruitmentId, applicationId, isLoggedIn),
-    enabled: isLoggedIn && !!recruitmentId && !!applicationId,
+    ...teamQueries.applicantDetail(recruitmentId, applicationId, token),
+    enabled: !!token && !!recruitmentId && !!applicationId,
   });
 
   const recruitmentIdNumber = Number(recruitmentId);
   const { data: recruitment } = useQuery({
-    ...teamQueries.detail(recruitmentIdNumber, isLoggedIn),
-    enabled: isLoggedIn && !!recruitmentId,
+    ...teamQueries.detail(recruitmentIdNumber, token),
+    enabled: !!token && !!recruitmentId,
   });
 
   const { mutate: decideApplication, isPending: isDeciding } = useMutation(
-    teamMutations.decideApplication(queryClient, recruitmentId),
+    teamMutations.decideApplication(queryClient, token, recruitmentId),
   );
 
   const { mutate: createDirectChatRoom, isPending: isCreatingChat } = useMutation(
-    teamMutations.createDirectChatRoom(Number(recruitmentId)),
+    teamMutations.createDirectChatRoom(token, Number(recruitmentId)),
   );
 
   const [decisionAction, setDecisionAction] = useState<TeamRecruitmentApplicationDecision | null>(null);
@@ -146,7 +144,7 @@ export default function ApplicantDetail() {
 
   return (
     <>
-      <div className={styles['mobile-header']}>
+      <div className={styles.mobileHeader}>
         <SubPageHeader title="지원자 상세" className={styles.header} />
       </div>
 
@@ -158,12 +156,12 @@ export default function ApplicantDetail() {
 
           {!isLoading && data && (
             <>
-              <div className={styles['desktop-title']}>
-                <h1 className={styles['desktop-title__heading']}>지원자 상세</h1>
+              <div className={styles.desktopTitle}>
+                <h1 className={styles.desktopTitle__heading}>지원자 상세</h1>
                 {recruitment && (
-                  <div className={styles['desktop-title__context']}>
-                    <span className={styles['desktop-title__category']}>{CATEGORY_LABEL[recruitment.category]}</span>
-                    <span className={styles['desktop-title__recruitment']}>{recruitment.title}</span>
+                  <div className={styles.desktopTitle__context}>
+                    <span className={styles.desktopTitle__category}>{CATEGORY_LABEL[recruitment.category]}</span>
+                    <span className={styles.desktopTitle__recruitment}>{recruitment.title}</span>
                   </div>
                 )}
               </div>
@@ -179,7 +177,7 @@ export default function ApplicantDetail() {
                 onChatClick={handleChatClick}
               />
 
-              <h2 className={styles['page__section-title']}>기본 정보</h2>
+              <h2 className={styles.page__sectionTitle}>기본 정보</h2>
 
               <div className={styles.skills}>
                 <span className={styles.skills__label}>보유기술 및 자격증</span>
@@ -195,20 +193,20 @@ export default function ApplicantDetail() {
               <ActivityHistoryList
                 activities={data.profile_snapshot.activities}
                 onMoreClick={() => setIsActivityModalOpen(true)}
-                className={styles['activity-section']}
+                className={styles.activitySection}
               />
 
-              <DetailInfoSection label="자기소개" className={styles['self-introduction-section']}>
+              <DetailInfoSection label="자기소개" className={styles.selfIntroductionSection}>
                 <p className={styles.text}>{data.profile_snapshot.self_introduction}</p>
               </DetailInfoSection>
 
-              <h2 className={styles['page__section-title']}>지원 내용</h2>
+              <h2 className={styles.page__sectionTitle}>지원 내용</h2>
 
-              <DetailInfoSection label="지원 동기" className={styles['motivation-section']}>
+              <DetailInfoSection label="지원 동기" className={styles.motivationSection}>
                 <p className={styles.text}>{data.motivation}</p>
               </DetailInfoSection>
 
-              <DetailInfoSection label="참여 가능 시간" className={styles['availability-section']}>
+              <DetailInfoSection label="참여 가능 시간" className={styles.availabilitySection}>
                 <p className={styles.text}>{data.availability}</p>
               </DetailInfoSection>
             </>

@@ -1,5 +1,4 @@
 import APIClient from 'utils/ts/apiClient';
-
 import DiningResponse, { DiningLikePatcher, CancelDiningLikePatcher } from './APIDetail';
 
 export const getCafeteriaDinings = APIClient.of(DiningResponse);

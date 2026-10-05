@@ -289,6 +289,7 @@
     }
 
     &:focus-within {
+      border: -webkit-focus-ring-color auto 1px;
       outline: -webkit-focus-ring-color auto 1px;
     }
 
@@ -325,6 +326,7 @@
     box-sizing: border-box;
 
     &:focus-within {
+      border: -webkit-focus-ring-color auto 1px;
       outline: -webkit-focus-ring-color auto 1px;
     }
 

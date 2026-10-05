@@ -1,19 +1,16 @@
 import { useCallback } from 'react';
-
 import { sendClientError } from '@bcsdlab/koin';
 import { useQueryClient } from '@tanstack/react-query';
-import type { RestrictedCallvanResponse } from 'api/callvan/entity';
+import { RestrictedCallvanResponse } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import CallvanRestrictionModal from 'components/Callvan/components/CallvanRestrictionModal';
 import { isCallvanRestrictedError } from 'components/Callvan/utils/callvanRestriction';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
-export default function useCallvanRestrictionModal() {
+export default function useCallvanRestrictionModal(token: string) {
   const portalManager = useModalPortal();
   const queryClient = useQueryClient();
-  const isLoggedIn = useIsLoggedIn();
 
   const open = useCallback(
     (restriction: RestrictedCallvanResponse) => {
@@ -28,24 +25,22 @@ export default function useCallvanRestrictionModal() {
     async (error: unknown) => {
       if (!isCallvanRestrictedError(error)) return false;
 
-      if (!isLoggedIn) return false;
+      if (!token) return false;
 
       try {
-        const restriction = await queryClient.fetchQuery(callvanQueries.restriction(isLoggedIn));
+        const restriction = await queryClient.fetchQuery(callvanQueries.restriction(token));
         if (restriction.is_restricted) {
           open(restriction);
-
           return true;
         }
 
         return false;
       } catch (restrictionError) {
         sendClientError(restrictionError);
-
         return false;
       }
     },
-    [open, queryClient, isLoggedIn],
+    [open, queryClient, token],
   );
 
   return { openFromError };

@@ -13,7 +13,7 @@ const imageResize = (
     };
     worker.onerror = (error) => {
       worker.terminate();
-      reject(error.error instanceof Error ? error.error : new Error(error.message));
+      reject(error);
     };
     worker.postMessage({
       file,

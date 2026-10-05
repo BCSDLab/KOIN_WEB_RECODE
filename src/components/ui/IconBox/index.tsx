@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-
 import styles from './IconBox.module.scss';
 
 interface IconBoxProps {
@@ -8,7 +7,11 @@ interface IconBoxProps {
 }
 
 function IconBox({ children, className }: IconBoxProps) {
-  return <span className={`${styles['icon-box']} ${className ?? ''}`}>{children}</span>;
+  return (
+    <span className={`${styles['icon-box']} ${className ?? ''}`}>
+      {children}
+    </span>
+  );
 }
 
 export default IconBox;

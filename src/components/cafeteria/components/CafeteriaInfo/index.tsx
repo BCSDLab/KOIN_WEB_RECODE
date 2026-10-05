@@ -1,10 +1,9 @@
-import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
+import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
+import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -48,19 +47,31 @@ interface CafeteriaInfoProps {
 
 export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInfoProps) {
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
-  const saturday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '토요일');
+  const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '토요일');
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
   useEscapeKeyDown({ onEscape: closeInfo });
   const isMobile = useMediaQuery();
 
   return (
-    <div className={styles.background} ref={backgroundRef}>
+    <div className={styles.background} aria-hidden ref={backgroundRef}>
       <div className={styles.box}>
-        {isMobile && <SubPageHeader title="학생식당정보" onBack={closeInfo} />}
+        {isMobile && (
+          <>
+            <div className={styles.division} />
+            <div className={styles['mobile-header']}>
+              <button type="button" aria-label="닫기 버튼" onClick={closeInfo}>
+                <BlackArrowBackIcon />
+              </button>
+              <span className={styles['mobile-header__title']}>학생식당정보</span>
+            </div>
+          </>
+        )}
         <div className={styles.header}>
           <div className={styles.header__title}>
             <span className={styles.header__main}>
-              {cafeteriaInfo.semester} {cafeteriaInfo.name} 운영시간
+              {cafeteriaInfo.name}
+              &nbsp;
+              {cafeteriaInfo.semester} 중 운영시간
             </span>
             <span className={styles.header__sub}>
               <span className={styles['header__sub--bold']}>위치</span>
@@ -75,10 +86,9 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
             <CloseIcon />
           </button>
         </div>
-        {isMobile && <div className={styles.division} />}
 
         <ScheduleTable title="평일" schedules={weekday} />
-        <ScheduleTable title="토요일" schedules={saturday} />
+        <ScheduleTable title="토요일" schedules={weekend} />
 
         <div className={styles.update}>
           {cafeteriaInfo.updated_at.split('-').join('.')}

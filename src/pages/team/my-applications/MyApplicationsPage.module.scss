@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.mobile-header {
+.mobileHeader {
   display: none;
 
   @include media.media-breakpoint(mobile) {
@@ -56,7 +56,7 @@
   }
 }
 
-.summary-row {
+.summaryRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,7 +66,7 @@
   }
 }
 
-.total-count {
+.totalCount {
   color: #727272;
   font-size: 14px;
   line-height: 1.6;
@@ -76,7 +76,7 @@
   }
 }
 
-.filter-button {
+.filterButton {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -222,7 +222,7 @@
   }
 }
 
-.application-status {
+.applicationStatus {
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 500;
@@ -249,7 +249,7 @@
   }
 }
 
-.chat-button {
+.chatButton {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -275,11 +275,11 @@
   }
 }
 
-.scroll-trigger {
+.scrollTrigger {
   height: 1px;
 }
 
-.error-fallback {
+.errorFallback {
   display: flex;
   align-items: center;
   justify-content: center;

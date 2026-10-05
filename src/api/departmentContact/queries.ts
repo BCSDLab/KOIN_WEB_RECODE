@@ -1,6 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-
-import type { DepartmentCategoryContactsRequest, DepartmentContactCategory, DepartmentContactsRequest } from './entity';
+import { DepartmentCategoryContactsRequest, DepartmentContactCategory, DepartmentContactsRequest } from './entity';
 import { getDepartmentContacts, getDepartmentContactsByCategory } from './index';
 
 export const departmentContactQueryKeys = {

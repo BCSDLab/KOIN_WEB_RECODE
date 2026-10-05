@@ -1,5 +1,4 @@
 import CloseIcon from 'assets/svg/Articles/close.svg';
-
 import styles from './RecentSearchKeywords.module.scss';
 
 interface RecentSearchKeywordsProps {

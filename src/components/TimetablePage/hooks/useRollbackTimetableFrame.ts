@@ -1,14 +1,13 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Semester } from 'api/timetable/entity';
 import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
-export default function useRollbackTimetableFrame(isLoggedIn: boolean, targetSemester?: Semester) {
+export default function useRollbackTimetableFrame(token: string) {
   const queryClient = useQueryClient();
-  const selectedSemester = useSemester();
-  const mutation = timetableMutations.rollbackFrame(queryClient, isLoggedIn, targetSemester ?? selectedSemester);
+  const semester = useSemester();
+  const mutation = timetableMutations.rollbackFrame(queryClient, token, semester);
 
   return useMutation({
     ...mutation,

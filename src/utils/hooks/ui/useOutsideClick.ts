@@ -18,7 +18,6 @@ export const useOutsideClick = <TContainer extends HTMLElement = HTMLDivElement>
 
       if (container && !container.contains(clickedElement)) {
         onOutsideClick(e);
-
         return;
       }
 

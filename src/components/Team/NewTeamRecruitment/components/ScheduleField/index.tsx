@@ -1,9 +1,8 @@
-import type { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
+import { TeamRecruitmentFormValues } from 'components/Team/NewTeamRecruitment/schema';
 import DatePickerModal from 'components/ui/DatePickerModal';
-import { type Control, Controller } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { getYyyyMmDd } from 'utils/ts/calendar';
-
 import styles from './ScheduleField.module.scss';
 
 interface ScheduleFieldProps {

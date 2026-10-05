@@ -1,11 +1,9 @@
 import Image from 'next/image';
-
-import type { Dining } from 'api/dinings/entity';
+import { Dining } from 'api/dinings/entity';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './DetailModal.module.scss';
 
 interface DetailModalProps {

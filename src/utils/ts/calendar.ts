@@ -34,7 +34,6 @@ export function getCalendarDates(year: number, month: number): CalendarCell[] {
       currentMonth: false,
     });
   }
-
   return dates;
 }
 
@@ -51,7 +50,6 @@ export function formatISODateTime(date: Date, hour: number, minute: number) {
   const h = d.getHours().toString().padStart(2, '0');
   const min = d.getMinutes().toString().padStart(2, '0');
   const s = d.getSeconds().toString().padStart(2, '0');
-
   return `${y}-${m}-${day}T${h}:${min}:${s}`;
 }
 
@@ -67,7 +65,6 @@ export function getYyyyMmDd(date: Date, separator: string = '-'): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-
   return `${year}${separator}${month}${separator}${day}`;
 }
 

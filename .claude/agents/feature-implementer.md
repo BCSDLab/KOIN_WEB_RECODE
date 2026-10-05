@@ -45,7 +45,7 @@ onError: (error) => {
   } else {
     showToast('error', '오류가 발생했습니다.');
   }
-};
+}
 ```
 
 ## 입력
@@ -55,7 +55,6 @@ onError: (error) => {
 ## 출력
 
 `_workspace/02_implementer_result.json` 파일:
-
 ```json
 {
   "branch": "feature/[name]",
@@ -65,8 +64,7 @@ onError: (error) => {
   "notes": "구현 중 발견된 특이사항"
 }
 ```
-
-- 실제 구현된 소스 파일들
++ 실제 구현된 소스 파일들
 
 ## 에러 핸들링
 

@@ -2,15 +2,13 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import type { StoreCategoriesResponse } from 'api/store/entity';
+import { StoreCategoriesResponse } from 'api/store/entity';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
 import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-
+import type { LoggingTeam } from 'lib/gtag';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -80,7 +78,6 @@ export default function IndexStore({ categories }: { categories: StoreCategories
 
     if (route.startsWith('http')) {
       window.location.assign(route);
-
       return;
     }
 

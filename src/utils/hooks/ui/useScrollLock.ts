@@ -1,15 +1,15 @@
 import { useState, useRef, useLayoutEffect } from 'react';
 
-interface UseScrollLockReturn {
+type UseScrollLockReturn = {
   isLocked: boolean;
   lock: () => void;
   unlock: () => void;
-}
+};
 
-interface OriginalStyle {
+type OriginalStyle = {
   overflow: CSSStyleDeclaration['overflow'];
   paddingRight: CSSStyleDeclaration['paddingRight'];
-}
+};
 
 export function useScrollLock(autoLock: boolean = true): UseScrollLockReturn {
   const [isLocked, setIsLocked] = useState(autoLock);

@@ -15,7 +15,6 @@ const useParamsHandler = () => {
         params.set(key, value);
       }
     });
-
     return params;
   }, [router.query]);
 

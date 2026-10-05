@@ -1,7 +1,5 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { getViewerScope } from 'utils/ts/getViewerScope';
 import mergeChatMessages from 'utils/ts/teamChatMessages';
-
 import type {
   MyCreatedTeamRecruitmentListRequest,
   MyTeamRecruitmentApplicationListRequest,
@@ -33,89 +31,58 @@ export const TEAM_CHAT_MESSAGE_LIMIT = 100;
 
 export const TEAM_CHAT_POLLING_INTERVAL = 1000;
 
+type TeamViewerScope = 'guest' | 'auth';
+
+const getViewerScope = (token?: string | null): TeamViewerScope => (token ? 'auth' : 'guest');
+
 export type TeamRecruitmentInfiniteListRequest = Omit<TeamRecruitmentListRequest, 'page' | 'limit'>;
 
 export const teamQueryKeys = {
   all: ['team'] as const,
   detailRoot: ['team', 'detail'] as const,
-  detail: (recruitmentId: number, isLoggedIn?: boolean) =>
-    [...teamQueryKeys.detailRoot, recruitmentId, getViewerScope(isLoggedIn)] as const,
+  detail: (recruitmentId: number, token?: string | null) =>
+    [...teamQueryKeys.detailRoot, recruitmentId, getViewerScope(token)] as const,
   listRoot: ['team', 'list'] as const,
-  infiniteList: (params: TeamRecruitmentInfiniteListRequest, isLoggedIn?: boolean) =>
-    [...teamQueryKeys.listRoot, 'infinite', getViewerScope(isLoggedIn), params] as const,
+  infiniteList: (params: TeamRecruitmentInfiniteListRequest, token?: string | null) =>
+    [...teamQueryKeys.listRoot, 'infinite', getViewerScope(token), params] as const,
   notificationsRoot: ['team', 'notifications'] as const,
-  notifications: (isLoggedIn: boolean, params: TeamRecruitmentNotificationListRequest) =>
-    [...teamQueryKeys.notificationsRoot, getViewerScope(isLoggedIn), params] as const,
-  infiniteNotifications: (isLoggedIn: boolean) =>
-    [...teamQueryKeys.notificationsRoot, 'infinite', getViewerScope(isLoggedIn)] as const,
+  notifications: (token: string, params: TeamRecruitmentNotificationListRequest) =>
+    [...teamQueryKeys.notificationsRoot, token, params] as const,
+  infiniteNotifications: (token: string) => [...teamQueryKeys.notificationsRoot, 'infinite', token] as const,
   myApplicationsRoot: ['team', 'my-applications'] as const,
-  infiniteMyApplications: (isLoggedIn: boolean, params: MyTeamRecruitmentApplicationListRequest) =>
-    [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(isLoggedIn), params] as const,
+  infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest) =>
+    [...teamQueryKeys.myApplicationsRoot, 'infinite', getViewerScope(token), params] as const,
   applicantsRoot: (recruitmentId: string) => ['team', 'recruitment', recruitmentId, 'applicants'] as const,
-  applicants: (recruitmentId: string, isLoggedIn: boolean, params: TeamRecruitmentApplicantListRequest) =>
-    [...teamQueryKeys.applicantsRoot(recruitmentId), getViewerScope(isLoggedIn), params] as const,
-  applicantDetail: (recruitmentId: string, applicationId: string, isLoggedIn: boolean) =>
-    [...teamQueryKeys.applicantsRoot(recruitmentId), 'detail', applicationId, getViewerScope(isLoggedIn)] as const,
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest) =>
+    [...teamQueryKeys.applicantsRoot(recruitmentId), token, params] as const,
+  applicantDetail: (recruitmentId: string, applicationId: string, token: string) =>
+    [...teamQueryKeys.applicantsRoot(recruitmentId), 'detail', applicationId, token] as const,
   myCreatedRoot: ['team', 'my-created'] as const,
-  infiniteMyCreated: (isLoggedIn: boolean, params: MyCreatedTeamRecruitmentListRequest) =>
-    [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(isLoggedIn), params] as const,
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest) =>
+    [...teamQueryKeys.myCreatedRoot, 'infinite', getViewerScope(token), params] as const,
   chatRoot: ['team', 'chat'] as const,
-  chatRoomList: (isLoggedIn: boolean) => [...teamQueryKeys.chatRoot, 'rooms', getViewerScope(isLoggedIn)] as const,
-  chatRoom: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number) =>
-    [...teamQueryKeys.chatRoot, 'room', getViewerScope(isLoggedIn), recruitmentId, chatRoomId] as const,
-  chatMessagesRoot: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number) =>
-    [...teamQueryKeys.chatRoot, 'messages', getViewerScope(isLoggedIn), recruitmentId, chatRoomId] as const,
-  chatMessages: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest) =>
-    [...teamQueryKeys.chatMessagesRoot(isLoggedIn, recruitmentId, chatRoomId), params] as const,
+  chatRoomList: (token: string) => [...teamQueryKeys.chatRoot, 'rooms', token] as const,
+  chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
+    [...teamQueryKeys.chatRoot, 'room', token, recruitmentId, chatRoomId] as const,
+  chatMessagesRoot: (token: string, recruitmentId: number, chatRoomId: number) =>
+    [...teamQueryKeys.chatRoot, 'messages', token, recruitmentId, chatRoomId] as const,
+  chatMessages: (token: string, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest) =>
+    [...teamQueryKeys.chatMessagesRoot(token, recruitmentId, chatRoomId), params] as const,
 };
 
 export const teamQueries = {
-  detail: (recruitmentId: number, isLoggedIn?: boolean) =>
+  detail: (recruitmentId: number, token?: string | null) =>
     queryOptions({
-      queryKey: teamQueryKeys.detail(recruitmentId, isLoggedIn),
-      queryFn: () => getTeamRecruitmentDetail(recruitmentId),
+      queryKey: teamQueryKeys.detail(recruitmentId, token),
+      queryFn: () => getTeamRecruitmentDetail(token || undefined, recruitmentId),
     }),
 
-  infiniteList: (params: TeamRecruitmentInfiniteListRequest = {}, isLoggedIn?: boolean) =>
+  infiniteList: (params: TeamRecruitmentInfiniteListRequest = {}, token?: string | null) =>
     infiniteQueryOptions({
-      queryKey: teamQueryKeys.infiniteList(params, isLoggedIn),
-      initialPageParam: 1,
-      queryFn: ({ pageParam }) => getTeamRecruitmentList({ ...params, page: pageParam, limit: TEAM_LIST_LIMIT }),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.current_page < lastPage.total_page) {
-          return lastPage.current_page + 1;
-        }
-
-        return undefined;
-      },
-    }),
-
-  notifications: (isLoggedIn: boolean, params: TeamRecruitmentNotificationListRequest = {}) =>
-    queryOptions({
-      queryKey: teamQueryKeys.notifications(isLoggedIn, params),
-      queryFn: () => getTeamRecruitmentNotifications(params),
-    }),
-
-  infiniteNotifications: (isLoggedIn: boolean) =>
-    infiniteQueryOptions({
-      queryKey: teamQueryKeys.infiniteNotifications(isLoggedIn),
-      initialPageParam: 1,
-      queryFn: ({ pageParam }) => getTeamRecruitmentNotifications({ page: pageParam, limit: TEAM_NOTIFICATION_LIMIT }),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.current_page < lastPage.total_page) {
-          return lastPage.current_page + 1;
-        }
-
-        return undefined;
-      },
-    }),
-
-  infiniteMyApplications: (isLoggedIn: boolean, params: MyTeamRecruitmentApplicationListRequest = {}) =>
-    infiniteQueryOptions({
-      queryKey: teamQueryKeys.infiniteMyApplications(isLoggedIn, params),
+      queryKey: teamQueryKeys.infiniteList(params, token),
       initialPageParam: 1,
       queryFn: ({ pageParam }) =>
-        getMyTeamRecruitmentApplications({ ...params, page: pageParam, limit: TEAM_MY_APPLICATIONS_LIMIT }),
+        getTeamRecruitmentList(token || undefined, { ...params, page: pageParam, limit: TEAM_LIST_LIMIT }),
       getNextPageParam: (lastPage) => {
         if (lastPage.current_page < lastPage.total_page) {
           return lastPage.current_page + 1;
@@ -125,24 +92,18 @@ export const teamQueries = {
       },
     }),
 
-  applicants: (recruitmentId: string, isLoggedIn: boolean, params: TeamRecruitmentApplicantListRequest = {}) =>
+  notifications: (token: string, params: TeamRecruitmentNotificationListRequest = {}) =>
     queryOptions({
-      queryKey: teamQueryKeys.applicants(recruitmentId, isLoggedIn, params),
-      queryFn: () => getTeamRecruitmentApplicants(recruitmentId, params),
+      queryKey: teamQueryKeys.notifications(token, params),
+      queryFn: () => getTeamRecruitmentNotifications(token, params),
     }),
 
-  applicantDetail: (recruitmentId: string, applicationId: string, isLoggedIn: boolean) =>
-    queryOptions({
-      queryKey: teamQueryKeys.applicantDetail(recruitmentId, applicationId, isLoggedIn),
-      queryFn: () => getTeamRecruitmentApplicantDetail(recruitmentId, applicationId),
-    }),
-
-  infiniteMyCreated: (isLoggedIn: boolean, params: MyCreatedTeamRecruitmentListRequest = {}) =>
+  infiniteNotifications: (token: string) =>
     infiniteQueryOptions({
-      queryKey: teamQueryKeys.infiniteMyCreated(isLoggedIn, params),
+      queryKey: teamQueryKeys.infiniteNotifications(token),
       initialPageParam: 1,
       queryFn: ({ pageParam }) =>
-        getMyCreatedTeamRecruitments({ ...params, page: pageParam, limit: TEAM_MY_CREATED_LIMIT }),
+        getTeamRecruitmentNotifications(token, { page: pageParam, limit: TEAM_NOTIFICATION_LIMIT }),
       getNextPageParam: (lastPage) => {
         if (lastPage.current_page < lastPage.total_page) {
           return lastPage.current_page + 1;
@@ -152,31 +113,68 @@ export const teamQueries = {
       },
     }),
 
-  chatRoomList: (isLoggedIn: boolean) =>
+  infiniteMyApplications: (token: string, params: MyTeamRecruitmentApplicationListRequest = {}) =>
+    infiniteQueryOptions({
+      queryKey: teamQueryKeys.infiniteMyApplications(token, params),
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getMyTeamRecruitmentApplications(token, { ...params, page: pageParam, limit: TEAM_MY_APPLICATIONS_LIMIT }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.current_page < lastPage.total_page) {
+          return lastPage.current_page + 1;
+        }
+
+        return undefined;
+      },
+    }),
+
+  applicants: (recruitmentId: string, token: string, params: TeamRecruitmentApplicantListRequest = {}) =>
     queryOptions({
-      queryKey: teamQueryKeys.chatRoomList(isLoggedIn),
-      queryFn: () => getTeamRecruitmentChatRoomList(),
+      queryKey: teamQueryKeys.applicants(recruitmentId, token, params),
+      queryFn: () => getTeamRecruitmentApplicants(token, recruitmentId, params),
+    }),
+
+  applicantDetail: (recruitmentId: string, applicationId: string, token: string) =>
+    queryOptions({
+      queryKey: teamQueryKeys.applicantDetail(recruitmentId, applicationId, token),
+      queryFn: () => getTeamRecruitmentApplicantDetail(token, recruitmentId, applicationId),
+    }),
+
+  infiniteMyCreated: (token: string, params: MyCreatedTeamRecruitmentListRequest = {}) =>
+    infiniteQueryOptions({
+      queryKey: teamQueryKeys.infiniteMyCreated(token, params),
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getMyCreatedTeamRecruitments(token, { ...params, page: pageParam, limit: TEAM_MY_CREATED_LIMIT }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.current_page < lastPage.total_page) {
+          return lastPage.current_page + 1;
+        }
+
+        return undefined;
+      },
+    }),
+
+  chatRoomList: (token: string) =>
+    queryOptions({
+      queryKey: teamQueryKeys.chatRoomList(token),
+      queryFn: () => getTeamRecruitmentChatRoomList(token),
       staleTime: 0,
       refetchInterval: TEAM_CHAT_POLLING_INTERVAL,
     }),
 
-  chatRoom: (isLoggedIn: boolean, recruitmentId: number, chatRoomId: number) =>
+  chatRoom: (token: string, recruitmentId: number, chatRoomId: number) =>
     queryOptions({
-      queryKey: teamQueryKeys.chatRoom(isLoggedIn, recruitmentId, chatRoomId),
-      queryFn: () => getTeamRecruitmentChatRoom(recruitmentId, chatRoomId),
+      queryKey: teamQueryKeys.chatRoom(token, recruitmentId, chatRoomId),
+      queryFn: () => getTeamRecruitmentChatRoom(token, recruitmentId, chatRoomId),
       staleTime: 60000,
     }),
 
-  chatMessages: (
-    isLoggedIn: boolean,
-    recruitmentId: number,
-    chatRoomId: number,
-    params: TeamChatMessageListRequest = {},
-  ) =>
+  chatMessages: (token: string, recruitmentId: number, chatRoomId: number, params: TeamChatMessageListRequest = {}) =>
     queryOptions({
-      queryKey: teamQueryKeys.chatMessages(isLoggedIn, recruitmentId, chatRoomId, params),
+      queryKey: teamQueryKeys.chatMessages(token, recruitmentId, chatRoomId, params),
       queryFn: () =>
-        getTeamRecruitmentChatMessages(recruitmentId, chatRoomId, {
+        getTeamRecruitmentChatMessages(token, recruitmentId, chatRoomId, {
           limit: TEAM_CHAT_MESSAGE_LIMIT,
           ...params,
         }),

@@ -18,7 +18,7 @@
   justify-content: space-between;
 }
 
-.header-title {
+.headerTitle {
   font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 600;
@@ -26,7 +26,7 @@
   line-height: 1.6;
 }
 
-.close-button {
+.closeButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@
   gap: 12px;
 }
 
-.reset-button {
+.resetButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,7 +90,7 @@
   }
 }
 
-.apply-button {
+.applyButton {
   flex: 1;
   height: 48px;
   border-radius: 20px;
@@ -121,7 +121,7 @@
   gap: 12px;
 }
 
-.section-title {
+.sectionTitle {
   font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-weight: 600;
@@ -130,7 +130,7 @@
   line-height: 1.6;
 }
 
-.section-badges {
+.sectionBadges {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -159,19 +159,19 @@
     animation: slide-up 0.25s ease-out;
   }
 
-  .header-title {
+  .headerTitle {
     color: #b611f5;
   }
 
-  .close-button:focus-visible {
+  .closeButton:focus-visible {
     outline-color: #b611f5;
   }
 
-  .reset-button:focus-visible {
+  .resetButton:focus-visible {
     outline-color: #b611f5;
   }
 
-  .apply-button {
+  .applyButton {
     background: #b611f5;
 
     &:hover {
@@ -183,7 +183,7 @@
     }
   }
 
-  .section-badges > button {
+  .sectionBadges > button {
     &:hover,
     &[aria-pressed="true"] {
       border-color: #b611f5;

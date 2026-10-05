@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from 'react';
-
 import { useCafeteriaServerValue } from 'components/cafeteria/context/CafeteriaServerContext';
 import { DiningTime, kstDateKey } from 'components/cafeteria/utils/time';
 

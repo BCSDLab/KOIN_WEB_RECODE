@@ -1,9 +1,7 @@
 import { useRouter } from 'next/router';
-
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { setRedirectPath } from 'utils/ts/auth';
-
 import styles from './GraduationCalculatorAuthModal.module.scss';
 
 export default function GraduationCalculatorAuthModal() {

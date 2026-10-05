@@ -1,5 +1,4 @@
 import APIClient from 'utils/ts/apiClient';
-
 import {
   StoreList,
   StoreListV2,

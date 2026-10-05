@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
-import type { ClubRecruitment } from 'api/club/entity';
+import { ClubRecruitment } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import DetailDescription from 'components/Club/NewClubRecruitment/components/DetailDescription';
@@ -13,7 +12,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
-
 import styles from './NewClubRecruitment.module.scss';
 
 function NewClubRecruitment({ id }: { id: string }) {
@@ -68,7 +66,6 @@ function NewClubRecruitment({ id }: { id: string }) {
 
   function splitKoreanDate(date: Date): [string, string] {
     const [year, ...rest] = formatKoreanDate(date).split(' ');
-
     return [year, rest.join(' ')];
   }
 
@@ -208,6 +205,5 @@ export default function ClubRecruitmentPage() {
   const router = useRouter();
   const { id } = router.query as { id: string };
   if (!id) return null;
-
   return <NewClubRecruitment id={id} />;
 }

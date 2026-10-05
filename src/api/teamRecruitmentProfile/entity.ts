@@ -1,21 +1,21 @@
-import type { APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
-export interface TeamRecruitmentProfileActivity {
+export type TeamRecruitmentProfileActivity = {
   id: number;
   title: string;
   started_at: string;
   ended_at: string | null;
   is_ongoing: boolean;
   description: string;
-}
+};
 
-export interface TeamRecruitmentProfileActivityInput {
+export type TeamRecruitmentProfileActivityInput = {
   title: string;
   started_at: string;
   ended_at: string | null;
   is_ongoing: boolean;
   description: string;
-}
+};
 
 export interface TeamRecruitmentProfileResponse extends APIResponse {
   profile_nickname: string;
@@ -28,12 +28,12 @@ export interface TeamRecruitmentProfileResponse extends APIResponse {
   self_introduction: string;
 }
 
-export interface UpsertTeamRecruitmentProfileRequest {
+export type UpsertTeamRecruitmentProfileRequest = {
   profile_nickname: string;
   preferred_role: string;
   skills: string[];
   activities: TeamRecruitmentProfileActivityInput[];
   self_introduction: string;
-}
+};
 
 export type UpsertTeamRecruitmentProfileResponse = TeamRecruitmentProfileResponse;

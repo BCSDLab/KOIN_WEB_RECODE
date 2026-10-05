@@ -1,6 +1,5 @@
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-
-import type { DeptListResponse, DeptMajorResponse } from './entity';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { DeptListResponse, DeptMajorResponse } from './entity';
 
 export class DeptList<R extends DeptListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

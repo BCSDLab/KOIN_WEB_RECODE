@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './DeleteConfirmModal.module.scss';
 
 interface DeleteConfirmModalProps {
@@ -43,7 +42,6 @@ export default function DeleteConfirmModal({ isPending, onCancel, onClose, onCon
       if (focusableButtons.length === 0) {
         event.preventDefault();
         modalElement.focus();
-
         return;
       }
 

@@ -1,21 +1,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import SearchIcon from 'assets/svg/Articles/search.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-
 import styles from './LostItemPageLayout.module.scss';
 
 export default function LostItemPageLayout({ children }: { children: React.ReactNode }) {
   useScrollToTop();
 
   const router = useRouter();
-  const isMobile = useMediaQuery();
 
   const keywordFromQuery = (Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword) ?? '';
   const [keyword, setKeyword] = useState(String(keywordFromQuery));
@@ -34,8 +30,8 @@ export default function LostItemPageLayout({ children }: { children: React.React
   };
 
   return (
-    <div className={styles['lost-item-template']}>
-      <div className={styles['lost-item-content']}>
+    <div className={styles['lostItem-template']}>
+      <div className={styles['lostItem-content']}>
         <div className={styles.header}>
           <Link href={ROUTES.LostItems()}>
             <h1 className={styles.header__title}>분실물</h1>
@@ -44,7 +40,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
 
         <div className={styles.index}>
           <div className={styles['search-container']}>
-            {!isMobile && <SearchIcon />}
+            <SearchIcon />
             <input
               className={styles['search-container__input']}
               value={keyword}
@@ -55,7 +51,6 @@ export default function LostItemPageLayout({ children }: { children: React.React
                 if (e.key === 'Enter') applySearch();
               }}
             />
-            {isMobile && <SearchIcon />}
           </div>
 
           <div className={styles.index__rightButton}>
@@ -63,7 +58,7 @@ export default function LostItemPageLayout({ children }: { children: React.React
           </div>
         </div>
 
-        <div className={styles['list-scroll']}>{children}</div>
+        <div className={styles.listScroll}>{children}</div>
       </div>
 
       <div className={styles.aside}>

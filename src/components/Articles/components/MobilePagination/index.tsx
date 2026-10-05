@@ -1,6 +1,5 @@
 import { cn } from '@bcsdlab/utils';
 import usePagination from 'components/Articles/hooks/usePagination';
-
 import styles from './MobilePagination.module.scss';
 
 interface MobilePaginationProps {

@@ -1,12 +1,10 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
-import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import {
   teamRecruitmentProfileQueries,
   useUpsertTeamRecruitmentProfileMutation,
@@ -19,12 +17,12 @@ import SubPageHeader from 'components/ui/SubPageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-
 import ApplicationStep from './Steps/ApplicationStep';
 import BasicInfoStep from './Steps/BasicInfoStep';
 import { APPLY_STEPS, type ApplicationFormValues, type ApplyStepTitle } from './types';
+import type { UpsertTeamRecruitmentProfileRequest } from 'api/teamRecruitmentProfile/entity';
 import styles from './RecruitmentApplyPage.module.scss';
 
 const LOGGING_TITLE = {
@@ -48,7 +46,7 @@ const toProfileRequestBody = (values: ApplicationFormValues): UpsertTeamRecruitm
 
 export default function RecruitmentApplyPage() {
   const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const queryClient = useQueryClient();
   const { actionEventClick } = useLogger();
   const [pendingValues, setPendingValues] = useState<ApplicationFormValues | null>(null);
@@ -71,13 +69,13 @@ export default function RecruitmentApplyPage() {
     isLoading: isRecruitmentLoading,
     isError: isRecruitmentError,
   } = useQuery({
-    ...teamQueries.detail(recruitmentId, isLoggedIn),
+    ...teamQueries.detail(recruitmentId, token),
     enabled: router.isReady && isValidRecruitmentId,
   });
 
   const { data: existingProfile } = useQuery({
-    ...teamRecruitmentProfileQueries.me(isLoggedIn),
-    enabled: isLoggedIn,
+    ...teamRecruitmentProfileQueries.me(token),
+    enabled: !!token,
   });
 
   const canApply = !!recruitment && (recruitment.can_apply || recruitment.apply_block_reason === 'PROFILE_REQUIRED');
@@ -139,13 +137,11 @@ export default function RecruitmentApplyPage() {
       showToast('warning', '기본 정보를 먼저 입력해주세요.');
       goToFirstStep();
     }
-    // goToFirstStep은 매 렌더 새로 생성되지만 React Compiler가 참조를 안정화하므로 의존성에서 제외한다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- goToFirstStep은 React Compiler가 참조를 안정화함
-  }, [isReady, currentStep, methods]);
+  }, [isReady, currentStep, methods, goToFirstStep]);
 
   const { mutate: upsertProfile, isPending: isProfilePending } = useUpsertTeamRecruitmentProfileMutation();
   const { mutate: submitApplication, isPending: isApplicationPending } = useMutation(
-    teamMutations.submitApplication(queryClient, recruitmentId),
+    teamMutations.submitApplication(queryClient, token, recruitmentId),
   );
   const isSubmitting = isProfilePending || isApplicationPending;
 
@@ -162,7 +158,6 @@ export default function RecruitmentApplyPage() {
       ) {
         showToast('warning', '기본 정보를 먼저 입력해주세요.');
         goToFirstStep();
-
         return;
       }
       showToast('warning', '필수 항목을 모두 작성해주세요.');
@@ -178,7 +173,6 @@ export default function RecruitmentApplyPage() {
       const selectedRole = recruitment.roles.find((role) => role.id === pendingValues.roleId);
       if (!selectedRole) {
         showToast('warning', '지원 역할을 다시 선택해주세요.');
-
         return;
       }
       roleId = selectedRole.id;
@@ -222,7 +216,7 @@ export default function RecruitmentApplyPage() {
   return (
     <div className={styles.container}>
       <div className={styles.page}>
-        <div className={styles['mobile-header']}>
+        <div className={styles.mobileHeader}>
           <SubPageHeader title="팀원 모집 지원" />
         </div>
         <h1 className={styles.title}>팀원 모집 지원</h1>

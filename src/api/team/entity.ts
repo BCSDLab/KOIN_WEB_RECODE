@@ -1,4 +1,4 @@
-import type { APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type TeamRecruitmentCategory = 'CONTEST' | 'EXTERNAL_ACTIVITY' | 'STUDY' | 'PROJECT' | 'OTHER';
 

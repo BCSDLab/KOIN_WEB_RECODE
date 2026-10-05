@@ -1,7 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
-import { type FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
-
+import { FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import styles from './FormCategory.module.scss';
 
 const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '기타'];
@@ -49,7 +48,7 @@ export default function FormCategory({ category, setCategory, isCategorySelected
                 [styles.category__button]: true,
                 [styles['category__button--selected']]: category === item,
               })}
-              onClick={() => handleCategoryClick(item)}
+              onClick={() => handleCategoryClick(item as FindUserCategory)}
             >
               {item}
             </button>

@@ -2,14 +2,16 @@ import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadGraduationExcel } from 'api/graduationCalculator';
 import { graduationCalculatorQueryKeys } from 'api/graduationCalculator/queries';
-import type { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
+import { GraduationExcelUploadForPost } from 'components/GraduationCalculatorPage/ts/types';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 const usePostGraduationExcel = () => {
+  const token = useTokenState();
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
-    mutationFn: async (data: GraduationExcelUploadForPost) => uploadGraduationExcel(data),
+    mutationFn: async (data: GraduationExcelUploadForPost) => uploadGraduationExcel(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
     },

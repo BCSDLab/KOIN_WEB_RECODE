@@ -1,7 +1,6 @@
-import type { DeleteResponse } from 'api/auth/entity';
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-
-import type {
+import { DeleteResponse } from 'api/auth/entity';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import {
   StoreListResponse,
   StoreListV2Response,
   StoreDetailResponse,
@@ -153,7 +152,12 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(id: number, pageParam: number, sorter: string) {
+  constructor(
+    id: number,
+    pageParam: number,
+    sorter: string,
+    public authorization?: string,
+  ) {
     this.path = `shops/${id}/reviews?page=${pageParam}&limit=10&sorter=${sorter}`;
   }
 }
@@ -165,7 +169,11 @@ export class DeleteReview<R extends DeleteResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(reviewId: number, shopId: string) {
+  constructor(
+    reviewId: number,
+    shopId: string,
+    public authorization: string,
+  ) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
   }
 }
@@ -177,7 +185,11 @@ export class GetMyReviews<R extends MyReviewResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(shopId: string, sorter: string) {
+  constructor(
+    shopId: string,
+    sorter: string,
+    public authorization: string,
+  ) {
     this.path = `shops/${shopId}/reviews/me?sorter=${sorter}`;
   }
 }
@@ -191,7 +203,12 @@ export class ReviewReport<R extends ReviewReportResponse> implements APIRequest<
 
   data: ReviewReportRequest;
 
-  constructor(shop_id: number, review_id: number, data: ReviewReportRequest) {
+  constructor(
+    shop_id: number,
+    review_id: number,
+    data: ReviewReportRequest,
+    public authorization?: string,
+  ) {
     this.path = `/shops/${shop_id}/reviews/${review_id}/reports`;
     this.data = data;
   }

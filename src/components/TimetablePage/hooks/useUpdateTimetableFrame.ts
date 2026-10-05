@@ -1,17 +1,16 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Semester } from 'api/timetable/entity';
 import { timetableMutations } from 'api/timetable/mutations';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
-export default function useUpdateTimetableFrame(targetSemester?: Semester) {
-  const isLoggedIn = useIsLoggedIn();
+export default function useUpdateTimetableFrame() {
+  const token = useTokenState();
 
   const queryClient = useQueryClient();
-  const selectedSemester = useSemester();
-  const mutation = timetableMutations.updateFrame(queryClient, isLoggedIn, targetSemester ?? selectedSemester);
+  const semester = useSemester();
+  const mutation = timetableMutations.updateFrame(queryClient, token, semester);
   const mutate = useMutation({
     ...mutation,
     onError: (error) => {

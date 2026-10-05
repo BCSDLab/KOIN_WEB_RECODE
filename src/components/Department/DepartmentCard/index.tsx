@@ -1,8 +1,7 @@
-import type { DepartmentContactDepartment } from 'api/departmentContact/entity';
+import { DepartmentContactDepartment } from 'api/departmentContact/entity';
 import ClipboardCopyIcon from 'assets/svg/department/clipboard-copy-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import showToast from 'utils/ts/showToast';
-
 import styles from './DepartmentCard.module.scss';
 
 interface DepartmentCardProps {
@@ -49,9 +48,17 @@ export default function DepartmentCard({ department, className }: DepartmentCard
     <div className={`${styles.card} ${className ?? ''}`}>
       <h2 className={styles.card__title}>{department.name}</h2>
       <div className={styles.single}>
-        <span className={styles.single__phone}>전화번호 : {contact?.phone_number}</span>
+        <span className={styles.single__phone}>
+          전화번호 :
+          {' '}
+          {contact?.phone_number}
+        </span>
         {contact && (
-          <button type="button" className={styles.single__copy} onClick={() => copyPhoneNumber(contact.phone_number)}>
+          <button
+            type="button"
+            className={styles.single__copy}
+            onClick={() => copyPhoneNumber(contact.phone_number)}
+          >
             전화번호 복사
             <ClipboardCopyIcon aria-hidden />
           </button>

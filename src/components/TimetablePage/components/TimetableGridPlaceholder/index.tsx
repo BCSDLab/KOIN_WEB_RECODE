@@ -1,9 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import { DAYS_STRING } from 'static/timetable';
-
 import styles from 'components/TimetablePage/components/Timetable/Timetable.module.scss';
 
-const DEFAULT_TIME_STRING = ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']);
+const DEFAULT_TIME_STRING = ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [
+  time,
+  '',
+]);
 
 interface TimetableGridPlaceholderProps {
   readonly firstColumnWidth: number;
@@ -21,11 +23,7 @@ export default function TimetableGridPlaceholder({
   const columnHeight = DEFAULT_TIME_STRING.length * rowHeight;
 
   return (
-    <div
-      className={styles.timetable}
-      style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}
-      aria-hidden
-    >
+    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }} aria-hidden>
       <div className={styles.timetable__head} style={{ height: `${rowHeight + 5}px` }}>
         <div
           className={cn({
@@ -53,7 +51,6 @@ export default function TimetableGridPlaceholder({
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
-              // eslint-disable-next-line react/no-array-index-key -- DEFAULT_TIME_STRING는 고정 정적 배열이다.
               key={`placeholder-row-${value}-${index}`}
             />
           ))}
@@ -70,7 +67,6 @@ export default function TimetableGridPlaceholder({
           {DEFAULT_TIME_STRING.map((value, index) => (
             <div
               style={{ height: `${rowHeight}px` }}
-              // eslint-disable-next-line react/no-array-index-key -- DEFAULT_TIME_STRING는 고정 정적 배열이다.
               key={`placeholder-time-${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']

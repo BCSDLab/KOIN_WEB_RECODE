@@ -1,9 +1,8 @@
 import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { Course, PreCourse } from 'api/course/entity';
+import { Course, PreCourse } from 'api/course/entity';
 import { courseQueries } from 'api/course/queries';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
@@ -18,11 +17,10 @@ import SSRSuspense from 'components/ssr/SSRSuspense';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { setRedirectPath } from 'utils/ts/auth';
 import { useSemester } from 'utils/zustand/semester';
-
 import styles from './CoursePage.module.scss';
 
 interface OpenCoursesTableContentProps {
@@ -55,14 +53,14 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
 }
 
 interface PreCoursesTableContentProps {
-  isLoggedIn: boolean;
+  token: string;
   timetableFrameId: number;
   onAddCourse: (course: PreCourse) => void;
 }
 
-function PreCoursesTableContent({ isLoggedIn, timetableFrameId, onAddCourse }: PreCoursesTableContentProps) {
+function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCoursesTableContentProps) {
   const logger = useLogger();
-  const { data: preCourses } = useSuspenseQuery(courseQueries.preCourseList(timetableFrameId, isLoggedIn));
+  const { data: preCourses } = useSuspenseQuery(courseQueries.preCourseList(token, timetableFrameId));
 
   const handleAddPreCourse = (course: PreCourse) => {
     logger.actionEventClick({ team: 'USER', event_label: 'application_training_pre_apply', value: '' });
@@ -96,7 +94,7 @@ function PreCoursesTableContent({ isLoggedIn, timetableFrameId, onAddCourse }: P
 
 function CoursePage() {
   const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const semester = useSemester();
   const currentSemester = getRecentSemester();
 
@@ -105,7 +103,7 @@ function CoursePage() {
     initialSemester: semester.term,
   });
 
-  const { data: timetableFrameList } = useTimetableFrameList(currentSemester);
+  const { data: timetableFrameList } = useTimetableFrameList(token, currentSemester);
   const mainFrame = timetableFrameList?.find((frame) => frame.is_main);
   const timetableFrameId = mainFrame?.id ?? 0;
   const hasValidFrameId = !!mainFrame?.id;
@@ -133,17 +131,17 @@ function CoursePage() {
           </div>
 
           <div className={styles.content__right}>
-            {isLoggedIn && hasValidFrameId ? (
+            {token && hasValidFrameId ? (
               <Suspense fallback={<div>예비수강과목 로딩중...</div>}>
                 <PreCoursesTableContent
-                  isLoggedIn={isLoggedIn}
+                  token={token}
                   timetableFrameId={timetableFrameId}
                   onAddCourse={handleAddCourse}
                 />
               </Suspense>
             ) : (
               <div className={styles.placeholder}>
-                {isLoggedIn ? (
+                {token ? (
                   <>
                     현재 학기 시간표가 없습니다.
                     <Link href={ROUTES.Timetable()} className={styles.placeholder__link}>

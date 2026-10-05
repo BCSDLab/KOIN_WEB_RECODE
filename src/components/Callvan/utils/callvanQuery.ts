@@ -1,12 +1,5 @@
+import { CallvanAuthor, CallvanLocation, CallvanSort, CallvanStatus, CALLVAN_LOCATIONS } from 'api/callvan/entity';
 import type { ParsedUrlQuery } from 'querystring';
-
-import {
-  type CallvanAuthor,
-  type CallvanLocation,
-  type CallvanSort,
-  type CallvanStatus,
-  CALLVAN_LOCATIONS,
-} from 'api/callvan/entity';
 
 export interface CallvanParams {
   page: number;
@@ -43,7 +36,6 @@ function isCallvanLocation(value: string): value is CallvanLocation {
 function parseStringParam(query: ParsedUrlQuery, key: string): string {
   const value = query[key];
   if (Array.isArray(value)) return value[0] ?? '';
-
   return value ?? '';
 }
 
@@ -51,7 +43,6 @@ function parseArrayParam(query: ParsedUrlQuery, key: string): string[] {
   const value = query[key];
   if (!value) return [];
   if (Array.isArray(value)) return value;
-
   return value.split(',').filter(Boolean);
 }
 
@@ -67,9 +58,7 @@ export function parseCallvanQuery(query: ParsedUrlQuery, fallback: CallvanParams
   const author = isCallvanAuthor(rawAuthor) ? rawAuthor : fallback.author;
 
   const rawJoined = parseStringParam(query, 'joined');
-  let joined = fallback.joined;
-  if (rawJoined === 'true') joined = true;
-  else if (rawJoined === 'false') joined = false;
+  const joined = rawJoined === 'true' ? true : rawJoined === 'false' ? false : fallback.joined;
 
   const rawStatuses = parseArrayParam(query, 'statuses');
   const validStatuses = rawStatuses.filter(isCallvanStatus);

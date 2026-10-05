@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.mobile-header {
+.mobileHeader {
   display: none;
 
   @include media.media-breakpoint(mobile) {
@@ -8,11 +8,11 @@
   }
 }
 
-.desktop-only {
+.desktopOnly {
   @include media.desktop-only;
 }
 
-.mobile-only {
+.mobileOnly {
   @include media.mobile-only;
 }
 
@@ -64,7 +64,7 @@
   }
 }
 
-.summary-row {
+.summaryRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -74,7 +74,7 @@
   }
 }
 
-.total-count {
+.totalCount {
   color: #727272;
   font-size: 14px;
   line-height: 1.6;
@@ -84,7 +84,7 @@
   }
 }
 
-.filter-button {
+.filterButton {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -222,7 +222,7 @@
   }
 }
 
-.action-row {
+.actionRow {
   display: none;
   gap: 12px;
   width: 100%;
@@ -233,7 +233,7 @@
   }
 }
 
-.action-button {
+.actionButton {
   display: flex;
   flex: 1;
   align-items: center;
@@ -251,13 +251,13 @@
 }
 
 // 데스크탑: 카드 상단 행(rightSlot)에 뱃지와 나란히 배치되는 액션 버튼 묶음.
-.desktop-actions {
+.desktopActions {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.desktop-action-button {
+.desktopActionButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -274,7 +274,7 @@
   cursor: pointer;
 }
 
-.chat-button {
+.chatButton {
   position: relative;
   z-index: 2;
   display: flex;
@@ -302,11 +302,11 @@
   }
 }
 
-.scroll-trigger {
+.scrollTrigger {
   height: 1px;
 }
 
-.error-fallback {
+.errorFallback {
   display: flex;
   align-items: center;
   justify-content: center;

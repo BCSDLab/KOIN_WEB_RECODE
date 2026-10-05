@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from 'react';
-
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import {
   keepPreviousData,
@@ -12,37 +11,40 @@ import {
 import { postLeaveLostItemChatroomV2, postLostItemChatroomMessageV2 } from 'api/articles';
 import { articleQueries, articleQueryKeys } from 'api/articles/queries';
 import { getCachedMessages, cacheMessages, clearChatroomCache } from 'utils/db/chatDB';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 const POLLING_INTERVAL_MS = 10_000;
 
 interface UseChatPollingOptions {
+  token: string;
   articleId: number | string | null;
   chatroomId: number | string | null;
   isOnline?: boolean;
   autoSelectFirst?: boolean;
 }
 
-const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirst = true }: UseChatPollingOptions) => {
-  const isLoggedIn = useIsLoggedIn();
+const useChatPolling = ({
+  token,
+  articleId,
+  chatroomId,
+  isOnline = true,
+  autoSelectFirst = true,
+}: UseChatPollingOptions) => {
   const queryClient = useQueryClient();
 
   const { data: chatroomList } = useSuspenseQuery({
-    ...articleQueries.lostItemChatroomList(isLoggedIn),
+    ...articleQueries.lostItemChatroomList(token),
     staleTime: isOnline ? 0 : Infinity,
     refetchInterval: isOnline ? POLLING_INTERVAL_MS : false,
     refetchIntervalInBackground: false,
   });
 
-  const findMatchedRoom = () => {
-    if (chatroomId != null) return chatroomList?.find((room) => room.chat_room_id === Number(chatroomId));
-    if (autoSelectFirst) return chatroomList?.[0];
-
-    return undefined;
-  };
-
-  const matchedRoom = findMatchedRoom();
+  const matchedRoom =
+    chatroomId != null
+      ? chatroomList?.find((room) => room.chat_room_id === Number(chatroomId))
+      : autoSelectFirst
+        ? chatroomList?.[0]
+        : undefined;
 
   const defaultChatroomId = chatroomId ?? matchedRoom?.chat_room_id ?? null;
   const defaultArticleId = articleId ?? matchedRoom?.article_id ?? null;
@@ -54,7 +56,7 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
   useEffect(() => {
     if (numericArticleId == null || numericChatroomId == null) return;
 
-    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn);
+    const queryKey = articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId);
     const existing = queryClient.getQueryData(queryKey);
     if (existing) return;
 
@@ -63,13 +65,13 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
         queryClient.setQueryData(queryKey, cached);
       }
     });
-  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId, isLoggedIn]);
+  }, [queryClient, numericArticleId, numericChatroomId, defaultArticleId, defaultChatroomId]);
 
   const { data: chatroomDetail } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
-      ? articleQueries.lostItemChatroomDetail(isLoggedIn, Number(defaultArticleId), Number(defaultChatroomId))
+      ? articleQueries.lostItemChatroomDetail(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId, isLoggedIn),
+          queryKey: articleQueryKeys.lostItemChatroomDetail(defaultArticleId, defaultChatroomId),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -77,9 +79,9 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
 
   const { data: messages } = useQuery({
     ...(defaultArticleId && defaultChatroomId && isOnline
-      ? articleQueries.lostItemChatroomMessages(isLoggedIn, Number(defaultArticleId), Number(defaultChatroomId))
+      ? articleQueries.lostItemChatroomMessages(token, Number(defaultArticleId), Number(defaultChatroomId))
       : {
-          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
+          queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
           queryFn: skipToken,
         }),
     placeholderData: keepPreviousData,
@@ -94,20 +96,20 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
     }
   }, [messages, numericArticleId, numericChatroomId]);
 
-  const { mutate: sendMessage, mutateAsync: sendMessageAsync } = useMutation({
+  const { mutate: sendMessage } = useMutation({
     mutationFn: ({ content, isImage = false }: { content: string; isImage?: boolean }) => {
       if (defaultArticleId == null || defaultChatroomId == null) {
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
       }
 
-      return postLostItemChatroomMessageV2(Number(defaultArticleId), Number(defaultChatroomId), {
+      return postLostItemChatroomMessageV2(token, Number(defaultArticleId), Number(defaultChatroomId), {
         content,
         is_image: isImage,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
+        queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
       });
     },
     onError: (error) => {
@@ -126,14 +128,14 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
         return Promise.reject(new Error('채팅방 정보가 없습니다.'));
       }
 
-      return postLeaveLostItemChatroomV2(Number(defaultArticleId), Number(defaultChatroomId));
+      return postLeaveLostItemChatroomV2(token, Number(defaultArticleId), Number(defaultChatroomId));
     },
     onSuccess: () => {
       if (numericArticleId != null && numericChatroomId != null) {
         clearChatroomCache(numericArticleId, numericChatroomId);
       }
       queryClient.invalidateQueries({
-        queryKey: articleQueryKeys.lostItemChatroomList(isLoggedIn),
+        queryKey: articleQueryKeys.lostItemChatroomList,
       });
     },
     onError: (error) => {
@@ -146,16 +148,19 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
     },
   });
 
-  const leaveRoom = useCallback((aId: number, cId: number) => {
-    postLeaveLostItemChatroomV2(aId, cId).catch((error: unknown) => {
-      if (isKoinError(error)) {
-        showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
-      } else {
-        showToast('error', '채팅방 퇴장을 실패하였습니다');
-        sendClientError(error);
-      }
-    });
-  }, []);
+  const leaveRoom = useCallback(
+    (aId: number, cId: number) => {
+      postLeaveLostItemChatroomV2(token, aId, cId).catch((error) => {
+        if (isKoinError(error)) {
+          showToast('error', error.message || '채팅방 퇴장을 실패하였습니다');
+        } else {
+          showToast('error', '채팅방 퇴장을 실패하였습니다');
+          sendClientError(error);
+        }
+      });
+    },
+    [token],
+  );
 
   const prevRoomRef = useRef<{ articleId: number; chatroomId: number } | null>(null);
 
@@ -180,15 +185,15 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
 
   const invalidateChatroomList = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomList(isLoggedIn),
+      queryKey: articleQueryKeys.lostItemChatroomList,
     });
-  }, [queryClient, isLoggedIn]);
+  }, [queryClient]);
 
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId, isLoggedIn),
+      queryKey: articleQueryKeys.lostItemChatroomMessages(defaultArticleId, defaultChatroomId),
     });
-  }, [queryClient, defaultArticleId, defaultChatroomId, isLoggedIn]);
+  }, [queryClient, defaultArticleId, defaultChatroomId]);
 
   return {
     chatroomList,
@@ -197,7 +202,6 @@ const useChatPolling = ({ articleId, chatroomId, isOnline = true, autoSelectFirs
     defaultChatroomId,
     defaultArticleId,
     sendMessage,
-    sendMessageAsync,
     leaveChatroom,
     invalidateChatroomList,
     invalidateMessages,

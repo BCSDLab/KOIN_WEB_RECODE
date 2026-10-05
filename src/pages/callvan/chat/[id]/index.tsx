@@ -1,6 +1,5 @@
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import CallvanChatRoom from 'components/Callvan/components/CallvanChatRoom';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

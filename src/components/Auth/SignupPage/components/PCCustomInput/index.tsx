@@ -1,5 +1,4 @@
-import { type ComponentPropsWithoutRef, forwardRef } from 'react';
-
+import { ComponentPropsWithoutRef, forwardRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import CloseIcon from 'assets/svg/Login/close.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
@@ -8,12 +7,16 @@ import EyeCloseIcon from 'assets/svg/Login/eye-close.svg';
 import EyeOpenIcon from 'assets/svg/Login/eye-open.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
 import FormatTime from 'components/Auth/SignupPage/hooks/useFormatTime';
-import type { InputMessage } from 'interfaces/InputMessage';
 import { useFormContext } from 'react-hook-form';
-import type { UserType } from 'static/auth';
+import { UserType } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-
 import styles from './PCCustomInput.module.scss';
+
+export type InputMessage = {
+  type: 'error' | 'warning' | 'success' | 'info' | 'default';
+  content: string;
+  code?: 'SMS_LIMIT' | 'ALREADY_REGISTERED' | string;
+} | null;
 
 interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
   htmlFor: string;
@@ -59,7 +62,6 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>(
       if (isVisibleButton && type === 'password') {
         return isPasswordVisible ? 'text' : 'password';
       }
-
       return type;
     };
 
@@ -137,13 +139,11 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>(
         </div>
         <div>
           {message && (
-            <div className={styles['message-wrapper']}>
+            <div className={styles.messageWrapper}>
               {message.type === 'error' && <ErrorIcon />}
               {message.type === 'success' && <CorrectIcon />}
               {message.type === 'warning' && <WarningIcon />}
-              <p
-                className={`${styles['message-wrapper__message']} ${styles[`message-wrapper__message--${message.type}`]}`}
-              >
+              <p className={`${styles.messageWrapper__message} ${styles[`messageWrapper__message--${message.type}`]}`}>
                 {message.content}
               </p>
               {children}

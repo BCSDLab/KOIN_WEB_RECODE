@@ -1,9 +1,8 @@
 import { useRef } from 'react';
-
 import * as gtag from 'lib/gtag';
 import type { LoggingTeam } from 'lib/gtag';
 
-interface ActionLoggerProps {
+type ActionLoggerProps = {
   team: LoggingTeam;
   event_label: string;
   value: string;
@@ -12,9 +11,9 @@ interface ActionLoggerProps {
   current_page?: string;
   duration_time?: number;
   custom_session_id?: string;
-}
+};
 
-interface LoggerEventProps {
+type LoggerEventProps = {
   team: LoggingTeam;
   event_category: string;
   event_label: string;
@@ -23,7 +22,7 @@ interface LoggerEventProps {
   previous_page?: string;
   current_page?: string;
   custom_session_id?: string;
-}
+};
 
 const useLogger = () => {
   const prevEvent = useRef<LoggerEventProps | null>(null);

@@ -1,11 +1,9 @@
 import { useState } from 'react';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
 import SelectDropdown from 'components/Bus/BusRoutePage/components/SelectDropdown';
-import type { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
-
 import styles from './TimeDetailPC.module.scss';
 
 interface TimeDetailPCProps {
@@ -15,7 +13,6 @@ interface TimeDetailPCProps {
 function formatSemesterLabel(semester?: string) {
   if (!semester) return '';
   const parts = semester.split('-');
-
   return (parts[1] ?? parts[0]).trim();
 }
 

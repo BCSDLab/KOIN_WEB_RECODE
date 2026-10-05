@@ -39,7 +39,7 @@
   text-align: center;
 }
 
-.search-row {
+.searchRow {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -79,7 +79,7 @@
   }
 }
 
-.filter-button {
+.filterButton {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -123,7 +123,7 @@
   }
 }
 
-.applied-filters {
+.appliedFilters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -135,7 +135,7 @@
   }
 }
 
-.applied-filter-chip {
+.appliedFilterChip {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,7 +163,7 @@
   }
 }
 
-.total-count {
+.totalCount {
   margin: 0 0 12px;
   color: #727272;
   font-size: 12px;
@@ -185,7 +185,7 @@
   }
 }
 
-.loading-state {
+.loadingState {
   display: flex;
   flex: 1;
   align-items: center;
@@ -295,7 +295,7 @@
   }
 }
 
-.profile-button {
+.profileButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -363,7 +363,7 @@
   }
 }
 
-.loading-indicator {
+.loadingIndicator {
   margin: 0;
   padding: 16px 0;
   color: #a8a8a8;
@@ -372,6 +372,6 @@
   text-align: center;
 }
 
-.scroll-trigger {
+.scrollTrigger {
   height: 1px;
 }

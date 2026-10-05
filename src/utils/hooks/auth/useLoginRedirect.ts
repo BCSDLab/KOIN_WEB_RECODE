@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-
 import { setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin } from 'utils/ts/auth';
 
 const isSafeExternalRedirect = (url: string) => {
@@ -28,7 +27,6 @@ function resolveRedirectTarget(redirect: unknown): RedirectTarget {
   }
 
   const isInternalPath = redirect.startsWith('/') && !redirect.startsWith('//');
-
   return isInternalPath ? { type: 'internal', destination: redirect } : { type: 'fallback' };
 }
 
@@ -46,13 +44,11 @@ export function useLoginRedirect() {
 
     if (target.type === 'fallback') {
       navigateToFallback();
-
       return;
     }
 
     if (target.type === 'external') {
       window.location.href = target.destination;
-
       return;
     }
 

@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CoopShopDetailResponse } from 'api/coopshop/entity';
 import { coopshopQueries } from 'api/coopshop/queries';
-import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import { filterDinings } from 'components/cafeteria/utils/filter';
 import { DiningTime } from 'components/cafeteria/utils/time';
@@ -12,7 +9,8 @@ import { DINING_TYPE_MAP } from 'static/cafeteria';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getYyyyMmDd } from 'utils/ts/calendar';
-
+import type { CoopShopDetailResponse } from 'api/coopshop/entity';
+import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
 import styles from './IndexMobileCafeteria.module.scss';
 
 const mealTabs: DiningPlace[] = ['A코너', 'B코너', 'C코너', '능수관'];

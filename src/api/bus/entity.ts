@@ -1,4 +1,4 @@
-import type { APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type BusType = 'shuttle' | 'express' | 'city';
 export type BusTypeResponse = BusType;
@@ -26,18 +26,16 @@ export interface Course {
   region: string;
 }
 
-export interface CityBusParams {
-  // API 요청용
+export interface CityBusParams {   // API 요청용
   bus_number: number;
   direction: string;
 }
 
-export interface CityCourse {
-  // UI용
-  bus_number: number; // ex. 400
-  direction: string; // ex. 병천3리
-  direction_type: DirectionType; // ex. to
-}
+export type CityCourse = {         // UI용
+  bus_number: number;              // ex. 400
+  direction: string;               // ex. 병천3리
+  direction_type: DirectionType;   // ex. to
+};
 
 export type CourseResponse = Course[];
 
@@ -58,10 +56,10 @@ export type BusTimetableResponse = RouteInfo | ExpressInfo;
 export type CityInfoResponse = CityInfo;
 
 export interface RouteInfo {
-  bus_timetables: Array<{
+  bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }>;
+  }[];
   updated_at: string;
 }
 
@@ -80,10 +78,10 @@ export interface BusRouteInfoResponseDTO {
 }
 
 export interface BusRouteInfo {
-  bus_timetables: Array<{
+  bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }>;
+  }[];
   updated_at: string;
 }
 
@@ -93,11 +91,11 @@ export interface ArrivalInfo {
 }
 
 export interface ExpressInfo {
-  bus_timetables: Array<{
+  bus_timetables: {
     departure: string;
     arrival: string;
     charge: number;
-  }>;
+  }[];
   updated_at: string;
 }
 
@@ -108,22 +106,22 @@ export interface CityInfo {
     depart_node: string;
     arrival_node: string;
   };
-  bus_timetables: Array<{
+  bus_timetables: {
     day_of_week: string;
     depart_info: [];
-  }>;
+  }[];
 }
 
 export interface ShuttleCourseResponse {
-  route_regions: Array<{
+  route_regions: {
     region: string;
-    routes: Array<{
+    routes: {
       id: string;
       type: string;
       route_name: string;
       sub_name: string;
-    }>;
-  }>;
+    }[];
+  }[];
 
   semester_info: {
     name: string;
@@ -138,15 +136,15 @@ export interface ShuttleTimetableDetailInfoResponse {
   route_type: string;
   route_name: string;
   sub_name: null;
-  node_info: Array<{
+  node_info: {
     name: string;
     detail: string;
-  }>;
-  route_info: Array<{
+  }[];
+  route_info: {
     name: string;
     detail: string;
     arrival_time: string[];
-  }>;
+  }[];
 }
 
 export interface BusRouteParams {

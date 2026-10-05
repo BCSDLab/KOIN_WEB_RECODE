@@ -1,15 +1,12 @@
 import { useState } from 'react';
-
 import { cn } from '@bcsdlab/utils';
 import ChevronLeftIcon from 'assets/svg/Articles/chevron-left.svg';
 import ChevronRightIcon from 'assets/svg/Articles/chevron-right.svg';
-
 import styles from './Calendar.module.scss';
 
 const getyyyyMM = (date: Date) => {
   const yyyy = date.getFullYear();
   const MM = (date.getMonth() + 1).toString().padStart(2, '0');
-
   return `${yyyy}.${MM}`;
 };
 
@@ -31,7 +28,6 @@ export default function Calendar({ selectedDate, setSelectedDate }: CalendarProp
   const days = Array.from({ length: 35 }, (_, i) => {
     const startDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), 1);
     startDate.setDate(startDate.getDate() - startDate.getDay());
-
     return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
   });
 

@@ -1,6 +1,5 @@
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-
-import type { TeamRecruitmentProfileResponse, UpsertTeamRecruitmentProfileRequest } from './entity';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { TeamRecruitmentProfileResponse, UpsertTeamRecruitmentProfileRequest } from './entity';
 
 export class TeamRecruitmentProfileDetail<R extends TeamRecruitmentProfileResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -10,6 +9,8 @@ export class TeamRecruitmentProfileDetail<R extends TeamRecruitmentProfileRespon
   response!: R;
 
   auth = true;
+
+  constructor(public authorization: string) {}
 }
 
 export class UpsertTeamRecruitmentProfile<R extends TeamRecruitmentProfileResponse> implements APIRequest<R> {
@@ -23,7 +24,10 @@ export class UpsertTeamRecruitmentProfile<R extends TeamRecruitmentProfileRespon
 
   auth = true;
 
-  constructor(data: UpsertTeamRecruitmentProfileRequest) {
+  constructor(
+    public authorization: string,
+    data: UpsertTeamRecruitmentProfileRequest,
+  ) {
     this.data = data;
   }
 }

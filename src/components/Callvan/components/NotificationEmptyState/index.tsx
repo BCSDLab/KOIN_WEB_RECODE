@@ -1,5 +1,4 @@
 import SleepingPlanet from 'assets/svg/Callvan/sleeping-planet.svg';
-
 import styles from './NotificationEmptyState.module.scss';
 
 export default function NotificationEmptyState() {

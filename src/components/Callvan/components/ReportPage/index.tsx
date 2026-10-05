@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
-import type { CallvanReportReason, CallvanReportReasonCode } from 'api/callvan/entity';
+import { CallvanReportReason, CallvanReportReasonCode } from 'api/callvan/entity';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import useCallvanToast from 'components/Callvan/hooks/useCallvanToast';
 import useReportCallvan from 'components/Callvan/hooks/useReportCallvan';
 import ROUTES from 'static/routes';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import showToast from 'utils/ts/showToast';
-
 import DetailStep from './DetailStep';
 import ReasonStep from './ReasonStep';
 import styles from './ReportPage.module.scss';
@@ -39,7 +37,6 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
       } else {
         next.add(code);
       }
-
       return next;
     });
   };
@@ -47,12 +44,10 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
   const handleNext = () => {
     if (selectedReasons.size === 0) {
       showToast('error', '신고 사유를 1개 이상 선택해주세요.');
-
       return;
     }
     if (selectedReasons.has('OTHER') && customText.trim() === '') {
       showToast('error', '기타 신고 사유를 입력해주세요.');
-
       return;
     }
     setStep(2);
@@ -72,17 +67,15 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
       ...(code === 'OTHER' ? { custom_text: customText } : {}),
     }));
 
-    let attachments: Array<{ attachment_type: 'IMAGE'; url: string }> = [];
+    let attachments: { attachment_type: 'IMAGE'; url: string }[] = [];
     if (images.length > 0) {
       try {
-        const uploadResults = await Promise.all(images.map((file) => uploadFile({ domain: 'CALLVAN_REPORT', file })));
-        attachments = uploadResults.map((result: { file_url: string }) => ({
-          attachment_type: 'IMAGE' as const,
-          url: result.file_url,
-        }));
+        const uploadResults = await Promise.all(
+          images.map((file) => uploadFile({ domain: 'CALLVAN_REPORT', file })),
+        );
+        attachments = uploadResults.map((result: { file_url: string }) => ({ attachment_type: 'IMAGE' as const, url: result.file_url }));
       } catch {
         showToast('error', '이미지 업로드에 실패했습니다.');
-
         return;
       }
     }
@@ -142,12 +135,7 @@ export default function ReportPage({ postId, reportedUserId }: ReportPageProps) 
             다음
           </button>
         ) : (
-          <button
-            type="button"
-            className={styles['page__submit-button']}
-            onClick={handleSubmit}
-            disabled={isPending || isUploading}
-          >
+          <button type="button" className={styles['page__submit-button']} onClick={handleSubmit} disabled={isPending || isUploading}>
             신고하기
           </button>
         )}

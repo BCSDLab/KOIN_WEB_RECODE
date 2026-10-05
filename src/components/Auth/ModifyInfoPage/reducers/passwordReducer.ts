@@ -1,7 +1,7 @@
-export interface PasswordValidationState {
+export type PasswordValidationState = {
   message: string;
   isValid: boolean;
-}
+};
 
 export type PasswordValidationAction =
   | { type: 'EMPTY' }

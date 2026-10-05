@@ -1,21 +1,17 @@
 import { Suspense, useEffect } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
 import ParticipantsList from 'components/Callvan/components/ParticipantsList';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useMount from 'utils/hooks/state/useMount';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 
-export const getServerSideProps = withCacheControl<{
-  dehydratedState: ReturnType<typeof dehydrate>;
-  postId: number;
-}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const { isLoggedIn } = serverRequest;
+  const { token } = parseServerSideParams(context);
   const postId = Number(context.params?.postId);
 
   if (!postId || Number.isNaN(postId)) {
@@ -23,8 +19,8 @@ export const getServerSideProps = withCacheControl<{
   }
 
   try {
-    if (isLoggedIn) {
-      await queryClient.prefetchQuery(callvanQueries.postDetail(postId, isLoggedIn));
+    if (token) {
+      await queryClient.prefetchQuery(callvanQueries.postDetail(token, postId));
     }
   } catch (error) {
     console.error('[SSR] callvan post detail prefetch failed:', error);
@@ -34,11 +30,15 @@ export const getServerSideProps = withCacheControl<{
     props: {
       dehydratedState: dehydrate(queryClient),
       postId,
+      token: token ?? '',
     },
   };
-});
+};
 
-export default function CallvanParticipantsPage({ postId }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function CallvanParticipantsPage({
+  postId,
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const mounted = useMount();
@@ -55,7 +55,7 @@ export default function CallvanParticipantsPage({ postId }: InferGetServerSidePr
 
   return (
     <Suspense fallback={null}>
-      <ParticipantsList postId={postId} />
+      <ParticipantsList postId={postId} token={token} />
     </Suspense>
   );
 }

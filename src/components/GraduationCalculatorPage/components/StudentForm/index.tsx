@@ -1,19 +1,17 @@
 import { useState } from 'react';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'api/auth/queries';
 import { deptQueries } from 'api/dept/queries';
 import useUpdateAcademicInfo from 'components/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
 import { Selector } from 'components/ui/Selector';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
-  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(isLoggedIn));
+  const token = useTokenState();
+  const { data: academicInfo } = useSuspenseQuery(authQueries.userAcademicInfo(token));
   const { data: deptMajorList } = useSuspenseQuery(deptQueries.majorList());
 
   const [studentNumber, setStudentNumber] = useState<string>(academicInfo?.student_number ?? '');
@@ -22,7 +20,8 @@ function StudentForm() {
   const majorOptionList =
     deptMajorList
       .find((deptMajor) => deptMajor.department === department)
-      ?.majors.map((majorName) => ({ label: majorName, value: majorName })) ?? [];
+      ?.majors.map((majorName) => ({ label: majorName, value: majorName })) ??
+      [];
 
   const departmentOptionList = deptMajorList.map((deptMajor) => ({
     label: deptMajor.department,
@@ -43,7 +42,7 @@ function StudentForm() {
     setMajor('');
   };
 
-  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo();
+  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
 
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

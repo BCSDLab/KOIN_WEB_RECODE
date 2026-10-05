@@ -1,5 +1,4 @@
 import Error from 'assets/svg/page-not-found-error.svg';
-
 import styles from './Maintenance.module.scss';
 
 export default function MaintenancePage() {

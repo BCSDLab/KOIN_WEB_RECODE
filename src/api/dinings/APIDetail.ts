@@ -1,6 +1,5 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-
-import type { DiningsResponseType } from './entity';
+import { DiningsResponseType } from './entity';
 
 export default class DiningsResponse<R extends DiningsResponseType> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

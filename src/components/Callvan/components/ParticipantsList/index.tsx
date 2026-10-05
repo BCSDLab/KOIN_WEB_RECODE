@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CallvanParticipant } from 'api/callvan/entity';
+import { CallvanParticipant } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import NotificationBellIcon from 'assets/svg/Callvan/notification.svg';
@@ -14,15 +13,12 @@ import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import { ParticipantAvatarFilledIcon, ParticipantAvatarIcon } from './ParticipantAvatarIcon';
 import styles from './ParticipantsList.module.scss';
 
 function getDayOfWeek(dateStr: string): string {
   const date = new Date(dateStr);
-
   return DAYS[date.getDay()];
 }
 
@@ -31,7 +27,6 @@ function formatDate(dateStr: string): string {
   const month = parts[1];
   const day = parts[2];
   const dayOfWeek = getDayOfWeek(dateStr);
-
   return `${month}.${day} (${dayOfWeek})`;
 }
 
@@ -108,14 +103,14 @@ function ParticipantRow({ participant, colorIndex }: ParticipantRowProps) {
 
 interface ParticipantsListProps {
   postId: number;
+  token: string;
 }
 
-export default function ParticipantsList({ postId }: ParticipantsListProps) {
+export default function ParticipantsList({ postId, token }: ParticipantsListProps) {
   const router = useRouter();
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
 
-  const { data: post } = useSuspenseQuery(callvanQueries.postDetail(postId, isLoggedIn));
+  const { data: post } = useSuspenseQuery(callvanQueries.postDetail(token, postId));
 
   const colorIndexMap = new Map(post.participants.filter((p) => !p.is_me).map((p, i) => [p.user_id, i]));
 

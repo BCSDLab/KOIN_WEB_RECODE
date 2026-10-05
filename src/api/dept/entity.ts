@@ -1,13 +1,13 @@
-export interface Dept {
+export type Dept = {
   curriculum_link: string;
   dept_nums: string[];
   name: string;
-}
+};
 
-export interface DeptMajor {
+export type DeptMajor = {
   department: string;
   majors: string[];
-}
+};
 
 export type DeptListResponse = Dept[];
 

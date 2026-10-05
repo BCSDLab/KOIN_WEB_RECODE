@@ -1,5 +1,4 @@
 import { cn } from '@bcsdlab/utils';
-
 import styles from './ShuttleCategoryTabs.module.scss';
 
 interface ShuttleCategoryTabsProps {

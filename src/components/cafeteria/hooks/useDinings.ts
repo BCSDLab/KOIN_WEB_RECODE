@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { cafeteriaMutations } from 'api/cafeteria/mutations';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
-import type { Dining, OriginalDining } from 'api/dinings/entity';
+import { Dining, OriginalDining } from 'api/dinings/entity';
 import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 function useDinings(date: Date) {
   const convertedDate = convertDateToSimpleString(date);
   const queryClient = useQueryClient();
+  const token = useTokenState();
 
   const { data: dinings } = useSuspenseQuery({
     ...cafeteriaQueries.dinings(convertedDate),
@@ -14,15 +16,14 @@ function useDinings(date: Date) {
       if ('status' in data || !Array.isArray(data)) {
         return [];
       }
-
-      return (data as OriginalDining[]).map((dining) => ({
+      return (data as Array<OriginalDining>).map((dining) => ({
         ...dining,
         menu: dining.menu.map((menuName, index) => ({ id: index, name: menuName })),
-      })) as Dining[];
+      })) as Array<Dining>;
     },
   });
-  const likeMutation = cafeteriaMutations.likeDining(queryClient, convertedDate);
-  const cancelLikeMutation = cafeteriaMutations.cancelLikeDining(queryClient, convertedDate);
+  const likeMutation = cafeteriaMutations.likeDining(queryClient, token, convertedDate);
+  const cancelLikeMutation = cafeteriaMutations.cancelLikeDining(queryClient, token, convertedDate);
 
   const likeDiningMutation = useMutation({
     ...likeMutation,

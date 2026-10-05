@@ -1,5 +1,4 @@
-import { type ComponentType, useState } from 'react';
-
+import { ComponentType, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import ComputerIcon from 'assets/svg/Team/computer.svg';
 import KeyframesDoubleIcon from 'assets/svg/Team/keyframes-double.svg';
@@ -10,7 +9,6 @@ import { Controller, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-
 import CategoryField from './components/CategoryField';
 import RoleField from './components/RoleField';
 import ScheduleField from './components/ScheduleField';
@@ -21,8 +19,8 @@ import {
   TEAM_RECRUITMENT_TITLE_MAX_LENGTH,
 } from './constants';
 import useTeamRecruitmentForm from './hooks/useTeamRecruitmentForm';
+import { TeamRecruitmentProgressType } from './types';
 import type { TeamRecruitmentFormValues } from './schema';
-import type { TeamRecruitmentProgressType } from './types';
 import styles from './NewTeamRecruitment.module.scss';
 
 const PROGRESS_TYPE_ICON: Record<TeamRecruitmentProgressType, ComponentType> = {
@@ -146,7 +144,6 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
             {(Object.keys(TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL) as TeamRecruitmentProgressType[]).map((type) => {
               const Icon = PROGRESS_TYPE_ICON[type];
               const isSelected = field.value === type;
-
               return (
                 <button
                   key={type}
@@ -158,7 +155,9 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
                   onClick={() => {
                     logger.actionEventClick({
                       team: 'CAMPUS',
-                      event_label: isEditMode ? 'team_recruitment_post_edit_method' : 'team_recruitment_recruit_method',
+                      event_label: isEditMode
+                        ? 'team_recruitment_post_edit_method'
+                        : 'team_recruitment_recruit_method',
                       value: TEAM_RECRUITMENT_PROGRESS_TYPE_LABEL[type].replaceAll(' ', ''),
                     });
                     field.onChange(type);
@@ -172,7 +171,9 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
           </div>
         )}
       />
-      {formState.errors.progressType && <p className={styles.form__error}>{formState.errors.progressType.message}</p>}
+      {formState.errors.progressType && (
+        <p className={styles.form__error}>{formState.errors.progressType.message}</p>
+      )}
     </div>
   );
 
@@ -210,7 +211,9 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
         maxLength={TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH}
         {...register('description')}
       />
-      {formState.errors.description && <p className={styles.form__error}>{formState.errors.description.message}</p>}
+      {formState.errors.description && (
+        <p className={styles.form__error}>{formState.errors.description.message}</p>
+      )}
     </div>
   );
 
@@ -246,14 +249,16 @@ export default function NewTeamRecruitment({ initialValues, mode = 'create', onS
         placeholder="공모전/대외활동 등 모집글 관련 URL을 작성해주세요."
         {...register('relatedUrl')}
       />
-      {formState.errors.relatedUrl && <p className={styles.form__error}>{formState.errors.relatedUrl.message}</p>}
+      {formState.errors.relatedUrl && (
+        <p className={styles.form__error}>{formState.errors.relatedUrl.message}</p>
+      )}
     </div>
   );
 
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        <div className={styles['mobile-header']}>
+        <div className={styles.mobileHeader}>
           <SubPageHeader title={headerTitle} className={styles.header} />
         </div>
         <h1 className={styles.title}>{headerTitle}</h1>

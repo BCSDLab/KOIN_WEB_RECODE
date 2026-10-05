@@ -1,60 +1,56 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
-import type { LostItemArticlesRequest } from 'api/articles/entity';
+import { LostItemArticlesRequest } from 'api/articles/entity';
 import { articleQueries } from 'api/articles/queries';
 import LostItemList from 'components/Articles/components/LostItemList';
 import LostItemPageLayout from 'components/Articles/components/LostItemPageLayout';
 import Pagination from 'components/Articles/components/Pagination';
-import { type LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
+import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { selectLostItemPaginationData } from 'components/Articles/utils/selectArticlesData';
 import { SSRLayout } from 'components/layout';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import styles from './LostItemArticleListPage.module.scss';
 
-export const getServerSideProps = withCacheControl(
-  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-    const queryClient = new QueryClient();
-    const { query } = context;
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+  const queryClient = new QueryClient();
+  const { token, query } = parseServerSideParams(context);
 
-    const fallback: LostItemParams = {
-      page: 1,
-      type: null,
-      category: [],
-      foundStatus: 'ALL',
-      sort: 'LATEST',
-      author: 'ALL',
-    };
+  const fallback: LostItemParams = {
+    page: 1,
+    type: null,
+    category: [],
+    foundStatus: 'ALL',
+    sort: 'LATEST',
+    author: 'ALL',
+  };
 
-    const params = parseLostItemQuery(query, fallback);
+  const params = parseLostItemQuery(query, fallback);
 
-    const apiParams = toLostItemArticlesRequest(params);
+  const apiParams = toLostItemArticlesRequest(params);
 
-    await queryClient.prefetchQuery(articleQueries.lostItemList(serverRequest.isLoggedIn, apiParams));
+  await queryClient.prefetchQuery(articleQueries.lostItemList(token ?? '', apiParams));
 
-    if (!serverRequest.isLoggedIn) {
-      cacheControl.enablePublicCache();
-    }
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
 
-    return {
-      props: {
-        dehydratedState: dehydrate(queryClient),
-        initialParams: params,
-      },
-    };
-  },
-);
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialParams: params,
+    },
+  };
+});
 
 function useLostItemParams(initialParams: LostItemParams) {
   const router = useRouter();
   const mounted = useMount();
 
   if (!mounted) return initialParams;
-
   return parseLostItemQuery(router.query, initialParams);
 }
 
@@ -71,7 +67,7 @@ export default function LostItemArticleListPage({
   initialParams,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
 
   const params = useLostItemParams(initialParams);
   const apiParams = toLostItemArticlesRequest(params);
@@ -82,7 +78,7 @@ export default function LostItemArticleListPage({
   const isSearching = keyword.length > 0;
 
   const { data: lostItemData } = useQuery({
-    ...articleQueries.lostItemList(isLoggedIn, apiParams),
+    ...articleQueries.lostItemList(token, apiParams),
     placeholderData: keepPreviousData,
     select: selectLostItemPaginationData,
   });

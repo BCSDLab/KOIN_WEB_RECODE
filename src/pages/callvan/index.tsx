@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-
 import { dehydrate, QueryClient, useInfiniteQuery } from '@tanstack/react-query';
-import type { CallvanListRequest } from 'api/callvan/entity';
+import { CallvanListRequest } from 'api/callvan/entity';
 import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import CallvanList from 'components/Callvan/components/CallvanList';
 import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
-import { type CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
+import { CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
-import { getDeviceClass } from 'utils/ssr/requestContext';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
-
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
+import { getDeviceClass } from 'utils/ts/serverRequestContext';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
 
 const DEFAULT_PARAMS: CallvanParams = {
@@ -44,7 +43,7 @@ function toCallvanApiParams(params: CallvanParams): Omit<CallvanListRequest, 'pa
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
   initialParams: CallvanParams;
-}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
+}>(async (context: GetServerSidePropsContext) => {
   // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다. 클라이언트에서 판정하면
   // 서버가 페이지 전체를 그린 뒤 마운트 직후 통째로 버리게 된다.
   if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
@@ -52,19 +51,17 @@ export const getServerSideProps = withCacheControl<{
   }
 
   const queryClient = new QueryClient();
-  const { query } = context;
+  const { token, query } = parseServerSideParams(context);
 
   const params = parseCallvanQuery(query, DEFAULT_PARAMS);
   const apiParams = toCallvanApiParams(params);
 
-  const { isLoggedIn } = serverRequest;
-
   try {
     await Promise.all([
-      queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(apiParams, isLoggedIn)),
-      isLoggedIn
-        ? queryClient.prefetchQuery(callvanQueries.notifications(isLoggedIn))
-        : queryClient.setQueryData(callvanQueryKeys.notifications(isLoggedIn), []),
+      queryClient.prefetchInfiniteQuery(callvanQueries.infiniteList(token ?? '', apiParams)),
+      token
+        ? queryClient.prefetchQuery(callvanQueries.notifications(token))
+        : queryClient.setQueryData(callvanQueryKeys.notifications(''), []),
     ]);
   } catch (error) {
     console.error('[SSR] callvan prefetch failed:', error);
@@ -83,8 +80,8 @@ function useCallvanParams(initialParams: CallvanParams): CallvanParams {
   const mounted = useMount();
 
   if (!mounted) return initialParams;
-
   return parseCallvanQuery(router.query, DEFAULT_PARAMS);
+
 }
 
 export default function CallvanPage({ initialParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -110,15 +107,15 @@ interface CallvanContentProps {
 
 function CallvanContent({ params }: CallvanContentProps) {
   const [searchTitle, setSearchTitle] = useState(params.title);
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const apiParams = toCallvanApiParams(params);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    ...callvanQueries.infiniteList(apiParams, isLoggedIn),
-    enabled: isLoggedIn,
+    ...callvanQueries.infiniteList(token ?? '', apiParams),
+    enabled: !!token,
   });
 
-  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
+  const posts = data?.pages.flatMap((page) => page.posts) ?? []
 
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 

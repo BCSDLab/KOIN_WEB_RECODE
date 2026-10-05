@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from 'api/club/queries';
@@ -24,23 +23,24 @@ import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLik
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
-import EditConfirmModal from 'components/Club/ClubEditPage/components/EditConfirmModal';
+import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { NO_SELECTED_EVENT_ID } from 'static/club';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { withCacheControl } from 'utils/ssr/withCacheControl';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
+import { withCacheControl } from 'utils/ts/withCacheControl';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
-
 import styles from './ClubDetailPage.module.scss';
+
+export const NO_SELECTED_EVENT_ID = -1;
 
 const TAB_LABEL = {
   intro: '상세 소개',
@@ -59,66 +59,72 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-export const getServerSideProps = withCacheControl(
-  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-    const { params, query } = context;
-    const id = params?.id;
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+  const { params, query } = context;
+  const { token } = parseServerSideParams(context);
+  const id = params?.id;
 
-    if (!id || Array.isArray(id)) {
-      return {
-        notFound: true,
-      };
-    }
-
-    const clubId = Number(id);
-    const tab = query.tab as TabType | undefined;
-    const eventId = query.eventId as string | undefined;
-    const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
-
-    let initialTab: TabType = tab ?? 'intro';
-    if (!tab && eventId) {
-      initialTab = 'event';
-    }
-
-    const queryClient = new QueryClient();
-
-    await Promise.all([
-      queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
-      queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
-    ]);
-
-    if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
-      await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
-    }
-
-    if (!serverRequest.isLoggedIn) {
-      cacheControl.enablePublicCache();
-    }
-
+  if (!id || Array.isArray(id)) {
     return {
-      props: {
-        dehydratedState: dehydrate(queryClient),
-        initialClubId: clubId,
-        initialTab,
-        initialEventId: numericEventId,
-      },
+      notFound: true,
     };
-  },
-);
+  }
+
+  const clubId = Number(id);
+  const tab = query.tab as TabType | undefined;
+  const eventId = query.eventId as string | undefined;
+  const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
+
+  let initialTab: TabType = tab ?? 'intro';
+  if (!tab && eventId) {
+    initialTab = 'event';
+  }
+
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery(clubQueries.detail(clubId, token)),
+    queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
+  ]);
+
+  if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
+    await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
+  }
+
+  if (!token) {
+    cacheControl.enablePublicCache();
+  }
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialClubId: clubId,
+      initialTab,
+      initialEventId: numericEventId,
+      serverToken: token ?? null,
+    },
+  };
+});
 
 interface ClubDetailPageProps {
+  serverToken: string | null;
   initialClubId: number;
   initialTab: TabType;
   initialEventId: number;
 }
 
-export default function ClubDetailPage({ initialClubId, initialTab, initialEventId }: ClubDetailPageProps) {
+export default function ClubDetailPage({
+  initialClubId,
+  initialTab,
+  initialEventId,
+  serverToken,
+}: ClubDetailPageProps) {
   const router = useRouter();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
 
-  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
+  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId, serverToken);
   const { data: clubRecruitmentData } = useSuspenseQuery(clubQueries.recruitment(initialClubId));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
@@ -140,7 +146,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
 
   const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } =
     useClubLikeMutation(initialClubId);
@@ -167,9 +173,8 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
 
   const handleToggleLike = async () => {
     if (!initialClubId || isPending) return;
-    if (!isLoggedIn) {
+    if (!token) {
       openAuthModal();
-
       return;
     }
     if (clubDetail.is_liked) {
@@ -190,7 +195,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   };
   const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
-  const handleIntroductionSave = () => {
+  const handleIntroductionSave = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_introduction_correction_save',
@@ -210,7 +215,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
     openEditModal();
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_correction',
@@ -334,7 +339,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   };
 
   const handleClickRecruitNotifyButton = () => {
-    if (!isLoggedIn) return openAuthModal();
+    if (!token) return openAuthModal();
     openRecruitNotifyModal();
   };
 

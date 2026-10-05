@@ -1,25 +1,23 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
-import type { Semester } from 'api/timetable/entity';
+import { Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
 import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
 import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
-import useResetInvalidSemester from 'components/TimetablePage/hooks/useResetInvalidSemester';
 import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-
 import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
@@ -27,7 +25,7 @@ import styles from './SemesterList.module.scss';
 function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const logger = useLogger();
   const semester = useSemester();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const portalManager = useModalPortal();
   const semesterOptionList = useSemesterOptionList();
   const { updateSemester } = useSemesterAction();
@@ -39,7 +37,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(isLoggedIn, selectedSemester);
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -64,13 +62,13 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     closePopup();
   };
 
-  const { mutate: addSemester } = useAddSemester(isLoggedIn);
-  const { data: mySemester } = useSemesterCheck();
+  const { mutate: addSemester } = useAddSemester(token);
+  const { data: mySemester } = useSemesterCheck(token);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if (isLoggedIn) {
+    if (token) {
       setModalOpenTrue();
       portalManager.open((portalOption: Portal) => (
         <AddSemesterModal
@@ -101,7 +99,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
 
   const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: Semester) => {
     e.stopPropagation();
-    if (isLoggedIn) {
+    if (token) {
       setSelectedSemester(semes);
       setModalOpenTrue();
       portalManager.open((portalOption: Portal) => (
@@ -122,9 +120,15 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     }
   };
 
-  useResetInvalidSemester();
+  // 저장된 학기가 더 이상 유효하지 않을 때만 되돌린다.
+  React.useEffect(() => {
+    if (semesterOptionList.length === 0) return;
+    if (isSemesterInList(semesterOptionList, semester)) return;
+    updateSemester(semesterOptionList[0].value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [semesterOptionList]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []);
 
   return (

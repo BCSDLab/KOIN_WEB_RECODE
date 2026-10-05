@@ -1,25 +1,23 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import LostItemFilterBottomSheet from 'components/Articles/components/LostItemFilterBottomSheet';
-import type { FilterState } from 'components/Articles/components/LostItemFilterContent';
+import { FilterState } from 'components/Articles/components/LostItemFilterContent';
 import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
 import LostItemWriteBottomSheet from 'components/Articles/components/LostItemWriteBottomSheet';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
-import { buildQueryFromFilter, type LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
+import { buildQueryFromFilter, LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
@@ -92,7 +90,6 @@ export default function LostItemRouteButton() {
           onClose={portalOption.close}
         />
       ));
-
       return;
     }
 
@@ -131,7 +128,7 @@ export default function LostItemRouteButton() {
     if (!isFilterOpen) return null;
 
     return (
-      <div className={styles['filter-popover']}>
+      <div className={styles.filterPopover}>
         <LostItemFilterModal
           initialFilter={initialFilter}
           onClose={() => setIsFilterOpen(false)}
@@ -147,8 +144,8 @@ export default function LostItemRouteButton() {
       return (
         <>
           <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
-            글쓰기
             <PencilIcon />
+            글쓰기
           </button>
 
           <LostItemWriteBottomSheet
@@ -162,7 +159,7 @@ export default function LostItemRouteButton() {
     }
 
     return (
-      <div className={styles['write-anchor']}>
+      <div className={styles.writeAnchor}>
         {!isWriting && (
           <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
             <PencilIcon />
@@ -171,22 +168,17 @@ export default function LostItemRouteButton() {
         )}
 
         {isWriting && (
-          <div ref={writeContainerRef} className={styles['write-popover']} role="dialog" aria-label="글쓰기 메뉴">
-            <div className={styles['write-header']}>
-              <div className={styles['write-title']}>글쓰기</div>
-              <button
-                type="button"
-                className={styles['write-close']}
-                aria-label="닫기"
-                onClick={() => setIsWriting(false)}
-              >
+          <div ref={writeContainerRef} className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
+            <div className={styles.writeHeader}>
+              <div className={styles.writeTitle}>글쓰기</div>
+              <button type="button" className={styles.writeClose} aria-label="닫기" onClick={() => setIsWriting(false)}>
                 <CloseIcon />
               </button>
             </div>
 
-            <div className={styles['write-body']}>
+            <div className={styles.writeBody}>
               <Link
-                className={styles['write-option-button']}
+                className={styles.writeOptionButton}
                 href={ROUTES.LostItemFound()}
                 onClick={() => {
                   logFindUserWriteClick();
@@ -194,11 +186,11 @@ export default function LostItemRouteButton() {
                 }}
               >
                 <FoundIcon />
-                <span className={styles['write-option-text']}>주인을 찾아요</span>
+                <span className={styles.writeOptionText}>주인을 찾아요</span>
               </Link>
 
               <Link
-                className={styles['write-option-button']}
+                className={styles.writeOptionButton}
                 href={ROUTES.LostItemLost()}
                 onClick={() => {
                   logLostItemWriteClick();
@@ -206,7 +198,7 @@ export default function LostItemRouteButton() {
                 }}
               >
                 <LostIcon />
-                <span className={styles['write-option-text']}>잃어버렸어요</span>
+                <span className={styles.writeOptionText}>잃어버렸어요</span>
               </Link>
             </div>
           </div>
@@ -217,7 +209,7 @@ export default function LostItemRouteButton() {
 
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
-      <div className={styles['filter-anchor']}>
+      <div className={styles.filterAnchor}>
         <button type="button" className={styles.links__filter} onClick={handleFilterButtonClick}>
           필터
           <FilterIcon />

@@ -1,8 +1,9 @@
 import { cn } from '@bcsdlab/utils';
-
 import styles from './ArticlesHeader.module.scss';
 
-type HeaderRowInfo = Record<string, string>;
+type HeaderRowInfo = {
+  [key: string]: string;
+};
 
 const HEADER_ROW: HeaderRowInfo = {
   number: '번호',

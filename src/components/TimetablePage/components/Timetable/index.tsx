@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-
 import { cn } from '@bcsdlab/utils';
-import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import ROUTES from 'static/routes';
 import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
-
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -50,29 +47,18 @@ function Timetable({
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const { timeString, setTimeString } = useTimeString();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
 
   const modifyType = router.query.type;
 
-  const lectureMetrics = isMobile
-    ? { fontSize: 10, placeFontSize: 9, lineHeight: 14, padding: 4, gap: 2 }
-    : {
-        fontSize: rowHeight / 3 + 1,
-        placeFontSize: rowHeight / 3 - 1,
-        lineHeight: rowHeight / 2,
-        padding: rowHeight / 4,
-        gap: rowHeight / 5.5,
-      };
-
   const handleEditLectureClick = (lectureIndex: number) => {
-    if (!isLoggedIn) {
+    if (!token) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
-
       return;
     }
 
     router.push(
-      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'direct' })}&lectureIndex=${lectureIndex}${
+      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
         semester ? `&year=${semester.year}&term=${semester.term}` : ''
       }`,
     );
@@ -119,12 +105,12 @@ function Timetable({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const calculateMinHeight = (block: number, kind: string) => {
-    if (block === 1) return kind === 'name' ? lectureMetrics.lineHeight : 0;
+    if (block === 1) return kind === 'name' ? rowHeight / 2 : 0;
 
-    if (block === 2) return kind === 'name' || kind === 'professor' ? lectureMetrics.lineHeight : 0;
+    if (block === 2) return kind === 'name' || kind === 'professor' ? rowHeight / 2 : 0;
 
     if (block === 3) {
-      if (kind === 'name' || kind === 'professor' || kind === 'place') return lectureMetrics.lineHeight;
+      if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
     }
 
     return rowHeight;
@@ -212,7 +198,6 @@ function Timetable({
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`value-${index}`}
             />
           ))}
@@ -230,7 +215,6 @@ function Timetable({
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key -- 고정된 시간 눈금 배열이라 index가 변경되지 않음
               key={`${value}-${index}`}
               className={
                 columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']
@@ -263,8 +247,8 @@ function Timetable({
                         top: `${(info.start_time % 100) * rowHeight + 1}px`,
                         width: isMobile ? undefined : `${columnWidth}px`,
                         height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight - 1}px`,
-                        padding: `${lectureMetrics.padding}px ${lectureMetrics.padding}px ${lectureMetrics.padding - 2}px ${lectureMetrics.padding}px`,
-                        gap: `${lectureMetrics.gap}px`,
+                        padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
+                        gap: `${rowHeight / 5.5}px`,
                       }}
                       onMouseEnter={() => setIsMouseOver(`${day}-${info.start_time % 100}-${info.end_time % 100}`)}
                       onMouseLeave={() => setIsMouseOver('')}
@@ -292,8 +276,8 @@ function Timetable({
                       <div
                         className={styles['timetable__lecture-name']}
                         style={{
-                          fontSize: `${lectureMetrics.fontSize}px`,
-                          lineHeight: `${lectureMetrics.lineHeight}px`,
+                          fontSize: `${rowHeight / 3 + 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'name')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (info.end_time % 100) - (info.start_time % 100) + 1,
@@ -308,9 +292,9 @@ function Timetable({
                       <span
                         className={styles['timetable__lecture-professor']}
                         style={{
-                          fontSize: `${lectureMetrics.fontSize}px`,
-                          lineHeight: `${lectureMetrics.lineHeight}px`,
-                          height: `${lectureMetrics.lineHeight}px`,
+                          fontSize: `${rowHeight / 3 + 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
+                          height: `${rowHeight / 2}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'professor')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (info.end_time % 100) - (info.start_time % 100) + 1,
@@ -326,9 +310,9 @@ function Timetable({
                         className={styles['timetable__lecture-place']}
                         style={{
                           display: `${(info.end_time % 100) - (info.start_time % 100) + 1 > 2 ? '-webkit-box' : 'none'}`,
-                          fontSize: `${lectureMetrics.placeFontSize}px`,
-                          lineHeight: `${lectureMetrics.lineHeight}px`,
-                          height: `${lectureMetrics.lineHeight}px`,
+                          fontSize: `${rowHeight / 3 - 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
+                          height: `${rowHeight / 2}px`,
                           minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'place')}px`,
                           WebkitLineClamp: calculateLineClamp(
                             (((info.end_time % 100) - (info.start_time % 100)) % 100) + 1,
@@ -409,7 +393,6 @@ function Timetable({
                       ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                             gap: `${rowHeight / 5.5}px`,
                           }}
-                          // eslint-disable-next-line react/no-array-index-key -- start_time/end_time가 겹칠 수 있어 idx로 유일성을 보장한다.
                           key={`${idx}-${info.start_time}-${info.end_time}`}
                         >
                           <div

@@ -2,9 +2,8 @@ import { useRef } from 'react';
 import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { TeamRecruitmentNotification } from 'api/team/entity';
+
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
@@ -14,15 +13,15 @@ import TeamNotificationHeader from 'components/Team/components/TeamNotificationH
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import showToast from 'utils/ts/showToast';
-
+import type { TeamRecruitmentNotification } from 'api/team/entity';
 import styles from './TeamNotificationsPage.module.scss';
 
 export default function TeamNotificationsPage() {
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
   const router = useRouter();
   const queryClient = useQueryClient();
   const isMounted = useMount();
@@ -31,8 +30,8 @@ export default function TeamNotificationsPage() {
   const pendingNotificationIdsRef = useRef(new Set<number>());
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    ...teamQueries.infiniteNotifications(isLoggedIn),
-    enabled: isLoggedIn,
+    ...teamQueries.infiniteNotifications(token ?? ''),
+    enabled: !!token,
   });
 
   const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
@@ -40,7 +39,7 @@ export default function TeamNotificationsPage() {
   const scrollTriggerRef = useInfiniteScroll(fetchNextPage, hasNextPage, isFetchingNextPage);
 
   const { mutate: markRead } = useMutation({
-    ...teamMutations.markNotificationRead(queryClient),
+    ...teamMutations.markNotificationRead(queryClient, token ?? ''),
     onMutate: (notificationId) => {
       pendingNotificationIdsRef.current.add(notificationId);
     },
@@ -50,11 +49,11 @@ export default function TeamNotificationsPage() {
     },
   });
   const { mutate: markAllRead, isPending: isMarkAllReadPending } = useMutation({
-    ...teamMutations.markAllNotificationsRead(queryClient),
+    ...teamMutations.markAllNotificationsRead(queryClient, token ?? ''),
     onError: () => showToast('error', '알림을 모두 읽음 처리하지 못했어요. 다시 시도해 주세요.'),
   });
   const { mutate: deleteAllNotifications, isPending: isDeleteAllPending } = useMutation({
-    ...teamMutations.deleteAllNotifications(queryClient),
+    ...teamMutations.deleteAllNotifications(queryClient, token ?? ''),
     onError: () => showToast('error', '알림을 모두 삭제하지 못했어요. 다시 시도해 주세요.'),
   });
 
@@ -80,13 +79,11 @@ export default function TeamNotificationsPage() {
           chatRoomId: String(notification.chat_room_id),
         }),
       );
-
       return;
     }
 
     if (notification.target_type === 'MY_APPLICATIONS') {
       router.push(ROUTES.TeamMyApplications());
-
       return;
     }
 
@@ -138,7 +135,7 @@ export default function TeamNotificationsPage() {
 
               {isFetchingNextPage && <p className={styles.loading}>알림을 불러오는 중입니다.</p>}
 
-              <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
+              <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
             </div>
 
             <p className={styles.footnote}>14일이 지난 알림은 자동으로 삭제됩니다.</p>

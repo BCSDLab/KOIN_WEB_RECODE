@@ -17,7 +17,9 @@ export function maskSensitive<T>(value: T): T {
   }
 
   if (value != null && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, maskSensitive(entry)])) as T;
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, maskSensitive(entry)]),
+    ) as T;
   }
 
   return value;

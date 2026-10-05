@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
@@ -7,14 +6,12 @@ import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent } f
 import { deptQueries } from 'api/dept/queries';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
-import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import type { InputMessage } from 'interfaces/InputMessage';
-import { Controller, type FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
+import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
-
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -42,11 +39,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
 
   const { errors } = useFormState({ control });
 
-  const loginId = useWatch({ control, name: 'login_id' }) ?? '';
+  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
   const passwordCheck = useWatch({ control, name: 'password_check' });
-  const nicknameControl = useWatch({ control, name: 'nickname' }) ?? '';
-  const emailControl = useWatch({ control, name: 'email' }) ?? '';
-  const studentNumber = useWatch({ control, name: 'student_number' }) ?? '';
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const emailControl = (useWatch({ control, name: 'email' }) ?? '') as string;
+  const studentNumber = (useWatch({ control, name: 'student_number' }) ?? '') as string;
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
   const [isCorrectNickname, setIsCorrectNickname, setInCorrectNickname] = useBooleanState(false);
@@ -170,7 +167,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
 
     if (!emailId) {
       handleSubmit(onSubmit)();
-
       return;
     }
 
@@ -196,14 +192,12 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     if (fieldError) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
-
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
   const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined): InputMessage | null => {
     if (fieldValue === '') return null;
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
-
     return emailMessage;
   };
 

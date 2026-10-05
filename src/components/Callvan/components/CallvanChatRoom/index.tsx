@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CallvanChatMessage } from 'api/callvan/entity';
+import { CallvanChatMessage } from 'api/callvan/entity';
 import { callvanQueries } from 'api/callvan/queries';
 import ArrowBackIcon from 'assets/svg/Callvan/arrow-back.svg';
 import PeopleIcon from 'assets/svg/Callvan/people.svg';
@@ -12,17 +11,16 @@ import { ParticipantAvatarIcon } from 'components/Callvan/components/Participant
 import useSendCallvanChat from 'components/Callvan/hooks/useSendCallvanChat';
 import { getParticipantColor } from 'components/Callvan/utils/participantColor';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
-
 import styles from './CallvanChatRoom.module.scss';
 
 interface CallvanChatRoomProps {
   postId: number;
 }
 
-function groupMessagesByDate(messages: CallvanChatMessage[]): Array<{ date: string; messages: CallvanChatMessage[] }> {
-  const groups: Array<{ date: string; messages: CallvanChatMessage[] }> = [];
+function groupMessagesByDate(messages: CallvanChatMessage[]): { date: string; messages: CallvanChatMessage[] }[] {
+  const groups: { date: string; messages: CallvanChatMessage[] }[] = [];
 
   messages.forEach((msg) => {
     const lastGroup = groups[groups.length - 1];
@@ -41,16 +39,15 @@ function formatKoreanDateString(dateStr: string): string {
   if (parts && parts.length >= 3) {
     return `${parts[0]}년 ${parts[1]}월 ${parts[2]}일`;
   }
-
   return dateStr;
 }
 
 export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
   const router = useRouter();
   const logger = useLogger();
-  const isLoggedIn = useIsLoggedIn();
-  const { data } = useSuspenseQuery(callvanQueries.chat(postId, isLoggedIn));
-  const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(postId, isLoggedIn));
+  const token = useTokenState();
+  const { data } = useSuspenseQuery(callvanQueries.chat(token ?? '', postId));
+  const { data: postDetail } = useSuspenseQuery(callvanQueries.postDetail(token ?? '', postId));
 
   const { mutate: sendMessage, isPending: isSending } = useSendCallvanChat(postId);
   const [inputValue, setInputValue] = useState('');
@@ -173,7 +170,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                     )}
                     {msg.is_image ? (
                       <div className={styles['chat-room__bubble-image']}>
-                        {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={msg.content} alt="업로드 이미지" />
                       </div>
                     ) : (
@@ -208,7 +205,7 @@ export default function CallvanChatRoom({ postId }: CallvanChatRoomProps) {
                   <div className={styles['chat-room__message-row--others']}>
                     {msg.is_image ? (
                       <div className={styles['chat-room__bubble-image']}>
-                        {/* eslint-disable-next-line @next/next/no-img-element -- 채팅 이미지 크기가 제각각이라 원본 비율로 표시 */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={msg.content} alt="업로드 이미지" />
                       </div>
                     ) : (

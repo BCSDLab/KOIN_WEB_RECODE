@@ -2,15 +2,14 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import Rating from 'components/Store/StoreDetailPage/components/Review/components/Rating/Rating';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './AverageRating.module.scss';
 
 export default function AverageRating({ id }: { id: string }) {
-  const isLoggedIn = useIsLoggedIn();
+  const token = useTokenState();
 
   const { data } = useSuspenseInfiniteQuery({
-    ...storeQueries.reviewFeed({ shopId: Number(id), sorter: 'LATEST', isLoggedIn }),
+    ...storeQueries.reviewFeed({ shopId: Number(id), sorter: 'LATEST', token }),
   });
   const totalReviewCount = data.pages[0].total_count;
 

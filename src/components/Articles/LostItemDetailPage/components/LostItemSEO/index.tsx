@@ -1,6 +1,5 @@
 import Head from 'next/head';
-
-import type { SingleLostItemArticleResponseDTO } from 'api/articles/entity';
+import { SingleLostItemArticleResponseDTO } from 'api/articles/entity';
 
 interface LostItemSEOProps {
   article: SingleLostItemArticleResponseDTO;

@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.mobile-header {
+.mobileHeader {
   display: none;
 }
 
@@ -26,7 +26,7 @@
   padding: 64px 0 96px;
 }
 
-.desktop-title {
+.desktopTitle {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -70,7 +70,7 @@
   text-align: center;
 }
 
-.page__section-title {
+.page__sectionTitle {
   display: none;
   font-weight: 600;
   line-height: 1.6;
@@ -115,24 +115,24 @@
   overflow-wrap: break-word;
 }
 
-.motivation-section {
+.motivationSection {
   order: 1;
 }
 
-.activity-section {
+.activitySection {
   order: 3;
 }
 
-.self-introduction-section {
+.selfIntroductionSection {
   order: 4;
 }
 
-.availability-section {
+.availabilitySection {
   order: 5;
 }
 
 @include media.media-breakpoint(mobile) {
-  .mobile-header {
+  .mobileHeader {
     display: block;
   }
 
@@ -148,11 +148,11 @@
     padding: 32px 20px;
   }
 
-  .desktop-title {
+  .desktopTitle {
     display: none;
   }
 
-  .page__section-title {
+  .page__sectionTitle {
     display: block;
   }
 
@@ -172,10 +172,10 @@
     }
   }
 
-  .motivation-section,
-  .activity-section,
-  .self-introduction-section,
-  .availability-section {
+  .motivationSection,
+  .activitySection,
+  .selfIntroductionSection,
+  .availabilitySection {
     order: initial;
   }
 }

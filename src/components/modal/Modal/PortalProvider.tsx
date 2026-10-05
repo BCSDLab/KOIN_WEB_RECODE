@@ -1,12 +1,26 @@
-import React, { type ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-
-import type { CloseFunc, OpenFunc, Portal } from 'utils/context/portal';
-import { PortalContext } from 'utils/context/portal';
 import useMount from 'utils/hooks/state/useMount';
 
-export type { Portal, PortalManager } from 'utils/context/portal';
-export { PortalContext } from 'utils/context/portal';
+export interface Portal {
+  close: () => void;
+}
+
+interface OpenOptions {
+  appendTo?: Element;
+  onClose?: () => void;
+}
+
+type OpenFunc = (element: ((portal: Portal) => React.ReactElement) | React.ReactElement, options?: OpenOptions) => void;
+
+type CloseFunc = () => void;
+
+export interface PortalManager {
+  open: OpenFunc;
+  close: CloseFunc;
+}
+
+export const PortalContext = React.createContext<PortalManager | undefined>(undefined);
 
 interface PortalProviderProps {
   children: ReactNode;

@@ -15,10 +15,6 @@
   font-size: 18px;
   font-weight: 600;
   color: #175c8e;
-
-  @include media.media-breakpoint(mobile) {
-    color: #b611f5;
-  }
 }
 
 .close {
@@ -68,11 +64,6 @@
 .active {
   border-color: #175c8e;
   color: #175c8e;
-
-  @include media.media-breakpoint(mobile) {
-    color: #b611f5;
-    border-color: #b611f5;
-  }
 }
 
 .footer {
@@ -111,6 +102,5 @@
   @include media.media-breakpoint(mobile) {
     flex: 2;
     height: 48px;
-    background-color: #b611f5;
   }
 }

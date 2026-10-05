@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.lost-item-template {
+.lostItem-template {
   display: flex;
   margin-top: 60px;
   width: 100%;
@@ -15,7 +15,7 @@
   }
 }
 
-.lost-item-content {
+.lostItem-content {
   width: 100%;
   max-width: 1500px; // MacBook Pro 14" 기준
   margin-bottom: 60px;
@@ -63,11 +63,9 @@
   gap: 8px;
 
   @include media.media-breakpoint(mobile) {
-    height: 36px;
-    margin-bottom: 12px;
-    padding: 0 24px;
+    margin-bottom: 4px;
+    padding: 4px 8px;
     box-sizing: border-box;
-    gap: 12px;
   }
 
   &__rightButton {
@@ -96,26 +94,12 @@
   width: auto;
 
   @include media.media-breakpoint(mobile) {
-    height: 36px;
-    box-sizing: border-box;
-    padding: 12px 20px;
-    font-size: 12px;
-    border-color: #e1e1e1;
-    border-radius: 40px;
-    background: #fff;
+    width: 230px;
+    padding: 8px 12px;
+    border: 4px;
+    background: #f5f5f5;
     box-shadow: none;
     gap: 4px;
-    justify-content: space-between;
-
-    svg {
-      width: 21px;
-      height: 21px;
-      flex-shrink: 0;
-
-      path {
-        fill: #b611f5;
-      }
-    }
   }
 
   &__input {
@@ -129,13 +113,12 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
-      background: white;
-      color: #727272;
+      background: #f5f5f5;
     }
   }
 }
 
-.list-scroll {
+.listScroll {
   @include media.media-breakpoint(mobile) {
     flex: 1 1 auto;
     min-height: 0;

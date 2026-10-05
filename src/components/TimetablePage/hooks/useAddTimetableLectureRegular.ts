@@ -3,10 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 
-export default function useAddTimetableLectureRegular(isLoggedIn: boolean) {
+export default function useAddTimetableLectureRegular(token: string) {
   const queryClient = useQueryClient();
-  const mutation = timetableMutations.addLectureRegular(queryClient, isLoggedIn);
-
+  const mutation = timetableMutations.addLectureRegular(queryClient, token);
   return useMutation({
     ...mutation,
     onError: (error) => {
