@@ -35,13 +35,8 @@ const ROUTES = {
   LostItemDetail: ({ id }: ROUTESParams<'id'>) => `/lost-item/${id}`,
   LostItemFound: () => '/lost-item/found',
   LostItemLost: () => '/lost-item/lost',
-  LostItemChat: (params?: { articleId: string; chatRoomId: string }) => {
-    if (!params) return '/lost-item/chat';
-
-    const query = new URLSearchParams({ articleId: params.articleId, chatRoomId: params.chatRoomId });
-
-    return `/lost-item/chat?${query.toString()}`;
-  },
+  LostItemChat: (params?: { articleId: string; chatRoomId: string }) =>
+    params ? `/lost-item/chat?articleId=${params.articleId}&chatRoomId=${params.chatRoomId}` : '/lost-item/chat',
   LostItemEdit: ({ id }: ROUTESParams<'id'>) => `/lost-item/edit/${id}`,
   LostItemReport: ({ id }: ROUTESParams<'id'>) => `/lost-item/report/${id}`,
   Room: () => '/room',
