@@ -87,8 +87,8 @@ const ROUTES = {
   TeamNotifications: () => '/team/notifications',
   TeamMyApplications: () => '/team/my-applications',
   TeamMyCreatedPosts: () => '/team/my-created-posts',
-TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
-  `/team/chat?recruitmentId=${recruitmentId}&chatRoomId=${chatRoomId}`,
+  TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
+    `/team/chat?recruitmentId=${recruitmentId}&chatRoomId=${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
