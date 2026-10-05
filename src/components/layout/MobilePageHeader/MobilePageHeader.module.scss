@@ -1,0 +1,31 @@
+@use "src/utils/scss/media" as media;
+
+.header {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: block;
+    flex-shrink: 0;
+    background-color: #fff;
+    animation: slide-left-enter 0.3s ease-out;
+
+    &--gray {
+      background-color: #f8f8fa;
+    }
+  }
+}
+
+@keyframes slide-left-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

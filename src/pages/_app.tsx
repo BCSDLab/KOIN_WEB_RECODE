@@ -17,6 +17,7 @@ import { clearLegacySessionStorage } from 'utils/auth/legacyStorage';
 import { useSessionState } from 'utils/hooks/auth/useSession';
 import { ServerRequestProvider } from 'utils/ssr/useServerRequest';
 import { isomorphicLocalStorage } from 'utils/ts/env';
+import { recordEntryHistory } from 'utils/ts/inAppNavigation';
 import { createQueryClient, queryClient } from 'utils/ts/queryClient';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -94,6 +95,10 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   useEffect(() => {
     clearLegacySessionStorage();
+  }, []);
+
+  useEffect(() => {
+    recordEntryHistory();
   }, []);
 
   if (isMaintenance) {

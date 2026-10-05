@@ -6,14 +6,14 @@ import { getStoreDetailInfo } from 'api/store';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
-import TimetableBackIcon from 'assets/svg/timetable-back-icon.svg';
 import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
@@ -23,23 +23,23 @@ import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
+import type { LegacyRoute } from './legacyRoute';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
-  isBusTimetableRoute: boolean;
-  isTimetableRoute: boolean;
+  route: LegacyRoute;
 }
 
-export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetableRoute }: MobileHeaderProps) {
+export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
+  const goBack = useGoBack();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
-  const isMain = pathname === ROUTES.Main();
   const isCustomButton = buttonState.type === 'custom';
   const logger = useLogger();
   const { id } = router.query;
@@ -82,39 +82,29 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
 
       return;
     }
-    // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
-    if (window.history.state?.idx === 0) {
-      router.push(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
-    } else {
-      router.back();
-    }
+    goBack(pathname === ROUTES.TimetableList() ? ROUTES.Timetable() : ROUTES.Main());
   };
 
   const handleHamburgerClick = () => {
     openSidebar();
   };
 
-  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
-  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
+  const { isMain, isClub: isClubRoute, isLight: useLightHeader } = route;
   const isLostItemCustomTitleRoute =
     [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
     pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
 
-  if (isBusTimetableRoute) {
+  if (route.isBusTimetable) {
     return (
-      <SubPageHeader
+      <PageHeader
         title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
       />
     );
   }
 
-  if (isTimetableRoute) {
+  if (route.isTimetable) {
     const isTimetableList = pathname === ROUTES.TimetableList();
     const getRightAction = () => {
       if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
@@ -132,10 +122,8 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
     };
 
     return (
-      <SubPageHeader
+      <PageHeader
         title={isTimetableList ? '시간표 목록' : '시간표'}
-        backIcon={<TimetableBackIcon />}
-        size="medium"
         onBack={backInDetailPage}
         className={styles['mobileheader--sub-page']}
         rightAction={getRightAction()}

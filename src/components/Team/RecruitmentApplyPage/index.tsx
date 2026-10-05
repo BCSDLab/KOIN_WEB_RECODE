@@ -15,7 +15,7 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import useTeamFormStep from 'components/Team/hooks/useTeamFormStep';
 import { createApplicationFormSchema } from 'components/Team/RecruitmentApplyPage/schema';
-import SubPageHeader from 'components/ui/SubPageHeader';
+import PageHeader from 'components/ui/PageHeader';
 import { FormProvider, useForm } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -223,7 +223,7 @@ export default function RecruitmentApplyPage() {
     <div className={styles.container}>
       <div className={styles.page}>
         <div className={styles['mobile-header']}>
-          <SubPageHeader title="팀원 모집 지원" />
+          <PageHeader title="팀원 모집 지원" />
         </div>
         <h1 className={styles.title}>팀원 모집 지원</h1>
 
