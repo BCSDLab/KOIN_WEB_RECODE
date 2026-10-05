@@ -1,20 +1,17 @@
 import { Suspense } from 'react';
-import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
-import type { MobileHeaderConfig, PageHeaderConfig } from 'components/layout/Header/mobileHeaderConfig';
-import { MobilePageHeaderFrame, PageOwnedHeaderProvider } from 'components/layout/MobilePageHeader';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import type { MobileHeaderVariant } from 'components/layout/Header';
+import { PageHeaderLayoutProvider } from 'components/layout/MobilePageHeader';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useGoBack from 'utils/hooks/routing/useGoBack';
 
 import styles from './Layout.module.scss';
 
 interface SSRLayoutProps {
   children: React.ReactNode;
-  mobileHeader?: MobileHeaderConfig;
+  mobileHeader?: MobileHeaderVariant;
   fitViewport?: boolean;
 }
 
@@ -22,46 +19,17 @@ interface LayoutProps extends SSRLayoutProps {
   hideLayout?: boolean;
 }
 
-function getRootClassName(mobileHeader: MobileHeaderConfig | undefined, fitViewport: boolean | undefined) {
-  if (mobileHeader?.type !== 'page' && mobileHeader?.type !== 'page-owned') return undefined;
+function getRootClassName(mobileHeader: MobileHeaderVariant | undefined, fitViewport: boolean | undefined) {
+  if (mobileHeader !== 'page') return undefined;
 
   return cn({ [styles['root--page']]: true, [styles['root--fit-viewport']]: !!fitViewport });
-}
-
-function ConfiguredPageHeader({ config }: { config: PageHeaderConfig }) {
-  const router = useRouter();
-  const logger = useLogger();
-  const goBack = useGoBack();
-  const { title: Title, rightAction: RightAction, background, onBack } = config;
-
-  return (
-    <MobilePageHeaderFrame
-      title={typeof Title === 'string' ? Title : <Title />}
-      rightAction={RightAction && <RightAction />}
-      background={background}
-      onBack={onBack && (() => onBack({ router, logger, goBack }))}
-    />
-  );
-}
-
-function PageContent({ mobileHeader, children }: Pick<SSRLayoutProps, 'mobileHeader' | 'children'>) {
-  return (
-    <>
-      {mobileHeader?.type === 'page' && (
-        <Suspense fallback={null}>
-          <ConfiguredPageHeader config={mobileHeader} />
-        </Suspense>
-      )}
-      <PageOwnedHeaderProvider value={mobileHeader?.type === 'page-owned'}>{children}</PageOwnedHeaderProvider>
-    </>
-  );
 }
 
 export function SSRLayout({ children, mobileHeader, fitViewport }: SSRLayoutProps) {
   return (
     <div id="root" className={getRootClassName(mobileHeader, fitViewport)}>
       <Header mobileHeader={mobileHeader} />
-      <PageContent mobileHeader={mobileHeader}>{children}</PageContent>
+      <PageHeaderLayoutProvider value={mobileHeader === 'page'}>{children}</PageHeaderLayoutProvider>
       <Footer />
     </div>
   );
@@ -80,9 +48,9 @@ export default function Layout({ children, mobileHeader, fitViewport, hideLayout
       <Suspense fallback={null}>
         <Header mobileHeader={mobileHeader} />
       </Suspense>
-      <PageContent mobileHeader={mobileHeader}>
+      <PageHeaderLayoutProvider value={mobileHeader === 'page'}>
         <Suspense fallback={null}>{children}</Suspense>
-      </PageContent>
+      </PageHeaderLayoutProvider>
       {!isNativeWebView && <Footer />}
     </div>
   );

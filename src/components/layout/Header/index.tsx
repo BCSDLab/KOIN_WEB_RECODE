@@ -7,7 +7,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import MobileHeader from './MobileHeader';
 import { getLegacyRoute } from './MobileHeader/legacyRoute';
 import type { LegacyRoute } from './MobileHeader/legacyRoute';
-import type { MobileHeaderConfig } from './mobileHeaderConfig';
 import MobileHomeRedesignHeader from './MobileHomeRedesignHeader';
 import PCHeader from './PCHeader';
 import styles from './Header.module.scss';
@@ -22,13 +21,15 @@ function getLegacyClassNames(route: LegacyRoute) {
   };
 }
 
-// 서브 헤더(`page`, `page-owned`)는 레이아웃이나 페이지가 MobilePageHeader로 그리므로 모바일에선 숨긴다
-function getClassNames(config: MobileHeaderConfig) {
-  return config.type === 'home' ? { [styles['header--mobile-home']]: true } : { [styles['header--mobile-none']]: true };
-}
+/**
+ * - `page`: 리디자인 페이지. 레거시 헤더를 숨기고 페이지가 `MobilePageHeader`를 직접 그린다.
+ * - `home`: 하단 탭이 있는 홈 화면 헤더.
+ * - 지정하지 않으면 경로로 판정하는 레거시 헤더.
+ */
+export type MobileHeaderVariant = 'page' | 'home';
 
 interface HeaderProps {
-  mobileHeader?: MobileHeaderConfig;
+  mobileHeader?: MobileHeaderVariant;
 }
 
 function Header({ mobileHeader }: HeaderProps) {
@@ -41,14 +42,16 @@ function Header({ mobileHeader }: HeaderProps) {
       return <MobileHeader openModal={openModal} route={legacyRoute} />;
     }
 
-    return mobileHeader?.type === 'home' ? <MobileHomeRedesignHeader /> : null;
+    return mobileHeader === 'home' ? <MobileHomeRedesignHeader /> : null;
   };
 
   return (
     <header
       className={cn({
         [styles.header]: true,
-        ...(legacyRoute ? getLegacyClassNames(legacyRoute) : mobileHeader && getClassNames(mobileHeader)),
+        ...(legacyRoute && getLegacyClassNames(legacyRoute)),
+        [styles['header--mobile-home']]: mobileHeader === 'home',
+        [styles['header--mobile-none']]: mobileHeader === 'page',
       })}
     >
       <nav className={styles.header__content}>
