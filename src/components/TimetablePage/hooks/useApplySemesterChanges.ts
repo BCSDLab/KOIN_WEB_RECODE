@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetableMutations } from 'api/timetable/mutations';
-import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
+import showMobileToast from 'components/feedback/Toast/showMobileToast';
 
 export default function useApplySemesterChanges(isLoggedIn: boolean) {
   const queryClient = useQueryClient();
@@ -11,10 +11,10 @@ export default function useApplySemesterChanges(isLoggedIn: boolean) {
     ...mutation,
     onError: (error) => {
       if (isKoinError(error)) {
-        showTimetableToast('error', error.message || '학기 변경에 실패했습니다.');
+        showMobileToast('error', error.message || '학기 변경에 실패했습니다.');
       } else {
         sendClientError(error);
-        showTimetableToast('error', '학기 변경에 실패했습니다.');
+        showMobileToast('error', '학기 변경에 실패했습니다.');
       }
     },
   });

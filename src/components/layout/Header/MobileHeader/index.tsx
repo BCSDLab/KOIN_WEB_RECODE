@@ -9,7 +9,7 @@ import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
 import TimetableBackIcon from 'assets/svg/timetable-back-icon.svg';
 import TimetableSquarePenIcon from 'assets/svg/timetable-square-pen-icon.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
-import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
+import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
@@ -124,7 +124,7 @@ export default function MobileHeader({ openModal, isBusTimetableRoute, isTimetab
           type="button"
           className={styles['mobileheader__action-button']}
           aria-label="시간표 수정"
-          onClick={() => showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
+          onClick={() => showMobileToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
         >
           <TimetableSquarePenIcon />
         </button>
