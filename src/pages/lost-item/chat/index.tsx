@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- 이미지가 동적으로 바뀌고 크기·비율이 제각각이라 sizes/fill 설정 비용 대비 이득이 작음 */
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
 // FIXME: svg 웹팩 로더가 쿼리와 무관하게 항상 컴포넌트를 반환해, addErrorImage의 img.src에 대입되는
@@ -25,21 +26,25 @@ import {
 } from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
+import { parseQueryId } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
 
 import styles from './LostItemChatPage.module.scss';
 
-function LostItemChatPage() {
+interface LostItemChatPageProps {
+  articleIdParam: string | null;
+  chatRoomIdParam: string | null;
+}
+
+function LostItemChatPage({ articleIdParam, chatRoomIdParam }: LostItemChatPageProps) {
   const isMobile = useMediaQuery();
   const isOnline = useNetworkStatus();
-  const { searchParams } = useParamsHandler();
   const { data: userInfo } = useUser();
 
   const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
@@ -49,9 +54,8 @@ function LostItemChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
-  const chatroomIdParam = searchParams.get('chatroomId');
-  const showList = !isMobile || !chatroomIdParam;
-  const showDetail = !isMobile || !!chatroomIdParam;
+  const showList = !isMobile || !chatRoomIdParam;
+  const showDetail = !isMobile || !!chatRoomIdParam;
 
   const {
     chatroomDetail,
@@ -62,8 +66,8 @@ function LostItemChatPage() {
     sendMessage: sendChatMessage,
     sendMessageAsync: sendChatMessageAsync,
   } = useChatPolling({
-    articleId: searchParams.get('articleId'),
-    chatroomId: chatroomIdParam,
+    articleId: articleIdParam,
+    chatroomId: chatRoomIdParam,
     isOnline,
     autoSelectFirst: showDetail,
   });
@@ -129,7 +133,7 @@ function LostItemChatPage() {
       unread_message_count,
     }) => ({
       key: `${chat_room_id}-${article_id}`,
-      href: `${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`,
+      href: ROUTES.LostItemChat({ articleId: String(article_id), chatRoomId: String(chat_room_id) }),
       title: article_title,
       timeLabel: formatChatRoomListTime(last_message_at),
       preview: recent_message_content,
@@ -281,10 +285,28 @@ function LostItemChatPage() {
 
 export default function LostItemChatPageWrapper() {
   const isLoggedIn = useIsLoggedIn();
+  const router = useRouter();
+  const articleId = router.query.articleId;
+  const chatRoomId = router.query.chatRoomId ?? router.query.chatroomId;
+  const isList = articleId === undefined && chatRoomId === undefined;
+  const hasValidRoom =
+    parseQueryId(chatRoomId) !== null && (articleId === undefined || parseQueryId(articleId) !== null);
+  const hasInvalidParams = !isList && !hasValidRoom;
 
-  if (!isLoggedIn) return null;
+  useEffect(() => {
+    if (router.isReady && hasInvalidParams) {
+      void router.replace(ROUTES.LostItemChat());
+    }
+  }, [router, hasInvalidParams]);
 
-  return <LostItemChatPage />;
+  if (!isLoggedIn || !router.isReady || hasInvalidParams) return null;
+
+  return (
+    <LostItemChatPage
+      articleIdParam={typeof articleId === 'string' ? articleId : null}
+      chatRoomIdParam={typeof chatRoomId === 'string' ? chatRoomId : null}
+    />
+  );
 }
 
 LostItemChatPageWrapper.requireAuth = true;

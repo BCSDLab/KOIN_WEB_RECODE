@@ -14,6 +14,13 @@ export const parseQueryNumber = (
   return Number.isNaN(parsed) ? defaultValue : parsed;
 };
 
+export const parseQueryId = (value: string | string[] | undefined): number | null => {
+  if (typeof value !== 'string' || !/^\d+$/.test(value)) return null;
+  const parsed = Number(value);
+
+  return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : null;
+};
+
 export const parseQueryBoolean = (value: string | string[] | undefined, defaultValue: boolean = false): boolean => {
   if (!value) return defaultValue;
 

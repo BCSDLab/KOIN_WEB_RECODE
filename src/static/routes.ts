@@ -36,7 +36,8 @@ const ROUTES = {
   LostItemDetail: ({ id }: ROUTESParams<'id'>) => `/lost-item/${id}`,
   LostItemFound: () => '/lost-item/found',
   LostItemLost: () => '/lost-item/lost',
-  LostItemChat: () => '/lost-item/chat',
+  LostItemChat: (params?: { articleId: string; chatRoomId: string }) =>
+    params ? `/lost-item/chat?articleId=${params.articleId}&chatRoomId=${params.chatRoomId}` : '/lost-item/chat',
   LostItemEdit: ({ id }: ROUTESParams<'id'>) => `/lost-item/edit/${id}`,
   LostItemReport: ({ id }: ROUTESParams<'id'>) => `/lost-item/report/${id}`,
   Room: () => '/room',
@@ -83,7 +84,7 @@ const ROUTES = {
   TeamMyApplications: () => '/team/my-applications',
   TeamMyCreatedPosts: () => '/team/my-created-posts',
   TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
-    `/team/chat/${recruitmentId}/${chatRoomId}`,
+    `/team/chat?recruitmentId=${recruitmentId}&chatRoomId=${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
