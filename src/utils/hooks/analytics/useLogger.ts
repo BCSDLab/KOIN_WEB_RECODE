@@ -3,8 +3,15 @@ import { useRef } from 'react';
 import * as gtag from 'lib/gtag';
 import type { LoggingTeam } from 'lib/gtag';
 
-interface ActionLoggerProps {
-  team: LoggingTeam;
+/**
+ * 로깅 네이밍룰 개편으로 GA 이벤트명이 team(CAMPUS 등)에서 event_name(DA1 등)으로 바뀐다.
+ * 기존 로깅은 team을 그대로 쓰고, 신규 로깅만 event_name을 사용한다.
+ * 이후 기존 로깅 변경이 완료되면 team은 제거하고 event_name만 사용하도록
+ * 리팩토링한다.
+ */
+type LoggerEventName = { team: LoggingTeam; event_name?: never } | { team?: never; event_name: string };
+
+type ActionLoggerProps = LoggerEventName & {
   event_label: string;
   value: string;
   event_category?: string;
@@ -12,10 +19,9 @@ interface ActionLoggerProps {
   current_page?: string;
   duration_time?: number;
   custom_session_id?: string;
-}
+};
 
-interface LoggerEventProps {
-  team: LoggingTeam;
+type LoggerEventProps = LoggerEventName & {
   event_category: string;
   event_label: string;
   value: string;
@@ -23,96 +29,26 @@ interface LoggerEventProps {
   previous_page?: string;
   current_page?: string;
   custom_session_id?: string;
-}
+};
 
 const useLogger = () => {
   const prevEvent = useRef<LoggerEventProps | null>(null);
 
-  const logEvent = ({
-    team,
-    event_category,
-    event_label,
-    value,
-    duration_time,
-    previous_page,
-    current_page,
-    custom_session_id,
-  }: LoggerEventProps) => {
-    const event = {
-      team,
-      event_category,
-      event_label,
-      value,
-      duration_time,
-      previous_page,
-      current_page,
-      custom_session_id,
-    };
-    gtag.event(event);
-    prevEvent.current = event;
+  const logEvent = (props: LoggerEventProps) => {
+    gtag.event(props);
+    prevEvent.current = props;
   };
 
-  const actionEventClick = ({
-    team,
-    event_label,
-    value,
-    duration_time,
-    previous_page,
-    current_page,
-    event_category,
-    custom_session_id,
-  }: ActionLoggerProps) => {
-    logEvent({
-      team,
-      event_category: event_category || 'click',
-      event_label,
-      value,
-      duration_time,
-      previous_page,
-      current_page,
-      custom_session_id,
-    });
+  const actionEventClick = (props: ActionLoggerProps) => {
+    logEvent({ ...props, event_category: props.event_category || 'click' });
   };
 
-  const actionEventSwipe = ({
-    team,
-    event_label,
-    value,
-    duration_time,
-    previous_page,
-    current_page,
-  }: ActionLoggerProps) => {
-    logEvent({
-      team,
-      event_category: 'swipe',
-      event_label,
-      value,
-      duration_time,
-      previous_page,
-      current_page,
-    });
+  const actionEventSwipe = (props: ActionLoggerProps) => {
+    logEvent({ ...props, event_category: 'swipe' });
   };
 
-  const actionEventLoad = ({
-    team,
-    event_label,
-    value,
-    duration_time,
-    previous_page,
-    current_page,
-    event_category,
-    custom_session_id,
-  }: ActionLoggerProps) => {
-    logEvent({
-      team,
-      event_category: event_category || 'entry',
-      event_label,
-      value,
-      duration_time,
-      previous_page,
-      current_page,
-      custom_session_id,
-    });
+  const actionEventLoad = (props: ActionLoggerProps) => {
+    logEvent({ ...props, event_category: props.event_category || 'entry' });
   };
 
   return {
