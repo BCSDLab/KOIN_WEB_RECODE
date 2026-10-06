@@ -7,6 +7,6 @@ function DepartmentPage() {
   return <DepartmentPageContent />;
 }
 
-DepartmentPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+DepartmentPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default DepartmentPage;

@@ -7,40 +7,34 @@ import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { backButtonTapped } from 'utils/ts/iosBridge';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
+import type { LegacyRoute } from './legacyRoute';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
-  isBusTimetableRoute: boolean;
+  route: LegacyRoute;
 }
 
-export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileHeaderProps) {
+export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
   const mounted = useMount();
   const router = useRouter();
+  const goBack = useGoBack();
   const { pathname } = router;
   const { openSidebar } = useMobileSidebar();
-  const buttonState = useHeaderButtonStore((state) => state.buttonState);
-
-  const isMain = pathname === ROUTES.Main();
-  const isCustomButton = buttonState.type === 'custom';
   const logger = useLogger();
   const { id } = router.query;
-
-  const { customTitle } = useHeaderTitle();
 
   const { params } = useParamsHandler();
 
@@ -58,17 +52,6 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
 
       return;
     }
-    if (pathname === '/timetable') {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'timetable_back',
-        value: '뒤로가기버튼',
-        previous_page: '시간표',
-        current_page: '메인',
-        duration_time: getElapsedSeconds('enterTimetablePage'),
-      });
-    }
-
     if (
       typeof window !== 'undefined' &&
       window.webkit?.messageHandlers != null &&
@@ -78,37 +61,14 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
 
       return;
     }
-    // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
-    if (window.history.state?.idx === 0) {
-      router.push(ROUTES.Main());
-    } else {
-      router.back();
-    }
+    goBack();
   };
 
   const handleHamburgerClick = () => {
     openSidebar();
   };
 
-  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
-  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
-  const isLostItemCustomTitleRoute =
-    [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
-    pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
-
-  if (isBusTimetableRoute) {
-    return (
-      <SubPageHeader
-        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        size="medium"
-        onBack={backInDetailPage}
-        className={styles['mobileheader--bus-timetable']}
-      />
-    );
-  }
+  const { isMain, isClub: isClubRoute, isLight: useLightHeader } = route;
 
   return (
     <>
@@ -136,10 +96,8 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
           })}
         >
           {isMain && <KoinServiceLogo />}
-          {!isMain && (isClubRoute || isLostItemCustomTitleRoute) && customTitle}
           {!isMain &&
             !isClubRoute &&
-            !isLostItemCustomTitleRoute &&
             (CATEGORY.flatMap((c) => c.submenu)
               .filter((s) => pathname.startsWith(s.link))
               .sort((a, b) => b.link.length - a.link.length)[0]?.title ??
@@ -153,29 +111,18 @@ export default function MobileHeader({ openModal, isBusTimetableRoute }: MobileH
           {pathname.startsWith('/clubs/event/edit') && '동아리 행사 수정'}
           {pathname.startsWith('/clubs/event') && !pathname.startsWith('/clubs/event/edit') && '동아리 행사 생성'}
         </span>
-        {isCustomButton ? (
-          <span
-            className={cn({
-              [styles.mobileheader__icon]: true,
-              [styles['mobileheader__icon--right']]: true,
-            })}
-          >
-            {buttonState.content}
-          </span>
-        ) : (
-          <button
-            className={cn({
-              [styles.mobileheader__icon]: true,
-              [styles['mobileheader__icon--right']]: true,
-              [styles['mobileheader__icon--none']]: useLightHeader,
-            })}
-            type="button"
-            aria-label="메뉴 버튼"
-            onClick={handleHamburgerClick}
-          >
-            <HamburgerIcon />
-          </button>
-        )}
+        <button
+          className={cn({
+            [styles.mobileheader__icon]: true,
+            [styles['mobileheader__icon--right']]: true,
+            [styles['mobileheader__icon--none']]: useLightHeader,
+          })}
+          type="button"
+          aria-label="메뉴 버튼"
+          onClick={handleHamburgerClick}
+        >
+          <HamburgerIcon />
+        </button>
       </div>
       {mounted && createPortal(<Panel openModal={openModal} />, document.body)}
     </>

@@ -89,13 +89,30 @@ export interface WebAuthResponse extends APIResponse {
 
 export type WebLogoutResponse = APIResponse;
 
-export interface WebCsrfTokenResponse extends APIResponse {
-  csrf_token: string;
+// 비로그인도 오류가 아니라 authenticated=false인 200이다.
+export interface WebSessionResponse extends APIResponse {
+  authenticated: boolean;
+  user_type: 'STUDENT' | 'GENERAL' | 'COUNCIL' | null;
+  csrf_token: string | null;
 }
 
-export interface UserAuthResponse extends APIResponse {
-  user_type: 'STUDENT' | 'GENERAL';
+// GET /v3/users/me. 학생·총학생회만 student_number, major가 있다.
+export interface UserProfileResponse extends APIResponse {
+  id: number;
+  login_id: string;
+  anonymous_nickname: string | null;
+  email: string;
+  gender: 0 | 1;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  user_type: 'STUDENT' | 'GENERAL' | 'COUNCIL';
+  student_number: string | null;
+  major: string | null;
 }
+
+// 익명 닉네임이 서버 값에 없으면 클라이언트가 만들어 항상 채운다.
+export type UserInfo = Omit<UserProfileResponse, 'anonymous_nickname'> & { anonymous_nickname: string };
 
 export interface UserResponse extends APIResponse {
   id: number;

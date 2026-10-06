@@ -6,11 +6,11 @@ import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import usePostLostItemArticles from 'components/Articles/hooks/usePostLostItemArticles';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 const MAX_ITEMS = 10;
 
@@ -36,12 +36,6 @@ export default function LostItemWritePage() {
   const { title, subtitle, description } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem, removeLostItem, validateAndUpdateItems, checkArticleFormFull } =
     useLostItemForm({ defaultType: type });
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-
-  useEffect(() => {
-    setCustomTitle(title);
-  }, [title, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   useEffect(() => {
     if (user?.name) {
@@ -103,27 +97,30 @@ export default function LostItemWritePage() {
   };
 
   return (
-    <LostItemPageTemplate
-      title={title}
-      subtitle={subtitle}
-      description={description}
-      isFound={isFound}
-      bottomButtonText="작성 완료"
-      onBottomButtonClick={handleCompleteClick}
-      isBottomButtonDisabled={status === 'pending'}
-      onAddButtonClick={lostItems.length < MAX_ITEMS ? handleItemAddClick : undefined}
-    >
-      {lostItems.map((lostItem, index) => (
-        <LostItemForm
-          key={lostItem.id}
-          type={type}
-          count={index}
-          totalCount={lostItems.length}
-          lostItem={lostItem}
-          lostItemHandler={lostItemHandler(index)}
-          removeLostItem={removeLostItem}
-        />
-      ))}
-    </LostItemPageTemplate>
+    <>
+      <MobilePageHeader title={title} />
+      <LostItemPageTemplate
+        title={title}
+        subtitle={subtitle}
+        description={description}
+        isFound={isFound}
+        bottomButtonText="작성 완료"
+        onBottomButtonClick={handleCompleteClick}
+        isBottomButtonDisabled={status === 'pending'}
+        onAddButtonClick={lostItems.length < MAX_ITEMS ? handleItemAddClick : undefined}
+      >
+        {lostItems.map((lostItem, index) => (
+          <LostItemForm
+            key={lostItem.id}
+            type={type}
+            count={index}
+            totalCount={lostItems.length}
+            lostItem={lostItem}
+            lostItemHandler={lostItemHandler(index)}
+            removeLostItem={removeLostItem}
+          />
+        ))}
+      </LostItemPageTemplate>
+    </>
   );
 }

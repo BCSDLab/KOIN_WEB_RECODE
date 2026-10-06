@@ -243,4 +243,4 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
   );
 }
 
-ShuttleBusTimetable.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+ShuttleBusTimetable.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import type { UserResponse } from 'api/auth/entity';
+import type { UserInfo } from 'api/auth/entity';
 import * as gtag from 'lib/gtag';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 
-const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
+const userUniqueIdGenerator = (userInfo: UserInfo | null) => {
   if (!userInfo) {
     isomorphicLocalStorage.removeItem('uuid');
 

@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
-
 import { cn } from '@bcsdlab/utils';
 import type { ShuttleTimetableDetailInfoResponse } from 'api/bus/entity';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import { BUS_FEEDBACK_FORM, SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
 
 import styles from './ShuttleDetailMobile.module.scss';
 
@@ -16,18 +13,11 @@ interface ShuttleDetailMobileProps {
 }
 
 export default function ShuttleDetailMobile({ timetable, selectedName, onSelect }: ShuttleDetailMobileProps) {
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
   const logger = useLogger();
   const isMultiple = timetable.route_info.length > 2;
   const showDirections = !isMultiple && timetable.route_info.length > 1;
   const selectedRoute = timetable.route_info.find(({ name }) => name === selectedName);
   const routeTypeClass = styles[SHUTTLE_ROUTE_TYPE_CLASS[timetable.route_type]];
-
-  useEffect(() => {
-    setCustomTitle(`${timetable.route_name} 시간표`);
-
-    return resetCustomTitle;
-  }, [timetable.route_name, setCustomTitle, resetCustomTitle]);
 
   return (
     <main className={styles.detail}>

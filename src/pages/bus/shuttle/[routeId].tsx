@@ -8,6 +8,8 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import ShuttleDetailMobile from 'components/Bus/ShuttleDetailMobile';
+import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import { SHUTTLE_ROUTE_TYPE_CLASS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -37,7 +39,11 @@ export default function ShuttleDetailPage() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
-  if (!shuttleTimetableDetail) return null;
+  const header = (
+    <MobilePageHeader title={shuttleTimetableDetail ? `${shuttleTimetableDetail.route_name} 시간표` : '버스 시간표'} />
+  );
+
+  if (!shuttleTimetableDetail) return header;
 
   const routeTypeClass = styles[SHUTTLE_ROUTE_TYPE_CLASS[shuttleTimetableDetail.route_type]];
   const rowLength = shuttleTimetableDetail.node_info.length + 1;
@@ -46,18 +52,21 @@ export default function ShuttleDetailPage() {
 
   if (isMobile) {
     return (
-      <ShuttleDetailMobile
-        timetable={shuttleTimetableDetail}
-        selectedName={selectedName}
-        onSelect={(name) => {
-          setSelectedDetail(name);
-          logger.actionEventClick({
-            team: 'CAMPUS',
-            event_label: name === '등교' ? 'go_to_school' : 'go_home',
-            value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
-          });
-        }}
-      />
+      <>
+        {header}
+        <ShuttleDetailMobile
+          timetable={shuttleTimetableDetail}
+          selectedName={selectedName}
+          onSelect={(name) => {
+            setSelectedDetail(name);
+            logger.actionEventClick({
+              team: 'CAMPUS',
+              event_label: name === '등교' ? 'go_to_school' : 'go_home',
+              value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
+            });
+          }}
+        />
+      </>
     );
   }
 
@@ -184,3 +193,5 @@ export default function ShuttleDetailPage() {
     </BusCoursePage>
   );
 }
+
+ShuttleDetailPage.getLayout = (page: React.ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

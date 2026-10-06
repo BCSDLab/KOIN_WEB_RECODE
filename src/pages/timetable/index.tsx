@@ -14,14 +14,20 @@ import {
   timetableQueryKeys,
 } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
+import { TimetableEditButton } from 'components/TimetablePage/components/MobileHeaderActions';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isServerAuthError } from 'utils/ssr/authError';
+import type { ServerRequestContext } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetablePage.module.scss';
@@ -50,11 +56,12 @@ async function prefetchTimetableData(
   queryClient: QueryClient,
   context: GetServerSidePropsContext,
   isLoggedIn: boolean,
+  userType: ServerRequestContext['userType'],
   query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
   try {
-    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn));
+    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
@@ -68,7 +75,7 @@ async function prefetchTimetableData(
     let timetableFrameList: TimetableFrameListResponse;
 
     try {
-      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(isLoggedIn, semester));
+      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(isLoggedIn, semester, { userType }));
     } catch (error) {
       if (!(isKoinError(error) && error.status === 404)) {
         throw error;
@@ -113,7 +120,14 @@ export const getServerSideProps = withCacheControl(
     const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
     if (serverRequest.isLoggedIn) {
-      await prefetchTimetableData(queryClient, context, serverRequest.isLoggedIn, query, validatedFrameId);
+      await prefetchTimetableData(
+        queryClient,
+        context,
+        serverRequest.isLoggedIn,
+        serverRequest.userType,
+        query,
+        validatedFrameId,
+      );
     } else {
       setDefaultTimetableFrameList(queryClient, false);
       cacheControl.enablePublicCache();
@@ -132,12 +146,15 @@ function TimetablePage() {
   useScrollToTop();
   const semester = useSemester();
   const router = useRouter();
+  const logger = useLogger();
+  const goBack = useGoBack();
   const { timetableFrameId } = router.query;
   const { data: timetableFrameList } = useTimetableFrameList(semester);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const mainFrameId = isValidTimetableFrameId(mainFrame?.id) ? mainFrame.id : 0;
   const queryFrameId = typeof timetableFrameId === 'string' ? Number(timetableFrameId) : Number.NaN;
-  const initialFrameId = isValidTimetableFrameId(queryFrameId) ? queryFrameId : mainFrameId;
+  const hasQueryFrame = timetableFrameList.some((frame) => frame.id === queryFrameId);
+  const initialFrameId = hasQueryFrame ? queryFrameId : mainFrameId;
   const [currentFrameIndex, setCurrentFrameIndex] = useState(initialFrameId);
   const resolvedCurrentFrameIndex = timetableFrameList.some((frame) => frame.id === currentFrameIndex)
     ? currentFrameIndex
@@ -147,17 +164,32 @@ function TimetablePage() {
     isomorphicSessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
   }, []);
 
+  const handleBack = () => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'timetable_back',
+      value: '뒤로가기버튼',
+      previous_page: '시간표',
+      current_page: '메인',
+      duration_time: getElapsedSeconds('enterTimetablePage'),
+    });
+    goBack();
+  };
+
   return (
-    <div className={styles.page}>
-      {!isMobile ? (
-        <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      ) : (
-        <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      )}
-    </div>
+    <>
+      <MobilePageHeader title="시간표" rightAction={<TimetableEditButton />} onBack={handleBack} />
+      <div className={styles.page}>
+        {!isMobile ? (
+          <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        ) : (
+          <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        )}
+      </div>
+    </>
   );
 }
 
 export default TimetablePage;
 
-TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;

@@ -24,7 +24,12 @@ import {
   rollbackTimetableFrame,
   rollbackTimetableLecture,
 } from './index';
-import { timetableQueryKeys } from './queries';
+import { timetableQueries, timetableQueryKeys } from './queries';
+
+export interface SemesterChanges {
+  toAdd: Semester[];
+  toRemove: Semester[];
+}
 
 interface DeleteTimetableFrameVariables {
   id: number;
@@ -52,6 +57,34 @@ export const timetableMutations = {
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(isLoggedIn) });
         await invalidateFrameList(queryClient, semester, isLoggedIn);
+      },
+    }),
+
+  applySemesterChanges: (queryClient: QueryClient, isLoggedIn: boolean) =>
+    mutationOptions({
+      mutationFn: async ({ toAdd, toRemove }: SemesterChanges) => {
+        // 서버가 학기 목록을 갱신하는 도중 겹치지 않도록 한 번에 하나씩 보낸다.
+        for (const semester of toAdd) {
+          await addTimetableFrame(semester);
+        }
+        for (const semester of toRemove) {
+          await deleteSemester(semester);
+        }
+      },
+      onSettled: async (_data, _error, { toAdd, toRemove }) => {
+        await Promise.all(
+          toAdd.map((semester) =>
+            queryClient
+              .fetchQuery({
+                ...timetableQueries.frameList(isLoggedIn, semester, { fallbackOnError: true }),
+                staleTime: 0,
+              })
+              .catch(() => undefined),
+          ),
+        );
+        await Promise.all(toRemove.map((semester) => invalidateFrameList(queryClient, semester, isLoggedIn)));
+        await queryClient.invalidateQueries({ queryKey: timetableQueryKeys.mySemester(isLoggedIn) });
+        if (toRemove.length > 0) await queryClient.invalidateQueries({ queryKey: graduationCalculatorQueryKeys.all });
       },
     }),
 

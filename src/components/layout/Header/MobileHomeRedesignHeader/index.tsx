@@ -13,7 +13,7 @@ function MobileHomeRedesignHeader() {
   // const logger = useLogger();
 
   return (
-    <header className={styles.header}>
+    <div className={styles.header}>
       <Link href={ROUTES.Main()} className={styles.header__brand}>
         <BbicoIcon aria-hidden />
         <KoinTitleIcon aria-label="KOIN" />
@@ -32,7 +32,7 @@ function MobileHomeRedesignHeader() {
       >
         <NotificationBellIcon aria-hidden />
       </button> */}
-    </header>
+    </div>
   );
 }
 

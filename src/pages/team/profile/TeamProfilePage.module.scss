@@ -6,4 +6,10 @@
 
 .mobile-only {
   @include media.mobile-only;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
 }

@@ -1,13 +1,5 @@
 @use "src/utils/scss/media" as media;
 
-.mobile-header {
-  display: none;
-}
-
-.header {
-  background: #f8f8fa;
-}
-
 .page {
   display: flex;
   flex-direction: column;
@@ -132,12 +124,9 @@
 }
 
 @include media.media-breakpoint(mobile) {
-  .mobile-header {
-    display: block;
-  }
-
   .page {
-    min-height: calc(100dvh - 56px);
+    flex: 1;
+    min-height: auto;
     background: #f8f8fa;
   }
 

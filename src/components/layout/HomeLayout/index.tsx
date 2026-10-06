@@ -1,7 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
-import MobileHomeRedesignHeader from 'components/layout/Header/MobileHomeRedesignHeader';
 import MobileBottomNavigation from 'components/layout/MobileBottomNavigation';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
@@ -24,7 +23,7 @@ function HomeLayout({ children, whiteMobileBg }: HomeLayoutProps) {
         [styles['layout--white']]: isMobile && !!whiteMobileBg,
       })}
     >
-      {isMobile ? <MobileHomeRedesignHeader /> : <Header />}
+      <Header mobileHeader="home" />
       {children}
       {isMobile && <MobileBottomNavigation />}
       <Footer />

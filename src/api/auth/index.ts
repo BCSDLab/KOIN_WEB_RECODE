@@ -7,12 +7,10 @@ import {
   WebLogin,
   WebRefresh,
   WebLogout,
-  WebCsrf,
-  UserAuth,
+  WebSession,
   SignupStudent,
   SignupGeneral,
-  User,
-  GeneralUser,
+  UserProfile,
   UserAcademicInfo,
   UpdateUser,
   UpdateGeneralUser,
@@ -54,13 +52,9 @@ export const webRefresh = APIClient.of(WebRefresh);
 
 export const webLogout = APIClient.of(WebLogout);
 
-export const webCsrf = APIClient.of(WebCsrf);
+export const getWebSession = APIClient.of(WebSession);
 
-export const getUserAuth = APIClient.of(UserAuth);
-
-export const getUser = APIClient.of(User);
-
-export const getGeneralUser = APIClient.of(GeneralUser);
+export const getUserProfile = APIClient.of(UserProfile);
 
 export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 

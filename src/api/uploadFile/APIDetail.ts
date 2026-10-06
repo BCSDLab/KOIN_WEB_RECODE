@@ -29,6 +29,8 @@ export class UploadToS3<R extends APIResponse> implements APIRequest<R> {
 
   baseURL = '';
 
+  withCredentials = false;
+
   headers: Record<string, string>;
 
   convertBody = (data: unknown) => data as string;

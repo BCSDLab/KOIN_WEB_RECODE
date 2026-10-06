@@ -11,13 +11,13 @@ import InducingLoginModal from 'components/TimetablePage/components/InducingLogi
 import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
 import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useResetInvalidSemester from 'components/TimetablePage/hooks/useResetInvalidSemester';
 import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { isSemesterInList } from 'utils/timetable/semester';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 
 import AddSemesterModal from './AddSemesterModal';
@@ -122,13 +122,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     }
   };
 
-  // 저장된 학기가 더 이상 유효하지 않을 때만 되돌린다.
-  React.useEffect(() => {
-    if (semesterOptionList.length === 0) return;
-    if (isSemesterInList(semesterOptionList, semester)) return;
-    updateSemester(semesterOptionList[0].value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- semester/updateSemester를 넣으면 재실행이 무한루프를 유발함
-  }, [semesterOptionList]);
+  useResetInvalidSemester();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- 언마운트 시 1회만 정리 (portalManager 참조 변경은 무시)
   React.useEffect(() => () => portalManager.close(), []);

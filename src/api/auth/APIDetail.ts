@@ -9,8 +9,8 @@ import type {
   WebLoginRequest,
   WebAuthResponse,
   WebLogoutResponse,
-  WebCsrfTokenResponse,
-  UserAuthResponse,
+  WebSessionResponse,
+  UserProfileResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -125,6 +125,8 @@ export class WebLogin<R extends WebAuthResponse> implements APIRequest<R> {
 
   path = '/v2/web/auth/login';
 
+  skipAuthRefresh = true;
+
   response!: R;
 
   constructor(public data: WebLoginRequest) {}
@@ -134,6 +136,8 @@ export class WebRefresh<R extends WebAuthResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v2/web/auth/refresh';
+
+  skipAuthRefresh = true;
 
   response!: R;
 
@@ -145,52 +149,32 @@ export class WebLogout<R extends WebLogoutResponse> implements APIRequest<R> {
 
   path = '/v2/web/auth/logout';
 
-  response!: R;
-
-  constructor() {}
-}
-
-export class WebCsrf<R extends WebCsrfTokenResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/v2/web/auth/csrf';
+  skipAuthRefresh = true;
 
   response!: R;
 
   constructor() {}
 }
 
-// 쿠키(또는 Bearer) 인증으로 로그인 상태·회원 유형을 확인한다. 문서(web-cookie-auth.md)가
-// "웹의 로그인 상태 확인은 쿠키와 함께 /user/auth를 사용한다"고 명시한 기존 엔드포인트.
-export class UserAuth<R extends UserAuthResponse> implements APIRequest<R> {
+// SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
+export class WebSession<R extends WebSessionResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/user/auth';
+  path = '/v2/web/auth/session';
 
   response!: R;
 
-  // SSR은 axios의 withCredentials가 통하지 않으므로 Cookie/Origin을 직접 실어 보낸다.
   constructor(public headers?: Record<string, string>) {}
 }
 
-export class User<R extends UserResponse> implements APIRequest<R> {
+export class UserProfile<R extends UserProfileResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/user/student/me';
+  path = '/v3/users/me';
+
+  authOptional = true;
 
   response!: R;
-
-  auth = false;
-}
-
-export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/v2/users/me';
-
-  response!: R;
-
-  auth = false;
 }
 
 // 추후 User 클래스명으로 아래 API로 통일할 것

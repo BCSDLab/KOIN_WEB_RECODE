@@ -11,7 +11,7 @@
   @include media.media-breakpoint(mobile) {
     align-items: center;
     width: 100vw;
-    height: calc(100vh - 56px);
+    flex: 1;
     gap: 24px;
     margin: 0;
     padding-top: 0;

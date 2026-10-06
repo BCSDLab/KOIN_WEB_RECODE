@@ -1,42 +1,21 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { GeneralUserResponse, UserResponse } from 'api/auth/entity';
+import type { UserInfo } from 'api/auth/entity';
 import { authQueries } from 'api/auth/queries';
-import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import { useServerRequest } from 'utils/ssr/useServerRequest';
-import { useTokenStore } from 'utils/zustand/auth';
-
-type GeneralUserWithAnonymousNickname = GeneralUserResponse & {
-  anonymous_nickname: string;
-};
-
-export type UnionUserResponse = UserResponse | GeneralUserWithAnonymousNickname;
+import useSession from 'utils/hooks/auth/useSession';
 
 export const useUser = () => {
-  const { userType } = useTokenStore();
-  const serverRequest = useServerRequest();
-  const isLoggedIn = useIsLoggedIn();
-  const effectiveUserType = userType || serverRequest?.userType || null;
+  const isLoggedIn = useSession().status === 'authenticated';
 
-  const { data, isError } = useSuspenseQuery({
-    ...authQueries.userInfo(isLoggedIn, effectiveUserType),
-    select: (rawData) => {
-      if (!rawData) return null;
+  const { data } = useSuspenseQuery({
+    ...authQueries.userInfo(isLoggedIn),
+    select: (profile): UserInfo | null => {
+      if (!profile) return null;
+      if (profile.anonymous_nickname) return { ...profile, anonymous_nickname: profile.anonymous_nickname };
 
-      if (rawData.user_type === 'STUDENT') {
-        return rawData;
-      }
-
-      const timeStamp = Date.now();
-      const anonymousNickname = `익명${rawData.id}${timeStamp.toString().slice(-4)}`;
-
-      return {
-        ...rawData,
-        anonymous_nickname: anonymousNickname,
-      };
+      // select는 렌더마다 다시 실행되고 SSR과 하이드레이션 값이 같아야 하므로 프로필에서만 파생한다.
+      return { ...profile, anonymous_nickname: `익명${profile.id}` };
     },
   });
 
-  return {
-    data: isError ? null : data,
-  };
+  return { data };
 };

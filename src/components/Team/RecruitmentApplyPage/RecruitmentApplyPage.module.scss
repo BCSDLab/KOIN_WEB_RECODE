@@ -11,6 +11,8 @@
 
   @include media.media-breakpoint(mobile) {
     display: block;
+    flex: 1;
+    min-height: auto;
     padding: 0;
     background: #f8f8fa;
   }
@@ -26,14 +28,6 @@
   @include media.media-breakpoint(mobile) {
     gap: 16px;
     max-width: none;
-  }
-}
-
-.mobile-header {
-  display: none;
-
-  @include media.media-breakpoint(mobile) {
-    display: block;
   }
 }
 
