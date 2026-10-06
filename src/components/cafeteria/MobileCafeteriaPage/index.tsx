@@ -4,16 +4,22 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
-import type { DiningType } from 'api/dinings/entity';
+import type { DiningPlace, DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
+import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
-import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import useSoldoutPlaces from 'components/cafeteria/hooks/useSoldoutPlaces';
+import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import { DINING_TYPES, DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
@@ -23,8 +29,18 @@ import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
 
+const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
+const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
+const SOLDOUT_REPORT_PLACES: DiningPlace[] = PLACE_ORDER.filter((place) => place !== '2캠퍼스');
+const SOLDOUT_REPORT_LABEL_BY_PLACE: Partial<Record<DiningPlace, string>> = {
+  A코너: 'A코스',
+  B코너: 'B코스',
+  C코너: 'C코스',
+  능수관: '능수관',
+};
+
 export default function MobileCafeteriaPage() {
-  const { diningType, setDiningType } = useCafeteriaParams();
+  const { date, diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
@@ -33,17 +49,70 @@ export default function MobileCafeteriaPage() {
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
+  const portalManager = useModalPortal();
+  const soldoutReportView = useABTestView(SOLDOUT_REPORT_AB_TEST_TITLE);
+  const isSoldoutReportHeaderVariant = soldoutReportView === SOLDOUT_REPORT_VARIANT_HEADER;
+  const soldoutPlaces = useSoldoutPlaces(date.current(), diningType);
+  const hasLoggedSoldoutExposureRef = useRef(false);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
+    if (soldoutReportView === 'default' || hasLoggedSoldoutExposureRef.current) return;
+    hasLoggedSoldoutExposureRef.current = true;
+    logger.actionEventClick({
+      event_name: 'DA1',
+      event_category: 'exposure',
+      event_label: 'cafeteria__dining__abtest__exposure',
+      value: isSoldoutReportHeaderVariant ? 'A안' : 'B안',
+    });
+  }, [soldoutReportView, isSoldoutReportHeaderVariant, logger]);
+
+  const openSoldoutReportModal = (initialPlace?: DiningPlace) => {
+    const variantLabel = isSoldoutReportHeaderVariant ? 'A안' : 'B안';
+    logger.actionEventClick({
+      event_name: 'DA1',
+      event_label: 'cafeteria__dining__soldout__start',
+      value: isSoldoutReportHeaderVariant ? variantLabel : `${variantLabel}_${initialPlace ?? ''}`,
+    });
+    portalManager.open((portalOption: Portal) => (
+      <SoldoutReportModal
+        places={SOLDOUT_REPORT_PLACES}
+        soldoutPlaces={soldoutPlaces}
+        initialPlace={initialPlace}
+        placeLabelMap={SOLDOUT_REPORT_LABEL_BY_PLACE}
+        variantLabel={variantLabel}
+        onClose={() => portalOption.close()}
+      />
+    ));
+  };
+
+  useEffect(() => {
     setButtonContent(
-      <button type="button" aria-label="학생식당 운영 정보 안내" onClick={openCafeteriaInfo}>
-        <InformationIcon />
-      </button>,
+      <div className={styles['header-button__container']}>
+        {isSoldoutReportHeaderVariant && (
+          <button
+            type="button"
+            aria-label="품절 제보하기"
+            className={styles['header-button__icon']}
+            onClick={() => openSoldoutReportModal()}
+          >
+            <SoldoutReportIcon />
+          </button>
+        )}
+        <button
+          type="button"
+          aria-label="학생식당 운영 정보 안내"
+          className={styles['header-button__icon']}
+          onClick={openCafeteriaInfo}
+        >
+          <InformationIcon />
+        </button>
+      </div>,
     );
 
     return resetButtonContent;
-  }, [setButtonContent, resetButtonContent, openCafeteriaInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- openSoldoutReportModal은 logger/portalManager로만 재생성되는 안정적인 콜백이라 deps에서 제외
+  }, [setButtonContent, resetButtonContent, openCafeteriaInfo, isSoldoutReportHeaderVariant]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[dining] });
@@ -107,7 +176,10 @@ export default function MobileCafeteriaPage() {
           </div>
           <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
         </button>
-        <MobileDiningBlocks diningType={diningType} />
+        <MobileDiningBlocks
+          diningType={diningType}
+          onReportSoldout={!isSoldoutReportHeaderVariant ? openSoldoutReportModal : undefined}
+        />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <div

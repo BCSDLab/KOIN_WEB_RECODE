@@ -31,6 +31,13 @@
     }
   }
 
+  &__report-button {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
   &__details {
     display: flex;
     align-items: center;
