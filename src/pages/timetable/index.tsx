@@ -14,15 +14,20 @@ import {
   timetableQueryKeys,
 } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
+import { TimetableEditButton } from 'components/TimetablePage/components/MobileHeaderActions';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isServerAuthError } from 'utils/ssr/authError';
 import type { ServerRequestContext } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetablePage.module.scss';
@@ -141,6 +146,8 @@ function TimetablePage() {
   useScrollToTop();
   const semester = useSemester();
   const router = useRouter();
+  const logger = useLogger();
+  const goBack = useGoBack();
   const { timetableFrameId } = router.query;
   const { data: timetableFrameList } = useTimetableFrameList(semester);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
@@ -157,17 +164,32 @@ function TimetablePage() {
     isomorphicSessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
   }, []);
 
+  const handleBack = () => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'timetable_back',
+      value: '뒤로가기버튼',
+      previous_page: '시간표',
+      current_page: '메인',
+      duration_time: getElapsedSeconds('enterTimetablePage'),
+    });
+    goBack();
+  };
+
   return (
-    <div className={styles.page}>
-      {!isMobile ? (
-        <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      ) : (
-        <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      )}
-    </div>
+    <>
+      <MobilePageHeader title="시간표" rightAction={<TimetableEditButton />} onBack={handleBack} />
+      <div className={styles.page}>
+        {!isMobile ? (
+          <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        ) : (
+          <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        )}
+      </div>
+    </>
   );
 }
 
 export default TimetablePage;
 
-TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;

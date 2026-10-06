@@ -1,0 +1,15 @@
+@use "src/utils/scss/media" as media;
+
+// 페이지 루트는 `flex: 1`로 헤더를 뺀 나머지 높이를 채운다
+.root {
+  @include media.media-breakpoint(mobile) {
+    &--page {
+      min-height: 100dvh;
+    }
+
+    // 내부 영역이 스크롤하는 화면(채팅 등)은 문서 높이를 화면에 고정한다
+    &--fit-viewport {
+      height: 100dvh;
+    }
+  }
+}

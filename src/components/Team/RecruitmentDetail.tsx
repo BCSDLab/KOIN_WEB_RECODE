@@ -10,12 +10,12 @@ import ClockIcon from 'assets/svg/Team/clock.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import ProfileIcon from 'assets/svg/Team/profile.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import DeleteConfirmModal from 'components/Team/components/DeleteConfirmModal';
 import OwnerActionMenu from 'components/Team/components/OwnerActionMenu';
 import { RecruitmentBadges } from 'components/Team/components/RecruitmentCard';
 import { formatRecruitmentDate, MEETING_TYPE_LABEL } from 'components/Team/utils/recruitmentDisplay';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -340,14 +340,11 @@ export default function RecruitmentDetail() {
 
   return (
     <div className={styles.page}>
-      <div className={styles['mobile-header']}>
-        <SubPageHeader
-          title="팀원 모집"
-          rightAction={
-            data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined
-          }
-        />
-      </div>
+      <MobilePageHeader
+        title="팀원 모집"
+        background="gray"
+        rightAction={data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined}
+      />
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
       {router.isReady && !data && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>

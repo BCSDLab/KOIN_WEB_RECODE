@@ -109,6 +109,6 @@ function TeamProfilePage() {
   );
 }
 
-TeamProfilePage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamProfilePage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamProfilePage;

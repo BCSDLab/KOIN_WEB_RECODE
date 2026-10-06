@@ -17,4 +17,4 @@ export default function TeamRecruitmentEditPage() {
   );
 }
 
-TeamRecruitmentEditPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamRecruitmentEditPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

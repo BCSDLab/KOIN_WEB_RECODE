@@ -57,4 +57,4 @@ export default function TimetableListPage() {
   );
 }
 
-TimetableListPage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+TimetableListPage.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;

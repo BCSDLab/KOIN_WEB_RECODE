@@ -1,32 +1,23 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+import ArrowBackIcon from 'assets/svg/common/arrow-back-icon.svg';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 
-import styles from './SubPageHeader.module.scss';
+import styles from './PageHeader.module.scss';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
-interface SubPageHeaderProps {
-  title: string;
+interface PageHeaderProps {
+  title: ReactNode;
   onBack?: () => void;
   rightAction?: ReactNode;
-  backIcon?: ReactNode;
   className?: string;
-  size?: 'small' | 'medium';
 }
 
-export default function SubPageHeader({
-  title,
-  onBack,
-  rightAction,
-  backIcon,
-  className,
-  size = 'small',
-}: SubPageHeaderProps) {
-  const router = useRouter();
+export default function PageHeader({ title, onBack, rightAction, className }: PageHeaderProps) {
+  const goBack = useGoBack();
   const headerRef = useRef<HTMLDivElement>(null);
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const rightActionRef = useRef<HTMLDivElement>(null);
@@ -54,35 +45,18 @@ export default function SubPageHeader({
     return () => resizeObserver.disconnect();
   }, []);
 
-  const handleBack = () => {
-    if (onBack) {
-      onBack();
-
-      return;
-    }
-
-    router.back();
-  };
-
   return (
     <div ref={headerRef} className={cn({ [styles.header]: true, [className ?? '']: !!className })}>
       <button
         ref={backButtonRef}
         type="button"
         className={styles['header__back-button']}
-        onClick={handleBack}
+        onClick={onBack ?? (() => goBack())}
         aria-label="뒤로가기"
       >
-        {backIcon ?? <ArrowBackIcon />}
+        <ArrowBackIcon />
       </button>
-      <h1
-        className={cn({
-          [styles.header__title]: true,
-          [styles['header__title--medium']]: size === 'medium',
-        })}
-      >
-        {title}
-      </h1>
+      <h1 className={styles.header__title}>{title}</h1>
       <div ref={rightActionRef} className={styles['header__right-action']}>
         {rightAction ?? <div className={styles.header__spacer} />}
       </div>

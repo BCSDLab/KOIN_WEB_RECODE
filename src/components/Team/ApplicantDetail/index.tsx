@@ -6,10 +6,10 @@ import type { TeamRecruitmentApplicationDecision } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import DetailInfoSection from 'components/Team/components/DetailInfoSection';
 import SubmitConfirmModal from 'components/Team/components/SubmitConfirmModal';
 import { CATEGORY_LABEL } from 'components/Team/utils/recruitmentDisplay';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -146,9 +146,7 @@ export default function ApplicantDetail() {
 
   return (
     <>
-      <div className={styles['mobile-header']}>
-        <SubPageHeader title="지원자 상세" className={styles.header} />
-      </div>
+      <MobilePageHeader title="지원자 상세" background="gray" />
 
       <div className={styles.page}>
         <div className={styles.content}>

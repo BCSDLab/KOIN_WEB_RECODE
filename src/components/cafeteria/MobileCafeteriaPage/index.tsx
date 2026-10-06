@@ -8,8 +8,10 @@ import type { DiningPlace, DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
+import type { DiningType } from 'api/dinings/entity';
+import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
-import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
+import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useSoldoutPlaces from 'components/cafeteria/hooks/useSoldoutPlaces';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
@@ -24,8 +26,8 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
+import CafeteriaInfoWidget from './components/CafeteriaInfoWidget';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -39,7 +41,6 @@ export default function MobileCafeteriaPage() {
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
-  const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
@@ -183,14 +184,9 @@ export default function MobileCafeteriaPage() {
         />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
-      <div
-        className={cn({
-          [styles['cafeteria-info']]: true,
-          [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
-        })}
-      >
-        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />
-      </div>
+      <CafeteriaInfoBoundary>
+        <CafeteriaInfoWidget />
+      </CafeteriaInfoBoundary>
     </>
   );
 }

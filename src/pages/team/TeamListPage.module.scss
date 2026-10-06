@@ -22,7 +22,8 @@
   @include media.media-breakpoint(mobile) {
     position: static;
     width: 100%;
-    min-height: calc(100dvh - 53px);
+    flex: 1;
+    min-height: auto;
     margin: 0;
     padding: 0;
     background: #f8f8fa;

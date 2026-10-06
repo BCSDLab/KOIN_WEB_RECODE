@@ -39,6 +39,6 @@ function TeamProfileEditPage() {
   );
 }
 
-TeamProfileEditPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamProfileEditPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamProfileEditPage;

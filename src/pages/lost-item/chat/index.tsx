@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- 이미지가 동적으로 바뀌고 크기·비율이 제각각이라 sizes/fill 설정 비용 대비 이득이 작음 */
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
 // FIXME: svg 웹팩 로더가 쿼리와 무관하게 항상 컴포넌트를 반환해, addErrorImage의 img.src에 대입되는
@@ -15,6 +16,7 @@ import ChatHeaderMenu from 'components/Articles/LostItemChatPage/components/Chat
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatPolling from 'components/Articles/LostItemChatPage/hooks/useChatPolling';
 import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import {
   ChatLayout,
   ChatMessageInput,
@@ -24,23 +26,25 @@ import {
 } from 'components/ui/Chat';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { formatChatDate, formatChatTime, formatChatRoomListTime } from 'utils/ts/chatTime';
+import { parseQueryId } from 'utils/ts/parseServerSideParams';
 import showToast from 'utils/ts/showToast';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
 import styles from './LostItemChatPage.module.scss';
 
-function LostItemChatPage() {
+interface LostItemChatPageProps {
+  articleIdParam: string | null;
+  chatRoomIdParam: string | null;
+}
+
+function LostItemChatPage({ articleIdParam, chatRoomIdParam }: LostItemChatPageProps) {
   const isMobile = useMediaQuery();
   const isOnline = useNetworkStatus();
-  const { searchParams } = useParamsHandler();
   const { data: userInfo } = useUser();
 
   const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
@@ -50,9 +54,8 @@ function LostItemChatPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
-  const chatroomIdParam = searchParams.get('chatroomId');
-  const showList = !isMobile || !chatroomIdParam;
-  const showDetail = !isMobile || !!chatroomIdParam;
+  const showList = !isMobile || !chatRoomIdParam;
+  const showDetail = !isMobile || !!chatRoomIdParam;
 
   const {
     chatroomDetail,
@@ -63,28 +66,11 @@ function LostItemChatPage() {
     sendMessage: sendChatMessage,
     sendMessageAsync: sendChatMessageAsync,
   } = useChatPolling({
-    articleId: searchParams.get('articleId'),
-    chatroomId: chatroomIdParam,
+    articleId: articleIdParam,
+    chatroomId: chatRoomIdParam,
     isOnline,
     autoSelectFirst: showDetail,
   });
-
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-  const resetButtonContent = useHeaderButtonStore((state) => state.resetButtonContent);
-
-  useEffect(() => {
-    setCustomTitle(showDetail && chatroomDetail ? chatroomDetail.article_title : '쪽지');
-  }, [showDetail, chatroomDetail, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
-
-  useEffect(() => {
-    if (showDetail && chatroomDetail) {
-      setButtonContent(<ChatHeaderMenu onBlockClick={openDeleteModal} />);
-    }
-
-    return resetButtonContent;
-  }, [showDetail, chatroomDetail, openDeleteModal, setButtonContent, resetButtonContent]);
 
   const prevMessagesLengthRef = useRef(0);
 
@@ -147,7 +133,7 @@ function LostItemChatPage() {
       unread_message_count,
     }) => ({
       key: `${chat_room_id}-${article_id}`,
-      href: `${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`,
+      href: ROUTES.LostItemChat({ articleId: String(article_id), chatRoomId: String(chat_room_id) }),
       title: article_title,
       timeLabel: formatChatRoomListTime(last_message_at),
       preview: recent_message_content,
@@ -201,99 +187,127 @@ function LostItemChatPage() {
     return groups;
   }, []);
 
-  return (
-    <div className={styles.container}>
-      {!isMobile && <h1 className={styles.title}>쪽지</h1>}
+  const isChatroomOpen = showDetail && !!chatroomDetail;
 
-      <ChatLayout
-        className={styles['chat-container']}
-        sidebarClassName={styles['chat-list']}
-        panelClassName={styles['chat-view']}
-        sidebar={showList && <ChatRoomList items={chatRoomItems} />}
-      >
-        {showDetail && (
-          <>
-            {!(chatroomDetail && messages) && (
-              <div className={styles.chat__empty}>
-                선택된 채팅방이 없습니다.
-                <br />
-                왼쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
-              </div>
-            )}
-            {chatroomDetail && messages && (
-              <>
-                <div className={styles['chat-view--header']}>
-                  <div>
-                    {chatroomDetail.chat_partner_profile_image ? (
-                      <img
-                        src={chatroomDetail.chat_partner_profile_image}
-                        alt="분실물 이미지"
-                        className={styles['chat-list--item-profile']}
-                        onError={addErrorImage}
-                      />
-                    ) : (
-                      <div className={styles['chat-list--item-profile']}>
-                        <DefaultPhotoIcon />
+  return (
+    <>
+      <MobilePageHeader
+        title={isChatroomOpen ? chatroomDetail.article_title : '쪽지'}
+        rightAction={isChatroomOpen ? <ChatHeaderMenu onBlockClick={openDeleteModal} /> : undefined}
+      />
+      <div className={styles.container}>
+        {!isMobile && <h1 className={styles.title}>쪽지</h1>}
+
+        <ChatLayout
+          className={styles['chat-container']}
+          sidebarClassName={styles['chat-list']}
+          panelClassName={styles['chat-view']}
+          sidebar={showList && <ChatRoomList items={chatRoomItems} />}
+        >
+          {showDetail && (
+            <>
+              {!(chatroomDetail && messages) && (
+                <div className={styles.chat__empty}>
+                  선택된 채팅방이 없습니다.
+                  <br />
+                  왼쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
+                </div>
+              )}
+              {chatroomDetail && messages && (
+                <>
+                  <div className={styles['chat-view--header']}>
+                    <div>
+                      {chatroomDetail.chat_partner_profile_image ? (
+                        <img
+                          src={chatroomDetail.chat_partner_profile_image}
+                          alt="분실물 이미지"
+                          className={styles['chat-list--item-profile']}
+                          onError={addErrorImage}
+                        />
+                      ) : (
+                        <div className={styles['chat-list--item-profile']}>
+                          <DefaultPhotoIcon />
+                        </div>
+                      )}
+                      <div className={styles['chat-view--title']}>{chatroomDetail.article_title}</div>
+                    </div>
+                    <button type="button" className={styles['chat-block']} onClick={openDeleteModal}>
+                      <BlockIcon />
+                      <div>차단하기</div>
+                    </button>
+                  </div>
+
+                  <div className={styles['message-container']} ref={chatContainerRef}>
+                    <ChatMessageList groups={messageGroups} />
+                  </div>
+                  <div className={styles['chat-input-container-wrapper']}>
+                    {!isOnline && (
+                      <div className={styles['offline-banner']}>
+                        오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.
                       </div>
                     )}
-                    <div className={styles['chat-view--title']}>{chatroomDetail.article_title}</div>
+                    <ChatMessageInput
+                      classNames={{
+                        container: styles['chat-input-container'],
+                        imageControl: styles['image-button'],
+                        textarea: styles['chat-input'],
+                        sendButton: styles['send-button'],
+                      }}
+                      value={inputValue}
+                      onChange={setInputValue}
+                      onSend={sendMessage}
+                      onImageChange={() => {
+                        void uploadImage();
+                      }}
+                      disabled={!isOnline}
+                      placeholder={isOnline ? undefined : '오프라인 상태입니다'}
+                      fileInputRef={imgRef}
+                      imageInputMultiple
+                    />
                   </div>
-                  <button type="button" className={styles['chat-block']} onClick={openDeleteModal}>
-                    <BlockIcon />
-                    <div>차단하기</div>
-                  </button>
-                </div>
+                </>
+              )}
+            </>
+          )}
+        </ChatLayout>
 
-                <div className={styles['message-container']} ref={chatContainerRef}>
-                  <ChatMessageList groups={messageGroups} />
-                </div>
-                <div className={styles['chat-input-container-wrapper']}>
-                  {!isOnline && (
-                    <div className={styles['offline-banner']}>오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.</div>
-                  )}
-                  <ChatMessageInput
-                    classNames={{
-                      container: styles['chat-input-container'],
-                      imageControl: styles['image-button'],
-                      textarea: styles['chat-input'],
-                      sendButton: styles['send-button'],
-                    }}
-                    value={inputValue}
-                    onChange={setInputValue}
-                    onSend={sendMessage}
-                    onImageChange={() => {
-                      void uploadImage();
-                    }}
-                    disabled={!isOnline}
-                    placeholder={isOnline ? undefined : '오프라인 상태입니다'}
-                    fileInputRef={imgRef}
-                    imageInputMultiple
-                  />
-                </div>
-              </>
-            )}
-          </>
+        {isDeleteModalOpen && (
+          <DeleteModal
+            articleId={Number(articleId)}
+            chatroomId={Number(chatroomId)}
+            closeDeleteModal={closeDeleteModal}
+          />
         )}
-      </ChatLayout>
-
-      {isDeleteModalOpen && (
-        <DeleteModal
-          articleId={Number(articleId)}
-          chatroomId={Number(chatroomId)}
-          closeDeleteModal={closeDeleteModal}
-        />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 
 export default function LostItemChatPageWrapper() {
   const isLoggedIn = useIsLoggedIn();
+  const router = useRouter();
+  const articleId = router.query.articleId;
+  const chatRoomId = router.query.chatRoomId ?? router.query.chatroomId;
+  const isList = articleId === undefined && chatRoomId === undefined;
+  const hasValidRoom =
+    parseQueryId(chatRoomId) !== null && (articleId === undefined || parseQueryId(articleId) !== null);
+  const hasInvalidParams = !isList && !hasValidRoom;
 
-  if (!isLoggedIn) return null;
+  useEffect(() => {
+    if (router.isReady && hasInvalidParams) {
+      void router.replace(ROUTES.LostItemChat());
+    }
+  }, [router, hasInvalidParams]);
 
-  return <LostItemChatPage />;
+  if (!isLoggedIn || !router.isReady || hasInvalidParams) return null;
+
+  return (
+    <LostItemChatPage
+      articleIdParam={typeof articleId === 'string' ? articleId : null}
+      chatRoomIdParam={typeof chatRoomId === 'string' ? chatRoomId : null}
+    />
+  );
 }
 
 LostItemChatPageWrapper.requireAuth = true;
-LostItemChatPageWrapper.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+LostItemChatPageWrapper.getLayout = (page: React.ReactElement) => <Layout mobileHeader="page">{page}</Layout>;
