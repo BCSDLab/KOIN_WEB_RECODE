@@ -7,8 +7,6 @@ import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
-import showMobileToast from 'components/feedback/Toast/showMobileToast';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -70,54 +68,6 @@ export default function MobileHeader({ openModal, route }: MobileHeaderProps) {
     openSidebar();
   };
 
-  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
-  const isArticleRoute = pathname.startsWith(ROUTES.Articles());
-  const isLostItemLightRoute = pathname.startsWith(ROUTES.LostItems());
-  const isLostItemCustomTitleRoute =
-    [ROUTES.LostItemLost(), ROUTES.LostItemFound(), ROUTES.LostItemChat()].includes(pathname) ||
-    pathname.startsWith(ROUTES.LostItemReport({ id: '' }));
-  const isCafeteriaRoute = pathname.startsWith(ROUTES.Cafeteria());
-  const useLightHeader = isClubRoute || isArticleRoute || isLostItemLightRoute || isCafeteriaRoute;
-
-  if (isBusTimetableRoute) {
-    return (
-      <SubPageHeader
-        title={pathname.startsWith(`${ROUTES.BusCourseShuttle()}/`) && customTitle ? customTitle : '버스 시간표'}
-        size="medium"
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-      />
-    );
-  }
-
-  if (isTimetableRoute) {
-    const isTimetableList = pathname === ROUTES.TimetableList();
-    const getRightAction = () => {
-      if (isTimetableList) return isCustomButton ? buttonState.content : undefined;
-
-      return (
-        <button
-          type="button"
-          className={styles['mobileheader__action-button']}
-          aria-label="시간표 수정"
-          onClick={() => showMobileToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.')}
-        >
-          <TimetableSquarePenIcon />
-        </button>
-      );
-    };
-
-    return (
-      <SubPageHeader
-        title={isTimetableList ? '시간표 목록' : '시간표'}
-        backIcon={<TimetableBackIcon />}
-        size="medium"
-        onBack={backInDetailPage}
-        className={styles['mobileheader--sub-page']}
-        rightAction={getRightAction()}
-      />
-    );
-  }
   const { isMain, isClub: isClubRoute, isLight: useLightHeader } = route;
 
   return (

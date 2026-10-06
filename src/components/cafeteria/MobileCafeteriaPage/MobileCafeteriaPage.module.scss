@@ -1,17 +1,3 @@
-.header-button {
-  &__container {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
 .type-select {
   display: flex;
   justify-content: space-around;
