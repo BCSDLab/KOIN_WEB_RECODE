@@ -13,6 +13,7 @@ import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useSoldoutPlaces from 'components/cafeteria/hooks/useSoldoutPlaces';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
+import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { DINING_TYPES, DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
@@ -32,12 +33,6 @@ import styles from './MobileCafeteriaPage.module.scss';
 const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
 const SOLDOUT_REPORT_PLACES: DiningPlace[] = PLACE_ORDER.filter((place) => place !== '2캠퍼스');
-const SOLDOUT_REPORT_LABEL_BY_PLACE: Partial<Record<DiningPlace, string>> = {
-  A코너: 'A코스',
-  B코너: 'B코스',
-  C코너: 'C코스',
-  능수관: '능수관',
-};
 
 export default function MobileCafeteriaPage() {
   const { date, diningType, setDiningType } = useCafeteriaParams();
@@ -68,6 +63,12 @@ export default function MobileCafeteriaPage() {
   }, [soldoutReportView, isSoldoutReportHeaderVariant, logger]);
 
   const openSoldoutReportModal = (initialPlace?: DiningPlace) => {
+    if (typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches) {
+      showMobileToast('info', '모바일에서만 지원하는 기능입니다. 모바일을 이용해주세요.');
+
+      return;
+    }
+
     const variantLabel = isSoldoutReportHeaderVariant ? 'A안' : 'B안';
     logger.actionEventClick({
       event_name: 'DA1',
@@ -79,7 +80,6 @@ export default function MobileCafeteriaPage() {
         places={SOLDOUT_REPORT_PLACES}
         soldoutPlaces={soldoutPlaces}
         initialPlace={initialPlace}
-        placeLabelMap={SOLDOUT_REPORT_LABEL_BY_PLACE}
         variantLabel={variantLabel}
         onClose={() => portalOption.close()}
       />
@@ -179,6 +179,7 @@ export default function MobileCafeteriaPage() {
         <MobileDiningBlocks
           diningType={diningType}
           onReportSoldout={!isSoldoutReportHeaderVariant ? openSoldoutReportModal : undefined}
+          reportablePlaces={SOLDOUT_REPORT_PLACES}
         />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>

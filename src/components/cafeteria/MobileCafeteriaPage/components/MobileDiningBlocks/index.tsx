@@ -15,9 +15,10 @@ import styles from './MobileDiningBlocks.module.scss';
 interface MobileDiningBlocksProps {
   diningType: DiningType;
   onReportSoldout?: (place: DiningPlace) => void;
+  reportablePlaces?: DiningPlace[];
 }
 
-export default function MobileDiningBlocks({ diningType, onReportSoldout }: MobileDiningBlocksProps) {
+export default function MobileDiningBlocks({ diningType, onReportSoldout, reportablePlaces }: MobileDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { date } = useCafeteriaParams();
@@ -46,7 +47,7 @@ export default function MobileDiningBlocks({ diningType, onReportSoldout }: Mobi
             <div className={styles.category__type}>
               <div className={styles['category__type--title']}>
                 {dining.place}
-                {onReportSoldout && (
+                {onReportSoldout && (reportablePlaces?.includes(dining.place) ?? true) && (
                   <button
                     type="button"
                     className={styles['category__report-button']}

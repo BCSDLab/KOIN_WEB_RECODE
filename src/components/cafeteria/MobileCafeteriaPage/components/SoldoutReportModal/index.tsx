@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import type { DiningPlace } from 'api/dinings/entity';
-import CameraAddIcon from 'assets/svg/cafeteria/soldout-report-camera-icon.svg';
 import CloseIcon from 'assets/svg/cafeteria/soldout-report-close-icon.svg';
+import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import showToast from 'utils/ts/showToast';
 
+import PhotoCapture from './components/PhotoCapture';
 import styles from './SoldoutReportModal.module.scss';
 
 interface SoldoutReportModalProps {
   places: DiningPlace[];
   soldoutPlaces?: DiningPlace[];
   initialPlace?: DiningPlace;
-  placeLabelMap: Partial<Record<DiningPlace, string>>;
   variantLabel: string;
   onClose: () => void;
 }
@@ -23,12 +22,10 @@ export default function SoldoutReportModal({
   places,
   soldoutPlaces = [],
   initialPlace,
-  placeLabelMap,
   variantLabel,
   onClose,
 }: SoldoutReportModalProps) {
   const logger = useLogger();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const availablePlaces = places.filter((place) => !soldoutPlaces.includes(place));
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace | null>(
     initialPlace && !soldoutPlaces.includes(initialPlace) ? initialPlace : (availablePlaces[0] ?? null),
@@ -43,7 +40,6 @@ export default function SoldoutReportModal({
     [photoPreviewUrl],
   );
 
-  // Notion 로깅 스펙 상 "코너 선택(select)" 단계는 A안(헤더 버튼)에만 존재한다.
   const handlePlaceSelect = (place: DiningPlace) => {
     if (variantLabel === 'A안') {
       logger.actionEventClick({
@@ -56,14 +52,7 @@ export default function SoldoutReportModal({
     setSelectedPlace(place);
   };
 
-  const handleCameraClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const handlePhotoCapture = (file: File) => {
     logger.actionEventClick({
       event_name: 'DA1',
       event_label: 'cafeteria__dining__soldout__photo',
@@ -86,7 +75,7 @@ export default function SoldoutReportModal({
       event_label: 'cafeteria__dining__soldout__submit',
       value: `${variantLabel}_${selectedPlace}`,
     });
-    showToast('success', `${placeLabelMap[selectedPlace] ?? selectedPlace} 품절 제보되었습니다.`);
+    showMobileToast('success', `${selectedPlace} 품절 제보되었습니다.`);
     onClose();
   };
 
@@ -112,7 +101,7 @@ export default function SoldoutReportModal({
         </div>
 
         <div className={styles.section}>
-          <span className={styles.section__label}>품절 코스 선택</span>
+          <span className={styles.section__label}>품절 코너 선택</span>
           <div className={styles.chips}>
             {places.map((place) => {
               const isSoldout = soldoutPlaces.includes(place);
@@ -129,7 +118,7 @@ export default function SoldoutReportModal({
                   disabled={isSoldout}
                   onClick={() => handlePlaceSelect(place)}
                 >
-                  {placeLabelMap[place] ?? place}
+                  {place}
                 </button>
               );
             })}
@@ -139,31 +128,7 @@ export default function SoldoutReportModal({
         <div className={styles.section}>
           <span className={styles.section__label}>품절 사진 촬영</span>
           <div className={styles.photo}>
-            <button
-              type="button"
-              className={styles['photo__camera-box']}
-              aria-label="품절 사진 촬영하기"
-              onClick={handleCameraClick}
-            >
-              {photoPreviewUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- 사용자가 방금 찍은 로컬 파일 미리보기라 next/image 최적화 대상이 아님
-                <img src={photoPreviewUrl} alt="품절 사진 미리보기" className={styles['photo__preview-image']} />
-              ) : (
-                <>
-                  <CameraAddIcon />
-                  <span className={styles['photo__camera-text']}>사진 촬영하기</span>
-                </>
-              )}
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className={styles['photo__file-input']}
-              onChange={handlePhotoChange}
-              aria-label="품절 사진 파일 선택"
-            />
+            <PhotoCapture previewUrl={photoPreviewUrl} onCapture={handlePhotoCapture} />
             <div className={styles.photo__guide}>
               <ul>
                 <li>배식대의 품절 안내판 촬영</li>
