@@ -105,6 +105,7 @@ export default function SoldoutReportModal({
           <div className={styles.chips}>
             {places.map((place) => {
               const isSoldout = soldoutPlaces.includes(place);
+              const isLockedByVariant = variantLabel === 'B안' && place !== selectedPlace;
 
               return (
                 <button
@@ -113,9 +114,9 @@ export default function SoldoutReportModal({
                   className={cn({
                     [styles.chip]: true,
                     [styles['chip--selected']]: place === selectedPlace,
-                    [styles['chip--soldout']]: isSoldout,
+                    [styles['chip--soldout']]: isSoldout || isLockedByVariant,
                   })}
-                  disabled={isSoldout}
+                  disabled={isSoldout || isLockedByVariant}
                   onClick={() => handlePlaceSelect(place)}
                 >
                   {place}

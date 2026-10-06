@@ -41,6 +41,8 @@
   &__right-action {
     position: relative;
     display: flex;
+    align-items: center;
+    gap: 16px;
     justify-self: end;
     width: max-content;
   }
