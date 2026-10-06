@@ -109,7 +109,7 @@ function Cafeteria() {
     <>
       <MobilePageHeader
         title="식단"
-        rightAction={(
+        rightAction={
           <>
             {isSoldoutReportHeaderVariant && (
               <HeaderIconButton aria-label="품절 제보하기" onClick={() => openSoldoutReportModal()}>
@@ -118,7 +118,7 @@ function Cafeteria() {
             )}
             <CafeteriaInfoButton />
           </>
-        )}
+        }
       />
       <div className={styles.page}>
         <div className={styles.page__content} key={date.key}>
