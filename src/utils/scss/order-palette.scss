@@ -1,0 +1,51 @@
+// KOIN_ORDER_WEBVIEW(Tailwind theme)에서 옮겨 온 모바일 상점·주문 화면 색·그림자.
+// 이전한 화면(components/Store/mobile, components/Order)에서만 쓴다.
+// Tailwind 기본 팔레트(oklch) 값은 브라우저가 그리는 sRGB 값으로 환산했다.
+// 사용: @use "src/utils/scss/order-palette" as palette;  color: palette.$primary-500;
+
+// primary
+$primary-100: #ead3fe;
+$primary-200: #ddb1fe;
+$primary-300: #ce86fd;
+$primary-500: #b611f5;
+$primary-700: #7d08a4;
+
+// neutral (300 이상은 order theme, 50~200은 Tailwind 기본)
+$neutral-50: #fafafa;
+$neutral-100: #f5f5f5;
+$neutral-200: #e5e5e5;
+$neutral-300: #e1e1e1;
+$neutral-400: #cacaca;
+$neutral-500: #727272;
+$neutral-600: #4b4b4b;
+$neutral-800: #000;
+
+// gray (Tailwind 기본)
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5dc;
+$gray-400: #99a1af;
+$gray-500: #6a7282;
+$gray-600: #4a5565;
+$gray-700: #364153;
+
+// semantic
+$info-500: #4ba1ff;
+$danger-600: #f64c4c;
+$sub-500: #f7941e;
+
+// 화면 고유
+$page-background: #f8f8fa;
+$star-filled: #ffc62b;
+$star-empty: #d9d9d9;
+
+// shadow
+$shadow-1:
+  0 1px 1px rgb(0 0 0 / 2%),
+  0 2px 4px rgb(0 0 0 / 4%);
+$shadow-2:
+  0 4px 10px rgb(0 0 0 / 8%),
+  0 1px 4px rgb(0 0 0 / 4%);
+$shadow-4:
+  0 24px 60px rgb(0 0 0 / 12%),
+  0 8px 20px rgb(0 0 0 / 6%);

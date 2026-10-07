@@ -1,0 +1,95 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: fit-content;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  font-weight: 600;
+
+  &--xs {
+    padding: 4px 8px;
+  }
+
+  &--sm {
+    padding: 6px 8px;
+  }
+
+  &--md {
+    padding: 4px 12px;
+  }
+
+  &--lg {
+    padding: 6px 12px;
+  }
+
+  &--font-sm {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &--font-xs {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &--primary-default {
+    border-color: palette.$primary-500;
+    background-color: palette.$primary-500;
+    color: #fff;
+  }
+
+  &--primary-outlined {
+    border-color: palette.$primary-500;
+    background-color: #fff;
+    color: palette.$primary-500;
+  }
+
+  &--primaryLight-default {
+    border-color: palette.$primary-300;
+    background-color: palette.$primary-300;
+    color: #fff;
+  }
+
+  &--primaryLight-outlined {
+    border-color: palette.$primary-300;
+    background-color: #fff;
+    color: palette.$primary-300;
+  }
+
+  &--neutral-default {
+    border-color: palette.$neutral-300;
+    background-color: #fff;
+    color: palette.$neutral-500;
+  }
+
+  &--neutral-outlined {
+    border-width: 0;
+    background-color: #fff;
+    color: palette.$neutral-400;
+  }
+
+  &--white-default {
+    border-color: #fff;
+    background-color: #fff;
+    color: palette.$primary-300;
+  }
+
+  &--white-outlined {
+    border-color: palette.$primary-500;
+    background-color: #fff;
+    color: palette.$primary-500;
+  }
+
+  &__start-icon {
+    width: 16px;
+  }
+
+  &__end-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

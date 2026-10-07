@@ -1,0 +1,79 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  box-shadow: palette.$shadow-1;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &--sm {
+    height: fit-content;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &--md {
+    padding: 6px 28px;
+  }
+
+  &--lg {
+    padding: 12px;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--primary {
+    border-color: palette.$primary-500;
+    background-color: palette.$primary-500;
+    color: #fff;
+  }
+
+  &--neutral {
+    border-color: palette.$neutral-200;
+    background-color: #fff;
+    color: palette.$primary-500;
+  }
+
+  &--gray {
+    border-color: palette.$neutral-300;
+    background-color: #fff;
+    color: palette.$neutral-500;
+  }
+
+  &--white {
+    border-color: palette.$neutral-200;
+    background-color: #fff;
+    color: palette.$neutral-500;
+  }
+
+  &--darkGray {
+    border-color: palette.$neutral-200;
+    background-color: palette.$neutral-200;
+    color: palette.$neutral-500;
+  }
+
+  &--disabled {
+    background-color: palette.$neutral-300;
+    color: #fff;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &__start-icon {
+    margin-right: 8px;
+  }
+
+  &__end-icon {
+    margin-left: 8px;
+  }
+}
