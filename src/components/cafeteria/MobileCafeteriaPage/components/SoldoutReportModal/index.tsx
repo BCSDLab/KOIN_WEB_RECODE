@@ -5,7 +5,9 @@ import type { DiningPlace } from 'api/dinings/entity';
 import CloseIcon from 'assets/svg/cafeteria/soldout-report-close-icon.svg';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useDinings from 'components/cafeteria/hooks/useDinings';
+import { getSoldoutPlaces } from 'components/cafeteria/utils/filter';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
+import { SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
@@ -13,20 +15,17 @@ import PhotoCapture from './components/PhotoCapture';
 import styles from './SoldoutReportModal.module.scss';
 
 interface SoldoutReportModalProps {
-  places: DiningPlace[];
   initialPlace?: DiningPlace;
   variantLabel: string;
   onClose: () => void;
 }
 
-export default function SoldoutReportModal({ places, initialPlace, variantLabel, onClose }: SoldoutReportModalProps) {
+export default function SoldoutReportModal({ initialPlace, variantLabel, onClose }: SoldoutReportModalProps) {
   const logger = useLogger();
   const { date, diningType } = useCafeteriaParams();
   const { dinings } = useDinings(date.current());
-  const soldoutPlaces = dinings
-    .filter((dining) => dining.type === diningType && dining.soldout_at)
-    .map((dining) => dining.place);
-  const availablePlaces = places.filter((place) => !soldoutPlaces.includes(place));
+  const soldoutPlaces = getSoldoutPlaces(dinings, diningType);
+  const availablePlaces = SOLDOUT_REPORT_PLACES.filter((place) => !soldoutPlaces.includes(place));
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace | null>(
     initialPlace && !soldoutPlaces.includes(initialPlace) ? initialPlace : (availablePlaces[0] ?? null),
   );
@@ -67,7 +66,7 @@ export default function SoldoutReportModal({ places, initialPlace, variantLabel,
   const canSubmit = !!selectedPlace && !!photoFile;
 
   const handleSubmit = () => {
-    if (!canSubmit || !selectedPlace) return;
+    if (!canSubmit) return;
 
     logger.actionEventClick({
       event_name: 'DA1',
@@ -103,7 +102,7 @@ export default function SoldoutReportModal({ places, initialPlace, variantLabel,
         <div className={styles.section}>
           <span className={styles.section__label}>품절 코너 선택</span>
           <div className={styles.chips}>
-            {places.map((place) => {
+            {SOLDOUT_REPORT_PLACES.map((place) => {
               const isSoldout = soldoutPlaces.includes(place);
               const isLockedByVariant = variantLabel === 'B안' && place !== selectedPlace;
 

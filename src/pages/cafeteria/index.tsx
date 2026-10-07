@@ -18,7 +18,6 @@ import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
-import { SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -93,7 +92,6 @@ function Cafeteria() {
     });
     portalManager.open((portalOption: Portal) => (
       <SoldoutReportModal
-        places={SOLDOUT_REPORT_PLACES}
         initialPlace={initialPlace}
         variantLabel={variantLabel}
         onClose={() => portalOption.close()}
