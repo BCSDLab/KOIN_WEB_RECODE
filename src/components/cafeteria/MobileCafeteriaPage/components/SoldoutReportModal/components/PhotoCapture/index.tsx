@@ -20,6 +20,7 @@ export default function PhotoCapture({ previewUrl, onCapture }: PhotoCaptureProp
     const file = e.target.files?.[0];
     if (!file) return;
     onCapture(file);
+    e.target.value = '';
   };
 
   return (
@@ -42,7 +43,6 @@ export default function PhotoCapture({ previewUrl, onCapture }: PhotoCaptureProp
         capture="environment"
         className={styles['file-input']}
         onChange={handleChange}
-        aria-label="품절 사진 파일 선택"
       />
     </>
   );
