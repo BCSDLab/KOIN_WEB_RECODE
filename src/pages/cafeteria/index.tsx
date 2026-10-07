@@ -18,7 +18,7 @@ import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import { useABTestViewWithStatus } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -60,8 +60,11 @@ function Cafeteria() {
   const { date } = useCafeteriaParams();
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const soldoutReportView = useABTestView(SOLDOUT_REPORT_AB_TEST_TITLE);
+  const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
+    useABTestViewWithStatus(SOLDOUT_REPORT_AB_TEST_TITLE);
   const isSoldoutReportHeaderVariant = soldoutReportView === SOLDOUT_REPORT_VARIANT_HEADER;
+  const isSoldoutReportHeaderReady = !isSoldoutReportPending && isSoldoutReportHeaderVariant;
+  const isSoldoutReportCardReady = !isSoldoutReportPending && !isSoldoutReportHeaderVariant;
   const hasLoggedSoldoutExposureRef = useRef(false);
 
   useScrollToTop();
@@ -105,7 +108,7 @@ function Cafeteria() {
         title="식단"
         rightAction={
           <>
-            {isSoldoutReportHeaderVariant && (
+            {isSoldoutReportHeaderReady && (
               <HeaderIconButton aria-label="품절 제보하기" onClick={() => openSoldoutReportModal()}>
                 <SoldoutReportIcon />
               </HeaderIconButton>
@@ -117,7 +120,7 @@ function Cafeteria() {
       <div className={styles.page}>
         <div className={styles.page__content} key={date.key}>
           {isMobile ? (
-            <MobileCafeteriaPage onReportSoldout={!isSoldoutReportHeaderVariant ? openSoldoutReportModal : undefined} />
+            <MobileCafeteriaPage onReportSoldout={isSoldoutReportCardReady ? openSoldoutReportModal : undefined} />
           ) : (
             <PCCafeteriaPage />
           )}
