@@ -9,7 +9,6 @@ import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import CafeteriaInfoButton from 'components/cafeteria/components/CafeteriaInfoButton';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
-import useSoldoutPlaces from 'components/cafeteria/hooks/useSoldoutPlaces';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
@@ -19,7 +18,7 @@ import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
-import { PLACE_ORDER } from 'static/cafeteria';
+import { SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -31,7 +30,6 @@ import styles from './Cafeteria.module.scss';
 
 const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
-const SOLDOUT_REPORT_PLACES: DiningPlace[] = PLACE_ORDER.filter((place) => place !== '2캠퍼스');
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
@@ -60,12 +58,11 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
 function Cafeteria() {
   const isMobile = useMediaQuery();
-  const { date, diningType } = useCafeteriaParams();
+  const { date } = useCafeteriaParams();
   const logger = useLogger();
   const portalManager = useModalPortal();
   const soldoutReportView = useABTestView(SOLDOUT_REPORT_AB_TEST_TITLE);
   const isSoldoutReportHeaderVariant = soldoutReportView === SOLDOUT_REPORT_VARIANT_HEADER;
-  const soldoutPlaces = useSoldoutPlaces(date.current(), diningType);
   const hasLoggedSoldoutExposureRef = useRef(false);
 
   useScrollToTop();
@@ -82,7 +79,7 @@ function Cafeteria() {
   }, [soldoutReportView, isSoldoutReportHeaderVariant, logger]);
 
   const openSoldoutReportModal = (initialPlace?: DiningPlace) => {
-    if (typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches) {
+    if (!window.matchMedia('(pointer: coarse)').matches) {
       showMobileToast('info', '모바일에서만 지원하는 기능입니다. 모바일을 이용해주세요.');
 
       return;
@@ -97,7 +94,6 @@ function Cafeteria() {
     portalManager.open((portalOption: Portal) => (
       <SoldoutReportModal
         places={SOLDOUT_REPORT_PLACES}
-        soldoutPlaces={soldoutPlaces}
         initialPlace={initialPlace}
         variantLabel={variantLabel}
         onClose={() => portalOption.close()}
@@ -123,10 +119,7 @@ function Cafeteria() {
       <div className={styles.page}>
         <div className={styles.page__content} key={date.key}>
           {isMobile ? (
-            <MobileCafeteriaPage
-              onReportSoldout={!isSoldoutReportHeaderVariant ? openSoldoutReportModal : undefined}
-              reportablePlaces={SOLDOUT_REPORT_PLACES}
-            />
+            <MobileCafeteriaPage onReportSoldout={!isSoldoutReportHeaderVariant ? openSoldoutReportModal : undefined} />
           ) : (
             <PCCafeteriaPage />
           )}

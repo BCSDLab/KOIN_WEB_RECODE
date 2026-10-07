@@ -20,10 +20,9 @@ import styles from './MobileCafeteriaPage.module.scss';
 
 interface MobileCafeteriaPageProps {
   onReportSoldout?: (initialPlace?: DiningPlace) => void;
-  reportablePlaces?: DiningPlace[];
 }
 
-export default function MobileCafeteriaPage({ onReportSoldout, reportablePlaces }: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage({ onReportSoldout }: MobileCafeteriaPageProps) {
   const { diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
   const router = useRouter();
@@ -92,11 +91,7 @@ export default function MobileCafeteriaPage({ onReportSoldout, reportablePlaces 
           </div>
           <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
         </button>
-        <MobileDiningBlocks
-          diningType={diningType}
-          onReportSoldout={onReportSoldout}
-          reportablePlaces={reportablePlaces}
-        />
+        <MobileDiningBlocks diningType={diningType} onReportSoldout={onReportSoldout} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <CafeteriaInfoBoundary>

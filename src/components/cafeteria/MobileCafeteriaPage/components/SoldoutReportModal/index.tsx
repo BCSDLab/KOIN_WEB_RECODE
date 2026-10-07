@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import type { DiningPlace } from 'api/dinings/entity';
 import CloseIcon from 'assets/svg/cafeteria/soldout-report-close-icon.svg';
+import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+import useDinings from 'components/cafeteria/hooks/useDinings';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -12,20 +14,18 @@ import styles from './SoldoutReportModal.module.scss';
 
 interface SoldoutReportModalProps {
   places: DiningPlace[];
-  soldoutPlaces?: DiningPlace[];
   initialPlace?: DiningPlace;
   variantLabel: string;
   onClose: () => void;
 }
 
-export default function SoldoutReportModal({
-  places,
-  soldoutPlaces = [],
-  initialPlace,
-  variantLabel,
-  onClose,
-}: SoldoutReportModalProps) {
+export default function SoldoutReportModal({ places, initialPlace, variantLabel, onClose }: SoldoutReportModalProps) {
   const logger = useLogger();
+  const { date, diningType } = useCafeteriaParams();
+  const { dinings } = useDinings(date.current());
+  const soldoutPlaces = dinings
+    .filter((dining) => dining.type === diningType && dining.soldout_at)
+    .map((dining) => dining.place);
   const availablePlaces = places.filter((place) => !soldoutPlaces.includes(place));
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace | null>(
     initialPlace && !soldoutPlaces.includes(initialPlace) ? initialPlace : (availablePlaces[0] ?? null),

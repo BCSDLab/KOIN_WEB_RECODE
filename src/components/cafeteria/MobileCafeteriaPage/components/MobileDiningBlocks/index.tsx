@@ -6,7 +6,7 @@ import DetailImage from 'components/cafeteria/MobileCafeteriaPage/components/Det
 import MobileMealImage from 'components/cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { filterDinings } from 'components/cafeteria/utils/filter';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
+import { DINING_TYPE_MAP, SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
@@ -15,10 +15,9 @@ import styles from './MobileDiningBlocks.module.scss';
 interface MobileDiningBlocksProps {
   diningType: DiningType;
   onReportSoldout?: (place: DiningPlace) => void;
-  reportablePlaces?: DiningPlace[];
 }
 
-export default function MobileDiningBlocks({ diningType, onReportSoldout, reportablePlaces }: MobileDiningBlocksProps) {
+export default function MobileDiningBlocks({ diningType, onReportSoldout }: MobileDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { date } = useCafeteriaParams();
@@ -47,7 +46,7 @@ export default function MobileDiningBlocks({ diningType, onReportSoldout, report
             <div className={styles.category__type}>
               <div className={styles['category__type--title']}>
                 {dining.place}
-                {onReportSoldout && (reportablePlaces?.includes(dining.place) ?? true) && (
+                {onReportSoldout && SOLDOUT_REPORT_PLACES.includes(dining.place) && (
                   <button
                     type="button"
                     className={styles['category__report-button']}
