@@ -1,0 +1,13 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW pages/Search 이전. 본문은 헤더(60px) 아래 화면 높이를 채운다
+.page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  padding: 0 16px 8px;
+  background-color: palette.$page-background;
+}
