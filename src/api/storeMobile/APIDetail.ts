@@ -36,8 +36,12 @@ export class ShopListV3<R extends ShopListResponse> implements APIRequest<R> {
 
   params: { sorter?: string; filter?: string };
 
+  // qsStringify는 undefined를 "undefined" 문자열로 보내므로 값이 있는 키만 담는다
   constructor(sorter?: string, filter?: string) {
-    this.params = { sorter, filter };
+    this.params = {
+      ...(sorter !== undefined && { sorter }),
+      ...(filter !== undefined && { filter }),
+    };
   }
 }
 
