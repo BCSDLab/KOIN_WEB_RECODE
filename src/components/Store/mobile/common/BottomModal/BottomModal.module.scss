@@ -1,0 +1,64 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW BottomModal(styles/modal.css의 bottom-modal-*) 계산값을 옮겼다
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: rgb(0 0 0 / 70%);
+}
+
+.modal {
+  position: static;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 32px 32px 0 0;
+  background-color: #fff;
+  box-shadow: palette.$shadow-4;
+  color: #000;
+
+  // 오라클 body의 font-family 체인(대소문자 무관하게 next/font의 pretendard 페이스와 매칭)
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.header {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 32px;
+  border-bottom: 0.5px solid palette.$neutral-300;
+  color: palette.$primary-500;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.content {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 32px 12px;
+  color: palette.$neutral-600;
+  font-size: 14px;
+  line-height: calc(1.25 / 0.875);
+}
+
+.footer {
+  box-sizing: border-box;
+  padding: 12px 32px;
+  border-top: 0.5px solid palette.$neutral-300;
+  color: palette.$neutral-600;
+  font-size: 14px;
+  line-height: calc(1.25 / 0.875);
+}

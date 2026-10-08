@@ -1,0 +1,309 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW NearbyShops 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
+
+// order styles/utilities.css의 scrollbar-responsive
+@mixin scrollbar-responsive {
+  @media (pointer: coarse) {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @media (pointer: fine) {
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background-color: #e1e1e1;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+}
+
+@mixin reset-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+// 본문은 헤더(60px) 아래 화면 높이를 페이지 배경으로 채운다
+.page {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+
+  // 오라클 HomeLayout의 pb-30
+  padding-bottom: 120px;
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인(대소문자 무관하게 next/font의 pretendard 페이스와 매칭)
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.content {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.search-section {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 980px;
+  padding: 0 24px;
+}
+
+.categories {
+  @include scrollbar-responsive;
+
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  width: calc(100% - 24px);
+  margin: 0 24px;
+  padding-top: 8px;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.category {
+  @include reset-button;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 56px;
+  scroll-snap-align: start;
+
+  &__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image {
+    display: block;
+    width: 32px;
+    height: 32px;
+
+    &--selected {
+      z-index: 10;
+    }
+  }
+
+  &__highlight {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    background-color: palette.$neutral-300;
+  }
+
+  &__name {
+    position: relative;
+    font-size: 12px;
+    line-height: 16px;
+
+    &--selected {
+      z-index: 10;
+    }
+  }
+}
+
+.options {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  padding-right: 16px;
+
+  &__inner {
+    display: flex;
+    width: 100%;
+  }
+
+  &__sort-button {
+    @include reset-button;
+
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    margin-left: 16px;
+    padding-bottom: 8px;
+    line-height: 1;
+
+    @media (pointer: coarse) {
+      padding-bottom: 0;
+    }
+  }
+
+  &__sort-badge {
+    box-shadow: palette.$shadow-1;
+  }
+
+  &__sort-icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: palette.$primary-500;
+  }
+
+  &__filters {
+    @include scrollbar-responsive;
+
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  &__filter-button {
+    @include reset-button;
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition-duration: 150ms;
+    transition-property: color, background-color, border-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    scroll-snap-align: start;
+  }
+
+  &__open-icon {
+    display: block;
+    fill: palette.$neutral-400;
+
+    &--active {
+      fill: palette.$page-background;
+    }
+  }
+
+  // Badge(neutral·outlined)의 배경·글자색을 덮는다
+  &__open-badge.options__open-badge {
+    box-shadow: palette.$shadow-1;
+    background-color: #fff;
+    color: palette.$neutral-400;
+  }
+
+  &__open-badge--active.options__open-badge {
+    background-color: palette.$primary-500;
+    color: #fff;
+  }
+}
+
+.list {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column: 1 / -1;
+  min-height: 200px;
+  margin-top: 40px;
+
+  &__icon {
+    display: block;
+  }
+
+  &__title {
+    margin-top: 16px;
+    color: palette.$primary-500;
+    font-size: 18px;
+  }
+
+  &__description {
+    color: palette.$neutral-600;
+    font-size: 14px;
+  }
+}
+
+.sort-sheet {
+  &__title {
+    font-weight: 600;
+    user-select: none;
+  }
+
+  &__close {
+    @include reset-button;
+  }
+
+  &__close-icon {
+    display: block;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    user-select: none;
+  }
+
+  &__option {
+    @include reset-button;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    // 오라클 tailwind v4 gray-700 계산값
+    color: oklch(37.3% 0.034 259.733deg);
+    font-size: 16px;
+    text-align: left;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: #f9fafb;
+      }
+    }
+
+    &--selected {
+      color: palette.$primary-500;
+    }
+  }
+
+  &__check {
+    display: block;
+    fill: palette.$primary-500;
+  }
+}
