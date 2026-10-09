@@ -1,6 +1,7 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/components/Store/mobile/common/pageLayout" as layout;
 
-// KOIN_ORDER_WEBVIEW pages/Search 이전. 본문은 헤더(60px) 아래 화면 높이를 채운다
+// KOIN_ORDER_WEBVIEW pages/Search 이전. 본문은 헤더(공통 MobilePageHeader) 아래 화면 높이를 채운다
 // 하단 여백 = 본문 pb-2(8px) + 오라클 HomeLayout pb-30(120px)
 .page {
   box-sizing: border-box;
@@ -8,7 +9,7 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - #{layout.$page-header-height});
   padding: 0 16px 128px;
   background-color: palette.$page-background;
 }

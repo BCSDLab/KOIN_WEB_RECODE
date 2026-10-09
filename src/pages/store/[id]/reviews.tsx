@@ -4,7 +4,7 @@ import type { GetServerSidePropsContext } from 'next';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { SSRLayout } from 'components/layout';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import StoreReviewsPage from 'components/Store/mobile/StoreReviewsPage';
 import { storeReviewsQueries } from 'components/Store/mobile/StoreReviewsPage/queries';
 import { parseReviewSort } from 'components/Store/mobile/StoreReviewsPage/utils/reviewSort';
@@ -53,7 +53,7 @@ export const getServerSideProps = withCacheControl(
 function StoreReviewsRoute({ id }: Props) {
   return (
     <>
-      <StoreMobileHeader title="리뷰" />
+      <MobilePageHeader title="리뷰" />
       <StoreReviewsPage id={id} />
     </>
   );
