@@ -1,0 +1,31 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ReviewCard 삭제 확인 모달 계산값을 옮겼다
+.delete {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+
+  &__message {
+    margin: 0;
+    color: palette.$neutral-600;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+// 공용 Button의 그림자를 덮어야 해서 선택자 우선순위를 올린다
+.delete__buttons .delete__button {
+  flex: 1;
+  box-shadow: none;
+  line-height: 1.5;
+}

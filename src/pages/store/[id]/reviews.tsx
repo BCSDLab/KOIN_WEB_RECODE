@@ -1,29 +1,51 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { storeMobileQueries } from 'api/storeMobile/queries';
 import { SSRLayout } from 'components/layout';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
 import StoreReviewsPage from 'components/Store/mobile/StoreReviewsPage';
+import { storeReviewsQueries } from 'components/Store/mobile/StoreReviewsPage/queries';
+import { parseReviewSort } from 'components/Store/mobile/StoreReviewsPage/utils/reviewSort';
 import ROUTES from 'static/routes';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
+import { isNotFoundKoinError } from 'utils/ts/isr';
 
 interface Props {
   id: string;
 }
 
 export const getServerSideProps = withCacheControl(
-  (context: GetServerSidePropsContext<{ id: string }>, cacheControl, serverRequest) => {
+  async (context: GetServerSidePropsContext<{ id: string }>, cacheControl, serverRequest) => {
     const id = context.params?.id;
-    if (!id) return Promise.resolve({ notFound: true as const });
+    if (!id) return { notFound: true as const };
 
     // 모바일 전용 화면. 데스크톱은 서버가 확정한 기기 값으로 기존 화면에 보낸다
     if (serverRequest?.device !== 'mobile') {
-      return Promise.resolve({ redirect: { destination: ROUTES.StoreDetail({ id }), permanent: false } });
+      return { redirect: { destination: ROUTES.StoreDetail({ id }), permanent: false } };
     }
 
-    cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+    // 상점명·리뷰 통계(최신순)·선택한 정렬의 목록을 서버에서 받아 본문까지 렌더한다.
+    // 로그인이면 내 리뷰도 받는다. 만료 등으로 실패해도 페이지는 그리고 클라이언트가 다시 받는다(prefetchQuery)
+    const isLoggedIn = serverRequest?.isLoggedIn ?? false;
+    const sort = parseReviewSort(context.query.sort);
+    const queryClient = new QueryClient();
+    try {
+      await Promise.all([
+        queryClient.fetchQuery(storeMobileQueries.detail(id)),
+        queryClient.fetchQuery(storeMobileQueries.reviewList(id, 'LATEST', isLoggedIn)),
+        sort !== 'LATEST' ? queryClient.fetchQuery(storeMobileQueries.reviewList(id, sort, isLoggedIn)) : null,
+        isLoggedIn ? queryClient.prefetchQuery(storeReviewsQueries.myReviews(id, sort, isLoggedIn)) : null,
+      ]);
+    } catch (error) {
+      if (isNotFoundKoinError(error)) return { notFound: true as const };
+      throw error;
+    }
 
-    return Promise.resolve({ props: { id } });
+    if (!isLoggedIn) cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+    return { props: { id, dehydratedState: dehydrate(queryClient) } };
   },
 );
 
