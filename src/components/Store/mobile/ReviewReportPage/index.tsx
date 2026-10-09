@@ -5,7 +5,7 @@ import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { storeMutations } from 'api/store/mutations';
 import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
-import CheckIcon from 'assets/svg/store/check-icon.svg';
+import CheckIcon from 'assets/svg/Store/check-icon.svg';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';

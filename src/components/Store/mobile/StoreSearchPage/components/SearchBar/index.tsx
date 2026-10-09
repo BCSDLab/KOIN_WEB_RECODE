@@ -1,6 +1,6 @@
 import type { ChangeEventHandler } from 'react';
 
-import SearchIconGray from 'assets/svg/store/search-icon-gray.svg';
+import SearchIconGray from 'assets/svg/Store/search-icon-gray.svg';
 
 import styles from './SearchBar.module.scss';
 

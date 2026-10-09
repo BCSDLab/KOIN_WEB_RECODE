@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 
-import AddThumbnailIcon from 'assets/svg/store/add-thumbnail.svg';
-import CloseIcon from 'assets/svg/store/close-icon.svg';
+import AddThumbnailIcon from 'assets/svg/Store/add-thumbnail.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
 import EditableStarList from 'components/Store/mobile/ReviewFormPage/components/EditableStarList';
 import type useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
 import Button from 'components/ui/Button';

@@ -6,9 +6,9 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQue
 import { deleteReview } from 'api/store';
 import type { ReviewSorter } from 'api/storeMobile/entity';
 import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
-import CheckboxFalseIcon from 'assets/svg/store/checkbox-false.svg';
-import CheckboxTrueIcon from 'assets/svg/store/checkbox-true.svg';
-import DownArrowIcon from 'assets/svg/store/down-arrow-icon.svg';
+import CheckboxFalseIcon from 'assets/svg/Store/checkbox-false.svg';
+import CheckboxTrueIcon from 'assets/svg/Store/checkbox-true.svg';
+import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
 import LoginRequiredModal from 'components/Store/mobile/common/LoginRequiredModal';
 import { setStartLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import useScrollLogging from 'components/Store/mobile/StoreListPage/hooks/useScrollLogging';
