@@ -1,0 +1,23 @@
+// KOIN_ORDER_WEBVIEW ReviewCard 이미지 미리보기 계산값을 옮겼다
+.preview {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 80%);
+
+  &__frame {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+  &__image {
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    object-fit: contain;
+  }
+}
