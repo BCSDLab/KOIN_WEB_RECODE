@@ -33,9 +33,10 @@
     line-height: 1.6;
   }
 
+  // 제목이 길면 order처럼 버튼 안의 글자·아이콘이 기본 크기 비율로 함께 줄어든다(아이콘도 20px 아래로)
   &__toggle-icon {
     display: block;
-    flex-shrink: 0;
+    min-width: 0;
   }
 
   &__period {
