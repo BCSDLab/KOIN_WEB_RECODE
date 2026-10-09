@@ -1,0 +1,94 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ShopCard 계산값을 옮겼다
+.card {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow: hidden;
+  padding: 0;
+  border: 0.5px solid palette.$neutral-200;
+  border-radius: 8px;
+  background-color: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+
+  &__closed {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: rgb(0 0 0 / 60%);
+  }
+
+  &__closed-text {
+    color: #fff;
+    text-align: center;
+  }
+
+  &__thumbnail {
+    display: block;
+    flex-shrink: 0;
+    width: 128px;
+    height: 128px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 128px;
+    border-radius: 8px;
+
+    // 오라클 tailwind v4 gray-400 계산값
+    color: oklch(70.7% 0.022 261.325deg);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 64px;
+  }
+
+  &__name {
+    font-weight: 700;
+    text-align: start;
+  }
+
+  &__rating {
+    display: flex;
+    gap: 4px;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &__rating-score {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__star {
+    display: block;
+  }
+
+  &__review-count {
+    color: #767676;
+  }
+
+  &__tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
