@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef, type ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -13,12 +13,15 @@ import {
   type DehydratedState,
 } from '@tanstack/react-query';
 import { storeQueries, storeQueryKeys } from 'api/store/queries';
+import { storeMobileQueries } from 'api/storeMobile/queries';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
 import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
+import Layout, { SSRLayout } from 'components/layout';
 import ImageModal from 'components/modal/Modal/ImageModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
+import StoreDetailMobilePage from 'components/Store/mobile/StoreDetailPage';
 import EventTable from 'components/Store/StoreDetailPage/components/EventTable';
 import MenuTable from 'components/Store/StoreDetailPage/components/MenuTable';
 import ReviewPage from 'components/Store/StoreDetailPage/components/Review';
@@ -55,6 +58,34 @@ export const getServerSideProps = withCacheControl(
     const storeId = context.params?.id;
     if (!storeId) {
       return { notFound: true };
+    }
+
+    // 모바일은 KOIN_ORDER_WEBVIEW 상점 상세 화면을 그린다. order가 부르는 API(요약·v2 상세·메뉴·이벤트)만 서버에서 받아 본문까지 렌더한다
+    if (serverRequest?.device === 'mobile') {
+      const mobileQueryClient = new QueryClient();
+      try {
+        await Promise.all([
+          mobileQueryClient.fetchQuery(storeMobileQueries.summary(storeId)),
+          mobileQueryClient.fetchQuery(storeMobileQueries.detail(storeId)),
+          mobileQueryClient.fetchQuery(storeMobileQueries.menus(storeId)),
+          mobileQueryClient.fetchQuery(storeMobileQueries.events(storeId)),
+        ]);
+      } catch (error) {
+        if (isNotFoundKoinError(error)) {
+          return { notFound: true };
+        }
+        throw error;
+      }
+
+      cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+      return {
+        props: {
+          isMobilePage: true,
+          dehydratedState: dehydrate(mobileQueryClient),
+          id: storeId,
+        },
+      };
     }
 
     try {
@@ -499,8 +530,18 @@ function StoreDetailPage({ id }: Props) {
   );
 }
 
-function StoreDetail({ dehydratedState, id }: { dehydratedState: DehydratedState; id: string }) {
+interface StoreDetailProps {
+  dehydratedState: DehydratedState;
+  id: string;
+  isMobilePage?: boolean;
+}
+
+function StoreDetail({ dehydratedState, id, isMobilePage }: StoreDetailProps) {
   const router = useRouter();
+
+  if (isMobilePage) {
+    return <StoreDetailMobilePage id={id} />;
+  }
 
   return (
     <StoreErrorBoundary onErrorClick={() => router.push(ROUTES.Store())}>
@@ -512,5 +553,9 @@ function StoreDetail({ dehydratedState, id }: { dehydratedState: DehydratedState
     </StoreErrorBoundary>
   );
 }
+
+// 기기는 서버가 확정한다. 모바일은 상세 전용 오버레이 헤더를 본문에서 그리므로 페이지 헤더 레이아웃을 쓰고, 데스크톱은 기본 레이아웃 그대로 둔다
+StoreDetail.getLayout = (page: ReactElement<StoreDetailProps>) =>
+  page.props.isMobilePage ? <SSRLayout mobileHeader="page">{page}</SSRLayout> : <Layout>{page}</Layout>;
 
 export default StoreDetail;

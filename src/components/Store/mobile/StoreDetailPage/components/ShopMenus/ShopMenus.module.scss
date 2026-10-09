@@ -1,0 +1,158 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ShopMenus 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
+.menus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 160px;
+  padding: 0 24px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  scroll-margin-top: 124px;
+
+  &__title {
+    margin-left: 4px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  &__card {
+    border-radius: 24px;
+    background-color: #fff;
+    box-shadow: palette.$shadow-1;
+  }
+}
+
+.icon {
+  display: block;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 12px 12px 16px;
+  border: 0 solid palette.$neutral-300;
+  background: transparent;
+  color: #000;
+  font: inherit;
+  line-height: inherit;
+  cursor: default;
+
+  &--divided {
+    border-top-width: 1px;
+  }
+
+  &__info {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    display: flex;
+    height: auto;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: start;
+  }
+
+  &__description {
+    display: -webkit-box;
+    overflow: hidden;
+    color: palette.$neutral-500;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: left;
+    word-break: keep-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  &__price {
+    display: flex;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__thumbnail {
+    position: relative;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+  }
+
+  &__sold-out {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: palette.$neutral-800;
+    opacity: 0.7;
+  }
+
+  &__sold-out-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px;
+
+  &__name {
+    display: block;
+    overflow: hidden;
+    max-width: 80%;
+    font-size: 14px;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__price {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+}
