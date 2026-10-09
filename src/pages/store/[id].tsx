@@ -61,7 +61,9 @@ export const getServerSideProps = withCacheControl(
       await Promise.all([
         queryClient.fetchQuery(storeQueries.detail(storeId)),
         queryClient.fetchQuery(storeQueries.detailMenu(storeId)),
-        queryClient.fetchQuery(
+        // 리뷰는 요청 쿠키가 실린다. 만료·무효 access 쿠키면 API가 401을 주는데 서버는 refresh를 못 하므로
+        // 실패해도 페이지는 그리고 클라이언트가 갱신 후 다시 받게 한다(prefetchQuery는 오류를 삼킨다)
+        queryClient.prefetchQuery(
           storeQueries.reviewList({
             shopId: Number(storeId),
             page: 1,
