@@ -1,0 +1,249 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ReviewCreateForm 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다.
+// 본문은 헤더(60px) 아래 화면 높이를 채우고, 작성 버튼은 맨 아래에 붙는다
+.form {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  padding: 0 24px;
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  &__shop-name {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  &__notice {
+    color: palette.$neutral-500;
+    font-size: 14px;
+  }
+
+  &__rating {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  &__rating-value {
+    font-weight: 600;
+  }
+
+  &__divider {
+    width: 100%;
+    height: 1px;
+    margin-top: 24px;
+    background-color: palette.$neutral-300;
+  }
+
+  &__photo-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 24px;
+  }
+
+  &__caption {
+    color: palette.$neutral-500;
+    font-size: 12px;
+  }
+
+  &__photos {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    padding-top: 6px;
+    overflow: scroll visible;
+  }
+
+  &__photo-upload {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    border: 2px dashed palette.$neutral-300;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  &__photo-upload-icon {
+    display: block;
+  }
+
+  &__photo-count {
+    color: palette.$neutral-500;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__photo-input {
+    display: none;
+  }
+
+  &__photo {
+    position: relative;
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+  }
+
+  &__photo-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  &__photo-remove {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 9999px;
+    background-color: palette.$neutral-500;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  &__photo-remove-icon {
+    display: block;
+  }
+
+  &__section {
+    margin-top: 24px;
+  }
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__section-title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &__input-box {
+    padding: 12px 16px 4px;
+    border: 1px solid palette.$neutral-300;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+
+  &__textarea {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    color: #000;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+
+    &::placeholder {
+      color: palette.$neutral-400;
+    }
+
+    &--menu {
+      overflow-y: hidden;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+  }
+
+  &__menu {
+    margin: 24px 0;
+  }
+
+  &__menu-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  &__menu-caption-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__menu-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  &__menu-tag {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 3px 10px;
+    border: 1px solid palette.$primary-300;
+    border-radius: 5px;
+    color: palette.$primary-300;
+    font-size: 12px;
+  }
+
+  &__menu-tag-remove {
+    display: block;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  // 공용 Button(md: 6px 28px, 1px 테두리)보다 우선하도록 클래스를 두 번 겹친다.
+  // 오라클의 비활성 버튼은 테두리가 없어(45px) 활성(47px)과 높이가 다르다
+  &__submit#{&}__submit {
+    margin-top: auto;
+    margin-bottom: 16px;
+    padding: 11px 28px;
+    font-size: 15px;
+    line-height: 1.5;
+
+    &:disabled {
+      border-width: 0;
+    }
+  }
+}
