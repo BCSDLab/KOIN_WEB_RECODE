@@ -1,0 +1,34 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ShopEvents 이전. 본문은 헤더(60px) 아래 화면 높이를 채운다
+.page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+  background-color: #fff;
+}
+
+.empty {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+
+  &__icon {
+    display: block;
+    width: 98px;
+    height: 75px;
+  }
+
+  &__text {
+    color: palette.$primary-500;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+  }
+}
