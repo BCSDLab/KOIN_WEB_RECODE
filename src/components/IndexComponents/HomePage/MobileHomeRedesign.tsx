@@ -16,14 +16,13 @@ import IndexMobileCafeteria from 'components/IndexComponents/IndexMobileCafeteri
 import IconBox from 'components/ui/IconBox';
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
-import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 
 import styles from './MobileHomeRedesign.module.scss';
 
 const unibus = BUS_LINKS[2];
-const mobileStoreLink = `${ORDER_BASE_URL}/shops/?category=1`;
+const mobileStoreLink = `${ROUTES.Store()}?category=1`;
 const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
   month: 'long',
   day: 'numeric',

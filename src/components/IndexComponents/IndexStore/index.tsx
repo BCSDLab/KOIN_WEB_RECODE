@@ -7,7 +7,6 @@ import type { StoreCategoriesResponse } from 'api/store/entity';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
 import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
-import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
@@ -44,7 +43,7 @@ export default function IndexStore({ categories }: { categories: StoreCategories
       previous_page: '메인',
       current_page: category.name,
     },
-    route: `${ORDER_BASE_URL}/shops/?category=${category.id}`,
+    route: `${ROUTES.Store()}?category=${category.id}`,
   }));
 
   const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) => {
@@ -70,7 +69,7 @@ export default function IndexStore({ categories }: { categories: StoreCategories
   });
 
   const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
-  const titleLink = isMobile ? `${ORDER_BASE_URL}/shops/?category=1` : `${ROUTES.Store()}?category=1`;
+  const titleLink = `${ROUTES.Store()}?category=1`;
 
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
     logger.actionEventClick({
