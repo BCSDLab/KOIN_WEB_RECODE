@@ -34,8 +34,9 @@ export const getServerSideProps = withCacheControl(
     try {
       await Promise.all([
         queryClient.fetchQuery(storeMobileQueries.detail(id)),
-        queryClient.fetchQuery(storeMobileQueries.reviewList(id, 'LATEST', isLoggedIn)),
-        sort !== 'LATEST' ? queryClient.fetchQuery(storeMobileQueries.reviewList(id, sort, isLoggedIn)) : null,
+        // 리뷰 요청에는 요청 쿠키가 실린다. 만료·무효 access 쿠키면 401인데 서버는 refresh를 못 하므로 실패해도 넘어간다
+        queryClient.prefetchQuery(storeMobileQueries.reviewList(id, 'LATEST', isLoggedIn)),
+        sort !== 'LATEST' ? queryClient.prefetchQuery(storeMobileQueries.reviewList(id, sort, isLoggedIn)) : null,
         isLoggedIn ? queryClient.prefetchQuery(storeReviewsQueries.myReviews(id, sort, isLoggedIn)) : null,
       ]);
     } catch (error) {
