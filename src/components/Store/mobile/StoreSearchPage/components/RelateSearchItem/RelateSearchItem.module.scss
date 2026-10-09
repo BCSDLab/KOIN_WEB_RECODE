@@ -1,0 +1,32 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 48px;
+  padding: 8px;
+  border-bottom: 1px solid palette.$neutral-200;
+  color: inherit;
+  text-decoration: none;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // 오라클처럼 긴 텍스트 줄에서는 아이콘도 함께 줄어든다(flex-shrink 기본값)
+  &__icon {
+    display: block;
+  }
+
+  &__text {
+    margin: 0;
+    color: palette.$neutral-500;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+}
