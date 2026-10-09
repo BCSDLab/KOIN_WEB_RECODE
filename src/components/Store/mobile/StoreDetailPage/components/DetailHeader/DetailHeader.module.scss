@@ -1,0 +1,37 @@
+// KOIN_ORDER_WEBVIEW Shop Header 이전 (fixed top-0 h-[60px] px-8, 배경·글자 투명도는 인라인 스타일)
+.header {
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 0 32px;
+
+  &__back {
+    position: absolute;
+    top: 50%;
+    left: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    line-height: inherit;
+    transform: translateY(-50%);
+  }
+
+  &__icon {
+    display: block;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+}
