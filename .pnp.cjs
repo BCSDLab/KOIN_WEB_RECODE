@@ -94,6 +94,7 @@ const RAW_RUNTIME_STATE =
           ["stylelint", "npm:17.14.0"],\
           ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:40.0.0"],\
           ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:17.0.0"],\
+          ["swiper", "npm:11.2.10"],\
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
           ["typescript-eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.46.2"],\
@@ -10157,6 +10158,7 @@ const RAW_RUNTIME_STATE =
           ["stylelint", "npm:17.14.0"],\
           ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:40.0.0"],\
           ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:17.0.0"],\
+          ["swiper", "npm:11.2.10"],\
           ["tsx", "npm:4.21.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"],\
           ["typescript-eslint", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.46.2"],\
@@ -12640,6 +12642,15 @@ const RAW_RUNTIME_STATE =
           ["picocolors", "npm:1.1.1"],\
           ["sax", "npm:1.6.0"],\
           ["svgo", "npm:3.3.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swiper", [\
+      ["npm:11.2.10", {\
+        "packageLocation": "./.yarn/cache/swiper-npm-11.2.10-2bf88a66cf-c3dde83e65.zip/node_modules/swiper/",\
+        "packageDependencies": [\
+          ["swiper", "npm:11.2.10"]\
         ],\
         "linkType": "HARD"\
       }]\
