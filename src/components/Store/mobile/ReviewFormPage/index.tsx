@@ -41,13 +41,15 @@ export default function ReviewCreatePage({ id }: ReviewCreatePageProps) {
     });
 
     if (!form.isFormValid) return;
+    // Enter 없이 남아 있는 메뉴명도 태그로 함께 보낸다
+    const menuNames = form.commitMenuInput();
 
     mutate(
       {
         rating: form.rating,
         content: form.content,
         image_urls: imageUrls,
-        menu_names: form.menus,
+        menu_names: menuNames,
       },
       {
         onSuccess: () => {

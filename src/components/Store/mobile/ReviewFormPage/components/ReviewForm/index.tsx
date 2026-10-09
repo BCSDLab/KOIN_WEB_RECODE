@@ -42,6 +42,7 @@ export default function ReviewForm({
     menuTextareaRef,
     isFormValid,
     handleMenuKeyDown,
+    handleMenuBlur,
     handleRemoveMenu,
   } = form;
 
@@ -148,6 +149,7 @@ export default function ReviewForm({
             value={menuInput}
             onChange={(e) => setMenuInput(e.target.value)}
             onKeyDown={handleMenuKeyDown}
+            onBlur={handleMenuBlur}
             placeholder="메뉴명을 입력해주세요"
             className={`${styles.form__textarea} ${styles['form__textarea--menu']}`}
             rows={1}
