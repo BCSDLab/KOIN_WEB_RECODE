@@ -5,11 +5,11 @@ import { cn } from '@bcsdlab/utils';
 import { keepPreviousData, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import type { ShopCategory } from 'api/storeMobile/entity';
 import { storeMobileQueries } from 'api/storeMobile/queries';
-import CheckIcon from 'assets/svg/store/check-icon.svg';
-import CloseIcon from 'assets/svg/store/close-icon.svg';
-import DownArrowIcon from 'assets/svg/store/down-arrow-icon.svg';
-import OpenIcon from 'assets/svg/store/open-icon.svg';
-import PlanetIcon from 'assets/svg/store/planet-closed-icon.svg';
+import CheckIcon from 'assets/svg/Store/check-icon.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
+import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
+import OpenIcon from 'assets/svg/Store/open-icon.svg';
+import PlanetIcon from 'assets/svg/Store/planet-closed-icon.svg';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,

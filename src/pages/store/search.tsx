@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 
 import { SSRLayout } from 'components/layout';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import StoreSearchPage from 'components/Store/mobile/StoreSearchPage';
 import ROUTES from 'static/routes';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
@@ -23,7 +23,7 @@ export const getServerSideProps = withCacheControl(
 function StoreSearchRoute() {
   return (
     <>
-      <StoreMobileHeader title="검색" />
+      <MobilePageHeader title="검색" />
       <StoreSearchPage />
     </>
   );

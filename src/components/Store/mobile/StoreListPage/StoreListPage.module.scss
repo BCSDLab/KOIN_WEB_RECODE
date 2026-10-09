@@ -1,4 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/components/Store/mobile/common/pageLayout" as layout;
 
 // KOIN_ORDER_WEBVIEW NearbyShops 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
 
@@ -42,11 +43,11 @@
   cursor: pointer;
 }
 
-// 본문은 헤더(60px) 아래 화면 높이를 페이지 배경으로 채운다
+// 본문은 헤더(공통 MobilePageHeader) 아래 화면 높이를 페이지 배경으로 채운다
 .page {
   box-sizing: border-box;
   width: 100%;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - #{layout.$page-header-height});
 
   // 오라클 HomeLayout의 pb-30
   padding-bottom: 120px;

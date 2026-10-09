@@ -17,7 +17,7 @@ import { storeQueries } from 'api/store/queries';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import Layout, { SSRLayout } from 'components/layout';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import StoreListPage from 'components/Store/mobile/StoreListPage';
 import { getListRequestParams, parseListQuery } from 'components/Store/mobile/StoreListPage/utils/listQuery';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
@@ -414,7 +414,7 @@ function StorePage({ dehydratedState, isMobilePage }: StorePageProps) {
   if (isMobilePage) {
     return (
       <>
-        <StoreMobileHeader title="주변상점" />
+        <MobilePageHeader title="주변상점" />
         <StoreListPage />
       </>
     );

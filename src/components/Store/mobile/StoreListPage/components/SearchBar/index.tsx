@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import SearchIconGray from 'assets/svg/store/search-icon-gray.svg';
+import SearchIconGray from 'assets/svg/Store/search-icon-gray.svg';
 import { getCategoryIdFromQuery, getCategoryNameById } from 'components/Store/mobile/common/utils/shopCategories';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';

@@ -21,7 +21,6 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import IconBox from 'components/ui/IconBox';
 import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
-import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -124,7 +123,7 @@ const sections: CategorySection[] = [
       },
       {
         title: '주변상점',
-        href: `${ORDER_BASE_URL}/shops/?category=1`,
+        href: `${ROUTES.Store()}?category=1`,
         Icon: StoreIcon,
         logging: {
           team: 'CAMPUS',

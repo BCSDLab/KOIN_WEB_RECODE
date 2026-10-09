@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import StarIcon from 'assets/svg/store/star-icon.svg';
+import StarIcon from 'assets/svg/Store/star-icon.svg';
 import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import { getCategoryIdFromQuery, getCategoryNameById } from 'components/Store/mobile/common/utils/shopCategories';
 import ROUTES from 'static/routes';

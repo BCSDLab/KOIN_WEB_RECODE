@@ -5,8 +5,8 @@ import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { storeMutations } from 'api/store/mutations';
 import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
-import CheckIcon from 'assets/svg/store/check-icon.svg';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import CheckIcon from 'assets/svg/Store/check-icon.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -114,7 +114,7 @@ export default function ReviewReportPage({ id, reviewId }: ReviewReportPageProps
 
   return (
     <>
-      <StoreMobileHeader title="리뷰 신고하기" />
+      <MobilePageHeader title="리뷰 신고하기" />
       <div className={styles.report}>
         <div className={styles.report__intro}>
           <span className={styles.report__title}>신고 이유를 선택해주세요.</span>

@@ -13,11 +13,7 @@ export const WEB_AUTH_ACCESS_COOKIE_KEY = IS_STAGE ? '__Secure-koin-stage-web-ac
 // 시간표에서 선택한 학기. localStorage(zustand)에만 두면 서버가 몰라 SSR과 클라이언트 렌더가 갈린다.
 export const TIMETABLE_SEMESTER_COOKIE_KEY = IS_STAGE ? 'koin-stage-timetable-semester' : 'koin-timetable-semester';
 
-const ORDER_URL = `https://order.${BASE_DOMAIN}`;
-const ORDER_STAGE_URL = `https://order.${STAGE_DOMAIN}`;
-
 const KOIN_URL = `https://${BASE_DOMAIN}`;
 const KOIN_STAGE_URL = `https://${STAGE_DOMAIN}`;
 
 export const KOIN_BASE_URL = IS_STAGE ? KOIN_STAGE_URL : KOIN_URL;
-export const ORDER_BASE_URL = IS_STAGE ? ORDER_STAGE_URL : ORDER_URL;
