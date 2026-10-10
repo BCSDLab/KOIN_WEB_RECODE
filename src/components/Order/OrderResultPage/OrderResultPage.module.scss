@@ -1,0 +1,364 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// KOIN_ORDER_WEBVIEW pages/OrderFinish 이전. 본문은 헤더(60px) 아래에서 시작한다. 값은 order 화면의 계산된 스타일을 옮겼다
+$header-height: 60px;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+
+  // 공용 #root의 min-width(360px)를 넘지 않고 화면 폭을 따른다
+  max-width: 100vw;
+  min-height: calc(100vh - #{$header-height});
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@include preflight.reset(".page");
+
+// order: flex flex-row justify-between px-6 py-6
+.status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 24px;
+
+  // order: text-primary-500 flex h-auto flex-col justify-center text-xl leading-[160%] font-bold
+  &__title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    color: palette.$primary-500;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 160%;
+  }
+
+  // order: font-bold text-[#7D08A4]
+  &__estimated {
+    color: palette.$primary-700;
+    font-weight: 700;
+  }
+
+  // order: text-xs leading-[160%] font-normal text-neutral-500
+  &__message {
+    color: palette.$neutral-500;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+  }
+}
+
+// order Button: h-[1.938rem] w-[4.125rem] self-end rounded-3xl px-2 text-xs leading-[160%] font-semibold.
+// 공용 Button(md)의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.status .status__cancel {
+  @include preflight.order-font;
+
+  align-self: flex-end;
+  width: 66px;
+  height: 31px;
+  padding: 6px 8px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 160%;
+}
+
+// order: flex flex-row justify-between px-6 pt-4 pb-1.5
+.progress {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 16px 24px 6px;
+
+  // order is-text-gray: text-neutral-400 font-semibold
+  &__label {
+    color: palette.$neutral-400;
+    font-weight: 600;
+
+    // order is-text-purple: text-primary-500 font-semibold
+    &--active {
+      color: palette.$primary-500;
+      font-weight: 600;
+    }
+  }
+
+  // order: flex flex-row justify-center
+  &__track {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  // order is-icon-gray: bg-neutral-400 rounded-full h-10 w-10 justify-center items-center flex p-2
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 9999px;
+    background-color: palette.$neutral-400;
+
+    // order is-icon-purple: bg-primary-300 rounded-full h-10 w-10 justify-center items-center flex
+    &--active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      background-color: palette.$primary-300;
+    }
+  }
+
+  // order: h-[5px] w-[calc((100vw-184px)/8)] self-center bg-neutral-400 (진행하면 bg-primary-300)
+  &__bar {
+    align-self: center;
+    width: calc((100vw - 184px) / 8);
+    height: 5px;
+    background-color: palette.$neutral-400;
+
+    &--long {
+      width: calc((100vw - 184px) / 8 * 3);
+    }
+
+    &--active {
+      background-color: palette.$primary-300;
+    }
+  }
+}
+
+// order: mt-10 px-6
+.content {
+  margin-top: 40px;
+  padding: 0 24px;
+
+  // order: text-primary-500 my-5 text-lg font-semibold
+  &__title {
+    margin: 20px 0;
+    color: palette.$primary-500;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: calc(1.75 / 1.125);
+
+    // 첫 제목은 mb-5만 있다
+    &--first {
+      margin-bottom: 20px;
+      color: palette.$primary-500;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: calc(1.75 / 1.125);
+    }
+  }
+}
+
+// order: shadow-1 rounded-2xl border border-white bg-white px-6 text-sm leading-[160%]
+.card {
+  padding: 0 24px;
+  border: 1px solid #fff;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+  font-size: 14px;
+  line-height: 160%;
+
+  // 배달·방문 정보: flex flex-col font-semibold
+  &--info {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+  }
+
+  // 주문내역·결제정보: py-4
+  &--padded {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  // 결제정보: mb-5
+  &--payment {
+    margin-bottom: 20px;
+  }
+
+  // order: py-4 (border-b border-neutral-200)
+  &__item {
+    padding: 16px 0;
+
+    &--bordered {
+      // order: border-b border-neutral-200 (색은 네 변 모두, 두께는 아래만).
+      // 색은 Tailwind 원본 oklch 표기 그대로 둔다(그리는 색은 palette.$neutral-200과 같다)
+      border-color: oklch(92.2% 0 0deg);
+      border-style: solid;
+      border-width: 0 0 1px;
+    }
+  }
+
+  // order: font-normal text-neutral-500
+  &__value {
+    color: palette.$neutral-500;
+    font-weight: 400;
+  }
+}
+
+// order: flex flex-col gap-4
+.menus {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  // order: mb-2.5 flex items-center justify-between
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  // order: flex items-center gap-1
+  &__name {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  // order: text-sm leading-[160%] font-semibold
+  &__name-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  // order: text-sm font-semibold text-neutral-500
+  &__quantity {
+    color: palette.$neutral-500;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: calc(1.25 / 0.875);
+  }
+
+  // order: text-[15px] leading-[160%] font-semibold
+  &__total {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  // order: ml-4 list-disc
+  &__details {
+    margin-left: 16px;
+    list-style-type: disc;
+  }
+
+  // order: text-[13px] text-neutral-500
+  &__detail {
+    color: palette.$neutral-500;
+    font-size: 13px;
+  }
+
+  // order: mt-4 border-t border-neutral-100
+  &__divider {
+    margin-top: 16px;
+    border-top: 1px solid palette.$neutral-100;
+  }
+}
+
+.payment {
+  // order: text-[13px] text-neutral-500
+  &__prices {
+    color: palette.$neutral-500;
+    font-size: 13px;
+  }
+
+  // order: flex justify-between (pb-1)
+  &__row {
+    display: flex;
+    justify-content: space-between;
+
+    &--spaced {
+      padding-bottom: 4px;
+    }
+  }
+
+  // order: my-4 h-[1px] border-b border-neutral-200
+  &__divider {
+    height: 1px;
+    margin: 16px 0;
+    border-bottom: 1px solid palette.$neutral-200;
+  }
+
+  // order: font-semibold
+  &__summary {
+    font-weight: 600;
+  }
+
+  // order: text-primary-500 text-[15px]
+  &__amount {
+    color: palette.$primary-500;
+    font-size: 15px;
+  }
+
+  // order: text-[15px]
+  &__method {
+    font-size: 15px;
+  }
+}
+
+// order: shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4
+.order {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 64px;
+  padding: 16px 24px;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+
+  // order: flex items-center gap-1.5 text-sm leading-[160%] font-semibold
+  &__shop {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  // order: text-[13px] text-neutral-600
+  &__meta {
+    color: palette.$neutral-600;
+    font-size: 13px;
+  }
+
+  // order: flex gap-2
+  &__row {
+    display: flex;
+    gap: 8px;
+  }
+
+  // order: h-[1px] border-b border-neutral-200
+  &__divider {
+    height: 1px;
+    border-bottom: 1px solid palette.$neutral-200;
+  }
+}
+
+// order Button: gap-3 self-center px-16 py-2.5
+.order .order__receipt {
+  @include preflight.order-font;
+
+  gap: 12px;
+  align-self: center;
+  padding: 10px 64px;
+}
