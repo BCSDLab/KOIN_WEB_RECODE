@@ -5,6 +5,8 @@ import type {
   AddressSearchResponse,
   CampusAddressCategory,
   CampusDeliveryAddressResponse,
+  CancelPaymentRequest,
+  CancelPaymentResponse,
   CartResponse,
   CartSummaryResponse,
   ConfirmPaymentRequest,
@@ -13,6 +15,7 @@ import type {
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
   OrderType,
+  PaymentInfoResponse,
   RiderMessageResponse,
   ShopDeliveryInfoResponse,
   ShopMenuDetailResponse,
@@ -297,6 +300,35 @@ export class ConfirmPayment<R extends ConfirmPaymentResponse> implements APIRequ
   response!: R;
 
   constructor(data: ConfirmPaymentRequest) {
+    this.data = data;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/payments getPaymentInfo 이전(주문 결과 화면). 로그인 사용자의 주문만 조회된다
+export class PaymentInfo<R extends PaymentInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'payments/:paymentId';
+
+  response!: R;
+
+  constructor(paymentId: number) {
+    this.path = `payments/${paymentId}`;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/payments cancelPayment 이전(주문 취소). 본문은 order와 같은 { cancel_reason }이다
+export class CancelPayment<R extends CancelPaymentResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'payments/:paymentId/cancel';
+
+  data: CancelPaymentRequest;
+
+  response!: R;
+
+  constructor(paymentId: number, data: CancelPaymentRequest) {
+    this.path = `payments/${paymentId}/cancel`;
     this.data = data;
   }
 }

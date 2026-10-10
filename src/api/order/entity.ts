@@ -242,3 +242,55 @@ export interface ConfirmPaymentResponse {
   payment_method: string;
   estimated_at: string;
 }
+
+// KOIN_ORDER_WEBVIEW api/payments getPaymentInfo 이전(주문 완료·결과 화면).
+// 포장 주문은 배달지·좌표·배달비·도착 예정 시각이 null로 온다(order 타입 선언은 non-null)
+export type OrderStatus = 'CONFIRMING' | 'COOKING' | 'PACKAGED' | 'PICKED_UP' | 'DELIVERING' | 'DELIVERED' | 'CANCELED';
+
+export interface PaymentInfoResponse {
+  id: number;
+  orderable_shop_id: number;
+  delivery_address: string | null;
+  delivery_address_details: string | null;
+  shop_address: string;
+  longitude: number | null;
+  latitude: number | null;
+  to_owner: string;
+  to_rider: string | null;
+  provide_cutlery: boolean;
+  total_menu_price: number;
+  delivery_tip: number | null;
+  amount: number;
+  shop_name: string;
+  menus: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    options: Array<{
+      option_group_name: string;
+      option_name: string;
+      option_price: number | null;
+    }> | null;
+  }>;
+  order_type: OrderType;
+  easy_pay_company: string;
+  requested_at: string;
+  approved_at: string;
+  payment_method: string;
+  estimated_at: string | null;
+  order_status: OrderStatus;
+}
+
+// KOIN_ORDER_WEBVIEW api/payments cancelPayment 이전(주문 취소)
+export interface CancelPaymentRequest {
+  cancel_reason: string;
+}
+
+export interface CancelPaymentResponse {
+  payment_cancels: Array<{
+    id: number;
+    cancel_reason: string;
+    cancel_amount: number;
+    canceled_at: string;
+  }>;
+}
