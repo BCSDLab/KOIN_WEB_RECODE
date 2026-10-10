@@ -4475,14 +4475,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.33.0":
-  version: 0.33.0
-  resolution: "axios@npm:0.33.0"
+"axios@npm:^0.34.0":
+  version: 0.34.0
+  resolution: "axios@npm:0.34.0"
   dependencies:
     follow-redirects: "npm:^1.15.4"
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/36c468997b94f71cda99c8b575fe3fbb75d6dc19242c43546e3a72e703f398df98bff8294c418bccfbc88da67da88cfb94f37c49cb89468c648fe83ec6f3e955
+  checksum: 10/ea12eb0dd038a574f9fac0b986f5157fbe210716e726accc0367bfbed6aa0eedb6ed4428cb693047c61919494f56466810d75ea46744cf89307469a17587e160
   languageName: node
   linkType: hard
 
@@ -7408,7 +7408,7 @@ __metadata:
     "@types/node": "npm:^24.13.3"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    axios: "npm:^0.33.0"
+    axios: "npm:^0.34.0"
     babel-plugin-react-compiler: "npm:1.0.0"
     dayjs: "npm:^1.11.12"
     dompurify: "npm:^3.4.13"
@@ -7435,7 +7435,7 @@ __metadata:
     lottie-react: "npm:^2.4.1"
     next: "npm:15.5.27"
     next-sitemap: "npm:^4.2.3"
-    postcss: "npm:^8.5.23"
+    postcss: "npm:^8.5.27"
     prettier: "npm:^3.6.2"
     quill: "npm:^2.0.3"
     react: "npm:^19.2.6"
@@ -7879,6 +7879,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10/1b3b4fdac831b92b56d1dbe8b1e63a372432faf86ea383134e3b53141ef8108a60b7f84343b5cefecac9550bb74edf8164da93ea07d1c4f757039bc75d8a5d9e
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^3.3.18":
+  version: 3.3.19
+  resolution: "nanoid@npm:3.3.19"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10/a330adb28dad63eccb0a0c95a2a61353e84b7e067061fff94167803d94be8eef0f7b75cf2da1bece06e8b7afb892abbe52cf0ec33298c817a083eedccd7656e4
   languageName: node
   linkType: hard
 
@@ -8396,7 +8405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.5.26, postcss@npm:^8.5.23":
+"postcss@npm:8.5.26":
   version: 8.5.26
   resolution: "postcss@npm:8.5.26"
   dependencies:
@@ -8404,6 +8413,17 @@ __metadata:
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
   checksum: 10/842a624f822f77cb37264cc24f0cf97c0a69dd8d6f7b4a6d76b5a8dc95355899dd044f33a2d4e890da858293de570fce18dff453f3b629ff14cac67a3591895a
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.5.27":
+  version: 8.5.27
+  resolution: "postcss@npm:8.5.27"
+  dependencies:
+    nanoid: "npm:^3.3.18"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10/23351b64013004252b380a0dbd9e8c0803ce1def4e0b7918446a1a24ac744338dd8da050f21ea095943adc4fca3a96e150788784accbe593a3c4eba193a8abb8
   languageName: node
   linkType: hard
 
