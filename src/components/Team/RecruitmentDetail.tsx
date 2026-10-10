@@ -81,6 +81,10 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
   const isActionDisabled = primaryAction.type === 'disabled';
   const isClosed = recruitment.status !== 'RECRUITING';
   const canManage = recruitment.is_author || recruitment.can_manage_applicants;
+  const qualifications = Array.from((recruitment.qualification ?? '').matchAll(/[^\r\n]+/g), (match) => ({
+    id: match.index,
+    text: match[0].trim(),
+  })).filter((qualification) => qualification.text !== '');
   const roles =
     recruitment.roles.length > 0
       ? recruitment.roles
@@ -163,16 +167,14 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
               <h3 className={styles.section__title}>모집 소개</h3>
               <p className={styles.section__text}>{recruitment.description}</p>
             </section>
-            {recruitment.qualification && (
+            {qualifications.length > 0 && (
               <section className={styles.section}>
                 <h3 className={styles.section__title}>지원 자격</h3>
-                <p className={styles.section__text}>
-                  {recruitment.qualification
-                    .split(/\r?\n/)
-                    .filter((qualification) => qualification.trim() !== '')
-                    .map((qualification) => `• ${qualification.trim()}`)
-                    .join('\n')}
-                </p>
+                <ul className={styles.qualifications}>
+                  {qualifications.map((qualification) => (
+                    <li key={qualification.id}>{qualification.text}</li>
+                  ))}
+                </ul>
               </section>
             )}
             {recruitment.related_url && (
