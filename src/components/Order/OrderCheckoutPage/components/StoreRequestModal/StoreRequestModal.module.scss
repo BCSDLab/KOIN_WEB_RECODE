@@ -1,0 +1,59 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order BottomModalContent: gap-0
+div.content {
+  gap: 0;
+}
+
+// order: w-full resize-none overflow-hidden rounded-xl border border-neutral-300 px-4 py-3 outline-none
+.textarea {
+  overflow: hidden;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid palette.$neutral-300;
+  border-radius: 12px;
+  outline: none;
+  resize: none;
+}
+
+// order: text-right text-[10px] (입력 전 text-neutral-400, 입력 후 text-black)
+.counter {
+  color: palette.$neutral-400;
+  font-size: 10px;
+  text-align: right;
+
+  &--filled {
+    color: #000;
+  }
+}
+
+// order: flex items-center gap-3 text-sm font-medium text-neutral-600 > accent-primary-500 h-4 w-4 rounded
+.cutlery {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: palette.$neutral-600;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: calc(1.25 / 0.875);
+
+  &__checkbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    accent-color: palette.$primary-500;
+  }
+}
+
+// order Button(lg): mt-4 rounded-xl py-2.5 text-lg. 공용 Button의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+button.save {
+  @include preflight.order-font;
+
+  margin-top: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 12px;
+  font-size: 18px;
+  line-height: calc(1.75 / 1.125);
+}

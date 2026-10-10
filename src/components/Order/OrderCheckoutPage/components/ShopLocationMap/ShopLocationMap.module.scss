@@ -1,0 +1,30 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: text-primary-500 mb-2 text-lg font-semibold
+.title {
+  margin-bottom: 8px;
+  color: palette.$primary-500;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+// order: shadow-1 w-full rounded-xl
+.card {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: palette.$shadow-1;
+
+  // order: flex min-h-[3.5rem] w-full items-center justify-between rounded-b-xl px-6 py-4 text-[0.813rem] text-neutral-600
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 16px 24px;
+    border-radius: 0 0 12px 12px;
+    color: palette.$neutral-600;
+    font-size: 0.813rem;
+  }
+}

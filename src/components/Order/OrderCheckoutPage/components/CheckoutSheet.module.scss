@@ -1,0 +1,16 @@
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// 결제 화면 바텀시트(연락처·사장님·배달기사님 요청) 공통. 시트는 포털이라 화면 본문의 초기화를 받지 않아 따로 건다
+@include preflight.reset(".sheet");
+
+// order styles/modal.css: bottom-modal-header·content·footer는 font-[Pretendard]
+.sheet .sheet__section {
+  @include preflight.order-font;
+}
+
+// order ContactModal·StoreRequestModal: flex w-full justify-between
+.sheet__title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

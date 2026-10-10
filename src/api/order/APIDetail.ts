@@ -7,10 +7,16 @@ import type {
   CampusDeliveryAddressResponse,
   CartResponse,
   CartSummaryResponse,
+  DeliveryTemporaryRequest,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
   OrderType,
+  RiderMessageResponse,
+  ShopDeliveryInfoResponse,
   ShopMenuDetailResponse,
+  StudentInfoResponse,
+  TakeoutTemporaryRequest,
+  TemporaryPaymentResponse,
   UpdateCartItemRequest,
 } from './entity';
 
@@ -215,6 +221,65 @@ export class RegisterOffCampusDeliveryAddress<R extends object> implements APIRe
   response!: R;
 
   constructor(data: OffCampusDeliveryAddressRequest) {
+    this.data = data;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW 결제 화면(pages/Payment) API. 경로·본문은 order와 같게 유지한다(parity G2)
+// 결제 화면의 연락처 기본값(학생 정보). 결제 화면은 로그인 상태에서만 진입한다
+export class StudentInfo<R extends StudentInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'user/student/me';
+
+  response!: R;
+}
+
+// 상점의 교내·교외 배달 가능 여부는 로그인과 무관한 공개 데이터다
+export class ShopDeliveryInfo<R extends ShopDeliveryInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'order/shop/:orderableShopId/delivery';
+
+  response!: R;
+
+  constructor(orderableShopId: number) {
+    this.path = `order/shop/${orderableShopId}/delivery`;
+  }
+}
+
+export class RiderMessages<R extends RiderMessageResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'delivery/rider-message';
+
+  response!: R;
+}
+
+export class TemporaryDeliveryPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'payments/delivery/temporary';
+
+  data: DeliveryTemporaryRequest;
+
+  response!: R;
+
+  constructor(data: DeliveryTemporaryRequest) {
+    this.data = data;
+  }
+}
+
+export class TemporaryTakeoutPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'payments/takeout/temporary';
+
+  data: TakeoutTemporaryRequest;
+
+  response!: R;
+
+  constructor(data: TakeoutTemporaryRequest) {
     this.data = data;
   }
 }

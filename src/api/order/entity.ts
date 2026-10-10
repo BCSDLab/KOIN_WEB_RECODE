@@ -150,3 +150,55 @@ export interface OffCampusDeliveryAddressRequest {
   longitude: number;
   latitude: number;
 }
+
+// KOIN_ORDER_WEBVIEW api/auth·shop·delivery·payments/entity 이전(결제 화면)
+export interface StudentInfoResponse {
+  id: number;
+  login_id: string;
+  anonymous_nickname: string;
+  email: string;
+  gender: 0 | 1;
+  major: string;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  student_number: string;
+  user_type: 'STUDENT';
+}
+
+export interface ShopDeliveryInfoResponse {
+  campus_delivery: boolean;
+  off_campus_delivery: boolean;
+}
+
+export interface RiderMessageResponse {
+  count: number;
+  contents: Array<{ content: string }>;
+}
+
+export interface DeliveryTemporaryRequest {
+  address: string;
+  address_detail: string;
+  longitude: number;
+  latitude: number;
+  phone_number: string;
+  to_owner: string;
+  to_rider: string;
+  total_menu_price: number;
+  delivery_type: 'CAMPUS' | 'OFF_CAMPUS';
+  delivery_tip: number;
+  provide_cutlery: boolean;
+  total_amount: number;
+}
+
+export interface TakeoutTemporaryRequest {
+  phone_number: string;
+  to_owner: string;
+  provide_cutlery: boolean;
+  total_menu_price: number;
+  total_amount: number;
+}
+
+export interface TemporaryPaymentResponse {
+  order_id: string;
+}

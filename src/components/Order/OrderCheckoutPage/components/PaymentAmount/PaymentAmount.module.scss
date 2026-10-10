@@ -1,0 +1,40 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: rounded-lg bg-white p-6 shadow-sm(Tailwind v4 기본 그림자)
+.amount {
+  padding: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  // order: mt-3 border-t-1 border-neutral-300 pt-3
+  &__detail {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid palette.$neutral-300;
+  }
+
+  &__sum {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    color: palette.$neutral-500;
+    font-size: 13px;
+  }
+}
