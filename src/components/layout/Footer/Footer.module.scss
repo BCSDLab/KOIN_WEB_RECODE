@@ -77,6 +77,10 @@
       order: 2;
       margin-right: 20px;
       width: 35px;
+
+      & > img {
+        height: auto;
+      }
     }
   }
 
