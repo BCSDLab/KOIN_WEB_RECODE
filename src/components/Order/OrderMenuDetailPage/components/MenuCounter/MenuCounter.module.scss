@@ -1,0 +1,43 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW MenuCounter 계산값 (h-17, 안쪽 h-9 w-26.5 rounded-3xl px-4)
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 68px;
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 106px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid palette.$primary-500;
+    border-radius: 24px;
+    background-color: #fff;
+  }
+
+  // 공용 버튼 기본 스타일 대신 order(Tailwind preflight) 값으로 맞춘다
+  &__button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    cursor: pointer;
+
+    & svg {
+      display: block;
+    }
+  }
+
+  &__count {
+    color: palette.$primary-500;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+  }
+}

@@ -1,0 +1,73 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW MenuPriceSelects 계산값
+.prices {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 16px 24px;
+  border: 1px solid palette.$neutral-300;
+  border-radius: 12px;
+  background-color: #fff;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__label {
+    display: block;
+    height: 29px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  // order의 bg-primary-50은 테마에 없는 색이라 배경이 투명하다
+  &__required {
+    padding: 2px 8px;
+    border: 1px solid palette.$primary-300;
+    border-radius: 9999px;
+    color: palette.$primary-500;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // 공용 버튼 기본 스타일 대신 order(Tailwind preflight) 값으로 맞춘다
+  &__item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    cursor: pointer;
+
+    & svg {
+      display: block;
+    }
+  }
+
+  &__name {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  &__price {
+    margin-left: auto;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+}
