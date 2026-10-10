@@ -88,3 +88,65 @@ export interface UpdateCartItemRequest {
     option_id: number;
   }>;
 }
+
+// KOIN_ORDER_WEBVIEW api/delivery/entity 이전(배달지 선택)
+export const CAMPUS_ADDRESS_CATEGORIES = ['DORMITORY', 'COLLEGE_BUILDING', 'ETC'] as const;
+
+export type CampusAddressCategory = (typeof CAMPUS_ADDRESS_CATEGORIES)[number];
+
+/** 요청/응답 참고: https://business.juso.go.kr/addrlink/openApi/searchApi.do */
+export interface Juso {
+  bd_nm: string;
+  emd_nm: string;
+  eng_address: string;
+  jibun_address: string;
+  li_nm: string;
+  rn: string;
+  road_address: string;
+  sgg_nm: string;
+  si_nm: string;
+  zip_no: string;
+}
+
+export interface AddressSearchResponse {
+  addresses: Juso[];
+  count_per_page: number;
+  current_page: number;
+  total_count: string;
+}
+
+export interface CampusDeliveryAddress {
+  id: number;
+  type: '기숙사' | '공학관' | '그 외';
+  full_address: string;
+  short_address: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface CampusDeliveryAddressResponse {
+  count: number;
+  addresses: CampusDeliveryAddress[];
+}
+
+export interface OffCampusDeliveryValidateRequest {
+  si_do: string;
+  si_gun_gu: string;
+  eup_myeon_dong: string;
+  building: string;
+}
+
+export interface OffCampusDeliveryAddressRequest {
+  zip_number: string;
+  si_do: string;
+  si_gun_gu: string;
+  eup_myeon_dong: string;
+  road: string;
+  building: string;
+  address: string;
+  detail_address: string;
+  // order는 스토어의 교외 주소(좌표 포함)를 그대로 보낸다
+  longitude: number;
+  latitude: number;
+}
