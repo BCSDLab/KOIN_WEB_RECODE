@@ -1,0 +1,39 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW MenuDescription 계산값 (px-6 py-4, 이미지가 없으면 mt-15)
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+
+  &--no-image {
+    margin-top: 60px;
+  }
+
+  &__name,
+  &__price {
+    align-self: flex-start;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  &__price {
+    color: palette.$primary-500;
+  }
+
+  // order의 text-xm은 없는 클래스라 글자 크기는 상속(16px)이다
+  &__text {
+    display: -webkit-box;
+    align-self: flex-start;
+    overflow: hidden;
+    margin-bottom: 8px;
+    color: palette.$neutral-500;
+    line-height: 1.6;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
