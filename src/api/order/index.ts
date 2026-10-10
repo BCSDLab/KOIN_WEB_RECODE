@@ -12,6 +12,11 @@ import {
   OrderShopMenuDetail,
   RegisterOffCampusDeliveryAddress,
   ResetCart,
+  RiderMessages,
+  ShopDeliveryInfo,
+  StudentInfo,
+  TemporaryDeliveryPayment,
+  TemporaryTakeoutPayment,
   UpdateCartItemOptions,
   UpdateCartItemQuantity,
   ValidateCart,
@@ -44,3 +49,13 @@ export const getCampusDeliveryAddresses = APIClient.of(CampusDeliveryAddresses);
 export const validateOffCampusDeliveryAddress = APIClient.of(OffCampusDeliveryValidate);
 
 export const registerOffCampusDeliveryAddress = APIClient.of(RegisterOffCampusDeliveryAddress);
+
+export const getStudentInfo = APIClient.of(StudentInfo);
+
+export const getShopDeliveryInfo = APIClient.of(ShopDeliveryInfo);
+
+export const getRiderMessages = APIClient.of(RiderMessages);
+
+export const createTemporaryDeliveryPayment = APIClient.of(TemporaryDeliveryPayment);
+
+export const createTemporaryTakeoutPayment = APIClient.of(TemporaryTakeoutPayment);

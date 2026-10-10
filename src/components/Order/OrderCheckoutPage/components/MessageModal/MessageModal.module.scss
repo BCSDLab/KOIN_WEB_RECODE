@@ -1,0 +1,33 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order styles/modal.css의 modal-content:
+// flex flex-col items-center justify-center gap-6 px-8 py-6 font-[Pretendard] text-[15px] font-medium text-neutral-600
+.content {
+  @include preflight.order-font;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  color: palette.$neutral-600;
+  font-size: 15px;
+  font-weight: 500;
+
+  &__message {
+    text-align: center;
+
+    // AddressModal: text-[15px] leading-[160%]
+    &--relaxed {
+      line-height: 160%;
+    }
+  }
+}
+
+@include preflight.reset(".content");
+
+.content .content__button {
+  @include preflight.order-font;
+}

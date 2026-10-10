@@ -1,0 +1,59 @@
+// 오라클(Tailwind v4 preflight)과 같은 초기화. 화면 본문과 포털(바텀시트·가운데 모달)의 루트에 건다.
+// :where로 우선순위를 0으로 둬 화면·공용 Button 등의 클래스가 이긴다
+@mixin reset($root) {
+  :where(#{$root}) *,
+  :where(#{$root}) *::before,
+  :where(#{$root}) *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  :where(#{$root}) button,
+  :where(#{$root}) input,
+  :where(#{$root}) textarea {
+    border-radius: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  :where(#{$root}) button {
+    cursor: pointer;
+  }
+
+  :where(#{$root}) textarea {
+    resize: vertical;
+  }
+
+  :where(#{$root}) a {
+    color: inherit;
+    font-family: inherit;
+    text-decoration: inherit;
+  }
+
+  :where(#{$root}) img,
+  :where(#{$root}) svg,
+  :where(#{$root}) video,
+  :where(#{$root}) canvas,
+  :where(#{$root}) audio,
+  :where(#{$root}) iframe,
+  :where(#{$root}) embed,
+  :where(#{$root}) object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  :where(#{$root}) ::placeholder {
+    opacity: 1;
+    color: color-mix(in oklab, currentcolor 50%, transparent);
+  }
+}
+
+// order Button·Badge·모달 영역의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+@mixin order-font {
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+}
