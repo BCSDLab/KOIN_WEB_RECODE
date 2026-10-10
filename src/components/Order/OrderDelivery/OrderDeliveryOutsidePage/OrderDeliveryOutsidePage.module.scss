@@ -1,0 +1,250 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: mx-6 mt-4 flex min-h-[calc(100dvh-4.75rem)] flex-col items-center justify-between
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: calc(100dvh - 4.75rem);
+  margin: 16px 24px 0;
+
+  // order: mb-[1.813rem] w-full
+  &__content {
+    width: 100%;
+    margin-bottom: 1.813rem;
+  }
+}
+
+// order: Button fullWidth mt-auto mb-5 h-[2.875rem] disabled:border-neutral-300 disabled:bg-neutral-300.
+// 공용 Button의 색·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.page > .page__button {
+  height: 2.875rem;
+  margin-top: auto;
+  margin-bottom: 20px;
+
+  // order Button의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+
+  &:disabled {
+    border-color: palette.$neutral-300;
+    background-color: palette.$neutral-300;
+    cursor: default;
+  }
+}
+
+// order: sticky top-[3.75rem] -mx-6 bg-[#f8f8fa] px-6 pb-2
+.search {
+  position: sticky;
+  top: 3.75rem;
+  margin: 0 -24px;
+  padding: 0 24px 8px;
+  background-color: palette.$page-background;
+
+  &__title {
+    color: palette.$primary-500;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  // order: my-2 flex h-10 items-center gap-2 rounded-xl border-[1px] border-neutral-400 px-3 py-2
+  &__box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    height: 40px;
+    margin: 8px 0;
+    padding: 8px 12px;
+    border: 1px solid palette.$neutral-400;
+    border-radius: 12px;
+  }
+
+  // order: w-full focus:border-transparent focus:ring-0 focus:outline-none
+  &__input {
+    width: 100%;
+
+    // order(Tailwind v4 preflight)의 기본 placeholder 색: 글자색의 50%
+    &::placeholder {
+      color: color-mix(in oklab, currentcolor 50%, transparent);
+      opacity: 1;
+    }
+
+    &:focus {
+      border-color: transparent;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  &__notice {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__notice-text {
+    color: palette.$neutral-500;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+}
+
+// order: mt-2 text-[13px] leading-[1.6] font-normal text-neutral-600
+.guide {
+  margin-top: 8px;
+  color: palette.$neutral-600;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+
+  &__title {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  // order: space-y-2
+  &__list > :not(:last-child) {
+    margin-bottom: 8px;
+  }
+
+  &__item {
+    position: relative;
+    padding-left: 16px;
+  }
+
+  &__bullet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: palette.$neutral-500;
+  }
+
+  &__label {
+    color: palette.$neutral-500;
+  }
+
+  &__example {
+    color: palette.$primary-300;
+  }
+}
+
+// order: shadow-1 mt-2 flex flex-col divide-y divide-neutral-300 overflow-y-auto rounded-xl border-[1px] border-neutral-300
+.results {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  overflow-y: auto;
+  border: 1px solid palette.$neutral-300;
+  border-radius: 12px;
+  box-shadow: palette.$shadow-1;
+
+  // order: flex flex-col items-start p-4 bg-white (선택 시 bg-neutral-200, 처음·끝 rounded-t-xl·rounded-b-xl)
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    background-color: #fff;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid palette.$neutral-300;
+    }
+
+    &--selected {
+      background-color: palette.$neutral-200;
+    }
+
+    &--first {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    &--last {
+      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+  }
+
+  &__name {
+    color: palette.$neutral-800;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: start;
+  }
+
+  &__address {
+    color: palette.$neutral-500;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: start;
+  }
+}
+
+// order: mt-20 flex flex-col items-center gap-3
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  margin-top: 80px;
+
+  &__title {
+    color: palette.$primary-500;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__description {
+    color: palette.$neutral-600;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+}
+
+// order: flex w-full flex-col items-center gap-6 px-8 py-6
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  padding: 24px 32px;
+
+  &__message {
+    color: palette.$neutral-600;
+    font-size: 15px;
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre-line;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+// order: Button h-12 font-medium (확인 w-[230px], 아니오·예 flex-1). 공용 Button의 굵기·글꼴을 덮는다
+.modal .modal__button {
+  height: 48px;
+
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  font-weight: 500;
+  line-height: 1.5;
+
+  &--confirm {
+    width: 230px;
+  }
+
+  &--half {
+    flex: 1 1 0%;
+  }
+}

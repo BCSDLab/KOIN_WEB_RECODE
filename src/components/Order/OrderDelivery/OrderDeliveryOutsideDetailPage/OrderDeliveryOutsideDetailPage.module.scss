@@ -1,0 +1,103 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: flex h-[calc(100vh-4rem)] flex-col items-center px-[1.5rem]
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100vh - 4rem);
+  padding: 0 1.5rem;
+}
+
+// order: Button fullWidth mt-auto mb-5 h-[2.875rem]. 공용 Button의 글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.page > .page__button {
+  height: 2.875rem;
+  margin-top: auto;
+  margin-bottom: 20px;
+
+  // order Button의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+}
+
+// order: shadow-1 w-full rounded-xl
+.card {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: palette.$shadow-1;
+
+  // order: flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 3.5rem;
+    padding: 0 24px;
+    border-radius: 0 0 12px 12px;
+    background-color: #fff;
+    color: palette.$neutral-600;
+    font-size: 0.813rem;
+  }
+}
+
+// order: mt-[1.813rem] w-full
+.section {
+  width: 100%;
+  margin-top: 1.813rem;
+
+  &__title {
+    color: palette.$primary-500;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  &__description {
+    padding-bottom: 12px;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  // order: w-full rounded-sm border border-neutral-300 bg-white px-4 py-3 placeholder-neutral-400 outline-none placeholder:text-sm
+  &__input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid palette.$neutral-300;
+    border-radius: 4px;
+    outline: none;
+    background-color: #fff;
+
+    &::placeholder {
+      color: palette.$neutral-400;
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+}
+
+// order ModalContent(styles/modal.css의 modal-content): flex flex-col items-center justify-center gap-6 px-8 py-6
+// font-[Pretendard] text-[15px] font-medium text-neutral-600
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  color: palette.$neutral-600;
+
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+// order: Button h-12 w-[16rem]
+.modal .modal__button {
+  width: 16rem;
+  height: 48px;
+
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  line-height: 1.5;
+}
