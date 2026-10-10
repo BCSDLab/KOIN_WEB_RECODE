@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
-  cancel-in-progress: ${{ github.ref_name != 'main' }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -31,6 +31,11 @@ jobs:
 
       - name: Check types
         run: yarn typecheck
+
+      - name: Verify stage release deployment
+        run: |
+          bash -n scripts/deploy/server/stage-deploy.sh
+          python3 scripts/deploy/tests/test_stage_deploy.py
 
   build-and-deploy:
     needs:
@@ -126,10 +131,17 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
           REMOTE_DEPLOY_SCRIPT="/home/ubuntu/koin/web/deploy-${SENTRY_ENVIRONMENT}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.sh"
-          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/koin/web/"
+          REMOTE_ARCHIVE="/home/ubuntu/koin/web/$ARCHIVE_NAME"
+          DEPLOY_ARGS=''
+          if [ "$SENTRY_ENVIRONMENT" = stage ]; then
+            RELEASE_ID="${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+            REMOTE_ARCHIVE="/home/ubuntu/koin/web/dist-${RELEASE_ID}.tar.gz"
+            DEPLOY_ARGS="$REMOTE_ARCHIVE $RELEASE_ID $GITHUB_SHA"
+          fi
+          scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_ARCHIVE"
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_DEPLOY_SCRIPT"
           ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
-            "bash -lc 'status=0; bash $REMOTE_DEPLOY_SCRIPT || status=\$?; rm -f $REMOTE_DEPLOY_SCRIPT; exit \$status'"
+            "bash -lc 'status=0; bash $REMOTE_DEPLOY_SCRIPT $DEPLOY_ARGS || status=\$?; rm -f $REMOTE_DEPLOY_SCRIPT; exit \$status'"
 
       # nginx까지 통과한 공개 endpoint가 방금 배포한 환경과 release를 반환하는지 확인한다.
       # Sentry Uptime은 status code만 검사하므로 release SHA 검증은 배포 파이프라인이 담당한다.
