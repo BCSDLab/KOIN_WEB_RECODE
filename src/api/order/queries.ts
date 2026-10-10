@@ -9,6 +9,7 @@ import {
   getCartItemOptions,
   getCartSummary,
   getOrderShopMenuDetail,
+  getPaymentInfo,
   getRiderMessages,
   getShopDeliveryInfo,
   getStudentInfo,
@@ -32,6 +33,9 @@ export const orderQueryKeys = {
   riderMessages: (scope: 'auth' | 'guest') => [...orderQueryKeys.all, 'rider-messages', scope] as const,
   shopDeliveryInfo: (orderableShopId: number) =>
     [...orderQueryKeys.all, 'shop-delivery-info', orderableShopId] as const,
+  // 주문 결과는 로그인 사용자 요청이라 범위를 키에 넣는다
+  paymentInfo: (paymentId: number, scope: 'auth' | 'guest') =>
+    [...orderQueryKeys.all, 'payment-info', scope, paymentId] as const,
 };
 
 // order useCart의 dummyCart: 비로그인(401)이면 빈 장바구니로 그린다
@@ -126,5 +130,12 @@ export const orderQueries = {
       queryKey: orderQueryKeys.shopDeliveryInfo(orderableShopId),
       queryFn: () => getShopDeliveryInfo(orderableShopId),
       enabled: orderableShopId > 0,
+    }),
+  // KOIN_ORDER_WEBVIEW pages/OrderFinish/hooks/usePaymentInfo 이전(주문 결과)
+  paymentInfo: (paymentId: number, isLoggedIn: boolean) =>
+    queryOptions({
+      queryKey: orderQueryKeys.paymentInfo(paymentId, getViewerScope(isLoggedIn)),
+      queryFn: () => getPaymentInfo(paymentId),
+      enabled: isLoggedIn,
     }),
 };

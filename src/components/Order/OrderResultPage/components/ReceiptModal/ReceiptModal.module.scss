@@ -1,0 +1,88 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order modal-content(flex flex-col items-center justify-center gap-6 font-[Pretendard] font-medium)에
+// ReceiptModal의 px-4 py-6 text-center text-sm text-black을 덮은 계산값
+.content {
+  @include preflight.order-font;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: calc(1.25 / 0.875);
+  text-align: center;
+}
+
+@include preflight.reset(".content");
+
+// order: flex w-full flex-col gap-4
+.receipt {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+
+  // order: relative flex items-center justify-center
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // order: absolute right-0
+  &__close {
+    position: absolute;
+    right: 0;
+  }
+
+  &__strong {
+    font-weight: 600;
+  }
+
+  // order: h-[1px] border-b border-neutral-200
+  &__divider {
+    height: 1px;
+    border-bottom: 1px solid palette.$neutral-200;
+  }
+
+  // order: text-xs text-neutral-600
+  &__meta {
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: calc(1 / 0.75);
+  }
+
+  // order: space-y-3.5
+  &__menus > * + * {
+    margin-top: 14px;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // order: space-y-2 text-left
+  &__address {
+    text-align: left;
+
+    & > * + * {
+      margin-top: 8px;
+    }
+  }
+
+  // order: text-sm break-words text-black
+  &__address-text {
+    color: #000;
+    font-size: 14px;
+    line-height: calc(1.25 / 0.875);
+    overflow-wrap: break-word;
+  }
+}

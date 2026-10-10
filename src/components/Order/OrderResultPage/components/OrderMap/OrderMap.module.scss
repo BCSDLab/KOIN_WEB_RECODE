@@ -1,0 +1,48 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: mb-2 h-65 w-full rounded-xl border border-primary-200
+.map {
+  box-sizing: border-box;
+  width: 100%;
+  height: 260px;
+  margin-bottom: 8px;
+  border: 1px solid palette.$primary-200;
+  border-radius: 12px;
+
+  // 배달지 지도(DeliveryMap)와 같은 처리: 지도 SDK 레이어(z-index 100~103)가 sticky 헤더 위로 올라오지 않게 가둔다
+  isolation: isolate;
+
+  // 지도 SDK가 그리는 링크(NAVER 로고 등)는 order(Tailwind preflight)처럼 지도 컨테이너의 글꼴을 물려받는다
+  a {
+    font-family: inherit;
+  }
+}
+
+// order ShopMarker가 head에 넣던 .shop-marker 스타일
+.shop-marker {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-top: 6px solid palette.$primary-300;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    transform: translateX(-50%);
+  }
+
+  &__text {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background: palette.$primary-300;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+    white-space: nowrap;
+  }
+}

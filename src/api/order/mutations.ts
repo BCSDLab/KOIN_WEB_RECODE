@@ -3,6 +3,7 @@ import { smsSend, smsVerify } from 'api/auth';
 
 import type {
   AddCartRequest,
+  CancelPaymentRequest,
   ConfirmPaymentRequest,
   DeliveryTemporaryRequest,
   OffCampusDeliveryAddressRequest,
@@ -13,6 +14,7 @@ import type {
 } from './entity';
 import {
   addCart,
+  cancelPayment,
   confirmPayment,
   createTemporaryDeliveryPayment,
   createTemporaryTakeoutPayment,
@@ -106,5 +108,11 @@ export const orderMutations = {
     mutationOptions({
       mutationFn: ({ phone, code }: { phone: string; code: string }) =>
         smsVerify({ phone_number: phone, verification_code: code }),
+    }),
+
+  // KOIN_ORDER_WEBVIEW pages/OrderFinish/hooks/useCancelPayment 이전(주문 취소). 이동은 화면에서 정한다
+  cancelPayment: (paymentId: number) =>
+    mutationOptions({
+      mutationFn: (data: CancelPaymentRequest) => cancelPayment(paymentId, data),
     }),
 };

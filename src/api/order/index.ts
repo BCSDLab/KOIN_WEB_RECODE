@@ -4,6 +4,7 @@ import {
   AddCart,
   AddressSearch,
   CampusDeliveryAddresses,
+  CancelPayment,
   Cart,
   CartItemOptions,
   CartSummary,
@@ -11,6 +12,7 @@ import {
   DeleteCartItem,
   OffCampusDeliveryValidate,
   OrderShopMenuDetail,
+  PaymentInfo,
   RegisterOffCampusDeliveryAddress,
   ResetCart,
   RiderMessages,
@@ -62,3 +64,7 @@ export const createTemporaryDeliveryPayment = APIClient.of(TemporaryDeliveryPaym
 export const createTemporaryTakeoutPayment = APIClient.of(TemporaryTakeoutPayment);
 
 export const confirmPayment = APIClient.of(ConfirmPayment);
+
+export const getPaymentInfo = APIClient.of(PaymentInfo);
+
+export const cancelPayment = APIClient.of(CancelPayment);
