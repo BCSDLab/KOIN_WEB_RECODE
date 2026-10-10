@@ -1,6 +1,13 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
-import type { CartResponse, CartSummaryResponse, OrderType } from './entity';
+import type {
+  AddCartRequest,
+  CartResponse,
+  CartSummaryResponse,
+  OrderType,
+  ShopMenuDetailResponse,
+  UpdateCartItemRequest,
+} from './entity';
 
 // KOIN_ORDER_WEBVIEW api/cart 이전. 경로·파라미터는 order와 같게 유지한다(parity G2).
 // 장바구니는 비로그인이어도 화면이 정상이므로(빈 장바구니) authOptional로 표시해 로그인 화면으로 보내지 않는다.
@@ -36,5 +43,75 @@ export class CartSummary<R extends CartSummaryResponse> implements APIRequest<R>
 
   constructor(orderableShopId: string) {
     this.path = `cart/summary/${orderableShopId}`;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/shop getShopMenuDetail 이전. 메뉴 상세는 로그인과 무관한 공개 데이터다
+export class OrderShopMenuDetail<R extends ShopMenuDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'order/shop/:id/menus/:menuId';
+
+  response!: R;
+
+  constructor(shopId: string, menuId: string) {
+    this.path = `order/shop/${shopId}/menus/${menuId}`;
+  }
+}
+
+// 장바구니 담기. order는 비로그인이어도 요청을 보내고 401 응답 메시지를 안내 모달로 보여 준다.
+// 그래서 로그인 화면으로 보내지 않도록 authOptional로 표시하고, 비로그인이면 refresh도 시도하지 않는다(장바구니 조회와 같은 처리)
+export class AddCart<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'cart/add';
+
+  data: AddCartRequest;
+
+  authOptional = true;
+
+  skipAuthRefresh: boolean;
+
+  response!: R;
+
+  constructor(data: AddCartRequest, isLoggedIn: boolean) {
+    this.data = data;
+    this.skipAuthRefresh = !isLoggedIn;
+  }
+}
+
+export class ResetCart<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = 'cart/reset';
+
+  response!: R;
+}
+
+// 장바구니 항목 옵션 수정(?editCartItemId). 장바구니 화면에서만 진입하므로 로그인 상태다
+export class CartItemOptions<R extends ShopMenuDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'cart/item/:cartMenuItemId/edit';
+
+  response!: R;
+
+  constructor(cartMenuItemId: string) {
+    this.path = `cart/item/${cartMenuItemId}/edit`;
+  }
+}
+
+export class UpdateCartItemOptions<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = 'cart/item/:cartMenuItemId';
+
+  data: UpdateCartItemRequest;
+
+  response!: R;
+
+  constructor(cartMenuItemId: string, data: UpdateCartItemRequest) {
+    this.path = `cart/item/${cartMenuItemId}`;
+    this.data = data;
   }
 }
