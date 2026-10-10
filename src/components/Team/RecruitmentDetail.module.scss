@@ -244,12 +244,18 @@
   }
 
   &__text,
+  .qualifications,
   &__link {
     margin: 0;
     overflow-wrap: anywhere;
     font-size: 12px;
     line-height: 160%;
     white-space: pre-wrap;
+  }
+
+  .qualifications {
+    padding-left: 18px;
+    list-style: disc;
   }
 
   &__link {
