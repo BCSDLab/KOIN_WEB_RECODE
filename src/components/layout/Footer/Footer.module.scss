@@ -26,19 +26,16 @@
     display: flex;
     list-style: none;
     justify-content: center;
+    gap: clamp(16px, 1.25vw, 24px);
     margin: 0 0 36px auto;
   }
 
   &__service {
-    margin-right: 44px;
+    flex-shrink: 0;
     white-space: nowrap;
 
-    &:last-child {
-      margin-right: 0;
-    }
-
     & > a {
-      font-size: 15px;
+      font-size: clamp(14px, 1.25vw, 15px);
       font-weight: 700;
       font-style: normal;
       font-stretch: normal;
