@@ -1,0 +1,15 @@
+// order: flex w-full flex-col items-center > w-full > #payment-method·#agreement(w-full)
+.widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  &__inner {
+    width: 100%;
+  }
+
+  &__area {
+    width: 100%;
+  }
+}
