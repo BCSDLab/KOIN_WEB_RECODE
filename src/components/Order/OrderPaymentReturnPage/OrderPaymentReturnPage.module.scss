@@ -1,0 +1,46 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW pages/PaymentConfirm 이전. order에서 이 화면은 앱 레이아웃 밖이라 헤더 없이 화면 전체를 쓴다.
+// 값은 order 화면의 계산된 스타일을 옮겼다
+
+.page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  min-height: 100vh;
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+// order: flex h-screen flex-col items-center justify-center
+.paying {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  // order: text-[32px] leading-[160%] font-bold
+  &__title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  // order: leading-[160%] font-medium
+  &__description {
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  // order Lottie: width 390, height 400
+  &__lottie {
+    width: 390px;
+    height: 400px;
+  }
+}

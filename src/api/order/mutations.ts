@@ -3,6 +3,7 @@ import { smsSend, smsVerify } from 'api/auth';
 
 import type {
   AddCartRequest,
+  ConfirmPaymentRequest,
   DeliveryTemporaryRequest,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
@@ -12,6 +13,7 @@ import type {
 } from './entity';
 import {
   addCart,
+  confirmPayment,
   createTemporaryDeliveryPayment,
   createTemporaryTakeoutPayment,
   deleteCartItem,
@@ -86,6 +88,12 @@ export const orderMutations = {
   createTemporaryTakeoutPayment: () =>
     mutationOptions({
       mutationFn: (data: TakeoutTemporaryRequest) => createTemporaryTakeoutPayment(data),
+    }),
+
+  // KOIN_ORDER_WEBVIEW useConfirmPayments 이전(결제 승인). 성공·실패 후 이동은 화면에서 정한다
+  confirmPayment: () =>
+    mutationOptions({
+      mutationFn: (data: ConfirmPaymentRequest) => confirmPayment(data),
     }),
 
   // KOIN_ORDER_WEBVIEW useSendSmsVerification 이전(연락처 변경 인증). order와 같은 경로·본문을 쓴다
