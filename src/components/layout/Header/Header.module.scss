@@ -1,6 +1,7 @@
 @use "src/utils/scss/media" as media;
 
 .header {
+  position: relative;
   height: 80px;
   font-size: 12px;
   font-weight: 600;
