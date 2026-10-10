@@ -2,8 +2,13 @@ import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 
 import type {
   AddCartRequest,
+  AddressSearchResponse,
+  CampusAddressCategory,
+  CampusDeliveryAddressResponse,
   CartResponse,
   CartSummaryResponse,
+  OffCampusDeliveryAddressRequest,
+  OffCampusDeliveryValidateRequest,
   OrderType,
   ShopMenuDetailResponse,
   UpdateCartItemRequest,
@@ -151,6 +156,65 @@ export class UpdateCartItemOptions<R extends object> implements APIRequest<R> {
 
   constructor(cartMenuItemId: string, data: UpdateCartItemRequest) {
     this.path = `cart/item/${cartMenuItemId}`;
+    this.data = data;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/delivery 이전(배달지 선택). 경로·파라미터는 order와 같게 유지한다(parity G2)
+export class AddressSearch<R extends AddressSearchResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'address/search';
+
+  params: { keyword: string; currentPage: string; countPerPage: string };
+
+  response!: R;
+
+  constructor(keyword: string, currentPage: string, countPerPage: string) {
+    this.params = { keyword, currentPage, countPerPage };
+  }
+}
+
+// 교내 배달지 목록은 로그인과 무관한 공개 데이터다
+export class CampusDeliveryAddresses<R extends CampusDeliveryAddressResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'address/delivery/campus';
+
+  params: { filter: CampusAddressCategory };
+
+  response!: R;
+
+  constructor(filter: CampusAddressCategory) {
+    this.params = { filter };
+  }
+}
+
+export class OffCampusDeliveryValidate<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'delivery/address/off-campus/validate';
+
+  data: OffCampusDeliveryValidateRequest;
+
+  response!: R;
+
+  constructor(data: OffCampusDeliveryValidateRequest) {
+    this.data = data;
+  }
+}
+
+// 교외 배달지 등록(주소 상세의 "주소 선택"). 결제 화면 이동과 함께 B8에서 쓴다
+export class RegisterOffCampusDeliveryAddress<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'delivery/address/off-campus';
+
+  data: OffCampusDeliveryAddressRequest;
+
+  response!: R;
+
+  constructor(data: OffCampusDeliveryAddressRequest) {
     this.data = data;
   }
 }
