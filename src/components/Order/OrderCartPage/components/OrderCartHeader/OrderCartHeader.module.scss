@@ -1,0 +1,20 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW CartResetButton 계산값
+.reset-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: palette.$primary-500;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &--disabled {
+    color: palette.$primary-300;
+    cursor: default;
+  }
+}

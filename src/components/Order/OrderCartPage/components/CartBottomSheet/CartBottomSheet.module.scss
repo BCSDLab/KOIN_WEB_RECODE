@@ -1,0 +1,57 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW pages/Cart/components/BottomSheet 계산값. 화면 하단 고정, 흰 막대 + 32px 흰 영역
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+
+  &__bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    border-bottom: 0.5px solid palette.$neutral-300;
+    border-radius: 32px 32px 0 0;
+    background-color: #fff;
+    box-shadow: palette.$shadow-4;
+    pointer-events: auto;
+  }
+
+  &__amount {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__status {
+    color: palette.$neutral-500;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  &__safe {
+    height: 32px;
+    background-color: #fff;
+  }
+}
+
+// 공용 Button(md)의 여백을 덮어야 해서 선택자 우선순위를 올린다
+.sheet__bar .sheet__button {
+  gap: 10px;
+  padding: 10px 50px;
+
+  // order Button의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  line-height: 1.5;
+
+  // 오라클 Button의 disabled는 border 클래스가 없어 테두리 두께가 0이다
+  &--disabled {
+    border-width: 0;
+  }
+}
