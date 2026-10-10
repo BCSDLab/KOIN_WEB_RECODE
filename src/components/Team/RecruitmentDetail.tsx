@@ -166,7 +166,14 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
             {recruitment.qualification && (
               <section className={styles.section}>
                 <h3 className={styles.section__title}>지원 자격</h3>
-                <p className={styles.section__text}>{recruitment.qualification}</p>
+                <p className={styles.section__text}>
+                  {recruitment.qualification
+                    .split(/\r?\n/)
+                    .map((qualification) => qualification.trim())
+                    .filter(Boolean)
+                    .map((qualification) => `• ${qualification}`)
+                    .join('\n')}
+                </p>
               </section>
             )}
             {recruitment.related_url && (
