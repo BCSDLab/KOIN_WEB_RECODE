@@ -11,6 +11,7 @@
     "@opentelemetry/core": "2.11.0",
     "@sentry/nextjs": "^10.74.0",
     "@tanstack/react-query": "^5.90.21",
+    "@tosspayments/tosspayments-sdk": "^2.3.4",
     "axios": "^0.33.0",
     "dayjs": "^1.11.12",
     "dompurify": "^3.4.13",
