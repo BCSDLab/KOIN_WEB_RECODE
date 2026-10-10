@@ -7,7 +7,7 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  initialize-stage:
+  verify-stage:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: stage
@@ -16,7 +16,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Initialize stage release layout
+      - name: Verify stage release deployment
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -33,76 +33,26 @@ jobs:
           ssh -o ConnectTimeout=30 -p 22222 "$DEPLOY_USER@$DEPLOY_HOST" 'bash -s' <<'REMOTE'
           set -Eeuo pipefail
           base=/usr/local/koin/stage
-          service=koin-stage.service
-          dropin=/etc/systemd/system/koin-stage.service.d/release-path.conf
-          health_url='http://127.0.0.1:3000/api/health?environment=stage'
+          expected=129d6c1cc49efa36074784aa62a7db5e46cb15fb
           exec 9>"$base/.deploy.lock"
           flock -w 300 9
-          if [ -L "$base/current" ]; then
-            test "$(systemctl show "$service" -p WorkingDirectory --value)" = "$base/current"
-            curl -fsS --connect-timeout 2 --max-time 10 "$health_url" | jq -e '.status == "ok" and .environment == "stage"'
-            echo 'Release layout already initialized'
-            exit 0
+          test "$(systemctl show koin-stage.service -p WorkingDirectory --value)" = "$base/current"
+          test -L "$base/current"
+          current=$(readlink -f "$base/current")
+          [[ "$current" == "$base/releases/$expected-"* ]]
+          curl -fsS --connect-timeout 2 --max-time 10 'http://127.0.0.1:3000/api/health?environment=stage' | jq -e --arg sha "$expected" '.status == "ok" and .environment == "stage" and .release == $sha'
+          # 이번 작업에서 만든 사용하지 않는 사전 복사본과 실패한 업로드만 정리한다.
+          unused="$base/releases/bootstrap-836acf78045856ef09d6d9c9a88db692234f8475"
+          if [ -d "$unused" ] && [ "$current" != "$unused" ]; then
+            rm -rf -- "$unused"
+            echo 'Removed unused pre-migration snapshot'
           fi
-          test ! -e "$base/current"
-          test ! -e "$dropin"
-          test "$(systemctl show "$service" -p WorkingDirectory --value)" = "$base"
-          previous_sha=$(curl -fsS --connect-timeout 2 --max-time 10 "$health_url" | jq -er '.release')
-          release="$base/releases/initial-$(date -u +%Y%m%dT%H%M%SZ)-$$"
-          mkdir -p "$release"
-          echo 'Preparing initial release without modifying the running files'
-          tar -C "$base" --exclude=.next/cache -cf - .next public .env .yarn .pnp.cjs .pnp.loader.mjs .yarnrc.yml next.config.mjs package.json yarn.lock | tar -C "$release" -xf -
-          for f in .next/BUILD_ID package.json .pnp.cjs .yarn/releases/yarn-4.17.0.cjs; do test -s "$release/$f"; done
-          current_sha=$(curl -fsS --connect-timeout 2 --max-time 10 "$health_url" | jq -er '.release')
-          test "$previous_sha" = "$current_sha"
-          changed=0
-          rollback() {
-            status=$1
-            trap - ERR HUP INT TERM
-            set +e
-            if [ "$changed" = 1 ]; then
-              sudo -n systemctl stop "$service"
-              sudo -n rm -f "$dropin"
-              rm -f "$base/current"
-              sudo -n systemctl daemon-reload
-              sudo -n systemctl start "$service"
-              echo 'Restored original stage service settings'
-              for i in $(seq 1 30); do
-                if curl -fsS --connect-timeout 2 --max-time 3 "$health_url" | jq -e --arg sha "$previous_sha" '.status == "ok" and .release == $sha' >/dev/null; then echo 'Rollback health verified'; break; fi
-                sleep 1
-              done
-            fi
-            sudo -n journalctl -u "$service" -n 25 --no-pager
-            exit "$status"
-          }
-          trap 'rollback $?' ERR
-          trap 'rollback 129' HUP
-          trap 'rollback 130' INT
-          trap 'rollback 143' TERM
-          changed=1
-          sudo -n systemctl stop "$service"
-          ln -s "$release" "$base/current"
-          sudo -n mkdir -p "$(dirname "$dropin")"
-          sudo -n tee "$dropin" >/dev/null <<'UNIT'
-          [Service]
-          WorkingDirectory=/usr/local/koin/stage/current
-          ExecStart=
-          ExecStart=/home/ubuntu/.nvm/versions/node/v24.14.1/bin/node /usr/local/koin/stage/current/.yarn/releases/yarn-4.17.0.cjs start:serve -p 3000
-          UNIT
-          sudo -n systemctl daemon-reload
-          sudo -n systemctl start "$service"
-          verified=0
-          for i in $(seq 1 30); do
-            if curl -fsS --connect-timeout 2 --max-time 3 "$health_url" | jq -e --arg sha "$previous_sha" '.status == "ok" and .environment == "stage" and .release == $sha' >/dev/null; then verified=1; break; fi
-            sleep 1
-          done
-          test "$verified" = 1
-          changed=0
-          trap - ERR HUP INT TERM
-          systemctl show "$service" -p ActiveState -p WorkingDirectory -p MainPID
-          curl -fsS --max-time 10 "$health_url"
-          echo
+          rm -f -- /home/ubuntu/koin/web/dist-129d6c1cc49efa36074784aa62a7db5e46cb15fb-38060654974-1.tar.gz
+          systemctl show koin-stage.service -p ActiveState -p WorkingDirectory -p MainPID -p MemoryCurrent -p MemorySwapCurrent
+          systemctl show koin-production.service -p ActiveState -p WorkingDirectory -p MainPID
+          sudo -n journalctl -u koin-stage.service --since '2026-10-10 23:55:00' --no-pager | grep -E 'Stopping |Stopped |Started |Ready in|Main process exited|Failed with result' || true
           readlink "$base/current"
+          du -sh "$base/releases/"*
           df -h /
-          echo 'Stage release initialization completed. Production was not changed.'
+          echo 'Server verification completed'
           REMOTE
