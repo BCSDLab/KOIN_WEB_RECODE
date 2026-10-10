@@ -1,0 +1,112 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ShopDetail(isOrderable=true) 이전. 본문은 헤더(StoreMobileHeader 60px) 아래 화면 높이를 채운다
+$header-height: 60px;
+
+.page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  min-height: calc(100vh - #{$header-height});
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  & p {
+    margin: 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section {
+  padding: 12px 24px;
+  background-color: #fff;
+
+  &--gray {
+    background-color: palette.$gray-100;
+  }
+
+  &--highlight {
+    background-color: palette.$neutral-100;
+  }
+
+  &--last {
+    margin-bottom: 40px;
+  }
+
+  &__title {
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+
+  &__label {
+    flex-shrink: 0;
+    width: 56px;
+
+    &--wide {
+      width: 96px;
+    }
+  }
+}
+
+.tip-table {
+  width: 100%;
+  border: 1px solid palette.$gray-200;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-indent: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+
+  &__row {
+    border-bottom: 1px solid palette.$gray-200;
+  }
+
+  &__cell {
+    padding: 8px 16px;
+    border-color: palette.$gray-200; // 오라클 preflight 기본 테두리 색
+    font-weight: 400;
+
+    &--range {
+      border-right: 1px solid palette.$gray-200;
+    }
+  }
+}
