@@ -1,0 +1,7 @@
+// 상점 리뷰 본문(StoreReviewsPage)은 MobilePageHeader(56.8px) 기준으로 화면 높이를 채운다.
+// 주문 화면 헤더는 StoreMobileHeader(60px)라 그대로 두면 본문이 화면보다 3px 길어지므로 높이 기준만 맞춘다
+$header-height: 60px;
+
+.container > :first-child {
+  min-height: calc(100vh - #{$header-height});
+}
