@@ -169,9 +169,8 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
                 <p className={styles.section__text}>
                   {recruitment.qualification
                     .split(/\r?\n/)
-                    .map((qualification) => qualification.trim())
-                    .filter(Boolean)
-                    .map((qualification) => `• ${qualification}`)
+                    .filter((qualification) => qualification.trim() !== '')
+                    .map((qualification) => `• ${qualification.trim()}`)
                     .join('\n')}
                 </p>
               </section>
