@@ -3680,6 +3680,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tosspayments/tosspayments-sdk@npm:^2.3.4":
+  version: 2.9.0
+  resolution: "@tosspayments/tosspayments-sdk@npm:2.9.0"
+  checksum: 10/a19def3c3f9b4416a3197368542f3b1658edd3861b4b3783ee073d3afff32c26787aadc958173314646cff0bc2d257644ea8550daae532160238007495e03c6f
+  languageName: node
+  linkType: hard
+
 "@tybys/wasm-util@npm:^0.10.0":
   version: 0.10.1
   resolution: "@tybys/wasm-util@npm:0.10.1"
@@ -7401,6 +7408,7 @@ __metadata:
     "@svgr/webpack": "npm:^8.1.0"
     "@tanstack/eslint-plugin-query": "npm:^5.102.8"
     "@tanstack/react-query": "npm:^5.90.21"
+    "@tosspayments/tosspayments-sdk": "npm:^2.3.4"
     "@types/file-saver": "npm:^2.0.7"
     "@types/gtag.js": "npm:^0.0.19"
     "@types/jsdom": "npm:^28.0.3"
