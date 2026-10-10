@@ -1,7 +1,14 @@
 import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 
-import type { AddCartRequest, UpdateCartItemRequest } from './entity';
-import { addCart, resetCart, updateCartItemOptions } from './index';
+import type { AddCartRequest, OrderType, UpdateCartItemRequest } from './entity';
+import {
+  addCart,
+  deleteCartItem,
+  resetCart,
+  updateCartItemOptions,
+  updateCartItemQuantity,
+  validateCart,
+} from './index';
 import { orderQueryKeys } from './queries';
 
 // KOIN_ORDER_WEBVIEW useAddCart·useResetCart·useUpdateCartItemOptions 이전.
@@ -25,5 +32,24 @@ export const orderMutations = {
   updateCartItemOptions: (cartMenuItemId: string) =>
     mutationOptions({
       mutationFn: (data: UpdateCartItemRequest) => updateCartItemOptions(cartMenuItemId, data),
+    }),
+
+  // KOIN_ORDER_WEBVIEW useUpdateCartItemQuantity·useDeleteCartItem·useValidateCart 이전(장바구니 화면)
+  updateCartItemQuantity: (queryClient: QueryClient) =>
+    mutationOptions({
+      mutationFn: ({ cartMenuItemId, quantity }: { cartMenuItemId: number; quantity: number }) =>
+        updateCartItemQuantity(cartMenuItemId, quantity),
+      onSuccess: () => invalidateCartQueries(queryClient),
+    }),
+
+  deleteCartItem: (queryClient: QueryClient) =>
+    mutationOptions({
+      mutationFn: (cartMenuItemId: number) => deleteCartItem(cartMenuItemId),
+      onSuccess: () => invalidateCartQueries(queryClient),
+    }),
+
+  validateCart: () =>
+    mutationOptions({
+      mutationFn: (orderType: OrderType) => validateCart(orderType),
     }),
 };

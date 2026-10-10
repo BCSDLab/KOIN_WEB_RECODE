@@ -1,0 +1,74 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW pages/Cart/components/CartItem 계산값
+.item {
+  display: flex;
+  justify-content: space-between;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__name {
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__details {
+    color: palette.$neutral-500;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  &__amount {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__thumbnail {
+    width: 60px;
+    height: 60px;
+    border: 0.5px solid palette.$neutral-400;
+    border-radius: 5px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+// 공용 Button(sm)의 글자 크기·그림자를 덮어야 해서 선택자 우선순위를 올린다
+.actions .actions__option-button {
+  // order Button의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+
+  // order의 rounded-full(Tailwind v4: calc(infinity * 1px))
+  border-radius: calc(infinity * 1px);
+  box-shadow: none;
+  color: palette.$neutral-600;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px;
+  border: 0.5px solid palette.$neutral-300;
+  border-radius: calc(infinity * 1px);
+  background-color: #fff;
+
+  &__quantity {
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 16px;
+  }
+}
