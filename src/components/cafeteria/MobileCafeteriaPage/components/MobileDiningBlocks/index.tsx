@@ -1,11 +1,12 @@
-import type { Dining, DiningType } from 'api/dinings/entity';
+import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
+import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailImage from 'components/cafeteria/MobileCafeteriaPage/components/DetailImage';
 import MobileMealImage from 'components/cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { filterDinings } from 'components/cafeteria/utils/filter';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
+import { DINING_TYPE_MAP, SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
@@ -13,9 +14,10 @@ import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
   diningType: DiningType;
+  onReportSoldout?: (place: DiningPlace) => void;
 }
 
-export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
+export default function MobileDiningBlocks({ diningType, onReportSoldout }: MobileDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { date } = useCafeteriaParams();
@@ -44,6 +46,16 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
             <div className={styles.category__type}>
               <div className={styles['category__type--title']}>
                 {dining.place}
+                {onReportSoldout && SOLDOUT_REPORT_PLACES.includes(dining.place) && (
+                  <button
+                    type="button"
+                    className={styles['category__report-button']}
+                    aria-label={`${dining.place} 품절 제보하기`}
+                    onClick={() => onReportSoldout(dining.place)}
+                  >
+                    <SoldoutReportIcon />
+                  </button>
+                )}
                 {dining.soldout_at && <span className={styles['category__block--sold-out']}>품절</span>}
                 {!dining.soldout_at && dining.changed_at && (
                   <span className={styles['category__block--changed']}>변경됨</span>

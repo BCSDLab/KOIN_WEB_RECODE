@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 
 import TimetableDownloadIcon from 'assets/svg/timetable-download-icon.svg';
-import showTimetableToast from 'components/feedback/Toast/showTimetableToast';
+import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import useResetInvalidSemester from 'components/TimetablePage/hooks/useResetInvalidSemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
@@ -54,7 +54,7 @@ function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
     .join(' / ');
 
   const handleTimetableClick = () => {
-    showTimetableToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.');
+    showMobileToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.');
   };
 
   return (
