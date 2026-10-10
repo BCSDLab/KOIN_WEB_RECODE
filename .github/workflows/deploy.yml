@@ -32,6 +32,11 @@ jobs:
       - name: Check types
         run: yarn typecheck
 
+      - name: Verify stage release deployment
+        run: |
+          bash -n scripts/deploy/server/stage-deploy.sh
+          python3 scripts/deploy/tests/test_stage_deploy.py
+
   build-and-deploy:
     needs:
       - verify
