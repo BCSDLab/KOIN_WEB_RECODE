@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -12,7 +12,6 @@ import {
   useSuspenseQuery,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { getStoreListV2 } from 'api/store';
 import { storeQueries, storeQueryKeys } from 'api/store/queries';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
@@ -33,15 +32,11 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
-import {
-  isNotFoundKoinError,
-  STORE_DETAIL_ISR_REVALIDATE_SECONDS,
-  STORE_HOT_PATH_LIMIT,
-  withStaticFetchRetry,
-} from 'utils/ts/isr';
+import { isNotFoundKoinError } from 'utils/ts/isr';
 import showToast from 'utils/ts/showToast';
 
 import styles from './StoreDetailPage.module.scss';
@@ -50,70 +45,57 @@ interface Props {
   id: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const { shops } = await withStaticFetchRetry('store.paths', () => getStoreListV2('NONE', [], undefined));
+// 기기·로그인 여부를 서버가 알아야 모바일·데스크톱 렌더와 리뷰 쿼리 범위를 서버에서 확정할 수 있어 SSR로 렌더한다.
+// (ISR은 요청을 몰라 항상 guest 범위로 프리페치했고, 캐시 상태에 따라 요청이 달라졌다)
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext<{ id: string }>, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
+    const isLoggedIn = !!serverRequest?.isLoggedIn;
 
-    return {
-      paths: shops.slice(0, STORE_HOT_PATH_LIMIT).map((shop) => ({
-        params: { id: String(shop.id) },
-      })),
-      fallback: 'blocking',
-    };
-  } catch (error) {
-    console.error('[ISR] failed to prebuild store detail paths:', error);
+    const storeId = context.params?.id;
+    if (!storeId) {
+      return { notFound: true };
+    }
 
-    return {
-      paths: [],
-      fallback: 'blocking',
-    };
-  }
-};
-
-export const getStaticProps: GetStaticProps<Props, { id: string }> = async ({ params }) => {
-  const queryClient = new QueryClient();
-
-  const storeId = params?.id;
-  if (!storeId) {
-    return { notFound: true, revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS };
-  }
-
-  try {
-    await withStaticFetchRetry('store.detail-page', () =>
-      Promise.all([
+    try {
+      await Promise.all([
         queryClient.fetchQuery(storeQueries.detail(storeId)),
         queryClient.fetchQuery(storeQueries.detailMenu(storeId)),
-        queryClient.fetchQuery(
+        // 리뷰는 요청 쿠키가 실린다. 만료·무효 access 쿠키면 API가 401을 주는데 서버는 refresh를 못 하므로
+        // 실패해도 페이지는 그리고 클라이언트가 갱신 후 다시 받게 한다(prefetchQuery는 오류를 삼킨다)
+        queryClient.prefetchQuery(
           storeQueries.reviewList({
             shopId: Number(storeId),
             page: 1,
             sorter: 'LATEST',
+            isLoggedIn,
           }),
         ),
-      ]),
-    );
-  } catch (error) {
-    if (isNotFoundKoinError(error)) {
-      return { notFound: true, revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS };
+      ]);
+    } catch (error) {
+      if (isNotFoundKoinError(error)) {
+        return { notFound: true };
+      }
+      throw error;
     }
-    throw error;
-  }
 
-  try {
-    // 이벤트/공지 탭 데이터는 부가 정보이므로 ISR 생성을 막지 않도록 분리합니다.
-    await withStaticFetchRetry('store.events', () => queryClient.fetchQuery(storeQueries.eventList(storeId)));
-  } catch (error) {
-    console.error(`[ISR] failed to prefetch optional store events for ${storeId}:`, error);
-  }
+    try {
+      // 이벤트/공지 탭 데이터는 부가 정보이므로 페이지 렌더를 막지 않도록 분리합니다.
+      await queryClient.fetchQuery(storeQueries.eventList(storeId));
+    } catch (error) {
+      console.error(`[SSR] failed to prefetch optional store events for ${storeId}:`, error);
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      id: storeId,
-    },
-    revalidate: STORE_DETAIL_ISR_REVALIDATE_SECONDS,
-  };
-};
+    cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        id: storeId,
+      },
+    };
+  },
+);
 
 function StoreDetailPage({ id }: Props) {
   const isMobile = useMediaQuery();

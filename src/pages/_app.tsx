@@ -107,6 +107,13 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   return (
     <div className={`${pretendard.variable} ${pretendard.className}`}>
+      {/* 폰트 변수가 wrapper div에만 있으면 body로 포털되는 모달·바텀시트가 Pretendard를 상속받지 못한다 */}
+      {/* eslint-disable-next-line react/no-unknown-property -- styled-jsx 전역 스타일 문법(jsx, global) */}
+      <style jsx global>{`
+        :root {
+          --font-pretendard: ${pretendard.style.fontFamily};
+        }
+      `}</style>
       <QueryClientProvider client={client}>
         <HydrationBoundary state={pageProps.dehydratedState}>
           {/* Google Tag Manager */}
