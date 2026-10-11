@@ -414,7 +414,7 @@ function StorePage({ dehydratedState, isMobilePage }: StorePageProps) {
   if (isMobilePage) {
     return (
       <>
-        <MobilePageHeader title="주변상점" />
+        <MobilePageHeader background="gray" title="주변상점" />
         <StoreListPage />
       </>
     );

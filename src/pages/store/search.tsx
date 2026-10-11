@@ -23,7 +23,7 @@ export const getServerSideProps = withCacheControl(
 function StoreSearchRoute() {
   return (
     <>
-      <MobilePageHeader title="검색" />
+      <MobilePageHeader background="gray" title="검색" />
       <StoreSearchPage />
     </>
   );
