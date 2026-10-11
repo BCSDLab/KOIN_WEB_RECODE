@@ -1,0 +1,42 @@
+// KOIN_ORDER_WEBVIEW ImageViewer 이전. 슬라이드·화살표·점 모양은 swiper-bundle.css가 그린다
+// 오라클은 Tailwind v4(레이어 안 유틸리티)라 레이어 밖 Swiper CSS의 display가 이긴다. 겹치지 않는 크기만 옮긴다
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+
+  // 포털로 body에 붙으므로 오라클 body(Tailwind preflight)의 글꼴·줄 높이를 직접 준다.
+  // 페이지네이션 점은 inline-block이라 줄 높이가 다르면 세로 위치가 어긋난다
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  &__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 50;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-family: inherit;
+    font-size: 24px;
+    line-height: 32px;
+    cursor: pointer;
+  }
+
+  &__swiper {
+    width: 100%;
+    height: 100%;
+  }
+}
