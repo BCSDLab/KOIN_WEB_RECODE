@@ -18,7 +18,6 @@
     left: 0;
     z-index: 20;
     border-bottom: none;
-    animation: slide-left-enter 0.3s ease-out;
 
     &--page {
       height: auto;
@@ -74,17 +73,5 @@
     @include media.media-breakpoint(mobile) {
       display: contents;
     }
-  }
-}
-
-@keyframes slide-left-enter {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
