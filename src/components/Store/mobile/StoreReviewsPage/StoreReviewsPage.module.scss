@@ -1,7 +1,8 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/components/Store/mobile/common/pageLayout" as layout;
 
 // KOIN_ORDER_WEBVIEW shopReview·ReviewList 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다.
-// 본문은 헤더(60px) 아래 화면 높이를 채운다
+// 본문은 헤더(공통 MobilePageHeader) 아래 화면 높이를 채운다
 @mixin reset-button {
   margin: 0;
   padding: 0;
@@ -19,7 +20,7 @@
   align-items: center;
   width: 100%;
   max-width: 100vw;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - #{layout.$page-header-height});
   padding: 0 24px 40px;
   background-color: palette.$page-background;
   color: #000;

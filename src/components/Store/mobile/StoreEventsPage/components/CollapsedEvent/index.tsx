@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 
 import type { Events } from 'api/storeMobile/entity';
 import LoadingLottie from 'assets/lottie/jumping.json';
-import DownArrow from 'assets/svg/store/chevron-down-icon.svg';
+import DownArrow from 'assets/svg/Store/chevron-down-icon.svg';
 import formatEventDate from 'components/Store/mobile/StoreEventsPage/utils/formatEventDate';
 import useLogger from 'utils/hooks/analytics/useLogger';
 

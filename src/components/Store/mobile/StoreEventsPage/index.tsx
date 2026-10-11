@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
-import SleepIcon from 'assets/svg/store/sleep-icon.svg';
+import SleepIcon from 'assets/svg/Store/sleep-icon.svg';
 
 import StoreEvent from './components/StoreEvent';
 import styles from './StoreEventsPage.module.scss';

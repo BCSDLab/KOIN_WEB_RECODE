@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import MenuIcon from 'assets/svg/store/search-menu-icon.svg';
-import NavigateStoreIcon from 'assets/svg/store/search-navigate-icon.svg';
-import StoresIcon from 'assets/svg/store/search-stores-icon.svg';
+import MenuIcon from 'assets/svg/Store/search-menu-icon.svg';
+import NavigateStoreIcon from 'assets/svg/Store/search-navigate-icon.svg';
+import StoresIcon from 'assets/svg/Store/search-stores-icon.svg';
 import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import { getCategoryIdFromQuery, getCategoryNameById } from 'components/Store/mobile/common/utils/shopCategories';
 import ROUTES from 'static/routes';

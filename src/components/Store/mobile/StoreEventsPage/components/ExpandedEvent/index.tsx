@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import type { Events } from 'api/storeMobile/entity';
-import UpArrow from 'assets/svg/store/chevron-up-icon.svg';
-import PreparingIcon from 'assets/svg/store/preparing-icon.svg';
+import UpArrow from 'assets/svg/Store/chevron-up-icon.svg';
+import PreparingIcon from 'assets/svg/Store/preparing-icon.svg';
 import formatEventDate from 'components/Store/mobile/StoreEventsPage/utils/formatEventDate';
 
 import styles from './ExpandedEvent.module.scss';

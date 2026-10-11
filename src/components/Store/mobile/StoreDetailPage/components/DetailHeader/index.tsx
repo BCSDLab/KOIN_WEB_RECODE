@@ -1,6 +1,6 @@
 import { useEffect, useState, type RefObject } from 'react';
 
-import ArrowBackIcon from 'assets/svg/store/arrow-back-icon.svg';
+import ArrowBackIcon from 'assets/svg/Store/arrow-back-icon.svg';
 import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';

@@ -17,7 +17,6 @@ import useJoinCallvan from 'components/Callvan/hooks/useJoinCallvan';
 import useReopenCallvan from 'components/Callvan/hooks/useReopenCallvan';
 import { DAYS } from 'static/day';
 import ROUTES from 'static/routes';
-import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -107,7 +106,7 @@ export default function CallvanCard({ post }: CallvanCardProps) {
   const handleCallClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     logger.actionEventClick({ event_label: 'callvan_call', team: 'CAMPUS', value: '' });
-    router.push(`${ORDER_BASE_URL}/shops/?category=${CALLVAN_CATEGORY}`);
+    router.push(`${ROUTES.Store()}?category=${CALLVAN_CATEGORY}`);
   };
 
   const renderTopAction = () => {

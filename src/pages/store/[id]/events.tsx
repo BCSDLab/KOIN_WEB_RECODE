@@ -4,7 +4,7 @@ import type { GetServerSidePropsContext } from 'next';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { SSRLayout } from 'components/layout';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import StoreEventsPage from 'components/Store/mobile/StoreEventsPage';
 import ROUTES from 'static/routes';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
@@ -42,7 +42,7 @@ export const getServerSideProps = withCacheControl(
 function StoreEventsRoute({ id }: Props) {
   return (
     <>
-      <StoreMobileHeader title="이벤트/공지" />
+      <MobilePageHeader title="이벤트/공지" />
       <StoreEventsPage id={id} />
     </>
   );

@@ -4,7 +4,7 @@ import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { reviewMutations } from 'api/review/mutations';
 import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ReviewExitModal from 'components/Store/mobile/ReviewFormPage/components/ReviewExitModal';
 import ReviewForm from 'components/Store/mobile/ReviewFormPage/components/ReviewForm';
 import useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
@@ -71,7 +71,7 @@ export default function ReviewEditPage({ id, reviewId }: ReviewEditPageProps) {
 
   return (
     <>
-      <StoreMobileHeader title="리뷰 수정하기" onBack={() => setIsExitModalOpen(true)} />
+      <MobilePageHeader title="리뷰 수정하기" onBack={() => setIsExitModalOpen(true)} />
       <ReviewForm
         shopName={shopDetail.name}
         form={form}

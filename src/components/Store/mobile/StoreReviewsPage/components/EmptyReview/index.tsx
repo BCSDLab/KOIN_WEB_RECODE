@@ -1,4 +1,4 @@
-import WizIcon from 'assets/svg/store/wiz-icon.svg';
+import WizIcon from 'assets/svg/Store/wiz-icon.svg';
 
 import styles from './EmptyReview.module.scss';
 

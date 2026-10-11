@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import Layout, { SSRLayout } from 'components/layout';
-import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ReviewCreatePage from 'components/Store/mobile/ReviewFormPage';
 import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useAddStoreReview } from 'components/Store/StoreReviewPage/hooks/useAddStoreReview';
@@ -67,7 +67,7 @@ function AddReviewPage({ id, isMobile }: Props) {
 
   return (
     <>
-      <StoreMobileHeader title="리뷰 작성하기" />
+      <MobilePageHeader title="리뷰 작성하기" />
       <ReviewCreatePage id={id} />
     </>
   );

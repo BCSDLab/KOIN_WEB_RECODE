@@ -1,8 +1,8 @@
 import { useEffect, useRef, type RefObject } from 'react';
 
 import { cn } from '@bcsdlab/utils';
-import EmptyThumbnailIcon from 'assets/svg/store/empty-thumbnail-icon.svg';
-import SoldOutIcon from 'assets/svg/store/sold-out-icon.svg';
+import EmptyThumbnailIcon from 'assets/svg/Store/empty-thumbnail-icon.svg';
+import SoldOutIcon from 'assets/svg/Store/sold-out-icon.svg';
 
 import styles from './ShopMenus.module.scss';
 

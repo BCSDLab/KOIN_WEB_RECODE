@@ -1,13 +1,14 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/components/Store/mobile/common/pageLayout" as layout;
 
 // KOIN_ORDER_WEBVIEW ReviewReport 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다.
-// 본문은 헤더(60px) 아래 화면 높이를 채우고, 신고 버튼은 맨 아래에 붙는다
+// 본문은 헤더(공통 MobilePageHeader) 아래 화면 높이를 채우고, 신고 버튼은 맨 아래에 붙는다
 .report {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - #{layout.$page-header-height});
   background-color: palette.$page-background;
   color: #000;
 

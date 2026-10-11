@@ -1,6 +1,6 @@
 import type { Review } from 'api/storeMobile/entity';
-import CheckBookmarkIcon from 'assets/svg/store/check-bookmark.svg';
-import NoImageIcon from 'assets/svg/store/no-image-icon.svg';
+import CheckBookmarkIcon from 'assets/svg/Store/check-bookmark.svg';
+import NoImageIcon from 'assets/svg/Store/no-image-icon.svg';
 import StarList from 'components/Store/mobile/StoreReviewsPage/components/StarList';
 import { formatReviewDate } from 'components/Store/mobile/StoreReviewsPage/utils/formatReviewDate';
 import Button from 'components/ui/Button';

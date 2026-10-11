@@ -1,4 +1,4 @@
-import StarIcon from 'assets/svg/store/star-icon.svg';
+import StarIcon from 'assets/svg/Store/star-icon.svg';
 
 import styles from './StarList.module.scss';
 
