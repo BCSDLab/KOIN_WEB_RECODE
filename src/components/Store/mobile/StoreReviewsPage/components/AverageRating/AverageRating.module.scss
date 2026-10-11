@@ -1,0 +1,72 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW AverageRating·Rating 계산값을 옮겼다
+.average {
+  display: flex;
+  gap: 29px;
+  width: 100%;
+  padding: 0 24px 14px;
+  border-bottom: 1px solid palette.$neutral-300;
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__score {
+    font-size: 32px;
+    line-height: 160%;
+  }
+
+  &__stars {
+    margin-top: 4px;
+  }
+
+  &__rates {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+}
+
+.rate {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__point {
+    width: 18px;
+    font-size: 12px;
+    line-height: 160%;
+    text-align: right;
+  }
+
+  &__track {
+    flex: 1;
+    border-radius: 10px;
+    background-color: palette.$neutral-300;
+  }
+
+  &__fill {
+    position: relative;
+    height: 6px;
+    border-radius: 10px;
+    background-color: palette.$star-filled;
+  }
+
+  &__count {
+    width: 15px;
+    color: palette.$neutral-500;
+    font-size: 13px;
+    line-height: 160%;
+  }
+}

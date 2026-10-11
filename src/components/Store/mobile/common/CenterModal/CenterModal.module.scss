@@ -1,0 +1,42 @@
+// KOIN_ORDER_WEBVIEW CenterModal(Modal.tsx) 계산값을 옮겼다
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 70%);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  min-width: 80%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #000;
+  transform: translate(-50%, -50%);
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  & p {
+    margin: 0;
+  }
+}

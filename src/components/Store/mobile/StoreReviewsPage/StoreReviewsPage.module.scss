@@ -1,0 +1,116 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW shopReview·ReviewList 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다.
+// 본문은 헤더(60px) 아래 화면 높이를 채운다
+@mixin reset-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100vw;
+  min-height: calc(100vh - 60px);
+  padding: 0 24px 40px;
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  & p {
+    margin: 0;
+  }
+}
+
+.write-button {
+  @include reset-button;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+  padding: 9px 0;
+  border: 1px solid palette.$primary-500;
+  border-radius: 8px;
+  color: palette.$primary-500;
+  font-size: 14px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 18px;
+  color: palette.$neutral-500;
+  font-size: 14px;
+
+  &__sort {
+    @include reset-button;
+
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__sort-icon {
+    display: block;
+  }
+
+  &__mine {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__mine-input {
+    display: none;
+  }
+
+  &__mine-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__mine-text {
+    padding-top: 2px;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 18px;
+}

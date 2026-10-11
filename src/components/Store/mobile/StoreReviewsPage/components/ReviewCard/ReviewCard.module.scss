@@ -1,0 +1,141 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ReviewCard 계산값을 옮겼다
+@mixin reset-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  padding-bottom: 4px;
+
+  &__mine {
+    display: flex;
+    align-items: center;
+    color: palette.$primary-500;
+    font-size: 12px;
+  }
+
+  &__mine-icon {
+    display: block;
+  }
+
+  &__header {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__nickname {
+    font-weight: 500;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__report {
+    @include reset-button;
+
+    color: palette.$neutral-500;
+    font-size: 14px;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    color: palette.$neutral-500;
+    font-size: 12px;
+  }
+
+  &__content {
+    display: flex;
+    font-size: 14px;
+    white-space: pre-line;
+  }
+
+  &__images {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__image-button {
+    @include reset-button;
+
+    flex-shrink: 0;
+  }
+
+  &__image {
+    display: block;
+    width: 148px;
+    height: 148px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__menus {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+    white-space: pre-line;
+  }
+
+  &__menu {
+    padding: 3px 10px;
+    border: 1px solid palette.$primary-300;
+    border-radius: 5px;
+    color: palette.$primary-300;
+    font-size: 12px;
+    word-break: break-all;
+  }
+}
+
+// 공용 Button(sm: 14px/20px, 그림자)을 order 계산값(12px/18px, 그림자 없음)으로 덮는다
+.card__actions .card__action {
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.reported {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0;
+
+  &__icon {
+    display: block;
+  }
+
+  &__text {
+    color: palette.$neutral-500;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
