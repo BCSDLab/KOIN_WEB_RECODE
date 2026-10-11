@@ -64,7 +64,7 @@ function OrderShopReviewsRoute({ isDesktop, shopId }: Props) {
           <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
         </Head>
       )}
-      <StoreMobileHeader title="리뷰" />
+      <StoreMobileHeader title="리뷰" background="white" />
       {isDesktop ? <DesktopNotice /> : <OrderShopReviewsPage shopId={shopId} />}
     </>
   );
