@@ -10,7 +10,7 @@ interface OrderResultHeaderProps {
 export default function OrderResultHeader({ onClose }: OrderResultHeaderProps) {
   return (
     <div className={styles.header}>
-      <StoreMobileHeader title="" onBack={onClose} />
+      <StoreMobileHeader title="" background="white" onBack={onClose} />
     </div>
   );
 }
