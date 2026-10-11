@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -14,7 +14,12 @@ import {
 } from '@tanstack/react-query';
 import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
+import { storeMobileQueries } from 'api/storeMobile/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
+import Layout, { SSRLayout } from 'components/layout';
+import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
+import StoreListPage from 'components/Store/mobile/StoreListPage';
+import { getListRequestParams, parseListQuery } from 'components/Store/mobile/StoreListPage/utils/listQuery';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
 import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
@@ -108,7 +113,28 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
   return storeList || [];
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
+export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+  // 모바일은 KOIN_ORDER_WEBVIEW 주변상점 화면을 그린다. order가 부르는 API(카테고리·v3 목록)만 서버에서 받아 본문까지 렌더한다
+  if (serverRequest?.device === 'mobile') {
+    const mobileQueryClient = new QueryClient();
+    const { sort, filter } = parseListQuery(context.query);
+    const { sorter, filter: listFilter } = getListRequestParams(sort, filter);
+
+    await Promise.all([
+      mobileQueryClient.prefetchQuery(storeMobileQueries.categories()),
+      mobileQueryClient.prefetchQuery(storeMobileQueries.list(sorter, listFilter)),
+    ]);
+
+    cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+    return {
+      props: {
+        isMobilePage: true,
+        dehydratedState: dehydrate(mobileQueryClient),
+      },
+    };
+  }
+
   const queryClient = new QueryClient();
 
   const { storeName } = context.query;
@@ -130,6 +156,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   return {
     props: {
+      isMobilePage: false,
       dehydratedState: dehydrate(queryClient),
     },
   };
@@ -378,10 +405,30 @@ function Store() {
   );
 }
 
-export default function StorePage({ dehydratedState }: { dehydratedState: DehydratedState }) {
+interface StorePageProps {
+  dehydratedState: DehydratedState;
+  isMobilePage?: boolean;
+}
+
+function StorePage({ dehydratedState, isMobilePage }: StorePageProps) {
+  if (isMobilePage) {
+    return (
+      <>
+        <StoreMobileHeader title="주변상점" />
+        <StoreListPage />
+      </>
+    );
+  }
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <Store />
     </HydrationBoundary>
   );
 }
+
+// 기기는 서버가 확정한다. 모바일만 페이지 헤더 레이아웃을 쓰고 데스크톱은 기본 레이아웃 그대로 둔다
+StorePage.getLayout = (page: ReactElement<StorePageProps>) =>
+  page.props.isMobilePage ? <SSRLayout mobileHeader="page">{page}</SSRLayout> : <Layout>{page}</Layout>;
+
+export default StorePage;
