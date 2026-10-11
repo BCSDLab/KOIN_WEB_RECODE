@@ -113,24 +113,16 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                     if (!price.name) {
                       return (
                         <span key={price.id} className={styles.menu__price}>
-                          {price.price.toLocaleString()}
-                          원
+                          {price.price.toLocaleString()}원
                         </span>
                       );
                     }
 
                     return (
                       <div key={price.id} className={styles.option}>
-                        <span className={styles.option__name}>
-                          {price.name}
-                          {' '}
-                          :
-                        </span>
+                        <span className={styles.option__name}>{price.name} :</span>
 
-                        <span className={styles.option__price}>
-                          {price.price.toLocaleString()}
-                          원
-                        </span>
+                        <span className={styles.option__price}>{price.price.toLocaleString()}원</span>
                       </div>
                     );
                   })}

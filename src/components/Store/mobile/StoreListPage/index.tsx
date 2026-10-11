@@ -45,7 +45,10 @@ export default function StoreListPage() {
   const { sorter, filter } = getListRequestParams(selectedSort, selectedFilter);
 
   const { data: categories } = useSuspenseQuery(storeMobileQueries.categories());
-  const { data: shopList } = useQuery({ ...storeMobileQueries.list(sorter, filter), placeholderData: keepPreviousData });
+  const { data: shopList } = useQuery({
+    ...storeMobileQueries.list(sorter, filter),
+    placeholderData: keepPreviousData,
+  });
 
   const shops = (shopList?.shops ?? []).filter((shop) => {
     if (!selectedCategory || selectedCategory === 1) return true;

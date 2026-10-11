@@ -185,9 +185,7 @@ export default function StoreReviewsPage({ id }: StoreReviewsPageProps) {
       <button type="button" className={styles['write-button']} onClick={handleWriteClick}>
         리뷰 작성하기
       </button>
-      <div className={styles.rating}>
-        {latestReviews && <AverageRating data={latestReviews} />}
-      </div>
+      <div className={styles.rating}>{latestReviews && <AverageRating data={latestReviews} />}</div>
       <div className={styles.toolbar}>
         <button type="button" onClick={openSortModal} className={styles.toolbar__sort}>
           <span>{getReviewSortLabel(selectedSort)}</span>

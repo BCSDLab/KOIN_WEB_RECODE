@@ -113,54 +113,56 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
   return storeList || [];
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
-  // 모바일은 KOIN_ORDER_WEBVIEW 주변상점 화면을 그린다. order가 부르는 API(카테고리·v3 목록)만 서버에서 받아 본문까지 렌더한다
-  if (serverRequest?.device === 'mobile') {
-    const mobileQueryClient = new QueryClient();
-    const { sort, filter } = parseListQuery(context.query);
-    const { sorter, filter: listFilter } = getListRequestParams(sort, filter);
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    // 모바일은 KOIN_ORDER_WEBVIEW 주변상점 화면을 그린다. order가 부르는 API(카테고리·v3 목록)만 서버에서 받아 본문까지 렌더한다
+    if (serverRequest?.device === 'mobile') {
+      const mobileQueryClient = new QueryClient();
+      const { sort, filter } = parseListQuery(context.query);
+      const { sorter, filter: listFilter } = getListRequestParams(sort, filter);
 
-    await Promise.all([
-      mobileQueryClient.prefetchQuery(storeMobileQueries.categories()),
-      mobileQueryClient.prefetchQuery(storeMobileQueries.list(sorter, listFilter)),
-    ]);
+      await Promise.all([
+        mobileQueryClient.prefetchQuery(storeMobileQueries.categories()),
+        mobileQueryClient.prefetchQuery(storeMobileQueries.list(sorter, listFilter)),
+      ]);
+
+      cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+      return {
+        props: {
+          isMobilePage: true,
+          dehydratedState: dehydrate(mobileQueryClient),
+        },
+      };
+    }
+
+    const queryClient = new QueryClient();
+
+    const { storeName } = context.query;
+    const selectedStoreName = storeName ? String(storeName) : undefined;
+
+    await queryClient.prefetchQuery(storeQueries.categories());
+
+    await queryClient.prefetchQuery(
+      storeQueries.listV2({
+        sorter: 'NONE',
+        filter: [],
+        query: selectedStoreName,
+      }),
+    );
+
+    await queryClient.prefetchQuery(storeQueries.allEvents());
 
     cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
 
     return {
       props: {
-        isMobilePage: true,
-        dehydratedState: dehydrate(mobileQueryClient),
+        isMobilePage: false,
+        dehydratedState: dehydrate(queryClient),
       },
     };
-  }
-
-  const queryClient = new QueryClient();
-
-  const { storeName } = context.query;
-  const selectedStoreName = storeName ? String(storeName) : undefined;
-
-  await queryClient.prefetchQuery(storeQueries.categories());
-
-  await queryClient.prefetchQuery(
-    storeQueries.listV2({
-      sorter: 'NONE',
-      filter: [],
-      query: selectedStoreName,
-    }),
-  );
-
-  await queryClient.prefetchQuery(storeQueries.allEvents());
-
-  cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
-
-  return {
-    props: {
-      isMobilePage: false,
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+  },
+);
 
 function Store() {
   const enterCategoryTimeRef = useRef<number | null>(null);

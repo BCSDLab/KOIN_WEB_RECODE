@@ -19,7 +19,6 @@ import {
   getShopSummary,
 } from './index';
 
-
 // 모바일 상점·주문 화면 쿼리. 데스크톱 상점(api/store)과 캐시를 섞지 않도록 키 접두사를 분리한다.
 // 리뷰처럼 로그인 여부에 따라 응답이 달라지는 쿼리는 getViewerScope로 범위를 키에 넣는다(SSR·클라이언트 키 일치)
 export const storeMobileQueryKeys = {

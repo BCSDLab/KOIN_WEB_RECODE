@@ -69,11 +69,7 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
           </div>
           <span className={styles.review__text}>{shopInfoSummary.rating_average}</span>
           <span className={styles.review__text}>·</span>
-          <span className={styles.review__text}>
-            리뷰
-            {' '}
-            {shopInfoSummary.review_count}
-          </span>
+          <span className={styles.review__text}>리뷰 {shopInfoSummary.review_count}</span>
           <div className={styles.review__chevron}>
             <ChevronRightIcon fill="black" className={styles.icon} />
           </div>
@@ -100,10 +96,7 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
               </div>
               <div className={styles['card__delivery-row']}>
                 <span className={styles.card__label}>배달금액</span>
-                <span className={styles.card__value}>
-                  {shopInfo.delivery_price}
-                  원
-                </span>
+                <span className={styles.card__value}>{shopInfo.delivery_price}원</span>
               </div>
             </div>
             <div className={styles.card__chevron}>
@@ -117,7 +110,11 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
           </div>
         )}
 
-        <Link href={ROUTES.StoreEvents({ id: String(shopInfoSummary.shop_id) })} className={styles.card} onClick={handleBenefitEntryClick}>
+        <Link
+          href={ROUTES.StoreEvents({ id: String(shopInfoSummary.shop_id) })}
+          className={styles.card}
+          onClick={handleBenefitEntryClick}
+        >
           <SpeakerIcon className={styles.icon} />
           <span className={styles.card__event}>{latestEvent?.title ?? '아직 이벤트/공지가 없어요'}</span>
           <div className={styles.card__chevron}>

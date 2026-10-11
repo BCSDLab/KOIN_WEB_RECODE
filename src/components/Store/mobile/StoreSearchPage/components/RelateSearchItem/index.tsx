@@ -35,17 +35,9 @@ export default function RelateSearchItem({ tag, shopId, shopName, menuName }: Re
   };
 
   return (
-    <Link
-      href={ROUTES.StoreDetail({ id: String(shopId) })}
-      className={styles.item}
-      onClick={handleSearchItemClick}
-    >
+    <Link href={ROUTES.StoreDetail({ id: String(shopId) })} className={styles.item} onClick={handleSearchItemClick}>
       <div className={styles.item__content}>
-        {tag === 'store' ? (
-          <StoresIcon className={styles.item__icon} />
-        ) : (
-          <MenuIcon className={styles.item__icon} />
-        )}
+        {tag === 'store' ? <StoresIcon className={styles.item__icon} /> : <MenuIcon className={styles.item__icon} />}
         <p className={styles.item__text}>
           {menuName && `${menuName} | `}
           {shopName}

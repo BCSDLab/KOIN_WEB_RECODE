@@ -20,7 +20,15 @@ interface ShopCardProps {
   isOrderable: boolean;
 }
 
-export default function ShopCard({ shopId, isOpen, name, rating, reviewCount, thumbnailUrl, isOrderable }: ShopCardProps) {
+export default function ShopCard({
+  shopId,
+  isOpen,
+  name,
+  rating,
+  reviewCount,
+  thumbnailUrl,
+  isOrderable,
+}: ShopCardProps) {
   const router = useRouter();
   const logger = useLogger();
 

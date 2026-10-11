@@ -14,7 +14,9 @@
 
   // 포털로 body에 붙으므로 오라클 body(Tailwind preflight)의 글꼴·줄 높이를 직접 준다.
   // 페이지네이션 점은 inline-block이라 줄 높이가 다르면 세로 위치가 어긋난다
-  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family:
+    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
   font-size: 16px;
   line-height: 1.5;
 
