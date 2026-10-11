@@ -7,7 +7,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { CATEGORY, type Submenu } from 'static/category';
 import ROUTES from 'static/routes';
-import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
+import { IS_STAGE } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -104,8 +104,7 @@ export default function Panel({ openModal }: PanelProps) {
     }
 
     if (submenu.title === '주변상점') {
-      const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
-      router.push(targetUrl);
+      router.push(`${ROUTES.Store()}?category=1`);
       closeSidebar();
 
       return;

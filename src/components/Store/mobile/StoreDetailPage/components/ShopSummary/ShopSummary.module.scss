@@ -1,0 +1,206 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ShopSummary 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
+.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  &__name {
+    align-self: flex-start;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__badges {
+    display: flex;
+    align-self: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  &__cards {
+    display: flex;
+    align-self: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+
+.icon {
+  display: block;
+}
+
+.review {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  color: #000;
+
+  &__star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 8px 4px 12px;
+  border: 0.5px solid palette.$neutral-400;
+  border-radius: 9999px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+  color: #000;
+
+  &__text {
+    color: palette.$neutral-500;
+    font-size: 10px;
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  min-width: fit-content;
+  height: 56px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+  color: #000;
+
+  &__delivery {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: fit-content;
+  }
+
+  &__delivery-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  &__value {
+    color: palette.$neutral-500;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  &__event {
+    overflow: hidden;
+    width: 96px;
+    height: 38px;
+    font-size: 12px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.unavailable {
+  width: 100%;
+  min-width: fit-content;
+  height: 56px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+  color: palette.$neutral-400;
+  font-size: 12px;
+  line-height: 160%;
+  text-align: center;
+}
+
+.call {
+  width: 100%;
+  margin-top: 12px;
+  color: #000;
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: palette.$shadow-1;
+    text-align: center;
+  }
+
+  &__icon {
+    display: block;
+    margin-right: 8px;
+  }
+
+  &__text {
+    margin-right: 20px;
+    color: palette.$primary-500;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  &__phone {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 160%;
+  }
+}

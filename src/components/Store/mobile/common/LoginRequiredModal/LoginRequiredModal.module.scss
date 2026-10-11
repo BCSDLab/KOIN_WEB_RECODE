@@ -1,0 +1,54 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW LoginRequiredModal(ModalContent = styles/modal.css의 modal-content) 계산값을 옮겼다
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  color: palette.$neutral-600;
+  font-size: 15px;
+  font-weight: 500;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    font-weight: 400;
+    line-height: 160%;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    white-space: pre-wrap;
+  }
+
+  &__subtitle {
+    color: palette.$neutral-500;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+// 공용 Button의 굵기·그림자·테두리를 덮어야 해서 선택자 우선순위를 올린다
+.content__buttons .content__button {
+  box-shadow: none;
+  font-weight: 500;
+  line-height: 1.5;
+
+  &--close {
+    border-color: palette.$neutral-400;
+  }
+}

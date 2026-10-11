@@ -4,11 +4,9 @@ import * as Sentry from '@sentry/nextjs';
 export const ARTICLE_DETAIL_ISR_REVALIDATE_SECONDS = 60 * 10;
 export const BUS_SHUTTLE_ISR_REVALIDATE_SECONDS = 60 * 30;
 export const ROOM_ISR_REVALIDATE_SECONDS = 60 * 60;
-export const STORE_DETAIL_ISR_REVALIDATE_SECONDS = 60 * 60;
 
 export const ARTICLE_HOT_PATH_LIMIT = 10;
 export const ROOM_HOT_PATH_LIMIT = 24;
-export const STORE_HOT_PATH_LIMIT = 24;
 
 const STATIC_FETCH_RETRY_ATTEMPTS = 2;
 const STATIC_FETCH_RETRY_DELAY_MS = 300;
