@@ -167,6 +167,11 @@
     border: 1px solid palette.$neutral-300;
     border-radius: 4px;
     background-color: #fff;
+
+    // 수정 화면(ReviewEditForm)은 아래 여백도 12px이다
+    &--edit {
+      padding-bottom: 12px;
+    }
   }
 
   &__textarea {

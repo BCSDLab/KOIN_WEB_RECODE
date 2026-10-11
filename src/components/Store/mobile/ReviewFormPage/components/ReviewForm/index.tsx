@@ -18,6 +18,8 @@ interface ReviewFormProps {
   onRemoveImage: (index: number) => void;
   submitLabel: string;
   onSubmit: () => void;
+  // edit: 기존 사진(form.existingImageUrls)을 함께 보이고, 입력 상자 아래 여백·내용 줄 수가 오라클 ReviewEditForm을 따른다
+  variant?: 'create' | 'edit';
 }
 
 export default function ReviewForm({
@@ -29,7 +31,9 @@ export default function ReviewForm({
   onRemoveImage,
   submitLabel,
   onSubmit,
+  variant = 'create',
 }: ReviewFormProps) {
+  const isEdit = variant === 'edit';
   const {
     content,
     setContent,
@@ -41,10 +45,19 @@ export default function ReviewForm({
     textareaRef,
     menuTextareaRef,
     isFormValid,
+    existingImageUrls,
+    handleRemoveExistingImage,
     handleMenuKeyDown,
     handleMenuBlur,
     handleRemoveMenu,
   } = form;
+
+  // 수정 화면은 기존 사진을 그대로 두므로 사진 수는 기존 + 새로 올린 사진이다
+  const visibleExistingImageUrls = isEdit ? existingImageUrls : [];
+  const imageCount = visibleExistingImageUrls.length + imageUrls.length;
+  const inputBoxClassName = isEdit
+    ? `${styles['form__input-box']} ${styles['form__input-box--edit']}`
+    : styles['form__input-box'];
 
   return (
     <div className={styles.form}>
@@ -72,7 +85,7 @@ export default function ReviewForm({
       <div className={styles.form__photos}>
         <label className={styles['form__photo-upload']}>
           <AddThumbnailIcon className={styles['form__photo-upload-icon']} />
-          <span className={styles['form__photo-count']}>{imageUrls.length}/3</span>
+          <span className={styles['form__photo-count']}>{imageCount}/3</span>
           <input
             type="file"
             accept="image/*"
@@ -80,14 +93,29 @@ export default function ReviewForm({
             ref={imgRef}
             className={styles['form__photo-input']}
             onChange={onChangeImage}
-            disabled={imageUrls.length >= 3}
+            disabled={imageCount >= 3}
           />
         </label>
 
-        {imageUrls.map((url, idx) => (
+        {visibleExistingImageUrls.map((url, idx) => (
           <div key={url} className={styles.form__photo}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- 기존 리뷰 사진이라 크기가 제각각 */}
+            <img src={url} alt={`existing-${idx}`} className={styles['form__photo-image']} />
+            {/* 오라클처럼 이름 없는 버튼으로 둔다(별점 버튼과 같은 이름 없는 버튼 순서를 맞춘다) */}
+            <button
+              type="button"
+              className={styles['form__photo-remove']}
+              onClick={() => handleRemoveExistingImage(idx)}
+            >
+              <CloseIcon width={12} height={12} className={styles['form__photo-remove-icon']} />
+            </button>
+          </div>
+        ))}
+
+        {imageUrls.map((url, idx) => (
+          <div key={isEdit ? `${url}-${idx}` : url} className={styles.form__photo}>
             {/* eslint-disable-next-line @next/next/no-img-element -- 업로드 이미지 미리보기라 크기가 제각각 */}
-            <img src={url} alt={`review-${idx}`} className={styles['form__photo-image']} />
+            <img src={url} alt={isEdit ? `new-${idx}` : `review-${idx}`} className={styles['form__photo-image']} />
             <button
               type="button"
               aria-label="사진 삭제"
@@ -105,14 +133,16 @@ export default function ReviewForm({
           <span className={styles['form__section-title']}>내용</span>
           <span className={styles.form__caption}>{content.length}/500</span>
         </div>
-        <div className={styles['form__input-box']}>
+        <div className={inputBoxClassName}>
+          {/* 수정 화면은 rows를 주지 않아 기본 2줄 높이에서 늘어난다(오라클 ReviewEditForm) */}
           <textarea
             ref={textareaRef}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="리뷰를 작성해주세요"
             className={styles.form__textarea}
-            rows={1}
+            rows={isEdit ? undefined : 1}
+            maxLength={isEdit ? 500 : undefined}
           />
         </div>
       </div>
@@ -143,7 +173,7 @@ export default function ReviewForm({
           )}
         </div>
 
-        <div className={styles['form__input-box']}>
+        <div className={inputBoxClassName}>
           <textarea
             ref={menuTextareaRef}
             value={menuInput}
