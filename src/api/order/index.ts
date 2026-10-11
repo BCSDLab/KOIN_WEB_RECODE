@@ -13,6 +13,7 @@ import {
   InProgressOrders,
   OffCampusDeliveryValidate,
   OrderHistory,
+  OrderableShops,
   OrderShopMenuDetail,
   PaymentInfo,
   RegisterOffCampusDeliveryAddress,
@@ -74,3 +75,5 @@ export const cancelPayment = APIClient.of(CancelPayment);
 export const getOrderHistory = APIClient.of(OrderHistory);
 
 export const getInProgressOrders = APIClient.of(InProgressOrders);
+
+export const getOrderableShops = APIClient.of(OrderableShops);

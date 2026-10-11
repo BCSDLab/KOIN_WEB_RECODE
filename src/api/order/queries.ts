@@ -2,13 +2,20 @@ import { isKoinError } from '@bcsdlab/koin';
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
 
-import type { CampusAddressCategory, CartResponse, OrderHistoryFilter, OrderType } from './entity';
+import type {
+  CampusAddressCategory,
+  CartResponse,
+  OrderableShopsParams,
+  OrderHistoryFilter,
+  OrderType,
+} from './entity';
 import {
   getCampusDeliveryAddresses,
   getCart,
   getCartItemOptions,
   getCartSummary,
   getInProgressOrders,
+  getOrderableShops,
   getOrderHistory,
   getOrderShopMenuDetail,
   getPaymentInfo,
@@ -42,6 +49,8 @@ export const orderQueryKeys = {
   orderHistory: (filter: OrderHistoryFilter, scope: 'auth' | 'guest') =>
     [...orderQueryKeys.all, 'order-history', scope, filter] as const,
   inProgressOrders: (scope: 'auth' | 'guest') => [...orderQueryKeys.all, 'in-progress-orders', scope] as const,
+  // 주문 홈 상점 목록은 공개 데이터라 범위를 키에 넣지 않는다. 조건(카테고리·필터·정렬·최소주문금액)별로 따로 캐시한다
+  orderableShops: (params: OrderableShopsParams) => [...orderQueryKeys.all, 'orderable-shops', params] as const,
 };
 
 // order useCart의 dummyCart: 비로그인(401)이면 빈 장바구니로 그린다
@@ -160,5 +169,11 @@ export const orderQueries = {
       queryKey: orderQueryKeys.inProgressOrders(getViewerScope(isLoggedIn)),
       queryFn: () => getInProgressOrders(),
       enabled: isLoggedIn,
+    }),
+  // KOIN_ORDER_WEBVIEW pages/Home/hooks/useOrderableShops 이전(주문 홈 상점 목록)
+  orderableShops: (params: OrderableShopsParams) =>
+    queryOptions({
+      queryKey: orderQueryKeys.orderableShops(params),
+      queryFn: () => getOrderableShops(params),
     }),
 };
