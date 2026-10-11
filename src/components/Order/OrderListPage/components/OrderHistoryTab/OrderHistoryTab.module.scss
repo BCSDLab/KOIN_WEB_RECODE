@@ -1,0 +1,28 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: fixed top-15 z-110 flex w-full bg-[#F8F8FA] font-semibold text-neutral-500
+.tab {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  z-index: 110;
+  display: flex;
+  width: 100%;
+  background-color: palette.$page-background;
+  color: palette.$neutral-500;
+  font-weight: 600;
+
+  // order: flex-1 border-b-2 py-3 (비활성 border-b-neutral-400 text-neutral-500)
+  &__button {
+    flex: 1;
+    padding: 12px 0;
+    border-bottom: 2px solid palette.$neutral-400;
+    color: palette.$neutral-500;
+
+    // order: text-primary-500 border-b-primary-500
+    &--active {
+      border-bottom-color: palette.$primary-500;
+      color: palette.$primary-500;
+    }
+  }
+}

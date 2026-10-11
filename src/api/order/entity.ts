@@ -294,3 +294,59 @@ export interface CancelPaymentResponse {
     canceled_at: string;
   }>;
 }
+
+// KOIN_ORDER_WEBVIEW api/order/entity 이전(주문 내역). 지난 주문 목록(GET order)·준비 중 주문(GET order/in-progress)
+export type OrderHistoryPeriod = 'NONE' | 'LAST_3_MONTHS' | 'LAST_6_MONTHS' | 'LAST_1_YEAR';
+export type OrderHistoryStatus = 'NONE' | 'COMPLETED' | 'CANCELED';
+export type OrderHistoryType = 'NONE' | OrderType;
+
+export interface OrderHistoryItem {
+  id: number;
+  payment_id: number;
+  orderable_shop_id: number;
+  orderable_shop_name: string;
+  open_status: boolean;
+  orderable_shop_thumbnail: string;
+  order_date: string;
+  order_status: OrderStatus;
+  order_title: string;
+  total_amount: number;
+}
+
+export interface OrderHistoryResponse {
+  orders: OrderHistoryItem[];
+  total_count: number;
+  current_count: number;
+  current_page: number;
+  total_page: number;
+}
+
+// 페이지 번호는 무한 스크롤이 정한다. 나머지는 order와 같은 이름·값으로 보낸다(검색어가 없으면 빈 문자열).
+// APIRequest.params(Record<string, unknown>)에 넣으려고 인덱스 시그니처를 둔다
+export interface OrderHistoryFilter {
+  [key: string]: unknown;
+  limit: number;
+  period: OrderHistoryPeriod;
+  status: OrderHistoryStatus;
+  type: OrderHistoryType;
+  query: string;
+}
+
+export interface OrderHistoryParams extends OrderHistoryFilter {
+  page: number;
+}
+
+export interface InProgressOrder {
+  id: number;
+  orderable_shop_id: number;
+  payment_id: number;
+  order_type: OrderType;
+  orderable_shop_name: string;
+  orderable_shop_thumbnail: string;
+  estimated_at: string | null;
+  order_status: OrderStatus;
+  order_title: string;
+  total_amount: number;
+}
+
+export type InProgressOrderResponse = InProgressOrder[];

@@ -12,8 +12,11 @@ import type {
   ConfirmPaymentRequest,
   ConfirmPaymentResponse,
   DeliveryTemporaryRequest,
+  InProgressOrderResponse,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
+  OrderHistoryParams,
+  OrderHistoryResponse,
   OrderType,
   PaymentInfoResponse,
   RiderMessageResponse,
@@ -331,4 +334,28 @@ export class CancelPayment<R extends CancelPaymentResponse> implements APIReques
     this.path = `payments/${paymentId}/cancel`;
     this.data = data;
   }
+}
+
+// KOIN_ORDER_WEBVIEW api/order getOrder 이전(주문 내역의 지난 주문). 로그인 사용자의 주문만 조회된다
+export class OrderHistory<R extends OrderHistoryResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'order';
+
+  params: OrderHistoryParams;
+
+  response!: R;
+
+  constructor(params: OrderHistoryParams) {
+    this.params = params;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/order getInProgressOrder 이전(주문 내역의 준비 중 주문)
+export class InProgressOrders<R extends InProgressOrderResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'order/in-progress';
+
+  response!: R;
 }

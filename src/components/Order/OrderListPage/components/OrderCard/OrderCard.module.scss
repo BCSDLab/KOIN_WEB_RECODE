@@ -1,0 +1,117 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order: cursor-pointer rounded-xl border-[0.5px] border-neutral-200 bg-white px-4 py-6
+.card {
+  padding: 24px 16px;
+  border: 0.5px solid palette.$neutral-200;
+  border-radius: 12px;
+  background-color: #fff;
+  cursor: pointer;
+
+  // order: flex justify-between
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // order: text-primary-500 flex items-center gap-1
+  &__state {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    color: palette.$primary-500;
+  }
+
+  // order: font-semibold
+  &__status {
+    font-weight: 600;
+  }
+
+  // order: text-xs
+  &__date {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  // order: flex items-center gap-0.5 text-xs text-neutral-500
+  &__detail {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    color: palette.$neutral-500;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  // order: my-3 h-[1px] bg-neutral-200
+  &__divider {
+    height: 1px;
+    margin: 12px 0;
+    background-color: palette.$neutral-200;
+  }
+
+  // order: flex gap-3
+  &__body {
+    display: flex;
+    gap: 12px;
+  }
+
+  // order: h-22 w-22 rounded-sm border-[0.5px] border-neutral-200 object-cover
+  &__thumbnail {
+    width: 88px;
+    height: 88px;
+    border: 0.5px solid palette.$neutral-200;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  // order: my-1 text-start
+  &__info {
+    margin: 4px 0;
+    text-align: start;
+  }
+
+  // order: font-semibold
+  &__name {
+    font-weight: 600;
+  }
+
+  // order: my-1.5 text-sm font-medium
+  &__title {
+    margin: 6px 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  // order: text-sm font-semibold
+  &__amount {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  // order: mt-4 flex flex-col gap-3
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+}
+
+// order Button: py-3 text-sm (리뷰 쓰기는 text-neutral-600). 공용 Button의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.card .card__review,
+.card .card__reorder {
+  @include preflight.order-font;
+
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.card .card__review {
+  color: palette.$neutral-600;
+}
