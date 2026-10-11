@@ -1,0 +1,194 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ReviewReport 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다.
+// 본문은 헤더(60px) 아래 화면 높이를 채우고, 신고 버튼은 맨 아래에 붙는다
+.report {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  background-color: palette.$page-background;
+  color: #000;
+
+  // 오라클 body의 font-family 체인
+  font-family: Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 24px;
+    padding: 0 28px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__notice {
+    font-size: 14px;
+    color: #8e8e8e;
+  }
+
+  &__options {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    margin-top: 24px;
+    padding: 0 24px;
+  }
+
+  &__submit#{&}__submit {
+    margin-top: auto;
+    margin-bottom: 16px;
+    padding: 11px 28px;
+    font-family: Pretendard, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+
+    &:disabled {
+      border-width: 0;
+    }
+  }
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+
+  &--bordered {
+    border-bottom: 1px solid palette.$neutral-300;
+  }
+
+  &__row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 0 8px;
+  }
+
+  &__check {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+
+    &--etc {
+      margin-top: 4px;
+    }
+  }
+
+  // Tailwind sr-only
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  &__circle {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #8e8e8e;
+    border-radius: 9999px;
+
+    &--checked {
+      border-color: transparent;
+      background-color: palette.$primary-500;
+    }
+  }
+
+  &__check-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+
+    svg {
+      fill: #fff;
+    }
+
+    &--checked {
+      opacity: 1;
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__label {
+    font-weight: 500;
+  }
+
+  &__counter {
+    font-size: 12px;
+    color: palette.$neutral-400;
+
+    &--active {
+      color: palette.$primary-500;
+    }
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: palette.$neutral-500;
+  }
+
+  &__textarea-wrapper {
+    padding: 8px 7px 4px 8px;
+  }
+
+  &__textarea {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px 0;
+    overflow: hidden;
+    border: 1px solid palette.$neutral-300;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #8e8e8e;
+    font: inherit;
+    font-size: 14px;
+    line-height: 21px;
+    resize: none;
+
+    &::placeholder {
+      color: palette.$neutral-400;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
