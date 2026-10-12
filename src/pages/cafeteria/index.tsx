@@ -8,11 +8,12 @@ import type { DiningPlace } from 'api/dinings/entity';
 import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import CafeteriaInfoButton from 'components/cafeteria/components/CafeteriaInfoButton';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
+import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLiveNow';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
-import { convertDateToSimpleString } from 'components/cafeteria/utils/time';
+import { convertDateToSimpleString, DiningTime, kstDateKey } from 'components/cafeteria/utils/time';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
@@ -57,7 +58,10 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
 function Cafeteria() {
   const isMobile = useMediaQuery();
-  const { date } = useCafeteriaParams();
+  const { date, diningType } = useCafeteriaParams();
+  const liveNow = useCafeteriaLiveNow();
+  const isViewingLiveMeal =
+    kstDateKey(date.current()) === kstDateKey(liveNow) && diningType === new DiningTime(liveNow).getType();
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
@@ -83,6 +87,12 @@ function Cafeteria() {
   const openSoldoutReportModal = (initialPlace?: DiningPlace) => {
     if (!window.matchMedia('(pointer: coarse)').matches) {
       showMobileToast('info', '모바일에서만 지원하는 기능입니다. 모바일을 이용해주세요.');
+
+      return;
+    }
+
+    if (!isViewingLiveMeal) {
+      showMobileToast('info', '지금 운영 중인 식단만 제보할 수 있어요.');
 
       return;
     }
