@@ -6,18 +6,36 @@ RELEASE_ID="${2:-$(date -u +%Y%m%dT%H%M%SZ)-$$}"
 EXPECTED_RELEASE="${3:-}"
 SERVICE=koin-stage.service
 HEALTH_URL='http://127.0.0.1:3000/api/health?environment=stage'
-KEEP_RELEASES=3
+KEEP_RELEASES=2
 log() { echo "[deploy-stage $(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
+
+prune_releases() {
+  local current release kept=0
+  current="$(readlink -f "$DEPLOY_DIR/current")"
+  while IFS= read -r release; do
+    [ "$release" = "$current" ] && continue
+    if [ "$kept" -lt $((KEEP_RELEASES - 1)) ]; then
+      kept=$((kept + 1))
+      continue
+    fi
+    log "오래된 릴리스 삭제: ${release##*/}"
+    rm -rf -- "$release"
+  done < <(find "$DEPLOY_DIR/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+}
 
 # CI뿐 아니라 수동 배포도 직렬화한다. 잠금을 얻기 전에는 파일을 변경하지 않는다.
 exec 9>"$DEPLOY_DIR/.deploy.lock"
 flock -w 300 9
 [[ "$RELEASE_ID" =~ ^[a-zA-Z0-9_-]+$ ]]
-test -f "$TAR_FILE"
 test -L "$DEPLOY_DIR/current" || {
   log 'ERROR: releases/current 구조와 systemd 실행 경로를 먼저 준비해야 합니다.'
   exit 1
 }
+if [ "$TAR_FILE" = --prune-only ]; then
+  prune_releases
+  exit 0
+fi
+test -f "$TAR_FILE"
 PREVIOUS_RELEASE="$(readlink -f "$DEPLOY_DIR/current")"
 NEW_RELEASE="$DEPLOY_DIR/releases/$RELEASE_ID"
 test -d "$PREVIOUS_RELEASE"
@@ -35,20 +53,6 @@ health() {
     sleep 1
   done
   return 1
-}
-
-prune_releases() {
-  local current release kept=0
-  current="$(readlink -f "$DEPLOY_DIR/current")"
-  while IFS= read -r release; do
-    [ "$release" = "$current" ] && continue
-    if [ "$kept" -lt $((KEEP_RELEASES - 1)) ]; then
-      kept=$((kept + 1))
-      continue
-    fi
-    log "오래된 릴리스 삭제: ${release##*/}"
-    rm -rf -- "$release"
-  done < <(find "$DEPLOY_DIR/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
 }
 
 activate() {
