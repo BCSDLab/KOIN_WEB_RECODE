@@ -6,6 +6,7 @@ RELEASE_ID="${2:-$(date -u +%Y%m%dT%H%M%SZ)-$$}"
 EXPECTED_RELEASE="${3:-}"
 SERVICE=koin-stage.service
 HEALTH_URL='http://127.0.0.1:3000/api/health?environment=stage'
+KEEP_RELEASES=3
 log() { echo "[deploy-stage $(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
 
 # CI뿐 아니라 수동 배포도 직렬화한다. 잠금을 얻기 전에는 파일을 변경하지 않는다.
@@ -36,6 +37,20 @@ health() {
   return 1
 }
 
+prune_releases() {
+  local current release kept=0
+  current="$(readlink -f "$DEPLOY_DIR/current")"
+  while IFS= read -r release; do
+    [ "$release" = "$current" ] && continue
+    if [ "$kept" -lt $((KEEP_RELEASES - 1)) ]; then
+      kept=$((kept + 1))
+      continue
+    fi
+    log "오래된 릴리스 삭제: ${release##*/}"
+    rm -rf -- "$release"
+  done < <(find "$DEPLOY_DIR/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+}
+
 activate() {
   ln -s "$1" "$DEPLOY_DIR/current.next"
   mv -Tf "$DEPLOY_DIR/current.next" "$DEPLOY_DIR/current"
@@ -59,6 +74,10 @@ rollback() {
     fi
     sudo /usr/bin/journalctl -u "$SERVICE" -n 30 --no-pager
   fi
+  if [ "$(readlink -f "$DEPLOY_DIR/current")" != "$(readlink -f "$NEW_RELEASE")" ]; then
+    rm -rf -- "$NEW_RELEASE"
+  fi
+  rm -f -- "$TAR_FILE"
   exit "$status"
 }
 trap 'rollback $?' ERR
@@ -66,6 +85,7 @@ trap 'rollback 129' HUP
 trap 'rollback 130' INT
 trap 'rollback 143' TERM
 
+prune_releases
 log "신규 릴리스 준비: $RELEASE_ID"
 tar -tzf "$TAR_FILE" >/dev/null
 mkdir "$NEW_RELEASE"
@@ -89,4 +109,3 @@ STOP_REQUESTED=0
 trap - ERR HUP INT TERM
 log "Stage 배포 성공: $RELEASE_ID"
 rm -f "$TAR_FILE"
-# 자동 삭제하지 않는다. 이전 릴리스와 실패한 릴리스는 조사·롤백을 위해 보존한다.

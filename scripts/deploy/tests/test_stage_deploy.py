@@ -25,7 +25,11 @@ printf '{"status":"ok","environment":"stage","release":"sha"}' '''}
   print(name+': PASS')
  pack();run('success',True);assert (base/'current').resolve()==(base/'releases/success').resolve()
  (base/'current').unlink();(base/'current').symlink_to(base/'releases/old')
- pack();(root/'fail-health').touch();run('health-failure',False);assert (base/'current').resolve()==(base/'releases/old').resolve();(root/'fail-health').unlink()
- pack();(root/'fail-start').touch();run('start-failure',False);assert (base/'current').resolve()==(base/'releases/old').resolve()
- (package/'.next/BUILD_ID').unlink();pack();before=(root/'commands').read_text();run('invalid-package',False);assert (root/'commands').read_text()==before
+ pack();(root/'fail-health').touch();run('health-failure',False);assert (base/'current').resolve()==(base/'releases/old').resolve();(root/'fail-health').unlink();assert not (base/'releases/health-failure').exists() and not archive.exists()
+ pack();(root/'fail-start').touch();run('start-failure',False);assert (base/'current').resolve()==(base/'releases/old').resolve();assert not (base/'releases/start-failure').exists() and not archive.exists()
+ (package/'.next/BUILD_ID').unlink();pack();before=(root/'commands').read_text();run('invalid-package',False);assert (root/'commands').read_text()==before;assert not (base/'releases/invalid-package').exists() and not archive.exists()
  archive.write_text('broken');run('corrupt-archive',False);assert (base/'current').resolve()==(base/'releases/old').resolve()
+ (package/'.next/BUILD_ID').write_text('fixture')
+ for i,name in enumerate(['old','success','r1','r2','r3','r4']):
+  d=base/'releases'/name;d.mkdir(exist_ok=True);os.utime(d,(100+i,100+i))
+ pack();run('prune',True);assert sorted(p.name for p in (base/'releases').iterdir())==['old','prune','r3','r4']
