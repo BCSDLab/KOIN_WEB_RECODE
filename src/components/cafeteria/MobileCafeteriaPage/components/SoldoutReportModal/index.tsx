@@ -92,11 +92,8 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
       const uploaded = await uploadFile({ domain: 'coop', file: photoFile });
       imageUrl = uploaded.file_url;
     } catch {
-      showMobileToast('error', '사진 업로드에 실패했습니다.');
-
       return;
     }
-
     createSoldoutReport(
       { diningId: targetDining.id, imageUrl },
       {
