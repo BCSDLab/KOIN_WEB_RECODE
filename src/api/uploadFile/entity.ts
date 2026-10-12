@@ -7,7 +7,7 @@ export type UploadDomain =
   | 'CALLVAN_REPORT'
   | 'CALLVAN_CHAT'
   | 'TEAM_RECRUITMENT'
-  | 'COOP';
+  | 'coop';
 
 export interface UploadImage extends APIResponse {
   file_url: string;
