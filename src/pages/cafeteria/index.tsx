@@ -59,9 +59,12 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 function Cafeteria() {
   const isMobile = useMediaQuery();
   const { date, diningType } = useCafeteriaParams();
-  const liveNow = useCafeteriaLiveNow();
+  const liveDiningTime = new DiningTime(useCafeteriaLiveNow());
+  // 18:30 이후엔 getType()이 '내일 아침'을 의미하므로, 날짜도 반드시 generateDiningDate()로
+  // 같이 넘겨서 비교해야 한다. liveNow 원본 날짜와 비교하면 "오늘(이미 지난) 아침"을 라이브로 오판한다.
   const isViewingLiveMeal =
-    kstDateKey(date.current()) === kstDateKey(liveNow) && diningType === new DiningTime(liveNow).getType();
+    kstDateKey(date.current()) === kstDateKey(liveDiningTime.generateDiningDate()) &&
+    diningType === liveDiningTime.getType();
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
