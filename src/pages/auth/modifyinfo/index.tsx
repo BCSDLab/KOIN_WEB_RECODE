@@ -1098,7 +1098,7 @@ const PhoneInput = React.forwardRef<ICustomFormInput | null, ICustomFormInputPro
 
 const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const { isValid, setIsValid } = useValidationContext();
+  const { setIsValid } = useValidationContext();
   const userType = useUserType();
 
   const isStudent = userType === 'STUDENT';
@@ -1115,21 +1115,12 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     if (email !== '' && !REGEX.EMAIL.test(fullEmail)) {
       valid = '올바른 이메일 형식이 아닙니다.';
     }
-    // 이메일이 비어있고, 변한 상태값은 없고, 기존에 이메일이 없는 경우
-    if (email === '' && !userInfo?.email && !isValid.isFieldChanged) {
-      valid = '이메일을 입력해주세요.';
-    }
-
-    // 이메일이 비어있고, 기존에 이메일이 있는 경우
-    if (email === '' && userInfo?.email) {
-      valid = true;
-    }
 
     return {
       value: email === '' ? null : fullEmail,
       valid,
     };
-  }, [fullEmail, email, userInfo?.email, isValid.isFieldChanged]);
+  }, [fullEmail, email]);
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -1139,10 +1130,6 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
 
     if (newEmail === '' && userInfo?.email) {
       setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
-    }
-
-    if (newEmail === '' && !userInfo?.email && !isValid.isFieldChanged) {
-      setIsValid((prev) => ({ ...prev, isEmailValid: false }));
     }
 
     if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
