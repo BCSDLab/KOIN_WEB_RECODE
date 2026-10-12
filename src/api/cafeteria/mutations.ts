@@ -1,6 +1,6 @@
 import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 
-import { cancelCafeteriaDiningLike, likeCafeteriaDining } from './index';
+import { cancelCafeteriaDiningLike, createSoldoutReport, likeCafeteriaDining } from './index';
 import { cafeteriaQueryKeys } from './queries';
 
 const invalidateDinings = (queryClient: QueryClient, date: string) =>
@@ -17,5 +17,11 @@ export const cafeteriaMutations = {
     mutationOptions({
       mutationFn: (diningId: number) => cancelCafeteriaDiningLike(diningId),
       onSuccess: () => invalidateDinings(queryClient, date),
+    }),
+
+  createSoldoutReport: () =>
+    mutationOptions({
+      mutationFn: ({ diningId, imageUrl }: { diningId: number; imageUrl: string }) =>
+        createSoldoutReport(diningId, { image_url: imageUrl }),
     }),
 };
