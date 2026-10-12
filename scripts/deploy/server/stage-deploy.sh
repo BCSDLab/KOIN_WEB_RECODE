@@ -113,3 +113,4 @@ STOP_REQUESTED=0
 trap - ERR HUP INT TERM
 log "Stage 배포 성공: $RELEASE_ID"
 rm -f "$TAR_FILE"
+prune_releases || log 'WARN: 오래된 릴리스 정리에 실패했습니다. 다음 배포에서 다시 정리합니다.'

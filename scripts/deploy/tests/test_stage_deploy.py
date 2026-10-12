@@ -32,7 +32,7 @@ printf '{"status":"ok","environment":"stage","release":"sha"}' '''}
  (package/'.next/BUILD_ID').write_text('fixture')
  for i,name in enumerate(['old','success','r1','r2','r3','r4']):
   d=base/'releases'/name;d.mkdir(exist_ok=True);os.utime(d,(100+i,100+i))
- pack();run('prune',True);assert sorted(p.name for p in (base/'releases').iterdir())==['old','prune','r4']
+ pack();run('prune',True);assert sorted(p.name for p in (base/'releases').iterdir())==['prune','r4']
  for i,name in enumerate(['r5','r6']):
   d=base/'releases'/name;d.mkdir();os.utime(d,(200+i,200+i))
  before=(root/'commands').read_text()
