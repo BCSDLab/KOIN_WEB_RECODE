@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 
-import { dehydrate, type DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { dehydrate, type DehydratedState, HydrationBoundary, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
+import type { Opens } from 'api/coopshop/entity';
 import { coopshopQueries } from 'api/coopshop/queries';
-import type { DiningPlace } from 'api/dinings/entity';
+import type { DiningPlace, DiningType } from 'api/dinings/entity';
 import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import CafeteriaInfoButton from 'components/cafeteria/components/CafeteriaInfoButton';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
@@ -13,12 +14,13 @@ import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParam
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
-import { convertDateToSimpleString, DiningTime, kstDateKey } from 'components/cafeteria/utils/time';
+import { convertDateToSimpleString, kstDayOfWeek, kstTimeOn } from 'components/cafeteria/utils/time';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { useABTestViewWithStatus } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -30,6 +32,32 @@ import styles from './Cafeteria.module.scss';
 
 const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
+
+// 학생식당은 일요일에 운영하지 않는다. '주말'은 토·일 모두 운영하는 다른 매장용 값이라,
+// 일요일을 '평일'로 묶으면 안 된다 — 매칭되는 opens 항목이 없어야 미운영으로 처리된다.
+const COOP_DAY_LABEL: Record<number, Opens['day_of_week']> = {
+  0: '주말',
+  1: '평일',
+  2: '평일',
+  3: '평일',
+  4: '평일',
+  5: '평일',
+  6: '토요일',
+};
+
+function isWithinOperatingHours(opens: Opens[], viewedDate: Date, diningType: DiningType, liveNow: Date): boolean {
+  const schedule = opens.find(
+    (open) => open.day_of_week === COOP_DAY_LABEL[kstDayOfWeek(viewedDate)] && open.type === DINING_TYPE_MAP[diningType],
+  );
+  if (!schedule) return false;
+
+  const [openHour, openMinute] = schedule.open_time.split(':').map(Number);
+  const [closeHour, closeMinute] = schedule.close_time.split(':').map(Number);
+
+  return (
+    liveNow >= kstTimeOn(viewedDate, openHour, openMinute) && liveNow < kstTimeOn(viewedDate, closeHour, closeMinute)
+  );
+}
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
   const queryClient = new QueryClient();
@@ -59,12 +87,9 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 function Cafeteria() {
   const isMobile = useMediaQuery();
   const { date, diningType } = useCafeteriaParams();
-  const liveDiningTime = new DiningTime(useCafeteriaLiveNow());
-  // 18:30 이후엔 getType()이 '내일 아침'을 의미하므로, 날짜도 반드시 generateDiningDate()로
-  // 같이 넘겨서 비교해야 한다. liveNow 원본 날짜와 비교하면 "오늘(이미 지난) 아침"을 라이브로 오판한다.
-  const isViewingLiveMeal =
-    kstDateKey(date.current()) === kstDateKey(liveDiningTime.generateDiningDate()) &&
-    diningType === liveDiningTime.getType();
+  const liveNow = useCafeteriaLiveNow();
+  const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
+  const isViewingLiveMeal = isWithinOperatingHours(cafeteriaInfo.opens, date.current(), diningType, liveNow);
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
