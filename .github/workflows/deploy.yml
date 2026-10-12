@@ -137,6 +137,8 @@ jobs:
             RELEASE_ID="${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
             REMOTE_ARCHIVE="/home/ubuntu/koin/web/dist-${RELEASE_ID}.tar.gz"
             DEPLOY_ARGS="$REMOTE_ARCHIVE $RELEASE_ID $GITHUB_SHA"
+            ssh -o ConnectTimeout=30 -p "$DEPLOY_PORT" "$DEPLOY_USER@$DEPLOY_HOST" \
+              "bash -s -- --prune-only" < "$LOCAL_DEPLOY_SCRIPT"
           fi
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$ARCHIVE_NAME" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_ARCHIVE"
           scp -o ConnectTimeout=30 -P "$DEPLOY_PORT" "$LOCAL_DEPLOY_SCRIPT" "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_DEPLOY_SCRIPT"

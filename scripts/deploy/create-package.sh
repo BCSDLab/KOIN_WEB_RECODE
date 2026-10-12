@@ -13,6 +13,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
 SMOKE_PORT="${SMOKE_PORT:-3999}"
+TARGET_OS="${TARGET_OS:-linux}"
+TARGET_CPU="${TARGET_CPU:-x64}"
+TARGET_LIBC="${TARGET_LIBC:-glibc}"
 YARN_BIN="$(sed -n 's/^yarnPath: *//p' .yarnrc.yml)"
 
 log() { echo "==> $*"; }
@@ -58,6 +61,32 @@ log "package.json 에서 devDependencies 제거"
 # devDependencies 가 남아 있으면 아래에서 제외한 zip 을 찾다가 기동에 실패한다.
 jq 'del(.devDependencies)' package.json >"$STAGE/package.json"
 
+log "서버(${TARGET_OS}-${TARGET_CPU}-${TARGET_LIBC})와 맞지 않는 플랫폼 패키지 제외"
+declare -A skipped_packages=()
+for dir in "$STAGE"/.yarn/unplugged/*/; do
+  manifest=''
+  for candidate in "$dir"node_modules/@*/*/package.json "$dir"node_modules/[!@]*/package.json; do
+    if [ -f "$candidate" ]; then
+      manifest="$candidate"
+      break
+    fi
+  done
+  [ -n "$manifest" ] || continue
+  if ! jq -e --arg os "$TARGET_OS" --arg cpu "$TARGET_CPU" --arg libc "$TARGET_LIBC" '
+    def allows($field; $value):
+      ($field // []) as $list
+      | ($list | any(.[]; . == "!" + $value) | not)
+        and (($list | map(select(startswith("!") | not))) as $only
+          | ($only | length) == 0 or ($only | any(.[]; . == $value)));
+    allows(.os; $os) and allows(.cpu; $cpu) and allows(.libc; $libc)
+  ' "$manifest" >/dev/null; then
+    name="$(basename "$dir")"
+    skipped_packages["$name"]=1
+    rm -rf -- "$dir"
+  fi
+done
+log "플랫폼 패키지 ${#skipped_packages[@]}개 제외"
+
 log ".pnp.cjs 가 참조하는 캐시 zip 만 복사"
 mkdir -p "$STAGE/.yarn/cache"
 zip_count=0
@@ -66,6 +95,8 @@ while IFS= read -r zip; do
     echo "ERROR: .pnp.cjs 가 참조하는 $zip 이 없다." >&2
     exit 1
   fi
+  zip_name="$(basename "$zip" .zip)"
+  [ -n "${skipped_packages["${zip_name%-*}"]+x}" ] && continue
   cp "$zip" "$STAGE/.yarn/cache/"
   zip_count=$((zip_count + 1))
 done < <(grep -oE '\.yarn/cache/[^"]+\.zip' .pnp.cjs | sort -u)
