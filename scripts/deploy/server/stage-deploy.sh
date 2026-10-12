@@ -10,17 +10,23 @@ KEEP_RELEASES=2
 log() { echo "[deploy-stage $(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
 
 prune_releases() {
-  local current release kept=0
+  local keep="${1:-}" current release kept=0 failed=0
   current="$(readlink -f "$DEPLOY_DIR/current")"
+  touch "$current/.release-complete" || failed=1
+  if [ -n "$keep" ] && [ "$keep" != "$current" ] && [ -d "$keep" ]; then
+    kept=1
+  fi
   while IFS= read -r release; do
     [ "$release" = "$current" ] && continue
-    if [ "$kept" -lt $((KEEP_RELEASES - 1)) ]; then
+    [ "$release" = "$keep" ] && continue
+    if [ -f "$release/.release-complete" ] && [ "$kept" -lt $((KEEP_RELEASES - 1)) ]; then
       kept=$((kept + 1))
       continue
     fi
     log "오래된 릴리스 삭제: ${release##*/}"
-    rm -rf -- "$release"
+    rm -rf -- "$release" || failed=1
   done < <(find "$DEPLOY_DIR/releases" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+  return "$failed"
 }
 
 # CI뿐 아니라 수동 배포도 직렬화한다. 잠금을 얻기 전에는 파일을 변경하지 않는다.
@@ -32,7 +38,7 @@ test -L "$DEPLOY_DIR/current" || {
   exit 1
 }
 if [ "$TAR_FILE" = --prune-only ]; then
-  prune_releases
+  prune_releases || log 'WARN: 오래된 릴리스 정리에 실패했습니다. 다음 배포에서 다시 정리합니다.'
   exit 0
 fi
 test -f "$TAR_FILE"
@@ -89,7 +95,7 @@ trap 'rollback 129' HUP
 trap 'rollback 130' INT
 trap 'rollback 143' TERM
 
-prune_releases
+prune_releases || log 'WARN: 오래된 릴리스 정리에 실패했습니다. 다음 배포에서 다시 정리합니다.'
 log "신규 릴리스 준비: $RELEASE_ID"
 tar -tzf "$TAR_FILE" >/dev/null
 mkdir "$NEW_RELEASE"
@@ -113,4 +119,4 @@ STOP_REQUESTED=0
 trap - ERR HUP INT TERM
 log "Stage 배포 성공: $RELEASE_ID"
 rm -f "$TAR_FILE"
-prune_releases || log 'WARN: 오래된 릴리스 정리에 실패했습니다. 다음 배포에서 다시 정리합니다.'
+prune_releases "$PREVIOUS_RELEASE" || log 'WARN: 오래된 릴리스 정리에 실패했습니다. 다음 배포에서 다시 정리합니다.'
