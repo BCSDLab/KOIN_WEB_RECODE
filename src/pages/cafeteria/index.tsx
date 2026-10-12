@@ -33,8 +33,7 @@ import styles from './Cafeteria.module.scss';
 const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
 
-// 학생식당은 일요일에 운영하지 않는다. '주말'은 토·일 모두 운영하는 다른 매장용 값이라,
-// 일요일을 '평일'로 묶으면 안 된다 — 매칭되는 opens 항목이 없어야 미운영으로 처리된다.
+// 학생식당 opens는 '평일'/'주말' 두 종류뿐이다('토요일' 단독 구간 없음) — 토요일도 '주말'에 포함된다.
 const COOP_DAY_LABEL: Record<number, Opens['day_of_week']> = {
   0: '주말',
   1: '평일',
@@ -42,14 +41,17 @@ const COOP_DAY_LABEL: Record<number, Opens['day_of_week']> = {
   3: '평일',
   4: '평일',
   5: '평일',
-  6: '토요일',
+  6: '주말',
 };
+
+const HH_MM = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
 
 function isWithinOperatingHours(opens: Opens[], viewedDate: Date, diningType: DiningType, liveNow: Date): boolean {
   const schedule = opens.find(
     (open) => open.day_of_week === COOP_DAY_LABEL[kstDayOfWeek(viewedDate)] && open.type === DINING_TYPE_MAP[diningType],
   );
-  if (!schedule) return false;
+  // 주말 아침처럼 시간 대신 "조식 미운영" 같은 안내 문구가 올 수도 있다 — 유효한 HH:mm일 때만 운영 중으로 본다.
+  if (!schedule || !HH_MM.test(schedule.open_time) || !HH_MM.test(schedule.close_time)) return false;
 
   const [openHour, openMinute] = schedule.open_time.split(':').map(Number);
   const [closeHour, closeMinute] = schedule.close_time.split(':').map(Number);
