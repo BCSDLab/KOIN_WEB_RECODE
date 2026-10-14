@@ -136,10 +136,10 @@ function Cafeteria() {
 
       return;
     }
-    
+
     if (!isLoggedIn) {
       handleRequireLogin('품절 제보');
-      
+
       return;
     }
 
