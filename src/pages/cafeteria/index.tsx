@@ -15,7 +15,6 @@ import type { DiningPlace, DiningType } from 'api/dinings/entity';
 import SoldoutReportIcon from 'assets/svg/cafeteria/soldout-report-icon.svg';
 import CafeteriaInfoButton from 'components/cafeteria/components/CafeteriaInfoButton';
 import { CafeteriaServerProvider } from 'components/cafeteria/context/CafeteriaServerContext';
-import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLiveNow';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import SoldoutReportModal from 'components/cafeteria/MobileCafeteriaPage/components/SoldoutReportModal';
@@ -97,9 +96,7 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 function Cafeteria() {
   const isMobile = useMediaQuery();
   const { date, diningType } = useCafeteriaParams();
-  const liveNow = useCafeteriaLiveNow();
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
-  const isViewingLiveMeal = isWithinOperatingHours(cafeteriaInfo.opens, date.current(), diningType, liveNow);
   const logger = useLogger();
   const portalManager = useModalPortal();
   const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
@@ -129,7 +126,7 @@ function Cafeteria() {
       return;
     }
 
-    if (!isViewingLiveMeal) {
+    if (!isWithinOperatingHours(cafeteriaInfo.opens, date.current(), diningType, new Date())) {
       showMobileToast('info', '지금 운영 중인 식단만 제보할 수 있어요.');
 
       return;
