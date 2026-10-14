@@ -9,6 +9,9 @@ import {
   getCartItemOptions,
   getCartSummary,
   getOrderShopMenuDetail,
+  getRiderMessages,
+  getShopDeliveryInfo,
+  getStudentInfo,
   searchAddress,
 } from './index';
 
@@ -24,6 +27,11 @@ export const orderQueryKeys = {
   campusDeliveryAddresses: (filter: CampusAddressCategory) =>
     [...orderQueryKeys.all, 'campus-delivery-addresses', filter] as const,
   addressSearch: (keyword: string) => [...orderQueryKeys.all, 'address-search', keyword] as const,
+  // 결제 화면. 학생 정보·라이더 요청 문구는 로그인 사용자 요청이라 범위를 키에 넣는다
+  studentInfo: (scope: 'auth' | 'guest') => [...orderQueryKeys.all, 'student-info', scope] as const,
+  riderMessages: (scope: 'auth' | 'guest') => [...orderQueryKeys.all, 'rider-messages', scope] as const,
+  shopDeliveryInfo: (orderableShopId: number) =>
+    [...orderQueryKeys.all, 'shop-delivery-info', orderableShopId] as const,
 };
 
 // order useCart의 dummyCart: 비로그인(401)이면 빈 장바구니로 그린다
@@ -97,5 +105,26 @@ export const orderQueries = {
       queryKey: orderQueryKeys.addressSearch(keyword),
       queryFn: () => searchAddress(keyword, '1', '10'),
       enabled: false,
+    }),
+  // KOIN_ORDER_WEBVIEW pages/Payment/hooks/useStudentInfo 이전(연락처 기본값)
+  studentInfo: (isLoggedIn: boolean) =>
+    queryOptions({
+      queryKey: orderQueryKeys.studentInfo(getViewerScope(isLoggedIn)),
+      queryFn: () => getStudentInfo(),
+      enabled: isLoggedIn,
+    }),
+  // KOIN_ORDER_WEBVIEW pages/Delivery/hooks/useGetRiderRequest 이전(배달기사님 요청 문구)
+  riderMessages: (isLoggedIn: boolean) =>
+    queryOptions({
+      queryKey: orderQueryKeys.riderMessages(getViewerScope(isLoggedIn)),
+      queryFn: () => getRiderMessages(),
+      enabled: isLoggedIn,
+    }),
+  // KOIN_ORDER_WEBVIEW pages/Payment/hooks/useDeliveryInfo 이전(교내·교외 배달 가능 여부)
+  shopDeliveryInfo: (orderableShopId: number) =>
+    queryOptions({
+      queryKey: orderQueryKeys.shopDeliveryInfo(orderableShopId),
+      queryFn: () => getShopDeliveryInfo(orderableShopId),
+      enabled: orderableShopId > 0,
     }),
 };

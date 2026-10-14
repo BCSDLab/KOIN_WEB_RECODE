@@ -1,0 +1,19 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: flex flex-col gap-3 > flex items-center justify-between > text-[12px] text-neutral-600
+.agreement {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    color: palette.$neutral-600;
+    font-size: 12px;
+  }
+}

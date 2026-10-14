@@ -1,0 +1,84 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order: relative > input(w-full rounded-xl border border-neutral-300 px-4 py-3 outline-none)
+.field {
+  position: relative;
+
+  &__input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid palette.$neutral-300;
+    border-radius: 12px;
+    outline: none;
+  }
+
+  // order: text-danger-600 absolute top-1/2 right-4 -translate-y-1/2 text-sm
+  &__timer {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    color: palette.$danger-600;
+    font-size: 14px;
+    line-height: calc(1.25 / 0.875);
+    transform: translateY(-50%);
+  }
+}
+
+// order Button(gray): absolute top-2 right-4 px-2.5 text-xs font-normal text-neutral-600 shadow-none
+.field .field__action {
+  @include preflight.order-font;
+
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+  color: palette.$neutral-600;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: calc(1 / 0.75);
+
+  &--inactive {
+    color: palette.$neutral-300;
+    cursor: not-allowed;
+  }
+}
+
+// order: text-sub-500 mt-1 flex items-center gap-1 text-xs leading-[160%]
+.error {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 4px;
+  color: palette.$sub-500;
+  font-size: 12px;
+  line-height: 160%;
+}
+
+// order: mt-1 text-sm leading-[160%] text-neutral-500
+.help {
+  margin-top: 4px;
+  color: palette.$neutral-500;
+  font-size: 14px;
+  line-height: 160%;
+
+  &__link {
+    color: palette.$info-500;
+    font-family: inherit;
+    text-decoration: underline;
+  }
+}
+
+// order Button(lg): rounded-xl py-2.5 text-lg
+// 공용 Button(lg)의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+button.submit {
+  @include preflight.order-font;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 12px;
+  font-size: 18px;
+  line-height: calc(1.75 / 1.125);
+}
