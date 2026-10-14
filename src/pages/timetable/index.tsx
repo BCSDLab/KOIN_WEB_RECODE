@@ -60,6 +60,9 @@ async function prefetchTimetableData(
   query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
+  // 학기·학과 목록은 사용자 학기와 무관하므로 먼저 띄워 두고 각 분기에서 기다린다. prefetchQuery는 실패해도 reject하지 않는다
+  const baseTimetablePrefetch = prefetchBaseTimetableData(queryClient);
+
   try {
     const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
     const userSemester = mySemesterData?.semesters?.[0];
@@ -67,7 +70,7 @@ async function prefetchTimetableData(
 
     if (!semester) {
       setDefaultTimetableFrameList(queryClient, isLoggedIn);
-      await prefetchBaseTimetableData(queryClient);
+      await baseTimetablePrefetch;
 
       return;
     }
@@ -82,7 +85,7 @@ async function prefetchTimetableData(
       }
 
       setDefaultTimetableFrameList(queryClient, isLoggedIn, semester);
-      await prefetchBaseTimetableData(queryClient);
+      await baseTimetablePrefetch;
 
       return;
     }
@@ -92,7 +95,7 @@ async function prefetchTimetableData(
       validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
     const currentFrameId = hasValidatedFrame ? validatedFrameId : (mainFrame?.id ?? null);
 
-    const prefetchPromises = [prefetchBaseTimetableData(queryClient)];
+    const prefetchPromises = [baseTimetablePrefetch];
 
     if (currentFrameId !== null) {
       prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, currentFrameId)));
@@ -108,7 +111,7 @@ async function prefetchTimetableData(
       isLoggedIn,
       getSemesterFromQuery(query.year, query.term) ?? getRecentSemester(),
     );
-    await prefetchBaseTimetableData(queryClient);
+    await baseTimetablePrefetch;
   }
 }
 

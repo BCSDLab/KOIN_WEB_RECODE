@@ -102,19 +102,16 @@ export const getServerSideProps = withCacheControl(
             isLoggedIn,
           }),
         ),
+        // 이벤트/공지 탭 데이터는 부가 정보이므로 실패해도 페이지 렌더를 막지 않도록 오류를 여기서 삼킵니다.
+        queryClient.fetchQuery(storeQueries.eventList(storeId)).catch((error: unknown) => {
+          console.error(`[SSR] failed to prefetch optional store events for ${storeId}:`, error);
+        }),
       ]);
     } catch (error) {
       if (isNotFoundKoinError(error)) {
         return { notFound: true };
       }
       throw error;
-    }
-
-    try {
-      // 이벤트/공지 탭 데이터는 부가 정보이므로 페이지 렌더를 막지 않도록 분리합니다.
-      await queryClient.fetchQuery(storeQueries.eventList(storeId));
-    } catch (error) {
-      console.error(`[SSR] failed to prefetch optional store events for ${storeId}:`, error);
     }
 
     cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
