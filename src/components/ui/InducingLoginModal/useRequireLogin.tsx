@@ -1,5 +1,5 @@
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
+import InducingLoginModal from 'components/ui/InducingLoginModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { getTopicParticle } from 'utils/ts/josa';
 

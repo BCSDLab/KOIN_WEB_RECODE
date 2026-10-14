@@ -9,6 +9,7 @@ import { getSoldoutPlaces } from 'components/cafeteria/utils/filter';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import { SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 
@@ -35,6 +36,8 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
   const { uploadFile, isPending: isUploading } = useUploadFile();
   const { mutate: createSoldoutReport, isPending: isSubmitting } = useCreateSoldoutReport();
+
+  useBodyScrollLock();
 
   useEffect(
     () => () => {
