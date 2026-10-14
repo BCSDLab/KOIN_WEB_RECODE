@@ -1,0 +1,85 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// 바텀시트는 포털이라 화면 본문의 초기화를 받지 않아 따로 건다
+@include preflight.reset(".sheet");
+
+// order styles/modal.css: bottom-modal-header·content·footer는 font-[Pretendard]
+.sheet .sheet__section {
+  @include preflight.order-font;
+}
+
+// order BottomModalHeader: flex items-center justify-center gap-[10px] pr-6 pl-8
+.sheet .header {
+  gap: 10px;
+  justify-content: center;
+  padding-right: 24px;
+  padding-left: 32px;
+
+  // order: w-full
+  &__title {
+    width: 100%;
+  }
+}
+
+// order: text-base font-semibold
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+
+  // order: mt-1 flex text-base font-semibold
+  &--info {
+    display: flex;
+    margin-top: 4px;
+  }
+}
+
+// order: flex gap-3
+.options {
+  display: flex;
+  gap: 12px;
+}
+
+// order Button(sm): shadow-1 border-[0.5px] (sm:grow는 640px 이상에서만 적용)
+.options .options__option {
+  @include preflight.order-font;
+
+  border-width: 0.5px;
+  box-shadow: palette.$shadow-1;
+}
+
+// order: my-3 mt-3 border-[1px] border-[#EEE]
+.divider {
+  margin: 12px 0;
+  border: 1px solid #eee;
+}
+
+// order: mt-4 flex gap-3
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+
+  // order Button(neutral): rounded-xl border border-neutral-400 px-4 py-[10px] text-neutral-800 shadow-none
+  .actions__reset {
+    @include preflight.order-font;
+
+    padding: 10px 16px;
+    border: 1px solid palette.$neutral-400;
+    border-radius: 12px;
+    box-shadow: none;
+    color: palette.$neutral-800;
+  }
+
+  // order Button(primary): flex-1 rounded-xl py-[10px] shadow-none
+  .actions__apply {
+    @include preflight.order-font;
+
+    flex: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+}

@@ -10,7 +10,9 @@ import {
   CartSummary,
   ConfirmPayment,
   DeleteCartItem,
+  InProgressOrders,
   OffCampusDeliveryValidate,
+  OrderHistory,
   OrderShopMenuDetail,
   PaymentInfo,
   RegisterOffCampusDeliveryAddress,
@@ -68,3 +70,7 @@ export const confirmPayment = APIClient.of(ConfirmPayment);
 export const getPaymentInfo = APIClient.of(PaymentInfo);
 
 export const cancelPayment = APIClient.of(CancelPayment);
+
+export const getOrderHistory = APIClient.of(OrderHistory);
+
+export const getInProgressOrders = APIClient.of(InProgressOrders);

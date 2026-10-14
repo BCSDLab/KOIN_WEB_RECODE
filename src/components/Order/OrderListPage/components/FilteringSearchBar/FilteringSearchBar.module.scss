@@ -1,0 +1,90 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/components/Order/OrderCheckoutPage/preflight";
+
+// order: fixed top-[110px] right-0 left-0 z-120 flex flex-col bg-[#F8F8FA] px-6 pb-[18px] (스크롤되면 shadow-2)
+.bar {
+  position: fixed;
+  top: 110px;
+  right: 0;
+  left: 0;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 18px;
+  background-color: palette.$page-background;
+
+  &--scrolled {
+    box-shadow: palette.$shadow-2;
+  }
+}
+
+// order: flex items-center justify-between gap-4 text-[14px] leading-[160%]
+.search {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 160%;
+
+  // order: shadow-1 my-4 flex flex-1 items-center gap-2 rounded-2xl bg-white px-3 py-2
+  &__box {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    align-items: center;
+    margin: 16px 0;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: palette.$shadow-1;
+  }
+
+  // order: flex w-full placeholder-neutral-400 focus:outline-none
+  &__input {
+    display: flex;
+    width: 100%;
+
+    &::placeholder {
+      color: palette.$neutral-400;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // order: flex font-semibold text-neutral-500
+  &__cancel {
+    display: flex;
+    color: palette.$neutral-500;
+    font-weight: 600;
+  }
+}
+
+// order: fixed inset-x-0 top-[232px] bottom-0 z-[110] bg-[rgba(0,0,0,0.70)]
+.dimmed {
+  position: fixed;
+  inset: 232px 0 0;
+  z-index: 110;
+  background-color: rgb(0 0 0 / 70%);
+}
+
+// order: flex gap-2 leading-[160%]
+.chips {
+  display: flex;
+  gap: 8px;
+  line-height: 160%;
+}
+
+// order Button(sm): rounded-2xl border-0 px-2 py-[6px] text-[15px]. 줄 높이는 칩 영역의 leading-[160%]를 따른다.
+// 공용 Button의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.chips .chips__chip {
+  @include preflight.order-font;
+
+  padding: 6px 8px;
+  border-width: 0;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: inherit;
+}
