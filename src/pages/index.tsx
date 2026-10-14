@@ -65,69 +65,87 @@ export const getServerSideProps = withCacheControl(
       date: diningDate.toISOString(),
     };
 
-    const [mySemester] = await Promise.all([
-      fetchMySemester(),
-      queryClient.prefetchQuery(cafeteriaQueries.dinings(convertDateToSimpleString(diningDate))),
-    ]);
+    const prefetchTimetable = async () => {
+      const mySemester = await fetchMySemester();
+      const userSemester = mySemester?.semesters?.[0];
 
-    if (isLoggedIn) {
-      await queryClient.prefetchQuery(authQueries.userInfo(true));
-    }
+      if (isMobile || !isLoggedIn || userType !== 'STUDENT') return userSemester;
 
-    const userSemester = mySemester?.semesters?.[0];
-    const serverSemester = resolveTimetableSemester(undefined, undefined, userSemester) ?? getRecentSemester();
+      if (!userSemester) {
+        setDefaultTimetableFrameList();
+
+        return userSemester;
+      }
+
+      try {
+        const timetableFrameList = await queryClient.fetchQuery(
+          timetableQueries.frameList(isLoggedIn, userSemester, { userType }),
+        );
+        const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+        const activeMainFrameId = mainFrame?.id;
+        if (typeof activeMainFrameId === 'number') {
+          await queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, activeMainFrameId));
+        }
+      } catch (error) {
+        if (isServerAuthError(error)) {
+          resetAuthContext();
+        } else if (isKoinError(error) && (error.status === 403 || error.status === 404)) {
+          setDefaultTimetableFrameList(userSemester);
+        } else {
+          throw error;
+        }
+      }
+
+      return userSemester;
+    };
+
+    const prefetchBanners = async () => {
+      const banners = await queryClient.fetchQuery(bannerQueries.categories());
+      const categoryId = Number(banners.banner_categories[0].id);
+      const list = await queryClient.fetchQuery(bannerQueries.list(categoryId));
+
+      return { categoryId, list };
+    };
 
     let bannerCategoryId = 0;
     let bannersList: BannersResponse = { count: 0, banners: [] };
     let categories: StoreCategoriesResponse = { total_count: 0, shop_categories: [] };
 
-    if (isMobile) {
-      await Promise.all([
-        queryClient.prefetchQuery(weatherQueries.info()),
-        queryClient.prefetchQuery(
-          callvanQueries.list({ statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
-        ),
-        queryClient.prefetchQuery(storeQueries.counts()),
-        queryClient.prefetchQuery(storeQueries.eventCount()),
-        queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo()),
-      ]);
-    } else {
+    const prefetchDeviceContent = async () => {
+      if (isMobile) {
+        await Promise.all([
+          queryClient.prefetchQuery(weatherQueries.info()),
+          queryClient.prefetchQuery(
+            callvanQueries.list({ statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
+          ),
+          queryClient.prefetchQuery(storeQueries.counts()),
+          queryClient.prefetchQuery(storeQueries.eventCount()),
+          queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo()),
+        ]);
+
+        return;
+      }
+
       const [banners, categoriesResponse] = await Promise.all([
-        queryClient.fetchQuery(bannerQueries.categories()),
+        prefetchBanners(),
         queryClient.fetchQuery(storeQueries.categories()),
         queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
         queryClient.prefetchQuery(timetableQueries.semesterInfo()),
         queryClient.prefetchQuery(articleQueries.lostItemStat()),
       ]);
+      bannerCategoryId = banners.categoryId;
+      bannersList = banners.list;
       categories = categoriesResponse;
-      bannerCategoryId = Number(banners.banner_categories[0].id);
-      bannersList = await queryClient.fetchQuery(bannerQueries.list(bannerCategoryId));
+    };
 
-      if (isLoggedIn && userType === 'STUDENT') {
-        if (!userSemester) {
-          setDefaultTimetableFrameList();
-        } else {
-          try {
-            const timetableFrameList = await queryClient.fetchQuery(
-              timetableQueries.frameList(isLoggedIn, userSemester, { userType }),
-            );
-            const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-            const activeMainFrameId = mainFrame?.id;
-            if (typeof activeMainFrameId === 'number') {
-              await queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, activeMainFrameId));
-            }
-          } catch (error) {
-            if (isServerAuthError(error)) {
-              resetAuthContext();
-            } else if (isKoinError(error) && (error.status === 403 || error.status === 404)) {
-              setDefaultTimetableFrameList(userSemester);
-            } else {
-              throw error;
-            }
-          }
-        }
-      }
-    }
+    const [userSemester] = await Promise.all([
+      prefetchTimetable(),
+      queryClient.prefetchQuery(cafeteriaQueries.dinings(convertDateToSimpleString(diningDate))),
+      isLoggedIn && queryClient.prefetchQuery(authQueries.userInfo(true)),
+      prefetchDeviceContent(),
+    ]);
+
+    const serverSemester = resolveTimetableSemester(undefined, undefined, userSemester) ?? getRecentSemester();
 
     if (!isLoggedIn) {
       cacheControl.enablePublicCache();
