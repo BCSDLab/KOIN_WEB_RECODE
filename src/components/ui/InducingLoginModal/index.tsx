@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
-import ROUTES from 'static/routes';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { redirectToLogin } from 'utils/ts/auth';
 
 import styles from './InducingLoginModal.module.scss';
 
@@ -19,7 +19,7 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
 
   const goLogin = () => {
     onClose();
-    router.push(ROUTES.Auth());
+    redirectToLogin(router.asPath);
   };
 
   return (

@@ -35,7 +35,14 @@ export default function DepartmentCard({ department, className }: DepartmentCard
           {department.contacts.map((contact) => (
             <div key={`${contact.task}-${contact.phone_number}`} className={styles.table__row}>
               <span className={styles.table__task}>{contact.task}</span>
-              <span className={styles.table__phone}>{contact.phone_number}</span>
+              <button
+                type="button"
+                className={styles.table__phone}
+                aria-label={`${contact.phone_number} 복사`}
+                onClick={() => copyPhoneNumber(contact.phone_number)}
+              >
+                {contact.phone_number}
+              </button>
             </div>
           ))}
         </div>

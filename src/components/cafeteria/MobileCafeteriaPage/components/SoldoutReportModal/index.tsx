@@ -9,9 +9,12 @@ import { getSoldoutPlaces } from 'components/cafeteria/utils/filter';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import { SOLDOUT_REPORT_PLACES } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 
 import PhotoCapture from './components/PhotoCapture';
+import useCreateSoldoutReport from './hooks/useCreateSoldoutReport';
 import styles from './SoldoutReportModal.module.scss';
 
 interface SoldoutReportModalProps {
@@ -31,6 +34,10 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
   );
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
+  const { uploadFile, isPending: isUploading } = useUploadFile();
+  const { mutate: createSoldoutReport, isPending: isSubmitting } = useCreateSoldoutReport();
+
+  useBodyScrollLock();
 
   useEffect(
     () => () => {
@@ -64,9 +71,17 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
   };
 
   const canSubmit = !!selectedPlace && !!photoFile;
+  const isProcessing = isUploading || isSubmitting;
 
-  const handleSubmit = () => {
-    if (!canSubmit) return;
+  const handleSubmit = async () => {
+    if (!canSubmit || !selectedPlace || !photoFile || isProcessing) return;
+
+    const targetDining = dinings.find((dining) => dining.place === selectedPlace && dining.type === diningType);
+    if (!targetDining) {
+      showMobileToast('error', '식단 정보를 찾을 수 없습니다.');
+
+      return;
+    }
 
     logger.actionEventClick({
       event_name: 'DA1',
@@ -74,8 +89,23 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
       event_label: 'cafeteria__dining__soldout__submit',
       value: `${variantLabel}_${selectedPlace}`,
     });
-    showMobileToast('success', `${selectedPlace} 품절 제보되었습니다.`);
-    onClose();
+
+    let imageUrl: string;
+    try {
+      const uploaded = await uploadFile({ domain: 'coop', file: photoFile });
+      imageUrl = uploaded.file_url;
+    } catch {
+      return;
+    }
+    createSoldoutReport(
+      { diningId: targetDining.id, imageUrl },
+      {
+        onSuccess: () => {
+          showMobileToast('success', `${selectedPlace} 품절 제보되었습니다.`);
+          onClose();
+        },
+      },
+    );
   };
 
   const handleClose = () => {
@@ -147,7 +177,7 @@ export default function SoldoutReportModal({ initialPlace, variantLabel, onClose
             [styles.submit]: true,
             [styles['submit--active']]: canSubmit,
           })}
-          disabled={!canSubmit}
+          disabled={!canSubmit || isProcessing}
           onClick={handleSubmit}
         >
           품절 제보하기

@@ -24,18 +24,20 @@ import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
+import useRequireLogin from 'components/ui/InducingLoginModal/useRequireLogin';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { useABTestViewWithStatus } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './Cafeteria.module.scss';
 
-const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
+const SOLDOUT_REPORT_AB_TEST_VARIABLE = 'icon_location';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
 
 // 토요일/일요일은 항상 각자 고유 라벨('토요일'/'일요일')로 내려온다. 시험기간처럼 시간이
@@ -99,8 +101,11 @@ function Cafeteria() {
   const { data: cafeteriaInfo } = useSuspenseQuery(coopshopQueries.cafeteriaInfo());
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
-    useABTestViewWithStatus(SOLDOUT_REPORT_AB_TEST_TITLE);
+  const isLoggedIn = useIsLoggedIn();
+  const handleRequireLogin = useRequireLogin();
+  const { variant: soldoutReportView, isPending: isSoldoutReportPending } = useABTestViewWithStatus(
+    SOLDOUT_REPORT_AB_TEST_VARIABLE,
+  );
   const isSoldoutReportHeaderVariant = soldoutReportView === SOLDOUT_REPORT_VARIANT_HEADER;
   const isSoldoutReportHeaderReady = !isSoldoutReportPending && isSoldoutReportHeaderVariant;
   const isSoldoutReportCardReady = !isSoldoutReportPending && !isSoldoutReportHeaderVariant;
@@ -129,6 +134,12 @@ function Cafeteria() {
     if (!isWithinOperatingHours(cafeteriaInfo.opens, date.current(), diningType, new Date())) {
       showMobileToast('info', '지금 운영 중인 식단만 제보할 수 있어요.');
 
+      return;
+    }
+    
+    if (!isLoggedIn) {
+      handleRequireLogin('품절 제보');
+      
       return;
     }
 

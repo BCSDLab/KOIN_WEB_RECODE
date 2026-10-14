@@ -1,7 +1,7 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { APIResponse } from 'interfaces/APIResponse';
 
-import type { DiningResponseType } from './entity';
+import type { DiningResponseType, SoldoutReportRequest, SoldoutReportResponse } from './entity';
 
 export class DiningLikePatcher<R extends APIResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PATCH;
@@ -40,6 +40,23 @@ export class CancelDiningLikePatcher<R extends APIResponse> implements APIReques
     this.params = {
       diningId,
     };
+  }
+}
+
+export class CreateSoldoutReport<R extends SoldoutReportResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  data: SoldoutReportRequest;
+
+  auth = true;
+
+  constructor(diningId: number, data: SoldoutReportRequest) {
+    this.path = `/dinings/${diningId}/soldout-reports`;
+    this.data = data;
   }
 }
 
