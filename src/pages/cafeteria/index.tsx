@@ -17,11 +17,13 @@ import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import Layout from 'components/layout';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
+import useRequireLogin from 'components/ui/InducingLoginModal/useRequireLogin';
 import HeaderIconButton from 'components/ui/PageHeader/HeaderIconButton';
 import { useABTestViewWithStatus } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
@@ -60,6 +62,8 @@ function Cafeteria() {
   const { date } = useCafeteriaParams();
   const logger = useLogger();
   const portalManager = useModalPortal();
+  const isLoggedIn = useIsLoggedIn();
+  const handleRequireLogin = useRequireLogin();
   const { variant: soldoutReportView, isPending: isSoldoutReportPending } = useABTestViewWithStatus(
     SOLDOUT_REPORT_AB_TEST_VARIABLE,
   );
@@ -84,6 +88,12 @@ function Cafeteria() {
   const openSoldoutReportModal = (initialPlace?: DiningPlace) => {
     if (!window.matchMedia('(pointer: coarse)').matches) {
       showMobileToast('info', '모바일에서만 지원하는 기능입니다. 모바일을 이용해주세요.');
+
+      return;
+    }
+
+    if (!isLoggedIn) {
+      handleRequireLogin('품절 제보');
 
       return;
     }
