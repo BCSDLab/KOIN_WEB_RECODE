@@ -1,13 +1,21 @@
 import { mutationOptions, type QueryClient } from '@tanstack/react-query';
 
-import type { AddCartRequest, OrderType, UpdateCartItemRequest } from './entity';
+import type {
+  AddCartRequest,
+  OffCampusDeliveryAddressRequest,
+  OffCampusDeliveryValidateRequest,
+  OrderType,
+  UpdateCartItemRequest,
+} from './entity';
 import {
   addCart,
   deleteCartItem,
+  registerOffCampusDeliveryAddress,
   resetCart,
   updateCartItemOptions,
   updateCartItemQuantity,
   validateCart,
+  validateOffCampusDeliveryAddress,
 } from './index';
 import { orderQueryKeys } from './queries';
 
@@ -51,5 +59,16 @@ export const orderMutations = {
   validateCart: () =>
     mutationOptions({
       mutationFn: (orderType: OrderType) => validateCart(orderType),
+    }),
+
+  // KOIN_ORDER_WEBVIEW useOffCampusDeliveryValidate·useUserDeliveryAddress 이전(배달지 선택)
+  validateOffCampusDeliveryAddress: () =>
+    mutationOptions({
+      mutationFn: (data: OffCampusDeliveryValidateRequest) => validateOffCampusDeliveryAddress(data),
+    }),
+
+  registerOffCampusDeliveryAddress: () =>
+    mutationOptions({
+      mutationFn: (data: OffCampusDeliveryAddressRequest) => registerOffCampusDeliveryAddress(data),
     }),
 };
