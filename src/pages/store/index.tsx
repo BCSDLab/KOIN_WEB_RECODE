@@ -141,17 +141,17 @@ export const getServerSideProps = withCacheControl(
     const { storeName } = context.query;
     const selectedStoreName = storeName ? String(storeName) : undefined;
 
-    await queryClient.prefetchQuery(storeQueries.categories());
-
-    await queryClient.prefetchQuery(
-      storeQueries.listV2({
-        sorter: 'NONE',
-        filter: [],
-        query: selectedStoreName,
-      }),
-    );
-
-    await queryClient.prefetchQuery(storeQueries.allEvents());
+    await Promise.all([
+      queryClient.prefetchQuery(storeQueries.categories()),
+      queryClient.prefetchQuery(
+        storeQueries.listV2({
+          sorter: 'NONE',
+          filter: [],
+          query: selectedStoreName,
+        }),
+      ),
+      queryClient.prefetchQuery(storeQueries.allEvents()),
+    ]);
 
     cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
 

@@ -43,9 +43,10 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
 
   const convertedDate = convertDateToSimpleString(currentDate);
 
-  await queryClient.prefetchQuery(cafeteriaQueries.dinings(convertedDate));
-
-  await queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo());
+  await Promise.all([
+    queryClient.prefetchQuery(cafeteriaQueries.dinings(convertedDate)),
+    queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo()),
+  ]);
 
   cacheControl.enablePublicCache();
 

@@ -84,14 +84,13 @@ export const getServerSideProps = withCacheControl(
 
     const queryClient = new QueryClient();
 
+    const shouldPrefetchEventDetail = initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID;
+
     await Promise.all([
       queryClient.prefetchQuery(clubQueries.detail(clubId, serverRequest.isLoggedIn)),
       queryClient.prefetchQuery(clubQueries.recruitment(clubId)),
+      shouldPrefetchEventDetail && queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId)),
     ]);
-
-    if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
-      await queryClient.prefetchQuery(clubQueries.eventDetail(clubId, numericEventId));
-    }
 
     if (!serverRequest.isLoggedIn) {
       cacheControl.enablePublicCache();

@@ -33,12 +33,12 @@ export const getServerSideProps = withCacheControl(async (context: GetServerSide
     };
   }
 
-  await queryClient.prefetchQuery(storeQueries.benefitCategory());
-
-  await queryClient.prefetchQuery(storeQueries.benefitList(categoryId));
-
-  // StoreList 페이지에서 사용하는 API
-  await queryClient.prefetchQuery(storeQueries.categories());
+  await Promise.all([
+    queryClient.prefetchQuery(storeQueries.benefitCategory()),
+    queryClient.prefetchQuery(storeQueries.benefitList(categoryId)),
+    // StoreList 페이지에서 사용하는 API
+    queryClient.prefetchQuery(storeQueries.categories()),
+  ]);
 
   cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
 
