@@ -350,3 +350,42 @@ export interface InProgressOrder {
 }
 
 export type InProgressOrderResponse = InProgressOrder[];
+
+// KOIN_ORDER_WEBVIEW api/shop/entity의 주문 가능 상점 목록(GET order/shops) 이전
+export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
+export type OrderableShopsSorter = 'RATING_DESC' | 'COUNT_DESC';
+
+// 값이 있는 키만 둔다(qsStringify는 undefined를 문자열로 보내므로 빈 키를 만들지 않는다).
+// APIRequest.params(Record<string, unknown>)에 넣으려고 인덱스 시그니처를 둔다
+export interface OrderableShopsParams {
+  [key: string]: unknown;
+  category_filter?: number;
+  filter?: OrderableShopsFilter[];
+  minimum_order_amount?: number;
+  sorter?: OrderableShopsSorter;
+}
+
+export interface OrderableShopImage {
+  image_url: string;
+  is_thumbnail: boolean;
+}
+
+export interface OrderableShop {
+  shop_id: number;
+  orderable_shop_id: number;
+  name: string;
+  is_delivery_available: boolean;
+  is_takeout_available: boolean;
+  service_event: boolean;
+  minimum_order_amount: number;
+  rating_average: number;
+  review_count: number;
+  minimum_delivery_tip: number | null;
+  maximum_delivery_tip: number | null;
+  is_open: boolean;
+  category_ids: number[];
+  images: OrderableShopImage[];
+  open_status: 'OPERATING' | 'PREPARING' | 'CLOSED';
+}
+
+export type OrderableShopsResponse = OrderableShop[];

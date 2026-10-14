@@ -17,6 +17,8 @@ import type {
   OffCampusDeliveryValidateRequest,
   OrderHistoryParams,
   OrderHistoryResponse,
+  OrderableShopsParams,
+  OrderableShopsResponse,
   OrderType,
   PaymentInfoResponse,
   RiderMessageResponse,
@@ -358,4 +360,19 @@ export class InProgressOrders<R extends InProgressOrderResponse> implements APIR
   path = 'order/in-progress';
 
   response!: R;
+}
+
+// KOIN_ORDER_WEBVIEW api/shop getOrderableShops 이전(주문 홈 상점 목록). 로그인과 무관한 공개 데이터다
+export class OrderableShops<R extends OrderableShopsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'order/shops';
+
+  params: OrderableShopsParams;
+
+  response!: R;
+
+  constructor(params: OrderableShopsParams) {
+    this.params = params;
+  }
 }
