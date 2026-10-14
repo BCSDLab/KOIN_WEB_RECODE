@@ -1,0 +1,13 @@
+@use "src/utils/scss/media" as media;
+
+// order Header: 결과 화면(/result)만 h-15 shadow-2. 공용 헤더는 그대로 두고 감싸는 쪽이 고정·그림자를 맡는다
+.header {
+  @include media.media-breakpoint(mobile) {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow:
+      0 4px 10px 0 rgb(0 0 0 / 8%),
+      0 1px 4px 0 rgb(0 0 0 / 4%);
+  }
+}
