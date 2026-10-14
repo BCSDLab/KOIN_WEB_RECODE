@@ -53,9 +53,29 @@
   }
 
   &__phone {
+    display: flex;
     flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     min-width: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: Pretendard, sans-serif;
+    font-size: inherit;
+    color: inherit;
     text-align: center;
+
+    &:where(button) {
+      cursor: pointer;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
   }
 }
 
