@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 
-import { dehydrate, type DehydratedState, HydrationBoundary, QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  dehydrate,
+  type DehydratedState,
+  HydrationBoundary,
+  QueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import type { Opens } from 'api/coopshop/entity';
 import { coopshopQueries } from 'api/coopshop/queries';
@@ -49,7 +55,8 @@ const HH_MM = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
 
 function isWithinOperatingHours(opens: Opens[], viewedDate: Date, diningType: DiningType, liveNow: Date): boolean {
   const schedule = opens.find(
-    (open) => open.day_of_week === COOP_DAY_LABEL[kstDayOfWeek(viewedDate)] && open.type === DINING_TYPE_MAP[diningType],
+    (open) =>
+      open.day_of_week === COOP_DAY_LABEL[kstDayOfWeek(viewedDate)] && open.type === DINING_TYPE_MAP[diningType],
   );
   // 일요일/토요일 아침처럼 시간 대신 "미운영"·"조식 미운영" 같은 안내 문구가 올 수도 있다 — 유효한 HH:mm일 때만 운영 중으로 본다.
   if (!schedule || !HH_MM.test(schedule.open_time) || !HH_MM.test(schedule.close_time)) return false;
