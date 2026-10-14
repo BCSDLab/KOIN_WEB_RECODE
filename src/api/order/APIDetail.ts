@@ -7,6 +7,8 @@ import type {
   CampusDeliveryAddressResponse,
   CartResponse,
   CartSummaryResponse,
+  ConfirmPaymentRequest,
+  ConfirmPaymentResponse,
   DeliveryTemporaryRequest,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
@@ -280,6 +282,21 @@ export class TemporaryTakeoutPayment<R extends TemporaryPaymentResponse> impleme
   response!: R;
 
   constructor(data: TakeoutTemporaryRequest) {
+    this.data = data;
+  }
+}
+
+// KOIN_ORDER_WEBVIEW api/payments confirmPayments 이전(결제 승인). Toss 결제 성공 후 승인 화면에서 한 번 보낸다
+export class ConfirmPayment<R extends ConfirmPaymentResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'payments/confirm';
+
+  data: ConfirmPaymentRequest;
+
+  response!: R;
+
+  constructor(data: ConfirmPaymentRequest) {
     this.data = data;
   }
 }

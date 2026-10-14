@@ -202,3 +202,43 @@ export interface TakeoutTemporaryRequest {
 export interface TemporaryPaymentResponse {
   order_id: string;
 }
+
+// KOIN_ORDER_WEBVIEW api/payments/entity 이전(결제 승인)
+export interface ConfirmPaymentRequest {
+  order_id: string;
+  payment_key: string;
+  amount: number;
+}
+
+export interface ConfirmPaymentResponse {
+  id: number;
+  orderable_shop_id: number;
+  delivery_address: string;
+  delivery_address_details: string;
+  shop_address: string;
+  longitude: number;
+  latitude: number;
+  to_owner: string;
+  to_rider: string;
+  provide_cutlery: boolean;
+  total_menu_price: number;
+  delivery_tip: number;
+  amount: number;
+  shop_name: string;
+  menus: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    options: Array<{
+      option_group_name: string;
+      option_name: string;
+      option_price: number;
+    }>;
+  }>;
+  order_type: OrderType;
+  easy_pay_company: string;
+  requested_at: string;
+  approved_at: string;
+  payment_method: string;
+  estimated_at: string;
+}
