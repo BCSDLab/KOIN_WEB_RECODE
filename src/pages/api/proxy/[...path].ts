@@ -10,7 +10,14 @@ export const config = {
 
 const PROXY_PREFIX = '/api/proxy';
 const HOP_BY_HOP_RESPONSE_HEADERS = new Set(['connection', 'content-encoding', 'content-length', 'transfer-encoding']);
-const FORWARDED_REQUEST_HEADERS = ['cookie', 'content-type', 'accept', 'x-csrf-token'];
+const FORWARDED_REQUEST_HEADERS = [
+  'cookie',
+  'content-type',
+  'accept',
+  'x-csrf-token',
+  'access_history_id',
+  'user-agent',
+];
 const METHODS_WITH_BODY = new Set(['POST', 'PUT', 'PATCH']);
 
 function rewriteSetCookie(rawCookie: string): string {
