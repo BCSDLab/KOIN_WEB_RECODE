@@ -1,0 +1,40 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW NoticeModal(ModalContent = styles/modal.css의 modal-content) 계산값
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  color: palette.$neutral-600;
+  font-size: 15px;
+  font-weight: 500;
+
+  // order의 mx-11 w-full. 가운데 정렬된 세로 flex 안에서 넘쳐 결과적으로 안쪽 너비에 맞는다
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 44px;
+  }
+
+  &__message {
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: center;
+    white-space: pre-line;
+  }
+}
+
+// 공용 Button의 굵기·그림자를 덮어야 해서 선택자 우선순위를 올린다
+.content__inner .content__button {
+  width: 100%;
+  box-shadow: none;
+  font-weight: 500;
+  line-height: 1.5;
+}

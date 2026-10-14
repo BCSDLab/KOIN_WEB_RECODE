@@ -3,7 +3,7 @@ import { queryOptions } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
 
 import type { CartResponse, OrderType } from './entity';
-import { getCart, getCartSummary } from './index';
+import { getCart, getCartItemOptions, getCartSummary, getOrderShopMenuDetail } from './index';
 
 // 장바구니는 사용자별 응답이라 getViewerScope로 범위를 키에 넣는다(SSR·클라이언트 키 일치)
 export const orderQueryKeys = {
@@ -11,6 +11,8 @@ export const orderQueryKeys = {
   cart: (orderType: OrderType, scope: 'auth' | 'guest') => [...orderQueryKeys.all, 'cart', scope, orderType] as const,
   cartSummary: (orderableShopId: string, scope: 'auth' | 'guest') =>
     [...orderQueryKeys.all, 'cart-summary', scope, orderableShopId] as const,
+  menuDetail: (shopId: string, menuId: string) => [...orderQueryKeys.all, 'menu-detail', shopId, menuId] as const,
+  cartItemOptions: (cartMenuItemId: string) => [...orderQueryKeys.all, 'cart-item-options', cartMenuItemId] as const,
 };
 
 // order useCart의 dummyCart: 비로그인(401)이면 빈 장바구니로 그린다
@@ -59,5 +61,17 @@ export const orderQueries = {
     queryOptions({
       queryKey: orderQueryKeys.cartSummary(orderableShopId, getViewerScope(isLoggedIn)),
       queryFn: () => getCartSummary(orderableShopId),
+    }),
+  // 메뉴 상세는 공개 데이터라 범위를 키에 넣지 않는다
+  menuDetail: (shopId: string, menuId: string) =>
+    queryOptions({
+      queryKey: orderQueryKeys.menuDetail(shopId, menuId),
+      queryFn: () => getOrderShopMenuDetail(shopId, menuId),
+    }),
+  cartItemOptions: (cartMenuItemId: string, enabled: boolean) =>
+    queryOptions({
+      queryKey: orderQueryKeys.cartItemOptions(cartMenuItemId),
+      queryFn: () => getCartItemOptions(cartMenuItemId),
+      enabled,
     }),
 };
