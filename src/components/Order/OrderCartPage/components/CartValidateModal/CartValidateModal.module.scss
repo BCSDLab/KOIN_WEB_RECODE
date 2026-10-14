@@ -1,0 +1,54 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ValidateModal(ModalContent = styles/modal.css의 modal-content) 계산값
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  color: palette.$neutral-600;
+  font-size: 15px;
+  font-weight: 500;
+
+  &__text {
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: center;
+
+    &--column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+// 공용 Button의 굵기·그림자·테두리를 덮어야 해서 선택자 우선순위를 올린다
+.content__buttons .content__button {
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  box-shadow: none;
+  font-weight: 500;
+  line-height: 1.5;
+
+  &--close {
+    border-color: palette.$neutral-400;
+  }
+}
+
+.content .content__confirm {
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+  width: 100%;
+  line-height: 1.5;
+}

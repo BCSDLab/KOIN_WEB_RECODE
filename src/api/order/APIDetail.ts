@@ -88,6 +88,45 @@ export class ResetCart<R extends object> implements APIRequest<R> {
   response!: R;
 }
 
+// 장바구니 화면(로그인 상태)의 수량 변경·항목 삭제·주문 전 검증. order와 같은 경로·파라미터를 쓴다
+export class UpdateCartItemQuantity<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'cart/quantity/:cartMenuItemId/:quantity';
+
+  response!: R;
+
+  constructor(cartMenuItemId: number, quantity: number) {
+    this.path = `cart/quantity/${cartMenuItemId}/${quantity}`;
+  }
+}
+
+export class DeleteCartItem<R extends object> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = 'cart/delete/:cartMenuItemId';
+
+  response!: R;
+
+  constructor(cartMenuItemId: number) {
+    this.path = `cart/delete/${cartMenuItemId}`;
+  }
+}
+
+export class ValidateCart<R extends CartResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'cart/validate';
+
+  params: { order_type: OrderType };
+
+  response!: R;
+
+  constructor(orderType: OrderType) {
+    this.params = { order_type: orderType };
+  }
+}
+
 // 장바구니 항목 옵션 수정(?editCartItemId). 장바구니 화면에서만 진입하므로 로그인 상태다
 export class CartItemOptions<R extends ShopMenuDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
