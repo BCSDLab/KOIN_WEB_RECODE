@@ -27,7 +27,7 @@ import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './Cafeteria.module.scss';
 
-const SOLDOUT_REPORT_AB_TEST_TITLE = '품절 제보 버튼 A/B 테스트';
+const SOLDOUT_REPORT_AB_TEST_VARIABLE = 'icon_location';
 const SOLDOUT_REPORT_VARIANT_HEADER = 'soldout_design_A';
 
 export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
@@ -60,8 +60,9 @@ function Cafeteria() {
   const { date } = useCafeteriaParams();
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { variant: soldoutReportView, isPending: isSoldoutReportPending } =
-    useABTestViewWithStatus(SOLDOUT_REPORT_AB_TEST_TITLE);
+  const { variant: soldoutReportView, isPending: isSoldoutReportPending } = useABTestViewWithStatus(
+    SOLDOUT_REPORT_AB_TEST_VARIABLE,
+  );
   const isSoldoutReportHeaderVariant = soldoutReportView === SOLDOUT_REPORT_VARIANT_HEADER;
   const isSoldoutReportHeaderReady = !isSoldoutReportPending && isSoldoutReportHeaderVariant;
   const isSoldoutReportCardReady = !isSoldoutReportPending && !isSoldoutReportHeaderVariant;
