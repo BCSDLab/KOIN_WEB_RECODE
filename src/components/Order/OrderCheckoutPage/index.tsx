@@ -11,6 +11,7 @@ import { EMPTY_CART, orderQueries } from 'api/order/queries';
 import RightArrow from 'assets/svg/Order/Cart/arrow-go-icon.svg';
 import Bike from 'assets/svg/Order/Checkout/agriculture.svg';
 import PickupIcon from 'assets/svg/Order/Checkout/bucket.svg';
+import AlertModal from 'components/Store/mobile/common/AlertModal';
 import Badge from 'components/ui/Badge';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
@@ -23,7 +24,6 @@ import { useOrderStore } from 'utils/zustand/order';
 import Agreement from './components/Agreement';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
-import MessageModal from './components/MessageModal';
 import PaymentAmount from './components/PaymentAmount';
 import RiderRequestModal from './components/RiderRequestModal';
 import ShopLocationMap from './components/ShopLocationMap';
@@ -297,10 +297,11 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
           onSubmit={setDeliveryRequest}
         />
 
-        <MessageModal
+        <AlertModal
           isOpen={isPaymentFailModalOpen}
           onClose={handleCloseFailModal}
           message={message || '알 수 없는 오류가 발생했습니다.'}
+          messageWeight="medium"
         />
       </div>
     </div>
