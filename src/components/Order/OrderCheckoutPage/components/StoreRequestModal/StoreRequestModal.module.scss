@@ -1,5 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
-@use "src/components/Order/OrderCheckoutPage/preflight";
+@use "src/utils/scss/order-preflight" as preflight;
 
 // order BottomModalContent: gap-0
 div.content {

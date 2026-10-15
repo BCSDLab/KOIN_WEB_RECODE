@@ -1,5 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
-@use "src/components/Order/OrderCheckoutPage/preflight";
+@use "src/utils/scss/order-preflight" as preflight;
 
 // 배달지가 있으면 제목과 다른 배달지 링크를 한 줄에 둔다(order: flex items-center justify-between)
 .header {

@@ -1,5 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
-@use "src/components/Order/OrderCheckoutPage/preflight";
+@use "src/utils/scss/order-preflight" as preflight;
 
 // 바텀시트는 포털이라 화면 본문의 초기화를 받지 않아 따로 건다
 @include preflight.reset(".sheet");

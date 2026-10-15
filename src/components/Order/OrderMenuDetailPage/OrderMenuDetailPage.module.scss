@@ -1,4 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
 
 // KOIN_ORDER_WEBVIEW 메뉴 상세 이전(pb-24). 헤더가 이미지 위에 겹치므로 본문은 화면 맨 위(0px)부터 시작한다
 .page {
@@ -12,19 +13,8 @@
   background-color: palette.$page-background;
   color: #000;
 
-  // 오라클 body의 font-family 체인
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
-
-  // 오라클(Tailwind preflight)과 같이 모든 요소를 border-box로 계산한다
-  & *,
-  & *::before,
-  & *::after {
-    box-sizing: border-box;
-  }
+  @include preflight.body-font;
+  @include preflight.border-box-all;
 
   // 가격·옵션·수량 영역 (mb-40 px-6)
   &__selects {

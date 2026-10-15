@@ -1,5 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
-@use "src/components/Order/OrderCheckoutPage/preflight";
+@use "src/utils/scss/order-preflight" as preflight;
 
 // order modal-content(flex flex-col items-center justify-center gap-6 font-[Pretendard] font-medium)에
 // ReceiptModal의 px-4 py-6 text-center text-sm text-black을 덮은 계산값
