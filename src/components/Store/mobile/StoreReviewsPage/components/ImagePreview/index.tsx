@@ -1,6 +1,5 @@
-import { useLayoutEffect } from 'react';
-
 import Portal from 'components/Portal';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 
 import styles from './ImagePreview.module.scss';
 
@@ -8,19 +7,6 @@ import styles from './ImagePreview.module.scss';
 interface ImagePreviewProps {
   src: string | null;
   onClose: () => void;
-}
-
-function useBodyScrollLock(isLocked: boolean) {
-  useLayoutEffect(() => {
-    if (!isLocked || typeof window === 'undefined') return undefined;
-
-    const originalOverflow = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [isLocked]);
 }
 
 export default function ImagePreview({ src, onClose }: ImagePreviewProps) {
