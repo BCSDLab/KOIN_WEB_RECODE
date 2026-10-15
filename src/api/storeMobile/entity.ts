@@ -1,4 +1,7 @@
 // KOIN_ORDER_WEBVIEW src/api/shop/entity.ts (오라클 패치 적용본)에서 옮긴 모바일 상점·주문 화면 응답 타입
+// 데스크톱 상점과 같은 엔드포인트(shops/categories·shops/:id/events)는 api/store 타입을 그대로 쓴다
+export type { StoreCategory as ShopCategory, StoreEvent as Events } from 'api/store/entity';
+
 interface DeliveryTips {
   from_amount: number;
   to_amount: number;
@@ -105,21 +108,6 @@ export interface UnorderableShopReviewsResponse {
   reviews: Review[];
 }
 
-export interface Events {
-  shop_id: number;
-  shop_name: string;
-  event_id: number;
-  title: string;
-  content: string;
-  thumbnail_images: string[];
-  start_date: string;
-  end_date: string;
-}
-
-export interface ShopEventsResponse {
-  events: Events[];
-}
-
 interface Price {
   id: number;
   name: string | null;
@@ -220,17 +208,6 @@ interface NearByShopMenuResult {
   shop_id: number;
   shop_name: string;
   menu_name: string;
-}
-
-export interface ShopCategoriesResponse {
-  total_count: number;
-  shop_categories: ShopCategory[];
-}
-
-export interface ShopCategory {
-  id: number;
-  name: string;
-  image_url: string;
 }
 
 export interface ShopListResponse {
