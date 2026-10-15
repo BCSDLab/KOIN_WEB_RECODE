@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tansta
 import type { ShopMenuDetailResponse } from 'api/order/entity';
 import { orderMutations } from 'api/order/mutations';
 import { orderQueries } from 'api/order/queries';
+import AlertModal from 'components/Store/mobile/common/AlertModal';
 import LoginRequiredModal from 'components/Store/mobile/common/LoginRequiredModal';
 import DetailHeader from 'components/Store/mobile/StoreDetailPage/components/DetailHeader';
 import ImageCarousel from 'components/Store/mobile/StoreDetailPage/components/ImageCarousel';
@@ -20,7 +21,6 @@ import MenuCounter from './components/MenuCounter';
 import MenuDescription from './components/MenuDescription';
 import MenuOptions from './components/MenuOptions';
 import MenuPriceSelects from './components/MenuPriceSelects';
-import NoticeModal from './components/NoticeModal';
 import ResetModal from './components/ResetModal';
 import useMenuSelection from './hooks/useMenuSelection';
 import styles from './OrderMenuDetailPage.module.scss';
@@ -150,7 +150,15 @@ function MenuDetailBody({ shopId, info, isEdit, editCartItemId }: MenuDetailBody
           isLoggedIn={isLoggedIn}
         />
       )}
-      <NoticeModal isOpen={isNoticeModalOpen} onClose={closeNoticeModal} message={noticeMessage} />
+      <AlertModal
+        isOpen={isNoticeModalOpen}
+        onClose={closeNoticeModal}
+        message={noticeMessage}
+        messageWeight="medium"
+        isMessageRelaxed
+        isMessagePreLine
+        buttonVariant="flat"
+      />
       <LoginRequiredModal isOpen={isLoginRequiredModalOpen} onClose={closeLoginRequiredModal} />
     </>
   );

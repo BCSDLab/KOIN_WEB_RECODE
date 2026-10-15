@@ -5,7 +5,7 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { reviewMutations } from 'api/review/mutations';
 import { invalidateShopReviews, storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
-import ReviewExitModal from 'components/Store/mobile/ReviewFormPage/components/ReviewExitModal';
+import ConfirmModal from 'components/Store/mobile/common/ConfirmModal';
 import ReviewForm from 'components/Store/mobile/ReviewFormPage/components/ReviewForm';
 import useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
 import useReviewImages from 'components/Store/mobile/ReviewFormPage/hooks/useReviewImages';
@@ -83,11 +83,16 @@ export default function ReviewEditPage({ id, reviewId }: ReviewEditPageProps) {
         onSubmit={handleSubmit}
         variant="edit"
       />
-      <ReviewExitModal
+      {/* 그만하기 = 뒤로, 계속쓰기 = 닫기 */}
+      <ConfirmModal
         isOpen={isExitModalOpen}
-        message="리뷰 수정을 그만하시겠어요?"
         onClose={() => setIsExitModalOpen(false)}
-        onExit={handleBack}
+        message="리뷰 수정을 그만하시겠어요?"
+        cancelLabel="그만하기"
+        confirmLabel="계속쓰기"
+        onCancel={handleBack}
+        onConfirm={() => setIsExitModalOpen(false)}
+        cancelTone="dark"
       />
     </>
   );

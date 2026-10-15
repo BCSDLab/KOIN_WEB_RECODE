@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 
-import CenterModal from 'components/Store/mobile/common/CenterModal';
-import Button from 'components/ui/Button';
+import ConfirmModal from 'components/Store/mobile/common/ConfirmModal';
 import ROUTES from 'static/routes';
 
 import styles from './LoginRequiredModal.module.scss';
@@ -28,27 +27,21 @@ export default function LoginRequiredModal({
   };
 
   return (
-    <CenterModal isOpen={isOpen} onClose={onClose}>
-      <div className={styles.content}>
-        <div className={styles.content__text}>
-          <div className={styles.content__title}>{title}</div>
-          <div className={styles.content__subtitle}>{subTitle}</div>
-        </div>
-        <div className={styles.content__buttons}>
-          <Button
-            size="lg"
-            color="gray"
-            fullWidth
-            className={`${styles.content__button} ${styles['content__button--close']}`}
-            onClick={onClose}
-          >
-            닫기
-          </Button>
-          <Button size="lg" color="primary" fullWidth className={styles.content__button} onClick={handleLogin}>
-            로그인하기
-          </Button>
-        </div>
-      </div>
-    </CenterModal>
+    <ConfirmModal
+      isOpen={isOpen}
+      onClose={onClose}
+      message={
+        <>
+          <div className={styles.title}>{title}</div>
+          <div className={styles.subtitle}>{subTitle}</div>
+        </>
+      }
+      messageLayout="column"
+      isMessageRelaxed
+      messageClassName={styles.text}
+      cancelLabel="닫기"
+      confirmLabel="로그인하기"
+      onConfirm={handleLogin}
+    />
   );
 }
