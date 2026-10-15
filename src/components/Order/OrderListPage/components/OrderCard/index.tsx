@@ -88,7 +88,7 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
         <Button color="gray" className={styles.card__review} fullWidth>
           리뷰 쓰기
         </Button>
-        <Button color="primary" className={styles.card__reorder} fullWidth disabled={orderInfo.open_status}>
+        <Button color="primary" className={styles.card__reorder} fullWidth disabled={!orderInfo.open_status}>
           {orderInfo.open_status ? '같은 메뉴 담기' : '같은 메뉴 담기(오픈 전)'}
         </Button>
       </div>
