@@ -4,8 +4,8 @@ import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { orderMutations } from 'api/order/mutations';
-import CloseIcon from 'assets/svg/Order/Checkout/close-icon.svg';
 import WarningIcon from 'assets/svg/Order/Checkout/warning.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
 import useTimer from 'components/Order/OrderCheckoutPage/hooks/useTimer';
 import formatPhoneNumber from 'components/Order/OrderCheckoutPage/utils/formatPhoneNumber';
 import BottomModal, {

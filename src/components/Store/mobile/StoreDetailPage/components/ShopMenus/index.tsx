@@ -1,7 +1,7 @@
 import { useEffect, useRef, type RefObject } from 'react';
 
 import { cn } from '@bcsdlab/utils';
-import EmptyThumbnailIcon from 'assets/svg/Store/empty-thumbnail-icon.svg';
+import EmptyThumbnailIcon from 'assets/svg/empty-thumbnail.svg';
 import SoldOutIcon from 'assets/svg/Store/sold-out-icon.svg';
 import { formatNumber } from 'utils/ts/formatPrice';
 

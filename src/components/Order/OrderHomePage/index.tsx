@@ -5,15 +5,15 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import type { OrderableShopsFilter } from 'api/order/entity';
 import { orderQueries } from 'api/order/queries';
 import { storeMobileQueries } from 'api/storeMobile/queries';
-import CheckIcon from 'assets/svg/Order/Home/check-icon.svg';
-import CloseIcon from 'assets/svg/Order/Home/close-icon.svg';
 import DeliveryIcon from 'assets/svg/Order/Home/delivery-icon.svg';
-import DownArrowIcon from 'assets/svg/Order/Home/down-arrow-icon.svg';
 import FreeIcon from 'assets/svg/Order/Home/free-icon.svg';
-import OpenIcon from 'assets/svg/Order/Home/open-icon.svg';
 import PackIcon from 'assets/svg/Order/Home/pack-icon.svg';
-import PlanetIcon from 'assets/svg/Order/Home/planet-closed-icon.svg';
 import PlanetSliderIcon from 'assets/svg/Order/Home/planet-icon.svg';
+import CheckIcon from 'assets/svg/Store/check-icon.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
+import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
+import OpenIcon from 'assets/svg/Store/open-icon.svg';
+import PlanetIcon from 'assets/svg/Store/planet-closed-icon.svg';
 import {
   DEFAULT_ORDER_HOME_CONDITIONS,
   getOrderableShopsParams,
