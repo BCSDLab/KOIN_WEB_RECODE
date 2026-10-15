@@ -1,6 +1,7 @@
 import type { DepartmentContactDepartment } from 'api/departmentContact/entity';
 import ClipboardCopyIcon from 'assets/svg/department/clipboard-copy-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { copyToClipboard } from 'utils/ts/copyToClipboard';
 import showToast from 'utils/ts/showToast';
 
 import styles from './DepartmentCard.module.scss';
@@ -14,7 +15,7 @@ export default function DepartmentCard({ department, className }: DepartmentCard
   const logger = useLogger();
 
   const copyPhoneNumber = async (phoneNumber: string) => {
-    await navigator.clipboard.writeText(phoneNumber);
+    await copyToClipboard(phoneNumber);
     showToast('info', '전화번호가 복사되었습니다.');
     logger.actionEventClick({
       team: 'CAMPUS',
