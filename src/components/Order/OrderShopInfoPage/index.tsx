@@ -1,8 +1,7 @@
-import { useEffect, useSyncExternalStore } from 'react';
-
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
+import useHashSection from 'components/Store/mobile/common/hooks/useHashSection';
 import { DAYS } from 'components/Store/mobile/StoreInfoPage/constants/day';
 import { formatNumber } from 'utils/ts/formatPrice';
 
@@ -15,38 +14,10 @@ interface OrderShopInfoPageProps {
 const NOTICE_SECTION_ID = '가게알림';
 const DELIVERY_SECTION_ID = '배달금액';
 
-const subscribeHash = (onChange: () => void) => {
-  window.addEventListener('hashchange', onChange);
-
-  return () => window.removeEventListener('hashchange', onChange);
-};
-const getHashId = () => decodeURIComponent(window.location.hash.replace('#', ''));
-const getServerHashId = () => '';
-
 // KOIN_ORDER_WEBVIEW ShopDetail(isOrderable=true) 이전.
-// 해시는 서버가 모르므로 서버·하이드레이션 렌더는 해시 없음 상태로 그리고 마운트 후 반영한다
 export default function OrderShopInfoPage({ id }: OrderShopInfoPageProps) {
   const { data } = useSuspenseQuery(storeMobileQueries.orderDetail(id));
-  const decodedId = useSyncExternalStore(subscribeHash, getHashId, getServerHashId);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
-
-      return undefined;
-    }
-
-    const target = document.getElementById(getHashId());
-    if (!target) return undefined;
-
-    const timer = window.setTimeout(() => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
-
-    return () => window.clearTimeout(timer);
-  }, []);
+  const decodedId = useHashSection();
 
   const closedDaysText =
     data.closed_days.length === 0 ? '연중무휴' : `매주 ${data.closed_days.map((day) => DAYS[day]).join(', ')}`;
