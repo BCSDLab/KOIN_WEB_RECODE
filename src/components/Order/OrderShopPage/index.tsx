@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import type { ShopInfoResponse } from 'api/storeMobile/entity';
 import { storeMobileQueries } from 'api/storeMobile/queries';
+import useCartOrderTypeFallback from 'components/Order/common/hooks/useCartOrderTypeFallback';
 import DetailHeader from 'components/Store/mobile/StoreDetailPage/components/DetailHeader';
 import ImageCarousel from 'components/Store/mobile/StoreDetailPage/components/ImageCarousel';
 import ShopMenuGroups from 'components/Store/mobile/StoreDetailPage/components/ShopMenuGroups';
@@ -14,7 +15,6 @@ import useMenuGroupScroll from 'components/Store/mobile/StoreDetailPage/hooks/us
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { formatNumber, formatPrice } from 'utils/ts/formatPrice';
-import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useOrderStore } from 'utils/zustand/order';
 
 import BottomCartModal from './components/BottomCartModal';
@@ -57,16 +57,10 @@ export default function OrderShopPage({ id }: OrderShopPageProps) {
   const { data: shopDetail } = useSuspenseQuery(storeMobileQueries.orderDetail(id));
 
   const isLoggedIn = useIsLoggedIn();
-  const { orderType, setOrderType } = useOrderStore();
+  const orderType = useOrderStore((state) => state.orderType);
   const { data: cartInfo, error: cartError } = useQuery(orderQueries.cart(orderType, isLoggedIn));
 
-  // order useCart: 401 외의 오류면 다른 주문 유형으로 다시 조회한다. 둘 다 실패해 번갈아 조회하지 않도록 한 번만 바꾼다
-  const hasSwitchedOrderType = useRef(false);
-  useEffect(() => {
-    if (!cartError || isUnauthorizedError(cartError) || hasSwitchedOrderType.current) return;
-    hasSwitchedOrderType.current = true;
-    setOrderType(orderType === 'DELIVERY' ? 'TAKE_OUT' : 'DELIVERY');
-  }, [cartError, orderType, setOrderType]);
+  useCartOrderTypeFallback(cartError, orderType);
 
   const cartItems = cartInfo?.items ?? [];
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
