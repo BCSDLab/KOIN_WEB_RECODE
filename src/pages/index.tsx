@@ -17,10 +17,10 @@ import { weatherQueries } from 'api/weather/queries';
 import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
 import HomePage from 'components/IndexComponents/HomePage';
 import HomeLayout from 'components/layout/HomeLayout';
-import { isServerAuthError } from 'utils/ssr/authError';
 import { getDeviceClass } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 
 export const getServerSideProps = withCacheControl(
   async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
@@ -44,7 +44,7 @@ export const getServerSideProps = withCacheControl(
       try {
         return await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
       } catch (error) {
-        if (isServerAuthError(error)) {
+        if (isUnauthorizedError(error)) {
           resetAuthContext();
 
           return null;
@@ -87,7 +87,7 @@ export const getServerSideProps = withCacheControl(
           await queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, activeMainFrameId));
         }
       } catch (error) {
-        if (isServerAuthError(error)) {
+        if (isUnauthorizedError(error)) {
           resetAuthContext();
         } else if (isKoinError(error) && (error.status === 403 || error.status === 404)) {
           setDefaultTimetableFrameList(userSemester);
