@@ -1,4 +1,4 @@
-// 오라클(Tailwind v4 preflight)과 같은 초기화. 화면 본문과 포털(바텀시트·가운데 모달)의 루트에 건다.
+// KOIN_ORDER_WEBVIEW(Tailwind v4 preflight)와 같은 초기화. 화면 본문과 포털(바텀시트·가운데 모달)의 루트에 건다.
 // :where로 우선순위를 0으로 둬 화면·공용 Button 등의 클래스가 이긴다
 @mixin reset($root) {
   :where(#{$root}) *,
@@ -56,4 +56,23 @@
 @mixin order-font {
   // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
   font-family: Pretendard;
+}
+
+// KOIN_ORDER_WEBVIEW body의 글꼴 체인·크기·줄 높이. 화면·포털 루트에 건다.
+// 이름은 대소문자를 가리지 않아 next/font가 등록한 pretendard 페이스와 매칭된다
+@mixin body-font {
+  font-family:
+    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+// 루트 아래 모든 요소를 border-box로 계산한다(Tailwind preflight와 같다). reset을 쓰지 않는 화면용
+@mixin border-box-all {
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
 }
