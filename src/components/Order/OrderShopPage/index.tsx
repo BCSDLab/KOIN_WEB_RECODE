@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
@@ -7,7 +8,7 @@ import { storeMobileQueries } from 'api/storeMobile/queries';
 import DetailHeader from 'components/Store/mobile/StoreDetailPage/components/DetailHeader';
 import ImageCarousel from 'components/Store/mobile/StoreDetailPage/components/ImageCarousel';
 import ShopMenuGroups from 'components/Store/mobile/StoreDetailPage/components/ShopMenuGroups';
-import type { MenuGroupItems } from 'components/Store/mobile/StoreDetailPage/components/ShopMenus';
+import ShopMenus, { type MenuGroupItems } from 'components/Store/mobile/StoreDetailPage/components/ShopMenus';
 import useMenuGroupScroll from 'components/Store/mobile/StoreDetailPage/hooks/useMenuGroupScroll';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -15,12 +16,11 @@ import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useOrderStore } from 'utils/zustand/order';
 
 import BottomCartModal from './components/BottomCartModal';
-import OrderShopMenus from './components/OrderShopMenus';
 import OrderShopSummary from './components/OrderShopSummary';
 import styles from './OrderShopPage.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/OrderableShopView 이전 (주문 가능 상점 상세).
-// 구조는 주문 불가 상점 상세(A4)와 같아 헤더·캐러셀·메뉴 그룹을 그대로 쓰고, 요약·메뉴 목록은 주문 가능 분기로 그린다.
+// 구조는 주문 불가 상점 상세(A4)와 같아 헤더·캐러셀·메뉴 그룹·메뉴 목록을 그대로 쓰고, 요약은 주문 가능 분기로 그린다.
 // 오라클의 이 화면은 스크롤 로깅·진입 시각 기록을 하지 않는다.
 // 장바구니는 order처럼 비로그인이어도 조회하고(401이면 빈 장바구니) 이 상점 메뉴가 담겨 있을 때만 하단 막대를 띄운다.
 // 로그인 상태는 서버가 장바구니를 미리 받아 막대까지 렌더한다
@@ -44,6 +44,7 @@ function toMenuGroups(data: ShopInfoResponse[]): MenuGroupItems[] {
 }
 
 export default function OrderShopPage({ id }: OrderShopPageProps) {
+  const router = useRouter();
   const targetRef = useRef<HTMLDivElement | null>(null);
 
   const { selectedMenu, menuGroupRefs, isAutoScrolling, handleScrollTo, handleChangeMenu } = useMenuGroupScroll();
@@ -82,12 +83,12 @@ export default function OrderShopPage({ id }: OrderShopPageProps) {
         onSelect={handleScrollTo}
         menuGroups={menuGroups}
       />
-      <OrderShopMenus
-        id={id}
+      <ShopMenus
         menuGroupRefs={menuGroupRefs}
         handleChangeMenu={handleChangeMenu}
         isAutoScrolling={isAutoScrolling}
         shopMenus={shopMenus}
+        onMenuClick={(menu) => router.push(ROUTES.OrderShopMenu({ id, menuId: String(menu.id) }))}
       />
       {hasThisShopInCart && <BottomCartModal id={id} cartItemCount={totalQuantity} isLoggedIn={isLoggedIn} />}
     </div>
