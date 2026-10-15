@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { reviewMutations } from 'api/review/mutations';
-import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
+import { invalidateShopReviews, storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
 import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ReviewExitModal from 'components/Store/mobile/ReviewFormPage/components/ReviewExitModal';
 import ReviewForm from 'components/Store/mobile/ReviewFormPage/components/ReviewForm';
@@ -42,8 +42,8 @@ export default function ReviewEditPage({ id, reviewId }: ReviewEditPageProps) {
   const { mutate } = useMutation({
     ...reviewMutations.edit(queryClient, id, reviewId, {
       onSuccess: () => {
-        // 모바일 리뷰 목록·내 리뷰는 같은 접두사(reviews) 아래에 있다. 다시 들어올 때를 위해 상세도 갱신한다
-        queryClient.invalidateQueries({ queryKey: [...storeMobileQueryKeys.all, 'reviews'] });
+        // 다시 들어올 때를 위해 리뷰 상세도 갱신한다
+        invalidateShopReviews(queryClient, id);
         queryClient.invalidateQueries({ queryKey: storeMobileQueryKeys.reviewDetail(id, reviewId) });
         showToast('success', '리뷰가 수정되었어요');
         handleBack();
