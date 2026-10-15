@@ -14,7 +14,6 @@ import OpenIcon from 'assets/svg/Order/Home/open-icon.svg';
 import PackIcon from 'assets/svg/Order/Home/pack-icon.svg';
 import PlanetIcon from 'assets/svg/Order/Home/planet-closed-icon.svg';
 import PlanetSliderIcon from 'assets/svg/Order/Home/planet-icon.svg';
-import ShopCard from 'components/Order/OrderHomePage/components/ShopCard';
 import {
   DEFAULT_ORDER_HOME_CONDITIONS,
   getOrderableShopsParams,
@@ -29,9 +28,11 @@ import BottomModal, {
   BottomModalFooter,
   BottomModalHeader,
 } from 'components/Store/mobile/common/BottomModal';
+import ShopCard from 'components/Store/mobile/common/ShopCard';
 import SearchBar from 'components/Store/mobile/StoreListPage/components/SearchBar';
 import Badge from 'components/ui/Badge';
 import Button from 'components/ui/Button';
+import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { formatNumber } from 'utils/ts/formatPrice';
 
@@ -244,15 +245,16 @@ function OrderHomeContent() {
               <ShopCard
                 key={shop.shop_id}
                 shopId={shop.orderable_shop_id}
+                href={ROUTES.OrderShop({ id: String(shop.orderable_shop_id) })}
                 isOpen={shop.is_open}
                 name={shop.name}
                 rating={shop.rating_average}
                 reviewCount={shop.review_count}
-                isDelivery={shop.is_delivery_available}
-                deliver={shop.minimum_delivery_tip}
-                isTakeout={shop.is_takeout_available}
-                isService={shop.service_event}
-                img={shop.images}
+                thumbnailUrl={shop.images.find((image) => image.is_thumbnail)?.image_url || ''}
+                deliveryFee={shop.is_delivery_available ? shop.minimum_delivery_tip : null}
+                tags={[shop.is_takeout_available && '픽업가능', shop.service_event && '서비스 증정'].filter(
+                  (tag): tag is string => !!tag,
+                )}
               />
             ))
           ) : (

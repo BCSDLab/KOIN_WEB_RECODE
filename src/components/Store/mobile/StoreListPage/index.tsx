@@ -210,12 +210,12 @@ export default function StoreListPage() {
               <ShopCard
                 key={shop.id}
                 shopId={shop.id}
+                href={ROUTES.StoreDetail({ id: String(shop.id) })}
                 isOpen={shop.is_open}
                 name={shop.name}
                 rating={shop.average_rate}
                 reviewCount={shop.review_count}
                 thumbnailUrl={shop.images[0] ?? ''}
-                isOrderable={false}
               />
             ))
           ) : (
