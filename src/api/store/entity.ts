@@ -133,6 +133,7 @@ export interface StoreBenefitCategory {
 export interface StoreEvent {
   shop_id: number;
   shop_name: string;
+  event_id: number;
   title: string;
   content: string;
   thumbnail_images: string[];
