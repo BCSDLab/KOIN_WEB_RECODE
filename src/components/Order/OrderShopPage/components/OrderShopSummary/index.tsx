@@ -25,6 +25,8 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
   const logger = useLogger();
   const { data: shopEvents } = useSuspenseQuery(storeMobileQueries.events(String(shopInfoSummary.shop_id)));
   const latestEvent = shopEvents?.events[0];
+  // 주문 가능 상점 요약에는 전화번호가 없어 상점 상세(가게 정보와 같은 응답)에서 받는다
+  const { data: shopDetail } = useSuspenseQuery(storeMobileQueries.orderDetail(id));
 
   const handleShopInfoClick = () => {
     logger.actionEventClick({
@@ -127,12 +129,11 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           </div>
         </Link>
       </div>
-      {/* 오라클의 주문 가능 분기는 전화번호를 받지 않아 번호 없이 버튼만 그린다 */}
-      <a href="tel:" onClick={handleCallButtonClick} className={styles.call}>
+      <a href={`tel:${shopDetail.phone}`} onClick={handleCallButtonClick} className={styles.call}>
         <div className={styles.call__box}>
           <CallIcon className={styles.call__icon} />
           <div className={styles.call__text}>가게에 전화하기</div>
-          <div className={styles.call__phone} />
+          <div className={styles.call__phone}>{shopDetail.phone}</div>
         </div>
       </a>
     </div>
