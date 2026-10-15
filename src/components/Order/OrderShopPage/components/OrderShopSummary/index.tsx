@@ -11,6 +11,7 @@ import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime
 import Badge from 'components/ui/Badge';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from 'components/Store/mobile/StoreDetailPage/components/ShopSummary/ShopSummary.module.scss';
 
@@ -101,14 +102,14 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           <div className={styles.card__delivery}>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>최소주문</span>
-              <span className={styles.card__value}>{minimumOrderAmount && minimumOrderAmount.toLocaleString()}원</span>
+              <span className={styles.card__value}>{formatNumber(minimumOrderAmount ?? 0)}원</span>
             </div>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>배달금액</span>
               <span className={styles.card__value}>
-                {minimumDeliveryTip && minimumDeliveryTip.toLocaleString()}
+                {formatNumber(minimumDeliveryTip ?? 0)}
                 {' - '}
-                {maximumDeliveryTip && maximumDeliveryTip.toLocaleString()}원
+                {formatNumber(maximumDeliveryTip ?? 0)}원
               </span>
             </div>
           </div>

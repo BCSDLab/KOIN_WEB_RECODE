@@ -1,6 +1,7 @@
 import type { MenuPrice } from 'api/order/entity';
 import RadioFalse from 'assets/svg/Store/radio-false.svg';
 import RadioTrue from 'assets/svg/Store/radio-true.svg';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './MenuPriceSelects.module.scss';
 
@@ -37,7 +38,7 @@ export default function MenuPriceSelects({ prices, selectedPriceId, selectPrice 
             >
               {checked ? <RadioTrue /> : <RadioFalse />}
               <span className={styles.prices__name}>{price.name}</span>
-              <span className={styles.prices__price}>{price.price.toLocaleString()}원</span>
+              <span className={styles.prices__price}>{formatNumber(price.price)}원</span>
             </button>
           );
         })}

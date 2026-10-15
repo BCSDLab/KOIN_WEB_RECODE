@@ -15,6 +15,7 @@ import TwoIcon from 'assets/svg/Store/CartCount/two-icon.svg';
 import ZeroIcon from 'assets/svg/Store/CartCount/zero-icon.svg';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './BottomCartModal.module.scss';
 
@@ -51,7 +52,7 @@ export default function BottomCartModal({ id, cartItemCount, isLoggedIn }: Botto
     <div className={styles.modal}>
       <div className={styles.modal__bar}>
         <div>
-          <p className={styles.modal__amount}>{data.cart_items_amount.toLocaleString()}원</p>
+          <p className={styles.modal__amount}>{formatNumber(data.cart_items_amount)}원</p>
           <p className={styles.modal__status}>{data.is_available ? '배달 가능' : '배달 불가'}</p>
         </div>
         <Button

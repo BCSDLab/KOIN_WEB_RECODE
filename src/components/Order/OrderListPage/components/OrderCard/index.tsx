@@ -4,6 +4,7 @@ import type { OrderHistoryItem, OrderStatus } from 'api/order/entity';
 import LeftArrowIcon from 'assets/svg/Order/List/left-arrow-icon.svg';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './OrderCard.module.scss';
 
@@ -81,7 +82,7 @@ export default function OrderCard({ orderInfo }: OrderCardProps) {
         <div className={styles.card__info}>
           <div className={styles.card__name}>{orderInfo.orderable_shop_name}</div>
           <div className={styles.card__title}>{orderInfo.order_title}</div>
-          <div className={styles.card__amount}>{orderInfo.total_amount.toLocaleString()}원</div>
+          <div className={styles.card__amount}>{formatNumber(orderInfo.total_amount)}원</div>
         </div>
       </div>
       <div className={styles.card__actions}>

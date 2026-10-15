@@ -11,6 +11,7 @@ import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime
 import Badge from 'components/ui/Badge';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './ShopSummary.module.scss';
 
@@ -96,7 +97,7 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
               </div>
               <div className={styles['card__delivery-row']}>
                 <span className={styles.card__label}>배달금액</span>
-                <span className={styles.card__value}>{shopInfo.delivery_price}원</span>
+                <span className={styles.card__value}>{formatNumber(shopInfo.delivery_price)}원</span>
               </div>
             </div>
             <div className={styles.card__chevron}>

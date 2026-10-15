@@ -6,6 +6,7 @@ import EmptyThumbnailIcon from 'assets/svg/Store/empty-thumbnail-icon.svg';
 import SoldOutIcon from 'assets/svg/Store/sold-out-icon.svg';
 import type { MenuGroupItems } from 'components/Store/mobile/StoreDetailPage/components/ShopMenus';
 import ROUTES from 'static/routes';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from 'components/Store/mobile/StoreDetailPage/components/ShopMenus/ShopMenus.module.scss';
 
@@ -105,7 +106,7 @@ export default function OrderShopMenus({
                     if (!price.name) {
                       return (
                         <span key={price.id} className={styles.menu__price}>
-                          {price.price.toLocaleString()}원
+                          {formatNumber(price.price)}원
                         </span>
                       );
                     }
@@ -114,7 +115,7 @@ export default function OrderShopMenus({
                       <div key={price.id} className={styles.option}>
                         <span className={styles.option__name}>{price.name} :</span>
 
-                        <span className={styles.option__price}>{price.price.toLocaleString()}원</span>
+                        <span className={styles.option__price}>{formatNumber(price.price)}원</span>
                       </div>
                     );
                   })}
