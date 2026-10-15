@@ -75,11 +75,7 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           </div>
           <span className={styles.review__text}>{shopInfoSummary.rating_average}</span>
           <span className={styles.review__text}>·</span>
-          <span className={styles.review__text}>
-            리뷰
-            {' '}
-            {shopInfoSummary.review_count}
-          </span>
+          <span className={styles.review__text}>리뷰 {shopInfoSummary.review_count}</span>
           <div className={styles.review__chevron}>
             <ChevronRightIcon fill="black" className={styles.icon} />
           </div>
@@ -103,18 +99,14 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           <div className={styles.card__delivery}>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>최소주문</span>
-              <span className={styles.card__value}>
-                {minimumOrderAmount && minimumOrderAmount.toLocaleString()}
-                원
-              </span>
+              <span className={styles.card__value}>{minimumOrderAmount && minimumOrderAmount.toLocaleString()}원</span>
             </div>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>배달금액</span>
               <span className={styles.card__value}>
                 {minimumDeliveryTip && minimumDeliveryTip.toLocaleString()}
                 {' - '}
-                {maximumDeliveryTip && maximumDeliveryTip.toLocaleString()}
-                원
+                {maximumDeliveryTip && maximumDeliveryTip.toLocaleString()}원
               </span>
             </div>
           </div>

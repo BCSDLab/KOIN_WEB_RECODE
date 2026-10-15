@@ -88,7 +88,9 @@ function OrderHomeContent() {
   );
 
   const toggleFilter = (filterId: OrderableShopsFilter) => {
-    setSelectedFilters((prev) => (prev.includes(filterId) ? prev.filter((id) => id !== filterId) : [...prev, filterId]));
+    setSelectedFilters((prev) =>
+      prev.includes(filterId) ? prev.filter((id) => id !== filterId) : [...prev, filterId],
+    );
   };
 
   const handleSortSelect = (sortId: OrderHomeSort) => {

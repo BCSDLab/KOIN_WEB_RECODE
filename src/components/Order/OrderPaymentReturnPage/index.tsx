@@ -81,8 +81,6 @@ function PaymentConfirm({ orderType, orderId, paymentKey, amount }: PaymentRetur
 // 실패하면 결제 화면(실패 안내 모달)으로, 성공하면 주문 결과 화면으로 이동한다
 export default function OrderPaymentReturnPage({ payment }: OrderPaymentReturnPageProps) {
   return (
-    <div className={styles.page}>
-      {payment ? <PaymentConfirm {...payment} /> : <div>결제 정보가 부족합니다.</div>}
-    </div>
+    <div className={styles.page}>{payment ? <PaymentConfirm {...payment} /> : <div>결제 정보가 부족합니다.</div>}</div>
   );
 }

@@ -119,8 +119,7 @@ export default function useMenuSelection(shopId: string, menuInfo: ShopMenuDetai
   const isAllRequiredOptionsSelected = menuInfo.option_groups
     .filter((group) => group.min_select > 0)
     .every(
-      (group) =>
-        state.selectedOptions.filter((option) => option.optionGroupId === group.id).length >= group.min_select,
+      (group) => state.selectedOptions.filter((option) => option.optionGroupId === group.id).length >= group.min_select,
     );
 
   const selectedOptionIds = state.selectedOptions.map((selected) => ({

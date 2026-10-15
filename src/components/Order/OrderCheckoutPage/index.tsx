@@ -268,8 +268,7 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
             pay();
           }}
         >
-          {cart.total_amount.toLocaleString()}
-          원 결제하기
+          {cart.total_amount.toLocaleString()}원 결제하기
         </Button>
 
         <ContactModal

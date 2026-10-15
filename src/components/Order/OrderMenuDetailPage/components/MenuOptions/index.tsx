@@ -64,9 +64,7 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
                     >
                       <TypeIcon isSingle={isSingle} checked={checked} />
                       <span className={styles.group__option}>{option.name}</span>
-                      <span className={styles.group__price}>
-                        +{option.price.toLocaleString()}원
-                      </span>
+                      <span className={styles.group__price}>+{option.price.toLocaleString()}원</span>
                     </button>
                   );
                 })}

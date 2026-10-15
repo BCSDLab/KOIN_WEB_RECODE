@@ -20,7 +20,18 @@ import styles from './BottomCartModal.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/components/BottomCartModal 이전.
 // 장바구니에 이 상점 메뉴가 있을 때만 화면 하단에 고정해 금액·배달 가능 여부·장바구니 보기 버튼을 띄운다
-const COUNT_ICONS = [ZeroIcon, OneIcon, TwoIcon, ThreeIcon, FourIcon, FiveIcon, SixIcon, SevenIcon, EightIcon, NineIcon];
+const COUNT_ICONS = [
+  ZeroIcon,
+  OneIcon,
+  TwoIcon,
+  ThreeIcon,
+  FourIcon,
+  FiveIcon,
+  SixIcon,
+  SevenIcon,
+  EightIcon,
+  NineIcon,
+];
 
 interface BottomCartModalProps {
   id: string;
@@ -40,10 +51,7 @@ export default function BottomCartModal({ id, cartItemCount, isLoggedIn }: Botto
     <div className={styles.modal}>
       <div className={styles.modal__bar}>
         <div>
-          <p className={styles.modal__amount}>
-            {data.cart_items_amount.toLocaleString()}
-            원
-          </p>
+          <p className={styles.modal__amount}>{data.cart_items_amount.toLocaleString()}원</p>
           <p className={styles.modal__status}>{data.is_available ? '배달 가능' : '배달 불가'}</p>
         </div>
         <Button

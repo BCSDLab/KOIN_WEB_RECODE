@@ -156,8 +156,7 @@ function ContactForm({ currentContact, onClose, onSubmit }: ContactFormProps) {
 
   let codeHelp = (
     <div className={styles.help}>
-      {MESSAGES.CODE_DEFAULT}
-      {' '}
+      {MESSAGES.CODE_DEFAULT}{' '}
       <a href={INQUIRE_FORM} className={styles.help__link}>
         문의하기
       </a>

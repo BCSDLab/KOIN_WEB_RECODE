@@ -17,7 +17,9 @@ import SixIcon from 'assets/svg/Store/CartCount/six-icon.svg';
 import ThreeIcon from 'assets/svg/Store/CartCount/three-icon.svg';
 import TwoIcon from 'assets/svg/Store/CartCount/two-icon.svg';
 import ZeroIcon from 'assets/svg/Store/CartCount/zero-icon.svg';
-import CartValidateModal, { type CartValidateErrorCode } from 'components/Order/OrderCartPage/components/CartValidateModal';
+import CartValidateModal, {
+  type CartValidateErrorCode,
+} from 'components/Order/OrderCartPage/components/CartValidateModal';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
@@ -26,7 +28,18 @@ import styles from './CartBottomSheet.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Cart/components/BottomSheet 이전.
 // 화면 하단에 고정해 총 금액·주문 가능 여부·주문하기 버튼을 띄운다. 주문하기는 장바구니를 검증하고 결제 화면으로 이동한다
-const COUNT_ICONS = [ZeroIcon, OneIcon, TwoIcon, ThreeIcon, FourIcon, FiveIcon, SixIcon, SevenIcon, EightIcon, NineIcon];
+const COUNT_ICONS = [
+  ZeroIcon,
+  OneIcon,
+  TwoIcon,
+  ThreeIcon,
+  FourIcon,
+  FiveIcon,
+  SixIcon,
+  SevenIcon,
+  EightIcon,
+  NineIcon,
+];
 
 const VALIDATE_ERROR_CODES: readonly string[] = ['SHOP_CLOSED', 'ORDER_AMOUNT_BELOW_MINIMUM'];
 
@@ -90,10 +103,7 @@ export default function CartBottomSheet({
     <div className={styles.sheet}>
       <div className={styles.sheet__bar}>
         <div>
-          <div className={styles.sheet__amount}>
-            {totalAmount.toLocaleString()}
-            원
-          </div>
+          <div className={styles.sheet__amount}>{totalAmount.toLocaleString()}원</div>
           <div className={styles.sheet__status}>{statusMessage}</div>
         </div>
         <Button

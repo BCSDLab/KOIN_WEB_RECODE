@@ -49,24 +49,17 @@ export default function CartItem({ shopId, item }: CartItemProps) {
         <div className={styles.item__info}>
           <div className={styles.item__name}>{item.name}</div>
           <div className={styles.item__details}>
-            <div>
-              가격 :
-              {' '}
-              {item.price.price.toLocaleString()}
-              원
-            </div>
+            <div>가격 : {item.price.price.toLocaleString()}원</div>
             {item.options && item.options.length > 0 && (
               <div>
                 {item.options.map((option) => (
                   <div key={`${option.option_group_name}-${option.option_name}`}>
                     {option.option_group_name}
                     {' : '}
-                    {option.option_name}
-                    {' '}
+                    {option.option_name}{' '}
                     {option.option_price > 0 && (
                       <>
-                        (
-                        {option.option_price.toLocaleString()}
+                        ({option.option_price.toLocaleString()}
                         원)
                       </>
                     )}
@@ -75,18 +68,11 @@ export default function CartItem({ shopId, item }: CartItemProps) {
               </div>
             )}
           </div>
-          <div className={styles.item__amount}>
-            {item.total_amount.toLocaleString()}
-            원
-          </div>
+          <div className={styles.item__amount}>{item.total_amount.toLocaleString()}원</div>
         </div>
         {item.menu_thumbnail_image_url && (
           // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
-          <img
-            src={item.menu_thumbnail_image_url}
-            className={styles.item__thumbnail}
-            alt={`${item.name} thumbnail`}
-          />
+          <img src={item.menu_thumbnail_image_url} className={styles.item__thumbnail} alt={`${item.name} thumbnail`} />
         )}
       </div>
 
@@ -97,10 +83,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
 
         <div className={styles.counter}>
           {item.quantity === 1 ? (
-            <button
-              type="button"
-              onClick={() => deleteCartItem(item.cart_menu_item_id, { onError: handleError })}
-            >
+            <button type="button" onClick={() => deleteCartItem(item.cart_menu_item_id, { onError: handleError })}>
               <TrashIcon />
             </button>
           ) : (

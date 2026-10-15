@@ -29,7 +29,9 @@ export const getServerSideProps = withCacheControl(
     // 실패하면 결과를 내리지 않고 클라이언트가 다시 조회한다
     const queryClient = new QueryClient();
     await Promise.all(
-      CAMPUS_ADDRESS_CATEGORIES.map((filter) => queryClient.prefetchQuery(orderQueries.campusDeliveryAddresses(filter))),
+      CAMPUS_ADDRESS_CATEGORIES.map((filter) =>
+        queryClient.prefetchQuery(orderQueries.campusDeliveryAddresses(filter)),
+      ),
     );
 
     return { props: { isDesktop: false, dehydratedState: dehydrate(queryClient) } };

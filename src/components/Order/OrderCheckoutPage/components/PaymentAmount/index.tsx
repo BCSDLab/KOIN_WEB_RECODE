@@ -12,33 +12,21 @@ export default function PaymentAmount({ totalAmount, deliveryAmount, menuAmount 
     <div className={styles.amount}>
       <div className={styles.amount__total}>
         <div>결제예정금액</div>
-        <div>
-          {totalAmount.toLocaleString()}
-          원
-        </div>
+        <div>{totalAmount.toLocaleString()}원</div>
       </div>
       <div className={styles.amount__detail}>
         <div className={styles.amount__sum}>
           <div>총 금액</div>
-          <div>
-            {totalAmount.toLocaleString()}
-            원
-          </div>
+          <div>{totalAmount.toLocaleString()}원</div>
         </div>
         <div className={styles.amount__item}>
           <div>메뉴 금액</div>
-          <div>
-            {menuAmount.toLocaleString()}
-            원
-          </div>
+          <div>{menuAmount.toLocaleString()}원</div>
         </div>
         {!!deliveryAmount && (
           <div className={styles.amount__item}>
             <div>배달 금액</div>
-            <div>
-              {deliveryAmount.toLocaleString()}
-              원
-            </div>
+            <div>{deliveryAmount.toLocaleString()}원</div>
           </div>
         )}
       </div>

@@ -84,12 +84,15 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
             >
               <div className={styles.address}>
                 {isCampus ? (
-                  <Badge color="primary" size="lg" className={styles.address__badge} label={campusAddress?.short_address} />
+                  <Badge
+                    color="primary"
+                    size="lg"
+                    className={styles.address__badge}
+                    label={campusAddress?.short_address}
+                  />
                 ) : (
                   <span className={styles.address__text}>
-                    {outsideAddress.address}
-                    {' '}
-                    {outsideAddress.detail_address}
+                    {outsideAddress.address} {outsideAddress.detail_address}
                   </span>
                 )}
                 <RightArrow />

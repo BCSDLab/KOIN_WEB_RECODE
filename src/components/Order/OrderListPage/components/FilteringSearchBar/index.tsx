@@ -76,12 +76,7 @@ export default function FilteringSearchBar({
       </div>
 
       {isSearchActive && (
-        <button
-          type="button"
-          aria-label="검색 닫기"
-          className={styles.dimmed}
-          onClick={deactivateSearch}
-        />
+        <button type="button" aria-label="검색 닫기" className={styles.dimmed} onClick={deactivateSearch} />
       )}
 
       <div className={styles.chips}>
