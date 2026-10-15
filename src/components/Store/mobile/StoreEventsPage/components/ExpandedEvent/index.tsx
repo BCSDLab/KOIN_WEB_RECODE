@@ -4,7 +4,7 @@ import { cn } from '@bcsdlab/utils';
 import type { Events } from 'api/storeMobile/entity';
 import UpArrow from 'assets/svg/Store/chevron-up-icon.svg';
 import PreparingIcon from 'assets/svg/Store/preparing-icon.svg';
-import formatEventDate from 'components/Store/mobile/StoreEventsPage/utils/formatEventDate';
+import formatDotDate from 'components/Store/mobile/common/utils/formatDotDate';
 
 import styles from './ExpandedEvent.module.scss';
 
@@ -49,7 +49,7 @@ export default function ExpandedEvent({ event, onToggleOpen, contentId, isOpen }
           </button>
         </div>
         <p className={styles.event__period}>
-          {formatEventDate(event.start_date)}~{formatEventDate(event.end_date)}
+          {formatDotDate(event.start_date)}~{formatDotDate(event.end_date)}
         </p>
       </div>
       <div>

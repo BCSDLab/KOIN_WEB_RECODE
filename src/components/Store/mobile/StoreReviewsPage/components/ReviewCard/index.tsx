@@ -2,7 +2,7 @@ import type { Review } from 'api/storeMobile/entity';
 import CheckBookmarkIcon from 'assets/svg/Store/check-bookmark.svg';
 import NoImageIcon from 'assets/svg/Store/no-image-icon.svg';
 import StarList from 'components/Store/mobile/common/StarList';
-import { formatReviewDate } from 'components/Store/mobile/StoreReviewsPage/utils/formatReviewDate';
+import formatDotDate from 'components/Store/mobile/common/utils/formatDotDate';
 import Button from 'components/ui/Button';
 
 import styles from './ReviewCard.module.scss';
@@ -58,7 +58,7 @@ export default function ReviewCard({ review, onEdit, onDelete, onReport, onImage
       </div>
       <div className={styles.card__meta}>
         <StarList rating={rating} />
-        <span>{formatReviewDate(created_at)}</span>
+        <span>{formatDotDate(created_at)}</span>
       </div>
       <span className={styles.card__content}>{content}</span>
       {image_urls?.length > 0 && (
