@@ -9,6 +9,7 @@ import ImageCarousel from 'components/Store/mobile/StoreDetailPage/components/Im
 import ShopMenuGroups from 'components/Store/mobile/StoreDetailPage/components/ShopMenuGroups';
 import type { MenuGroupItems } from 'components/Store/mobile/StoreDetailPage/components/ShopMenus';
 import useMenuGroupScroll from 'components/Store/mobile/StoreDetailPage/hooks/useMenuGroupScroll';
+import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOrderStore } from 'utils/zustand/order';
 
@@ -71,7 +72,7 @@ export default function OrderShopPage({ id }: OrderShopPageProps) {
 
   return (
     <div className={styles.page}>
-      <DetailHeader name={shopInfoSummary.name} targetRef={targetRef} />
+      <DetailHeader name={shopInfoSummary.name} targetRef={targetRef} fallbackHref={ROUTES.OrderHome()} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} shopName={shopInfoSummary.name} />
       <OrderShopSummary id={id} shopInfoSummary={shopInfoSummary} />
       <ShopMenuGroups

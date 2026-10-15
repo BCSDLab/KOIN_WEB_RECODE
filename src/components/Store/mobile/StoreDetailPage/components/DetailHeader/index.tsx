@@ -14,6 +14,8 @@ import styles from './DetailHeader.module.scss';
 interface DetailHeaderProps {
   name: string;
   targetRef: RefObject<HTMLDivElement | null>;
+  // 이전 페이지가 없을 때(직접 진입) 돌아갈 경로
+  fallbackHref?: string;
 }
 
 const OPACITY_THRESHOLDS = Array.from({ length: 31 }, (_, i) => i / 100);
@@ -24,7 +26,7 @@ const getTransitionColor = (opacity: number) => {
   return `rgb(${value}, ${value}, ${value})`;
 };
 
-export default function DetailHeader({ name, targetRef }: DetailHeaderProps) {
+export default function DetailHeader({ name, targetRef, fallbackHref = ROUTES.Store() }: DetailHeaderProps) {
   const logger = useLogger();
   const goBack = useGoBack();
   const [opacity, setOpacity] = useState(0);
@@ -37,7 +39,7 @@ export default function DetailHeader({ name, targetRef }: DetailHeaderProps) {
       duration_time: getLoggingTime('enteredShopDetail'),
       current_page: isomorphicSessionStorage.getItem('currentCategory') || '전체보기',
     });
-    goBack(ROUTES.Store());
+    goBack(fallbackHref);
   };
 
   useEffect(() => {
