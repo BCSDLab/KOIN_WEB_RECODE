@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { dehydrate, type DehydratedState, QueryClient } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderListPage from 'components/Order/OrderListPage';
 import { DEFAULT_ORDER_HISTORY_FILTER } from 'components/Order/OrderListPage/constants';
@@ -49,12 +49,9 @@ function OrderListRoute({ isDesktop }: Props) {
     );
   }
 
-  // viewport는 order 웹뷰(index.html)와 같게 배율을 1로 고정한다(다른 주문 화면과 같은 처리)
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-      </Head>
+      <OrderViewport />
       <StoreMobileHeader title="주문 내역" background="gray" />
       <OrderListPage />
     </>

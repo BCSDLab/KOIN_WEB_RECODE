@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { dehydrate, type DehydratedState, QueryClient } from '@tanstack/react-query';
 import { CAMPUS_ADDRESS_CATEGORIES } from 'api/order/entity';
 import { orderQueries } from 'api/order/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderDeliveryCampusPage from 'components/Order/OrderDelivery/OrderDeliveryCampusPage';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
@@ -41,12 +41,7 @@ export const getServerSideProps = withCacheControl(
 function OrderDeliveryCampusRoute({ isDesktop }: Props) {
   return (
     <>
-      {!isDesktop && (
-        // order 웹뷰(index.html)와 같은 viewport로 배율을 1로 고정한다
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-        </Head>
-      )}
+      {!isDesktop && <OrderViewport />}
       <StoreMobileHeader title="주소 상세" />
       {isDesktop ? <DesktopNotice /> : <OrderDeliveryCampusPage />}
     </>
