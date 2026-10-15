@@ -10,7 +10,7 @@ import styles from './ShopLocationMap.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Payment/components/ShopLocationMap 이전(포장 주문의 가게 위치).
 // 가게 주소는 서버가 받아 본문에 그리고, 지도는 마운트 후 주소를 좌표로 바꿔 그린다
-const COPIED_MESSAGE = '전화번호가 복사되었습니다.';
+const COPIED_MESSAGE = '주소가 복사되었습니다.';
 
 async function copyText(text: string) {
   try {
