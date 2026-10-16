@@ -1,3 +1,5 @@
+@use "src/utils/scss/order-preflight" as preflight;
+
 // KOIN_ORDER_WEBVIEW CenterModal(Modal.tsx) 계산값을 옮겼다
 .backdrop {
   position: fixed;
@@ -25,18 +27,8 @@
   color: #000;
   transform: translate(-50%, -50%);
 
-  // 오라클 body의 font-family 체인
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
-
-  & *,
-  & *::before,
-  & *::after {
-    box-sizing: border-box;
-  }
+  @include preflight.body-font;
+  @include preflight.border-box-all;
 
   & p {
     margin: 0;

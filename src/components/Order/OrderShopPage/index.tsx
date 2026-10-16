@@ -22,7 +22,7 @@ import styles from './OrderShopPage.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/OrderableShopView 이전 (주문 가능 상점 상세).
 // 구조는 주문 불가 상점 상세와 같아 헤더·캐러셀·요약·메뉴 그룹·메뉴 목록을 그대로 쓰고 주문 가능 분기 값만 넘긴다.
-// 오라클의 이 화면은 스크롤 로깅·진입 시각 기록을 하지 않는다.
+// KOIN_ORDER_WEBVIEW의 이 화면은 스크롤 로깅·진입 시각 기록을 하지 않는다.
 // 장바구니는 order처럼 비로그인이어도 조회하고(401이면 빈 장바구니) 이 상점 메뉴가 담겨 있을 때만 하단 막대를 띄운다.
 // 로그인 상태는 서버가 장바구니를 미리 받아 막대까지 렌더한다
 interface OrderShopPageProps {

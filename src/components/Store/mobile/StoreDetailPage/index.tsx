@@ -47,7 +47,7 @@ function toMenuGroups(data: UnorderableShopMenusResponse): MenuGroupItems[] {
 }
 
 export default function StoreDetailPage({ id }: StoreDetailPageProps) {
-  // React Compiler가 아래 스크롤 로깅 함수를 메모이즈하면 오라클과 달리 구독이 렌더마다 다시 걸리지 않는다
+  // React Compiler가 아래 스크롤 로깅 함수를 메모이즈하면 KOIN_ORDER_WEBVIEW와 달리 구독이 렌더마다 다시 걸리지 않는다
   'use no memo';
 
   useScrollToTop();
@@ -66,7 +66,7 @@ export default function StoreDetailPage({ id }: StoreDetailPageProps) {
     [shopInfo.menu_categories],
   );
 
-  // 오라클과 같이 매 렌더 새 함수를 넘겨 스크롤 로깅 구독이 렌더마다 다시 걸리게 한다(useCallback·컴파일러 메모이즈 금지).
+  // KOIN_ORDER_WEBVIEW와 같이 매 렌더 새 함수를 넘겨 스크롤 로깅 구독이 렌더마다 다시 걸리게 한다(useCallback·컴파일러 메모이즈 금지).
   // 재구독 때 기준 스크롤 위치가 현재 위치로 갱신되므로, 메뉴 그룹 탭을 눌러 이동한 직후의 스크롤은 기록되지 않는다
   const shopDetailScrollLogging = () => {
     logger.actionEventClick({

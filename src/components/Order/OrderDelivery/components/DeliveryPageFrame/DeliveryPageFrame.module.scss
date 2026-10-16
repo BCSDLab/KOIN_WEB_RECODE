@@ -1,4 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
 
 // KOIN_ORDER_WEBVIEW pages/Delivery 이전. 본문은 헤더(60px) 아래에서 시작한다. 값은 order 화면의 계산된 스타일을 옮겼다
 .frame {
@@ -13,15 +14,10 @@
   background-color: palette.$page-background;
   color: #000;
 
-  // 오라클 body의 font-family 체인
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
+  @include preflight.body-font;
 }
 
-// 오라클(Tailwind preflight)과 같은 초기화. :where로 우선순위를 0으로 둬 화면·공용 Button의 클래스가 이긴다
+// KOIN_ORDER_WEBVIEW(Tailwind preflight)와 같은 초기화. :where로 우선순위를 0으로 둬 화면·공용 Button의 클래스가 이긴다
 :where(.frame) *,
 :where(.frame) *::before,
 :where(.frame) *::after {

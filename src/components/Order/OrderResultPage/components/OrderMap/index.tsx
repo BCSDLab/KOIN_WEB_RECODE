@@ -9,7 +9,7 @@ import styles from './OrderMap.module.scss';
 // KOIN_ORDER_WEBVIEW pages/OrderFinish/components/OrderMap·ShopMarker·hooks/useMarkers 이전.
 // 배달은 배달지 좌표로, 포장은 가게 주소를 지오코딩한 좌표로 지도를 만든다(useNaverMap: zoom 17, 15~20).
 // 배달이면 배달지·가게가 모두 보이게 맞추고(fitBounds, 여백 10), 포장이면 가게를 가운데에 zoom 16으로 둔다.
-// 지도 로더·지오코딩은 배달지 선택 화면(B7)의 훅을 함께 쓴다
+// 지도 로더·지오코딩은 배달지 선택 화면의 훅을 함께 쓴다
 interface OrderMapProps {
   paymentInfo: PaymentInfoResponse;
 }

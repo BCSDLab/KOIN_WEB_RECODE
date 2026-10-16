@@ -1,7 +1,8 @@
 @use "src/utils/scss/order-palette" as palette;
 @use "src/components/Store/mobile/common/pageLayout" as layout;
+@use "src/utils/scss/order-preflight" as preflight;
 
-// KOIN_ORDER_WEBVIEW NearbyShops 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
+// KOIN_ORDER_WEBVIEW NearbyShops 이전. 값은 그 화면의 계산된 스타일을 옮겼다
 
 // order styles/utilities.css의 scrollbar-responsive
 @mixin scrollbar-responsive {
@@ -49,17 +50,12 @@
   width: 100%;
   min-height: calc(100vh - #{layout.$page-header-height});
 
-  // 오라클 HomeLayout의 pb-30
+  // KOIN_ORDER_WEBVIEW HomeLayout의 pb-30
   padding-bottom: 120px;
   background-color: palette.$page-background;
   color: #000;
 
-  // 오라클 body의 font-family 체인(대소문자 무관하게 next/font의 pretendard 페이스와 매칭)
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
+  @include preflight.body-font;
 }
 
 .content {
@@ -289,7 +285,7 @@
     justify-content: space-between;
     width: 100%;
 
-    // 오라클 tailwind v4 gray-700 계산값
+    // KOIN_ORDER_WEBVIEW(Tailwind v4) gray-700 계산값
     color: oklch(37.3% 0.034 259.733deg);
     font-size: 16px;
     text-align: left;

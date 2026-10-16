@@ -1,5 +1,5 @@
 import type { PaymentInfoResponse } from 'api/order/entity';
-import CloseIcon from 'assets/svg/Order/Checkout/close-icon.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
 import CenterModal from 'components/Store/mobile/common/CenterModal';
 import { formatPrice } from 'utils/ts/formatPrice';
 
