@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { isUnauthorizedError, orderQueries } from 'api/order/queries';
+import { orderQueries } from 'api/order/queries';
 import type { ShopInfoResponse } from 'api/storeMobile/entity';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import DetailHeader from 'components/Store/mobile/StoreDetailPage/components/DetailHeader';
@@ -11,6 +11,7 @@ import type { MenuGroupItems } from 'components/Store/mobile/StoreDetailPage/com
 import useMenuGroupScroll from 'components/Store/mobile/StoreDetailPage/hooks/useMenuGroupScroll';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useOrderStore } from 'utils/zustand/order';
 
 import BottomCartModal from './components/BottomCartModal';

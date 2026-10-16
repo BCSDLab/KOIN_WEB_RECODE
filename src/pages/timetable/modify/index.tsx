@@ -7,9 +7,9 @@ import type { Semester } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
-import { isServerAuthError } from 'utils/ssr/authError';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 
 export const getServerSideProps = withCacheControl(
   async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
@@ -37,7 +37,7 @@ export const getServerSideProps = withCacheControl(
 
         await Promise.all(prefetchPromises);
       } catch (error) {
-        if (!isServerAuthError(error) && !(isKoinError(error) && error.status === 403)) {
+        if (!isUnauthorizedError(error) && !(isKoinError(error) && error.status === 403)) {
           throw error;
         }
       }
