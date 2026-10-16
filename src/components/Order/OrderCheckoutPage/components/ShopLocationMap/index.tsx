@@ -4,6 +4,7 @@ import CopyIcon from 'assets/svg/Order/Checkout/copy.svg';
 import DeliveryMap from 'components/Order/OrderDelivery/components/DeliveryMap';
 import useNaverGeocode from 'components/Order/OrderDelivery/hooks/useNaverGeocode';
 import useNaverMapsLoaded from 'components/Order/OrderDelivery/hooks/useNaverMapsLoaded';
+import { copyToClipboard } from 'utils/ts/copyToClipboard';
 import showToast from 'utils/ts/showToast';
 
 import styles from './ShopLocationMap.module.scss';
@@ -13,16 +14,7 @@ import styles from './ShopLocationMap.module.scss';
 const COPIED_MESSAGE = '주소가 복사되었습니다.';
 
 async function copyText(text: string) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
-  }
+  await copyToClipboard(text);
   showToast('success', COPIED_MESSAGE);
 }
 

@@ -1,5 +1,5 @@
 import type { UnorderableShopReviewsResponse } from 'api/storeMobile/entity';
-import StarList from 'components/Store/mobile/StoreReviewsPage/components/StarList';
+import StarList from 'components/Store/mobile/common/StarList';
 
 import styles from './AverageRating.module.scss';
 

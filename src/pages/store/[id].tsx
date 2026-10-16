@@ -36,6 +36,7 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
+import { copyToClipboard } from 'utils/ts/copyToClipboard';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
@@ -231,7 +232,7 @@ function StoreDetailPage({ id }: Props) {
     });
   };
   const copyAccount = async (account: string) => {
-    await navigator.clipboard.writeText(account);
+    await copyToClipboard(account);
     showToast('info', '계좌번호가 복사되었습니다.');
   };
 

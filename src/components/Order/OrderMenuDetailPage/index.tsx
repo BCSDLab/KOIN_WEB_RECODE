@@ -7,6 +7,7 @@ import type { ShopMenuDetailResponse } from 'api/order/entity';
 import { orderMutations } from 'api/order/mutations';
 import { orderQueries } from 'api/order/queries';
 import LoginRequiredModal from 'components/Store/mobile/common/LoginRequiredModal';
+import DetailHeader from 'components/Store/mobile/StoreDetailPage/components/DetailHeader';
 import ImageCarousel from 'components/Store/mobile/StoreDetailPage/components/ImageCarousel';
 import ROUTES from 'static/routes';
 import useGoBack from 'utils/hooks/routing/useGoBack';
@@ -17,7 +18,6 @@ import showToast from 'utils/ts/showToast';
 import AddToCartBottomModal from './components/AddToCartBottomModal';
 import MenuCounter from './components/MenuCounter';
 import MenuDescription from './components/MenuDescription';
-import MenuDetailHeader from './components/MenuDetailHeader';
 import MenuOptions from './components/MenuOptions';
 import MenuPriceSelects from './components/MenuPriceSelects';
 import NoticeModal from './components/NoticeModal';
@@ -174,7 +174,12 @@ export default function OrderMenuDetailPage({ shopId, menuId }: OrderMenuDetailP
 
   return (
     <div className={styles.page}>
-      <MenuDetailHeader shopId={shopId} name={info.name} targetRef={targetRef} noImage={!hasImage} />
+      <DetailHeader
+        name={info.name}
+        targetRef={targetRef}
+        fallbackHref={ROUTES.OrderShop({ id: shopId })}
+        noImage={!hasImage}
+      />
       {hasImage && <ImageCarousel images={images} targetRef={targetRef} />}
       {/* 선택 상태는 메뉴 정보로 초기화하므로, 편집 대상 정보가 도착하면 다시 마운트해 그 선택으로 맞춘다 */}
       <MenuDetailBody

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
@@ -10,10 +10,10 @@ import EmptyCartIcon from 'assets/svg/Order/Cart/cart-icon.svg';
 import PlusIcon from 'assets/svg/Order/Cart/plus-icon.svg';
 import InfoIcon from 'assets/svg/Order/Cart/primary-info-icon.svg';
 import PrimaryPlusIcon from 'assets/svg/Order/Cart/primary-plus-icon.svg';
+import useCartOrderTypeFallback from 'components/Order/common/hooks/useCartOrderTypeFallback';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import { isomorphicLocalStorage } from 'utils/ts/env';
-import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useOrderStore } from 'utils/zustand/order';
 
 import CartBottomSheet from './components/CartBottomSheet';
@@ -48,13 +48,7 @@ export default function OrderCartPage() {
 
   const { mutate: addToCart } = useMutation(orderMutations.addCart(queryClient, isLoggedIn));
 
-  // order useCart: 401 외의 오류면 다른 주문 유형으로 다시 조회한다. 둘 다 실패해 번갈아 조회하지 않도록 한 번만 바꾼다
-  const hasSwitchedOrderType = useRef(false);
-  useEffect(() => {
-    if (!cartError || isUnauthorizedError(cartError) || hasSwitchedOrderType.current) return;
-    hasSwitchedOrderType.current = true;
-    setOrderType(orderType === 'DELIVERY' ? 'TAKE_OUT' : 'DELIVERY');
-  }, [cartError, orderType, setOrderType]);
+  useCartOrderTypeFallback(cartError, orderType);
 
   useEffect(() => {
     const request = readStoredMenuOptions();

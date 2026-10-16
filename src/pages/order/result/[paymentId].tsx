@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderResultPage from 'components/Order/OrderResultPage';
 import OrderResultHeader from 'components/Order/OrderResultPage/components/OrderResultHeader';
@@ -64,10 +65,9 @@ function OrderResultRoute({ isDesktop, paymentId }: Props) {
 
   return (
     <>
+      {!isDesktop && <OrderViewport />}
       {!isDesktop && (
-        // order 웹뷰(index.html)와 같은 viewport로 배율을 1로 고정한다
         <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
           {/* order는 index.html에서 지도 스크립트를 바로 불러 첫 렌더 때 지오코더가 준비돼 있다.
               여기선 지도 로더(useNaverMapsLoaded)가 마운트 후 붙이므로, 같은 주소를 미리 받아 둬 지도·가게 위치를 일찍 그린다 */}
           <link rel="preload" href={NAVER_MAPS_SCRIPT_URL} as="script" />

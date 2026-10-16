@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderMenuDetailPage from 'components/Order/OrderMenuDetailPage';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
@@ -51,13 +51,10 @@ export const getServerSideProps = withCacheControl(
 
 function OrderMenuDetailRoute({ id, menuId, isDesktop }: Props) {
   // 모바일은 이미지 위에 겹치는 상세 전용 헤더를 본문에서 그린다.
-  // viewport는 order 웹뷰(index.html)와 같게 배율을 1로 고정한다(주문 가능 상점 상세와 같은 처리)
   if (!isDesktop) {
     return (
       <>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-        </Head>
+        <OrderViewport />
         <OrderMenuDetailPage shopId={id} menuId={menuId} />
       </>
     );
