@@ -17,7 +17,7 @@ export default function SearchBar({ onChange }: SearchBarProps) {
         type="text"
         placeholder="검색어를 입력해주세요."
         autoComplete="off"
-        // eslint-disable-next-line jsx-a11y/no-autofocus -- 검색 화면 진입 즉시 입력하도록 오라클과 같이 포커스한다
+        // eslint-disable-next-line jsx-a11y/no-autofocus -- 검색 화면 진입 즉시 입력하도록 KOIN_ORDER_WEBVIEW와 같이 포커스한다
         autoFocus
         className={styles['search-bar__input']}
         onChange={onChange}

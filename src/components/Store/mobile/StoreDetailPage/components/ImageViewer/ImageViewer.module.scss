@@ -1,7 +1,7 @@
 @use "src/utils/scss/order-preflight" as preflight;
 
 // KOIN_ORDER_WEBVIEW ImageViewer 이전. 슬라이드·화살표·점 모양은 swiper-bundle.css가 그린다
-// 오라클은 Tailwind v4(레이어 안 유틸리티)라 레이어 밖 Swiper CSS의 display가 이긴다. 겹치지 않는 크기만 옮긴다
+// KOIN_ORDER_WEBVIEW는 Tailwind v4(레이어 안 유틸리티)라 레이어 밖 Swiper CSS의 display가 이긴다. 겹치지 않는 크기만 옮긴다
 
 .viewer {
   position: fixed;
@@ -14,7 +14,7 @@
   height: 100%;
   background-color: #000;
 
-  // 포털로 body에 붙으므로 오라클 body(Tailwind preflight)의 글꼴·줄 높이를 직접 준다.
+  // 포털로 body에 붙으므로 KOIN_ORDER_WEBVIEW body(Tailwind preflight)의 글꼴·줄 높이를 직접 준다.
   // 페이지네이션 점은 inline-block이라 줄 높이가 다르면 세로 위치가 어긋난다
   @include preflight.body-font;
 

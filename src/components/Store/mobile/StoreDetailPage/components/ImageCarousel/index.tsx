@@ -114,7 +114,7 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
     return () => router.beforePopState(() => true);
   }, [router]);
 
-  // 오라클과 같이 뷰어를 열 때 히스토리 항목을 하나 쌓고 뒤로가기(popstate)로 닫는다.
+  // KOIN_ORDER_WEBVIEW와 같이 뷰어를 열 때 히스토리 항목을 하나 쌓고 뒤로가기(popstate)로 닫는다.
   // Next 라우터가 돌아온 항목을 자기 것으로 알아보도록 기존 상태(__N 등)를 유지한다
   useEffect(() => {
     if (!isImageViewerOpen) return undefined;
@@ -147,7 +147,7 @@ export default function ImageCarousel({ images, targetRef, shopName }: ImageCaro
               setIsInteracting(true);
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음) */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음) */}
             <img src={image.image_url} alt={`slide ${index}`} className={styles.carousel__image} />
           </button>
         ))}

@@ -17,7 +17,7 @@ const ROUTES = {
   StoreInfo: ({ id }: ROUTESParams<'id'>) => `/store/${id}/info`,
   StoreEvents: ({ id }: ROUTESParams<'id'>) => `/store/${id}/events`,
   StoreReviews: ({ id }: ROUTESParams<'id'>) => `/store/${id}/reviews`,
-  // 주문 흐름(Track B): KOIN_ORDER_WEBVIEW 주문 화면을 그대로 이전. develop 머지 전에 진입을 막는다
+  // 주문 흐름: KOIN_ORDER_WEBVIEW 주문 화면을 옮긴 경로. 웹 주문을 열기 전까지 middleware가 진입을 막는다
   OrderHome: () => '/order',
   OrderShop: ({ id }: ROUTESParams<'id'>) => `/order/shops/${id}`,
   OrderShopInfo: ({ id }: ROUTESParams<'id'>) => `/order/shops/${id}/info`,

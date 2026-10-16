@@ -14,7 +14,7 @@ import useGoBack from 'utils/hooks/routing/useGoBack';
 import showToast from 'utils/ts/showToast';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/shopReview/components/ReviewEditForm + hooks/useEditReviewForm 이전(모바일 리뷰 수정).
-// 오라클 헤더는 /review/edit에서 뒤로가기를 누르면 나가기 확인 모달을 띄운다. 여기서는 헤더의 onBack으로 연다
+// KOIN_ORDER_WEBVIEW 헤더는 /review/edit에서 뒤로가기를 누르면 나가기 확인 모달을 띄운다. 여기서는 헤더의 onBack으로 연다
 interface ReviewEditPageProps {
   id: string;
   reviewId: string;
@@ -28,7 +28,7 @@ export default function ReviewEditPage({ id, reviewId }: ReviewEditPageProps) {
   const goBack = useGoBack();
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
-  // 서버가 받은 기존 리뷰로 첫 렌더부터 채운다(오라클은 조회 후 effect로 채운다)
+  // 서버가 받은 기존 리뷰로 첫 렌더부터 채운다(KOIN_ORDER_WEBVIEW는 조회 후 effect로 채운다)
   const form = useReviewFormBase({
     rating: reviewDetail.rating,
     content: reviewDetail.content,
@@ -38,7 +38,7 @@ export default function ReviewEditPage({ id, reviewId }: ReviewEditPageProps) {
   const { imageUrls, imgRef, handleChangeImage, removeImage } = useReviewImages();
   const handleBack = () => goBack(ROUTES.StoreReviews({ id }));
 
-  // 데스크톱 훅(useEditStoreReview)은 성공 시 자체 토스트를 띄워 오라클 토스트와 겹치므로 공용 mutation을 직접 쓴다
+  // 데스크톱 훅(useEditStoreReview)은 성공 시 자체 토스트를 띄워 KOIN_ORDER_WEBVIEW 토스트와 겹치므로 공용 mutation을 직접 쓴다
   const { mutate } = useMutation({
     ...reviewMutations.edit(queryClient, id, reviewId, {
       onSuccess: () => {

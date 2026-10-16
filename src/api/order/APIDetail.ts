@@ -30,7 +30,7 @@ import type {
   UpdateCartItemRequest,
 } from './entity';
 
-// KOIN_ORDER_WEBVIEW api/cart 이전. 경로·파라미터는 order와 같게 유지한다(parity G2).
+// KOIN_ORDER_WEBVIEW api/cart 이전. 같은 엔드포인트를 쓰므로 경로·파라미터를 바꿀 때 양쪽을 함께 맞춘다.
 // 장바구니는 비로그인이어도 화면이 정상이므로(빈 장바구니) authOptional로 표시해 로그인 화면으로 보내지 않는다.
 // 비로그인 화면에서는 401이 정상 응답이라 refresh(세션 조회)를 시도하지 않는다. 마운트 후 세션이 로그인으로 확인되면
 // 쿼리 키 범위가 auth로 바뀌어 refresh가 켜진 요청으로 다시 조회한다
@@ -176,7 +176,7 @@ export class UpdateCartItemOptions<R extends object> implements APIRequest<R> {
   }
 }
 
-// KOIN_ORDER_WEBVIEW api/delivery 이전(배달지 선택). 경로·파라미터는 order와 같게 유지한다(parity G2)
+// KOIN_ORDER_WEBVIEW api/delivery 이전(배달지 선택). 같은 엔드포인트를 쓰므로 경로·파라미터를 바꿀 때 양쪽을 함께 맞춘다
 export class AddressSearch<R extends AddressSearchResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
@@ -220,7 +220,7 @@ export class OffCampusDeliveryValidate<R extends object> implements APIRequest<R
   }
 }
 
-// 교외 배달지 등록(주소 상세의 "주소 선택"). 결제 화면 이동과 함께 B8에서 쓴다
+// 교외 배달지 등록(주소 상세의 "주소 선택"). 등록 후 결제 화면으로 이동한다
 export class RegisterOffCampusDeliveryAddress<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
@@ -235,7 +235,7 @@ export class RegisterOffCampusDeliveryAddress<R extends object> implements APIRe
   }
 }
 
-// KOIN_ORDER_WEBVIEW 결제 화면(pages/Payment) API. 경로·본문은 order와 같게 유지한다(parity G2)
+// KOIN_ORDER_WEBVIEW 결제 화면(pages/Payment) API. 같은 엔드포인트를 쓰므로 경로·본문을 바꿀 때 양쪽을 함께 맞춘다
 // 결제 화면의 연락처 기본값(학생 정보). 결제 화면은 로그인 상태에서만 진입한다
 export class StudentInfo<R extends StudentInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

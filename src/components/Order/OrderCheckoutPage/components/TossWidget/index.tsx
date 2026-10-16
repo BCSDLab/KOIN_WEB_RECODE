@@ -5,7 +5,7 @@ import { loadTossPayments, type TossPaymentsWidgets } from '@tosspayments/tosspa
 import styles from './TossWidget.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Payment/components/TossWidget 이전. 결제 수단·이용약관 위젯을 그린다.
-// 테스트 키는 order와 같다(결제 승인은 B9에서 다시 정한다)
+// TODO: 웹 주문을 열기 전에 운영 클라이언트 키(환경 변수)로 바꾼다. 지금은 KOIN_ORDER_WEBVIEW와 같은 Toss 공개 테스트 키다
 const CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const CUSTOMER_KEY = 'RIjiDf_DbIaGaFMTcj3_v';
 

@@ -62,7 +62,7 @@ export default function ShopCard({
       )}
 
       {thumbnailUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
+        // eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
         <img src={thumbnailUrl} alt={name} className={styles.card__thumbnail} />
       ) : (
         <div className={styles.card__placeholder}>이미지 준비중</div>
