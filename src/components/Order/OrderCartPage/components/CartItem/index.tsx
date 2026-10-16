@@ -9,6 +9,7 @@ import PlusIcon from 'assets/svg/Order/Cart/plus-icon.svg';
 import TrashIcon from 'assets/svg/Order/Cart/trash-icon.svg';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
+import { formatNumber } from 'utils/ts/formatPrice';
 import showToast from 'utils/ts/showToast';
 
 import styles from './CartItem.module.scss';
@@ -49,7 +50,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
         <div className={styles.item__info}>
           <div className={styles.item__name}>{item.name}</div>
           <div className={styles.item__details}>
-            <div>가격 : {item.price.price.toLocaleString()}원</div>
+            <div>가격 : {formatNumber(item.price.price)}원</div>
             {item.options && item.options.length > 0 && (
               <div>
                 {item.options.map((option) => (
@@ -59,7 +60,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
                     {option.option_name}{' '}
                     {option.option_price > 0 && (
                       <>
-                        ({option.option_price.toLocaleString()}
+                        ({formatNumber(option.option_price)}
                         원)
                       </>
                     )}
@@ -68,7 +69,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
               </div>
             )}
           </div>
-          <div className={styles.item__amount}>{item.total_amount.toLocaleString()}원</div>
+          <div className={styles.item__amount}>{formatNumber(item.total_amount)}원</div>
         </div>
         {item.menu_thumbnail_image_url && (
           // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)

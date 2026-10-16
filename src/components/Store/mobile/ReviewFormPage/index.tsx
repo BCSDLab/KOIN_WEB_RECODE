@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
+import { invalidateShopReviews, storeMobileQueries } from 'api/storeMobile/queries';
 import { getLoggingTime, setStartLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import ReviewForm from 'components/Store/mobile/ReviewFormPage/components/ReviewForm';
 import useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
@@ -53,8 +53,7 @@ export default function ReviewCreatePage({ id }: ReviewCreatePageProps) {
       },
       {
         onSuccess: () => {
-          // 모바일 리뷰 목록·내 리뷰는 같은 접두사(reviews) 아래에 있다
-          queryClient.invalidateQueries({ queryKey: [...storeMobileQueryKeys.all, 'reviews'] });
+          invalidateShopReviews(queryClient, id);
           showToast('success', '리뷰가 작성되었어요');
           goBack();
         },

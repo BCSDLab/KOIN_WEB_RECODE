@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './MenuDescription.module.scss';
 
@@ -14,7 +15,7 @@ export default function MenuDescription({ name, description, price, noImage }: M
   return (
     <div className={cn({ [styles.description]: true, [styles['description--no-image']]: noImage })}>
       <span className={styles.description__name}>{name}</span>
-      <span className={styles.description__price}>{price.toLocaleString()}원</span>
+      <span className={styles.description__price}>{formatNumber(price)}원</span>
       {description && <span className={styles.description__text}>{description}</span>}
     </div>
   );

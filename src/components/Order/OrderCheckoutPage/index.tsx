@@ -16,6 +16,7 @@ import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { formatNumber } from 'utils/ts/formatPrice';
 import showToast from 'utils/ts/showToast';
 import { useOrderStore } from 'utils/zustand/order';
 
@@ -268,7 +269,7 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
             pay();
           }}
         >
-          {cart.total_amount.toLocaleString()}원 결제하기
+          {formatNumber(cart.total_amount)}원 결제하기
         </Button>
 
         <ContactModal

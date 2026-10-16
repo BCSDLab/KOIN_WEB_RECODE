@@ -5,7 +5,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { deleteReview } from 'api/store';
 import type { ReviewSorter } from 'api/storeMobile/entity';
-import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
+import { invalidateShopReviews, storeMobileQueries } from 'api/storeMobile/queries';
 import CheckboxFalseIcon from 'assets/svg/Store/checkbox-false.svg';
 import CheckboxTrueIcon from 'assets/svg/Store/checkbox-true.svg';
 import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
@@ -25,7 +25,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { getViewerScope } from 'utils/ts/getViewerScope';
 import showToast from 'utils/ts/showToast';
 
 import styles from './StoreReviewsPage.module.scss';
@@ -74,7 +73,7 @@ export default function StoreReviewsPage({ id }: StoreReviewsPageProps) {
   const { mutate: removeReview, isPending: isDeletePending } = useMutation({
     mutationFn: (reviewId: number) => deleteReview(reviewId, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: storeMobileQueryKeys.reviews(id, getViewerScope(isLoggedIn)) });
+      invalidateShopReviews(queryClient, id);
       showToast('success', '리뷰가 삭제되었어요');
       setDeleteTargetId(null);
     },

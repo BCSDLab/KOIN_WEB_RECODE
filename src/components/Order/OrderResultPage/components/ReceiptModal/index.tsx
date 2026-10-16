@@ -1,6 +1,7 @@
 import type { PaymentInfoResponse } from 'api/order/entity';
 import CloseIcon from 'assets/svg/Order/Checkout/close-icon.svg';
 import CenterModal from 'components/Store/mobile/common/CenterModal';
+import { formatPrice } from 'utils/ts/formatPrice';
 
 import styles from './ReceiptModal.module.scss';
 
@@ -10,8 +11,6 @@ interface ReceiptModalProps {
   onClose: () => void;
   paymentInfo: PaymentInfoResponse;
 }
-
-const formatKRW = (number: number) => `${number.toLocaleString()}원`;
 
 export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptModalProps) {
   return (
@@ -44,7 +43,7 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
                 // eslint-disable-next-line react/no-array-index-key -- 메뉴 응답에 고유 id가 없고 조회 결과를 그대로 그리는 정적 목록이다
                 <div key={`${menuIndex}-${quantityIndex}`} className={styles.receipt__row}>
                   <div className={styles.receipt__strong}>{menu.name}</div>
-                  <div>{formatKRW(unitTotal)}</div>
+                  <div>{formatPrice(unitTotal)}</div>
                 </div>
               ));
             })}
@@ -53,11 +52,11 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
           <div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>주문 금액</div>
-              <div>{formatKRW(paymentInfo.total_menu_price)}</div>
+              <div>{formatPrice(paymentInfo.total_menu_price)}</div>
             </div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>배달비</div>
-              <div>{formatKRW(paymentInfo.delivery_tip ?? 0)}</div>
+              <div>{formatPrice(paymentInfo.delivery_tip ?? 0)}</div>
             </div>
           </div>
           <div className={styles.receipt__divider} />
@@ -69,7 +68,7 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
           <div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>총 결제 금액</div>
-              <div>{formatKRW(paymentInfo.amount)}</div>
+              <div>{formatPrice(paymentInfo.amount)}</div>
             </div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>결제 수단</div>
