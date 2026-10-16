@@ -1,3 +1,4 @@
+import { StoreCategories, StoreEventList } from 'api/store/APIDetail';
 import APIClient from 'utils/ts/apiClient';
 
 import {
@@ -5,9 +6,7 @@ import {
   OrderShopMenuGroups,
   OrderShopMenus,
   OrderShopSummary,
-  ShopCategories,
   ShopDetailV2,
-  ShopEvents,
   ShopListV3,
   ShopMenus,
   ShopRelatedSearch,
@@ -17,7 +16,7 @@ import {
   ShopSummary,
 } from './APIDetail';
 
-export const getShopCategories = APIClient.of(ShopCategories);
+export const getShopCategories = APIClient.of(StoreCategories);
 
 export const getShopListV3 = APIClient.of(ShopListV3);
 
@@ -29,7 +28,7 @@ export const getShopDetailV2 = APIClient.of(ShopDetailV2);
 
 export const getShopMenus = APIClient.of(ShopMenus);
 
-export const getShopEvents = APIClient.of(ShopEvents);
+export const getShopEvents = APIClient.of(StoreEventList);
 
 export const getShopReviews = APIClient.of(ShopReviews);
 

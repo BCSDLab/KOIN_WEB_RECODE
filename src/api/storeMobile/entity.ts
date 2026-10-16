@@ -1,7 +1,8 @@
 // KOIN_ORDER_WEBVIEW src/api/shop/entity.ts (오라클 패치 적용본)에서 옮긴 모바일 상점·주문 화면 응답 타입
-export interface ShopDetailInfoParams {
-  orderableShopId: number;
-}
+import type { MenuPrice } from 'api/order/entity';
+
+// 데스크톱 상점과 같은 엔드포인트(shops/categories·shops/:id/events)는 api/store 타입을 그대로 쓴다
+export type { StoreCategory as ShopCategory, StoreEvent as Events } from 'api/store/entity';
 
 interface DeliveryTips {
   from_amount: number;
@@ -39,14 +40,14 @@ export interface ShopDetailInfoResponse {
   origins: OriginInfo[] | [];
 }
 
-export interface Time {
+interface Time {
   day_of_week: Day;
   closed: boolean;
   open_time: string | null;
   close_time: string | null;
 }
 
-export interface CategoryGroup {
+interface CategoryGroup {
   id: number;
   name: string;
 }
@@ -109,49 +110,13 @@ export interface UnorderableShopReviewsResponse {
   reviews: Review[];
 }
 
-export interface ShopDeliveryInfoResponse {
-  campus_delivery: boolean;
-  off_campus_delivery: boolean;
-}
-
-export interface OrderableShopInfoParams {
-  orderableShopId: number;
-  orderableShopMenuId?: number;
-}
-
-export interface UnorderableShopInfoParams {
-  UnorderableShopId: number;
-}
-
-export interface Events {
-  shop_id: number;
-  shop_name: string;
-  event_id: number;
-  title: string;
-  content: string;
-  thumbnail_images: string[];
-  start_date: string;
-  end_date: string;
-}
-
-export interface ShopEventsResponse {
-  events: Events[];
-}
-
-export interface Price {
-  id: number;
-  name: string | null;
-  price: number;
-  is_selected: boolean;
-}
-
-export interface Menu {
+interface Menu {
   id: number;
   name: string;
   description: string;
   thumbnail_image: string;
   is_sold_out: boolean;
-  prices: Price[];
+  prices: MenuPrice[];
 }
 
 export interface ShopInfoResponse {
@@ -165,7 +130,7 @@ interface UnorderableOptions {
   price: number;
 }
 
-export interface UnorderableMenu {
+interface UnorderableMenu {
   id: number;
   name: string;
   is_hidden: boolean;
@@ -220,30 +185,6 @@ export interface ShopMenuGroupsResponse {
   menu_groups: MenuGroup[];
 }
 
-export interface OptionGroup {
-  id: number;
-  name: string;
-  description?: string | null;
-  is_required: boolean;
-  min_select: number;
-  max_select: number;
-  options: Price[];
-}
-
-export interface ShopMenuDetailResponse {
-  id: number;
-  quantity: number;
-  name: string;
-  description: string | null;
-  images: string[];
-  prices: Price[];
-  option_groups: OptionGroup[];
-}
-
-export interface NearbyStoresRelateSearchParams {
-  keyword: string;
-}
-
 export interface NearbyStoresRelateSearchResponse {
   search_keyword: string;
   processed_search_keyword: string;
@@ -253,82 +194,15 @@ export interface NearbyStoresRelateSearchResponse {
   menu_name_search_results: NearByShopMenuResult[];
 }
 
-export interface NearByShopResult {
+interface NearByShopResult {
   shop_id: number;
   shop_name: string;
 }
 
-export interface NearByShopMenuResult {
+interface NearByShopMenuResult {
   shop_id: number;
   shop_name: string;
   menu_name: string;
-}
-
-export interface RelatedSearchResponse {
-  search_keyword: string;
-  processed_search_keyword: string;
-  shop_name_search_result_count: number;
-  menu_name_search_result_count: number;
-  shop_name_search_results: ShopResult[];
-  menu_name_search_results: MenuResult[];
-}
-
-export interface ShopResult {
-  orderable_shop_id: number;
-  orderable_shop_name: string;
-}
-
-export interface MenuResult {
-  orderable_shop_id: number;
-  orderable_shop_name: string;
-  menu_name: string;
-}
-
-export interface RelatedSearchParams {
-  keyword: string;
-}
-
-export interface ShopCategoriesResponse {
-  total_count: number;
-  shop_categories: ShopCategory[];
-}
-
-export interface ShopCategory {
-  id: number;
-  name: string;
-  image_url: string;
-}
-
-export interface OrderableShopsResponse {
-  shop_id: number;
-  orderable_shop_id: number;
-  name: string;
-  is_delivery_available: boolean;
-  is_takeout_available: boolean;
-  service_event: boolean;
-  minimum_order_amount: number;
-  rating_average: number;
-  review_count: number;
-  minimum_delivery_tip: number;
-  maximum_delivery_tip: number;
-  is_open: boolean;
-  category_ids: number[];
-  images: Image[];
-  open_status: 'OPERATING' | 'PREPARING' | 'CLOSED';
-}
-
-export interface OrderableShopsParams {
-  sorter?: string;
-  filter?: OrderableShopsFilter[];
-  category_filter?: number;
-  minimum_order_amount?: number;
-}
-
-export type OrderableShopsFilter = 'IS_OPEN' | 'DELIVERY_AVAILABLE' | 'TAKEOUT_AVAILABLE' | 'FREE_DELIVERY_TIP';
-
-export interface ShopListParams {
-  sorter?: string;
-  filter?: string;
 }
 
 export interface ShopListResponse {
@@ -336,7 +210,7 @@ export interface ShopListResponse {
   shops: ShopInfo[];
 }
 
-export interface ShopInfo {
+interface ShopInfo {
   category_ids: number[];
   delivery: boolean;
   id: number;
@@ -353,20 +227,14 @@ export interface ShopInfo {
   images: string[];
 }
 
-export interface OpenInfo {
+interface OpenInfo {
   day_of_week: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
   closed: boolean;
   open_time: string;
   close_time: string;
 }
 
-export interface ReportReviewRequest {
-  reports: Array<{
-    title: string;
-    content: string;
-  }>;
-}
-export interface ReviewReportCategory {
+interface ReviewReportCategory {
   name: string;
   detail: string;
 }
@@ -377,31 +245,6 @@ export interface ReviewReportCategoriesResponse {
 }
 
 export type ReviewSorter = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
-
-export interface GetShopTotalReviewParams {
-  shopId: number;
-  page: number;
-  limit: number;
-  sorter: ReviewSorter;
-}
-
-export interface GetMyShopReviewsParams {
-  shopId: number;
-  params: {
-    sorter: ReviewSorter;
-  };
-}
-
-export interface CreateReviewRequest {
-  rating: number;
-  content: string;
-  image_urls: string[];
-  menu_names: string[];
-}
-
-export interface UploadShopFilesResponse {
-  file_urls: string[];
-}
 
 export interface ReviewDetailResponse {
   review_id: number;
