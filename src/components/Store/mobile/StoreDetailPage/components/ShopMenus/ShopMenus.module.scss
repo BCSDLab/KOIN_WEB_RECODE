@@ -1,6 +1,6 @@
 @use "src/utils/scss/order-palette" as palette;
 
-// KOIN_ORDER_WEBVIEW ShopMenus 이전. 값은 오라클 화면의 계산된 스타일을 옮겼다
+// KOIN_ORDER_WEBVIEW ShopMenus 이전. 값은 그 화면의 계산된 스타일을 옮겼다
 .menus {
   display: flex;
   flex-direction: column;

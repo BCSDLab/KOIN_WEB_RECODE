@@ -6,7 +6,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 
 import styles from './OrderCartHeader.module.scss';
 
-// KOIN_ORDER_WEBVIEW components/Layout/Header(장바구니) 이전. Track B 공통 헤더(60px)에 order의 CartResetButton(전체삭제)을 붙인다.
+// KOIN_ORDER_WEBVIEW components/Layout/Header(장바구니) 이전. 주문 화면 공통 헤더(60px)에 order의 CartResetButton(전체삭제)을 붙인다.
 // 장바구니가 비어 있으면 버튼을 비활성화한다
 function CartResetButton() {
   const { cartInfo } = useOrderCart();

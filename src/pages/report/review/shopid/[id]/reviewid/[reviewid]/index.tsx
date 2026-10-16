@@ -38,7 +38,7 @@ export const getServerSideProps = withCacheControl(
       return { props: { id, reviewId, isMobile: false } };
     }
 
-    // 모바일은 오라클처럼 신고 카테고리만 받아 본문까지 렌더한다(클라이언트는 같은 쿼리 키로 캐시를 이어받는다)
+    // 모바일은 KOIN_ORDER_WEBVIEW처럼 신고 카테고리만 받아 본문까지 렌더한다(클라이언트는 같은 쿼리 키로 캐시를 이어받는다)
     const queryClient = new QueryClient();
     await queryClient.fetchQuery(storeMobileQueries.reportCategories());
 

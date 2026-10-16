@@ -95,7 +95,7 @@ $header-height: 60px;
 
   &__cell {
     padding: 8px 16px;
-    border-color: palette.$gray-200; // 오라클 preflight 기본 테두리 색
+    border-color: palette.$gray-200; // KOIN_ORDER_WEBVIEW preflight 기본 테두리 색
     font-weight: 400;
 
     &--range {

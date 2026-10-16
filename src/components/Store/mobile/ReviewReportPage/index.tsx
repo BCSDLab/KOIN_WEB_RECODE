@@ -43,7 +43,7 @@ export default function ReviewReportPage({ id, reviewId }: ReviewReportPageProps
     hasTextarea: category.name === ETC,
   }));
 
-  // 데스크톱 훅(useReviewReport)은 성공 시 자체 토스트를 띄워 오라클 토스트와 겹치므로 공용 mutation을 직접 쓴다
+  // 데스크톱 훅(useReviewReport)은 성공 시 자체 토스트를 띄워 KOIN_ORDER_WEBVIEW 토스트와 겹치므로 공용 mutation을 직접 쓴다
   const { mutate } = useMutation({
     ...storeMutations.reportReview(queryClient, id, reviewId, {
       onSuccess: () => {

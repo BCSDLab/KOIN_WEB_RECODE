@@ -17,7 +17,7 @@ $header-height: 60px;
   @include preflight.body-font;
 }
 
-// 오라클(Tailwind preflight)과 같은 초기화. :where로 우선순위를 0으로 둬 공용 Button 등의 클래스가 이긴다
+// KOIN_ORDER_WEBVIEW(Tailwind preflight)와 같은 초기화. :where로 우선순위를 0으로 둬 공용 Button 등의 클래스가 이긴다
 :where(.page) *,
 :where(.page) *::before,
 :where(.page) *::after {

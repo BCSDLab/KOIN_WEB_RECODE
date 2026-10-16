@@ -150,7 +150,7 @@ export default function ShopMenus({
                     </div>
                   )}
                   {menu.thumbnailImage && (
-                    // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
+                    // eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
                     <img src={menu.thumbnailImage} alt={menu.name} className={styles.menu__image} />
                   )}
                 </div>
