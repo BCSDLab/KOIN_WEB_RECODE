@@ -18,7 +18,7 @@
 [Service]
 WorkingDirectory=/usr/local/koin/stage/current
 ExecStart=
-ExecStart=/home/ubuntu/.nvm/versions/node/v24.14.1/bin/node /usr/local/koin/stage/current/.yarn/releases/yarn-4.17.0.cjs start:serve -p 3000
+ExecStart=/home/ubuntu/.nvm/versions/node/v24.22.1/bin/node /usr/local/koin/stage/current/.yarn/releases/yarn-4.17.0.cjs start:serve -p 3000
 ```
 
 systemd 설정을 다시 읽고 스테이징을 재시작한 후
