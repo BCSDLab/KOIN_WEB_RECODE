@@ -4,7 +4,7 @@
 
 KOIN은 한국기술교육대학교(KOREATECH) 재학생을 위한 캠퍼스 서비스 웹앱이다. 시간표, 버스, 식당, 가게, 커뮤니티, 동아리, 분실물, 졸업 계산기를 제공한다.
 
-**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 24.14.1
+**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 24.22.1
 
 ## 주요 명령어
 
