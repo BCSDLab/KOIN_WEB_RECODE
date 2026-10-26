@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import useReportLostItemArticle from 'components/Articles/hooks/useReportLostItemArticle';
 import CheckboxGroup from 'components/Articles/LostItemDetailPage/components/CheckboxGroup';
-import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
+
 import styles from './ReportForm.module.scss';
 
 const options = [
@@ -32,6 +33,7 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
   const handleReportClick = async () => {
     if (selectedReason.length === 0) {
       showToast('error', '신고 사유를 선택해주세요.');
+
       return;
     }
 
@@ -50,7 +52,8 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
         navigate(ROUTES.LostItems());
       }
     } catch {
-      toast.error('신고 중 오류가 발생했습니다. 다시 시도해주세요.');
+      showToast('error', '신고 중 오류가 발생했습니다. 다시 시도해주세요.');
+
       return;
     }
     logItemPostReportConfirm();

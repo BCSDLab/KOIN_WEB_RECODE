@@ -1,7 +1,8 @@
-import { DepartmentContactDepartment } from 'api/departmentContact/entity';
+import type { DepartmentContactDepartment } from 'api/departmentContact/entity';
 import ClipboardCopyIcon from 'assets/svg/department/clipboard-copy-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import showToast from 'utils/ts/showToast';
+
 import styles from './DepartmentCard.module.scss';
 
 interface DepartmentCardProps {
@@ -34,7 +35,14 @@ export default function DepartmentCard({ department, className }: DepartmentCard
           {department.contacts.map((contact) => (
             <div key={`${contact.task}-${contact.phone_number}`} className={styles.table__row}>
               <span className={styles.table__task}>{contact.task}</span>
-              <span className={styles.table__phone}>{contact.phone_number}</span>
+              <button
+                type="button"
+                className={styles.table__phone}
+                aria-label={`${contact.phone_number} 복사`}
+                onClick={() => copyPhoneNumber(contact.phone_number)}
+              >
+                {contact.phone_number}
+              </button>
             </div>
           ))}
         </div>
@@ -48,17 +56,9 @@ export default function DepartmentCard({ department, className }: DepartmentCard
     <div className={`${styles.card} ${className ?? ''}`}>
       <h2 className={styles.card__title}>{department.name}</h2>
       <div className={styles.single}>
-        <span className={styles.single__phone}>
-          전화번호 :
-          {' '}
-          {contact?.phone_number}
-        </span>
+        <span className={styles.single__phone}>전화번호 : {contact?.phone_number}</span>
         {contact && (
-          <button
-            type="button"
-            className={styles.single__copy}
-            onClick={() => copyPhoneNumber(contact.phone_number)}
-          >
+          <button type="button" className={styles.single__copy} onClick={() => copyPhoneNumber(contact.phone_number)}>
             전화번호 복사
             <ClipboardCopyIcon aria-hidden />
           </button>

@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { ABTestAssignResponse } from './entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type { ABTestAssignResponse } from './entity';
 
 export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
@@ -16,7 +17,6 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
 
   constructor(
     title: string,
-    public authorization?: string,
     public accessHistoryId?: string | number | null,
   ) {
     this.data = { title };

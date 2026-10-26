@@ -1,4 +1,5 @@
-import { Course, PreCourse } from 'api/course/entity';
+import type { Course, PreCourse } from 'api/course/entity';
+
 import styles from './CourseTable.module.scss';
 
 type TableVariant = 'open' | 'pre' | 'selected';
@@ -14,7 +15,7 @@ interface CourseTableProps<T> {
   variant: TableVariant;
   title: string;
   data: T[];
-  columns: Column<T>[];
+  columns: Array<Column<T>>;
   getRowKey: (item: T, index: number) => string;
   headerExtra?: React.ReactNode;
 }
@@ -69,6 +70,7 @@ interface ActionButtonProps {
 
 function ActionButton({ type, onClick }: ActionButtonProps) {
   const label = type === 'apply' ? '신청' : '취소';
+
   return (
     <button type="button" className={styles[`button--${type}`]} onClick={onClick}>
       {label}
@@ -100,7 +102,7 @@ const col = {
   }),
 };
 
-export function createOpenCoursesColumns(onAddCourse: (course: PreCourse) => void): Column<Course>[] {
+export function createOpenCoursesColumns(onAddCourse: (course: PreCourse) => void): Array<Column<Course>> {
   return [
     col.no(),
     {
@@ -142,7 +144,7 @@ export function createOpenCoursesColumns(onAddCourse: (course: PreCourse) => voi
   ];
 }
 
-export function createPreCoursesColumns(onAddCourse: (course: PreCourse) => void): Column<PreCourse>[] {
+export function createPreCoursesColumns(onAddCourse: (course: PreCourse) => void): Array<Column<PreCourse>> {
   return [
     col.no(),
     {
@@ -157,7 +159,7 @@ export function createPreCoursesColumns(onAddCourse: (course: PreCourse) => void
   ];
 }
 
-export function createSelectedCoursesColumns(onRemoveCourse: (index: number) => void): Column<PreCourse>[] {
+export function createSelectedCoursesColumns(onRemoveCourse: (index: number) => void): Array<Column<PreCourse>> {
   return [
     col.no(),
     {

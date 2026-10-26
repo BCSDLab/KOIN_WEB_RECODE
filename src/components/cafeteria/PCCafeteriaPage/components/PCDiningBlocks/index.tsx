@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { Dining, DiningType } from 'api/dinings/entity';
+
+import type { Dining, DiningType } from 'api/dinings/entity';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailModal from 'components/cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'components/cafeteria/PCCafeteriaPage/components/PCMealImage';
 import { filterDinings } from 'components/cafeteria/utils/filter';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {

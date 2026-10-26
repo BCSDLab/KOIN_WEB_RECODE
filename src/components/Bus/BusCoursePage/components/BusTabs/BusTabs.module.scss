@@ -7,7 +7,6 @@
   @include media.media-breakpoint(mobile) {
     width: 100%;
     margin: 0;
-    box-sizing: border-box;
   }
 }
 
@@ -18,8 +17,11 @@
   list-style: none;
 
   @include media.media-breakpoint(mobile) {
-    width: 100vw;
-    height: 100%;
+    width: 100%;
+    height: 50px;
+    box-shadow:
+      0 2px 4px rgb(0 0 0 / 4%),
+      0 1px 1px rgb(0 0 0 / 2%);
   }
 
   &__tab {
@@ -38,7 +40,6 @@
     font-family: Pretendard, sans-serif;
     border-bottom: 2px solid #cacaca;
     padding: 16px 16px 12px;
-    cursor: pointer;
 
     &--selected {
       color: rgb(23 92 142);
@@ -46,9 +47,20 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      display: flex;
-      font-size: 16px;
+      height: 50px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0;
+      color: #727272;
+      border-radius: 0;
+      border-bottom: 1px solid #cacaca;
       padding: 12px 16px;
+
+      &--selected {
+        color: #b611f5;
+        font-weight: 600;
+        border-bottom: 2px solid #b611f5;
+      }
     }
   }
 }

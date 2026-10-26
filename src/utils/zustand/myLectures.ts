@@ -1,11 +1,9 @@
-import { Lecture } from 'api/timetable/entity';
+import type { Lecture } from 'api/timetable/entity';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
-interface TimetableInfoFromLocalStorage {
-  [key: string]: Lecture[];
-}
+type TimetableInfoFromLocalStorage = Record<string, Lecture[]>;
 
 const MY_LECTURES_KEY = 'my-lectures';
 
@@ -13,16 +11,16 @@ const getInitialLectures = (): TimetableInfoFromLocalStorage => {
   return isomorphicLocalStorage.getJSONItem<TimetableInfoFromLocalStorage>(MY_LECTURES_KEY, {});
 };
 
-type State = {
+interface State {
   lectures: TimetableInfoFromLocalStorage;
-};
+}
 
-type Action = {
+interface Action {
   action: {
     addLecture: (lecture: Lecture, semester: string) => void;
     removeLecture: (lecture: Lecture, semester: string) => void;
   };
-};
+}
 
 interface TimeStringState {
   timeString: string[];
@@ -56,6 +54,7 @@ export const useLecturesStore = create<State & Action>((set, get) => ({
 
 export const useLecturesState = (semester: string) => {
   const lectures = useLecturesStore(useShallow((state) => state.lectures));
+
   return lectures[semester];
 };
 

@@ -1,6 +1,7 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './SubmitConfirmModal.module.scss';
 
 interface SubmitConfirmModalProps {

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import AddIcon from 'assets/svg/Articles/add.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './LostItemPageTemplate.module.scss';
 
 interface LostItemPageTemplateProps {

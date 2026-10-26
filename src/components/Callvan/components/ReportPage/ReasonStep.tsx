@@ -1,4 +1,5 @@
-import { CallvanReportReasonCode } from 'api/callvan/entity';
+import type { CallvanReportReasonCode } from 'api/callvan/entity';
+
 import styles from './ReportPage.module.scss';
 
 const MAX_CUSTOM_TEXT_LENGTH = 150;
@@ -45,6 +46,7 @@ export default function ReasonStep({ selected, customText, onToggle, onCustomTex
         {REASON_OPTIONS.map((option, index) => {
           const isChecked = selected.has(option.code);
           const isOther = option.code === 'OTHER';
+
           return (
             <div key={option.code}>
               {index > 0 && <div className={styles['reason-step__divider']} />}

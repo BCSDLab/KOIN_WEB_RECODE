@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+
+import type { TeamApplicationStatus, TeamRecruitmentSort } from 'api/team/entity';
 import SpinIcon from 'assets/svg/Callvan/spin.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import StatusBadge from 'components/Callvan/components/StatusBadge';
@@ -8,16 +10,16 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import type { TeamApplicationStatus, TeamRecruitmentSort } from 'api/team/entity';
+
 import styles from './MyApplicationFilterPanel.module.scss';
 
-const STATUS_OPTIONS: { value: TeamApplicationStatus; label: string }[] = [
+const STATUS_OPTIONS: Array<{ value: TeamApplicationStatus; label: string }> = [
   { value: 'ACCEPTED', label: '승인' },
   { value: 'PENDING', label: '대기' },
   { value: 'REJECTED', label: '거절' },
 ];
 
-const SORT_OPTIONS: { value: TeamRecruitmentSort; label: string }[] = [
+const SORT_OPTIONS: Array<{ value: TeamRecruitmentSort; label: string }> = [
   { value: 'LATEST_DESC', label: '최신순' },
   { value: 'DEADLINE_ASC', label: '마감 임박순' },
 ];
@@ -53,6 +55,7 @@ export default function MyApplicationFilterPanel({
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
@@ -69,6 +72,7 @@ export default function MyApplicationFilterPanel({
     setLocalStatuses((prev) => {
       if (prev.includes(option.value)) return prev.filter((status) => status !== option.value);
       const next = [...prev, option.value];
+
       return next.length === STATUS_OPTIONS.length ? [] : next;
     });
     logStatusSelect(option.label);
@@ -106,16 +110,16 @@ export default function MyApplicationFilterPanel({
   const body = (
     <>
       <BottomModalHeader className={styles.header}>
-        <span className={styles.headerTitle}>필터</span>
-        <button type="button" className={styles.closeButton} onClick={onClose} aria-label="필터 닫기">
+        <span className={styles['header-title']}>필터</span>
+        <button type="button" className={styles['close-button']} onClick={onClose} aria-label="필터 닫기">
           <CloseIcon />
         </button>
       </BottomModalHeader>
 
       <BottomModalContent className={styles.content}>
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>지원 상태</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>지원 상태</h3>
+          <div className={styles['section-badges']}>
             <StatusBadge label="전체" isActive={localStatuses.length === 0} onClick={handleSelectAllStatuses} />
             {STATUS_OPTIONS.map((opt) => (
               <StatusBadge
@@ -129,8 +133,8 @@ export default function MyApplicationFilterPanel({
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>정렬</h3>
-          <div className={styles.sectionBadges}>
+          <h3 className={styles['section-title']}>정렬</h3>
+          <div className={styles['section-badges']}>
             {SORT_OPTIONS.map((opt) => (
               <StatusBadge
                 key={opt.value}
@@ -144,11 +148,11 @@ export default function MyApplicationFilterPanel({
       </BottomModalContent>
 
       <BottomModalFooter className={styles.footer}>
-        <button type="button" className={styles.resetButton} onClick={handleReset}>
+        <button type="button" className={styles['reset-button']} onClick={handleReset}>
           초기화
           <SpinIcon />
         </button>
-        <button type="button" className={styles.applyButton} onClick={handleApply}>
+        <button type="button" className={styles['apply-button']} onClick={handleApply}>
           적용하기
         </button>
       </BottomModalFooter>

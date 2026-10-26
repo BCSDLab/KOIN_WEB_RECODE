@@ -1,0 +1,145 @@
+.background {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000026;
+  z-index: 21;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 336px;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background: #fff;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f1f1f;
+    line-height: 1.6;
+  }
+
+  &__close {
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+
+  &__label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f1f1f;
+    line-height: 1.6;
+  }
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 8px 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 24px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #727272;
+  white-space: nowrap;
+
+  &--selected {
+    border-color: #b611f5;
+    color: #b611f5;
+  }
+
+  &--soldout {
+    color: #e1e1e1;
+    cursor: not-allowed;
+  }
+}
+
+.photo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+
+  &__guide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 158px;
+    height: 168px;
+    box-sizing: border-box;
+    padding: 0 4px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      list-style: disc;
+    }
+
+    li {
+      font-size: 12px;
+      color: #727272;
+      line-height: 1.6;
+    }
+  }
+}
+
+.submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 46px;
+  border: none;
+  border-radius: 8px;
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 4%),
+    0 1px 1px rgb(0 0 0 / 2%);
+  background: #e1e1e1;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  cursor: not-allowed;
+
+  &--active {
+    background: #b611f5;
+    cursor: pointer;
+  }
+}

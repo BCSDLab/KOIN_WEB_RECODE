@@ -25,6 +25,7 @@ const PRIVATE_PATHS = [
   '/lost-item/edit/*',
   '/lost-item/report/*',
   '/lost-item/chat',
+  '/team/chat',
   '/store/review/*',
   '/store/review/edit/**',
 ];
@@ -56,6 +57,7 @@ export default {
           '/lost-item/edit',
           '/lost-item/report',
           '/lost-item/chat',
+          '/team/chat',
           '/store/review',
         ],
       },

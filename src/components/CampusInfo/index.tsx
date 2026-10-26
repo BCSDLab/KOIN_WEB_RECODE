@@ -1,10 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshopQueries } from 'api/coopshop/queries';
+
 import styles from './CampusInfo.module.scss';
 
 const CAFETERIA_HEAD_TABLE = {
-  row: ['평일', '주말'],
+  row: ['평일', '토요일'],
   col: ['아침', '점심', '저녁'],
 };
 
@@ -33,17 +34,16 @@ const formatDateRange = (fromDate: string, toDate: string) => {
   return `기간 : ${fromFormatted} - ${toFormatted}`;
 };
 
-type ShopIconProps = {
+interface ShopIconProps {
   readonly iconUrl: string | null | undefined;
   readonly name: string;
-};
+}
 
 function ShopIcon({ iconUrl, name }: ShopIconProps) {
   return (
     <div className={styles['icon-wrapper']}>
       {iconUrl ? (
-        // NOTE: 백엔드가 내려주는 소형 반복 아이콘은 호스트가 고정되지 않을 수 있어 <img>를 유지합니다.
-        // eslint-disable-next-line @next/next/no-img-element
+        // eslint-disable-next-line @next/next/no-img-element -- 아이콘 호스트가 고정되지 않을 수 있음
         <img className={styles['icon-image']} src={iconUrl} alt={name} decoding="async" />
       ) : (
         <span className={styles['icon-fallback']} aria-hidden="true">

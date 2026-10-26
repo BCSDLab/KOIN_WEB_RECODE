@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import DefaultPage from './DefaultPage';
+
 import type { Semester } from 'api/timetable/entity';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
+import DefaultPage from './DefaultPage';
 import styles from './ModifyTimetablePage.module.scss';
 
 const MobilePage = dynamic(

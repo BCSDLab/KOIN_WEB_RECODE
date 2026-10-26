@@ -75,7 +75,7 @@
   &__image {
     width: 48px;
     height: 48px;
-    border-width: 50%;
+    border-radius: 50%;
     object-fit: contain;
 
     @media (width <= 576px) {

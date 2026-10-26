@@ -1,4 +1,5 @@
 import UpdateIcon from 'assets/svg/update-icon.svg';
+
 import styles from './UpdateInfo.module.scss';
 
 interface UpdateInfoProps {

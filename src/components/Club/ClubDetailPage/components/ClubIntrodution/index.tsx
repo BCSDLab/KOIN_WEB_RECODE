@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction, useCallback, useMemo, useRef } from 'react';
+import { type Dispatch, type SetStateAction, useCallback, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
+
 import type ReactQuillType from 'react-quill-new';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
+
 import styles from './ClubIntrodution.module.scss';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
@@ -22,6 +24,7 @@ export default function ClubIntroduction({ isEdit, introduction, setIntroduction
   const uploadImage = useCallback(
     async (file: File) => {
       const res = await uploadFile({ domain: 'CLUB', file });
+
       return res.file_url; // 서버에서 돌아오는 URL
     },
     [uploadFile],
@@ -61,6 +64,7 @@ export default function ClubIntroduction({ isEdit, introduction, setIntroduction
     if (!isEdit) {
       return {};
     }
+
     return {
       toolbar: {
         container: [

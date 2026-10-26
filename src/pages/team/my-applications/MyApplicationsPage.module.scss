@@ -1,17 +1,5 @@
 @use "src/utils/scss/media" as media;
 
-.mobileHeader {
-  display: none;
-
-  @include media.media-breakpoint(mobile) {
-    display: block;
-  }
-}
-
-.header {
-  background: #f8f8fa;
-}
-
 .page {
   display: flex;
   justify-content: center;
@@ -25,7 +13,8 @@
     flex-direction: column;
     justify-content: flex-start;
     padding: 0;
-    min-height: calc(100dvh - 56px);
+    flex: 1;
+    min-height: auto;
     background: #f8f8fa;
   }
 }
@@ -56,7 +45,7 @@
   }
 }
 
-.summaryRow {
+.summary-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,7 +55,7 @@
   }
 }
 
-.totalCount {
+.total-count {
   color: #727272;
   font-size: 14px;
   line-height: 1.6;
@@ -76,7 +65,7 @@
   }
 }
 
-.filterButton {
+.filter-button {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -222,7 +211,7 @@
   }
 }
 
-.applicationStatus {
+.application-status {
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 500;
@@ -249,7 +238,7 @@
   }
 }
 
-.chatButton {
+.chat-button {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -275,11 +264,11 @@
   }
 }
 
-.scrollTrigger {
+.scroll-trigger {
   height: 1px;
 }
 
-.errorFallback {
+.error-fallback {
   display: flex;
   align-items: center;
   justify-content: center;

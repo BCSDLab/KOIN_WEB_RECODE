@@ -1,17 +1,18 @@
 import { cn } from '@bcsdlab/utils';
-import { BusTypeRequest } from 'api/bus/entity';
+import type { BusTypeRequest } from 'api/bus/entity';
 import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
 import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import TimeDetail from 'components/Bus/BusRoutePage/components/TimeDetail';
 import { BUS_TYPE_MAP } from 'components/Bus/BusRoutePage/constants/busType';
-import { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import type { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { format12Hour, formatRelativeDate } from 'components/Bus/BusRoutePage/utils/timeModule';
 import { loggingBusTypeMap, useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {
@@ -72,7 +73,7 @@ export default function BusSearchOptions({ busType, setBusType, timeSelect }: Bu
           </button>
           {isBusTypeOpen && (
             <div className={styles['bus-type__dropdown']}>
-              {(Object.entries(BUS_TYPE_MAP) as [BusTypeRequest, string][]).map(([type, name]) => (
+              {(Object.entries(BUS_TYPE_MAP) as Array<[BusTypeRequest, string]>).map(([type, name]) => (
                 <button
                   key={type}
                   className={cn({

@@ -125,6 +125,15 @@
     @include media.media-breakpoint(mobile) {
       height: 40px;
       font-size: 14px;
+      background-color: #fff;
+      border: 1px solid #b611f5;
+      color: #b611f5;
+
+      svg {
+        path {
+          fill: #b611f5;
+        }
+      }
     }
   }
 
@@ -155,6 +164,7 @@
       width: 100%;
       height: 44px;
       font-size: 14px;
+      background-color: #b611f5;
     }
 
     &--cancel {

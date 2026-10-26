@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,

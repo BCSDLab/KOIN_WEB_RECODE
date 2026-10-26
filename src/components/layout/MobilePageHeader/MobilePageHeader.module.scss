@@ -1,0 +1,18 @@
+@use "src/utils/scss/media" as media;
+
+.header {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: block;
+    flex-shrink: 0;
+    background-color: #fff;
+
+    &--gray {
+      background-color: #f8f8fa;
+    }
+  }
+}

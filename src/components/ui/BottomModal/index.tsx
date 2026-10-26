@@ -1,7 +1,9 @@
 import type { ReactNode, HTMLAttributes } from 'react';
+
 import Portal from 'components/Portal';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+
 import styles from './BottomModal.module.scss';
 
 type BottomModalProps = HTMLAttributes<HTMLDivElement> & {

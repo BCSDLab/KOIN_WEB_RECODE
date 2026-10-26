@@ -19,6 +19,11 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  @include media.media-breakpoint(mobile) {
+    border: none;
+    border-radius: 0;
+  }
 }
 
 .timetable-label {
@@ -35,8 +40,9 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      justify-content: flex-start;
+      color: #4b4b4b;
+      line-height: 1.6;
     }
   }
 }
@@ -80,10 +86,9 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      flex: 0;
       font-size: 18px;
       text-align: left;
     }
@@ -99,10 +104,10 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      flex: 0;
+      color: #4ba1ff;
       font-size: 18px;
       text-align: left;
     }

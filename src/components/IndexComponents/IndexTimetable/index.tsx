@@ -1,4 +1,6 @@
 ﻿import Link from 'next/link';
+
+import type { Semester } from 'api/timetable/entity';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -6,8 +8,7 @@ import TimetableGridPlaceholder from 'components/TimetablePage/components/Timeta
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import type { Semester } from 'api/timetable/entity';
+
 import styles from './IndexTimetable.module.scss';
 
 interface IndexTimeTableProps {
@@ -24,19 +25,13 @@ interface IndexTimeTableProps {
 export default function IndexTimeTable({ serverSemester }: IndexTimeTableProps) {
   const logger = useLogger();
   const semester = serverSemester;
-  const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
   const hasValidCurrentFrameId = isValidTimetableFrameId(currentFrameId);
 
   const renderPlaceholder = (
-    <TimetableGridPlaceholder
-      columnWidth={44}
-      firstColumnWidth={29}
-      rowHeight={17.3}
-      totalHeight={369}
-    />
+    <TimetableGridPlaceholder columnWidth={44} firstColumnWidth={29} rowHeight={17.3} totalHeight={369} />
   );
 
   const renderTimetable = hasValidCurrentFrameId ? (

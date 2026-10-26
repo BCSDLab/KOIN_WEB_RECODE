@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { LostItemImageDTO } from 'api/articles/entity';
+import type { LostItemImageDTO } from 'api/articles/entity';
 import { articleQueries } from 'api/articles/queries';
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
-import { FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
+import { type FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import usePutLostItemArticle from 'components/Articles/LostItemEditPage/hooks/usePutLostItemArticle';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
 import ROUTES from 'static/routes';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 
 interface LostItemEditPageProps {
@@ -31,9 +32,9 @@ const EDIT_TITLES = {
 
 export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { logLostItemModifyComplete } = useArticlesLogger();
-  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(token, articleId));
+  const { data: article } = useSuspenseQuery(articleQueries.lostItemDetail(isLoggedIn, articleId));
   const { status, mutateAsync: putLostItem } = usePutLostItemArticle(articleId);
 
   const type = article.type as 'FOUND' | 'LOST';
@@ -70,7 +71,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
   const baseHandler = lostItemHandler(0);
   const customLostItemHandler = {
     ...baseHandler,
-    setImages: (images: Array<string>) => {
+    setImages: (images: string[]) => {
       const removedUrls = lostItem.images.filter((url) => !images.includes(url));
       const newDeleteIds = originalImages.filter((img) => removedUrls.includes(img.image_url)).map((img) => img.id);
       setDeleteImageIds((prev: number[]) => Array.from(new Set([...prev, ...newDeleteIds])));

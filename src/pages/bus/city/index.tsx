@@ -1,21 +1,25 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { CityInfo, DirectionType } from 'api/bus/entity';
+import type { DirectionType } from 'api/bus/entity';
 import { busQueries } from 'api/bus/queries';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
+import Layout from 'components/layout';
 import dayjs from 'dayjs';
 import { CITY_COURSES, CITY_COURSES_MAP } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './CityBusTimetable.module.scss';
 
-type CityDirectionOption = {
+interface CityDirectionOption {
   label: string;
   value: DirectionType;
-};
+}
 
 type DayType = '평일' | '주말';
 type TimetableRow = [am: string, pm: string];
@@ -42,7 +46,7 @@ export default function CityBusTimetable() {
       direction: selectedDirection,
     }),
     select: (response) => ({
-      info: response as CityInfo,
+      info: response,
       type: 'city' as const,
     }),
   });
@@ -86,13 +90,14 @@ export default function CityBusTimetable() {
   ]);
 
   return (
-    <BusCoursePage>
+    <BusCoursePage boardingLocation={selectedDirectionType === 'from' ? '코리아텍' : '천안 터미널'}>
       <div className={styles['timetable-container']}>
         <div className={styles['city-container']}>
           <div className={styles['city-label']}>
-            <div className={styles['city-label__button']}>노선</div>
+            <div className={`${styles['city-label__button']} ${styles['city-label__title']}`}>노선</div>
             {CITY_COURSES.slice(0, 3).map((cityCourse) => (
               <button
+                key={cityCourse.bus_number}
                 className={cn({
                   [styles['city-label__button']]: true,
                   [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
@@ -113,12 +118,14 @@ export default function CityBusTimetable() {
           </div>
 
           <div className={styles['city-label']}>
-            <div className={styles['city-label__button']}>운행</div>
+            <div className={`${styles['city-label__button']} ${styles['city-label__title']}`}>운행</div>
             {cityBusDirections.map((cityBusDirection) => (
               <button
+                key={cityBusDirection.value}
                 className={cn({
                   [styles['city-label__button']]: true,
                   [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirectionType,
+                  [styles['city-label__button--byeongcheon']]: cityBusDirection.value === 'to',
                 })}
                 type="button"
                 onClick={() => handleDirectionButton(cityBusDirection)}
@@ -148,3 +155,5 @@ export default function CityBusTimetable() {
     </BusCoursePage>
   );
 }
+
+CityBusTimetable.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

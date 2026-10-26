@@ -1,17 +1,18 @@
-/* eslint-disable @next/next/no-img-element */
-/* 푸터 로고/아이콘은 작은 정적 이미지라 Next/Image 최적화 이득이 작아 img 유지 */
+/* eslint-disable @next/next/no-img-element -- 작은 정적 로고/아이콘이라 최적화 이점 대비 설정 비용이 큼 */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { CATEGORY } from 'static/category';
+import type { SubmenuTitle } from 'static/category';
 import ROUTES from 'static/routes';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
-import type { SubmenuTitle } from 'static/category';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+
 import styles from './Footer.module.scss';
 
 function Footer() {
@@ -19,7 +20,7 @@ function Footer() {
   const logger = useLogger();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
   const portalManager = useModalPortal();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   const router = useRouter();
   const { pathname } = router; // 현재 URL의 경로
@@ -46,7 +47,7 @@ function Footer() {
 
   const handleClickMenu = (e: React.MouseEvent<HTMLAnchorElement>, title: SubmenuTitle) => {
     logShortcut(title);
-    if (!token && title === '쪽지') {
+    if (!isLoggedIn && title === '쪽지') {
       e.preventDefault();
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal

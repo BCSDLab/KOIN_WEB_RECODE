@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLiveNow';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+
 import styles from './WeeklyDatePicker.module.scss';
 
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
@@ -12,6 +13,7 @@ export default function WeeklyDatePicker() {
   const addDays = (date: Date, days: number) => {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
+
     return result;
   };
 
@@ -21,6 +23,7 @@ export default function WeeklyDatePicker() {
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   };
 

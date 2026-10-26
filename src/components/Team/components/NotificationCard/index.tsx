@@ -1,10 +1,10 @@
 import { cn } from '@bcsdlab/utils';
-
+import type { TeamRecruitmentNotification } from 'api/team/entity';
 import ChatIcon from 'assets/svg/Team/chat.svg';
 import UserGroupIcon from 'assets/svg/Team/user-group.svg';
 import formatRelativeTime from 'components/Team/utils/formatRelativeTime';
 import getNotificationTitle from 'components/Team/utils/getNotificationTitle';
-import type { TeamRecruitmentNotification } from 'api/team/entity';
+
 import styles from './NotificationCard.module.scss';
 
 interface NotificationCardProps {

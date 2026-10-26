@@ -9,14 +9,14 @@ description: KOIN 프로젝트에 새 기능을 추가하기 위한 구현 계�
 
 새 기능이 어느 도메인에 속하는지 먼저 판단한다:
 
-| 도메인 | 경로 | 특성 |
-|--------|------|------|
-| 시간표 | `src/api/timetable/`, `src/pages/timetable/` | 복잡한 상태 관리 (Zustand) |
-| 버스 | `src/api/bus/`, `src/pages/bus/` | 실시간 데이터, SSE |
-| 식당 | `src/api/dinings/`, `src/pages/cafeteria/` | 날짜 기반 필터링 |
-| 커뮤니티 | `src/api/articles/`, `src/pages/articles/` | 인증 필요, 페이지네이션 |
-| 가게 | `src/api/store/`, `src/pages/store/` | 검색/필터 |
-| 클럽 | `src/api/club/`, `src/pages/clubs/` | 좋아요, 카테고리 |
+| 도메인   | 경로                                         | 특성                       |
+| -------- | -------------------------------------------- | -------------------------- |
+| 시간표   | `src/api/timetable/`, `src/pages/timetable/` | 복잡한 상태 관리 (Zustand) |
+| 버스     | `src/api/bus/`, `src/pages/bus/`             | 실시간 데이터, SSE         |
+| 식당     | `src/api/dinings/`, `src/pages/cafeteria/`   | 날짜 기반 필터링           |
+| 커뮤니티 | `src/api/articles/`, `src/pages/articles/`   | 인증 필요, 페이지네이션    |
+| 가게     | `src/api/store/`, `src/pages/store/`         | 검색/필터                  |
+| 클럽     | `src/api/club/`, `src/pages/clubs/`          | 좋아요, 카테고리           |
 
 ## 유사 기능 탐색
 
@@ -67,22 +67,24 @@ src/components/[FeatureName]/
 
 ## 상태 관리 결정 기준
 
-| 상황 | 선택 |
-|------|------|
-| 서버 데이터 조회/캐싱 | React Query (`useSuspenseQuery`) |
-| 조건부 페칭, 백그라운드 갱신 | React Query (`useQuery`) |
-| 전역 UI 상태 (모달, 사이드바) | Zustand |
-| 복잡한 폼 | react-hook-form |
-| 단순 컴포넌트 내부 상태 | useState |
+| 상황                          | 선택                             |
+| ----------------------------- | -------------------------------- |
+| 서버 데이터 조회/캐싱         | React Query (`useSuspenseQuery`) |
+| 조건부 페칭, 백그라운드 갱신  | React Query (`useQuery`)         |
+| 전역 UI 상태 (모달, 사이드바) | Zustand                          |
+| 복잡한 폼                     | react-hook-form                  |
+| 단순 컴포넌트 내부 상태       | useState                         |
 
 ## SSR 페이지 여부 결정
 
 다음 조건 중 하나라도 해당하면 SSR:
+
 - SEO가 필요한 공개 페이지
 - 초기 로딩 시 서버 데이터가 필요한 경우
 - 소셜 미디어 공유 지원 필요
 
 SSR 페이지는:
+
 - `getServerSideProps` 사용
 - `SSRLayout` 사용
 - `HydrationBoundary`로 React Query 상태 전달

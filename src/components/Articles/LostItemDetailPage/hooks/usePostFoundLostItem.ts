@@ -1,13 +1,13 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { articleMutations } from 'api/articles/mutations';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
 
 const usePostFoundLostItem = (articleId: number) => {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const queryClient = useQueryClient();
-  const mutation = articleMutations.toggleLostItemFound(queryClient, token, articleId);
+  const mutation = articleMutations.toggleLostItemFound(queryClient, isLoggedIn, articleId);
 
   const { mutate, isPending } = useMutation({
     ...mutation,

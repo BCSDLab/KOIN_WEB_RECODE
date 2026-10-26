@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
-const useMount = () => {
-  const [mounted, setMounted] = useState(false);
+const subscribeNoop = () => () => {};
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
-  return mounted;
-};
+const useMount = () =>
+  useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 
 export default useMount;

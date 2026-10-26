@@ -3,29 +3,31 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { teamQueries } from 'api/team/queries';
-import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
-import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
-import FilterIcon from 'assets/svg/Team/filter.svg';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import Layout from 'components/layout';
-import MyApplicationFilterPanel from 'components/Team/components/MyApplicationFilterPanel';
-import RecruitmentCard from 'components/Team/components/RecruitmentCard';
-import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
-import SubPageHeader from 'components/ui/SubPageHeader';
-import ROUTES from 'static/routes';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
 import type {
   MyTeamRecruitmentApplication,
   MyTeamRecruitmentApplicationListRequest,
   TeamApplicationStatus,
   TeamRecruitmentSort,
 } from 'api/team/entity';
+import { teamQueries } from 'api/team/queries';
+import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
+import ChatIcon from 'assets/svg/Team/chat-bubble.svg';
+import FilterIcon from 'assets/svg/Team/filter.svg';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
+import Layout from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
+import MyApplicationFilterPanel from 'components/Team/components/MyApplicationFilterPanel';
+import RecruitmentCard from 'components/Team/components/RecruitmentCard';
+import formatApplicationStatus from 'components/Team/utils/formatApplicationStatus';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+
 import styles from './MyApplicationsPage.module.scss';
 
 const APPLICATION_STATUS_CLASS = {
@@ -42,9 +44,9 @@ interface ApplicationsListSectionProps {
 
 function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: ApplicationsListSectionProps) {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
-    teamQueries.infiniteMyApplications(token, requestParams),
+    teamQueries.infiniteMyApplications(isLoggedIn, requestParams),
   );
 
   const applications = data.pages.flatMap((page) => page.applications);
@@ -59,11 +61,11 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
 
   return (
     <>
-      <div className={styles.summaryRow}>
-        <p className={styles.totalCount}>총 {totalCount}개의 모집글</p>
+      <div className={styles['summary-row']}>
+        <p className={styles['total-count']}>총 {totalCount}개의 모집글</p>
 
-        <button type="button" className={styles.filterButton} onClick={handleFilterOpen}>
-          <span className={styles.filterButton__label}>필터</span>
+        <button type="button" className={styles['filter-button']} onClick={handleFilterOpen}>
+          <span className={styles['filter-button__label']}>필터</span>
           <FilterIcon />
         </button>
       </div>
@@ -91,7 +93,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                 rightSlot={
                   <span
                     className={cn({
-                      [styles.applicationStatus]: true,
+                      [styles['application-status']]: true,
                       [styles[APPLICATION_STATUS_CLASS[application.status]]]: true,
                     })}
                   >
@@ -103,7 +105,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
                   application.team_chat_room_id !== null && (
                     <button
                       type="button"
-                      className={styles.chatButton}
+                      className={styles['chat-button']}
                       aria-label="팀 채팅방으로 이동"
                       onClick={onChatClick(application)}
                     >
@@ -114,7 +116,7 @@ function ApplicationsListSection({ requestParams, onFilterOpen, onChatClick }: A
               />
             ))}
 
-            <div ref={scrollTriggerRef} className={styles.scrollTrigger} />
+            <div ref={scrollTriggerRef} className={styles['scroll-trigger']} />
           </div>
         )}
       </div>
@@ -166,19 +168,17 @@ export default function MyApplicationsPage() {
         <meta name="description" content="내가 지원한 팀원 모집 게시글과 지원 상태를 확인할 수 있습니다." />
       </Head>
 
-      <div className={styles.mobileHeader}>
-        <SubPageHeader
-          title="내가 지원한 모집글"
-          onBack={() => router.replace(ROUTES.TeamProfile())}
-          className={styles.header}
-        />
-      </div>
+      <MobilePageHeader
+        title="내가 지원한 모집글"
+        onBack={() => router.replace(ROUTES.TeamProfile())}
+        background="gray"
+      />
 
       <main className={styles.page}>
         <div className={styles.inner}>
           <h1 className={styles.title}>내가 지원한 모집글</h1>
 
-          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles.errorFallback}>
+          <ErrorBoundary key={JSON.stringify(requestParams)} fallbackClassName={styles['error-fallback']}>
             <Suspense fallback={null}>
               <ApplicationsListSection
                 requestParams={requestParams}
@@ -210,4 +210,4 @@ export default function MyApplicationsPage() {
   );
 }
 
-MyApplicationsPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+MyApplicationsPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

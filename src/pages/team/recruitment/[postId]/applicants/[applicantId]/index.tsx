@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+
 import Layout from 'components/layout';
 import ApplicantDetail from 'components/Team/ApplicantDetail';
 
@@ -16,6 +17,6 @@ function TeamApplicantDetailPage() {
   );
 }
 
-TeamApplicantDetailPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamApplicantDetailPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamApplicantDetailPage;

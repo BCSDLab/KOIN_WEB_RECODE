@@ -1,4 +1,5 @@
 import APIClient from 'utils/ts/apiClient';
+
 import { DeptList, DeptMajorList } from './APIDetail';
 
 export const getDeptList = APIClient.of(DeptList);

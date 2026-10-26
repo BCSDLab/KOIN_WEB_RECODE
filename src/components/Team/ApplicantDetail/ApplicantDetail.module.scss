@@ -1,13 +1,5 @@
 @use "src/utils/scss/media" as media;
 
-.mobileHeader {
-  display: none;
-}
-
-.header {
-  background: #f8f8fa;
-}
-
 .page {
   display: flex;
   flex-direction: column;
@@ -26,7 +18,7 @@
   padding: 64px 0 96px;
 }
 
-.desktopTitle {
+.desktop-title {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -70,7 +62,7 @@
   text-align: center;
 }
 
-.page__sectionTitle {
+.page__section-title {
   display: none;
   font-weight: 600;
   line-height: 1.6;
@@ -115,29 +107,26 @@
   overflow-wrap: break-word;
 }
 
-.motivationSection {
+.motivation-section {
   order: 1;
 }
 
-.activitySection {
+.activity-section {
   order: 3;
 }
 
-.selfIntroductionSection {
+.self-introduction-section {
   order: 4;
 }
 
-.availabilitySection {
+.availability-section {
   order: 5;
 }
 
 @include media.media-breakpoint(mobile) {
-  .mobileHeader {
-    display: block;
-  }
-
   .page {
-    min-height: calc(100dvh - 56px);
+    flex: 1;
+    min-height: auto;
     background: #f8f8fa;
   }
 
@@ -148,11 +137,11 @@
     padding: 32px 20px;
   }
 
-  .desktopTitle {
+  .desktop-title {
     display: none;
   }
 
-  .page__sectionTitle {
+  .page__section-title {
     display: block;
   }
 
@@ -172,10 +161,10 @@
     }
   }
 
-  .motivationSection,
-  .activitySection,
-  .selfIntroductionSection,
-  .availabilitySection {
+  .motivation-section,
+  .activity-section,
+  .self-introduction-section,
+  .availability-section {
     order: initial;
   }
 }

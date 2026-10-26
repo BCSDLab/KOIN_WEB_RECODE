@@ -10,6 +10,7 @@ description: SonarCloud에서 KOIN 프로젝트 코드 이슈를 조회하고 �
 SonarCloud를 처음 사용하는 경우 `references/sonarcloud-setup.md`를 읽어 설정 방법을 안내한다.
 
 필수 환경변수:
+
 ```bash
 SONAR_ORGANIZATION=your-organization-key   # sonarcloud.io 조직 키
 SONAR_PROJECT_KEY=koin_web_recode
@@ -39,16 +40,17 @@ curl -H "Authorization: Bearer $SONAR_TOKEN" \
 
 ## 이슈 분류 기준
 
-| 심각도 | 자동 수정 가능 | 우선순위 |
-|--------|--------------|--------|
-| BLOCKER | 케이스별 판단 | 1순위 |
-| CRITICAL | 대부분 가능 | 2순위 |
-| MAJOR | 가능 | 3순위 |
-| MINOR | 가능 | 4순위 |
+| 심각도   | 자동 수정 가능 | 우선순위 |
+| -------- | -------------- | -------- |
+| BLOCKER  | 케이스별 판단  | 1순위    |
+| CRITICAL | 대부분 가능    | 2순위    |
+| MAJOR    | 가능           | 3순위    |
+| MINOR    | 가능           | 4순위    |
 
 ## 자동 수정 불가 이슈 패턴
 
 다음 이슈는 `skipped_issues`로 분류한다:
+
 - 보안 핫스팟 (Security Hotspot) — 수동 검토 필요
 - 아키텍처 냄새 (Architecture smell) — 리팩토링 범위
 - 중복 코드 (Duplication) — 구조적 변경 필요
@@ -57,6 +59,7 @@ curl -H "Authorization: Bearer $SONAR_TOKEN" \
 ## 배치 생성 규칙
 
 파일당 이슈가 몰린 경우를 방지하기 위해:
+
 - 배치당 최대 파일 10개
 - 배치당 최대 이슈 50개
 - 같은 파일의 이슈는 동일 배치에 묶음

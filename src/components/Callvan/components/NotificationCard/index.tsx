@@ -1,9 +1,10 @@
-import { CallvanNotification, CallvanNotificationType } from 'api/callvan/entity';
+import type { CallvanNotification, CallvanNotificationType } from 'api/callvan/entity';
 import NotificationBellRead from 'assets/svg/Callvan/notification-bell-read.svg';
 import NotificationBellUnread from 'assets/svg/Callvan/notification-bell-unread.svg';
 import PeopleGray from 'assets/svg/Callvan/people-gray.svg';
 import PeoplePurple from 'assets/svg/Callvan/people-purple.svg';
 import { DAYS } from 'static/day';
+
 import styles from './NotificationCard.module.scss';
 
 const NOTIFICATION_TITLE_MAP: Record<CallvanNotificationType, string> = {
@@ -18,6 +19,7 @@ function formatNotificationDate(dateString: string): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const dayOfWeek = DAYS[date.getDay()];
+
   return `${month}.${day}(${dayOfWeek})`;
 }
 

@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { NewClubData } from 'api/club/entity';
+import type { NewClubData } from 'api/club/entity';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import DisplayIcon from 'assets/svg/Club/display-icon.svg';
 import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
@@ -14,6 +15,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { addHyphen } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
+
 import styles from './NewClubPCView.module.scss';
 
 interface PCViewProps {
@@ -23,6 +25,7 @@ interface PCViewProps {
   openModal: () => void;
   isEdit?: boolean;
 }
+
 export default function PCView({ formData, setFormData, openModal, isEdit, setType }: PCViewProps) {
   const router = useRouter();
   const navigate = router.push;
@@ -84,6 +87,7 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
   const handleOpenModal = () => {
     if (!formData.name || !formData.location || !formData.image_url || !formData.phone_number) {
       showToast('error', '동아리명, 위치, 대표자 연락처, 이미지는 필수 입력 사항입니다.');
+
       return;
     }
     openModal();
@@ -277,6 +281,7 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
                   const { value } = e.target;
                   if (/^https?:\/\//.test(value)) {
                     showToast('error', '"https://"는 자동으로 포함되어 있습니다.');
+
                     return;
                   }
                   setFormData({ ...formData, open_chat: value });

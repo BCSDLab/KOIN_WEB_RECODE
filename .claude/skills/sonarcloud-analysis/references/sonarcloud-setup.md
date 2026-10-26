@@ -72,6 +72,7 @@ jobs:
 ## 4. GitHub Secrets 설정
 
 GitHub 저장소 Settings > Secrets and variables > Actions에 추가:
+
 - `SONAR_TOKEN`: SonarCloud Personal Access Token
   - 발급 위치: sonarcloud.io > My Account > Security > Generate Tokens
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { formatDate, formatTime } from 'components/Bus/BusRoutePage/utils/timeModule';
 
 interface TimeState {
@@ -49,6 +50,7 @@ export const useTimeSelect = () => {
       setTimeState((prev) => {
         const newDate = new Date();
         newDate.setDate(newDate.getDate() + dateDiff);
+
         return {
           ...prev,
           nowDate: newDate,
@@ -59,6 +61,7 @@ export const useTimeSelect = () => {
       setTimeState((prev) => {
         const newDate = new Date(prev.nowDate);
         newDate.setHours(hour);
+
         return {
           ...prev,
           nowDate: newDate,
@@ -69,6 +72,7 @@ export const useTimeSelect = () => {
       setTimeState((prev) => {
         const newDate = new Date(prev.nowDate);
         newDate.setMinutes(minute);
+
         return {
           ...prev,
           nowDate: newDate,

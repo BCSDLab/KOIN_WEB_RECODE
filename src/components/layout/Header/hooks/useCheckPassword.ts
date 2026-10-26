@@ -1,16 +1,15 @@
 import { useState } from 'react';
+
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkPassword } from 'api/auth';
-import { CheckPasswordRequest } from 'api/auth/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import type { CheckPasswordRequest } from 'api/auth/entity';
 import showToast from 'utils/ts/showToast';
 
 const useCheckPassword = () => {
-  const token = useTokenState();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, error } = useMutation({
-    mutationFn: (password: CheckPasswordRequest) => checkPassword(token, password),
+    mutationFn: (password: CheckPasswordRequest) => checkPassword(password),
     onSuccess: () => {
       showToast('success', '비밀번호 확인이 완료되었습니다.');
     },
@@ -18,10 +17,12 @@ const useCheckPassword = () => {
       if (isKoinError(err)) {
         if (err.status === 400) {
           setErrorMessage('비밀번호가 일치하지 않습니다.');
+
           return;
         }
         if (err.status === 403) {
           setErrorMessage('비밀번호를 입력해주세요.');
+
           return;
         }
         const message = err.message || '에러가 발생했습니다.';
@@ -30,6 +31,7 @@ const useCheckPassword = () => {
       }
     },
   });
+
   return {
     mutate,
     isSuccess,

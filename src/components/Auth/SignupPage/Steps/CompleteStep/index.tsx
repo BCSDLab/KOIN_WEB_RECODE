@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
+
 import LogoIcon from 'assets/svg/Login/mobile-logo.svg';
+import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './CompleteStep.module.scss';
 
 function CompleteStep() {
@@ -21,7 +24,7 @@ function CompleteStep() {
               className={`${styles['button-container__button']} ${styles['button-container__button--purple']}`}
               type="button"
               onClick={() => {
-                router.push('/auth');
+                router.push(ROUTES.Auth());
               }}
             >
               로그인 바로가기
@@ -29,7 +32,7 @@ function CompleteStep() {
             <button
               className={`${styles['button-container__button']} ${styles['button-container__button--white']}`}
               type="button"
-              onClick={() => router.push('/')}
+              onClick={() => router.push(ROUTES.Main())}
             >
               홈화면 바로가기
             </button>
@@ -39,7 +42,7 @@ function CompleteStep() {
         <div>
           <h2 className={styles.title}>회원가입 완료</h2>
 
-          <div className={styles['subTitle-container']}>
+          <div className={styles['sub-title-container']}>
             <div className={styles.subTitle}>회원가입이 완료되었습니다.</div>
             <div className={styles.subTitle}>홈페이지에서 바로 로그인이 가능합니다.</div>
           </div>
@@ -48,7 +51,7 @@ function CompleteStep() {
             className={styles['button-login-navigate']}
             type="button"
             onClick={() => {
-              router.push('/auth');
+              router.push(ROUTES.Auth());
             }}
           >
             로그인 화면 바로가기

@@ -1,5 +1,5 @@
-import TimetableToast, { Toast } from 'components/feedback/Toast/TimetableToast';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import TimetableToast, { type Toast } from 'components/feedback/Toast/TimetableToast';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
 export default function useToast() {
@@ -15,5 +15,6 @@ export default function useToast() {
       />
     ));
   };
+
   return { open };
 }

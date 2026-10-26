@@ -1,6 +1,13 @@
-import { LostItemAuthor, LostItemCategory, LostItemFoundStatus, LostItemSort, LostItemType } from 'api/articles/entity';
-import { Category, FilterState } from 'components/Articles/components/LostItemFilterContent';
 import type { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
+
+import type {
+  LostItemAuthor,
+  LostItemCategory,
+  LostItemFoundStatus,
+  LostItemSort,
+  LostItemType,
+} from 'api/articles/entity';
+import type { Category, FilterState } from 'components/Articles/components/LostItemFilterContent';
 
 /*
 [제작 배경]
@@ -19,19 +26,20 @@ type QueryValue = ParsedUrlQuery[keyof ParsedUrlQuery];
 
 export function toArray(v: QueryValue): string[] {
   if (!v) return [];
+
   return Array.isArray(v) ? v : [v];
 }
 
 type LostItemSelectableCategory = Exclude<LostItemCategory, 'ALL'>;
 
-export type LostItemParams = {
+export interface LostItemParams {
   page: number;
   type: LostItemType | null;
   category: LostItemSelectableCategory[];
   foundStatus: LostItemFoundStatus;
   sort: LostItemSort;
   author: LostItemAuthor;
-};
+}
 
 const TYPE_VALUES = ['LOST', 'FOUND'] as const;
 const SORT_VALUES = ['LATEST', 'OLDEST'] as const;
@@ -56,6 +64,7 @@ function parsePage(v: QueryValue, fallback: number) {
   if (!Number.isFinite(n)) return fallback;
 
   const int = Math.floor(n);
+
   return Math.min(Math.max(int, 1), MAX_PAGE);
 }
 
@@ -97,6 +106,7 @@ export function buildLostItemQuery(params: LostItemParams): ParsedUrlQueryInput 
 
   if (params.type) q.type = params.type;
   if (params.category.length > 0) q.category = params.category;
+
   return q;
 }
 

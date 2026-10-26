@@ -8,6 +8,7 @@ description: KOIN 프로젝트의 기능 구현 계획을 실제 코드로 작�
 ## 구현 순서
 
 의존성 방향에 따라 순서를 지킨다:
+
 1. `entity.ts` — 타입 정의 (다른 파일이 의존)
 2. `APIDetail.ts` — API 클래스
 3. `index.ts` — export
@@ -19,6 +20,7 @@ description: KOIN 프로젝트의 기능 구현 계획을 실제 코드로 작�
 ## 파일별 코드 패턴
 
 ### entity.ts
+
 ```typescript
 export interface FeatureItem {
   id: number;
@@ -37,6 +39,7 @@ export interface CreateFeatureRequest {
 ```
 
 ### APIDetail.ts
+
 ```typescript
 import { APIRequest } from 'utils/ts/apiClient';
 import { HTTP_METHOD } from 'static/httpMethod';
@@ -58,6 +61,7 @@ export class PostFeature implements APIRequest<FeatureResponse> {
 ```
 
 ### index.ts
+
 ```typescript
 import { APIClient } from 'utils/ts/apiClient';
 import { GetFeatureList, PostFeature } from './APIDetail';
@@ -67,6 +71,7 @@ export const postFeature = APIClient.of(PostFeature);
 ```
 
 ### queries.ts (React Query)
+
 ```typescript
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import { getFeatureList } from '.';
@@ -79,6 +84,7 @@ export const useFeatureListQuery = (params: { page?: number }) =>
 ```
 
 ### mutations.ts
+
 ```typescript
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
@@ -106,6 +112,7 @@ export const useCreateFeatureMutation = () => {
 ```
 
 ### 컴포넌트 패턴
+
 ```tsx
 import React from 'react';
 import { useLogger } from 'utils/hooks/analytics/useLogger';
@@ -127,13 +134,8 @@ export default function Feature() {
 
   return (
     <div className={styles.container}>
-      {data.items.map(item => (
-        <button
-          key={item.id}
-          type="button"
-          onClick={() => handleItemClick(item.id)}
-          className={styles.item}
-        >
+      {data.items.map((item) => (
+        <button key={item.id} type="button" onClick={() => handleItemClick(item.id)} className={styles.item}>
           {item.name}
         </button>
       ))}
@@ -143,6 +145,7 @@ export default function Feature() {
 ```
 
 ### SCSS 패턴
+
 ```scss
 // Feature.module.scss
 .container {
@@ -161,6 +164,7 @@ export default function Feature() {
 ```
 
 ### 페이지 패턴
+
 ```tsx
 // src/pages/feature/index.tsx
 import type { NextPage } from 'next';
@@ -177,6 +181,7 @@ export default FeaturePage;
 ```
 
 ## 임포트 순서 (ESLint 규칙)
+
 ```typescript
 // 1. React/Next
 import React, { useState } from 'react';
@@ -193,6 +198,7 @@ import styles from './Feature.module.scss';
 ## SSR 구현 패턴
 
 SSR이 필요한 페이지의 경우:
+
 ```tsx
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { getFeatureList } from 'api/feature';
@@ -211,8 +217,8 @@ export const getServerSideProps = async () => {
 ## 자주 쓰는 유틸리티
 
 ```typescript
-import { cn } from '@bcsdlab/utils';           // className 병합
-import { ROUTES } from 'static/routes';         // 라우트
+import { cn } from '@bcsdlab/utils'; // className 병합
+import { ROUTES } from 'static/routes'; // 라우트
 import { showToast } from 'utils/ts/showToast'; // 토스트
-import { isKoinError } from '@bcsdlab/koin';    // 에러 타입 가드
+import { isKoinError } from '@bcsdlab/koin'; // 에러 타입 가드
 ```

@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { deptQueries } from 'api/dept/queries';
+import type { TimetableFrameListResponse } from 'api/timetable/entity';
 import {
   createDefaultTimetableFrameList,
   isValidTimetableFrameId,
@@ -12,18 +14,22 @@ import {
   timetableQueryKeys,
 } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
+import { TimetableEditButton } from 'components/TimetablePage/components/MobileHeaderActions';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useGoBack from 'utils/hooks/routing/useGoBack';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { isServerAuthError } from 'utils/ssr/authError';
+import type { ServerRequestContext } from 'utils/ssr/requestContext';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { clearServerAuthCookies, isServerAuthError } from 'utils/ts/ssrAuth';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useSemester } from 'utils/zustand/semester';
-import type { TimetableFrameListResponse } from 'api/timetable/entity';
+
 import styles from './TimetablePage.module.scss';
 
 const MobilePage = dynamic(
@@ -38,50 +44,61 @@ const prefetchBaseTimetableData = async (queryClient: QueryClient) => {
   ]);
 };
 
-const setDefaultTimetableFrameList = (queryClient: QueryClient, semester = getRecentSemester()) => {
-  queryClient.setQueryData(timetableQueryKeys.frameList(semester), createDefaultTimetableFrameList());
+const setDefaultTimetableFrameList = (
+  queryClient: QueryClient,
+  isLoggedIn: boolean,
+  semester = getRecentSemester(),
+) => {
+  queryClient.setQueryData(timetableQueryKeys.frameList(semester, isLoggedIn), createDefaultTimetableFrameList());
 };
 
 async function prefetchTimetableData(
   queryClient: QueryClient,
   context: GetServerSidePropsContext,
-  token: string,
+  isLoggedIn: boolean,
+  userType: ServerRequestContext['userType'],
   query: GetServerSidePropsContext['query'],
   validatedFrameId: number | null,
 ): Promise<void> {
+  // 학기·학과 목록은 사용자 학기와 무관하므로 먼저 띄워 두고 각 분기에서 기다린다. prefetchQuery는 실패해도 reject하지 않는다
+  const baseTimetablePrefetch = prefetchBaseTimetableData(queryClient);
+
   try {
-    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(token));
+    const mySemesterData = await queryClient.fetchQuery(timetableQueries.mySemester(isLoggedIn, { userType }));
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = resolveTimetableSemester(query.year, query.term, userSemester);
 
     if (!semester) {
-      setDefaultTimetableFrameList(queryClient);
-      await prefetchBaseTimetableData(queryClient);
+      setDefaultTimetableFrameList(queryClient, isLoggedIn);
+      await baseTimetablePrefetch;
+
       return;
     }
 
     let timetableFrameList: TimetableFrameListResponse;
 
     try {
-      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(token, semester));
+      timetableFrameList = await queryClient.fetchQuery(timetableQueries.frameList(isLoggedIn, semester, { userType }));
     } catch (error) {
       if (!(isKoinError(error) && error.status === 404)) {
         throw error;
       }
 
-      setDefaultTimetableFrameList(queryClient, semester);
-      await prefetchBaseTimetableData(queryClient);
+      setDefaultTimetableFrameList(queryClient, isLoggedIn, semester);
+      await baseTimetablePrefetch;
+
       return;
     }
 
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
-    const hasValidatedFrame = validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
+    const hasValidatedFrame =
+      validatedFrameId !== null && timetableFrameList.some((frame) => frame.id === validatedFrameId);
     const currentFrameId = hasValidatedFrame ? validatedFrameId : (mainFrame?.id ?? null);
 
-    const prefetchPromises = [prefetchBaseTimetableData(queryClient)];
+    const prefetchPromises = [baseTimetablePrefetch];
 
     if (currentFrameId !== null) {
-      prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(token, currentFrameId)));
+      prefetchPromises.push(queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, currentFrameId)));
     }
 
     await Promise.all(prefetchPromises);
@@ -89,44 +106,58 @@ async function prefetchTimetableData(
     const isAuthError = isServerAuthError(error);
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
-    if (isAuthError) clearServerAuthCookies(context);
-    setDefaultTimetableFrameList(queryClient, getSemesterFromQuery(query.year, query.term) ?? getRecentSemester());
-    await prefetchBaseTimetableData(queryClient);
+    setDefaultTimetableFrameList(
+      queryClient,
+      isLoggedIn,
+      getSemesterFromQuery(query.year, query.term) ?? getRecentSemester(),
+    );
+    await baseTimetablePrefetch;
   }
 }
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const queryClient = new QueryClient();
-  const { token, query } = parseServerSideParams(context);
-  const frameId = Number(query.timetableFrameId);
-  const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const queryClient = new QueryClient();
+    const { query } = context;
+    const frameId = Number(query.timetableFrameId);
+    const validatedFrameId = isValidTimetableFrameId(frameId) ? frameId : null;
 
-  if (token) {
-    await prefetchTimetableData(queryClient, context, token, query, validatedFrameId);
-  } else {
-    setDefaultTimetableFrameList(queryClient);
-    cacheControl.enablePublicCache();
-  }
+    if (serverRequest.isLoggedIn) {
+      await prefetchTimetableData(
+        queryClient,
+        context,
+        serverRequest.isLoggedIn,
+        serverRequest.userType,
+        query,
+        validatedFrameId,
+      );
+    } else {
+      setDefaultTimetableFrameList(queryClient, false);
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+);
 
 function TimetablePage() {
   const isMobile = useMediaQuery();
   useScrollToTop();
-  const token = useTokenState();
   const semester = useSemester();
   const router = useRouter();
+  const logger = useLogger();
+  const goBack = useGoBack();
   const { timetableFrameId } = router.query;
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const mainFrameId = isValidTimetableFrameId(mainFrame?.id) ? mainFrame.id : 0;
   const queryFrameId = typeof timetableFrameId === 'string' ? Number(timetableFrameId) : Number.NaN;
-  const initialFrameId = isValidTimetableFrameId(queryFrameId) ? queryFrameId : mainFrameId;
+  const hasQueryFrame = timetableFrameList.some((frame) => frame.id === queryFrameId);
+  const initialFrameId = hasQueryFrame ? queryFrameId : mainFrameId;
   const [currentFrameIndex, setCurrentFrameIndex] = useState(initialFrameId);
   const resolvedCurrentFrameIndex = timetableFrameList.some((frame) => frame.id === currentFrameIndex)
     ? currentFrameIndex
@@ -136,17 +167,32 @@ function TimetablePage() {
     isomorphicSessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
   }, []);
 
+  const handleBack = () => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'timetable_back',
+      value: '뒤로가기버튼',
+      previous_page: '시간표',
+      current_page: '메인',
+      duration_time: getElapsedSeconds('enterTimetablePage'),
+    });
+    goBack();
+  };
+
   return (
-    <div className={styles.page}>
-      {!isMobile ? (
-        <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      ) : (
-        <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
-      )}
-    </div>
+    <>
+      <MobilePageHeader title="시간표" rightAction={<TimetableEditButton />} onBack={handleBack} />
+      <div className={styles.page}>
+        {!isMobile ? (
+          <DefaultPage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        ) : (
+          <MobilePage timetableFrameId={resolvedCurrentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        )}
+      </div>
+    </>
   );
 }
 
 export default TimetablePage;
 
-TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
+TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout mobileHeader="page">{page}</SSRLayout>;

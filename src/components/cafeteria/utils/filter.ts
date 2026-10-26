@@ -1,5 +1,8 @@
-import { Dining, DiningType } from 'api/dinings/entity';
+import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
 import { PLACE_ORDER } from 'static/cafeteria';
+
+export const getSoldoutPlaces = (dinings: Dining[], type: DiningType): DiningPlace[] =>
+  dinings.filter((dining) => dining.type === type && dining.soldout_at).map((dining) => dining.place);
 
 export const filterDinings = (dinings: Dining[], type: DiningType) => {
   const filteredDinings = dinings.filter(
@@ -9,6 +12,7 @@ export const filterDinings = (dinings: Dining[], type: DiningType) => {
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);
     const indexB = PLACE_ORDER.indexOf(b.place);
+
     return indexA - indexB;
   });
 

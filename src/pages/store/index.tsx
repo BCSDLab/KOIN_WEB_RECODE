@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import { useState, useEffect, useRef, type ReactElement } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import {
   dehydrate,
@@ -11,8 +12,14 @@ import {
   useSuspenseQuery,
   type DehydratedState,
 } from '@tanstack/react-query';
+import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
+import { storeMobileQueries } from 'api/storeMobile/queries';
 import Close from 'assets/svg/close-icon-20x20.svg';
+import Layout, { SSRLayout } from 'components/layout';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
+import StoreListPage from 'components/Store/mobile/StoreListPage';
+import { getListRequestParams, parseListQuery } from 'components/Store/mobile/StoreListPage/utils/listQuery';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
 import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
@@ -29,19 +36,19 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
 import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ssr/withCacheControl';
 import { isomorphicLocalStorage, isomorphicSessionStorage } from 'utils/ts/env';
-import { STORE_PUBLIC_SSR_CACHE_CONTROL, withCacheControl } from 'utils/ts/withCacheControl';
-import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
+
 import styles from './StorePage.module.scss';
 
-type StoreSearchQueryType = {
+interface StoreSearchQueryType {
   storeName?: string;
   category?: string;
   delivery?: string;
   bank?: string;
   card?: string;
   shopIds?: string;
-};
+}
 
 const MOBILE_SORT_CHECK_BOX = [
   {
@@ -106,37 +113,61 @@ const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params
   return storeList || [];
 };
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const queryClient = new QueryClient();
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    // 모바일은 KOIN_ORDER_WEBVIEW 주변상점 화면을 그린다. order가 부르는 API(카테고리·v3 목록)만 서버에서 받아 본문까지 렌더한다
+    if (serverRequest?.device === 'mobile') {
+      const mobileQueryClient = new QueryClient();
+      const { sort, filter } = parseListQuery(context.query);
+      const { sorter, filter: listFilter } = getListRequestParams(sort, filter);
 
-  const { storeName } = context.query;
-  const selectedStoreName = storeName ? String(storeName) : undefined;
+      await Promise.all([
+        mobileQueryClient.prefetchQuery(storeMobileQueries.categories()),
+        mobileQueryClient.prefetchQuery(storeMobileQueries.list(sorter, listFilter)),
+      ]);
 
-  await queryClient.prefetchQuery(storeQueries.categories());
+      cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
 
-  await queryClient.prefetchQuery(
-    storeQueries.listV2({
-      sorter: 'NONE',
-      filter: [],
-      query: selectedStoreName,
-    }),
-  );
+      return {
+        props: {
+          isMobilePage: true,
+          dehydratedState: dehydrate(mobileQueryClient),
+        },
+      };
+    }
 
-  await queryClient.prefetchQuery(storeQueries.allEvents());
+    const queryClient = new QueryClient();
 
-  cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+    const { storeName } = context.query;
+    const selectedStoreName = storeName ? String(storeName) : undefined;
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-});
+    await Promise.all([
+      queryClient.prefetchQuery(storeQueries.categories()),
+      queryClient.prefetchQuery(
+        storeQueries.listV2({
+          sorter: 'NONE',
+          filter: [],
+          query: selectedStoreName,
+        }),
+      ),
+      queryClient.prefetchQuery(storeQueries.allEvents()),
+    ]);
+
+    cacheControl.enablePublicCache(STORE_PUBLIC_SSR_CACHE_CONTROL);
+
+    return {
+      props: {
+        isMobilePage: false,
+        dehydratedState: dehydrate(queryClient),
+      },
+    };
+  },
+);
 
 function Store() {
   const enterCategoryTimeRef = useRef<number | null>(null);
   const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
-  const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
+  const [storeFilterList, setStoreFilterList] = useState<Record<StoreFilterType, boolean>>({
     OPEN: false,
     DELIVERY: false,
   });
@@ -376,10 +407,30 @@ function Store() {
   );
 }
 
-export default function StorePage({ dehydratedState }: { dehydratedState: DehydratedState }) {
+interface StorePageProps {
+  dehydratedState: DehydratedState;
+  isMobilePage?: boolean;
+}
+
+function StorePage({ dehydratedState, isMobilePage }: StorePageProps) {
+  if (isMobilePage) {
+    return (
+      <>
+        <MobilePageHeader background="gray" title="주변상점" />
+        <StoreListPage />
+      </>
+    );
+  }
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <Store />
     </HydrationBoundary>
   );
 }
+
+// 기기는 서버가 확정한다. 모바일만 페이지 헤더 레이아웃을 쓰고 데스크톱은 기본 레이아웃 그대로 둔다
+StorePage.getLayout = (page: ReactElement<StorePageProps>) =>
+  page.props.isMobilePage ? <SSRLayout mobileHeader="page">{page}</SSRLayout> : <Layout>{page}</Layout>;
+
+export default StorePage;

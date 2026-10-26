@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { timetableQueries } from 'api/timetable/queries';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 export default function useTotalGrades(timetableFrameId: number) {
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
 
   return useSuspenseQuery({
-    ...timetableQueries.lectureInfo(token, timetableFrameId),
+    ...timetableQueries.lectureInfo(isLoggedIn, timetableFrameId),
     select: (data) => data?.total_grades,
   });
 }

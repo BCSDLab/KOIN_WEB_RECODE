@@ -1,0 +1,59 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW shopReview SortModal 계산값을 옮겼다
+@mixin reset-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sort-sheet {
+  &__title {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__close {
+    @include reset-button;
+  }
+
+  &__icon {
+    display: block;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  &__option {
+    @include reset-button;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    &--active {
+      color: palette.$primary-500;
+    }
+  }
+
+  &__check {
+    display: block;
+    fill: palette.$primary-500;
+  }
+}
+
+// 공용 BottomModal 헤더(justify-between)를 order처럼 가운데 정렬 + 10px 간격으로 덮는다
+.sort-sheet .sort-sheet__header {
+  gap: 10px;
+  justify-content: center;
+}

@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from 'react';
+
 import { getStorageJSONValue, isomorphicLocalStorage } from 'utils/ts/env';
 
 // storage 이벤트 구독
 function subscribe(callback: () => void) {
   if (typeof window === 'undefined') return () => {};
   window.addEventListener('storage', callback);
+
   return () => window.removeEventListener('storage', callback);
 }
 
@@ -23,6 +25,7 @@ function getSnapshot<T>(key: string, defaultValue: T): T {
 
   const value = isomorphicLocalStorage.getJSONItem(key, defaultValue);
   snapshotCache.set(key, { raw, value });
+
   return value;
 }
 

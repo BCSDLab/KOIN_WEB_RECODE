@@ -1,5 +1,6 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+
+import type {
   CallvanChatResponse,
   CallvanListRequest,
   CallvanListResponse,
@@ -23,10 +24,7 @@ export class GetCallvanList<R extends CallvanListResponse> implements APIRequest
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    params: CallvanListRequest,
-  ) {
+  constructor(params: CallvanListRequest) {
     this.params = params;
   }
 }
@@ -39,8 +37,6 @@ export class GetCallvanNotifications<R extends CallvanNotificationsResponse> imp
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class GetCallvanRestriction<R extends CallvanRestrictionResponse> implements APIRequest<R> {
@@ -51,8 +47,6 @@ export class GetCallvanRestriction<R extends CallvanRestrictionResponse> impleme
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class PostMarkAllNotificationsRead<R extends object> implements APIRequest<R> {
@@ -63,8 +57,6 @@ export class PostMarkAllNotificationsRead<R extends object> implements APIReques
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class PostMarkNotificationRead<R extends object> implements APIRequest<R> {
@@ -76,10 +68,7 @@ export class PostMarkNotificationRead<R extends object> implements APIRequest<R>
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    notificationId: number,
-  ) {
+  constructor(notificationId: number) {
     this.path = `/callvan/notifications/${notificationId}/read`;
   }
 }
@@ -95,10 +84,7 @@ export class PostCallvan<R extends CreateCallvanResponse> implements APIRequest<
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    data: CreateCallvanRequest,
-  ) {
+  constructor(data: CreateCallvanRequest) {
     this.data = data;
   }
 }
@@ -111,8 +97,6 @@ export class DeleteAllNotifications<R extends object> implements APIRequest<R> {
   response!: R;
 
   auth = true;
-
-  constructor(public authorization: string) {}
 }
 
 export class GetCallvanPostDetail<R extends CallvanPostDetail> implements APIRequest<R> {
@@ -124,10 +108,7 @@ export class GetCallvanPostDetail<R extends CallvanPostDetail> implements APIReq
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}`;
   }
 }
@@ -141,10 +122,7 @@ export class PostJoinCallvan<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/participants`;
   }
 }
@@ -158,10 +136,7 @@ export class DeleteCancelCallvan<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/participants`;
   }
 }
@@ -175,10 +150,7 @@ export class GetCallvanChat<R extends CallvanChatResponse> implements APIRequest
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/chat`;
   }
 }
@@ -194,11 +166,7 @@ export class PostCallvanChat<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-    data: SendChatRequest,
-  ) {
+  constructor(postId: number, data: SendChatRequest) {
     this.path = `/callvan/posts/${postId}/chat`;
     this.data = data;
   }
@@ -213,10 +181,7 @@ export class PutCloseCallvanPost<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/close`;
   }
 }
@@ -230,10 +195,7 @@ export class PutReopenCallvanPost<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/reopen`;
   }
 }
@@ -247,10 +209,7 @@ export class PutCompleteCallvanPost<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-  ) {
+  constructor(postId: number) {
     this.path = `/callvan/posts/${postId}/complete`;
   }
 }
@@ -266,11 +225,7 @@ export class PostCallvanReport<R extends object> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(
-    public authorization: string,
-    postId: number,
-    data: CallvanReportRequest,
-  ) {
+  constructor(postId: number, data: CallvanReportRequest) {
     this.path = `/callvan/posts/${postId}/reports`;
     this.data = data;
   }

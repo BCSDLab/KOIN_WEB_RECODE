@@ -1,8 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
+
 import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
+
 import styles from './EmailPage.module.scss';
 
 function MobileFindIdEmailPage() {
@@ -56,6 +57,7 @@ function MobileFindIdEmailPage() {
     stopTimer();
     setEmailMessage(null);
     setIncorrect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- email 변경 시에만 재실행 (나머지는 훅이 반환하는 안정적 함수)
   }, [email]);
 
   return (

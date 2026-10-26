@@ -3,6 +3,7 @@ import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
 import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
+
 import CafeteriaInfoTrigger from './components/CafeteriaInfoTrigger';
 import styles from './DateNavigator.module.scss';
 

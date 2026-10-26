@@ -1,5 +1,6 @@
 import type { ComponentType, MouseEvent, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
+
 import BriefcaseIcon from 'assets/svg/category/briefcase-icon.svg';
 import CalendarIcon from 'assets/svg/category/calendar-icon.svg';
 import ChatIcon from 'assets/svg/category/chat-icon.svg';
@@ -16,14 +17,14 @@ import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import RouteIcon from 'assets/svg/common/route-icon.svg';
 import HomeLayout from 'components/layout/HomeLayout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import IconBox from 'components/ui/IconBox';
+import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
-import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
-import type { LoggingTeam } from 'lib/gtag';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+
 import styles from './CategoryPage.module.scss';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -122,7 +123,7 @@ const sections: CategorySection[] = [
       },
       {
         title: '주변상점',
-        href: `${ORDER_BASE_URL}/shops/?category=1`,
+        href: `${ROUTES.Store()}?category=1`,
         Icon: StoreIcon,
         logging: {
           team: 'CAMPUS',
@@ -226,7 +227,7 @@ function CategoryIconBox({ Icon }: { Icon?: IconComponent }) {
 
 function CategoryPage() {
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
 
   const handleCategoryClick = (logging: CategoryLogging) => {
@@ -241,7 +242,7 @@ function CategoryPage() {
 
   const handleMenuClick = (e: MouseEvent<HTMLAnchorElement>, item: CategoryItem) => {
     handleCategoryClick(item.logging);
-    if (!token && item.href === ROUTES.LostItemChat()) {
+    if (!isLoggedIn && item.href === ROUTES.LostItemChat()) {
       e.preventDefault();
       openLoginModal();
     }
@@ -269,6 +270,7 @@ function CategoryPage() {
           <ul className={styles.menu}>
             {items.map((item) => {
               const { title: itemTitle, href, Icon } = item;
+
               return (
                 <li key={itemTitle}>
                   <Link href={href} className={styles.menu__link} onClick={(e) => handleMenuClick(e, item)}>

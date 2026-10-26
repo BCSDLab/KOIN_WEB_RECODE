@@ -18,14 +18,14 @@
   justify-content: space-between;
 }
 
-.headerTitle {
+.header-title {
   font-size: 18px;
   font-weight: 600;
   color: #175c8e;
   line-height: 1.6;
 }
 
-.closeButton {
+.close-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +58,7 @@
   gap: 12px;
 }
 
-.resetButton {
+.reset-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,7 +87,7 @@
   }
 }
 
-.applyButton {
+.apply-button {
   flex: 1;
   height: 48px;
   border-radius: 20px;
@@ -116,14 +116,14 @@
   gap: 12px;
 }
 
-.sectionTitle {
+.section-title {
   font-weight: 600;
   color: #000;
   margin: 0;
   line-height: 1.6;
 }
 
-.sectionBadges {
+.section-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -152,19 +152,19 @@
     animation: slide-up 0.25s ease-out;
   }
 
-  .headerTitle {
+  .header-title {
     color: #b611f5;
   }
 
-  .closeButton:focus-visible {
+  .close-button:focus-visible {
     outline-color: #b611f5;
   }
 
-  .resetButton:focus-visible {
+  .reset-button:focus-visible {
     outline-color: #b611f5;
   }
 
-  .applyButton {
+  .apply-button {
     background: #b611f5;
 
     &:hover {
@@ -176,7 +176,7 @@
     }
   }
 
-  .sectionBadges > button {
+  .section-badges > button {
     &:hover,
     &[aria-pressed="true"] {
       border-color: #b611f5;

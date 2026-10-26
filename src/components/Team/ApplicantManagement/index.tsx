@@ -1,28 +1,30 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { teamQueries } from 'api/team/queries';
 import EmptyRecruitment from 'assets/svg/common/sleep-bbico.svg';
 import ChatBubbleIcon from 'assets/svg/Team/chat-bubble.svg';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import RecruitmentCard from 'components/Team/components/RecruitmentCard';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+
 import ApplicantCard from './components/ApplicantCard';
 import styles from './ApplicantManagement.module.scss';
 
 export default function ApplicantManagement() {
   const router = useRouter();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const isMobile = useMediaQuery();
   const { postId } = router.query;
   const recruitmentId = typeof postId === 'string' ? postId : '';
 
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.applicants(recruitmentId, token),
-    enabled: !!token && !!recruitmentId,
+    ...teamQueries.applicants(recruitmentId, isLoggedIn),
+    enabled: isLoggedIn && !!recruitmentId,
   });
 
   const handleGroupChatClick = () => {
@@ -34,7 +36,7 @@ export default function ApplicantManagement() {
   const groupChatButton = data?.recruitment.team_chat_available && (
     <button
       type="button"
-      className={styles.chatButton}
+      className={styles['chat-button']}
       onClick={handleGroupChatClick}
       aria-label="모집글 그룹 채팅방으로 이동"
     >
@@ -44,9 +46,7 @@ export default function ApplicantManagement() {
 
   return (
     <>
-      <div className={styles.mobileHeader}>
-        <SubPageHeader title="지원자 관리" className={styles.header} />
-      </div>
+      <MobilePageHeader title="지원자 관리" background="gray" />
 
       <main className={styles.page}>
         <div className={styles.inner}>
@@ -62,7 +62,7 @@ export default function ApplicantManagement() {
                 recruitment={data.recruitment}
                 rightSlot={
                   isMobile ? (
-                    <span className={styles.recruitmentStatus}>
+                    <span className={styles['recruitment-status']}>
                       {data.recruitment.status === 'RECRUITING' ? '모집 중' : '모집완료'}
                     </span>
                   ) : (

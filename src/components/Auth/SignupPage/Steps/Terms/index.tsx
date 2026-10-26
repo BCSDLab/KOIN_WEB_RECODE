@@ -1,10 +1,12 @@
 'use no memo'; //react compiler로 인한 watch 오류 방지
+
 import { cn } from '@bcsdlab/utils';
 import CustomCheckbox from 'components/Auth/SignupPage/components/CustomCheckbox';
 import { useFormContext } from 'react-hook-form';
 import { privacy, koin, marketing } from 'static/terms';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './Terms.module.scss';
 
 interface TermsProps {

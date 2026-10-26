@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router';
+
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './ConfirmModal.module.scss';
 
 interface ConfirmModalProps {
@@ -17,7 +19,7 @@ export default function ConfirmModal({ closeModal, onSubmit, onCancel, type = 'c
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     onSubmit();
     closeModal();
   };

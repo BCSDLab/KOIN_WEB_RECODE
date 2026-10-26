@@ -1,23 +1,33 @@
-type ROUTESParams<T extends string = string> = {
-  [key in T]?: string;
-};
+type ROUTESParams<T extends string = string> = Partial<Record<T, string>>;
 
 const ROUTES = {
   Main: () => '/',
   Category: () => '/category',
   NotFound: () => '*',
   Timetable: () => '/timetable',
+  TimetableList: () => '/timetable/list',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
-    `timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
+    `/timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
   GraduationCalculator: () => '/graduation',
   Course: () => '/course',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
   StoreDetail: ({ id }: ROUTESParams<'id'>) => `/store/${id}`,
+  StoreSearch: () => '/store/search',
+  StoreInfo: ({ id }: ROUTESParams<'id'>) => `/store/${id}/info`,
+  StoreEvents: ({ id }: ROUTESParams<'id'>) => `/store/${id}/events`,
+  StoreReviews: ({ id }: ROUTESParams<'id'>) => `/store/${id}/reviews`,
+  OrderShop: ({ id }: ROUTESParams<'id'>) => `/order/shops/${id}`,
+  OrderShopInfo: ({ id }: ROUTESParams<'id'>) => `/order/shops/${id}/info`,
+  OrderShopReviews: ({ id }: ROUTESParams<'id'>) => `/order/shops/${id}/reviews`,
+  OrderCheckout: () => '/order/checkout',
+  OrderCheckoutSuccess: () => '/order/checkout/success',
+  OrderCheckoutFail: () => '/order/checkout/fail',
   BusRoute: () => '/bus/route',
   BusCourseShuttle: () => '/bus/shuttle',
   BusCourseExpress: () => '/bus/express',
   BusCourseCity: () => '/bus/city',
+  BusShuttleDetail: ({ routeId }: ROUTESParams<'routeId'>) => `/bus/shuttle/${routeId}`,
   Club: () => '/clubs',
   ClubDetail: ({ id, hot }: ROUTESParams<'id' | 'hot'>) => `/clubs/${id}?hot=${hot}`,
   NewClub: () => '/clubs/new',
@@ -36,7 +46,8 @@ const ROUTES = {
   LostItemDetail: ({ id }: ROUTESParams<'id'>) => `/lost-item/${id}`,
   LostItemFound: () => '/lost-item/found',
   LostItemLost: () => '/lost-item/lost',
-  LostItemChat: () => '/lost-item/chat',
+  LostItemChat: (params?: { articleId: string; chatRoomId: string }) =>
+    params ? `/lost-item/chat?articleId=${params.articleId}&chatRoomId=${params.chatRoomId}` : '/lost-item/chat',
   LostItemEdit: ({ id }: ROUTESParams<'id'>) => `/lost-item/edit/${id}`,
   LostItemReport: ({ id }: ROUTESParams<'id'>) => `/lost-item/report/${id}`,
   Room: () => '/room',
@@ -83,7 +94,7 @@ const ROUTES = {
   TeamMyApplications: () => '/team/my-applications',
   TeamMyCreatedPosts: () => '/team/my-created-posts',
   TeamChat: ({ recruitmentId, chatRoomId }: { recruitmentId: string; chatRoomId: string }) =>
-    `/team/chat/${recruitmentId}/${chatRoomId}`,
+    `/team/chat?recruitmentId=${recruitmentId}&chatRoomId=${chatRoomId}`,
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
   Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',

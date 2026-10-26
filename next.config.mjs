@@ -2,6 +2,11 @@
 // tsc(moduleResolution: bundler)는 정상 해석한다 — package.json exports map에 실제로 있음.
 // eslint-disable-next-line import/no-unresolved
 import { withSentryConfig } from '@sentry/nextjs/config';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: false,
@@ -10,6 +15,12 @@ const nextConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         jsdom: false,
+        // node:async_hooks는 클라이언트 번들에서 resolve되지 않는다. SSR 전용
+        // 구현(cookieForwarding.ts)을 no-op 구현으로 치환한다.
+        [path.resolve(__dirname, 'src/utils/ssr/cookieForwarding.ts')]: path.resolve(
+          __dirname,
+          'src/utils/ssr/cookieForwarding.client.ts',
+        ),
       };
     }
 

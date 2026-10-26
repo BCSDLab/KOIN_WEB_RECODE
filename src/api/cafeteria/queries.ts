@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { getCafeteriaDinings } from './index';
 
 export const cafeteriaQueryKeys = {

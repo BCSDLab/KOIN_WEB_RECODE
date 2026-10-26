@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import CompletePage from 'components/Auth/FindPasswordPage/Complete';
 import FindPWLayout from 'components/Auth/FindPasswordPage/Layout';
@@ -12,10 +13,11 @@ import PCVerifyPhone from 'components/Auth/FindPasswordPage/PC/PCVerifyPhone';
 import ProgressBar from 'components/Auth/SignupPage/components/ProgressBar';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ContactType } from 'static/auth';
+import type { ContactType } from 'static/auth';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+
 import styles from './FindPasswordPage.module.scss';
 
 type StepTitle = '계정인증' | '이메일인증' | '비밀번호변경' | '완료';
@@ -28,11 +30,11 @@ const stepToProgress: Record<StepTitle, ProgressStepTitle> = {
   완료: '완료',
 };
 
-type StepProps<T> = {
+interface StepProps<T> {
   step: T;
   name: T;
   children: React.ReactNode;
-};
+}
 
 function Step<T extends string>({ step, name, children }: StepProps<T>) {
   return step === name ? <div>{children}</div> : null;
@@ -71,6 +73,7 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
       if (methods.getValues('newPassword')) {
         methods.reset();
       }
+
       return;
     }
 
@@ -85,12 +88,14 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
 
   if (!step) {
     router.push(ROUTES.Auth());
+
     return null;
   }
 
   const nextStep = (next: StepTitle, options?: { replace: boolean }) => {
     if (options?.replace) {
       router.replace(ROUTES.AuthFindPW({ step: next }));
+
       return;
     }
     router.push(ROUTES.AuthFindPW({ step: next }));
@@ -166,6 +171,7 @@ function FindPassword() {
 
   const { step } = router.query as { step?: StepTitle };
   if (!step) return null;
+
   return <FindPasswordPage step={step} />;
 }
 

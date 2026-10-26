@@ -12,5 +12,13 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: 'chore'
+    groups:
+      minor-patch:
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     labels:
       - dependencies

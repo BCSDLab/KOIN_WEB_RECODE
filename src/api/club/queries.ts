@@ -1,5 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { queryOptions } from '@tanstack/react-query';
+import { getViewerScope } from 'utils/ts/getViewerScope';
+
 import type { ClubRecruitmentResponse, HotClubResponse } from './entity';
 import {
   getClubCategories,
@@ -30,25 +32,21 @@ const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
 };
 
 interface ClubListQueryParams {
-  token?: string | null;
+  isLoggedIn?: boolean;
   categoryId?: number;
   sortType?: string;
   isRecruiting?: boolean;
   clubName?: string;
 }
 
-type ClubViewerScope = 'auth' | 'guest';
-
-const getViewerScope = (token?: string | null): ClubViewerScope => (token ? 'auth' : 'guest');
-
 export const clubQueryKeys = {
   all: ['club'] as const,
-  categories: (token?: string | null) => [...clubQueryKeys.all, 'categories', getViewerScope(token)] as const,
+  categories: (isLoggedIn?: boolean) => [...clubQueryKeys.all, 'categories', getViewerScope(isLoggedIn)] as const,
   listRoot: () => [...clubQueryKeys.all, 'list'] as const,
-  list: ({ token, categoryId, sortType, isRecruiting, clubName }: ClubListQueryParams) =>
+  list: ({ isLoggedIn, categoryId, sortType, isRecruiting, clubName }: ClubListQueryParams) =>
     [
       ...clubQueryKeys.listRoot(),
-      getViewerScope(token),
+      getViewerScope(isLoggedIn),
       categoryId ?? null,
       sortType ?? '',
       Boolean(isRecruiting),
@@ -56,33 +54,35 @@ export const clubQueryKeys = {
     ] as const,
   hot: () => [...clubQueryKeys.all, 'hot'] as const,
   detailRoot: (clubId?: number | string) =>
-    clubId === undefined ? [...clubQueryKeys.all, 'detail'] as const : [...clubQueryKeys.all, 'detail', Number(clubId)] as const,
-  detail: (clubId: number, token?: string | null) =>
-    [...clubQueryKeys.detailRoot(clubId), getViewerScope(token)] as const,
+    clubId === undefined
+      ? ([...clubQueryKeys.all, 'detail'] as const)
+      : ([...clubQueryKeys.all, 'detail', Number(clubId)] as const),
+  detail: (clubId: number, isLoggedIn?: boolean) =>
+    [...clubQueryKeys.detailRoot(clubId), getViewerScope(isLoggedIn)] as const,
   recruitment: (clubId: number) => [...clubQueryKeys.all, 'recruitment', clubId] as const,
   eventListRoot: (clubId?: string | number) =>
     clubId === undefined
-      ? [...clubQueryKeys.all, 'event-list'] as const
-      : [...clubQueryKeys.all, 'event-list', clubId] as const,
-  eventList: (clubId: string | number, eventType: string, token?: string | null) =>
-    [...clubQueryKeys.eventListRoot(clubId), eventType, getViewerScope(token)] as const,
+      ? ([...clubQueryKeys.all, 'event-list'] as const)
+      : ([...clubQueryKeys.all, 'event-list', clubId] as const),
+  eventList: (clubId: string | number, eventType: string, isLoggedIn?: boolean) =>
+    [...clubQueryKeys.eventListRoot(clubId), eventType, getViewerScope(isLoggedIn)] as const,
   eventDetail: (clubId: string | number, eventId: string | number) =>
     [...clubQueryKeys.all, 'event-detail', clubId, eventId] as const,
-  qna: (clubId: number | string, token?: string | null) =>
-    [...clubQueryKeys.all, 'qna', clubId, getViewerScope(token)] as const,
+  qna: (clubId: number | string, isLoggedIn?: boolean) =>
+    [...clubQueryKeys.all, 'qna', clubId, getViewerScope(isLoggedIn)] as const,
 };
 
 export const clubQueries = {
-  categories: (token?: string | null) =>
+  categories: (isLoggedIn?: boolean) =>
     queryOptions({
-      queryKey: clubQueryKeys.categories(token),
-      queryFn: () => getClubCategories(token ?? undefined),
+      queryKey: clubQueryKeys.categories(isLoggedIn),
+      queryFn: () => getClubCategories(),
     }),
 
-  list: ({ token, categoryId, sortType, isRecruiting, clubName }: ClubListQueryParams) =>
+  list: ({ isLoggedIn, categoryId, sortType, isRecruiting, clubName }: ClubListQueryParams) =>
     queryOptions({
-      queryKey: clubQueryKeys.list({ token, categoryId, sortType, isRecruiting, clubName }),
-      queryFn: () => getClubList(token ?? undefined, categoryId, sortType, isRecruiting, clubName),
+      queryKey: clubQueryKeys.list({ isLoggedIn, categoryId, sortType, isRecruiting, clubName }),
+      queryFn: () => getClubList(categoryId, sortType, isRecruiting, clubName),
     }),
 
   hot: () =>
@@ -100,10 +100,10 @@ export const clubQueries = {
       },
     }),
 
-  detail: (clubId: number, token?: string | null) =>
+  detail: (clubId: number, isLoggedIn?: boolean) =>
     queryOptions({
-      queryKey: clubQueryKeys.detail(clubId, token),
-      queryFn: () => getClubDetail(token ?? '', clubId),
+      queryKey: clubQueryKeys.detail(clubId, isLoggedIn),
+      queryFn: () => getClubDetail(clubId),
     }),
 
   recruitment: (clubId: number) =>
@@ -121,10 +121,10 @@ export const clubQueries = {
       },
     }),
 
-  eventList: (clubId: string | number, eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED', token?: string | null) =>
+  eventList: (clubId: string | number, eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED', isLoggedIn?: boolean) =>
     queryOptions({
-      queryKey: clubQueryKeys.eventList(clubId, eventType, token),
-      queryFn: () => getClubEventList(clubId, eventType, token ?? undefined),
+      queryKey: clubQueryKeys.eventList(clubId, eventType, isLoggedIn),
+      queryFn: () => getClubEventList(clubId, eventType),
     }),
 
   eventDetail: (clubId: string | number, eventId: string | number) =>
@@ -133,9 +133,9 @@ export const clubQueries = {
       queryFn: () => getClubEventDetail(clubId, eventId),
     }),
 
-  qna: (clubId: number | string, token?: string | null) =>
+  qna: (clubId: number | string, isLoggedIn?: boolean) =>
     queryOptions({
-      queryKey: clubQueryKeys.qna(clubId, token),
-      queryFn: () => getClubQnA(token ?? '', Number(clubId)),
+      queryKey: clubQueryKeys.qna(clubId, isLoggedIn),
+      queryFn: () => getClubQnA(Number(clubId)),
     }),
 };

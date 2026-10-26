@@ -1,0 +1,18 @@
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.notification {
+  position: relative;
+
+  &__dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b611f5;
+  }
+}

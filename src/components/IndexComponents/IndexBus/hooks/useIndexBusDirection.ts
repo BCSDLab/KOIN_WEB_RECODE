@@ -7,6 +7,7 @@ const useIndexBusDirection = () => {
     setToSchoolList((value) => {
       const newValue = [...value];
       newValue[index] = !value[index];
+
       return newValue;
     });
   };

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getYyyyMmDd } from 'utils/ts/calendar';
@@ -38,6 +39,7 @@ let activitySequence = 0;
 
 const createActivityId = () => {
   activitySequence += 1;
+
   return `activity-${Date.now()}-${activitySequence}`;
 };
 
@@ -86,6 +88,7 @@ export default function useActivityHistoryField(
     const result = validateActivity(activity);
     if (!result.success) {
       showToast('warning', result.message);
+
       return;
     }
 

@@ -19,6 +19,7 @@ const isBrowser = () => typeof document !== 'undefined';
 function resolveSecureFlag(explicit?: boolean): boolean {
   if (typeof explicit === 'boolean') return explicit;
   if (typeof window !== 'undefined') return window.location.protocol === 'https:';
+
   return false;
 }
 
@@ -74,6 +75,7 @@ export function getCookie(name: string): string | undefined {
       }
     }
   }
+
   return undefined;
 }
 

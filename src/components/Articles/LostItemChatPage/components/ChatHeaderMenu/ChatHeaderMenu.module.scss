@@ -1,0 +1,48 @@
+.header-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: #fafafa;
+    box-shadow:
+      0 8px 32px 0 rgb(0 0 0 / 4%),
+      0 2px 20px 0 rgb(0 0 0 / 8%);
+    z-index: 30;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: none;
+    color: #b611f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: nowrap;
+    cursor: pointer;
+
+    svg path {
+      fill: #b611f5;
+    }
+  }
+}

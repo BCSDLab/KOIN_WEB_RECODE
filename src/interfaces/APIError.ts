@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 export interface KoinError {
   type: 'KOIN_ERROR';

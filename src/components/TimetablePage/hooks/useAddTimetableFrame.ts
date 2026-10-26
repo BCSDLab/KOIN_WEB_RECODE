@@ -1,13 +1,16 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { Semester } from 'api/timetable/entity';
 import { timetableMutations } from 'api/timetable/mutations';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 
-export default function useAddTimetableFrame(token: string) {
+/** targetSemester가 없으면 선택된 학기의 목록을 갱신한다. */
+export default function useAddTimetableFrame(isLoggedIn: boolean, targetSemester?: Semester) {
   const queryClient = useQueryClient();
-  const semester = useSemester();
-  const mutation = timetableMutations.addFrame(queryClient, token, semester);
+  const selectedSemester = useSemester();
+  const mutation = timetableMutations.addFrame(queryClient, isLoggedIn, targetSemester ?? selectedSemester);
+
   return useMutation({
     ...mutation,
     onError: (error) => {

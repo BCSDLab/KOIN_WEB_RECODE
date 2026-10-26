@@ -1,5 +1,6 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+
 import { dehydrate, keepPreviousData, QueryClient, useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
@@ -10,40 +11,41 @@ import MobileArticleTabMenu from 'components/Articles/components/MobileArticleTa
 import Pagination from 'components/Articles/components/Pagination';
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import HomeLayout from 'components/layout/HomeLayout';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import { withCacheControl } from 'utils/ts/withCacheControl';
+import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 const DEFAULT_BOARD_ID = 4;
 
-export const getServerSideProps = withCacheControl(async (context: GetServerSidePropsContext, cacheControl) => {
-  const { token, query } = parseServerSideParams(context);
-  const pageNumber = typeof query.page === 'string' ? query.page : '1';
-  const boardId = typeof query.boardId === 'string' ? Number(query.boardId) : DEFAULT_BOARD_ID;
+export const getServerSideProps = withCacheControl(
+  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+    const { query } = context;
+    const pageNumber = typeof query.page === 'string' ? query.page : '1';
+    const boardId = typeof query.boardId === 'string' ? Number(query.boardId) : DEFAULT_BOARD_ID;
 
-  const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-  const prefetchPromises = [
-    queryClient.prefetchQuery(articleQueries.hot()),
-    queryClient.prefetchQuery(articleQueries.list(token ?? '', pageNumber, boardId)),
-  ];
+    const prefetchPromises = [
+      queryClient.prefetchQuery(articleQueries.hot()),
+      queryClient.prefetchQuery(articleQueries.list(serverRequest.isLoggedIn, pageNumber, boardId)),
+    ];
 
-  await Promise.all(prefetchPromises);
+    await Promise.all(prefetchPromises);
 
-  if (!token) {
-    cacheControl.enablePublicCache();
-  }
+    if (!serverRequest.isLoggedIn) {
+      cacheControl.enablePublicCache();
+    }
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      initialPage: pageNumber,
-      serverNow: new Date().toISOString(),
-      initialBoardId: boardId,
-    },
-  };
-});
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        initialPage: pageNumber,
+        serverNow: new Date().toISOString(),
+        initialBoardId: boardId,
+      },
+    };
+  },
+);
 
 function usePageParams(initialPage: string) {
   const router = useRouter();
@@ -51,6 +53,7 @@ function usePageParams(initialPage: string) {
 
   if (!mounted) return initialPage;
   const page = router.query.page;
+
   return typeof page === 'string' ? page : initialPage;
 }
 
@@ -60,16 +63,21 @@ function useBoardIdParams(initialBoardId: number) {
 
   if (!mounted) return initialBoardId;
   const boardId = router.query.boardId;
+
   return typeof boardId === 'string' ? Number(boardId) : initialBoardId;
 }
 
-export default function ArticleListPage({ initialPage, initialBoardId, serverNow }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const token = useTokenState();
+export default function ArticleListPage({
+  initialPage,
+  initialBoardId,
+  serverNow,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const isLoggedIn = useIsLoggedIn();
   const paramsPage = usePageParams(initialPage);
   const boardId = useBoardIdParams(initialBoardId);
 
   const { data: articlesData } = useQuery({
-    ...articleQueries.list(token, paramsPage, boardId),
+    ...articleQueries.list(isLoggedIn, paramsPage, boardId),
     placeholderData: keepPreviousData,
     select: createArticlesWithNewSelector(serverNow),
   });
@@ -84,12 +92,12 @@ export default function ArticleListPage({ initialPage, initialBoardId, serverNow
 
   return (
     <ArticlesPageLayout
-      mobileTabMenu={(
+      mobileTabMenu={
         <>
           <MobileArticleTabMenu currentBoardId={boardId} />
           <MobileArticleSearchButton />
         </>
-      )}
+      }
     >
       <ArticlesHeader />
       <ArticleList articles={articles} />

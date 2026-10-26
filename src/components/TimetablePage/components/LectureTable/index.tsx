@@ -1,21 +1,24 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
+import type { Lecture, MyLectureInfo, Semester } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import ROUTES from 'static/routes';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   rowWidthList: number[];
   timetableFrameId: number;
-  list: Array<Lecture> | Array<MyLectureInfo>;
-  myLectures: Array<Lecture> | Array<MyLectureInfo>;
+  list: Lecture[] | MyLectureInfo[];
+  myLectures: Lecture[] | MyLectureInfo[];
   selectedLecture: Lecture | undefined;
   onClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
@@ -55,7 +58,7 @@ function LectureTable({
   const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const { containerRef } = useOutsideClick({
     onOutsideClick: () => {
       updateTempLecture(null);
@@ -64,13 +67,14 @@ function LectureTable({
   });
 
   const handleEditLectureClick = (lectureIndex: number) => {
-    if (!token) {
+    if (!isLoggedIn) {
       showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
+
       return;
     }
 
     navigate(
-      `/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}${
+      `${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'direct' })}&lectureIndex=${lectureIndex}${
         semester ? `&year=${semester.year}&term=${semester.term}` : ''
       }`,
     );
@@ -96,6 +100,7 @@ function LectureTable({
       }
     }
   };
+
   function useKeyboardEvent() {
     React.useEffect(() => {
       function keyboardNavigation(e: KeyboardEvent) {
@@ -124,13 +129,16 @@ function LectureTable({
           }
         }
       }
+
       window.addEventListener('keydown', keyboardNavigation, true);
+
       return () => {
         window.removeEventListener('keydown', keyboardNavigation, true);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- cursor 변경 시에만 리스너를 재등록 (list/핸들러는 세션 중 안정적)
     }, [cursor]);
   }
+
   useKeyboardEvent();
   React.useEffect(() => {
     if (containerRef.current) {
@@ -140,8 +148,9 @@ function LectureTable({
         behavior: 'smooth',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- containerRef는 안정적인 ref라 의존성에서 제외
   }, [cursor]);
+
   return (
     <div className={styles.table}>
       <div className={styles['table__lecture-list']} ref={containerRef}>

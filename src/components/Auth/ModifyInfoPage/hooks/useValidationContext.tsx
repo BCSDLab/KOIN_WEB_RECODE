@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo, Dispatch, SetStateAction, useContext } from 'react';
+import { createContext, useState, useMemo, type Dispatch, type SetStateAction, useContext } from 'react';
 
 interface FormValidation {
   isPasswordValid?: boolean;

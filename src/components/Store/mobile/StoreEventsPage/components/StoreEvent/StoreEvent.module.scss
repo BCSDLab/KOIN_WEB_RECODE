@@ -1,0 +1,41 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.event {
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 0.5px solid palette.$neutral-400;
+  background-color: #fff;
+}
+
+// 접힘·펼침 영역을 grid 행 높이(0fr↔1fr)로 여닫는다. order와 같이 translate는 전환 없이 바뀐다
+.slot {
+  display: grid;
+  min-height: 0;
+  transition-property: grid-template-rows, opacity, transform;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
+  &--visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  &--hidden-up {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    translate: 0 -4px;
+  }
+
+  &--hidden-down {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    translate: 0 4px;
+  }
+
+  &__inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+}

@@ -1,7 +1,9 @@
 import Link from 'next/link';
+
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+
 import styles from './IndexCallvan.module.scss';
 
 const CALLVAN_LINKS = [

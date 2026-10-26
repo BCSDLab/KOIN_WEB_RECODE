@@ -168,7 +168,7 @@
   }
 }
 
-.roleOption {
+.role-option {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -270,7 +270,7 @@
 }
 
 // Figma 기준 고정 96px (지원동기와 달리 자동 높이 조절 없음).
-.availabilityControl {
+.availability-control {
   height: 96px;
   resize: none;
 }

@@ -1,7 +1,14 @@
 export type LoggingTeam = 'CAMPUS' | 'BUSINESS' | 'USER';
 
-type GTagEvent = {
-  team: LoggingTeam;
+/**
+ * 로깅 네이밍룰 개편으로 GA 이벤트명이 team(CAMPUS 등)에서 event_name(DA1 등)으로 바뀐다.
+ * 기존 로깅은 team을 그대로 쓰고, 신규 로깅만 event_name을 사용한다.
+ * 이후 기존 로깅 변경이 완료되면 team은 제거하고 event_name만 사용하도록
+ * 리팩토링한다.
+ */
+type GTagEventName = { team: LoggingTeam; event_name?: never } | { team?: never; event_name: string };
+
+type GTagEvent = GTagEventName & {
   event_category: string;
   event_label: string;
   value: string;
@@ -10,12 +17,12 @@ type GTagEvent = {
   current_page?: string;
 };
 
-type SessionEvent = {
+interface SessionEvent {
   event_label: string;
   value: string;
   event_category: string;
   custom_session_id: string;
-};
+}
 
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 const API_PATH = process.env.NEXT_PUBLIC_API_PATH;
@@ -33,6 +40,7 @@ export const pageView = (url: string, userId?: string) => {
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
   team,
+  event_name,
   event_category,
   event_label,
   value,
@@ -42,7 +50,7 @@ export const event = ({
 }: GTagEvent) => {
   if (typeof window === 'undefined' || typeof window.gtag === 'undefined') return;
 
-  window.gtag('event', team, {
+  window.gtag('event', event_name ?? team, {
     event_category,
     event_label,
     value,
@@ -52,9 +60,9 @@ export const event = ({
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
-      팀: team,
+      '이벤트명(team/event_name)': event_name ?? team,
       '이벤트 Category': event_category,
       '이벤트 Title': event_label,
       값: value,
@@ -76,7 +84,7 @@ export const startSession = ({ event_label, value, event_category, custom_sessio
   });
 
   if (API_PATH?.includes('stage')) {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console -- stage 환경에서만 분석 이벤트 디버깅용으로 출력
     console.table({
       '세션 시작': event_label,
       값: value,

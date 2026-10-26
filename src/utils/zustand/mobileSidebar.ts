@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { create } from 'zustand';
 

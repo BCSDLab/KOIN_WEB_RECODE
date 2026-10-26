@@ -1,0 +1,28 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.search-bar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 40px;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+  color: inherit;
+  font: inherit;
+
+  &__icon {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &__placeholder {
+    color: palette.$neutral-500;
+    font-size: 14px;
+    line-height: 160%;
+  }
+}

@@ -1,9 +1,9 @@
 @use "src/utils/scss/media" as media;
 
 $template-shuttle-colors: (
-  "순환": #4ed92c,
-  "주중": #ffb443,
-  "주말": #34adff,
+  "circulation": #4ed92c,
+  "weekday": #ffb443,
+  "weekend": #34adff,
 );
 
 .timetable-container {
@@ -43,7 +43,7 @@ $template-shuttle-colors: (
   width: 100%;
   box-sizing: border-box;
   background-color: #fff;
-  height: "fit-content";
+  height: fit-content;
   border-radius: 16px;
   border: 1px solid #eee;
   padding-bottom: 20px;
@@ -51,7 +51,7 @@ $template-shuttle-colors: (
   &__title {
     font-size: 18px;
     font-weight: 700;
-    line-height: 160%;
+    line-height: 1.6;
     padding: 16px 24px;
     font-family: Pretendard, sans-serif;
   }
@@ -84,10 +84,10 @@ $template-shuttle-colors: (
     padding: 0 4px;
     border-radius: 4px;
     font-size: 11px;
-    line-height: 160%;
+    line-height: 1.6;
 
     @each $type, $color in $template-shuttle-colors {
-      &.type-#{$type} {
+      &.bus-type--#{$type} {
         background-color: $color;
       }
     }
@@ -96,7 +96,7 @@ $template-shuttle-colors: (
   &__list_name {
     font-size: 16px;
     font-weight: 500;
-    line-height: 160%;
+    line-height: 1.6;
   }
 
   &__list_sub_name {
@@ -110,6 +110,34 @@ $template-shuttle-colors: (
     border: none;
     padding: 0;
     margin: 0;
+
+    &__arrow {
+      color: #727272;
+    }
+
+    &__list_header {
+      padding: 0;
+    }
+
+    &__list_type {
+      padding: 1px 8px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 500;
+
+      @each $type, $color,
+        $background in (("circulation", #0c9d61, #e5f5ec), ("weekday", #ffad0d, #fff9ee), ("weekend", #3a70e2, #e4f2ff))
+      {
+        &.bus-type--#{$type} {
+          color: $color;
+          background-color: $background;
+        }
+      }
+    }
+
+    &__list_sub_name {
+      line-height: 1.6;
+    }
   }
 }
 
@@ -125,7 +153,7 @@ $template-shuttle-colors: (
     width: 100vw;
     height: 7px;
     background-color: #fafafa;
-    margin: 10px 0 0;
+    margin: 8px 0 0;
   }
 }
 
@@ -153,7 +181,7 @@ $template-shuttle-colors: (
       background: #175c8e;
       color: #fff;
       font-weight: 600;
-      line-height: 160%;
+      line-height: 1.6;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -180,7 +208,7 @@ $template-shuttle-colors: (
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 160%;
+  line-height: 1.6;
 
   &__date {
     display: flex;
@@ -201,7 +229,7 @@ $template-shuttle-colors: (
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 160%;
+  line-height: 1.6;
 }
 
 .info-footer-mobile {
@@ -213,12 +241,16 @@ $template-shuttle-colors: (
   padding: 8px 24px;
   margin-bottom: 140px;
 
+  .info-footer__text {
+    font-size: 12px;
+  }
+
   &__text {
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
     white-space: pre-wrap;
   }
 
@@ -230,6 +262,6 @@ $template-shuttle-colors: (
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%;
+    line-height: 1.6;
   }
 }

@@ -1,0 +1,55 @@
+@use "src/utils/scss/media" as media;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 1135px;
+  margin: 0 auto;
+  padding: 64px 0 98px;
+  box-sizing: border-box;
+
+  &__title {
+    margin: 0;
+    color: #175c8e;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  &__content {
+    width: 100%;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    flex: 1;
+    gap: 0;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+
+    &__title {
+      display: none;
+    }
+
+    &__content {
+      flex: 1;
+      min-height: 0;
+    }
+  }
+}
+
+.error {
+  padding: 24px;
+  color: #727272;
+  font-size: 12px;
+  line-height: 160%;
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

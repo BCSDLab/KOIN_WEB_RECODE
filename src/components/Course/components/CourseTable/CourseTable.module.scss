@@ -128,7 +128,7 @@
     border-right: 1px solid #e0e0e0;
     padding: 4px 5px;
     text-align: center;
-    font-size: 9pt;
+    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -147,7 +147,7 @@
   &--apply,
   &--cancel {
     padding: 2px 8px;
-    font-size: 9pt;
+    font-size: 12px;
     border-radius: 2px;
     cursor: pointer;
     display: flex;

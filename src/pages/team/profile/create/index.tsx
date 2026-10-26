@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+
 import Layout from 'components/layout';
 import TeamProfileForm from 'components/Team/ProfilePage';
 
@@ -16,6 +17,6 @@ function TeamProfileCreatePage() {
   );
 }
 
-TeamProfileCreatePage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamProfileCreatePage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamProfileCreatePage;

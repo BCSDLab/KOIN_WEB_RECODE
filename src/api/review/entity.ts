@@ -1,5 +1,5 @@
-import { Review } from 'api/store/entity';
-import { APIResponse } from 'interfaces/APIResponse';
+import type { Review } from 'api/store/entity';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export type ReviewData = Omit<Review, 'is_min'>;
 

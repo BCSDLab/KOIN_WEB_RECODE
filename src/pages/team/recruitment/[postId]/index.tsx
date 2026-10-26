@@ -17,4 +17,4 @@ export default function TeamDetailPage() {
   );
 }
 
-TeamDetailPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamDetailPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;

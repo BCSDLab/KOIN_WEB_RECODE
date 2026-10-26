@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import {
   TEAM_RECRUITMENT_DESCRIPTION_MAX_LENGTH,
   TEAM_RECRUITMENT_MAX_MEMBER_COUNT,
@@ -74,9 +75,7 @@ export const teamRecruitmentFormSchema = z
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '중복되지 않은 역할명을 입력해주세요.' });
       } else if (roleNames.some((roleName) => roleName === '')) {
         ctx.addIssue({ code: 'custom', path: ['roles'], message: '역할명을 입력해주세요.' });
-      } else if (
-        data.roles.reduce((sum, role) => sum + role.memberCount, 0) > TEAM_RECRUITMENT_MAX_MEMBER_COUNT
-      ) {
+      } else if (data.roles.reduce((sum, role) => sum + role.memberCount, 0) > TEAM_RECRUITMENT_MAX_MEMBER_COUNT) {
         ctx.addIssue({
           code: 'custom',
           path: ['roles'],

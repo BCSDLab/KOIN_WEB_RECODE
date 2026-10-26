@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+
 import Layout from 'components/layout';
 import ApplicantManagement from 'components/Team/ApplicantManagement';
 
@@ -16,6 +17,6 @@ function TeamApplicantManagementPage() {
   );
 }
 
-TeamApplicantManagementPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamApplicantManagementPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamApplicantManagementPage;

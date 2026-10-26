@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import usePostLostItemArticles from 'components/Articles/hooks/usePostLostItemArticles';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
@@ -72,6 +74,7 @@ export default function LostItemWritePage() {
 
     if (lostItems.length === 0) {
       showToast('error', '물품을 추가해주세요.');
+
       return;
     }
 
@@ -94,27 +97,30 @@ export default function LostItemWritePage() {
   };
 
   return (
-    <LostItemPageTemplate
-      title={title}
-      subtitle={subtitle}
-      description={description}
-      isFound={isFound}
-      bottomButtonText="작성 완료"
-      onBottomButtonClick={handleCompleteClick}
-      isBottomButtonDisabled={status === 'pending'}
-      onAddButtonClick={lostItems.length < MAX_ITEMS ? handleItemAddClick : undefined}
-    >
-      {lostItems.map((lostItem, index) => (
-        <LostItemForm
-          key={lostItem.id}
-          type={type}
-          count={index}
-          totalCount={lostItems.length}
-          lostItem={lostItem}
-          lostItemHandler={lostItemHandler(index)}
-          removeLostItem={removeLostItem}
-        />
-      ))}
-    </LostItemPageTemplate>
+    <>
+      <MobilePageHeader title={title} />
+      <LostItemPageTemplate
+        title={title}
+        subtitle={subtitle}
+        description={description}
+        isFound={isFound}
+        bottomButtonText="작성 완료"
+        onBottomButtonClick={handleCompleteClick}
+        isBottomButtonDisabled={status === 'pending'}
+        onAddButtonClick={lostItems.length < MAX_ITEMS ? handleItemAddClick : undefined}
+      >
+        {lostItems.map((lostItem, index) => (
+          <LostItemForm
+            key={lostItem.id}
+            type={type}
+            count={index}
+            totalCount={lostItems.length}
+            lostItem={lostItem}
+            lostItemHandler={lostItemHandler(index)}
+            removeLostItem={removeLostItem}
+          />
+        ))}
+      </LostItemPageTemplate>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 @use "src/utils/scss/media" as media;
 
 .header {
+  position: relative;
   height: 80px;
   font-size: 12px;
   font-weight: 600;
@@ -17,7 +18,10 @@
     left: 0;
     z-index: 20;
     border-bottom: none;
-    animation: slide-left-enter 0.3s ease-out;
+
+    &--page {
+      height: auto;
+    }
 
     &--main {
       height: 77px;
@@ -25,13 +29,21 @@
       box-shadow: 0 2px 4px 0 rgb(0 0 0 / 34%);
     }
 
-    &--new-club {
-      background-color: #fff;
-    }
-
     &--mobile-light {
       background-color: #fff;
       color: #000;
+    }
+
+    &--mobile-none {
+      display: none;
+    }
+
+    &--mobile-home {
+      position: static;
+      height: auto;
+      background: none;
+      color: inherit;
+      animation: none;
     }
   }
 
@@ -61,17 +73,5 @@
     @include media.media-breakpoint(mobile) {
       display: contents;
     }
-  }
-}
-
-@keyframes slide-left-enter {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
   }
 }

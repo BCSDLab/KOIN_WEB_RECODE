@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { createTouchHandlers } from 'utils/ts/touchHandler';
+
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -26,6 +28,7 @@ function ImageModal({ imageList, imageIndex, onClose }: ImageModalProps) {
     (move: number) => {
       setSelectedIndex((prevIndex) => {
         const newIndex = prevIndex + move;
+
         return Math.max(0, Math.min(newIndex, imageList.length - 1));
       });
     },
@@ -88,8 +91,7 @@ function ImageModal({ imageList, imageIndex, onClose }: ImageModalProps) {
         />
       )}
       <button className={styles.close} type="button" aria-label="이미지 닫기" onClick={() => onClose()} />
-      {/* 이미지 개별 크기가 모두 다르며 핀치 줌 등 기능이 존재하므로 img 태그 유지 */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- 개별 크기가 다르고 핀치 줌에 ref로 직접 접근해야 함 */}
       <img
         ref={imageRef}
         className={styles.image}

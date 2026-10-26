@@ -1,4 +1,5 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import DesktopHome from './DesktopHome';
 import MobileHomeRedesign from './MobileHomeRedesign';
 import type { HomePageProps } from './types';

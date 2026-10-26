@@ -1,4 +1,5 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+
 import styles from './Footer.module.scss';
 
 export default function Footer() {

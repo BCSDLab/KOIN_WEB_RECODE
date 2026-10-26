@@ -42,10 +42,7 @@ export const savedApplyActivitySchema = z
   })
   .superRefine(validateActivityDateRange);
 
-export const applyActivitySchema = z.discriminatedUnion('status', [
-  draftApplyActivitySchema,
-  savedApplyActivitySchema,
-]);
+export const applyActivitySchema = z.discriminatedUnion('status', [draftApplyActivitySchema, savedApplyActivitySchema]);
 
 const applicationFormBaseSchema = z.object({
   nickname: z.string(),

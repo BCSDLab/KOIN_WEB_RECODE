@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Head from 'next/head';
+
 import Layout from 'components/layout';
 import CreateTeamRecruitment from 'components/Team/CreateTeamRecruitment';
 
@@ -16,6 +17,6 @@ function TeamRecruitmentNewPage() {
   );
 }
 
-TeamRecruitmentNewPage.getLayout = (page: ReactNode) => <Layout hideLayout>{page}</Layout>;
+TeamRecruitmentNewPage.getLayout = (page: ReactNode) => <Layout mobileHeader="page">{page}</Layout>;
 
 export default TeamRecruitmentNewPage;

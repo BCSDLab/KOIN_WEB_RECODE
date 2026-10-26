@@ -1,20 +1,27 @@
-import { mutationOptions, QueryClient } from '@tanstack/react-query';
+import { mutationOptions, type QueryClient } from '@tanstack/react-query';
+
+import { cancelCafeteriaDiningLike, createSoldoutReport, likeCafeteriaDining } from './index';
 import { cafeteriaQueryKeys } from './queries';
-import { cancelCafeteriaDiningLike, likeCafeteriaDining } from './index';
 
 const invalidateDinings = (queryClient: QueryClient, date: string) =>
   queryClient.invalidateQueries({ queryKey: cafeteriaQueryKeys.dinings(date) });
 
 export const cafeteriaMutations = {
-  likeDining: (queryClient: QueryClient, token: string, date: string) =>
+  likeDining: (queryClient: QueryClient, date: string) =>
     mutationOptions({
-      mutationFn: (diningId: number) => likeCafeteriaDining(diningId, token),
+      mutationFn: (diningId: number) => likeCafeteriaDining(diningId),
       onSuccess: () => invalidateDinings(queryClient, date),
     }),
 
-  cancelLikeDining: (queryClient: QueryClient, token: string, date: string) =>
+  cancelLikeDining: (queryClient: QueryClient, date: string) =>
     mutationOptions({
-      mutationFn: (diningId: number) => cancelCafeteriaDiningLike(diningId, token),
+      mutationFn: (diningId: number) => cancelCafeteriaDiningLike(diningId),
       onSuccess: () => invalidateDinings(queryClient, date),
+    }),
+
+  createSoldoutReport: () =>
+    mutationOptions({
+      mutationFn: ({ diningId, imageUrl }: { diningId: number; imageUrl: string }) =>
+        createSoldoutReport(diningId, { image_url: imageUrl }),
     }),
 };

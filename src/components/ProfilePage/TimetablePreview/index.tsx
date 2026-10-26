@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+
+import type { Semester } from 'api/timetable/entity';
 import { isValidTimetableFrameId } from 'api/timetable/queries';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
-import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
+import useResetInvalidSemester from 'components/TimetablePage/hooks/useResetInvalidSemester';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import { BACKGROUND_COLOR, BORDER_TOP_COLOR } from 'static/timetable';
 import useMount from 'utils/hooks/state/useMount';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { isSemesterInList } from 'utils/timetable/semester';
-import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import { useSemester } from 'utils/zustand/semester';
+
 import styles from './TimetablePreview.module.scss';
 
 const timetableDays = ['월', '화', '수', '목', '금'];
@@ -33,8 +33,8 @@ export function ProfileTimetableGrid({ children }: { children?: ReactNode }) {
   );
 }
 
-export function FilledTimetableGrid({ timetableFrameId }: { timetableFrameId: number }) {
-  const { myLectures } = useMyLectures(timetableFrameId);
+export function FilledTimetableGrid({ timetableFrameId, semester }: { timetableFrameId: number; semester: Semester }) {
+  const { myLectures } = useMyLectures(timetableFrameId, semester);
 
   return (
     <ProfileTimetableGrid>
@@ -64,26 +64,28 @@ export function FilledTimetableGrid({ timetableFrameId }: { timetableFrameId: nu
   );
 }
 
-export function LoggedInTimetablePreview() {
-  const { updateSemester } = useSemesterAction();
-  const semesterOptionList = useSemesterOptionList();
-  const semester = useSemester();
-  const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+interface LoggedInTimetablePreviewProps {
+  serverSemester: Semester;
+  hasSemesterCookie: boolean;
+}
+
+/**
+ * 학기는 서버가 학기 쿠키로 확정해 내린 값을 쓴다. 저장 학기가 무효하면 서버가 이미 되돌린 값이 오고,
+ * useResetInvalidSemester가 스토어(와 쿠키)도 같은 값으로 맞춘다.
+ */
+export function LoggedInTimetablePreview({ serverSemester, hasSemesterCookie }: LoggedInTimetablePreviewProps) {
+  useResetInvalidSemester();
+  const storedSemester = useSemester();
+  const isMounted = useMount();
+  // 최후 수단 게이트: 쿠키 도입 전부터 localStorage에만 학기가 있던 브라우저는 서버가 고른 학기를 모른다.
+  // 마운트 후 저장 학기로 바꾼다. 스토어 rehydrate 때 쿠키가 기록되므로 브라우저당 한 번뿐이다.
+  const semester = !hasSemesterCookie && isMounted ? storedSemester : serverSemester;
+  const { data: timetableFrameList } = useTimetableFrameList(semester);
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id;
-  const isClient = useMount();
 
-  // 저장된 학기가 더 이상 유효하지 않을 때만 되돌린다. 무조건 덮어쓰면 사용자가
-  // 시간표 페이지에서 고른 학기가 프로필을 열 때마다 지워진다.
-  useEffect(() => {
-    if (semesterOptionList.length === 0) return;
-    if (isSemesterInList(semesterOptionList, semester)) return;
-    updateSemester(semesterOptionList[0].value);
-  }, [semesterOptionList, semester, updateSemester]);
-
-  if (!isClient || !isValidTimetableFrameId(currentFrameId)) {
+  if (!isValidTimetableFrameId(currentFrameId)) {
     return <ProfileTimetableGrid />;
   }
 
-  return <FilledTimetableGrid timetableFrameId={currentFrameId} />;
+  return <FilledTimetableGrid timetableFrameId={currentFrameId} semester={semester} />;
 }

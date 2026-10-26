@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import ChevronDownIcon from 'assets/svg/Team/chevron-down-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './DeptSelect.module.scss';
 
 interface DeptOption {
@@ -46,14 +47,14 @@ export default function DeptSelect({
   const selectedOption = options.find((option) => option.value === value);
 
   return (
-    <div ref={containerRef} className={styles.deptSelect}>
+    <div ref={containerRef} className={styles['dept-select']}>
       <button
         type="button"
         id={id}
         className={cn({
-          [styles.deptSelect__trigger]: true,
-          [styles['deptSelect__trigger--opened']]: isOpen,
-          [styles['deptSelect__trigger--selected']]: Boolean(selectedOption),
+          [styles['dept-select__trigger']]: true,
+          [styles['dept-select__trigger--opened']]: isOpen,
+          [styles['dept-select__trigger--selected']]: Boolean(selectedOption),
           [className ?? '']: !!className,
         })}
         aria-expanded={isOpen}
@@ -67,14 +68,14 @@ export default function DeptSelect({
       </button>
 
       {isOpen && (
-        <ul className={styles.deptSelect__list} role="listbox">
+        <ul className={styles['dept-select__list']} role="listbox">
           {options.map((option) => (
             <li
               key={option.value}
               role="option"
               tabIndex={0}
               aria-selected={option.value === value}
-              className={styles.deptSelect__option}
+              className={styles['dept-select__option']}
               onClick={() => handleOptionClick(option.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {

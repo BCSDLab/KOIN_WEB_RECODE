@@ -1,21 +1,28 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
-import { DiningType } from 'api/dinings/entity';
+import type { DiningPlace, DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfoBoundary from 'components/cafeteria/components/CafeteriaInfoBoundary';
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import CafeteriaInfoWidget from './components/CafeteriaInfoWidget';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
 
-export default function MobileCafeteriaPage() {
+interface MobileCafeteriaPageProps {
+  onReportSoldout?: (initialPlace?: DiningPlace) => void;
+}
+
+export default function MobileCafeteriaPage({ onReportSoldout }: MobileCafeteriaPageProps) {
   const { diningType, setDiningType } = useCafeteriaParams();
   const logger = useLogger();
   const router = useRouter();
@@ -39,6 +46,7 @@ export default function MobileCafeteriaPage() {
       }
     };
     window.addEventListener('scroll', handleScroll);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -51,8 +59,9 @@ export default function MobileCafeteriaPage() {
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    router.push('/store');
+    router.push(ROUTES.Store());
   };
+
   useScrollToTop();
 
   return (
@@ -82,7 +91,7 @@ export default function MobileCafeteriaPage() {
           </div>
           <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
         </button>
-        <MobileDiningBlocks diningType={diningType} />
+        <MobileDiningBlocks diningType={diningType} onReportSoldout={onReportSoldout} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <CafeteriaInfoBoundary>

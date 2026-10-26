@@ -1,6 +1,6 @@
 import TimeDetailMobile from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailMobile';
 import TimeDetailPC from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailPC';
-import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import type { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 interface TimeDetailProps {

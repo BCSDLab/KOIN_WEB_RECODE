@@ -1,7 +1,12 @@
+import type {
+  TeamRecruitmentCategory,
+  TeamRecruitmentMeetingType,
+  TeamRecruitmentUpdateRequest,
+} from 'api/team/entity';
 import { getYyyyMmDd } from 'utils/ts/calendar';
+
 import type { TeamRecruitmentFormValues } from './schema';
 import type { TeamRecruitmentProgressType } from './types';
-import type { TeamRecruitmentCategory, TeamRecruitmentMeetingType, TeamRecruitmentUpdateRequest } from 'api/team/entity';
 
 export const CATEGORY_BY_LABEL: Record<string, TeamRecruitmentCategory> = {
   공모전: 'CONTEST',

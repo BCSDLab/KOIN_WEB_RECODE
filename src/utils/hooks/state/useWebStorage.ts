@@ -1,18 +1,13 @@
 import { useSyncExternalStore } from 'react';
-import {
-  getBrowserStorage,
-  getStorageJSONValue,
-  isomorphicLocalStorage,
-  isomorphicSessionStorage,
-} from 'utils/ts/env';
+
+import { getBrowserStorage, getStorageJSONValue, isomorphicLocalStorage, isomorphicSessionStorage } from 'utils/ts/env';
 
 type StorageVariant = 'local' | 'session';
 
 const getStorage = (variant: StorageVariant) => getBrowserStorage(variant);
 
-const getIsomorphicStorage = (variant: StorageVariant) => (
-  variant === 'local' ? isomorphicLocalStorage : isomorphicSessionStorage
-);
+const getIsomorphicStorage = (variant: StorageVariant) =>
+  variant === 'local' ? isomorphicLocalStorage : isomorphicSessionStorage;
 
 const subscribe = (variant: StorageVariant, key: string) => {
   return (callback: () => void) => {
@@ -26,6 +21,7 @@ const subscribe = (variant: StorageVariant, key: string) => {
     };
 
     window.addEventListener('storage', onStorage);
+
     return () => window.removeEventListener('storage', onStorage);
   };
 };
@@ -33,6 +29,7 @@ const subscribe = (variant: StorageVariant, key: string) => {
 const getSnapshot = <T>(variant: StorageVariant, key: string, defaultValue: T) => {
   return () => {
     if (typeof window === 'undefined') return defaultValue;
+
     return getIsomorphicStorage(variant).getJSONItem(key, defaultValue);
   };
 };

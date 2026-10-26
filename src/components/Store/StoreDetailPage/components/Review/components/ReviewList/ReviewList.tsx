@@ -1,17 +1,18 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
+
 import { keepPreviousData, useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { storeQueries } from 'api/store/queries';
 import ChervronUp from 'assets/svg/chervron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { REVEIW_LOGIN } from 'components/Store/StoreDetailPage/components/Review/components/ReviewButton/index';
 import ReviewCard from 'components/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
 import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { useUser } from 'utils/hooks/state/useUser';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+
 import styles from './ReviewList.module.scss';
 
 type SortType = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
@@ -34,40 +35,41 @@ const typeToLabel: Record<SortType, OptionLabel> = {
 };
 
 export default function ReviewList({ id }: { id: string }) {
+  const isLoggedIn = useIsLoggedIn();
+
   const endOfPage = useRef(null);
   const startReview = useRef(null);
   const [currentSortType, setCurrentSortType] = useState<SortType>(sortType.최신순);
   const previousSortType = useDeferredValue(currentSortType);
   const currentSortLabel = typeToLabel[currentSortType];
-  const token = useTokenState();
 
   const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
     ...storeQueries.reviewFeed({
       shopId: Number(id),
       sorter: previousSortType,
-      token,
+      isLoggedIn,
     }),
   });
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useQuery({
-    ...storeQueries.myReview(id, previousSortType, token),
-    enabled: !!token,
+    ...storeQueries.myReview(id, previousSortType),
+    enabled: isLoggedIn,
     placeholderData: keepPreviousData,
   });
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
   const portalManager = useModalPortal();
-  const { data: userInfo } = useUser();
   const { openDropdown, toggleDropdown, closeDropdown } = useDropdown();
 
   const checkUser = (): boolean => {
-    if (!userInfo) {
+    if (!isLoggedIn) {
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal title={REVEIW_LOGIN[0]} description={REVEIW_LOGIN[1]} onClose={portalOption.close} />
       ));
     }
-    return !userInfo;
+
+    return !isLoggedIn;
   };
 
   const getNextReview = useCallback(

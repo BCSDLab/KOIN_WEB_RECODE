@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import styles from './DetailDescription.module.scss';
 
 interface DetailDescriptionProps {

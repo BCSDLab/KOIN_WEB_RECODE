@@ -1,29 +1,29 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { DirectionType, ExpressCourse, ShuttleCourse } from 'api/bus/entity';
+import type { DirectionType, ExpressCourse, ShuttleCourse } from 'api/bus/entity';
 import { busQueries } from 'api/bus/queries';
 
 export type PrefetchParams =
   | {
-    type: 'shuttle_detail';
-    id: string;
-  }
+      type: 'shuttle_detail';
+      id: string;
+    }
   | {
-    type: 'express';
-    bus_type: ExpressCourse['bus_type'];
-    direction: DirectionType;
-    region: string;
-  }
+      type: 'express';
+      bus_type: ExpressCourse['bus_type'];
+      direction: DirectionType;
+      region: string;
+    }
   | {
-    type: 'shuttle';
-    bus_type: ShuttleCourse['bus_type'];
-    direction: DirectionType;
-    region: string;
-  }
+      type: 'shuttle';
+      bus_type: ShuttleCourse['bus_type'];
+      direction: DirectionType;
+      region: string;
+    }
   | {
-    type: 'city';
-    bus_number: number;
-    direction: string;
-  };
+      type: 'city';
+      bus_number: number;
+      direction: string;
+    };
 
 export default function useBusPrefetch() {
   const queryClient = useQueryClient();
@@ -63,7 +63,7 @@ export default function useBusPrefetch() {
         );
       }
     }
-  }
+  };
 
   return prefetchBusTimetable;
 }

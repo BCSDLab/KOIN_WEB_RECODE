@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { DiningType } from 'api/dinings/entity';
+
+import type { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
@@ -8,12 +9,14 @@ import { useCafeteriaLiveNow } from 'components/cafeteria/hooks/useCafeteriaLive
 import { useCafeteriaParams } from 'components/cafeteria/hooks/useCafeteriaParams';
 import Suspense from 'components/ssr/SSRSuspense';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -50,7 +53,7 @@ function PCCafeteriaComponent() {
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    router.push('/store');
+    router.push(ROUTES.Store());
   };
 
   const 지난주일요일 = getWeekAgo(today);

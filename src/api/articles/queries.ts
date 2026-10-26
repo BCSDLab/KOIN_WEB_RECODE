@@ -1,5 +1,7 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { LostItemArticlesRequest, SearchArticlesRequest, SearchLostItemArticleRequest } from './entity';
+import { getViewerScope } from 'utils/ts/getViewerScope';
+
+import type { LostItemArticlesRequest, SearchArticlesRequest, SearchLostItemArticleRequest } from './entity';
 import {
   getArticle,
   getArticles,
@@ -22,12 +24,14 @@ type LostItemSearchParams = Required<Pick<SearchLostItemArticleRequest, 'query'>
   limit: number;
 };
 
-type ArticlesSearchParams = Required<Pick<SearchArticlesRequest, 'query'>> & Pick<SearchArticlesRequest, 'boardId' | 'limit'>;
+type ArticlesSearchParams = Required<Pick<SearchArticlesRequest, 'query'>> &
+  Pick<SearchArticlesRequest, 'boardId' | 'limit'>;
 
 export const articleQueryKeys = {
   all: ['articles'] as const,
   listRoot: ['articles', 'list'] as const,
-  list: (page: string, boardId?: number) => [...articleQueryKeys.listRoot, page, boardId ?? 4] as const,
+  list: (page: string, boardId?: number, isLoggedIn?: boolean) =>
+    [...articleQueryKeys.listRoot, page, boardId ?? 4, getViewerScope(isLoggedIn)] as const,
   hot: ['articles', 'hot'] as const,
   detail: (id: string) => ['articles', 'detail', id] as const,
   hotKeyword: (count: number) => ['articles', 'hotKeyword', count] as const,
@@ -35,26 +39,35 @@ export const articleQueryKeys = {
   search: (params: ArticlesSearchParams) => [...articleQueryKeys.searchRoot, params] as const,
   lostItemAll: ['lostItem'] as const,
   lostItemListRoot: ['lostItem', 'list'] as const,
-  lostItemList: (params: LostItemArticlesRequest) => [...articleQueryKeys.lostItemListRoot, params] as const,
+  lostItemList: (params: LostItemArticlesRequest, isLoggedIn?: boolean) =>
+    [...articleQueryKeys.lostItemListRoot, params, getViewerScope(isLoggedIn)] as const,
   lostItemInfiniteListRoot: ['lostItem', 'infinite-list'] as const,
-  lostItemInfiniteList: (params: LostItemInfiniteListParams) =>
-    [...articleQueryKeys.lostItemInfiniteListRoot, params] as const,
-  lostItemDetail: (articleId: number) => ['lostItem', 'detail', articleId] as const,
+  lostItemInfiniteList: (params: LostItemInfiniteListParams, isLoggedIn?: boolean) =>
+    [...articleQueryKeys.lostItemInfiniteListRoot, params, getViewerScope(isLoggedIn)] as const,
+  lostItemDetail: (articleId: number, isLoggedIn?: boolean) =>
+    ['lostItem', 'detail', articleId, getViewerScope(isLoggedIn)] as const,
   lostItemSearch: (params: LostItemSearchParams) => ['lostItem', 'search', params] as const,
   lostItemStat: ['lostItem', 'stat'] as const,
   lostItemChatroomAll: ['chatroom', 'lost-item'] as const,
-  lostItemChatroomList: ['chatroom', 'lost-item', 'list'] as const,
-  lostItemChatroomDetail: (articleId: number | string | null, chatroomId: number | string | null) =>
-    ['chatroom', 'lost-item', 'detail', articleId, chatroomId] as const,
-  lostItemChatroomMessages: (articleId: number | string | null, chatroomId: number | string | null) =>
-    ['chatroom', 'lost-item', 'messages', articleId, chatroomId] as const,
+  lostItemChatroomList: (isLoggedIn?: boolean) =>
+    ['chatroom', 'lost-item', 'list', getViewerScope(isLoggedIn)] as const,
+  lostItemChatroomDetail: (
+    articleId: number | string | null,
+    chatroomId: number | string | null,
+    isLoggedIn?: boolean,
+  ) => ['chatroom', 'lost-item', 'detail', articleId, chatroomId, getViewerScope(isLoggedIn)] as const,
+  lostItemChatroomMessages: (
+    articleId: number | string | null,
+    chatroomId: number | string | null,
+    isLoggedIn?: boolean,
+  ) => ['chatroom', 'lost-item', 'messages', articleId, chatroomId, getViewerScope(isLoggedIn)] as const,
 };
 
 export const articleQueries = {
-  list: (token: string, page: string, boardId?: number) =>
+  list: (isLoggedIn: boolean, page: string, boardId?: number) =>
     queryOptions({
-      queryKey: articleQueryKeys.list(page, boardId),
-      queryFn: () => getArticles(token, page, boardId),
+      queryKey: articleQueryKeys.list(page, boardId, isLoggedIn),
+      queryFn: () => getArticles(page, boardId),
     }),
 
   hot: () =>
@@ -89,17 +102,17 @@ export const articleQueries = {
       },
     }),
 
-  lostItemList: (token: string, params: LostItemArticlesRequest) =>
+  lostItemList: (isLoggedIn: boolean, params: LostItemArticlesRequest) =>
     queryOptions({
-      queryKey: articleQueryKeys.lostItemList(params),
-      queryFn: () => getLostItemArticles(token, params),
+      queryKey: articleQueryKeys.lostItemList(params, isLoggedIn),
+      queryFn: () => getLostItemArticles(params),
     }),
 
-  lostItemInfiniteList: (token: string, params: LostItemInfiniteListParams) =>
+  lostItemInfiniteList: (isLoggedIn: boolean, params: LostItemInfiniteListParams) =>
     infiniteQueryOptions({
-      queryKey: articleQueryKeys.lostItemInfiniteList(params),
+      queryKey: articleQueryKeys.lostItemInfiniteList(params, isLoggedIn),
       initialPageParam: 1,
-      queryFn: ({ pageParam }) => getLostItemArticles(token, { ...params, page: pageParam }),
+      queryFn: ({ pageParam }) => getLostItemArticles({ ...params, page: pageParam }),
       getNextPageParam: (lastPage) => {
         if (lastPage.total_page > lastPage.current_page) {
           return lastPage.current_page + 1;
@@ -109,10 +122,10 @@ export const articleQueries = {
       },
     }),
 
-  lostItemDetail: (token: string, articleId: number) =>
+  lostItemDetail: (isLoggedIn: boolean, articleId: number) =>
     queryOptions({
-      queryKey: articleQueryKeys.lostItemDetail(articleId),
-      queryFn: () => getSingleLostItemArticle(token, articleId),
+      queryKey: articleQueryKeys.lostItemDetail(articleId, isLoggedIn),
+      queryFn: () => getSingleLostItemArticle(articleId),
     }),
 
   lostItemSearch: (params: LostItemSearchParams) =>
@@ -127,21 +140,21 @@ export const articleQueries = {
       queryFn: getLostItemStat,
     }),
 
-  lostItemChatroomList: (token: string) =>
+  lostItemChatroomList: (isLoggedIn: boolean) =>
     queryOptions({
-      queryKey: articleQueryKeys.lostItemChatroomList,
-      queryFn: () => getLostItemChatroomList(token),
+      queryKey: articleQueryKeys.lostItemChatroomList(isLoggedIn),
+      queryFn: () => getLostItemChatroomList(),
     }),
 
-  lostItemChatroomDetail: (token: string, articleId: number, chatroomId: number) =>
+  lostItemChatroomDetail: (isLoggedIn: boolean, articleId: number, chatroomId: number) =>
     queryOptions({
-      queryKey: articleQueryKeys.lostItemChatroomDetail(articleId, chatroomId),
-      queryFn: () => getLostItemChatroomDetail(token, articleId, chatroomId),
+      queryKey: articleQueryKeys.lostItemChatroomDetail(articleId, chatroomId, isLoggedIn),
+      queryFn: () => getLostItemChatroomDetail(articleId, chatroomId),
     }),
 
-  lostItemChatroomMessages: (token: string, articleId: number, chatroomId: number) =>
+  lostItemChatroomMessages: (isLoggedIn: boolean, articleId: number, chatroomId: number) =>
     queryOptions({
-      queryKey: articleQueryKeys.lostItemChatroomMessages(articleId, chatroomId),
-      queryFn: () => getLostItemChatroomMessagesV2(token, articleId, chatroomId),
+      queryKey: articleQueryKeys.lostItemChatroomMessages(articleId, chatroomId, isLoggedIn),
+      queryFn: () => getLostItemChatroomMessagesV2(articleId, chatroomId),
     }),
 };

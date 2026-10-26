@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { ClubEventRequest } from 'api/club/entity';
+
+import type { ClubEventRequest } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import usePutClubEvent from 'components/Club/ClubEventEditPage/hooks/usePutClubEvent';
@@ -15,10 +16,12 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
+
 import styles from './ClubEventEditPage.module.scss';
 
 function splitKoreanDate(date: Date): [string, string] {
   const [year, ...rest] = formatKoreanDate(date).split(' ');
+
   return [year, rest.join(' ')];
 }
 
@@ -40,10 +43,12 @@ function ClubEventEditPage({ id, eventId }: { id: string; eventId: string }) {
   const [endDate, setEndDate] = useState<Date>(() => new Date(clubEventDetail.end_date));
   const [startTime, setStartTime] = useState(() => {
     const date = new Date(clubEventDetail.start_date);
+
     return { hour: date.getHours(), minute: date.getMinutes() };
   });
   const [endTime, setEndTime] = useState(() => {
     const date = new Date(clubEventDetail.end_date);
+
     return { hour: date.getHours(), minute: date.getMinutes() };
   });
 
@@ -265,5 +270,6 @@ export default function ClubEventEditPageWrapper() {
   const router = useRouter();
   const { id, eventId } = router.query;
   if (!id || Array.isArray(id) || !eventId || Array.isArray(eventId)) return null;
+
   return <ClubEventEditPage id={id} eventId={eventId} />;
 }

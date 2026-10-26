@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useEffect } from 'react';
+
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import UploadIcon from 'assets/svg/upload-icon.svg';
 import { useExcelUpload } from 'components/GraduationCalculatorPage/hooks/useExcelUpload';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+
 import styles from './ExcelUploader.module.scss';
 
 function ExcelUploader() {
@@ -15,6 +15,7 @@ function ExcelUploader() {
 
   useEffect(() => {
     openTooltip();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 시 1회만 툴팁을 연다
   }, []);
 
   return (

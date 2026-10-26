@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
+
 import { cn } from '@bcsdlab/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
 import { teamMutations } from 'api/team/mutations';
 import { teamQueries } from 'api/team/queries';
 import CalendarIcon from 'assets/svg/Team/calendar.svg';
@@ -8,18 +10,18 @@ import ClockIcon from 'assets/svg/Team/clock.svg';
 import LocationIcon from 'assets/svg/Team/location.svg';
 import PeopleIcon from 'assets/svg/Team/people.svg';
 import ProfileIcon from 'assets/svg/Team/profile.svg';
+import MobilePageHeader from 'components/layout/MobilePageHeader';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import DeleteConfirmModal from 'components/Team/components/DeleteConfirmModal';
 import OwnerActionMenu from 'components/Team/components/OwnerActionMenu';
 import { RecruitmentBadges } from 'components/Team/components/RecruitmentCard';
 import { formatRecruitmentDate, MEETING_TYPE_LABEL } from 'components/Team/utils/recruitmentDisplay';
-import SubPageHeader from 'components/ui/SubPageHeader';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import showToast from 'utils/ts/showToast';
-import type { TeamRecruitmentDetailResponse } from 'api/team/entity';
+
 import styles from './RecruitmentDetail.module.scss';
 
 const formatCreatedAt = (createdAt: string) => formatRecruitmentDate(createdAt.split(' ')[0]);
@@ -79,6 +81,10 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
   const isActionDisabled = primaryAction.type === 'disabled';
   const isClosed = recruitment.status !== 'RECRUITING';
   const canManage = recruitment.is_author || recruitment.can_manage_applicants;
+  const qualifications = Array.from((recruitment.qualification ?? '').matchAll(/[^\r\n]+/g), (match) => ({
+    id: match.index,
+    text: match[0].trim(),
+  })).filter((qualification) => qualification.text !== '');
   const roles =
     recruitment.roles.length > 0
       ? recruitment.roles
@@ -113,12 +119,15 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     switch (primaryAction.type) {
       case 'login':
         openLoginModal();
+
         return;
       case 'apply':
         router.push(ROUTES.TeamRecruitmentApply({ postId: String(recruitment.id) }));
+
         return;
       case 'manage':
         navigateToApplicantManagement();
+
         return;
       case 'chat':
         if (recruitment.team_chat_room_id !== null) {
@@ -129,6 +138,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
             }),
           );
         }
+
         return;
       case 'disabled':
         return;
@@ -139,13 +149,13 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
     <>
       <main className={styles.content}>
         <h1 className={styles.title}>모집글 상세</h1>
-        <div className={styles.summaryRow}>
+        <div className={styles['summary-row']}>
           <section className={cn({ [styles.summary]: true, [styles['summary--inline']]: canManage })}>
             <RecruitmentBadges category={recruitment.category} status={recruitment.status} dDay={recruitment.d_day} />
             <h2 className={styles.summary__title}>{recruitment.title}</h2>
           </section>
           {canManage && (
-            <button type="button" className={styles.manageButton} onClick={navigateToApplicantManagement}>
+            <button type="button" className={styles['manage-button']} onClick={navigateToApplicantManagement}>
               지원자 관리
             </button>
           )}
@@ -157,10 +167,14 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
               <h3 className={styles.section__title}>모집 소개</h3>
               <p className={styles.section__text}>{recruitment.description}</p>
             </section>
-            {recruitment.qualification && (
+            {qualifications.length > 0 && (
               <section className={styles.section}>
                 <h3 className={styles.section__title}>지원 자격</h3>
-                <p className={styles.section__text}>{recruitment.qualification}</p>
+                <ul className={styles.qualifications}>
+                  {qualifications.map((qualification) => (
+                    <li key={qualification.id}>{qualification.text}</li>
+                  ))}
+                </ul>
               </section>
             )}
             {recruitment.related_url && (
@@ -225,7 +239,7 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
                 <dd className={styles.information__value}>{recruitment.author_nickname}</dd>
               </div>
             </dl>
-            <section className={styles.roleCard}>
+            <section className={styles['role-card']}>
               <h3 className={styles.section__title}>모집 역할 및 인원</h3>
               <div className={styles.roles}>
                 {roles.map((role) => (
@@ -250,11 +264,11 @@ function DetailContent({ recruitment, onEdit, onDelete }: DetailContentProps) {
         </button>
       </div>
       {recruitment.is_author && (
-        <div className={styles.ownerActions}>
-          <button type="button" className={styles.ownerActions__edit} onClick={onEdit}>
+        <div className={styles['owner-actions']}>
+          <button type="button" className={styles['owner-actions__edit']} onClick={onEdit}>
             수정
           </button>
-          <button type="button" className={styles.ownerActions__delete} onClick={onDelete}>
+          <button type="button" className={styles['owner-actions__delete']} onClick={onDelete}>
             삭제
           </button>
         </div>
@@ -274,17 +288,17 @@ export default function RecruitmentDetail() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const logger = useLogger();
-  const token = useTokenState();
+  const isLoggedIn = useIsLoggedIn();
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const postId = Array.isArray(router.query.postId) ? router.query.postId[0] : router.query.postId;
   const recruitmentId = Number(postId);
   const isValidRecruitmentId = Number.isInteger(recruitmentId) && recruitmentId > 0;
   const { data, isLoading, isError } = useQuery({
-    ...teamQueries.detail(recruitmentId, token),
+    ...teamQueries.detail(recruitmentId, isLoggedIn),
     enabled: router.isReady && isValidRecruitmentId,
   });
   const { mutate: deleteRecruitment, isPending: isDeletePending } = useMutation(
-    teamMutations.deleteRecruitment(queryClient, token ?? ''),
+    teamMutations.deleteRecruitment(queryClient),
   );
 
   const handleEdit = () => {
@@ -334,14 +348,11 @@ export default function RecruitmentDetail() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.mobileHeader}>
-        <SubPageHeader
-          title="팀원 모집"
-          rightAction={
-            data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined
-          }
-        />
-      </div>
+      <MobilePageHeader
+        title="팀원 모집"
+        background="gray"
+        rightAction={data?.is_author ? <OwnerActionMenu onEdit={handleEdit} onDelete={handleDeleteClick} /> : undefined}
+      />
       {(!router.isReady || isLoading) && <p className={styles.state}>모집글을 불러오는 중입니다.</p>}
       {router.isReady && !data && (!isValidRecruitmentId || isError) && (
         <p className={styles.state}>모집글을 불러오지 못했습니다.</p>

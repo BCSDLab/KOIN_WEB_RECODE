@@ -1,4 +1,4 @@
-import { APIResponse } from 'interfaces/APIResponse';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 interface Open {
   open_time: string;
@@ -44,7 +44,7 @@ interface SinglePriceMenu extends MenuBase {
 
 interface MultiPriceMenu extends MenuBase {
   single_price: null;
-  option_prices: { option: string; price: number }[];
+  option_prices: Array<{ option: string; price: number }>;
 }
 
 export type Menu = SinglePriceMenu | MultiPriceMenu;
@@ -62,7 +62,7 @@ export interface StoreDetailMenuResponse extends APIResponse {
   updated_at: string;
 }
 
-export type StoreList = {
+export interface StoreList {
   id: number;
   name: string;
   phone: string;
@@ -73,9 +73,9 @@ export type StoreList = {
   category_ids: number[];
   is_event: boolean;
   is_open: boolean;
-};
+}
 
-export type StoreListV2 = {
+export interface StoreListV2 {
   id: number;
   name: string;
   phone: string;
@@ -90,7 +90,7 @@ export type StoreListV2 = {
   review_count: number;
   benefit_detail: string;
   benefit_details: string[];
-};
+}
 
 export interface StoreListResponse extends APIResponse {
   count: number;
@@ -145,7 +145,7 @@ export interface StoreBenefitCategoryResponse extends APIResponse {
 }
 
 export interface AllStoreEventResponse extends APIResponse {
-  events: {
+  events: Array<{
     shop_id: number;
     event_id: number;
     shop_name: string;
@@ -154,7 +154,7 @@ export interface AllStoreEventResponse extends APIResponse {
     thumbnail_images: string[];
     start_date: string;
     end_date: string;
-  }[];
+  }>;
 }
 
 export interface StoreEventListResponse extends APIResponse {

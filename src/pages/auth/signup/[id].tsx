@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import SignupLayout from 'components/Auth/FindPasswordPage/Layout';
 import ProgressBar from 'components/Auth/SignupPage/components/ProgressBar';
@@ -17,6 +18,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+
 import styles from './SignupPage.module.scss';
 
 type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
@@ -77,6 +79,7 @@ function SignupPage() {
       if (methods.getValues('name')) {
         methods.reset();
       }
+
       return;
     }
 
@@ -84,6 +87,7 @@ function SignupPage() {
     if (currentStep === '본인인증' && !isAgreements) {
       showToast('warning', '약관에 동의해주세요.');
       goToFirstStep();
+
       return;
     }
     const isVerificationStepPassed =

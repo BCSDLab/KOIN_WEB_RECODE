@@ -22,7 +22,8 @@
   @include media.media-breakpoint(mobile) {
     position: static;
     width: 100%;
-    min-height: calc(100dvh - 53px);
+    flex: 1;
+    min-height: auto;
     margin: 0;
     padding: 0;
     background: #f8f8fa;
@@ -39,7 +40,7 @@
   text-align: center;
 }
 
-.searchRow {
+.search-row {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -79,7 +80,7 @@
   }
 }
 
-.filterButton {
+.filter-button {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -123,7 +124,7 @@
   }
 }
 
-.appliedFilters {
+.applied-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -135,7 +136,7 @@
   }
 }
 
-.appliedFilterChip {
+.applied-filter-chip {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,7 +164,7 @@
   }
 }
 
-.totalCount {
+.total-count {
   margin: 0 0 12px;
   color: #727272;
   font-size: 12px;
@@ -185,7 +186,7 @@
   }
 }
 
-.loadingState {
+.loading-state {
   display: flex;
   flex: 1;
   align-items: center;
@@ -295,7 +296,7 @@
   }
 }
 
-.profileButton {
+.profile-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -363,7 +364,7 @@
   }
 }
 
-.loadingIndicator {
+.loading-indicator {
   margin: 0;
   padding: 16px 0;
   color: #a8a8a8;
@@ -372,6 +373,6 @@
   text-align: center;
 }
 
-.scrollTrigger {
+.scroll-trigger {
   height: 1px;
 }

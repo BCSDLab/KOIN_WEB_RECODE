@@ -1,15 +1,18 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Semester } from 'api/timetable/entity';
+import type { Semester } from 'api/timetable/entity';
 import { timetableQueries } from 'api/timetable/queries';
-import { useTokenStore } from 'utils/zustand/auth';
+import useUserType from 'utils/hooks/auth/useUserType';
+import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+
 import useSemesterCheck from './useMySemester';
 
-function useTimetableFrameList(token: string, semester: Semester) {
-  const { userType } = useTokenStore();
-  const { data: mySemester } = useSemesterCheck(token);
+function useTimetableFrameList(semester: Semester) {
+  const userType = useUserType();
+  const isLoggedIn = useIsLoggedIn();
+  const { data: mySemester } = useSemesterCheck();
   const hasUserSemester = mySemester?.semesters.length !== 0;
   const { data } = useSuspenseQuery(
-    timetableQueries.frameList(token, semester, { fallbackOnError: true, hasUserSemester, userType }),
+    timetableQueries.frameList(isLoggedIn, semester, { fallbackOnError: true, hasUserSemester, userType }),
   );
 
   return { data };

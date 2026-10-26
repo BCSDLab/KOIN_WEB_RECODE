@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import Image from 'next/image';
+
 import { cn } from '@bcsdlab/utils';
-import { Review } from 'api/store/entity';
+import type { Review } from 'api/store/entity';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import Mine from 'assets/svg/Review/check-mine.svg';
 import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
@@ -9,10 +10,11 @@ import EmptyStar from 'assets/svg/Review/empty-star.svg';
 import Kebab from 'assets/svg/Review/kebab.svg';
 import Star from 'assets/svg/Review/star.svg';
 import ImageModal from 'components/modal/Modal/ImageModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import SelectButton from 'components/Store/StoreDetailPage/components/Review/components/SelectButton/SelectButton';
 import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
@@ -52,6 +54,7 @@ export default function ReviewCard({
   }, [handleDropdown]);
 
   const ratingList = [...starList, ...emptyStarList];
+
   return (
     <div className={is_mine ? styles['container--mine'] : styles.container}>
       {is_mine && (
@@ -80,7 +83,10 @@ export default function ReviewCard({
         </button>
       </div>
       <div className={styles.rating}>
-        <div>{ratingList.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}</div>
+        <div>
+          {/* eslint-disable-next-line react/no-array-index-key -- 별점은 항상 고정 5칸이며 위치 자체가 의미를 가진다. */}
+          {ratingList.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
+        </div>
         <div className={styles.created}>
           {created_at}
           {is_modified && '(수정됨)'}
@@ -111,6 +117,7 @@ export default function ReviewCard({
           <div className={styles['menu-card']}>
             {
               menu_names.map((menu, idx) => (
+                // eslint-disable-next-line react/no-array-index-key -- 메뉴명이 중복될 수 있어 고정 순서 idx로 유일성을 보장하며, 수정·삭제되지 않는다.
                 <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>
                   {menu}
                 </div>

@@ -1,5 +1,6 @@
-import LostItemFilterContent, { FilterState } from 'components/Articles/components/LostItemFilterContent';
+import LostItemFilterContent, { type FilterState } from 'components/Articles/components/LostItemFilterContent';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+
 import styles from './LostItemFilterModal.module.scss';
 
 interface LostItemFilterModalProps {
@@ -18,7 +19,7 @@ export default function LostItemFilterModal(props: LostItemFilterModalProps) {
 
   return (
     <div className={styles.modal}>
-      <div ref={containerRef} className={styles.modalInner}>
+      <div ref={containerRef} className={styles['modal-inner']}>
         <LostItemFilterContent {...props} />
       </div>
     </div>

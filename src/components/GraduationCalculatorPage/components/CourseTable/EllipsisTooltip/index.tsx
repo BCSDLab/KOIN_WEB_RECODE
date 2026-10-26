@@ -1,5 +1,7 @@
-import { ReactNode, ReactElement } from 'react';
+import type { ReactNode, ReactElement } from 'react';
+
 import { useEllipsisTooltip } from 'utils/hooks/ui/useEllipsisTooltip';
+
 import styles from './EllipsisTooltip.module.scss';
 
 interface EllipsisTooltipProps {
@@ -19,6 +21,7 @@ const extractText = (node: ReactNode): string => {
       }
     }
   }
+
   return '';
 };
 
@@ -26,7 +29,7 @@ function EllipsisTooltip({ text, children }: EllipsisTooltipProps) {
   const { textRef, isTooltipVisible, handleMouseEnter, handleMouseLeave } = useEllipsisTooltip(extractText(text));
 
   return (
-    <div className={styles.ellipsisContainer} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div className={styles['ellipsis-container']} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div ref={textRef} className={styles.ellipsisText}>
         {children}
       </div>

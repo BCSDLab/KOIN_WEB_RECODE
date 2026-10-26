@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+
 import { getDeptList, getDeptMajorList } from './index';
 
 export const deptQueryKeys = {
