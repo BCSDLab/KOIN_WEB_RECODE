@@ -12,7 +12,7 @@
     "@sentry/nextjs": "^10.74.0",
     "@tanstack/react-query": "^5.90.21",
     "@tosspayments/tosspayments-sdk": "^2.3.4",
-    "axios": "^0.33.0",
+    "axios": "^0.34.0",
     "dayjs": "^1.11.12",
     "dompurify": "^3.4.13",
     "embla-carousel-autoplay": "^8.0.4",
@@ -24,7 +24,7 @@
     "idb": "^8.0.3",
     "jsdom": "26.0.0",
     "lottie-react": "^2.4.1",
-    "next": "15.5.27",
+    "next": "15.5.28",
     "quill": "^2.0.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -33,7 +33,7 @@
     "react-swipeable": "^7.0.2",
     "react-toastify": "^11.0.5",
     "reset-css": "^5.0.1",
-    "swiper": "^11.2.10",
+    "swiper": "^12.1.2",
     "zod": "^4.5.2",
     "zustand": "^4.5.2"
   },
@@ -67,7 +67,7 @@
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
-    "@next/eslint-plugin-next": "^15.5.27",
+    "@next/eslint-plugin-next": "^15.5.28",
     "@notionhq/client": "^5.9.0",
     "@sentry/cli": "^3.7.0",
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -94,7 +94,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
     "next-sitemap": "^4.2.3",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.28",
     "prettier": "^3.6.2",
     "sass": "^1.53.0",
     "stylelint": "^17.14.0",
@@ -105,7 +105,7 @@
     "typescript-eslint": "^8.46.2"
   },
   "engines": {
-    "node": "24.14.1",
+    "node": "24.22.1",
     "yarn": "4.17.0"
   },
   "resolutions": {
@@ -128,7 +128,6 @@
     "form-data": "4.0.6",
     "uuid": "11.1.1",
     "svgo": "3.3.4",
-    "sharp": "0.35.0",
     "ip": "2.0.1",
     "@babel/core": "7.29.6",
     "@opentelemetry/core": "2.11.0"

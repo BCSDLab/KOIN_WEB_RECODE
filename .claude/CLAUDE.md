@@ -4,7 +4,7 @@
 
 KOIN은 한국기술교육대학교(KOREATECH) 재학생을 위한 캠퍼스 서비스 웹앱이다. 시간표, 버스, 식당, 가게, 커뮤니티, 동아리, 분실물, 졸업 계산기를 제공한다.
 
-**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 24.14.1
+**기술 스택:** Next.js 15 (Pages Router) · React 19 · TypeScript strict · Yarn 4 (Berry) PnP · Node 24.22.1
 
 ## 주요 명령어
 
@@ -58,6 +58,8 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
     - `getServerSideProps`가 없는 페이지는 서버가 요청을 모른다. `serverRequest`가 `null`이므로 훅들이 기본값으로 동작한다
     - 기기 분기는 `useMediaQuery`가 UA 판정값을 서버 스냅샷으로 쓴다. **UA 정규식이 nginx `$device_class`(`/etc/nginx/conf.d/proxy-cache.conf`)와 같아야 한다** — 한쪽만 바꾸면 캐시가 잘못 갈려 다른 기기용 HTML이 서빙된다
     - 검증: 콘솔 확인만으로는 부족하다. `scripts/hydration/dom-diff.mjs`로 **DOM 파괴율**을 잴 것. 로그인/비로그인 × 데스크톱/모바일 4조합을 볼 것
+11. **주석:** 이 저장소만 가진 사람이 이해할 수 있게 쓴다. 변경 이력·리뷰어 대상 서술, private 하네스 용어(`parity G2`, `Track B`, `오라클` 등)를 쓰지 않는다. 주석을 쓰거나 고칠 때 `doc-comments` 스킬을 따른다.
+12. **SCSS:** 화면을 바꾸는 선언만 쓴다. 전역 reset·`src/pages/index.scss`가 처리하는 값과 CSS 초기값(Figma의 `font-style: normal`, `font-family: Pretendard` 등)을 반복하지 않는다. 단 `box-sizing`은 전역 설정이 없다. SCSS를 쓰거나 Figma 값을 옮길 때 `scss-authoring` 스킬을 따른다.
 
 ## PR 리뷰 규칙 (claude-code-action용)
 
@@ -96,3 +98,4 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 | 2026-08-08 | 규칙 10 재작성 | CLAUDE.md | useMount 게이트 권장 → 서버 주입 원칙으로 전환. 게이트가 하이드레이션 DOM 교체의 원인이었음 |
 | 2026-08-13 | 명령어·검증 정책 갱신 | CLAUDE.md | 무효 test 스크립트/Jest 스택 제거, typecheck 분리(빌드에서 tsc 이중 실행 제거), CI 정합성 정비 |
 | 2026-10-02 | 규칙 10 인증 상태 설명 갱신 | CLAUDE.md | 세션 쿼리 단일 출처 구조로 전환(영속 userType·토큰 폴백 제거). 옛 `useTokenState()` 설명이 더는 맞지 않음 |
+| 2026-10-16 | 규칙 11(주석)·12(SCSS) 추가 | CLAUDE.md, `doc-comments`·`scss-authoring` 스킬 | private 하네스 용어가 섞인 주석, Figma에서 옮긴 중복 선언(전역·초기값 반복)이 반복적으로 들어옴 |
