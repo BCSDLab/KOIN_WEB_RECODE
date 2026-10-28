@@ -26,7 +26,7 @@ function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
 }
 
-// 주문 흐름(/order, /order/*)은 웹 주문을 열기 전까지 막는다(#1572 Track B).
+// 주문 흐름(/order, /order/*)은 웹 주문을 열기 전까지 막는다(#1572).
 // 빌드 환경 변수 NEXT_PUBLIC_ORDER_ENABLED가 'true'일 때만 열린다(배포 기본값은 꺼짐)
 const ORDER_BASE_PATH = ROUTES.OrderHome();
 const isOrderEnabled = process.env.NEXT_PUBLIC_ORDER_ENABLED === 'true';

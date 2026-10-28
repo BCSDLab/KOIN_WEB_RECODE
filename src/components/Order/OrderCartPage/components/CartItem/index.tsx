@@ -72,7 +72,7 @@ export default function CartItem({ shopId, item }: CartItemProps) {
           <div className={styles.item__amount}>{formatNumber(item.total_amount)}원</div>
         </div>
         {item.menu_thumbnail_image_url && (
-          // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
+          // eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
           <img src={item.menu_thumbnail_image_url} className={styles.item__thumbnail} alt={`${item.name} thumbnail`} />
         )}
       </div>

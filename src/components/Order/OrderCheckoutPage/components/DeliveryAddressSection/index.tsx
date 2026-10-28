@@ -8,7 +8,7 @@ import { orderQueries } from 'api/order/queries';
 import RightArrow from 'assets/svg/Order/Cart/arrow-go-icon.svg';
 import Home from 'assets/svg/Order/Checkout/home-icon.svg';
 import University from 'assets/svg/Order/Checkout/university-icon.svg';
-import MessageModal from 'components/Order/OrderCheckoutPage/components/MessageModal';
+import AlertModal from 'components/Store/mobile/common/AlertModal';
 import Badge from 'components/ui/Badge';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
@@ -133,7 +133,13 @@ export default function DeliveryAddressSection({ orderableShopId }: DeliveryAddr
           </>
         )}
       </div>
-      <MessageModal isOpen={isAddressModalOpen} onClose={closeAddressModal} message={modalMessage} isRelaxed />
+      <AlertModal
+        isOpen={isAddressModalOpen}
+        onClose={closeAddressModal}
+        message={modalMessage}
+        messageWeight="medium"
+        isMessageRelaxed
+      />
     </div>
   );
 }

@@ -5,15 +5,15 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import type { OrderableShopsFilter } from 'api/order/entity';
 import { orderQueries } from 'api/order/queries';
 import { storeMobileQueries } from 'api/storeMobile/queries';
-import CheckIcon from 'assets/svg/Order/Home/check-icon.svg';
-import CloseIcon from 'assets/svg/Order/Home/close-icon.svg';
 import DeliveryIcon from 'assets/svg/Order/Home/delivery-icon.svg';
-import DownArrowIcon from 'assets/svg/Order/Home/down-arrow-icon.svg';
 import FreeIcon from 'assets/svg/Order/Home/free-icon.svg';
-import OpenIcon from 'assets/svg/Order/Home/open-icon.svg';
 import PackIcon from 'assets/svg/Order/Home/pack-icon.svg';
-import PlanetIcon from 'assets/svg/Order/Home/planet-closed-icon.svg';
 import PlanetSliderIcon from 'assets/svg/Order/Home/planet-icon.svg';
+import CheckIcon from 'assets/svg/Store/check-icon.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
+import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
+import OpenIcon from 'assets/svg/Store/open-icon.svg';
+import PlanetIcon from 'assets/svg/Store/planet-closed-icon.svg';
 import {
   DEFAULT_ORDER_HOME_CONDITIONS,
   getOrderableShopsParams,
@@ -135,7 +135,7 @@ function OrderHomeContent() {
                 data-testid={`category-${category.name}`}
               >
                 <div className={styles.category__icon}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 쓴다 */}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 쓴다 */}
                   <img
                     src={category.image_url}
                     role="presentation"
@@ -278,7 +278,7 @@ function OrderHomeContent() {
         <BottomModalContent>
           <div className={styles['sort-sheet__options']}>
             {SORT_OPTIONS.map((option) => (
-              // eslint-disable-next-line jsx-a11y/role-supports-aria-props -- order와 같은 선택 상태 표시(접근성 트리를 오라클과 맞춘다)
+              // eslint-disable-next-line jsx-a11y/role-supports-aria-props -- order와 같은 선택 상태 표시(접근성 트리를 KOIN_ORDER_WEBVIEW와 맞춘다)
               <button
                 key={option.id}
                 type="button"

@@ -3,7 +3,7 @@ import { useRef, useState, type ChangeEvent } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
-import CloseIcon from 'assets/svg/Order/Checkout/close-icon.svg';
+import CloseIcon from 'assets/svg/Store/close-icon.svg';
 import BottomModal, {
   BottomModalContent,
   BottomModalFooter,

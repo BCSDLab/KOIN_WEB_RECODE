@@ -1,4 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
 
 // KOIN_ORDER_WEBVIEW pages/PaymentConfirm 이전. order에서 이 화면은 앱 레이아웃 밖이라 헤더 없이 화면 전체를 쓴다.
 // 값은 order 화면의 계산된 스타일을 옮겼다
@@ -11,12 +12,7 @@
   background-color: palette.$page-background;
   color: #000;
 
-  // 오라클 body의 font-family 체인
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
+  @include preflight.body-font;
 }
 
 // order: flex h-screen flex-col items-center justify-center
