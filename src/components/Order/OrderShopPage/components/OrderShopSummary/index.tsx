@@ -11,6 +11,7 @@ import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime
 import Badge from 'components/ui/Badge';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from 'components/Store/mobile/StoreDetailPage/components/ShopSummary/ShopSummary.module.scss';
 
@@ -25,6 +26,8 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
   const logger = useLogger();
   const { data: shopEvents } = useSuspenseQuery(storeMobileQueries.events(String(shopInfoSummary.shop_id)));
   const latestEvent = shopEvents?.events[0];
+  // 주문 가능 상점 요약에는 전화번호가 없어 상점 상세(가게 정보와 같은 응답)에서 받는다
+  const { data: shopDetail } = useSuspenseQuery(storeMobileQueries.orderDetail(id));
 
   const handleShopInfoClick = () => {
     logger.actionEventClick({
@@ -99,14 +102,14 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           <div className={styles.card__delivery}>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>최소주문</span>
-              <span className={styles.card__value}>{minimumOrderAmount && minimumOrderAmount.toLocaleString()}원</span>
+              <span className={styles.card__value}>{formatNumber(minimumOrderAmount ?? 0)}원</span>
             </div>
             <div className={styles['card__delivery-row']}>
               <span className={styles.card__label}>배달금액</span>
               <span className={styles.card__value}>
-                {minimumDeliveryTip && minimumDeliveryTip.toLocaleString()}
+                {formatNumber(minimumDeliveryTip ?? 0)}
                 {' - '}
-                {maximumDeliveryTip && maximumDeliveryTip.toLocaleString()}원
+                {formatNumber(maximumDeliveryTip ?? 0)}원
               </span>
             </div>
           </div>
@@ -127,12 +130,11 @@ export default function OrderShopSummary({ id, shopInfoSummary }: OrderShopSumma
           </div>
         </Link>
       </div>
-      {/* 오라클의 주문 가능 분기는 전화번호를 받지 않아 번호 없이 버튼만 그린다 */}
-      <a href="tel:" onClick={handleCallButtonClick} className={styles.call}>
+      <a href={`tel:${shopDetail.phone}`} onClick={handleCallButtonClick} className={styles.call}>
         <div className={styles.call__box}>
           <CallIcon className={styles.call__icon} />
           <div className={styles.call__text}>가게에 전화하기</div>
-          <div className={styles.call__phone} />
+          <div className={styles.call__phone}>{shopDetail.phone}</div>
         </div>
       </a>
     </div>

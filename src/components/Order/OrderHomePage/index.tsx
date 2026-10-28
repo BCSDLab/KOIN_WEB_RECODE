@@ -33,6 +33,7 @@ import SearchBar from 'components/Store/mobile/StoreListPage/components/SearchBa
 import Badge from 'components/ui/Badge';
 import Button from 'components/ui/Button';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './OrderHomePage.module.scss';
 
@@ -98,7 +99,7 @@ function OrderHomeContent() {
     closeSortModal();
   };
 
-  const minOrderLabel = isMinOrderActive ? `최소주문금액 ${minOrderAmount.toLocaleString()}원 이하` : '최소주문금액';
+  const minOrderLabel = isMinOrderActive ? `최소주문금액 ${formatNumber(minOrderAmount)}원 이하` : '최소주문금액';
   const currentSortLabel = SORT_OPTIONS.find((option) => option.id === selectedSort)?.label || '기본순';
 
   const selectedIndex = MIN_ORDER_OPTIONS.findIndex((option) => option.value === selectedValue);

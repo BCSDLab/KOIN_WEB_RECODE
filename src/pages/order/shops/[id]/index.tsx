@@ -28,13 +28,14 @@ export const getServerSideProps = withCacheControl(
       return { props: { id, isDesktop: true } };
     }
 
-    // order가 부르는 API(요약·메뉴 그룹·메뉴, 요약의 일반 상점 번호로 이벤트, 장바구니)만 서버에서 받아 본문까지 렌더한다
+    // 요약·메뉴 그룹·메뉴·상세(전화번호), 요약의 일반 상점 번호로 이벤트, 장바구니를 서버에서 받아 본문까지 렌더한다
     const queryClient = new QueryClient();
     try {
       const [summary] = await Promise.all([
         queryClient.fetchQuery(storeMobileQueries.orderSummary(id)),
         queryClient.fetchQuery(storeMobileQueries.orderMenuGroups(id)),
         queryClient.fetchQuery(storeMobileQueries.orderMenus(id)),
+        queryClient.fetchQuery(storeMobileQueries.orderDetail(id)),
       ]);
       await queryClient.fetchQuery(storeMobileQueries.events(String(summary.shop_id)));
     } catch (error) {

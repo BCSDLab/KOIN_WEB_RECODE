@@ -1,8 +1,8 @@
 import type { ReactNode, HTMLAttributes } from 'react';
 
 import Portal from 'components/Portal';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 
 import styles from './BottomModal.module.scss';
 
@@ -21,7 +21,7 @@ export default function BottomModal({
   backdropClassName,
   ...rest
 }: BottomModalProps) {
-  useScrollLock(isOpen);
+  useBodyScrollLock(isOpen);
 
   const { containerRef, backgroundRef } = useOutsideClick<HTMLDivElement>({
     onOutsideClick: (e: MouseEvent) => {

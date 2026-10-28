@@ -1,4 +1,5 @@
 import Button from 'components/ui/Button';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './AddToCartBottomModal.module.scss';
 
@@ -17,7 +18,7 @@ export default function AddToCartBottomModal({ price, isActive, onAddToCart, isE
       <div className={styles.modal__bar}>
         <Button className={styles.modal__button} state={isActive ? 'default' : 'disabled'} onClick={onAddToCart}>
           <span className={styles.modal__label}>{isEdit ? '옵션 수정' : '장바구니 추가'}</span>
-          <span className={styles.modal__price}>{price.toLocaleString()}원</span>
+          <span className={styles.modal__price}>{formatNumber(price)}원</span>
         </Button>
       </div>
       <div className={styles.modal__safe} />

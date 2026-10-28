@@ -3,6 +3,7 @@ import { useEffect, useRef, type RefObject } from 'react';
 import { cn } from '@bcsdlab/utils';
 import EmptyThumbnailIcon from 'assets/svg/Store/empty-thumbnail-icon.svg';
 import SoldOutIcon from 'assets/svg/Store/sold-out-icon.svg';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './ShopMenus.module.scss';
 
@@ -113,7 +114,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                     if (!price.name) {
                       return (
                         <span key={price.id} className={styles.menu__price}>
-                          {price.price.toLocaleString()}원
+                          {formatNumber(price.price)}원
                         </span>
                       );
                     }
@@ -122,7 +123,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                       <div key={price.id} className={styles.option}>
                         <span className={styles.option__name}>{price.name} :</span>
 
-                        <span className={styles.option__price}>{price.price.toLocaleString()}원</span>
+                        <span className={styles.option__price}>{formatNumber(price.price)}원</span>
                       </div>
                     );
                   })}

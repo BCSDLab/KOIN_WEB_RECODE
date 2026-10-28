@@ -22,6 +22,7 @@ import CartValidateModal, {
 } from 'components/Order/OrderCartPage/components/CartValidateModal';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
+import { formatNumber } from 'utils/ts/formatPrice';
 import showToast from 'utils/ts/showToast';
 
 import styles from './CartBottomSheet.module.scss';
@@ -72,7 +73,7 @@ export default function CartBottomSheet({
   let statusMessage = '';
 
   if (orderType === 'DELIVERY') {
-    statusMessage = isOrderAvailable ? '배달 가능' : `${remainAmount.toLocaleString()}원 더 담으면 배달 가능`;
+    statusMessage = isOrderAvailable ? '배달 가능' : `${formatNumber(remainAmount)}원 더 담으면 배달 가능`;
   } else if (orderType === 'TAKE_OUT') {
     statusMessage = '주문 가능';
   }
@@ -103,7 +104,7 @@ export default function CartBottomSheet({
     <div className={styles.sheet}>
       <div className={styles.sheet__bar}>
         <div>
-          <div className={styles.sheet__amount}>{totalAmount.toLocaleString()}원</div>
+          <div className={styles.sheet__amount}>{formatNumber(totalAmount)}원</div>
           <div className={styles.sheet__status}>{statusMessage}</div>
         </div>
         <Button

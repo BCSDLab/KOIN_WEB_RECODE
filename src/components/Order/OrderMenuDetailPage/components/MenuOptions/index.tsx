@@ -5,6 +5,7 @@ import RadioFalse from 'assets/svg/Store/radio-false.svg';
 import RadioTrue from 'assets/svg/Store/radio-true.svg';
 import type { SelectedOption } from 'components/Order/OrderMenuDetailPage/hooks/useMenuSelection';
 import Badge from 'components/ui/Badge';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './MenuOptions.module.scss';
 
@@ -64,7 +65,7 @@ export default function MenuOptions({ optionGroups, selectedOptions, selectOptio
                     >
                       <TypeIcon isSingle={isSingle} checked={checked} />
                       <span className={styles.group__option}>{option.name}</span>
-                      <span className={styles.group__price}>+{option.price.toLocaleString()}원</span>
+                      <span className={styles.group__price}>+{formatNumber(option.price)}원</span>
                     </button>
                   );
                 })}

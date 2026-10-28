@@ -14,6 +14,7 @@ import SkilletIcon from 'assets/svg/Order/Result/skillet-icon.svg';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
+import { formatPrice } from 'utils/ts/formatPrice';
 
 import OrderMap from './components/OrderMap';
 import ReceiptModal from './components/ReceiptModal';
@@ -42,8 +43,6 @@ function formatKoreanTime(time: string): string {
 
   return `${period} ${hour}시 ${minute}분`;
 }
-
-const formatKRW = (number: number) => `${number.toLocaleString()}원`;
 
 interface OrderResultPageProps {
   paymentId: number;
@@ -180,12 +179,12 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
                         <div className={styles['menus__name-text']}>{menu.name}</div>
                         <div className={styles.menus__quantity}>{menu.quantity}개</div>
                       </div>
-                      <div className={styles.menus__total}>{formatKRW(lineTotal)}</div>
+                      <div className={styles.menus__total}>{formatPrice(lineTotal)}</div>
                     </div>
 
                     <ul className={styles.menus__details}>
                       <li>
-                        <div className={styles.menus__detail}>가격 : {formatKRW(menu.price)}</div>
+                        <div className={styles.menus__detail}>가격 : {formatPrice(menu.price)}</div>
                       </li>
 
                       {options.length > 0 &&
@@ -196,8 +195,8 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
                             // eslint-disable-next-line react/no-array-index-key -- 옵션 응답에 고유 id가 없고 조회 결과를 그대로 그리는 정적 목록이다
                             <li key={optionIndex}>
                               <div className={styles.menus__detail}>
-                                {option.option_group_name} : {option.option_name} (<span>{formatKRW(optionPrice)}</span>
-                                )
+                                {option.option_group_name} : {option.option_name} (
+                                <span>{formatPrice(optionPrice)}</span>)
                               </div>
                             </li>
                           );
@@ -215,16 +214,16 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
         <div className={cn({ [styles.card]: true, [styles['card--padded']]: true, [styles['card--payment']]: true })}>
           <div className={styles.payment__prices}>
             <div className={cn({ [styles.payment__row]: true, [styles['payment__row--spaced']]: true })}>
-              메뉴 금액<div>{formatKRW(paymentInfo.total_menu_price)}</div>
+              메뉴 금액<div>{formatPrice(paymentInfo.total_menu_price)}</div>
             </div>
             <div className={styles.payment__row}>
-              배달 금액<div>{formatKRW(paymentInfo.delivery_tip ?? 0)}</div>
+              배달 금액<div>{formatPrice(paymentInfo.delivery_tip ?? 0)}</div>
             </div>
             <div className={styles.payment__divider} />
           </div>
           <div className={styles.payment__summary}>
             <div className={cn({ [styles.payment__row]: true, [styles['payment__row--spaced']]: true })}>
-              총 결제 금액 <div className={styles.payment__amount}>{formatKRW(paymentInfo.amount)}</div>
+              총 결제 금액 <div className={styles.payment__amount}>{formatPrice(paymentInfo.amount)}</div>
             </div>
             <div className={styles.payment__row}>
               결제 수단 <div className={styles.payment__method}>{paymentInfo.easy_pay_company}</div>

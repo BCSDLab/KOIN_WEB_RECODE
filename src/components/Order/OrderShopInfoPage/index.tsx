@@ -4,6 +4,7 @@ import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { DAYS } from 'components/Store/mobile/StoreInfoPage/constants/day';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './OrderShopInfoPage.module.scss';
 
@@ -112,10 +113,10 @@ export default function OrderShopInfoPage({ id }: OrderShopInfoPageProps) {
                 <tr key={`${tips.from_amount}-${tips.to_amount}-${tips.fee}`} className={styles['tip-table__row']}>
                   <td className={cn({ [styles['tip-table__cell']]: true, [styles['tip-table__cell--range']]: true })}>
                     {tips.to_amount
-                      ? `${tips.from_amount.toLocaleString()} ~ ${tips.to_amount.toLocaleString()}원 미만`
-                      : `${tips.from_amount.toLocaleString()} 이상`}
+                      ? `${formatNumber(tips.from_amount)} ~ ${formatNumber(tips.to_amount)}원 미만`
+                      : `${formatNumber(tips.from_amount)} 이상`}
                   </td>
-                  <td className={styles['tip-table__cell']}>{tips.fee.toLocaleString()}원</td>
+                  <td className={styles['tip-table__cell']}>{formatNumber(tips.fee)}원</td>
                 </tr>
               ))}
             </tbody>
