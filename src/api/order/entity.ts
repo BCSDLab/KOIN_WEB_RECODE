@@ -370,7 +370,7 @@ export interface OrderableShopImage {
   is_thumbnail: boolean;
 }
 
-export interface OrderableShop {
+interface OrderableShop {
   shop_id: number;
   orderable_shop_id: number;
   name: string;

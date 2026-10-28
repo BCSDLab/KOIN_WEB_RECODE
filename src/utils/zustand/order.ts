@@ -1,4 +1,4 @@
-import type { OrderType } from 'api/order/entity';
+import type { CampusDeliveryAddress, OffCampusDeliveryAddressRequest, OrderType } from 'api/order/entity';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -8,35 +8,16 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 // 그래서 주문 유형은 영속하지 않고 서버와 같은 기본값(DELIVERY)으로 시작한다.
 // 배달지(배달 유형·교내·교외 주소)와 결제 화면의 입력(연락처·요청사항·수저 여부)은 order처럼 sessionStorage에 영속한다.
 // 첫 렌더가 서버와 같도록 자동 복원하지 않으며(skipHydration), 배달지를 쓰는 화면이 마운트 후 rehydrate()를 부른다
-export type DeliveryType = 'CAMPUS' | 'OFF_CAMPUS';
+type DeliveryType = 'CAMPUS' | 'OFF_CAMPUS';
 
-export interface CampusAddress {
-  id: number;
-  full_address: string;
-  short_address: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-}
-
-export interface OutsideAddress {
-  zip_number: string;
-  si_do: string;
-  si_gun_gu: string;
-  eup_myeon_dong: string;
-  road: string;
-  building: string;
-  address: string;
-  detail_address: string;
-  longitude: number;
-  latitude: number;
-}
+// 선택한 교내 배달지. 응답의 주소 유형(type)은 담지 않는다
+export type CampusAddress = Omit<CampusDeliveryAddress, 'type'>;
 
 interface OrderState {
   orderType: OrderType;
   deliveryType: DeliveryType;
   campusAddress?: CampusAddress;
-  outsideAddress: OutsideAddress;
+  outsideAddress: OffCampusDeliveryAddressRequest;
   // 결제 화면(KOIN_ORDER_WEBVIEW pages/Payment) 입력
   userPhoneNumber: string;
   ownerRequest: string;
@@ -48,14 +29,14 @@ interface OrderActions {
   setOrderType: (type: OrderType) => void;
   setDeliveryType: (type: DeliveryType) => void;
   setCampusAddress: (address: CampusAddress) => void;
-  setOutsideAddress: (address: OutsideAddress) => void;
+  setOutsideAddress: (address: OffCampusDeliveryAddressRequest) => void;
   setUserPhoneNumber: (phoneNumber: string) => void;
   setOwnerRequest: (request: string) => void;
   setDeliveryRequest: (request: string) => void;
   setIsCutleryDeclined: (isDeclined: boolean) => void;
 }
 
-const EMPTY_OUTSIDE_ADDRESS: OutsideAddress = {
+const EMPTY_OUTSIDE_ADDRESS: OffCampusDeliveryAddressRequest = {
   zip_number: '',
   si_do: '',
   si_gun_gu: '',

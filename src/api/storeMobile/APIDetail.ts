@@ -5,9 +5,7 @@ import type {
   ReviewDetailResponse,
   ReviewReportCategoriesResponse,
   ReviewSorter,
-  ShopCategoriesResponse,
   ShopDetailInfoResponse,
-  ShopEventsResponse,
   ShopInfoResponse,
   ShopInfoSummaryResponse,
   ShopListResponse,
@@ -17,15 +15,8 @@ import type {
   UnorderableShopReviewsResponse,
 } from './entity';
 
-// 모바일 상점·주문 화면(KOIN_ORDER_WEBVIEW 이전)이 부르는 엔드포인트. 경로·파라미터는 order와 같게 유지한다(parity G2)
-
-export class ShopCategories<R extends ShopCategoriesResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = 'shops/categories';
-
-  response!: R;
-}
+// 모바일 상점·주문 화면이 부르는 엔드포인트. KOIN_ORDER_WEBVIEW와 같은 엔드포인트를 쓰므로 경로·파라미터를 바꿀 때 양쪽을 함께 맞춘다.
+// 데스크톱과 요청·응답이 같은 카테고리·이벤트는 api/store 클래스를 쓴다(index.ts)
 
 export class ShopListV3<R extends ShopListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -92,18 +83,6 @@ export class ShopMenus<R extends UnorderableShopMenusResponse> implements APIReq
 
   constructor(id: string) {
     this.path = `shops/${id}/menus`;
-  }
-}
-
-export class ShopEvents<R extends ShopEventsResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/shops/:id/events';
-
-  response!: R;
-
-  constructor(id: string) {
-    this.path = `/shops/${id}/events`;
   }
 }
 
