@@ -38,6 +38,7 @@ import useGoBack from 'utils/hooks/routing/useGoBack';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
+import { copyToClipboard } from 'utils/ts/copyToClipboard';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import { backButtonTapped } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
@@ -237,18 +238,8 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   };
 
   const handleCopy = async (text: string, label: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      showToast('success', `${label}가 복사되었습니다.`);
-    } catch {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      textarea.remove();
-      showToast('success', `${label}가 복사되었습니다.`);
-    }
+    await copyToClipboard(text);
+    showToast('success', `${label}가 복사되었습니다.`);
   };
 
   const handleClickDetailInfo = () => {

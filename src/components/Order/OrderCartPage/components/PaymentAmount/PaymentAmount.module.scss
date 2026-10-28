@@ -1,0 +1,48 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW pages/Cart/components/PaymentAmount 계산값
+.title {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.card {
+  padding: 24px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+
+  &__summary {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid palette.$neutral-300;
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__details {
+    color: palette.$neutral-500;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__final {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+}

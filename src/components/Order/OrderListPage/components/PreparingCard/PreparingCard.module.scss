@@ -1,0 +1,117 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
+
+// order: rounded-xl border-[0.5px] border-neutral-200 bg-white px-6 py-4
+.card {
+  padding: 16px 24px;
+  border: 0.5px solid palette.$neutral-200;
+  border-radius: 12px;
+  background-color: #fff;
+
+  // order: bg-primary-100 inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5
+  &__badge {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: palette.$primary-100;
+  }
+
+  // order: text-primary-500 text-xs font-medium
+  &__badge-label {
+    color: palette.$primary-500;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+
+  // order: leading-[160%]
+  &__state {
+    line-height: 160%;
+  }
+
+  // order: text-xl font-bold
+  &__headline {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+  }
+
+  // order: text-primary-500 mt-3
+  &__status {
+    margin-top: 12px;
+    color: palette.$primary-500;
+  }
+
+  // order: text-primary-700
+  &__eta {
+    color: palette.$primary-700;
+  }
+
+  // order: text-xs text-neutral-500
+  &__description {
+    color: palette.$neutral-500;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  // order: my-4 h-[1px] bg-neutral-200
+  &__divider {
+    height: 1px;
+    margin: 16px 0;
+    background-color: palette.$neutral-200;
+  }
+
+  // order: flex gap-3
+  &__body {
+    display: flex;
+    gap: 12px;
+  }
+
+  // order: h-22 w-22 rounded-sm border-[0.5px] border-neutral-200 object-cover
+  &__thumbnail {
+    width: 88px;
+    height: 88px;
+    border: 0.5px solid palette.$neutral-200;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  // order: my-1
+  &__info {
+    margin: 4px 0;
+  }
+
+  // order: font-semibold
+  &__name {
+    font-weight: 600;
+  }
+
+  // order: my-1.5 text-sm font-medium
+  &__title {
+    margin: 6px 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  // order: text-sm font-semibold
+  &__amount {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+}
+
+// order Button(neutral): border-primary-500 mt-4 py-2 text-sm. 공용 Button의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.card .card__detail {
+  @include preflight.order-font;
+
+  margin-top: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-color: palette.$primary-500;
+  font-size: 14px;
+  line-height: 20px;
+}

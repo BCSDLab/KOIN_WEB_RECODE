@@ -45,6 +45,7 @@ const RAW_RUNTIME_STATE =
           ["@svgr/webpack", "npm:8.1.0"],\
           ["@tanstack/eslint-plugin-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.102.8"],\
           ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.90.21"],\
+          ["@tosspayments/tosspayments-sdk", "npm:2.9.0"],\
           ["@types/file-saver", "npm:2.0.7"],\
           ["@types/gtag.js", "npm:0.0.19"],\
           ["@types/jsdom", "npm:28.0.3"],\
@@ -5568,6 +5569,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@tosspayments/tosspayments-sdk", [\
+      ["npm:2.9.0", {\
+        "packageLocation": "./.yarn/cache/@tosspayments-tosspayments-sdk-npm-2.9.0-e88f6ba719-a19def3c3f.zip/node_modules/@tosspayments/tosspayments-sdk/",\
+        "packageDependencies": [\
+          ["@tosspayments/tosspayments-sdk", "npm:2.9.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@tybys/wasm-util", [\
       ["npm:0.10.1", {\
         "packageLocation": "./.yarn/cache/@tybys-wasm-util-npm-0.10.1-607c8a7e5c-7fe0d23939.zip/node_modules/@tybys/wasm-util/",\
@@ -10109,6 +10119,7 @@ const RAW_RUNTIME_STATE =
           ["@svgr/webpack", "npm:8.1.0"],\
           ["@tanstack/eslint-plugin-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.102.8"],\
           ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.90.21"],\
+          ["@tosspayments/tosspayments-sdk", "npm:2.9.0"],\
           ["@types/file-saver", "npm:2.0.7"],\
           ["@types/gtag.js", "npm:0.0.19"],\
           ["@types/jsdom", "npm:28.0.3"],\

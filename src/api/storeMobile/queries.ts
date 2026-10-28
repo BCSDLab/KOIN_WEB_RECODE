@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query';
+import { queryOptions, type QueryClient } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
 
 import type { ReviewSorter } from './entity';
@@ -82,3 +82,12 @@ export const storeMobileQueries = {
   orderDetail: (id: string) =>
     queryOptions({ queryKey: storeMobileQueryKeys.orderDetail(id), queryFn: () => getOrderShopDetail(id) }),
 };
+
+// 리뷰 작성·수정·삭제 뒤 목록(로그인 범위·내 리뷰 포함)과 상세 요약의 평점·리뷰 수를 갱신한다.
+// 주문 가능 상점 요약은 주문 상점 번호로 키가 잡혀 있어 리뷰 화면에서 알 수 없으므로 접두사로 무효화한다
+export const invalidateShopReviews = (queryClient: QueryClient, shopId: string) =>
+  Promise.all([
+    queryClient.invalidateQueries({ queryKey: [...storeMobileQueryKeys.all, 'reviews'] }),
+    queryClient.invalidateQueries({ queryKey: storeMobileQueryKeys.summary(shopId) }),
+    queryClient.invalidateQueries({ queryKey: [...storeMobileQueryKeys.all, 'order', 'summary'] }),
+  ]);

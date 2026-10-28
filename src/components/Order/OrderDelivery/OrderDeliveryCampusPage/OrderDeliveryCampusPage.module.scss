@@ -1,0 +1,83 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: flex min-h-screen w-full flex-col items-center px-[1.5rem] pb-6
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 1.5rem 24px;
+}
+
+// order: Button mt-auto w-full py-3. 공용 Button(md)의 세로 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
+.page > .page__button {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 12px;
+  padding-bottom: 12px;
+
+  // order Button의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+}
+
+// order: shadow-1 w-full rounded-xl
+.card {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: palette.$shadow-1;
+
+  // order: flex h-[3.5rem] w-full items-center justify-between rounded-b-xl bg-white px-6 text-[0.813rem] text-neutral-600
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 3.5rem;
+    padding: 0 24px;
+    border-radius: 0 0 12px 12px;
+    background-color: #fff;
+    color: palette.$neutral-600;
+    font-size: 0.813rem;
+  }
+
+  &__selection {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+// order Badge의 font-[Pretendard]
+.card__selection .card__badge {
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+}
+
+// order: mt-[1.813rem] mb-6 w-full
+.section {
+  width: 100%;
+  margin-top: 1.813rem;
+  margin-bottom: 24px;
+
+  &__title {
+    color: palette.$primary-500;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  &__description {
+    padding-bottom: 12px;
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

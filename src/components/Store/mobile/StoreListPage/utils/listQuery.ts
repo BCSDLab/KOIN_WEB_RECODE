@@ -24,17 +24,17 @@ export const SORT_OPTIONS: Array<{ id: SortType; label: string }> = [
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value) ?? null;
 
-export function parseCategory(query: string | null) {
+function parseCategory(query: string | null) {
   const categoryNumber = Number(query);
 
   return Number.isNaN(categoryNumber) || categoryNumber <= 0 ? 1 : categoryNumber;
 }
 
-export function parseSort(query: string | null): SortType {
+function parseSort(query: string | null): SortType {
   return SORT_VALID.includes(query as SortType) ? (query as SortType) : 'NONE';
 }
 
-export function parseFilter(query: string | null): ListFilter {
+function parseFilter(query: string | null): ListFilter {
   return query === 'OPEN' ? 'OPEN' : null;
 }
 

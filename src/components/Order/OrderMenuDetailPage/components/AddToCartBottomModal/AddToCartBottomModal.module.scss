@@ -1,0 +1,51 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW AddToCartBottomModal 계산값. 화면 하단 고정, 흰 막대(py-3 px-8, 위 32px 라운드) + 34px 흰 영역
+.modal {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 32px;
+    border-radius: 32px 32px 0 0;
+    background-color: #fff;
+    box-shadow: palette.$shadow-4;
+  }
+
+  // order Button(h-12.25 w-full gap-2.5)의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+  &__bar &__button {
+    gap: 10px;
+    width: 100%;
+    height: 49px;
+
+    // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+    font-family: Pretendard;
+    line-height: 1.5;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  &__price {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
+  &__safe {
+    width: 100%;
+    height: 34px;
+    border-top: 1px solid palette.$neutral-300;
+    background-color: #fff;
+  }
+}

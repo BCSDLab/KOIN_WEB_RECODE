@@ -22,12 +22,12 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useGoBack from 'utils/hooks/routing/useGoBack';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { isServerAuthError } from 'utils/ssr/authError';
 import type { ServerRequestContext } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, getSemesterFromQuery, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useSemester } from 'utils/zustand/semester';
 
 import styles from './TimetablePage.module.scss';
@@ -103,7 +103,7 @@ async function prefetchTimetableData(
 
     await Promise.all(prefetchPromises);
   } catch (error) {
-    const isAuthError = isServerAuthError(error);
+    const isAuthError = isUnauthorizedError(error);
     const isForbiddenError = isKoinError(error) && error.status === 403;
     if (!isAuthError && !isForbiddenError) throw error;
     setDefaultTimetableFrameList(

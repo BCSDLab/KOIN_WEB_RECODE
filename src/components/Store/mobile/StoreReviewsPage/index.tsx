@@ -5,15 +5,15 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { deleteReview } from 'api/store';
 import type { ReviewSorter } from 'api/storeMobile/entity';
-import { storeMobileQueries, storeMobileQueryKeys } from 'api/storeMobile/queries';
+import { invalidateShopReviews, storeMobileQueries } from 'api/storeMobile/queries';
 import CheckboxFalseIcon from 'assets/svg/Store/checkbox-false.svg';
 import CheckboxTrueIcon from 'assets/svg/Store/checkbox-true.svg';
 import DownArrowIcon from 'assets/svg/Store/down-arrow-icon.svg';
+import ConfirmModal from 'components/Store/mobile/common/ConfirmModal';
 import LoginRequiredModal from 'components/Store/mobile/common/LoginRequiredModal';
 import { setStartLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import useScrollLogging from 'components/Store/mobile/StoreListPage/hooks/useScrollLogging';
 import AverageRating from 'components/Store/mobile/StoreReviewsPage/components/AverageRating';
-import DeleteReviewModal from 'components/Store/mobile/StoreReviewsPage/components/DeleteReviewModal';
 import EmptyReview from 'components/Store/mobile/StoreReviewsPage/components/EmptyReview';
 import ImagePreview from 'components/Store/mobile/StoreReviewsPage/components/ImagePreview';
 import ReviewCard, { type ReviewCardItem } from 'components/Store/mobile/StoreReviewsPage/components/ReviewCard';
@@ -25,7 +25,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { isomorphicSessionStorage } from 'utils/ts/env';
-import { getViewerScope } from 'utils/ts/getViewerScope';
 import showToast from 'utils/ts/showToast';
 
 import styles from './StoreReviewsPage.module.scss';
@@ -74,7 +73,7 @@ export default function StoreReviewsPage({ id }: StoreReviewsPageProps) {
   const { mutate: removeReview, isPending: isDeletePending } = useMutation({
     mutationFn: (reviewId: number) => deleteReview(reviewId, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: storeMobileQueryKeys.reviews(id, getViewerScope(isLoggedIn)) });
+      invalidateShopReviews(queryClient, id);
       showToast('success', '리뷰가 삭제되었어요');
       setDeleteTargetId(null);
     },
@@ -237,12 +236,21 @@ export default function StoreReviewsPage({ id }: StoreReviewsPageProps) {
         subTitle={LOGIN_MODAL_SUBTITLE}
       />
 
-      <DeleteReviewModal
+      <ConfirmModal
         isOpen={deleteTargetId !== null}
-        isPending={isDeletePending}
         onClose={() => setDeleteTargetId(null)}
+        message={
+          <>
+            삭제한 리뷰는 되돌릴 수 없습니다. <br /> 삭제 하시겠습니까?
+          </>
+        }
+        cancelLabel="취소"
+        confirmLabel="삭제하기"
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
+        isConfirmDisabled={isDeletePending}
+        buttonWeight="semibold"
+        cancelTone="plain"
       />
 
       <ImagePreview src={previewImage} onClose={() => setPreviewImage(null)} />

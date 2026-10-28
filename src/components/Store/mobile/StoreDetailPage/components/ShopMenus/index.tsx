@@ -1,13 +1,15 @@
 import { useEffect, useRef, type RefObject } from 'react';
 
 import { cn } from '@bcsdlab/utils';
-import EmptyThumbnailIcon from 'assets/svg/Store/empty-thumbnail-icon.svg';
+import EmptyThumbnailIcon from 'assets/svg/empty-thumbnail.svg';
 import SoldOutIcon from 'assets/svg/Store/sold-out-icon.svg';
+import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './ShopMenus.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/components/ShopMenus 이전.
-// 주문 불가 상점이라 메뉴 버튼은 비활성이다. 화면에 보이는 가장 위 그룹을 탭 선택값으로 알린다
+// 주문 불가 상점은 메뉴 버튼이 비활성이고, 주문 가능 상점(onMenuClick)은 품절이 아닌 메뉴만 누를 수 있다.
+// 화면에 보이는 가장 위 그룹을 탭 선택값으로 알린다
 export interface MenuPrice {
   id: number;
   name: string | null;
@@ -34,12 +36,19 @@ interface ShopMenusProps {
   handleChangeMenu: (name: string) => void;
   isAutoScrolling: RefObject<boolean>;
   shopMenus: MenuGroupItems[];
+  onMenuClick?: (menu: MenuItem) => void;
 }
 
 // 고정 헤더(60px)와 메뉴 그룹 탭(64px) 아래부터를 화면으로 본다
 const STICKY_AREA_HEIGHT = 124;
 
-export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrolling, shopMenus }: ShopMenusProps) {
+export default function ShopMenus({
+  menuGroupRefs,
+  handleChangeMenu,
+  isAutoScrolling,
+  shopMenus,
+  onMenuClick,
+}: ShopMenusProps) {
   const visibleMap = useRef<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -104,7 +113,8 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                 })}
                 key={menu.id}
                 name={menu.name}
-                disabled
+                disabled={!onMenuClick || menu.isSoldOut}
+                onClick={onMenuClick && (() => onMenuClick(menu))}
               >
                 <div className={styles.menu__info}>
                   <span className={styles.menu__name}>{menu.name}</span>
@@ -113,7 +123,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                     if (!price.name) {
                       return (
                         <span key={price.id} className={styles.menu__price}>
-                          {price.price.toLocaleString()}원
+                          {formatNumber(price.price)}원
                         </span>
                       );
                     }
@@ -122,7 +132,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                       <div key={price.id} className={styles.option}>
                         <span className={styles.option__name}>{price.name} :</span>
 
-                        <span className={styles.option__price}>{price.price.toLocaleString()}원</span>
+                        <span className={styles.option__price}>{formatNumber(price.price)}원</span>
                       </div>
                     );
                   })}
@@ -140,7 +150,7 @@ export default function ShopMenus({ menuGroupRefs, handleChangeMenu, isAutoScrol
                     </div>
                   )}
                   {menu.thumbnailImage && (
-                    // eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
+                    // eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 그대로 쓴다(next/image 최적화 경로를 거치지 않음)
                     <img src={menu.thumbnailImage} alt={menu.name} className={styles.menu__image} />
                   )}
                 </div>

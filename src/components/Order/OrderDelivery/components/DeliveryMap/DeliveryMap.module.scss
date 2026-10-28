@@ -1,0 +1,20 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// order: h-40 w-full rounded-t-xl border border-neutral-300
+.map {
+  box-sizing: border-box;
+  width: 100%;
+  height: 160px;
+  border: 1px solid palette.$neutral-300;
+  border-radius: 12px 12px 0 0;
+
+  // 지도 SDK의 레이어(타일·마커·컨트롤)는 z-index 100~103이라 쌓임 맥락이 없으면 스크롤 시
+  // sticky 헤더(z-index 20) 위로 올라온다(order 헤더는 z-110이라 가려졌다). 지도 안에 가둔다
+  isolation: isolate;
+
+  // 지도 SDK가 그리는 링크(NAVER 로고 등)는 전역 a 규칙(font-family: Pretendard 변수)을 받지 않고
+  // order(Tailwind preflight: a는 상속)처럼 지도 컨테이너의 글꼴을 물려받는다
+  a {
+    font-family: inherit;
+  }
+}

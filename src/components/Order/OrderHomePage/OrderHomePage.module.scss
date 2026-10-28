@@ -1,0 +1,395 @@
+@use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
+
+// KOIN_ORDER_WEBVIEW pages/Home 이전. 본문은 헤더(60px) 아래에서 시작한다. 값은 order 화면의 계산된 스타일을 옮겼다
+$header-height: 60px;
+
+// order styles/utilities.css의 scrollbar-responsive
+@mixin scrollbar-responsive {
+  @media (pointer: coarse) {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @media (pointer: fine) {
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background-color: #e1e1e1;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+}
+
+// order HomeLayout: pt-15 pb-30 (헤더 높이만큼의 위 여백은 헤더가 차지한다)
+.page {
+  display: flow-root;
+  box-sizing: border-box;
+  width: 100%;
+
+  // 공용 #root의 min-width(360px)를 넘지 않고 화면 폭을 따른다
+  max-width: 100vw;
+  min-height: calc(100vh - #{$header-height});
+  padding-bottom: 120px;
+  background-color: palette.$page-background;
+  color: #000;
+
+  @include preflight.body-font;
+}
+
+@include preflight.reset(".page");
+
+// order: flex h-full w-full flex-col items-center justify-center gap-4
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+}
+
+// order: w-full max-w-245 px-6
+.search-section {
+  width: 100%;
+  max-width: 980px;
+  padding: 0 24px;
+}
+
+// order: ml-6 flex w-[calc(100%-24px)] snap-x snap-mandatory gap-6 overflow-x-auto pt-2 pb-4
+.categories {
+  @include scrollbar-responsive;
+
+  display: flex;
+  gap: 24px;
+  width: calc(100% - 24px);
+  margin-left: 24px;
+  padding-top: 8px;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 56px;
+  scroll-snap-align: start;
+
+  &__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image {
+    width: 32px;
+    height: 32px;
+
+    &--selected {
+      z-index: 10;
+    }
+  }
+
+  &__highlight {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    background-color: palette.$neutral-300;
+  }
+
+  &__name {
+    position: relative;
+    font-size: 12px;
+    line-height: calc(1 / 0.75);
+
+    &--selected {
+      z-index: 10;
+    }
+  }
+}
+
+.options {
+  display: flex;
+  width: 100%;
+  padding-right: 16px;
+
+  &__inner {
+    display: flex;
+    width: 100%;
+  }
+
+  // order: mr-4 ml-4 inline-flex shrink-0 items-center justify-center pb-2 leading-none [@media(pointer:coarse)]:pb-0
+  &__sort-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    margin-left: 16px;
+    padding-bottom: 8px;
+    line-height: 1;
+
+    @media (pointer: coarse) {
+      padding-bottom: 0;
+    }
+  }
+
+  &__sort-badge {
+    box-shadow: palette.$shadow-1;
+  }
+
+  &__sort-icon {
+    width: 16px;
+    height: 16px;
+    fill: palette.$primary-500;
+  }
+
+  &__filters {
+    @include scrollbar-responsive;
+
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  &__filter-button {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition-duration: 150ms;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    scroll-snap-align: start;
+  }
+
+  &__min-order-button {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+  }
+
+  &__filter-icon {
+    fill: palette.$neutral-400;
+
+    &--active {
+      fill: palette.$page-background;
+    }
+  }
+
+  &__min-order-icon {
+    width: 16px;
+    height: 16px;
+    fill: palette.$neutral-400;
+
+    &--active {
+      fill: #fff;
+    }
+  }
+
+  // Badge(neutral·outlined)의 배경·글자색을 덮는다
+  &__filter-badge.options__filter-badge {
+    box-shadow: palette.$shadow-1;
+    background-color: #fff;
+    color: palette.$neutral-400;
+  }
+
+  &__filter-badge--active.options__filter-badge {
+    background-color: palette.$primary-500;
+    color: #fff;
+  }
+}
+
+// order: flex h-25 items-center justify-center text-center
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  text-align: center;
+}
+
+// order: grid w-full grid-cols-1 gap-6 px-6
+.list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column: 1 / -1;
+  min-height: 200px;
+  margin-top: 40px;
+
+  &__title {
+    margin-top: 16px;
+    color: palette.$primary-500;
+    font-size: 18px;
+  }
+
+  &__description {
+    color: palette.$neutral-600;
+    font-size: 14px;
+  }
+}
+
+// 바텀시트는 포털로 본문 밖에 그려지므로 시트 루트에도 초기화를 건다
+.sheet {
+  &__title {
+    color: palette.$primary-500;
+    font-weight: 600;
+    user-select: none;
+  }
+}
+
+@include preflight.reset(".sheet");
+
+.sort-sheet {
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    user-select: none;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    // KOIN_ORDER_WEBVIEW(Tailwind v4) gray-700 계산값
+    color: oklch(37.3% 0.034 259.733deg);
+    font-size: 16px;
+    text-align: left;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: #f9fafb;
+      }
+    }
+
+    &--selected {
+      color: palette.$primary-500;
+    }
+  }
+
+  &__check {
+    fill: palette.$primary-500;
+  }
+}
+
+.min-order-sheet {
+  position: relative;
+  margin-bottom: 36px;
+
+  &__track {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: #e9ebed;
+  }
+
+  &__fill {
+    position: absolute;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: #c358fc;
+  }
+
+  &__points {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__point {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__dot {
+    width: 4px;
+    height: 4px;
+    border: 2px solid palette.$neutral-400;
+    border-radius: 9999px;
+
+    &--active {
+      border: 0;
+      background-color: #fff;
+    }
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+  }
+
+  &__labels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    padding: 0 4px;
+  }
+
+  &__label {
+    color: #000;
+    font-size: 14px;
+
+    &--selected {
+      color: palette.$primary-500;
+      font-weight: 700;
+    }
+  }
+
+  // order: rounded-xl py-2.5 text-lg (공용 Button md 위에 덮는다)
+  &__apply.min-order-sheet__apply {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 12px;
+    font-size: 18px;
+    line-height: calc(1.75 / 1.125);
+  }
+}

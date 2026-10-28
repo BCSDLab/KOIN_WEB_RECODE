@@ -1,0 +1,24 @@
+// KOIN_ORDER_WEBVIEW StarList 계산값(inline-flex, 2px 간격)
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  align-items: flex-start;
+
+  &__button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: default;
+
+    &--editable {
+      cursor: pointer;
+    }
+  }
+
+  &__icon {
+    display: block;
+  }
+}

@@ -18,7 +18,7 @@
     gap: 4px;
   }
 
-  // 오라클처럼 긴 텍스트 줄에서는 아이콘도 함께 줄어든다(flex-shrink 기본값)
+  // KOIN_ORDER_WEBVIEW처럼 긴 텍스트 줄에서는 아이콘도 함께 줄어든다(flex-shrink 기본값)
   &__icon {
     display: block;
   }

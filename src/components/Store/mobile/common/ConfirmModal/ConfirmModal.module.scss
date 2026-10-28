@@ -1,0 +1,60 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW ModalContent(styles/modal.css의 modal-content) 계산값
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+
+  &__message {
+    color: palette.$neutral-600;
+    font-size: 15px;
+    font-weight: 400;
+
+    &--center {
+      text-align: center;
+    }
+
+    &--column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &--medium {
+      font-weight: 500;
+    }
+
+    &--relaxed {
+      line-height: 1.6;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+// 공용 Button의 굵기·그림자·테두리를 덮어야 해서 선택자 우선순위를 올린다
+.confirm__buttons .confirm__button {
+  box-shadow: none;
+  font-weight: 500;
+  line-height: 1.5;
+
+  &--semibold {
+    font-weight: 600;
+  }
+
+  &--bordered {
+    border-color: palette.$neutral-400;
+  }
+
+  &--dark {
+    color: palette.$neutral-600;
+  }
+}

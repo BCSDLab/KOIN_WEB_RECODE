@@ -6,8 +6,8 @@ import { timetableQueries } from 'api/timetable/queries';
 import { SSRLayout } from 'components/layout';
 import MobileTimetableListPage from 'components/TimetablePage/MobileTimetableListPage';
 import ROUTES from 'static/routes';
-import { isServerAuthError } from 'utils/ssr/authError';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 
 export const getServerSideProps = withCacheControl(async (_context, cacheControl, serverRequest) => {
   // 모바일 전용 화면: 데스크탑은 시간표 페이지로 보낸다.
@@ -33,7 +33,7 @@ export const getServerSideProps = withCacheControl(async (_context, cacheControl
     } catch (error) {
       // userType 가드로 학생이 아닌 사용자는 요청 자체를 건너뛰지만, 판별 실패 등으로 요청이 나간 경우의 방어선이다.
       const isForbiddenError = isKoinError(error) && error.status === 403;
-      if (!isServerAuthError(error) && !isForbiddenError) throw error;
+      if (!isUnauthorizedError(error) && !isForbiddenError) throw error;
     }
   }
 

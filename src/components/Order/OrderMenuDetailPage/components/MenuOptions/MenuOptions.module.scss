@@ -1,0 +1,100 @@
+@use "src/utils/scss/order-palette" as palette;
+
+// KOIN_ORDER_WEBVIEW MenuOptions 계산값
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 16px 24px;
+  border: 1px solid palette.$neutral-300;
+  border-radius: 12px;
+  background-color: #fff;
+  scroll-margin-top: 124px;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name {
+    display: flex;
+    height: 29px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__description {
+    display: flex;
+    height: 19px;
+    color: palette.$neutral-500;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  // order Badge에 덧붙인 justify-center p-0 px-2 py-[0.125rem] text-xs
+  .group__badge {
+    justify-content: center;
+    padding: 2px 8px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  // 공용 버튼 기본 스타일 대신 order(Tailwind preflight) 값으로 맞춘다
+  &__item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    cursor: pointer;
+
+    & svg {
+      display: block;
+    }
+  }
+
+  &__option,
+  &__price {
+    font-size: 16px;
+    line-height: 24px;
+
+    @media (width <= 380px) {
+      font-size: 15px;
+    }
+  }
+
+  &__price {
+    margin-left: auto;
+    font-weight: 600;
+  }
+}

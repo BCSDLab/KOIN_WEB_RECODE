@@ -26,8 +26,21 @@ function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
 }
 
+// 주문 흐름(/order, /order/*)은 웹 주문을 열기 전까지 막는다(#1572).
+// 빌드 환경 변수 NEXT_PUBLIC_ORDER_ENABLED가 'true'일 때만 열린다(배포 기본값은 꺼짐)
+const ORDER_BASE_PATH = ROUTES.OrderHome();
+const isOrderEnabled = process.env.NEXT_PUBLIC_ORDER_ENABLED === 'true';
+
+function isOrderPath(pathname: string): boolean {
+  return pathname === ORDER_BASE_PATH || pathname.startsWith(`${ORDER_BASE_PATH}/`);
+}
+
 // CSRF 쿠키 존재는 "세션이 있을 가능성"의 낙관적 신호일 뿐 — 실제 인증 실패는 API 401 + redirectToLogin()이 처리한다.
 export function middleware(request: NextRequest) {
+  if (!isOrderEnabled && isOrderPath(request.nextUrl.pathname)) {
+    return NextResponse.rewrite(new URL('/404', request.url));
+  }
+
   const hasSession = Boolean(request.cookies.get(WEB_AUTH_CSRF_COOKIE_KEY)?.value);
 
   if (isProtectedPath(request.nextUrl.pathname) && !hasSession) {

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import type { Events } from 'api/storeMobile/entity';
 import LoadingLottie from 'assets/lottie/jumping.json';
 import DownArrow from 'assets/svg/Store/chevron-down-icon.svg';
-import formatEventDate from 'components/Store/mobile/StoreEventsPage/utils/formatEventDate';
+import formatDotDate from 'components/Store/mobile/common/utils/formatDotDate';
 import useLogger from 'utils/hooks/analytics/useLogger';
 
 import styles from './CollapsedEvent.module.scss';
@@ -62,7 +62,7 @@ export default function CollapsedEvent({ event, onToggleOpen, contentId, isOpen 
         <div className={styles.event__detail}>
           <p className={styles.event__content}>{event.content}</p>
           <p className={styles.event__period}>
-            {formatEventDate(event.start_date)}~{formatEventDate(event.end_date)}
+            {formatDotDate(event.start_date)}~{formatDotDate(event.end_date)}
           </p>
         </div>
       </div>

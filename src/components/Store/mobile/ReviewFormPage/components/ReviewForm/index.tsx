@@ -2,13 +2,13 @@ import type { ChangeEvent } from 'react';
 
 import AddThumbnailIcon from 'assets/svg/Store/add-thumbnail.svg';
 import CloseIcon from 'assets/svg/Store/close-icon.svg';
-import EditableStarList from 'components/Store/mobile/ReviewFormPage/components/EditableStarList';
+import StarList from 'components/Store/mobile/common/StarList';
 import type useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
 import Button from 'components/ui/Button';
 
 import styles from './ReviewForm.module.scss';
 
-// KOIN_ORDER_WEBVIEW ReviewCreateForm·ReviewEditForm의 공통 본문. 값은 오라클 화면의 계산된 스타일을 옮겼다
+// KOIN_ORDER_WEBVIEW ReviewCreateForm·ReviewEditForm의 공통 본문. 값은 그 화면의 계산된 스타일을 옮겼다
 interface ReviewFormProps {
   shopName: string;
   form: ReturnType<typeof useReviewFormBase>;
@@ -18,7 +18,7 @@ interface ReviewFormProps {
   onRemoveImage: (index: number) => void;
   submitLabel: string;
   onSubmit: () => void;
-  // edit: 기존 사진(form.existingImageUrls)을 함께 보이고, 입력 상자 아래 여백·내용 줄 수가 오라클 ReviewEditForm을 따른다
+  // edit: 기존 사진(form.existingImageUrls)을 함께 보이고, 입력 상자 아래 여백·내용 줄 수가 KOIN_ORDER_WEBVIEW ReviewEditForm을 따른다
   variant?: 'create' | 'edit';
 }
 
@@ -71,7 +71,7 @@ export default function ReviewForm({
       </div>
 
       <div className={styles.form__rating}>
-        <EditableStarList value={rating} onChange={setRating} size={40} />
+        <StarList rating={rating} onChange={setRating} size={40} />
         <span className={styles['form__rating-value']}>{rating}</span>
       </div>
 
@@ -101,7 +101,7 @@ export default function ReviewForm({
           <div key={url} className={styles.form__photo}>
             {/* eslint-disable-next-line @next/next/no-img-element -- 기존 리뷰 사진이라 크기가 제각각 */}
             <img src={url} alt={`existing-${idx}`} className={styles['form__photo-image']} />
-            {/* 오라클처럼 이름 없는 버튼으로 둔다(별점 버튼과 같은 이름 없는 버튼 순서를 맞춘다) */}
+            {/* KOIN_ORDER_WEBVIEW처럼 이름 없는 버튼으로 둔다(별점 버튼과 같은 이름 없는 버튼 순서를 맞춘다) */}
             <button
               type="button"
               className={styles['form__photo-remove']}
@@ -134,7 +134,7 @@ export default function ReviewForm({
           <span className={styles.form__caption}>{content.length}/500</span>
         </div>
         <div className={inputBoxClassName}>
-          {/* 수정 화면은 rows를 주지 않아 기본 2줄 높이에서 늘어난다(오라클 ReviewEditForm) */}
+          {/* 수정 화면은 rows를 주지 않아 기본 2줄 높이에서 늘어난다(KOIN_ORDER_WEBVIEW ReviewEditForm) */}
           <textarea
             ref={textareaRef}
             value={content}

@@ -142,7 +142,7 @@ export default function StoreListPage() {
                 className={styles.category}
               >
                 <div className={styles.category__icon}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 오라클과 같은 원본 이미지 주소를 쓴다 */}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- KOIN_ORDER_WEBVIEW와 같은 원본 이미지 주소를 쓴다 */}
                   <img
                     src={category.image_url}
                     alt={category.name}
@@ -210,12 +210,12 @@ export default function StoreListPage() {
               <ShopCard
                 key={shop.id}
                 shopId={shop.id}
+                href={ROUTES.StoreDetail({ id: String(shop.id) })}
                 isOpen={shop.is_open}
                 name={shop.name}
                 rating={shop.average_rate}
                 reviewCount={shop.review_count}
                 thumbnailUrl={shop.images[0] ?? ''}
-                isOrderable={false}
               />
             ))
           ) : (

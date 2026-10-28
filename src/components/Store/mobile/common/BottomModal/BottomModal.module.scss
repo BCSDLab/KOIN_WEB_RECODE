@@ -1,4 +1,5 @@
 @use "src/utils/scss/order-palette" as palette;
+@use "src/utils/scss/order-preflight" as preflight;
 
 // KOIN_ORDER_WEBVIEW BottomModal(styles/modal.css의 bottom-modal-*) 계산값을 옮겼다
 .backdrop {
@@ -24,12 +25,7 @@
   box-shadow: palette.$shadow-4;
   color: #000;
 
-  // 오라클 body의 font-family 체인(대소문자 무관하게 next/font의 pretendard 페이스와 매칭)
-  font-family:
-    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-size: 16px;
-  line-height: 1.5;
+  @include preflight.body-font;
 }
 
 .header {

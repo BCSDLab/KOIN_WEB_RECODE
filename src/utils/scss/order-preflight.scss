@@ -1,0 +1,78 @@
+// KOIN_ORDER_WEBVIEW(Tailwind v4 preflight)와 같은 초기화. 화면 본문과 포털(바텀시트·가운데 모달)의 루트에 건다.
+// :where로 우선순위를 0으로 둬 화면·공용 Button 등의 클래스가 이긴다
+@mixin reset($root) {
+  :where(#{$root}) *,
+  :where(#{$root}) *::before,
+  :where(#{$root}) *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  :where(#{$root}) button,
+  :where(#{$root}) input,
+  :where(#{$root}) textarea {
+    border-radius: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  :where(#{$root}) button {
+    cursor: pointer;
+  }
+
+  :where(#{$root}) textarea {
+    resize: vertical;
+  }
+
+  :where(#{$root}) a {
+    color: inherit;
+    font-family: inherit;
+    text-decoration: inherit;
+  }
+
+  :where(#{$root}) img,
+  :where(#{$root}) svg,
+  :where(#{$root}) video,
+  :where(#{$root}) canvas,
+  :where(#{$root}) audio,
+  :where(#{$root}) iframe,
+  :where(#{$root}) embed,
+  :where(#{$root}) object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  :where(#{$root}) ::placeholder {
+    opacity: 1;
+    color: color-mix(in oklab, currentcolor 50%, transparent);
+  }
+}
+
+// order Button·Badge·모달 영역의 font-[Pretendard]. 계산된 값이 "Pretendard" 하나라 대체 글꼴을 붙이지 않는다
+@mixin order-font {
+  // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+  font-family: Pretendard;
+}
+
+// KOIN_ORDER_WEBVIEW body의 글꼴 체인·크기·줄 높이. 화면·포털 루트에 건다.
+// 이름은 대소문자를 가리지 않아 next/font가 등록한 pretendard 페이스와 매칭된다
+@mixin body-font {
+  font-family:
+    Pretendard, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+// 루트 아래 모든 요소를 border-box로 계산한다(Tailwind preflight와 같다). reset을 쓰지 않는 화면용
+@mixin border-box-all {
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+}

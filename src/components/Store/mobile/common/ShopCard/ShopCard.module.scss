@@ -49,7 +49,7 @@
     height: 128px;
     border-radius: 8px;
 
-    // 오라클 tailwind v4 gray-400 계산값
+    // KOIN_ORDER_WEBVIEW(Tailwind v4) gray-400 계산값
     color: oklch(70.7% 0.022 261.325deg);
   }
 
@@ -82,6 +82,15 @@
     display: block;
   }
 
+  &__delivery {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
   &__review-count {
     color: #767676;
   }
@@ -90,5 +99,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  &__tag {
+    padding: 2px 10px;
+    border-radius: 9999px;
+    background-color: #f2f2f2;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 16px;
   }
 }
