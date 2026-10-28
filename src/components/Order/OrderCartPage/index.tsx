@@ -5,7 +5,6 @@ import { cn } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AddCartRequest } from 'api/order/entity';
 import { orderMutations } from 'api/order/mutations';
-import { isUnauthorizedError } from 'api/order/queries';
 import RightArrowIcon from 'assets/svg/Order/Cart/arrow-go-icon.svg';
 import EmptyCartIcon from 'assets/svg/Order/Cart/cart-icon.svg';
 import PlusIcon from 'assets/svg/Order/Cart/plus-icon.svg';
@@ -14,6 +13,7 @@ import PrimaryPlusIcon from 'assets/svg/Order/Cart/primary-plus-icon.svg';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import { isomorphicLocalStorage } from 'utils/ts/env';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 import { useOrderStore } from 'utils/zustand/order';
 
 import CartBottomSheet from './components/CartBottomSheet';

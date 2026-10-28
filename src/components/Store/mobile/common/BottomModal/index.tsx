@@ -1,7 +1,8 @@
-import { useLayoutEffect, type HTMLAttributes, type ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import Portal from 'components/Portal';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
 import styles from './BottomModal.module.scss';
@@ -12,20 +13,6 @@ interface BottomModalProps {
   onClose: () => void;
   children: ReactNode;
   className?: string;
-}
-
-// 공용 useScrollLock은 첫 렌더 값만 반영해 열고 닫을 때 잠금이 바뀌지 않는다. order처럼 열려 있는 동안만 body 스크롤을 막는다
-function useBodyScrollLock(isLocked: boolean) {
-  useLayoutEffect(() => {
-    if (!isLocked || typeof window === 'undefined') return undefined;
-
-    const originalOverflow = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [isLocked]);
 }
 
 export default function BottomModal({ isOpen, onClose, children, className }: BottomModalProps) {

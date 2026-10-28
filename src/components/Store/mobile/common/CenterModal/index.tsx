@@ -1,7 +1,8 @@
-import { useLayoutEffect, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { cn } from '@bcsdlab/utils';
 import Portal from 'components/Portal';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 
 import styles from './CenterModal.module.scss';
@@ -12,20 +13,6 @@ interface CenterModalProps {
   onClose: () => void;
   children: ReactNode;
   className?: string;
-}
-
-// order useScrollLock과 같게 열려 있는 동안만 body 스크롤을 막는다
-function useBodyScrollLock(isLocked: boolean) {
-  useLayoutEffect(() => {
-    if (!isLocked || typeof window === 'undefined') return undefined;
-
-    const originalOverflow = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [isLocked]);
 }
 
 export default function CenterModal({ isOpen, onClose, children, className }: CenterModalProps) {

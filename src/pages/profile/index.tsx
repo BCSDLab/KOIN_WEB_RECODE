@@ -22,10 +22,10 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useUser } from 'utils/hooks/state/useUser';
-import { isServerAuthError } from 'utils/ssr/authError';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, isSemesterInList } from 'utils/timetable/semester';
 import { parseSemesterCookie } from 'utils/timetable/semesterCookie';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 
 import styles from './ProfilePage.module.scss';
@@ -96,7 +96,7 @@ export const getServerSideProps = withCacheControl(async (context, cacheControl,
         await queryClient.prefetchQuery(timetableQueries.lectureInfo(isLoggedIn, mainFrameId));
       }
     } catch (error) {
-      if (!isServerAuthError(error) && !(isKoinError(error) && (error.status === 403 || error.status === 404))) {
+      if (!isUnauthorizedError(error) && !(isKoinError(error) && (error.status === 403 || error.status === 404))) {
         throw error;
       }
       // 시간표를 못 불러와도 프로필 자체는 보여준다. 빈 그리드로 확정한다.

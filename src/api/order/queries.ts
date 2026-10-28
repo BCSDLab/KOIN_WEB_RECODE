@@ -1,6 +1,6 @@
-import { isKoinError } from '@bcsdlab/koin';
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { getViewerScope } from 'utils/ts/getViewerScope';
+import { isUnauthorizedError } from 'utils/ts/httpError';
 
 import type {
   CampusAddressCategory,
@@ -67,20 +67,6 @@ export const EMPTY_CART: CartResponse = {
   delivery_fee: 0,
   final_payment_amount: 0,
 };
-
-function getErrorStatus(error: unknown): number | undefined {
-  if (isKoinError(error)) return error.status;
-  if (typeof error === 'object' && error !== null && 'response' in error) {
-    const { response } = error as { response?: { status?: unknown } };
-    if (typeof response?.status === 'number') return response.status;
-  }
-
-  return undefined;
-}
-
-export function isUnauthorizedError(error: unknown) {
-  return getErrorStatus(error) === 401;
-}
 
 export const orderQueries = {
   cart: (orderType: OrderType, isLoggedIn: boolean) =>
