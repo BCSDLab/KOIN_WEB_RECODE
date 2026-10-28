@@ -7,6 +7,7 @@ import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime
 import { getCategoryIdFromQuery, getCategoryNameById } from 'components/Store/mobile/common/utils/shopCategories';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import { formatPrice } from 'utils/ts/formatPrice';
 
 import styles from './ShopCard.module.scss';
 
@@ -85,7 +86,7 @@ export default function ShopCard({
         {!!deliveryFee && (
           <div className={styles.card__delivery}>
             <DeliveryIcon fill="#c358fc" />
-            <div>배달비 {deliveryFee}원</div>
+            <div>배달비 {formatPrice(deliveryFee)}</div>
           </div>
         )}
 
