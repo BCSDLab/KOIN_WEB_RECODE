@@ -10,12 +10,14 @@ import { isomorphicSessionStorage } from 'utils/ts/env';
 import styles from './DetailHeader.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/Shop/components/Header 이전.
-// 이미지 캐러셀 위에 겹치는 상세 전용 고정 헤더. 캐러셀이 화면에서 벗어날수록 배경·글자가 진해진다
+// 이미지 캐러셀 위에 겹치는 상세 전용 고정 헤더. 캐러셀이 화면에서 벗어날수록 배경·글자가 진해진다.
+// 메뉴 상세처럼 이미지가 없으면(noImage) 처음부터 불투명하게 그린다
 interface DetailHeaderProps {
   name: string;
   targetRef: RefObject<HTMLDivElement | null>;
   // 이전 페이지가 없을 때(직접 진입) 돌아갈 경로
   fallbackHref?: string;
+  noImage?: boolean;
 }
 
 const OPACITY_THRESHOLDS = Array.from({ length: 31 }, (_, i) => i / 100);
@@ -26,10 +28,16 @@ const getTransitionColor = (opacity: number) => {
   return `rgb(${value}, ${value}, ${value})`;
 };
 
-export default function DetailHeader({ name, targetRef, fallbackHref = ROUTES.Store() }: DetailHeaderProps) {
+export default function DetailHeader({
+  name,
+  targetRef,
+  fallbackHref = ROUTES.Store(),
+  noImage = false,
+}: DetailHeaderProps) {
   const logger = useLogger();
   const goBack = useGoBack();
   const [opacity, setOpacity] = useState(0);
+  const currentOpacity = noImage ? 1 : opacity;
 
   const backToPreviousPage = () => {
     logger.actionEventClick({
@@ -44,7 +52,7 @@ export default function DetailHeader({ name, targetRef, fallbackHref = ROUTES.St
 
   useEffect(() => {
     const element = targetRef.current;
-    if (!element) return undefined;
+    if (noImage || !element) return undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -57,14 +65,14 @@ export default function DetailHeader({ name, targetRef, fallbackHref = ROUTES.St
     observer.observe(element);
 
     return () => observer.unobserve(element);
-  }, [targetRef]);
+  }, [noImage, targetRef]);
 
   return (
-    <header className={styles.header} style={{ backgroundColor: `rgba(248, 248, 250, ${opacity})` }}>
+    <header className={styles.header} style={{ backgroundColor: `rgba(248, 248, 250, ${currentOpacity})` }}>
       <button type="button" aria-label="뒤로가기 버튼" onClick={backToPreviousPage} className={styles.header__back}>
-        <ArrowBackIcon fill={getTransitionColor(opacity)} className={styles.header__icon} />
+        <ArrowBackIcon fill={getTransitionColor(currentOpacity)} className={styles.header__icon} />
       </button>
-      <span className={styles.header__title} style={{ color: `rgba(0, 0, 0, ${opacity})` }}>
+      <span className={styles.header__title} style={{ color: `rgba(0, 0, 0, ${currentOpacity})` }}>
         {name}
       </span>
     </header>

@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 
 import AddThumbnailIcon from 'assets/svg/Store/add-thumbnail.svg';
 import CloseIcon from 'assets/svg/Store/close-icon.svg';
-import EditableStarList from 'components/Store/mobile/ReviewFormPage/components/EditableStarList';
+import StarList from 'components/Store/mobile/common/StarList';
 import type useReviewFormBase from 'components/Store/mobile/ReviewFormPage/hooks/useReviewFormBase';
 import Button from 'components/ui/Button';
 
@@ -71,7 +71,7 @@ export default function ReviewForm({
       </div>
 
       <div className={styles.form__rating}>
-        <EditableStarList value={rating} onChange={setRating} size={40} />
+        <StarList rating={rating} onChange={setRating} size={40} />
         <span className={styles['form__rating-value']}>{rating}</span>
       </div>
 

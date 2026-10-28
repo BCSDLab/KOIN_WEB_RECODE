@@ -5,9 +5,11 @@ import type { UnorderableShopMenusResponse } from 'api/storeMobile/entity';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { setStartLoggingTime } from 'components/Store/mobile/common/utils/loggingTime';
 import useScrollLogging from 'components/Store/mobile/StoreListPage/hooks/useScrollLogging';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { isomorphicSessionStorage } from 'utils/ts/env';
+import { formatPrice } from 'utils/ts/formatPrice';
 
 import DetailHeader from './components/DetailHeader';
 import ImageCarousel from './components/ImageCarousel';
@@ -86,7 +88,27 @@ export default function StoreDetailPage({ id }: StoreDetailPageProps) {
     <div className={styles.page}>
       <DetailHeader name={shopInfoSummary.name} targetRef={targetRef} />
       <ImageCarousel images={shopInfoSummary.images} targetRef={targetRef} shopName={shopInfoSummary.name} />
-      <ShopSummary id={id} shopInfoSummary={shopInfoSummary} shopInfo={shopInfo} />
+      <ShopSummary
+        shopInfoSummary={shopInfoSummary}
+        reviewsHref={ROUTES.StoreReviews({ id })}
+        infoHref={ROUTES.StoreInfo({ id })}
+        infoLabel="가게정보"
+        badges={[
+          shopInfo.delivery && '배달 가능',
+          shopInfo.pay_card && '카드 가능',
+          shopInfo.pay_bank && '계좌이체 가능',
+        ].filter((badge): badge is string => !!badge)}
+        deliveryCard={
+          shopInfo.delivery
+            ? {
+                href: ROUTES.StoreInfo({ id }),
+                minimumOrder: '0원',
+                deliveryFee: formatPrice(shopInfo.delivery_price),
+              }
+            : null
+        }
+        phone={shopInfo.phone}
+      />
       <ShopMenuGroups
         shopName={shopInfoSummary.name}
         selectedMenu={selectedMenu}

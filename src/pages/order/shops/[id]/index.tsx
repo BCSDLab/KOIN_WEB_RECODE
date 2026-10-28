@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderShopPage from 'components/Order/OrderShopPage';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
@@ -65,15 +65,11 @@ export const getServerSideProps = withCacheControl(
 );
 
 function OrderShopRoute({ id, isDesktop }: Props) {
-  // 모바일은 이미지 위에 겹치는 상세 전용 헤더를 본문에서 그린다.
-  // viewport는 order 웹뷰(index.html)와 같게 배율을 1로 고정한다. Next 기본값(width=device-width)만 있으면
-  // 내용 최소 폭(#root min-width 360px 등)이 화면보다 넓어지는 순간 브라우저가 축소 배율을 적용해 order와 다르게 그린다
+  // 모바일은 이미지 위에 겹치는 상세 전용 헤더를 본문에서 그린다
   if (!isDesktop) {
     return (
       <>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-        </Head>
+        <OrderViewport />
         <OrderShopPage id={id} />
       </>
     );

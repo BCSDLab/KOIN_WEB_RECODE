@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderDeliveryOutsideDetailPage from 'components/Order/OrderDelivery/OrderDeliveryOutsideDetailPage';
 import StoreMobileHeader from 'components/Store/mobile/common/StoreMobileHeader';
@@ -33,12 +33,7 @@ export const getServerSideProps = withCacheControl(
 function OrderDeliveryOutsideDetailRoute({ isDesktop, roadAddress }: Props) {
   return (
     <>
-      {!isDesktop && (
-        // order 웹뷰(index.html)와 같은 viewport로 배율을 1로 고정한다
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-        </Head>
-      )}
+      {!isDesktop && <OrderViewport />}
       <StoreMobileHeader title="주소 상세" />
       {isDesktop ? <DesktopNotice /> : <OrderDeliveryOutsideDetailPage roadAddress={roadAddress} />}
     </>

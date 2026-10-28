@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { ShopInfoSummaryResponse, UnorderableShopDetailInfoResponse } from 'api/storeMobile/entity';
+import type { ShopInfoSummaryResponse } from 'api/storeMobile/entity';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import CallIcon from 'assets/svg/Store/call-icon.svg';
 import ChevronRightIcon from 'assets/svg/Store/chevron-right-icon.svg';
@@ -11,18 +11,37 @@ import { getLoggingTime } from 'components/Store/mobile/common/utils/loggingTime
 import Badge from 'components/ui/Badge';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { formatNumber } from 'utils/ts/formatPrice';
 
 import styles from './ShopSummary.module.scss';
 
-// KOIN_ORDER_WEBVIEW pages/Shop/components/ShopSummary 이전 (주문 불가 상점 분기만)
-interface ShopSummaryProps {
-  id: string;
-  shopInfoSummary: ShopInfoSummaryResponse;
-  shopInfo: UnorderableShopDetailInfoResponse;
+// KOIN_ORDER_WEBVIEW pages/Shop/components/ShopSummary 이전.
+// 주문 가능 여부에 따라 갈리는 링크·뱃지·배달 카드·전화번호는 호출하는 쪽이 정해 넘긴다
+interface DeliveryCard {
+  href: string;
+  minimumOrder: string;
+  deliveryFee: string;
 }
 
-export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSummaryProps) {
+interface ShopSummaryProps {
+  shopInfoSummary: ShopInfoSummaryResponse;
+  reviewsHref: string;
+  infoHref: string;
+  infoLabel: string;
+  badges: string[];
+  // 없으면 배달 불가 안내를 그린다
+  deliveryCard: DeliveryCard | null;
+  phone: string;
+}
+
+export default function ShopSummary({
+  shopInfoSummary,
+  reviewsHref,
+  infoHref,
+  infoLabel,
+  badges,
+  deliveryCard,
+  phone,
+}: ShopSummaryProps) {
   const logger = useLogger();
   const { data: shopEvents } = useSuspenseQuery(storeMobileQueries.events(String(shopInfoSummary.shop_id)));
   const latestEvent = shopEvents?.events[0];
@@ -64,7 +83,7 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
     <div className={styles.summary}>
       <span className={styles.summary__name}>{shopInfoSummary.name}</span>
       <div className={styles.summary__row}>
-        <Link href={ROUTES.StoreReviews({ id })} className={styles.review} onClick={handleReviewClick}>
+        <Link href={reviewsHref} className={styles.review} onClick={handleReviewClick}>
           <div className={styles.review__star}>
             <StarIcon className={styles.icon} />
           </div>
@@ -75,29 +94,29 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
             <ChevronRightIcon fill="black" className={styles.icon} />
           </div>
         </Link>
-        <Link href={ROUTES.StoreInfo({ id })} className={styles.info} onClick={handleShopInfoClick}>
-          <div className={styles.info__text}>가게정보</div>
+        <Link href={infoHref} className={styles.info} onClick={handleShopInfoClick}>
+          <div className={styles.info__text}>{infoLabel}</div>
           <div className={styles.info__chevron}>
             <ChevronRightIcon fill="#CACACA" className={styles.icon} />
           </div>
         </Link>
       </div>
       <div className={styles.summary__badges}>
-        {shopInfo.delivery && <Badge label="배달 가능" color="white" size="xs" font="xs" />}
-        {shopInfo.pay_card && <Badge label="카드 가능" color="white" size="xs" font="xs" />}
-        {shopInfo.pay_bank && <Badge label="계좌이체 가능" color="white" size="xs" font="xs" />}
+        {badges.map((badge) => (
+          <Badge key={badge} label={badge} color="white" size="xs" font="xs" />
+        ))}
       </div>
       <div className={styles.summary__cards}>
-        {shopInfo.delivery ? (
-          <Link href={ROUTES.StoreInfo({ id })} className={styles.card} onClick={handleShopInfoClick}>
+        {deliveryCard ? (
+          <Link href={deliveryCard.href} className={styles.card} onClick={handleShopInfoClick}>
             <div className={styles.card__delivery}>
               <div className={styles['card__delivery-row']}>
                 <span className={styles.card__label}>최소주문</span>
-                <span className={styles.card__value}>0원</span>
+                <span className={styles.card__value}>{deliveryCard.minimumOrder}</span>
               </div>
               <div className={styles['card__delivery-row']}>
                 <span className={styles.card__label}>배달금액</span>
-                <span className={styles.card__value}>{formatNumber(shopInfo.delivery_price)}원</span>
+                <span className={styles.card__value}>{deliveryCard.deliveryFee}</span>
               </div>
             </div>
             <div className={styles.card__chevron}>
@@ -123,11 +142,11 @@ export default function ShopSummary({ id, shopInfoSummary, shopInfo }: ShopSumma
           </div>
         </Link>
       </div>
-      <a href={`tel:${shopInfo.phone}`} onClick={handleCallButtonClick} className={styles.call}>
+      <a href={`tel:${phone}`} onClick={handleCallButtonClick} className={styles.call}>
         <div className={styles.call__box}>
           <CallIcon className={styles.call__icon} />
           <div className={styles.call__text}>가게에 전화하기</div>
-          <div className={styles.call__phone}>{shopInfo.phone}</div>
+          <div className={styles.call__phone}>{phone}</div>
         </div>
       </a>
     </div>

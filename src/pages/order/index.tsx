@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import Head from 'next/head';
 
 import { dehydrate, type DehydratedState, QueryClient } from '@tanstack/react-query';
 import { orderQueries } from 'api/order/queries';
 import { storeMobileQueries } from 'api/storeMobile/queries';
 import { SSRLayout } from 'components/layout';
+import OrderViewport from 'components/Order/common/OrderViewport';
 import DesktopNotice from 'components/Order/DesktopNotice';
 import OrderHomePage from 'components/Order/OrderHomePage';
 import { DEFAULT_ORDER_HOME_CONDITIONS, getOrderableShopsParams } from 'components/Order/OrderHomePage/constants';
@@ -50,12 +50,9 @@ function OrderHomeRoute({ isDesktop }: Props) {
     );
   }
 
-  // viewport는 order 웹뷰(index.html)와 같게 배율을 1로 고정한다(다른 주문 화면과 같은 처리)
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-      </Head>
+      <OrderViewport />
       <StoreMobileHeader title="주문" background="gray" />
       <OrderHomePage />
     </>
