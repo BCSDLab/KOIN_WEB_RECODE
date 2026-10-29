@@ -14,7 +14,6 @@ import showToast from 'utils/ts/showToast';
 import styles from './OrderCancelPage.module.scss';
 
 // KOIN_ORDER_WEBVIEW pages/OrderFinish/OrderCancel 이전(주문 취소 사유 선택).
-// 확인 모달 문구·버튼도 order 그대로다: '그만하기'는 모달만 닫고, '계속하기'가 실제 취소 요청을 보낸다
 const ORDER_CANCEL_REASONS: string[] = [
   '단순 변심이에요',
   '주소를 잘못 입력했어요',
@@ -134,16 +133,16 @@ export default function OrderCancelPage({ paymentId }: OrderCancelPageProps) {
       </div>
       <CenterModal isOpen={isCancelModalOpen} onClose={() => setIsCancelModalOpen(false)}>
         <div className={styles.modal}>
-          <div>주문 취소를 그만두시겠어요?</div>
+          <div>주문을 취소하시겠어요?</div>
           <div className={styles.modal__buttons}>
             <Button
               onClick={() => setIsCancelModalOpen(false)}
               className={cn({ [styles.modal__button]: true, [styles['modal__button--stop']]: true })}
             >
-              그만하기
+              닫기
             </Button>
             <Button onClick={handleClickContinueCancel} className={styles.modal__button}>
-              계속하기
+              취소하기
             </Button>
           </div>
         </div>
