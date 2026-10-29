@@ -1,0 +1,49 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: palette.$page-background;
+  color: palette.$neutral-800;
+
+  &__title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  &__row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  &__label {
+    flex: none;
+    width: 64px;
+    color: palette.$neutral-500;
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  &__copy {
+    flex: none;
+    padding: 2px 8px;
+    border: 1px solid palette.$neutral-300;
+    border-radius: 4px;
+    background-color: #fff;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
