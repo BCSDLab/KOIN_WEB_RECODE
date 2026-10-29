@@ -9,9 +9,7 @@ import type {
   CancelPaymentResponse,
   CartResponse,
   CartSummaryResponse,
-  ConfirmPaymentRequest,
-  ConfirmPaymentResponse,
-  DeliveryTemporaryRequest,
+  DeliveryOrderRequest,
   InProgressOrderResponse,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
@@ -19,14 +17,14 @@ import type {
   OrderHistoryResponse,
   OrderableShopsParams,
   OrderableShopsResponse,
+  OrderCreateResponse,
   OrderType,
   PaymentInfoResponse,
   RiderMessageResponse,
   ShopDeliveryInfoResponse,
   ShopMenuDetailResponse,
   StudentInfoResponse,
-  TakeoutTemporaryRequest,
-  TemporaryPaymentResponse,
+  TakeoutOrderRequest,
   UpdateCartItemRequest,
 } from './entity';
 
@@ -266,45 +264,31 @@ export class RiderMessages<R extends RiderMessageResponse> implements APIRequest
   response!: R;
 }
 
-export class TemporaryDeliveryPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
+// 계좌이체 주문을 만든다. 서버가 금액을 다시 계산해 요청 금액과 다르면 `ORDER_PRICE_MISMATCH`로 거절하고, 성공하면 장바구니를 비운다
+export class CreateDeliveryOrder<R extends OrderCreateResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'payments/delivery/temporary';
+  path = 'order/delivery';
 
-  data: DeliveryTemporaryRequest;
+  data: DeliveryOrderRequest;
 
   response!: R;
 
-  constructor(data: DeliveryTemporaryRequest) {
+  constructor(data: DeliveryOrderRequest) {
     this.data = data;
   }
 }
 
-export class TemporaryTakeoutPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
+export class CreateTakeoutOrder<R extends OrderCreateResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'payments/takeout/temporary';
+  path = 'order/takeout';
 
-  data: TakeoutTemporaryRequest;
+  data: TakeoutOrderRequest;
 
   response!: R;
 
-  constructor(data: TakeoutTemporaryRequest) {
-    this.data = data;
-  }
-}
-
-// KOIN_ORDER_WEBVIEW api/payments confirmPayments 이전(결제 승인). Toss 결제 성공 후 승인 화면에서 한 번 보낸다
-export class ConfirmPayment<R extends ConfirmPaymentResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = 'payments/confirm';
-
-  data: ConfirmPaymentRequest;
-
-  response!: R;
-
-  constructor(data: ConfirmPaymentRequest) {
+  constructor(data: TakeoutOrderRequest) {
     this.data = data;
   }
 }

@@ -3,15 +3,13 @@ import { useRouter } from 'next/router';
 
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import type { TossPaymentsWidgets } from '@tosspayments/tosspayments-sdk';
-import type { OrderType, TemporaryPaymentResponse } from 'api/order/entity';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { OrderCreateResponse, OrderType } from 'api/order/entity';
 import { orderMutations } from 'api/order/mutations';
 import { EMPTY_CART, orderQueries } from 'api/order/queries';
 import RightArrow from 'assets/svg/Order/Cart/arrow-go-icon.svg';
 import Bike from 'assets/svg/Order/Checkout/agriculture.svg';
 import PickupIcon from 'assets/svg/Order/Checkout/bucket.svg';
-import AlertModal from 'components/Store/mobile/common/AlertModal';
 import Badge from 'components/ui/Badge';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
@@ -22,13 +20,14 @@ import showToast from 'utils/ts/showToast';
 import { useOrderStore } from 'utils/zustand/order';
 
 import Agreement from './components/Agreement';
+import BankTransfer from './components/BankTransfer';
 import ContactModal from './components/ContactModal';
 import DeliveryAddressSection from './components/DeliveryAddressSection';
 import PaymentAmount from './components/PaymentAmount';
 import RiderRequestModal from './components/RiderRequestModal';
 import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
-import TossWidget from './components/TossWidget';
+import useShopBankAccount from './hooks/useShopBankAccount';
 import formatPhoneNumber from './utils/formatPhoneNumber';
 import styles from './OrderCheckoutPage.module.scss';
 
@@ -37,24 +36,21 @@ import styles from './OrderCheckoutPage.module.scss';
 // 서버는 기본값으로 그리고, 마운트 후 복원(rehydrate)한 값으로 바꾼다. 연락처가 없으면 학생 정보의 번호를 쓴다
 interface OrderCheckoutPageProps {
   orderType: OrderType;
-  message: string | null;
 }
 
-const FAILED_PAYMENT_MESSAGE = '결제 중 오류가 발생했습니다. 다시 시도해주세요.';
+const FAILED_ORDER_MESSAGE = '주문 중 오류가 발생했습니다. 다시 시도해주세요.';
 
-export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutPageProps) {
+export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const isLoggedIn = useIsLoggedIn();
   const isDelivery = orderType === 'DELIVERY';
 
   const [isContactModalOpen, openContactModal, closeContactModal] = useBooleanState(false);
   const [isStoreRequestModalOpen, openStoreRequestModal, closeStoreRequestModal] = useBooleanState(false);
   const [isRiderRequestModalOpen, openRiderRequestModal, closeRiderRequestModal] = useBooleanState(false);
-  const [isPaymentFailModalOpen, , closePaymentFailModal] = useBooleanState(!!message);
 
-  const [ready, setReady] = useState(false);
-  const [agreement, setAgreement] = useState(true);
-  const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+  const [isAgreed, , , toggleAgreement] = useBooleanState(false);
   const [isRestored, setIsRestored] = useState(false);
 
   const userPhoneNumber = useOrderStore((state) => state.userPhoneNumber);
@@ -71,8 +67,8 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
 
   const { data: studentInfo } = useQuery(orderQueries.studentInfo(isLoggedIn));
   const { data: cart = EMPTY_CART } = useQuery(orderQueries.cart(orderType, isLoggedIn));
-  const { mutateAsync: createTemporaryDelivery } = useMutation(orderMutations.createTemporaryDeliveryPayment());
-  const { mutateAsync: createTemporaryTakeout } = useMutation(orderMutations.createTemporaryTakeoutPayment());
+  const deliveryOrder = useMutation(orderMutations.createDeliveryOrder(queryClient));
+  const takeoutOrder = useMutation(orderMutations.createTakeoutOrder(queryClient));
 
   // 서버 렌더와 같게 그린 뒤 저장된 주문 정보를 복원한다(skipHydration)
   useEffect(() => {
@@ -94,19 +90,42 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
 
   const phoneNumber = userPhoneNumber || studentInfo?.phone_number || '';
 
-  const firstItemName = cart.items[0]?.name ?? '';
-  const orderName = cart.items.length <= 1 ? firstItemName : `${firstItemName} 외 ${cart.items.length - 1}건`;
-
   const selectedAddress = deliveryType === 'CAMPUS' ? campusAddress : outsideAddress;
-  const address = selectedAddress?.address;
-  const addressDetail = deliveryType === 'CAMPUS' ? campusAddress?.short_address : outsideAddress.detail_address;
+  // 성공 뒤에도 결과 화면으로 넘어갈 때까지 막아 같은 주문을 두 번 만들지 않는다
+  const isOrdering = [deliveryOrder.status, takeoutOrder.status].some(
+    (status) => status === 'pending' || status === 'success',
+  );
+  const {
+    bank,
+    accountNumber,
+    accountHolder,
+    hasAccount,
+    isUnavailable: isAccountUnavailable,
+    isError: isAccountError,
+    retry: retryAccount,
+  } = useShopBankAccount(cart.orderable_shop_id);
+  const canPay = hasAccount && isAgreed && !!phoneNumber && (!isDelivery || !!selectedAddress?.address) && !isOrdering;
 
-  const createTemporaryOrder = async (): Promise<TemporaryPaymentResponse | null> => {
-    try {
-      if (isDelivery && selectedAddress) {
-        return await createTemporaryDelivery({
+  const orderCallbacks = {
+    onSuccess: (response: OrderCreateResponse) => {
+      // 주문이 만들어지면 저장된 주문 정보(연락처·요청사항·배달지)를 비우고 결과 화면으로 바꾼다
+      useOrderStore.persist.clearStorage();
+      router.replace(ROUTES.OrderResult({ paymentId: String(response.payment_id) }));
+    },
+    onError: (error: unknown) => {
+      showToast('error', isKoinError(error) ? error.message : FAILED_ORDER_MESSAGE);
+    },
+  };
+
+  const pay = () => {
+    if (!canPay) return;
+
+    if (isDelivery && selectedAddress) {
+      deliveryOrder.mutate(
+        {
           address: selectedAddress.address,
-          address_detail: addressDetail ?? '',
+          address_detail:
+            (deliveryType === 'CAMPUS' ? campusAddress?.short_address : outsideAddress.detail_address) ?? '',
           longitude: selectedAddress.longitude,
           latitude: selectedAddress.latitude,
           phone_number: phoneNumber,
@@ -117,63 +136,23 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
           delivery_type: deliveryType,
           delivery_tip: cart.delivery_fee,
           total_amount: cart.total_amount,
-        });
-      }
+        },
+        orderCallbacks,
+      );
 
-      return await createTemporaryTakeout({
+      return;
+    }
+
+    takeoutOrder.mutate(
+      {
         phone_number: phoneNumber,
         to_owner: ownerRequest,
         provide_cutlery: !isCutleryDeclined,
         total_menu_price: cart.items_amount,
         total_amount: cart.total_amount,
-      });
-    } catch (error) {
-      // order는 배달 주소 형식 오류(INVALID_ADDRESS_FORMAT)의 메시지를 토스트로 보여 준다
-      if (isKoinError(error)) showToast('error', error.message);
-
-      return null;
-    }
-  };
-
-  const pay = async () => {
-    if (!agreement) {
-      showToast('error', '결제 이용 약관에 동의해주세요');
-
-      return;
-    }
-
-    if (!phoneNumber) {
-      showToast('error', '연락처를 입력해주세요');
-
-      return;
-    }
-
-    if (isDelivery && !address) {
-      showToast('error', '배달 주소를 선택해주세요');
-
-      return;
-    }
-
-    const order = await createTemporaryOrder();
-    if (!order || !widgets) return;
-
-    try {
-      await widgets.requestPayment({
-        orderId: order.order_id,
-        orderName,
-        successUrl: `${window.location.origin}${ROUTES.OrderCheckoutReturn()}?orderType=${orderType}&entryPoint=payment`,
-        failUrl: `${window.location.origin}${ROUTES.OrderCheckout()}?orderType=${orderType}`,
-      });
-    } catch (error) {
-      console.error(error);
-      showToast('error', FAILED_PAYMENT_MESSAGE);
-    }
-  };
-
-  // 실패 안내를 닫으면 order처럼 주소에서 message를 지운다(같은 화면이라 서버 데이터는 다시 받지 않는다)
-  const handleCloseFailModal = () => {
-    closePaymentFailModal();
-    router.replace(`${ROUTES.OrderCheckout()}?orderType=${orderType}`, undefined, { shallow: true });
+      },
+      orderCallbacks,
+    );
   };
 
   const handleSubmitOwnerRequest = (newRequest: string, newNoCutlery: boolean) => {
@@ -246,12 +225,15 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
             </div>
           )}
 
-          <TossWidget
-            widgets={widgets}
-            setWidgets={setWidgets}
-            setReady={setReady}
-            amount={{ currency: 'KRW', value: cart.total_amount }}
-            setAgreement={setAgreement}
+          <BankTransfer
+            bank={bank}
+            accountNumber={accountNumber}
+            accountHolder={accountHolder}
+            isAccountUnavailable={isAccountUnavailable}
+            isAccountError={isAccountError}
+            onRetryAccount={retryAccount}
+            isAgreed={isAgreed}
+            onToggleAgreement={toggleAgreement}
           />
           <Agreement />
           <PaymentAmount
@@ -261,14 +243,7 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
           />
           <div className={styles.consent}>위 내용을 확인하였으며 결제에 동의합니다.</div>
         </div>
-        <Button
-          className={styles.content__pay}
-          fullWidth
-          state={ready ? 'default' : 'disabled'}
-          onClick={() => {
-            pay();
-          }}
-        >
+        <Button className={styles.content__pay} fullWidth state={canPay ? 'default' : 'disabled'} onClick={pay}>
           {formatNumber(cart.total_amount)}원 결제하기
         </Button>
 
@@ -281,7 +256,7 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
 
         {/* 모달은 order처럼 늘 붙어 있어 처음 값을 마운트 때 정한다. 복원 뒤 값으로 다시 시작하도록 key를 바꾼다 */}
         <StoreRequestModal
-          key={isRestored ? 'restored' : 'initial'}
+          key={isRestored ? 'store-request-restored' : 'store-request-initial'}
           isOpen={isStoreRequestModalOpen}
           onClose={closeStoreRequestModal}
           currentRequest={ownerRequest}
@@ -290,18 +265,11 @@ export default function OrderCheckoutPage({ orderType, message }: OrderCheckoutP
         />
 
         <RiderRequestModal
-          key={isRestored ? 'restored' : 'initial'}
+          key={isRestored ? 'rider-request-restored' : 'rider-request-initial'}
           isOpen={isRiderRequestModalOpen}
           onClose={closeRiderRequestModal}
           initialValue={deliveryRequest}
           onSubmit={setDeliveryRequest}
-        />
-
-        <AlertModal
-          isOpen={isPaymentFailModalOpen}
-          onClose={handleCloseFailModal}
-          message={message || '알 수 없는 오류가 발생했습니다.'}
-          messageWeight="medium"
         />
       </div>
     </div>

@@ -1,0 +1,96 @@
+@use "src/utils/scss/order-palette" as palette;
+
+.title {
+  margin-bottom: 8px;
+  color: palette.$primary-500;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: palette.$shadow-1;
+}
+
+.method {
+  padding: 12px 0;
+  border: 0.5px solid palette.$neutral-800;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.unavailable {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: palette.$page-background;
+  color: palette.$neutral-500;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: palette.$page-background;
+  color: palette.$neutral-500;
+  font-size: 13px;
+  line-height: 1.5;
+
+  &__retry {
+    padding: 6px 12px;
+    border: 1px solid palette.$neutral-400;
+    border-radius: 6px;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+.notice {
+  color: palette.$neutral-500;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.consent {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+
+  &__toggle {
+    display: flex;
+    flex: 1;
+    gap: 6px;
+    align-items: center;
+    min-width: 0;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: start;
+  }
+
+  &__check {
+    flex: none;
+
+    // 동의 전 상태는 시안이 없어 체크 표시를 비활성 회색으로 그린다
+    &--off path {
+      stroke: palette.$neutral-400;
+    }
+  }
+}

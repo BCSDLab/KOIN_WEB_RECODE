@@ -8,7 +8,8 @@ import {
   Cart,
   CartItemOptions,
   CartSummary,
-  ConfirmPayment,
+  CreateDeliveryOrder,
+  CreateTakeoutOrder,
   DeleteCartItem,
   InProgressOrders,
   OffCampusDeliveryValidate,
@@ -21,8 +22,6 @@ import {
   RiderMessages,
   ShopDeliveryInfo,
   StudentInfo,
-  TemporaryDeliveryPayment,
-  TemporaryTakeoutPayment,
   UpdateCartItemOptions,
   UpdateCartItemQuantity,
   ValidateCart,
@@ -62,11 +61,9 @@ export const getShopDeliveryInfo = APIClient.of(ShopDeliveryInfo);
 
 export const getRiderMessages = APIClient.of(RiderMessages);
 
-export const createTemporaryDeliveryPayment = APIClient.of(TemporaryDeliveryPayment);
+export const createDeliveryOrder = APIClient.of(CreateDeliveryOrder);
 
-export const createTemporaryTakeoutPayment = APIClient.of(TemporaryTakeoutPayment);
-
-export const confirmPayment = APIClient.of(ConfirmPayment);
+export const createTakeoutOrder = APIClient.of(CreateTakeoutOrder);
 
 export const getPaymentInfo = APIClient.of(PaymentInfo);
 

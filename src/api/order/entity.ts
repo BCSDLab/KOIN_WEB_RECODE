@@ -176,7 +176,7 @@ export interface RiderMessageResponse {
   contents: Array<{ content: string }>;
 }
 
-export interface DeliveryTemporaryRequest {
+export interface DeliveryOrderRequest {
   address: string;
   address_detail: string;
   longitude: number;
@@ -191,7 +191,7 @@ export interface DeliveryTemporaryRequest {
   total_amount: number;
 }
 
-export interface TakeoutTemporaryRequest {
+export interface TakeoutOrderRequest {
   phone_number: string;
   to_owner: string;
   provide_cutlery: boolean;
@@ -199,48 +199,22 @@ export interface TakeoutTemporaryRequest {
   total_amount: number;
 }
 
-export interface TemporaryPaymentResponse {
-  order_id: string;
+export interface BankAccount {
+  bank: string;
+  account_number: string;
+  account_holder: string;
 }
 
-// KOIN_ORDER_WEBVIEW api/payments/entity 이전(결제 승인)
-export interface ConfirmPaymentRequest {
-  order_id: string;
-  payment_key: string;
-  amount: number;
-}
-
-export interface ConfirmPaymentResponse {
-  id: number;
-  orderable_shop_id: number;
-  delivery_address: string;
-  delivery_address_details: string;
-  shop_address: string;
-  longitude: number;
-  latitude: number;
-  to_owner: string;
-  to_rider: string;
-  provide_cutlery: boolean;
-  total_menu_price: number;
-  delivery_tip: number;
-  amount: number;
-  shop_name: string;
-  menus: Array<{
-    name: string;
-    quantity: number;
-    price: number;
-    options: Array<{
-      option_group_name: string;
-      option_name: string;
-      option_price: number;
-    }>;
-  }>;
+// 계좌이체 주문 생성 결과. 입금할 금액(`amount`)과 상점 계좌를 함께 돌려준다
+export interface OrderCreateResponse {
+  order_id: number;
+  order_number: string;
+  payment_id: number;
   order_type: OrderType;
-  easy_pay_company: string;
-  requested_at: string;
-  approved_at: string;
+  order_status: OrderStatus;
   payment_method: string;
-  estimated_at: string;
+  amount: number;
+  bank_account: BankAccount;
 }
 
 // KOIN_ORDER_WEBVIEW api/payments getPaymentInfo 이전(주문 완료·결과 화면).
@@ -275,10 +249,13 @@ export interface PaymentInfoResponse {
   order_type: OrderType;
   easy_pay_company: string;
   requested_at: string;
-  approved_at: string;
+  // 계좌이체 주문은 승인 단계가 없어 null이다
+  approved_at: string | null;
   payment_method: string;
   estimated_at: string | null;
   order_status: OrderStatus;
+  // 계좌이체 주문에만 온다
+  bank_account?: BankAccount | null;
 }
 
 // KOIN_ORDER_WEBVIEW api/payments cancelPayment 이전(주문 취소)

@@ -28,7 +28,6 @@ const ROUTES = {
   OrderDeliveryOutside: () => '/order/delivery/outside',
   OrderDeliveryOutsideDetail: () => '/order/delivery/outside/detail',
   OrderCheckout: () => '/order/checkout',
-  OrderCheckoutReturn: () => '/order/checkout/return',
   OrderResult: ({ paymentId }: ROUTESParams<'paymentId'>) => `/order/result/${paymentId}`,
   OrderCancel: ({ paymentId }: ROUTESParams<'paymentId'>) => `/order/cancel/${paymentId}`,
   OrderList: () => '/order/orders',
