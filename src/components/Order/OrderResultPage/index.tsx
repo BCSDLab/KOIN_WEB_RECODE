@@ -11,6 +11,7 @@ import PackageIcon from 'assets/svg/Order/Result/package.svg';
 import ReceiptIcon from 'assets/svg/Order/Result/receipt-icon.svg';
 import ShoppingCartIcon from 'assets/svg/Order/Result/shopping-cart-icon.svg';
 import SkilletIcon from 'assets/svg/Order/Result/skillet-icon.svg';
+import BankAccountInfo from 'components/Order/common/BankAccountInfo';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
@@ -69,6 +70,7 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
   const isDelivery = paymentInfo.order_type === 'DELIVERY';
   const isConfirming = paymentInfo.order_status === 'CONFIRMING';
   const isCompleted = COMPLETED_STATUSES.includes(paymentInfo.order_status);
+  const bankAccount = paymentInfo.order_status === 'CANCELED' ? null : paymentInfo.bank_account;
 
   const handleClickOrderCancel = () => {
     router.push(ROUTES.OrderCancel({ paymentId: String(paymentId) }));
@@ -162,80 +164,27 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
             </div>
           )}
         </div>
-        <div className={styles.content__title}>주문내역</div>
-        <div className={cn({ [styles.card]: true, [styles['card--padded']]: true })}>
-          <div>
-            <div className={styles.menus}>
-              {paymentInfo.menus.map((menu, menuIndex) => {
-                const options = menu.options ?? [];
-                const optionSumPerItem = options.reduce((sum, option) => sum + (option.option_price ?? 0), 0);
-                const lineTotal = (menu.price + optionSumPerItem) * menu.quantity;
-
-                return (
-                  // eslint-disable-next-line react/no-array-index-key -- 메뉴 응답에 고유 id가 없고 조회 결과를 그대로 그리는 정적 목록이다
-                  <div key={menuIndex}>
-                    <div className={styles.menus__head}>
-                      <div className={styles.menus__name}>
-                        <div className={styles['menus__name-text']}>{menu.name}</div>
-                        <div className={styles.menus__quantity}>{menu.quantity}개</div>
-                      </div>
-                      <div className={styles.menus__total}>{formatPrice(lineTotal)}</div>
-                    </div>
-
-                    <ul className={styles.menus__details}>
-                      <li>
-                        <div className={styles.menus__detail}>가격 : {formatPrice(menu.price)}</div>
-                      </li>
-
-                      {options.length > 0 &&
-                        options.map((option, optionIndex) => {
-                          const optionPrice = option.option_price ?? 0;
-
-                          return (
-                            // eslint-disable-next-line react/no-array-index-key -- 옵션 응답에 고유 id가 없고 조회 결과를 그대로 그리는 정적 목록이다
-                            <li key={optionIndex}>
-                              <div className={styles.menus__detail}>
-                                {option.option_group_name} : {option.option_name} (
-                                <span>{formatPrice(optionPrice)}</span>)
-                              </div>
-                            </li>
-                          );
-                        })}
-                    </ul>
-                    {menuIndex !== paymentInfo.menus.length - 1 && <div className={styles.menus__divider} />}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.content__title}>결제정보</div>
-        <div className={cn({ [styles.card]: true, [styles['card--padded']]: true, [styles['card--payment']]: true })}>
-          <div className={styles.payment__prices}>
-            <div className={cn({ [styles.payment__row]: true, [styles['payment__row--spaced']]: true })}>
-              메뉴 금액<div>{formatPrice(paymentInfo.total_menu_price)}</div>
-            </div>
-            <div className={styles.payment__row}>
-              배달 금액<div>{formatPrice(paymentInfo.delivery_tip ?? 0)}</div>
-            </div>
-            <div className={styles.payment__divider} />
-          </div>
-          <div className={styles.payment__summary}>
-            <div className={cn({ [styles.payment__row]: true, [styles['payment__row--spaced']]: true })}>
-              총 결제 금액 <div className={styles.payment__amount}>{formatPrice(paymentInfo.amount)}</div>
-            </div>
-            <div className={styles.payment__row}>
-              결제 수단 <div className={styles.payment__method}>{paymentInfo.easy_pay_company}</div>
-            </div>
-          </div>
-        </div>
         <div className={styles.content__title}>주문정보</div>
         <div className={styles.order}>
           <button type="button" className={styles.order__shop} onClick={handleGoToShopDetail}>
-            <div>{paymentInfo.shop_name}</div>
+            {paymentInfo.shop_name}
             <ArrowGoIcon />
           </button>
+          <div className={styles.order__divider} />
+          <ul className={styles.order__menus}>
+            {paymentInfo.menus.map((menu, menuIndex) => (
+              // eslint-disable-next-line react/no-array-index-key -- 메뉴 응답에 고유 id가 없고 조회 결과를 그대로 그리는 정적 목록이다
+              <li key={menuIndex} className={styles.order__menu}>
+                <span>{menu.name}</span>
+                <span>{menu.quantity}개</span>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.order__divider} />
+          <div className={styles.order__total}>
+            총 결제금액<span>{formatPrice(paymentInfo.amount)}</span>
+          </div>
+          <div className={styles.order__divider} />
           <div className={styles.order__meta}>
             <div className={styles.order__row}>
               주문번호 <div>{paymentInfo.id}</div>
@@ -244,11 +193,27 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
               주문일시 <div>{paymentInfo.requested_at.split(' ')[0]}</div>
             </div>
           </div>
-          <div className={styles.order__divider} />
           <Button className={styles.order__receipt} onClick={() => setIsReceiptOpen(true)}>
             <ReceiptIcon />
             영수증 보기
           </Button>
+        </div>
+
+        <div className={styles.content__title}>결제정보</div>
+        <div className={cn({ [styles.card]: true, [styles['card--padded']]: true, [styles['card--payment']]: true })}>
+          <div className={styles.payment__method}>
+            결제 수단<span className={styles['payment__method-value']}>{paymentInfo.payment_method}</span>
+          </div>
+          {/* 취소된 주문은 입금할 필요가 없어 계좌를 숨긴다 */}
+          {bankAccount && (
+            <div className={styles.payment__account}>
+              <BankAccountInfo
+                bank={bankAccount.bank}
+                accountNumber={bankAccount.account_number}
+                accountHolder={bankAccount.account_holder}
+              />
+            </div>
+          )}
         </div>
       </div>
       <ReceiptModal isOpen={isReceiptOpen} onClose={() => setIsReceiptOpen(false)} paymentInfo={paymentInfo} />

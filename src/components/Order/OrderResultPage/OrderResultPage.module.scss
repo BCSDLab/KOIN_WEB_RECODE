@@ -177,15 +177,15 @@ $header-height: 60px;
     font-weight: 600;
   }
 
-  // 주문내역·결제정보: py-4
+  // 결제정보: py-4
   &--padded {
     padding-top: 16px;
     padding-bottom: 16px;
   }
 
-  // 결제정보: mb-5
+  // 결제정보: 화면 마지막 카드라 아래 여백을 둔다
   &--payment {
-    margin-bottom: 20px;
+    margin-bottom: 64px;
   }
 
   // order: py-4 (border-b border-neutral-200)
@@ -208,154 +208,85 @@ $header-height: 60px;
   }
 }
 
-// order: flex flex-col gap-4
-.menus {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  // order: mb-2.5 flex items-center justify-between
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  // order: flex items-center gap-1
-  &__name {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
-
-  // order: text-sm leading-[160%] font-semibold
-  &__name-text {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 160%;
-  }
-
-  // order: text-sm font-semibold text-neutral-500
-  &__quantity {
-    color: palette.$neutral-500;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: calc(1.25 / 0.875);
-  }
-
-  // order: text-[15px] leading-[160%] font-semibold
-  &__total {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 160%;
-  }
-
-  // order: ml-4 list-disc
-  &__details {
-    margin-left: 16px;
-    list-style-type: disc;
-  }
-
-  // order: text-[13px] text-neutral-500
-  &__detail {
-    color: palette.$neutral-500;
-    font-size: 13px;
-  }
-
-  // order: mt-4 border-t border-neutral-100
-  &__divider {
-    margin-top: 16px;
-    border-top: 1px solid palette.$neutral-100;
-  }
-}
-
-.payment {
-  // order: text-[13px] text-neutral-500
-  &__prices {
-    color: palette.$neutral-500;
-    font-size: 13px;
-  }
-
-  // order: flex justify-between (pb-1)
-  &__row {
-    display: flex;
-    justify-content: space-between;
-
-    &--spaced {
-      padding-bottom: 4px;
-    }
-  }
-
-  // order: my-4 h-[1px] border-b border-neutral-200
-  &__divider {
-    height: 1px;
-    margin: 16px 0;
-    border-bottom: 1px solid palette.$neutral-200;
-  }
-
-  // order: font-semibold
-  &__summary {
-    font-weight: 600;
-  }
-
-  // order: text-primary-500 text-[15px]
-  &__amount {
-    color: palette.$primary-500;
-    font-size: 15px;
-  }
-
-  // order: text-[15px]
-  &__method {
-    font-size: 15px;
-  }
-}
-
-// order: shadow-1 mb-16 flex flex-col gap-4 rounded-2xl bg-white px-6 py-4
+// 주문정보: 가게 이름 · 메뉴 이름과 수량 · 총 결제금액 · 주문번호와 주문일시를 구분선으로 나눈다
 .order {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 64px;
-  padding: 16px 24px;
   border-radius: 16px;
   background-color: #fff;
   box-shadow: palette.$shadow-1;
 
-  // order: flex items-center gap-1.5 text-sm leading-[160%] font-semibold
   &__shop {
     display: flex;
     gap: 6px;
     align-items: center;
+    padding: 16px 24px;
     font-size: 14px;
     font-weight: 600;
-    line-height: 160%;
+    line-height: 1.6;
   }
 
-  // order: text-[13px] text-neutral-600
-  &__meta {
+  &__divider {
+    height: 1px;
+    margin: 0 16px;
+    background-color: #eee;
+  }
+
+  &__menus {
+    padding: 12px 24px;
     color: palette.$neutral-600;
     font-size: 13px;
+    line-height: 1.6;
   }
 
-  // order: flex gap-2
-  &__row {
+  &__menu {
     display: flex;
     gap: 8px;
   }
 
-  // order: h-[1px] border-b border-neutral-200
-  &__divider {
-    height: 1px;
-    border-bottom: 1px solid palette.$neutral-200;
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  &__meta {
+    padding: 12px 24px 0;
+    color: palette.$neutral-600;
+    font-size: 13px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 8px;
   }
 }
 
-// order Button: gap-3 self-center px-16 py-2.5
+// order Button: gap-3 self-center px-16 py-2.5. 공용 Button의 여백·글꼴을 덮어야 해서 선택자 우선순위를 올린다
 .order .order__receipt {
   @include preflight.order-font;
 
   gap: 12px;
   align-self: center;
+  margin: 16px 0;
   padding: 10px 64px;
+}
+
+.payment {
+  &__method {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+
+  &__method-value {
+    font-size: 15px;
+  }
+
+  &__account {
+    margin-top: 16px;
+  }
 }

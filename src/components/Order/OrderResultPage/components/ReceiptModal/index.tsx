@@ -60,11 +60,6 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
             </div>
           </div>
           <div className={styles.receipt__divider} />
-          <div className={styles.receipt__row}>
-            <div className={styles.receipt__strong}>결제 정보(카드사)</div>
-            <div>{paymentInfo.easy_pay_company}</div>
-          </div>
-          <div className={styles.receipt__divider} />
           <div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>총 결제 금액</div>
@@ -72,7 +67,7 @@ export default function ReceiptModal({ isOpen, onClose, paymentInfo }: ReceiptMo
             </div>
             <div className={styles.receipt__row}>
               <div className={styles.receipt__strong}>결제 수단</div>
-              <div>{paymentInfo.easy_pay_company}</div>
+              <div>{paymentInfo.payment_method}</div>
             </div>
           </div>
           {paymentInfo.order_type === 'DELIVERY' && (
