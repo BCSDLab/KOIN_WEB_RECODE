@@ -1,0 +1,21 @@
+.logo {
+  display: flex;
+  align-items: center;
+  width: 116px;
+  height: 37px;
+  color: #1f1f1f;
+
+  &--muted {
+    color: #cacaca;
+  }
+
+  &__title {
+    width: 70px;
+    height: 25px;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 22px;
+    text-align: center;
+  }
+}

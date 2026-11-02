@@ -6,7 +6,9 @@ import { cn } from '@bcsdlab/utils';
 import { getStoreDetailInfo } from 'api/store';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
-import { CATEGORY, type Category, type Submenu, type SubmenuTitle } from 'static/category';
+import KoinLogo from 'components/ui/KoinLogo';
+import type { SubmenuTitle } from 'static/category';
+import { DESKTOP_NAVIGATION } from 'static/desktopNavigation';
 import ROUTES from 'static/routes';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -19,53 +21,13 @@ import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 
 import styles from './PCHeader.module.scss';
 
-const ID: Record<string, string> = {
-  PANEL: 'megamenu-panel',
-  LABEL1: 'megamenu-label-1',
-  LABEL2: 'megamenu-label-2',
-};
-
-const useMegaMenu = (category: Category[]) => {
-  const [panelMenuList, setPanelMenuList] = useState<Submenu[] | null>();
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const createOnChangeMenu = (title: string) => () => {
-    const selectedSubmenu = category.find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
-    setPanelMenuList(selectedSubmenu);
-    setIsExpanded(true);
-  };
-  const onFocusPanel = () => {
-    setIsExpanded(true);
-  };
-  const hideMegaMenu = (event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>) => {
-    if (event.type === 'mouseout') {
-      const { currentTarget } = event;
-      currentTarget.blur();
-    }
-    setIsExpanded(false);
-  };
-
-  return {
-    panelMenuList,
-    isExpanded,
-    createOnChangeMenu,
-    onFocusPanel,
-    hideMegaMenu,
-  };
-};
-
 interface PCHeaderProps {
   openModal: () => void;
 }
 
 export default function PCHeader({ openModal }: PCHeaderProps) {
-  const {
-    panelMenuList,
-    isExpanded: isMegaMenuExpanded,
-    createOnChangeMenu,
-    onFocusPanel,
-    hideMegaMenu: hideMegamenu,
-  } = useMegaMenu(CATEGORY);
+  const [activeCategory, setActiveCategory] = useState<(typeof DESKTOP_NAVIGATION)[number] | null>(null);
+  const activeCategoryIndex = DESKTOP_NAVIGATION.findIndex((category) => category === activeCategory);
 
   const logout = useLogout();
   const logger = useLogger();
@@ -152,79 +114,77 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
+    setActiveCategory(null);
+  };
+
+  const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Escape') {
+      setActiveCategory(null);
+    }
   };
 
   return (
     <>
       <Link className={styles.header__logo} href={ROUTES.Main()} tabIndex={0} onClick={escapeByLogo}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- 작은 정적 로고라 최적화 이점 대비 설정 비용이 큼 */}
-        <img
-          src="https://static.koreatech.in/assets/img/logo_white.png"
-          alt="KOIN service logo"
-          width={80}
-          height={44}
-          decoding="async"
-          loading="eager"
-        />
+        <KoinLogo />
       </Link>
       <div
-        className={cn({
-          [styles.header__megamenu]: true,
-          [styles.megamenu]: true,
-        })}
-        onBlur={hideMegamenu}
-        onMouseOut={hideMegamenu}
+        className={styles.megamenu}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setActiveCategory(null);
+          }
+        }}
+        onMouseLeave={() => setActiveCategory(null)}
       >
         <ul className={styles['megamenu__trigger-list']}>
-          {CATEGORY.map((category, index) => (
+          {DESKTOP_NAVIGATION.map((category, index) => (
             <li key={category.title}>
               <button
-                className={styles.megamenu__trigger}
+                className={cn({
+                  [styles.megamenu__trigger]: true,
+                  [styles['megamenu__trigger--active']]: activeCategory === category,
+                })}
+                id={`megamenu-label-${index}`}
                 tabIndex={0}
                 type="button"
-                onClick={createOnChangeMenu(category.title)}
-                onFocus={createOnChangeMenu(category.title)}
-                onBlur={hideMegamenu}
-                onMouseOver={createOnChangeMenu(category.title)}
-                onMouseOut={hideMegamenu}
-                aria-expanded={isMegaMenuExpanded}
-                aria-controls={ID[`LABEL${index + 1}`]}
+                onClick={() => setActiveCategory(category)}
+                onFocus={() => setActiveCategory(category)}
+                onMouseEnter={() => setActiveCategory(category)}
+                onKeyDown={handleMenuKeyDown}
+                aria-expanded={activeCategory === category}
+                aria-controls="megamenu-panel"
               >
-                <span>{category.title}</span>
+                {category.title}
               </button>
             </li>
           ))}
         </ul>
         <div
-          id={ID.PANEL}
+          id="megamenu-panel"
           className={styles.megamenu__panel}
-          onFocus={onFocusPanel}
-          onMouseOver={onFocusPanel}
-          aria-hidden={!isMegaMenuExpanded}
-          aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
+          hidden={!activeCategory}
+          aria-labelledby={activeCategory ? `megamenu-label-${activeCategoryIndex}` : undefined}
         >
           <ul className={styles.megamenu__content}>
-            {panelMenuList
-              ?.slice(0, -4)
-              .filter((menu) => !menu.mobileOnly)
-              .map((menu) => {
-                const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
-                const href = preferred ?? ROUTES.Main();
+            {activeCategory?.submenu.map((menu) => {
+              const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
+              const href = preferred ?? ROUTES.Main();
 
-                return (
-                  <li className={styles.megamenu__menu} key={menu.title}>
-                    {/* TODO: 키보드 Focus 접근성 향상 */}
-                    <Link
-                      className={styles.megamenu__link}
-                      href={href}
-                      prefetch={false}
-                      onClick={(e) => handleMenuClick(e, menu.title)}
-                    >
-                      {menu.title}
-                    </Link>
-                  </li>
-                );
-              })}
+              return (
+                <li key={menu.title}>
+                  <Link
+                    className={styles.megamenu__link}
+                    href={href}
+                    prefetch={false}
+                    onClick={(e) => handleMenuClick(e, menu.title)}
+                    onKeyDown={handleMenuKeyDown}
+                  >
+                    {menu.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

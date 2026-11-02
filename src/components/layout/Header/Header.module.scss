@@ -75,3 +75,14 @@
     }
   }
 }
+
+@media (width >= 577px) {
+  .header {
+    background: #fff;
+    color: #727272;
+
+    &__content {
+      width: 1136px;
+    }
+  }
+}

@@ -194,3 +194,68 @@
     }
   }
 }
+
+@media (width >= 577px) {
+  .footer {
+    &__content {
+      width: 1136px;
+      padding-top: 46px;
+      padding-bottom: 65px;
+    }
+
+    &__services {
+      gap: 24px;
+      margin-bottom: 19px;
+    }
+
+    &__service > a {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+    }
+  }
+
+  .sitemap {
+    display: grid;
+    grid-template-columns: 1fr auto;
+
+    &__logo {
+      width: 116px;
+      height: 37px;
+      margin-right: 0;
+      opacity: 1;
+    }
+
+    &__content {
+      grid-column: 1 / -1;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    &__link {
+      margin-right: 0;
+    }
+
+    &__icon-links {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      gap: 12px;
+    }
+
+    &__icon-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 37px;
+      height: 37px;
+      margin-right: 0;
+    }
+
+    &__copyright {
+      grid-column: 1 / -1;
+      margin-top: 22px;
+      line-height: 14px;
+    }
+  }
+}
