@@ -133,7 +133,6 @@ export const getServerSideProps = withCacheControl(
         queryClient.prefetchQuery(storeQueries.eventCount()),
         queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
         queryClient.prefetchQuery(timetableQueries.semesterInfo()),
-        queryClient.prefetchQuery(articleQueries.lostItemStat()),
       ]);
       bannerCategoryId = banners.categoryId;
       bannersList = banners.list;

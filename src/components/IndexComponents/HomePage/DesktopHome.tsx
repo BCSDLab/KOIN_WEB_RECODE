@@ -2,7 +2,6 @@ import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
 import IndexCallvan from 'components/IndexComponents/IndexCallvan';
-import IndexLostItem from 'components/IndexComponents/IndexLostItem';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import Banner from 'components/ui/Banner';
@@ -29,7 +28,6 @@ function DesktopHome({
           <IndexBus />
           <IndexCallvan />
           <IndexStore categories={categories} />
-          <IndexLostItem />
           <IndexArticles serverNow={serverNow} />
         </div>
         <div className={styles['right-container']}>
