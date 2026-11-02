@@ -99,19 +99,13 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
     bank,
     accountNumber,
     accountHolder,
-    hasAccount,
+    isAccountReady,
     isUnavailable: isAccountUnavailable,
     isError: isAccountError,
     retry: retryAccount,
   } = useShopBankAccount(cart.orderable_shop_id);
-  // 다시 불러오다 실패하면 이전 계좌가 남아 `hasAccount`가 참이어도 화면은 오류를 보여 주므로 결제를 막는다
-  const canPay =
-    hasAccount &&
-    !isAccountError &&
-    isAgreed &&
-    !!phoneNumber &&
-    (!isDelivery || !!selectedAddress?.address) &&
-    !isOrdering;
+  const hasOrderInfo = !!phoneNumber && (!isDelivery || !!selectedAddress?.address);
+  const canPay = isAccountReady && isAgreed && hasOrderInfo && !isOrdering;
 
   const orderCallbacks = {
     onSuccess: (response: OrderCreateResponse) => {
