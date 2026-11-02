@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { cn } from '@bcsdlab/utils';
-import type { DiningPlace } from 'api/dinings/entity';
+import type { Dining, DiningPlace, DiningType } from 'api/dinings/entity';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import Close from 'assets/svg/close-icon-grey.svg';
+import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useDinings from 'components/cafeteria/hooks/useDinings';
@@ -22,6 +23,45 @@ interface IndexCafeteriaProps {
   serverDining: ServerDining;
 }
 
+interface DiningCardProps {
+  place: DiningPlace;
+  dining?: Dining;
+  diningType: DiningType;
+  onClick: () => void;
+}
+
+function DiningCard({ place, dining, diningType, onClick }: DiningCardProps) {
+  return (
+    <button type="button" className={styles['meal-card']} onClick={onClick}>
+      <div className={styles['meal-card__meta']}>
+        <span>{DINING_TYPE_MAP[diningType]}</span>
+        {dining && (
+          <span className={styles['meal-card__details']}>
+            {!!dining.price_cash && <span>{`₩${dining.price_cash.toLocaleString('ko-KR')}`}</span>}
+            {!!dining.price_cash && !!dining.kcal && <span>·</span>}
+            {!!dining.kcal && <strong>{`${dining.kcal}kcal`}</strong>}
+          </span>
+        )}
+      </div>
+      <span className={styles['meal-card__title']}>{place}</span>
+      {dining ? (
+        <p className={styles['meal-card__menu']}>
+          {dining.menu
+            .slice(0, 10)
+            .map((menuItem) => menuItem.name)
+            .join(' · ')}
+        </p>
+      ) : (
+        <div className={styles['meal-card__empty']}>
+          <NotServed />
+          <p>식단이 제공되지 않아</p>
+          <p>표시할 수 없습니다.</p>
+        </div>
+      )}
+    </button>
+  );
+}
+
 /**
  * 시각 파생 값은 서버가 확정한 것을 쓴다. `useMount()` 뒤로 미루면 React 경고는 사라지지만
  * 서버가 그린 DOM이 하이드레이션 직후 매번 교체된다.
@@ -36,9 +76,18 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
   const dayLabel = serverDining.dayLabel;
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
+  const [hasMoreCards, setHasMoreCards] = useState(true);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const selectedDining = dinings.find((dining) => dining.place === selectedPlace && dining.type === diningType);
+
+  const updateCarouselEdge = useCallback(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    setHasMoreCards(carousel.scrollWidth - carousel.clientWidth - carousel.scrollLeft > 1);
+  }, []);
 
   const handleMoreClick = () => {
     logger.actionEventClick({
@@ -52,6 +101,15 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
   const handlePlaceClick = (place: DiningPlace) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_corner', value: place });
     setSelectedPlace(place);
+
+    const carousel = carouselRef.current;
+    const card = carousel?.children[PLACE_ORDER.indexOf(place)];
+    if (carousel && card) {
+      carousel.scrollTo({
+        left: carousel.scrollLeft + card.getBoundingClientRect().left - carousel.getBoundingClientRect().left,
+        behavior: 'smooth',
+      });
+    }
   };
 
   const handleTooltipContentButtonClick = () => {
@@ -70,15 +128,25 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     }
   }, [openTooltip]);
 
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const observer = new ResizeObserver(updateCarouselEdge);
+    observer.observe(carousel);
+
+    return () => observer.disconnect();
+  }, [isMobile, updateCarouselEdge]);
+
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>
         <button type="button" className={styles.header__title} onClick={handleMoreClick}>
-          {`${dayLabel} 식단`}
+          {isMobile ? `${dayLabel} 식단` : '오늘의 식단'}
         </button>
         <button type="button" className={styles.header__more} onClick={handleMoreClick}>
-          더보기
-          <RightArrow />
+          {isMobile ? '더보기' : '전체보기'}
+          {isMobile ? <RightArrow /> : <ArrowRightIcon aria-hidden />}
         </button>
         {isTooltipOpen && (
           <div className={styles.header__tooltip}>
@@ -124,36 +192,61 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
           ))}
         </div>
         <div className={styles.type}>{diningType ? DINING_TYPE_MAP[diningType] : ''}</div>
-        <button
-          type="button"
-          className={cn({
-            [styles.menus]: true,
-            [styles['menus--not-served']]: !selectedDining,
-          })}
-          onClick={handleMoreClick}
-        >
-          {isMobile && (
+        {isMobile ? (
+          <button
+            type="button"
+            className={cn({
+              [styles.menus]: true,
+              [styles['menus--not-served']]: !selectedDining,
+            })}
+            onClick={handleMoreClick}
+          >
             <div className={styles.menus__type}>
               {diningType ? DINING_TYPE_MAP[diningType] : ''}
               {selectedDining?.soldout_at && <span className={styles.menus__chip}>품절</span>}
             </div>
-          )}
-          {selectedDining ? (
-            <ul className={styles.menus__list}>
-              {selectedDining.menu.slice(0, 10).map((menuItem) => (
-                <li className={styles.menus__name} key={menuItem.id}>
-                  {menuItem.name}
-                </li>
+            {selectedDining ? (
+              <ul className={styles.menus__list}>
+                {selectedDining.menu.slice(0, 10).map((menuItem) => (
+                  <li className={styles.menus__name} key={menuItem.id}>
+                    {menuItem.name}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className={styles['menus__not-served']}>
+                <NotServed />
+                <p>식단이 제공되지 않아</p>
+                <p>표시할 수 없습니다.</p>
+              </div>
+            )}
+          </button>
+        ) : (
+          <div
+            className={cn({
+              [styles.carousel]: true,
+              [styles['carousel--has-more']]: hasMoreCards,
+            })}
+          >
+            <div
+              ref={carouselRef}
+              className={styles.carousel__viewport}
+              role="group"
+              aria-label="오늘의 식단 목록"
+              onScroll={updateCarouselEdge}
+            >
+              {PLACE_ORDER.map((place) => (
+                <DiningCard
+                  key={place}
+                  place={place}
+                  dining={dinings.find((dining) => dining.place === place && dining.type === diningType)}
+                  diningType={diningType}
+                  onClick={handleMoreClick}
+                />
               ))}
-            </ul>
-          ) : (
-            <div className={styles['menus__not-served']}>
-              <NotServed />
-              <p>식단이 제공되지 않아</p>
-              <p>표시할 수 없습니다.</p>
             </div>
-          )}
-        </button>
+          </div>
+        )}
       </div>
     </section>
   );
