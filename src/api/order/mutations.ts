@@ -84,17 +84,20 @@ export const orderMutations = {
       mutationFn: (data: OffCampusDeliveryAddressRequest) => registerOffCampusDeliveryAddress(data),
     }),
 
-  // 결제하기에서 계좌이체 주문 생성. 이동은 화면에서 정한다
+  // 결제하기에서 계좌이체 주문 생성. 이동은 화면에서 정한다.
+  // 실패하면 장바구니를 다시 받는다. 가격이 바뀌어 `ORDER_PRICE_MISMATCH`로 거절됐을 때 새 금액으로 다시 주문할 수 있게 한다
   createDeliveryOrder: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: (data: DeliveryOrderRequest) => createDeliveryOrder(data),
       onSuccess: () => markCartQueriesStale(queryClient),
+      onError: () => invalidateCartQueries(queryClient),
     }),
 
   createTakeoutOrder: (queryClient: QueryClient) =>
     mutationOptions({
       mutationFn: (data: TakeoutOrderRequest) => createTakeoutOrder(data),
       onSuccess: () => markCartQueriesStale(queryClient),
+      onError: () => invalidateCartQueries(queryClient),
     }),
 
   // KOIN_ORDER_WEBVIEW useSendSmsVerification 이전(연락처 변경 인증). order와 같은 경로·본문을 쓴다
