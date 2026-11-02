@@ -1,27 +1,36 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  min-width: 1132px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1;
+  padding: 50px 24px;
+  background: #f8f8fa;
 
   @include media.media-breakpoint(mobile) {
-    min-width: 100%;
-    width: 100%;
     padding: 40px 0 0;
+  }
+}
+
+.content {
+  max-width: 1136px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 357px;
+  align-items: flex-start;
+  gap: 44px;
+
+  @include media.media-breakpoint(mobile) {
+    grid-template-columns: minmax(0, 1fr);
     gap: 0;
   }
 }
 
 .left-container {
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 40px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -29,9 +38,10 @@
 }
 
 .right-container {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 62px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;

@@ -1,7 +1,7 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  width: 862px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -66,6 +66,7 @@
   }
 
   &__item-link {
+    min-width: 0;
     font-size: 14px;
     color: #252525;
     text-decoration: none;
@@ -74,6 +75,7 @@
   }
 
   &__item-title {
+    min-width: 0;
     max-width: 680px;
     white-space: nowrap;
     overflow: hidden;
@@ -81,6 +83,7 @@
   }
 
   &__item-type {
+    flex-shrink: 0;
     font-weight: 600;
     margin-right: 4px;
   }
@@ -92,6 +95,7 @@
   }
 
   &__item-registered {
+    flex-shrink: 0;
     color: #999;
     text-align: right;
     font-size: 12px;

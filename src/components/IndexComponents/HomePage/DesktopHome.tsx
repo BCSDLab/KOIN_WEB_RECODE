@@ -23,16 +23,18 @@ function DesktopHome({
     <main className={styles.template}>
       <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
       <UserInfoModal />
-      <div className={styles['left-container']}>
-        <IndexStore categories={categories} />
-        <IndexBus />
-        <IndexCallvan />
-        <IndexLostItem />
-        <IndexArticles serverNow={serverNow} />
-      </div>
-      <div className={styles['right-container']}>
-        <IndexTimetable serverSemester={serverSemester} />
-        <IndexCafeteria serverDining={serverDining} />
+      <div className={styles.content}>
+        <div className={styles['left-container']}>
+          <IndexCafeteria serverDining={serverDining} />
+          <IndexBus />
+          <IndexCallvan />
+          <IndexStore categories={categories} />
+          <IndexLostItem />
+          <IndexArticles serverNow={serverNow} />
+        </div>
+        <div className={styles['right-container']}>
+          <IndexTimetable serverSemester={serverSemester} />
+        </div>
       </div>
     </main>
   );
