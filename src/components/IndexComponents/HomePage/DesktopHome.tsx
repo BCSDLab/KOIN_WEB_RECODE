@@ -1,7 +1,6 @@
 import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
-import IndexCallvan from 'components/IndexComponents/IndexCallvan';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import Banner from 'components/ui/Banner';
@@ -11,14 +10,7 @@ import HomeGreeting from './HomeGreeting';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
-function DesktopHome({
-  bannersList,
-  categories,
-  bannerCategoryId,
-  serverDining,
-  serverNow,
-  serverSemester,
-}: HomePageProps) {
+function DesktopHome({ bannersList, categories, bannerCategoryId, serverDining, serverSemester }: HomePageProps) {
   return (
     <main className={styles.template}>
       <UserInfoModal />
@@ -27,9 +19,8 @@ function DesktopHome({
         <div className={styles['left-container']}>
           <IndexCafeteria serverDining={serverDining} />
           <IndexBus />
-          <IndexCallvan />
           <IndexStore categories={categories} />
-          <IndexArticles serverNow={serverNow} />
+          <IndexArticles />
         </div>
         <div className={styles['right-container']}>
           <IndexTimetable serverSemester={serverSemester} />

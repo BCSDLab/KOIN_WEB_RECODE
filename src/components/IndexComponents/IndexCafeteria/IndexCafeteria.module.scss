@@ -359,17 +359,34 @@
       overflow-x: auto;
       scroll-snap-type: x proximity;
       scrollbar-width: none;
+      cursor: grab;
+      user-select: none;
+
+      &--dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+      }
     }
 
+    &--has-previous::before,
     &--has-more::after {
       content: "";
       position: absolute;
+      z-index: 1;
       top: 0;
-      right: 0;
       bottom: 0;
       width: 64px;
-      background: linear-gradient(to right, transparent, #f8f8fa);
       pointer-events: none;
+    }
+
+    &--has-previous::before {
+      left: 0;
+      background: linear-gradient(to left, transparent, #f8f8fa);
+    }
+
+    &--has-more::after {
+      right: 0;
+      background: linear-gradient(to right, transparent, #f8f8fa);
     }
   }
 
@@ -386,6 +403,7 @@
     background: #fff;
     text-align: left;
     scroll-snap-align: start;
+    cursor: inherit;
 
     &__meta {
       display: flex;

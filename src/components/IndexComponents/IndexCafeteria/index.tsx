@@ -1,3 +1,4 @@
+import type { MouseEvent, PointerEvent } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -76,9 +77,13 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
   const dayLabel = serverDining.dayLabel;
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
+  const [hasPreviousCards, setHasPreviousCards] = useState(false);
   const [hasMoreCards, setHasMoreCards] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselDragRef = useRef<{ pointerId: number; startX: number; scrollLeft: number } | null>(null);
+  const didDragRef = useRef(false);
 
   const selectedDining = dinings.find((dining) => dining.place === selectedPlace && dining.type === diningType);
 
@@ -86,8 +91,54 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
+    setHasPreviousCards(carousel.scrollLeft > 1);
     setHasMoreCards(carousel.scrollWidth - carousel.clientWidth - carousel.scrollLeft > 1);
   }, []);
+
+  const handleCarouselPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+
+    carouselDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: event.currentTarget.scrollLeft,
+    };
+    didDragRef.current = false;
+    setIsDragging(true);
+  };
+
+  const handleCarouselPointerEnd = () => {
+    carouselDragRef.current = null;
+    setIsDragging(false);
+  };
+
+  const handleCarouselPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const drag = carouselDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    if (event.buttons !== 1) {
+      handleCarouselPointerEnd();
+
+      return;
+    }
+
+    const distance = event.clientX - drag.startX;
+    if (!didDragRef.current && Math.abs(distance) < 5) return;
+
+    if (!didDragRef.current) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      didDragRef.current = true;
+    }
+    event.preventDefault();
+    event.currentTarget.scrollLeft = drag.scrollLeft - distance;
+  };
+
+  const handleCarouselClickCapture = (event: MouseEvent<HTMLDivElement>) => {
+    if (!didDragRef.current || event.detail === 0) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    didDragRef.current = false;
+  };
 
   const handleMoreClick = () => {
     logger.actionEventClick({
@@ -225,15 +276,28 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
           <div
             className={cn({
               [styles.carousel]: true,
+              [styles['carousel--has-previous']]: hasPreviousCards,
               [styles['carousel--has-more']]: hasMoreCards,
             })}
           >
             <div
               ref={carouselRef}
-              className={styles.carousel__viewport}
+              className={cn({
+                [styles.carousel__viewport]: true,
+                [styles['carousel__viewport--dragging']]: isDragging,
+              })}
               role="group"
               aria-label="오늘의 식단 목록"
               onScroll={updateCarouselEdge}
+              onPointerDown={handleCarouselPointerDown}
+              onPointerMove={handleCarouselPointerMove}
+              onPointerUp={handleCarouselPointerEnd}
+              onPointerCancel={handleCarouselPointerEnd}
+              onPointerLeave={(event) => {
+                if (!event.currentTarget.hasPointerCapture(event.pointerId)) handleCarouselPointerEnd();
+              }}
+              onLostPointerCapture={handleCarouselPointerEnd}
+              onClickCapture={handleCarouselClickCapture}
             >
               {PLACE_ORDER.map((place) => (
                 <DiningCard

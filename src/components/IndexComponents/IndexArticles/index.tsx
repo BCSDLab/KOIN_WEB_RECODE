@@ -4,23 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './IndexArticles.module.scss';
 
-interface IndexArticlesProps {
-  /** NEW 뱃지 판정 기준 시각. 서버가 확정해 내려준다. */
-  serverNow: string;
-}
-
-export default function IndexArticles({ serverNow }: IndexArticlesProps) {
+export default function IndexArticles() {
   const isLoggedIn = useIsLoggedIn();
   const { data: articlesData } = useQuery({
     ...articleQueries.list(isLoggedIn, '1'),
-    select: createArticlesWithNewSelector(serverNow),
   });
   const logger = useLogger();
 
