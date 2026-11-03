@@ -217,10 +217,7 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
             </div>
           )}
 
-          <BankTransfer
-            isAgreed={isAgreed}
-            onToggleAgreement={toggleAgreement}
-          />
+          <BankTransfer isAgreed={isAgreed} onToggleAgreement={toggleAgreement} />
           <Agreement />
           <PaymentAmount
             totalAmount={cart.total_amount}
