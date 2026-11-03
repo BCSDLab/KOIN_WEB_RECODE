@@ -18,7 +18,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 357px;
   align-items: flex-start;
-  gap: 44px;
+  gap: 40px 44px;
 
   @include media.media-breakpoint(mobile) {
     grid-template-columns: minmax(0, 1fr);

@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -17,18 +16,12 @@ import IconBox from 'components/ui/IconBox';
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useUser } from 'utils/hooks/state/useUser';
 
+import HomeGreeting from './HomeGreeting';
 import styles from './MobileHomeRedesign.module.scss';
 
 const unibus = BUS_LINKS[2];
 const mobileStoreLink = `${ROUTES.Store()}?category=1`;
-const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
-  month: 'long',
-  day: 'numeric',
-  weekday: 'long',
-  timeZone: 'Asia/Seoul',
-});
 
 const transportCards = [
   {
@@ -72,7 +65,6 @@ function SectionHeader({ titleId, title, children }: SectionHeaderProps) {
 
 function MobileHomeRedesign() {
   const logger = useLogger();
-  const { data: userInfo } = useUser();
   const { data: weatherData } = useSuspenseQuery(weatherQueries.info());
   const { data: callvanData } = useSuspenseQuery({
     ...callvanQueries.list({
@@ -85,9 +77,6 @@ function MobileHomeRedesign() {
   const { data: storeCounts } = useSuspenseQuery(storeQueries.counts());
   const { data: storeEventCount } = useSuspenseQuery(storeQueries.eventCount());
 
-  const displayName = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '코리';
-  const todayLabel = dateFormatter.format(new Date());
-
   const logClick = (event_label: string, value: string) => {
     logger.actionEventClick({
       team: 'CAMPUS',
@@ -98,28 +87,7 @@ function MobileHomeRedesign() {
 
   return (
     <main className={styles.template}>
-      <section className={styles.hero} aria-labelledby="home-greeting-title">
-        <div className={styles.hero__meta}>
-          <span className={styles.hero__date}>{todayLabel}</span>
-          <span className={styles.weather}>
-            <Image
-              className={styles.weather__icon}
-              src={weatherData.weather_icon_url}
-              alt=""
-              width={16}
-              height={16}
-              aria-hidden
-            />
-            <span className={styles.weather__text}>
-              {weatherData.weather} {weatherData.temperature}°
-            </span>
-          </span>
-        </div>
-        <h1 id="home-greeting-title" className={styles.hero__title}>
-          <span>{displayName}님,</span>
-          <span>오늘도 잘 챙겨먹어요</span>
-        </h1>
-      </section>
+      <HomeGreeting weatherData={weatherData} />
 
       <section className={styles.section} aria-labelledby="today-menu-title">
         <SectionHeader titleId="today-menu-title" title="오늘의 식단">

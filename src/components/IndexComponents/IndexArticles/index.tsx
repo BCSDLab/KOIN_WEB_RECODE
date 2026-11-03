@@ -32,7 +32,7 @@ export default function IndexArticles({ serverNow }: IndexArticlesProps) {
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice', value: '공지사항' })}
         >
-          <h1 className={styles.template__title}>공지사항</h1>
+          <h2 className={styles.template__title}>공지사항</h2>
         </Link>
         <Link
           href={ROUTES.Articles()}

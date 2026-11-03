@@ -7,6 +7,7 @@ import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
 
+import HomeGreeting from './HomeGreeting';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
@@ -22,6 +23,7 @@ function DesktopHome({
     <main className={styles.template}>
       <UserInfoModal />
       <div className={styles.content}>
+        <HomeGreeting variant="desktop" />
         <div className={styles['left-container']}>
           <IndexCafeteria serverDining={serverDining} />
           <IndexBus />
