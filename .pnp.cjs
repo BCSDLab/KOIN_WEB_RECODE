@@ -81,7 +81,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.28"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["prettier", "npm:3.6.2"],\
           ["quill", "npm:2.0.3"],\
           ["react", "npm:19.2.6"],\
@@ -4673,7 +4673,7 @@ const RAW_RUNTIME_STATE =
           ["@sentry/cli-win32-x64", "npm:3.7.0"],\
           ["progress", "npm:2.0.3"],\
           ["proxy-from-env", "npm:1.1.0"],\
-          ["undici", "npm:6.28.1"],\
+          ["undici", "npm:6.29.1"],\
           ["which", "npm:2.0.2"]\
         ],\
         "linkType": "HARD"\
@@ -10108,7 +10108,7 @@ const RAW_RUNTIME_STATE =
           ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
           ["next", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:15.5.28"],\
           ["next-sitemap", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.3"],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["prettier", "npm:3.6.2"],\
           ["quill", "npm:2.0.3"],\
           ["react", "npm:19.2.6"],\
@@ -11160,12 +11160,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.5.28", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.28-5a200e589f-c34814c1da.zip/node_modules/postcss/",\
+      ["npm:8.5.29", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.29-6b984b2404-801c352ab8.zip/node_modules/postcss/",\
         "packageDependencies": [\
           ["nanoid", "npm:3.3.20"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
@@ -11223,7 +11223,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/postcss-scss-virtual-1808c41d6e/0/cache/postcss-scss-npm-4.0.9-b492c55307-d191c77134.zip/node_modules/postcss-scss/",\
         "packageDependencies": [\
           ["@types/postcss", null],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["postcss-scss", "virtual:e8361015ff820323b5d1e702e7c41736dcdb7ca774d1748580b2fdd6edc21c013a67ffa6ad8170debbaadd75a8a521aee8a4518a7be2b31a93ba0b703b2b6529#npm:4.0.9"]\
         ],\
         "packagePeers": [\
@@ -12467,7 +12467,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/postcss", null],\
           ["@types/stylelint", null],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["postcss-scss", "virtual:e8361015ff820323b5d1e702e7c41736dcdb7ca774d1748580b2fdd6edc21c013a67ffa6ad8170debbaadd75a8a521aee8a4518a7be2b31a93ba0b703b2b6529#npm:4.0.9"],\
           ["stylelint", "npm:17.14.0"],\
           ["stylelint-config-recommended", "virtual:e8361015ff820323b5d1e702e7c41736dcdb7ca774d1748580b2fdd6edc21c013a67ffa6ad8170debbaadd75a8a521aee8a4518a7be2b31a93ba0b703b2b6529#npm:18.0.0"],\
@@ -12519,7 +12519,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/postcss", null],\
           ["@types/stylelint", null],\
-          ["postcss", "npm:8.5.28"],\
+          ["postcss", "npm:8.5.29"],\
           ["stylelint", "npm:17.14.0"],\
           ["stylelint-config-recommended-scss", "virtual:94689fa80866d5e5bff57db09646cb43e451735bab215b3c2ab21ba82d3a5f5f8207c7962a54038e8afa4a6003c6b21462f1719a50e7242248e3613055641294#npm:17.0.1"],\
           ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:40.0.0"],\
@@ -12993,10 +12993,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["undici", [\
-      ["npm:6.28.1", {\
-        "packageLocation": "./.yarn/cache/undici-npm-6.28.1-db55889786-a64d597205.zip/node_modules/undici/",\
+      ["npm:6.29.1", {\
+        "packageLocation": "./.yarn/cache/undici-npm-6.29.1-78d25c49fa-92acb64ec1.zip/node_modules/undici/",\
         "packageDependencies": [\
-          ["undici", "npm:6.28.1"]\
+          ["undici", "npm:6.29.1"]\
         ],\
         "linkType": "HARD"\
       }]\
