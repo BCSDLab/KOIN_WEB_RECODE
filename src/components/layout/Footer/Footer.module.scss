@@ -24,7 +24,6 @@
 
   &__services {
     display: flex;
-    list-style: none;
     justify-content: center;
     gap: clamp(28px, 2vw, 40px);
     margin: 0 0 34px auto;
@@ -40,7 +39,6 @@
       font-weight: 700;
       font-style: normal;
       font-stretch: normal;
-      text-decoration: none;
       line-height: 20px;
       text-align: left;
       color: #fff;
@@ -85,7 +83,6 @@
 
   &__content {
     display: flex;
-    list-style: none;
 
     @include media.media-breakpoint(mobile) {
       flex-wrap: wrap;
@@ -117,7 +114,6 @@
 
     & > a {
       color: currentcolor;
-      text-decoration: none;
 
       &:hover {
         font-weight: bold;

@@ -22,7 +22,6 @@ export default function IndexArticles() {
       <div className={styles.template__header}>
         <Link
           href={ROUTES.Articles()}
-          className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice', value: '공지사항' })}
         >
           <h2 className={styles.template__title}>공지사항</h2>
