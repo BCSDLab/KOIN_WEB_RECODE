@@ -123,6 +123,7 @@ export const getServerSideProps = withCacheControl(
 
       const [banners] = await Promise.all([
         prefetchBanners(),
+        queryClient.prefetchQuery(weatherQueries.info()),
         queryClient.prefetchQuery(storeQueries.counts()),
         queryClient.prefetchQuery(storeQueries.eventCount()),
         queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
