@@ -10,7 +10,6 @@ export interface ServerDining {
 
 export interface HomePageProps {
   bannersList: BannersResponse;
-  bannerCategoryId: number;
   serverDining: ServerDining;
   serverSemester: Semester;
 }

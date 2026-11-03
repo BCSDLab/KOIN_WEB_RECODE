@@ -100,12 +100,10 @@ export const getServerSideProps = withCacheControl(
     const prefetchBanners = async () => {
       const banners = await queryClient.fetchQuery(bannerQueries.categories());
       const categoryId = Number(banners.banner_categories[0].id);
-      const list = await queryClient.fetchQuery(bannerQueries.list(categoryId));
 
-      return { categoryId, list };
+      return queryClient.fetchQuery(bannerQueries.list(categoryId));
     };
 
-    let bannerCategoryId = 0;
     let bannersList: BannersResponse = { count: 0, banners: [] };
 
     const prefetchDeviceContent = async () => {
@@ -130,8 +128,7 @@ export const getServerSideProps = withCacheControl(
         queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
         queryClient.prefetchQuery(timetableQueries.semesterInfo()),
       ]);
-      bannerCategoryId = banners.categoryId;
-      bannersList = banners.list;
+      bannersList = banners;
     };
 
     const [userSemester] = await Promise.all([
@@ -149,7 +146,6 @@ export const getServerSideProps = withCacheControl(
 
     return {
       props: {
-        bannerCategoryId,
         bannersList,
         serverDining,
         serverSemester,
