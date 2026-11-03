@@ -173,6 +173,29 @@
   }
 }
 
+.timetable--home {
+  box-sizing: border-box;
+  padding-top: 8px;
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  color: #727272;
+
+  .timetable__col--head {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .timetable__content--time:nth-child(odd),
+  .timetable__content--time-main:nth-child(odd) {
+    top: 7.05px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+}
+
 @include media.media-breakpoint(mobile) {
   .timetable {
     --first-column-width: 17px;

@@ -1,7 +1,11 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  height: 405px;
+  box-sizing: border-box;
+  height: 399px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: #fff;
   position: relative;
 
   @include media.media-breakpoint(mobile) {
@@ -18,11 +22,11 @@
 
 .title {
   font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.6;
-  color: #175c8e;
-  margin-bottom: 16px;
+  color: #000;
+  margin-bottom: 8px;
   display: block;
   text-decoration: none;
   cursor: pointer;

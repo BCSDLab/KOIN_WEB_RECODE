@@ -31,16 +31,23 @@ export default function IndexTimeTable({ serverSemester }: IndexTimeTableProps) 
   const hasValidCurrentFrameId = isValidTimetableFrameId(currentFrameId);
 
   const renderPlaceholder = (
-    <TimetableGridPlaceholder columnWidth={44} firstColumnWidth={29} rowHeight={17.3} totalHeight={369} />
+    <TimetableGridPlaceholder
+      variant="home"
+      columnWidth={55}
+      firstColumnWidth={28}
+      rowHeight={14.1}
+      totalHeight={306}
+    />
   );
 
   const renderTimetable = hasValidCurrentFrameId ? (
     <Timetable
       timetableFrameId={currentFrameId}
-      columnWidth={44}
-      firstColumnWidth={29}
-      rowHeight={17.3}
-      totalHeight={369}
+      variant="home"
+      columnWidth={55}
+      firstColumnWidth={28}
+      rowHeight={14.1}
+      totalHeight={306}
     />
   ) : (
     renderPlaceholder
