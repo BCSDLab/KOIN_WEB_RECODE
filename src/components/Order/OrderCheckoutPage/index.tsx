@@ -27,7 +27,6 @@ import PaymentAmount from './components/PaymentAmount';
 import RiderRequestModal from './components/RiderRequestModal';
 import ShopLocationMap from './components/ShopLocationMap';
 import StoreRequestModal from './components/StoreRequestModal';
-import useShopBankAccount from './hooks/useShopBankAccount';
 import formatPhoneNumber from './utils/formatPhoneNumber';
 import styles from './OrderCheckoutPage.module.scss';
 
@@ -92,17 +91,8 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
   const selectedAddress = deliveryType === 'CAMPUS' ? campusAddress : outsideAddress;
   // 성공 뒤에도 결과 화면으로 넘어갈 때까지 막아 같은 주문을 두 번 만들지 않는다
   const isOrdering = createOrder.isPending || createOrder.isSuccess;
-  const {
-    bank,
-    accountNumber,
-    accountHolder,
-    isAccountReady,
-    isUnavailable: isAccountUnavailable,
-    isError: isAccountError,
-    retry: retryAccount,
-  } = useShopBankAccount(cart.orderable_shop_id);
   const hasOrderInfo = !!phoneNumber && (!isDelivery || !!selectedAddress?.address);
-  const canPay = isAccountReady && isAgreed && hasOrderInfo && !isOrdering;
+  const canPay = isAgreed && hasOrderInfo && !isOrdering;
 
   const orderCallbacks = {
     onSuccess: (response: OrderCreateResponse) => {
@@ -228,12 +218,6 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
           )}
 
           <BankTransfer
-            bank={bank}
-            accountNumber={accountNumber}
-            accountHolder={accountHolder}
-            isAccountUnavailable={isAccountUnavailable}
-            isAccountError={isAccountError}
-            onRetryAccount={retryAccount}
             isAgreed={isAgreed}
             onToggleAgreement={toggleAgreement}
           />

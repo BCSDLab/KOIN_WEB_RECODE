@@ -33,6 +33,10 @@ const ORDER_STATE_TEXT: Partial<Record<OrderStatus, { title: string; message: st
 
 const ESTIMATED_STATUSES: OrderStatus[] = ['COOKING', 'DELIVERING', 'PACKAGED'];
 const COMPLETED_STATUSES: OrderStatus[] = ['DELIVERED', 'PICKED_UP'];
+const DEPOSIT_NOTICES = [
+  '주문 후 30분 이내에 입금하지 않으면 주문이 자동 취소돼요.',
+  '입금자명이 다르면 입금 확인이 늦어질 수 있어요.',
+];
 
 // 서버가 내린 도착 예정 시각(HH:mm)을 그대로 포맷한다(기기 시계와 무관)
 function formatKoreanTime(time: string): string {
@@ -52,11 +56,25 @@ interface OrderResultPageProps {
 export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
   const router = useRouter();
   const isLoggedIn = useIsLoggedIn();
-  const { data: paymentInfo, isPending } = useQuery(orderQueries.paymentInfo(paymentId, isLoggedIn));
+  const { data: paymentInfo, isPending, isError, refetch } = useQuery(orderQueries.paymentInfo(paymentId, isLoggedIn));
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
 
   // order는 Suspense로 조회 중엔 아무것도 그리지 않는다
   if (isLoggedIn && isPending) return <div className={styles.page} />;
+
+  // 주문은 이미 만들어졌으므로 조회만 실패했을 때 입금 계좌를 다시 받을 수 있게 한다
+  if (isError) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.error}>
+          <p>주문 정보를 불러오지 못했어요</p>
+          <button type="button" className={styles.error__retry} onClick={() => refetch()}>
+            다시 시도
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!paymentInfo) {
     return (
@@ -204,7 +222,6 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
           <div className={styles.payment__method}>
             결제 수단<span className={styles['payment__method-value']}>{paymentInfo.payment_method}</span>
           </div>
-          {/* 취소된 주문은 입금할 필요가 없어 계좌를 숨긴다 */}
           {bankAccount && (
             <div className={styles.payment__account}>
               <BankAccountInfo
@@ -212,6 +229,11 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
                 accountNumber={bankAccount.account_number}
                 accountHolder={bankAccount.account_holder}
               />
+              <ul className={styles.payment__notice}>
+                {DEPOSIT_NOTICES.map((notice) => (
+                  <li key={notice}>· {notice}</li>
+                ))}
+              </ul>
             </div>
           )}
         </div>

@@ -289,4 +289,31 @@ $header-height: 60px;
   &__account {
     margin-top: 16px;
   }
+
+  &__notice {
+    margin-top: 16px;
+    color: palette.$neutral-500;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 48px 24px;
+  color: palette.$neutral-500;
+  font-size: 13px;
+  line-height: 1.5;
+
+  &__retry {
+    padding: 6px 12px;
+    border: 1px solid palette.$neutral-400;
+    border-radius: 6px;
+    color: palette.$neutral-600;
+    font-size: 12px;
+    line-height: 1.5;
+  }
 }

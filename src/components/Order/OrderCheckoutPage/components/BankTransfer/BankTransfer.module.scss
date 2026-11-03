@@ -28,39 +28,7 @@
   text-align: center;
 }
 
-.unavailable {
-  padding: 16px;
-  border-radius: 8px;
-  background-color: palette.$page-background;
-  color: palette.$neutral-500;
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.error {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  padding: 16px;
-  border-radius: 8px;
-  background-color: palette.$page-background;
-  color: palette.$neutral-500;
-  font-size: 13px;
-  line-height: 1.5;
-
-  &__retry {
-    padding: 6px 12px;
-    border: 1px solid palette.$neutral-400;
-    border-radius: 6px;
-    color: palette.$neutral-600;
-    font-size: 12px;
-    line-height: 1.5;
-  }
-}
-
-.notice {
+.guide {
   color: palette.$neutral-500;
   font-size: 12px;
   line-height: 1.5;
