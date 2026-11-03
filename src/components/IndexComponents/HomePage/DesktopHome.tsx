@@ -10,7 +10,7 @@ import HomeGreeting from './HomeGreeting';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
-function DesktopHome({ bannersList, categories, bannerCategoryId, serverDining, serverSemester }: HomePageProps) {
+function DesktopHome({ bannersList, bannerCategoryId, serverDining, serverSemester }: HomePageProps) {
   return (
     <main className={styles.template}>
       <UserInfoModal />
@@ -19,7 +19,7 @@ function DesktopHome({ bannersList, categories, bannerCategoryId, serverDining, 
         <div className={styles['left-container']}>
           <IndexCafeteria serverDining={serverDining} />
           <IndexBus />
-          <IndexStore categories={categories} />
+          <IndexStore />
           <IndexArticles />
         </div>
         <div className={styles['right-container']}>
