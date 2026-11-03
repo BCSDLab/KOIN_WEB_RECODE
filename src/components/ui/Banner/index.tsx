@@ -2,7 +2,9 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { cn } from '@bcsdlab/utils';
 import type { BannersResponse } from 'api/banner/entity';
+import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { useSwipeable } from 'react-swipeable';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -17,9 +19,16 @@ interface BannerCardProps {
   image_url: string;
   redirect_link: string | null;
   isFirst: boolean;
+  sizes?: string;
 }
 
-function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }: BannerCardProps) {
+function BannerCard({
+  handleImageLinkClick,
+  image_url,
+  redirect_link,
+  isFirst,
+  sizes = '(max-width: 768px) 100vw, 400px',
+}: BannerCardProps) {
   const imgWrapper = (
     <div className={styles['slider__image-wrapper']}>
       <Image
@@ -28,7 +37,7 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }:
         fill
         priority={isFirst}
         fetchPriority={isFirst ? 'high' : 'auto'}
-        sizes="(max-width: 768px) 100vw, 400px"
+        sizes={sizes}
         className={styles.slider__image}
         onError={(e) => {
           e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
@@ -65,20 +74,24 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }:
 interface BannerProps {
   bannersList: BannersResponse;
   bannerCategoryId: number;
+  variant?: 'inline';
 }
 
 const HIDE_BANNER_DURATION_DAYS = 7;
 const HIDE_BANNER_COOKIE = 'HIDE_BANNER';
 
-function Banner({ bannersList, bannerCategoryId }: BannerProps) {
+function Banner({ bannersList, bannerCategoryId, variant }: BannerProps) {
   const isMobile = useMediaQuery();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const logger = useLogger();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersList.banners[currentPageIndex];
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const isVisible = variant === 'inline' ? bannersList.count > 0 : isModalOpen;
 
   useEffect(() => {
+    if (variant === 'inline') return;
+
     if (bannersList.count === 0) {
       closeModal();
 
@@ -94,7 +107,7 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
     }
 
     openModal();
-  }, [bannerCategoryId, bannersList.count, closeModal, openModal]);
+  }, [bannerCategoryId, bannersList.count, closeModal, openModal, variant]);
 
   const resetAutoSlide = useCallback(() => {
     if (intervalRef.current) clearTimeout(intervalRef.current);
@@ -132,6 +145,16 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
     resetAutoSlide();
   };
 
+  const handlePageButtonClick = (index: number) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'main_next_modal',
+      value: `${currentBanner.title}`,
+    });
+    setCurrentPageIndex(index);
+    resetAutoSlide();
+  };
+
   const handleCloseBanner = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
@@ -160,17 +183,17 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
   });
 
   useEffect(() => {
-    if (!isModalOpen || bannersList.count <= 1) return undefined;
+    if (!isVisible || bannersList.count <= 1) return undefined;
 
     resetAutoSlide();
 
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [isModalOpen, bannersList.count, resetAutoSlide, currentPageIndex]);
+  }, [isVisible, bannersList.count, resetAutoSlide, currentPageIndex]);
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isVisible) {
       logger.actionEventLoad({
         team: 'CAMPUS',
         event_label: 'main_modal_entry',
@@ -178,10 +201,63 @@ function Banner({ bannersList, bannerCategoryId }: BannerProps) {
         event_category: 'entry',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 모달이 열릴 때만 로깅해야 하므로 logger/currentBanner 변경은 무시
-  }, [isModalOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 배너가 보일 때만 로깅해야 하므로 logger/currentBanner 변경은 무시
+  }, [isVisible]);
 
-  if (!isModalOpen) return null;
+  if (!isVisible) return null;
+
+  if (variant === 'inline') {
+    return (
+      <section className={styles.inline} aria-label="메인 배너">
+        <div className={styles.inline__slider}>
+          <BannerCard
+            handleImageLinkClick={handleImageLinkClick}
+            image_url={currentBanner.image_url}
+            redirect_link={currentBanner.redirect_link}
+            isFirst={currentPageIndex === 0}
+            sizes="357px"
+          />
+          {bannersList.count > 1 && (
+            <>
+              <button
+                type="button"
+                className={`${styles.inline__arrow} ${styles['inline__arrow--previous']}`}
+                aria-label="이전 슬라이드"
+                onClick={handlePrevButtonClick}
+              >
+                <ArrowRightIcon aria-hidden />
+              </button>
+              <button
+                type="button"
+                className={`${styles.inline__arrow} ${styles['inline__arrow--next']}`}
+                aria-label="다음 슬라이드"
+                onClick={handleNextButtonClick}
+              >
+                <ArrowRightIcon aria-hidden />
+              </button>
+            </>
+          )}
+        </div>
+        {bannersList.count > 1 && (
+          <div className={styles.inline__pagination}>
+            {bannersList.banners.map((banner, index) => (
+              <button
+                key={banner.id}
+                type="button"
+                className={cn({
+                  [styles.inline__indicator]: true,
+                  [styles['inline__indicator--active']]: index === currentPageIndex,
+                })}
+                aria-label={`${index + 1}번 배너 보기`}
+                aria-current={index === currentPageIndex ? 'true' : undefined}
+                onClick={() => handlePageButtonClick(index)}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    );
+  }
 
   return (
     <div className={styles.background}>

@@ -20,7 +20,6 @@ function DesktopHome({
 }: HomePageProps) {
   return (
     <main className={styles.template}>
-      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
       <UserInfoModal />
       <div className={styles.content}>
         <div className={styles['left-container']}>
@@ -32,6 +31,7 @@ function DesktopHome({
         </div>
         <div className={styles['right-container']}>
           <IndexTimetable serverSemester={serverSemester} />
+          <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} variant="inline" />
         </div>
       </div>
     </main>
