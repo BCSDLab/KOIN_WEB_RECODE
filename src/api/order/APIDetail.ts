@@ -9,7 +9,6 @@ import type {
   CancelPaymentResponse,
   CartResponse,
   CartSummaryResponse,
-  DeliveryOrderRequest,
   InProgressOrderResponse,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
@@ -24,8 +23,8 @@ import type {
   ShopDeliveryInfoResponse,
   ShopMenuDetailResponse,
   StudentInfoResponse,
-  TakeoutOrderRequest,
   UpdateCartItemRequest,
+  CreateOrderVariables,
 } from './entity';
 
 // KOIN_ORDER_WEBVIEW api/cart 이전. 같은 엔드포인트를 쓰므로 경로·파라미터를 바꿀 때 양쪽을 함께 맞춘다.
@@ -264,31 +263,22 @@ export class RiderMessages<R extends RiderMessageResponse> implements APIRequest
   response!: R;
 }
 
-// 계좌이체 주문을 만든다. 서버가 금액을 다시 계산해 요청 금액과 다르면 `ORDER_PRICE_MISMATCH`로 거절하고, 성공하면 장바구니를 비운다
-export class CreateDeliveryOrder<R extends OrderCreateResponse> implements APIRequest<R> {
+const CREATE_ORDER_PATH = {
+  DELIVERY: 'order/delivery',
+  TAKE_OUT: 'order/takeout',
+} satisfies Record<OrderType, string>;
+
+export class CreateOrder<R extends OrderCreateResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'order/delivery';
+  path: string;
 
-  data: DeliveryOrderRequest;
+  data: CreateOrderVariables['data'];
 
   response!: R;
 
-  constructor(data: DeliveryOrderRequest) {
-    this.data = data;
-  }
-}
-
-export class CreateTakeoutOrder<R extends OrderCreateResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = 'order/takeout';
-
-  data: TakeoutOrderRequest;
-
-  response!: R;
-
-  constructor(data: TakeoutOrderRequest) {
+  constructor({ orderType, data }: CreateOrderVariables) {
+    this.path = CREATE_ORDER_PATH[orderType];
     this.data = data;
   }
 }

@@ -67,8 +67,7 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
 
   const { data: studentInfo } = useQuery(orderQueries.studentInfo(isLoggedIn));
   const { data: cart = EMPTY_CART } = useQuery(orderQueries.cart(orderType, isLoggedIn));
-  const deliveryOrder = useMutation(orderMutations.createDeliveryOrder(queryClient));
-  const takeoutOrder = useMutation(orderMutations.createTakeoutOrder(queryClient));
+  const createOrder = useMutation(orderMutations.createOrder(queryClient));
 
   // 서버 렌더와 같게 그린 뒤 저장된 주문 정보를 복원한다(skipHydration)
   useEffect(() => {
@@ -92,9 +91,7 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
 
   const selectedAddress = deliveryType === 'CAMPUS' ? campusAddress : outsideAddress;
   // 성공 뒤에도 결과 화면으로 넘어갈 때까지 막아 같은 주문을 두 번 만들지 않는다
-  const isOrdering = [deliveryOrder.status, takeoutOrder.status].some(
-    (status) => status === 'pending' || status === 'success',
-  );
+  const isOrdering = createOrder.isPending || createOrder.isSuccess;
   const {
     bank,
     accountNumber,
@@ -121,22 +118,29 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
   const pay = () => {
     if (!canPay) return;
 
+    const takeOutData = {
+      phone_number: phoneNumber,
+      to_owner: ownerRequest,
+      provide_cutlery: !isCutleryDeclined,
+      total_menu_price: cart.items_amount,
+      total_amount: cart.total_amount,
+    };
+
     if (isDelivery && selectedAddress) {
-      deliveryOrder.mutate(
+      createOrder.mutate(
         {
-          address: selectedAddress.address,
-          address_detail:
-            (deliveryType === 'CAMPUS' ? campusAddress?.short_address : outsideAddress.detail_address) ?? '',
-          longitude: selectedAddress.longitude,
-          latitude: selectedAddress.latitude,
-          phone_number: phoneNumber,
-          to_owner: ownerRequest,
-          to_rider: deliveryRequest,
-          provide_cutlery: !isCutleryDeclined,
-          total_menu_price: cart.items_amount,
-          delivery_type: deliveryType,
-          delivery_tip: cart.delivery_fee,
-          total_amount: cart.total_amount,
+          orderType: 'DELIVERY',
+          data: {
+            ...takeOutData,
+            address: selectedAddress.address,
+            address_detail:
+              (deliveryType === 'CAMPUS' ? campusAddress?.short_address : outsideAddress.detail_address) ?? '',
+            longitude: selectedAddress.longitude,
+            latitude: selectedAddress.latitude,
+            to_rider: deliveryRequest,
+            delivery_type: deliveryType,
+            delivery_tip: cart.delivery_fee,
+          },
         },
         orderCallbacks,
       );
@@ -144,13 +148,10 @@ export default function OrderCheckoutPage({ orderType }: OrderCheckoutPageProps)
       return;
     }
 
-    takeoutOrder.mutate(
+    createOrder.mutate(
       {
-        phone_number: phoneNumber,
-        to_owner: ownerRequest,
-        provide_cutlery: !isCutleryDeclined,
-        total_menu_price: cart.items_amount,
-        total_amount: cart.total_amount,
+        orderType: 'TAKE_OUT',
+        data: takeOutData,
       },
       orderCallbacks,
     );

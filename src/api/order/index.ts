@@ -8,8 +8,6 @@ import {
   Cart,
   CartItemOptions,
   CartSummary,
-  CreateDeliveryOrder,
-  CreateTakeoutOrder,
   DeleteCartItem,
   InProgressOrders,
   OffCampusDeliveryValidate,
@@ -25,6 +23,7 @@ import {
   UpdateCartItemOptions,
   UpdateCartItemQuantity,
   ValidateCart,
+  CreateOrder,
 } from './APIDetail';
 
 export const getCart = APIClient.of(Cart);
@@ -61,9 +60,7 @@ export const getShopDeliveryInfo = APIClient.of(ShopDeliveryInfo);
 
 export const getRiderMessages = APIClient.of(RiderMessages);
 
-export const createDeliveryOrder = APIClient.of(CreateDeliveryOrder);
-
-export const createTakeoutOrder = APIClient.of(CreateTakeoutOrder);
+export const createOrder = APIClient.of(CreateOrder);
 
 export const getPaymentInfo = APIClient.of(PaymentInfo);
 

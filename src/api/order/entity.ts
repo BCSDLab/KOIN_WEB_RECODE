@@ -176,19 +176,14 @@ export interface RiderMessageResponse {
   contents: Array<{ content: string }>;
 }
 
-export interface DeliveryOrderRequest {
+export interface DeliveryOrderRequest extends TakeoutOrderRequest {
   address: string;
   address_detail: string;
   longitude: number;
   latitude: number;
-  phone_number: string;
-  to_owner: string;
   to_rider: string;
-  total_menu_price: number;
   delivery_type: 'CAMPUS' | 'OFF_CAMPUS';
   delivery_tip: number;
-  provide_cutlery: boolean;
-  total_amount: number;
 }
 
 export interface TakeoutOrderRequest {
@@ -198,6 +193,15 @@ export interface TakeoutOrderRequest {
   total_menu_price: number;
   total_amount: number;
 }
+
+interface OrderRequestByType {
+  DELIVERY: DeliveryOrderRequest;
+  TAKE_OUT: TakeoutOrderRequest;
+}
+
+export type CreateOrderVariables = {
+  [T in OrderType]: { orderType: T; data: OrderRequestByType[T] };
+}[OrderType];
 
 export interface BankAccount {
   bank: string;
@@ -247,7 +251,6 @@ export interface PaymentInfoResponse {
     }> | null;
   }>;
   order_type: OrderType;
-  easy_pay_company: string;
   requested_at: string;
   // 계좌이체 주문은 승인 단계가 없어 null이다
   approved_at: string | null;
@@ -255,7 +258,7 @@ export interface PaymentInfoResponse {
   estimated_at: string | null;
   order_status: OrderStatus;
   // 계좌이체 주문에만 온다
-  bank_account?: BankAccount | null;
+  bank_account?: BankAccount;
 }
 
 // KOIN_ORDER_WEBVIEW api/payments cancelPayment 이전(주문 취소)
