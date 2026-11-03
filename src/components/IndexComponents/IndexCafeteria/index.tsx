@@ -84,18 +84,33 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const carouselDragRef = useRef<{ pointerId: number; startX: number; scrollLeft: number } | null>(null);
   const didDragRef = useRef(false);
+  const isTabScrollRef = useRef(false);
 
   const selectedDining = dinings.find((dining) => dining.place === selectedPlace && dining.type === diningType);
 
-  const updateCarouselEdge = useCallback(() => {
+  const updateCarouselState = useCallback(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
+    const hasMore = carousel.scrollWidth - carousel.clientWidth - carousel.scrollLeft > 1;
     setHasPreviousCards(carousel.scrollLeft > 1);
-    setHasMoreCards(carousel.scrollWidth - carousel.clientWidth - carousel.scrollLeft > 1);
+    setHasMoreCards(hasMore);
+
+    // 탭으로 이동한 경우에는 끝에서 여러 카드가 보여도 누른 코너의 선택을 유지한다.
+    if (isTabScrollRef.current) return;
+
+    const [firstCard, secondCard] = carousel.children;
+    if (!firstCard) return;
+
+    const firstCardRect = firstCard.getBoundingClientRect();
+    const cardStep = secondCard ? secondCard.getBoundingClientRect().left - firstCardRect.left : firstCardRect.width;
+    const activeIndex = hasMore ? Math.round(carousel.scrollLeft / cardStep) : carousel.children.length - 1;
+    const activePlace = PLACE_ORDER[activeIndex];
+    if (activePlace) setSelectedPlace(activePlace);
   }, []);
 
   const handleCarouselPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    isTabScrollRef.current = false;
     if (event.pointerType !== 'mouse' || event.button !== 0) return;
 
     carouselDragRef.current = {
@@ -156,6 +171,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     const carousel = carouselRef.current;
     const card = carousel?.children[PLACE_ORDER.indexOf(place)];
     if (carousel && card) {
+      isTabScrollRef.current = true;
       carousel.scrollTo({
         left: carousel.scrollLeft + card.getBoundingClientRect().left - carousel.getBoundingClientRect().left,
         behavior: 'smooth',
@@ -183,11 +199,11 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
-    const observer = new ResizeObserver(updateCarouselEdge);
+    const observer = new ResizeObserver(updateCarouselState);
     observer.observe(carousel);
 
     return () => observer.disconnect();
-  }, [isMobile, updateCarouselEdge]);
+  }, [isMobile, updateCarouselState]);
 
   return (
     <section className={styles.template}>
@@ -287,7 +303,10 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
               })}
               role="group"
               aria-label="오늘의 식단 목록"
-              onScroll={updateCarouselEdge}
+              onScroll={updateCarouselState}
+              onWheel={() => {
+                isTabScrollRef.current = false;
+              }}
               onPointerDown={handleCarouselPointerDown}
               onPointerMove={handleCarouselPointerMove}
               onPointerUp={handleCarouselPointerEnd}
