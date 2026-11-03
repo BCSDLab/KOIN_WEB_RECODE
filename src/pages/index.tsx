@@ -56,7 +56,6 @@ export const getServerSideProps = withCacheControl(
       }
     };
 
-    const serverNow = new Date();
     const diningTime = new DiningTime();
     const diningDate = diningTime.generateDiningDate();
     const serverDining = {
@@ -159,7 +158,6 @@ export const getServerSideProps = withCacheControl(
         categories,
         serverDining,
         serverSemester,
-        serverNow: serverNow.toISOString(),
         dehydratedState: dehydrate(queryClient),
       },
     };

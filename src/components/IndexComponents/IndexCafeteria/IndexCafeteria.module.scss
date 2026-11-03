@@ -156,28 +156,6 @@
   }
 }
 
-.type {
-  grid-column: 2 / 6;
-  grid-row: 1 / 2;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 26px;
-  text-align: center;
-  white-space: nowrap;
-  color: #000;
-  height: 26px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-}
-
 .menus {
   position: relative;
   grid-column: 2 / 6;
@@ -343,10 +321,6 @@
         color: #fff;
       }
     }
-  }
-
-  .type {
-    display: none;
   }
 
   .carousel {

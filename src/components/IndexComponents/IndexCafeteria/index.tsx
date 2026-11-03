@@ -242,7 +242,6 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
             </button>
           ))}
         </div>
-        <div className={styles.type}>{diningType ? DINING_TYPE_MAP[diningType] : ''}</div>
         {isMobile ? (
           <button
             type="button"

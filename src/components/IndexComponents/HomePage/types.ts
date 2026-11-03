@@ -14,6 +14,5 @@ export interface HomePageProps {
   bannerCategoryId: number;
   categories: StoreCategoriesResponse;
   serverDining: ServerDining;
-  serverNow: string;
   serverSemester: Semester;
 }
