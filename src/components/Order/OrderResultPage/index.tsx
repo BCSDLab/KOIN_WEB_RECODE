@@ -224,11 +224,7 @@ export default function OrderResultPage({ paymentId }: OrderResultPageProps) {
           </div>
           {bankAccount && (
             <div className={styles.payment__account}>
-              <BankAccountInfo
-                bank={bankAccount.bank}
-                accountNumber={bankAccount.account_number}
-                accountHolder={bankAccount.account_holder}
-              />
+              <BankAccountInfo account={bankAccount} />
               <ul className={styles.payment__notice}>
                 {DEPOSIT_NOTICES.map((notice) => (
                   <li key={notice}>· {notice}</li>

@@ -1,29 +1,25 @@
+import type { BankAccount } from 'api/order/entity';
 import showMobileToast from 'components/feedback/Toast/showMobileToast';
 import { copyToClipboard } from 'utils/ts/copyToClipboard';
 
 import styles from './BankAccountInfo.module.scss';
 
 const COPIED_MESSAGE = '계좌번호가 복사되었습니다.';
-const EMPTY_VALUE = '-';
 
 interface BankAccountInfoProps {
-  bank: string | null;
-  accountNumber: string | null;
-  accountHolder: string | null;
+  account: BankAccount;
 }
 
-export default function BankAccountInfo({ bank, accountNumber, accountHolder }: BankAccountInfoProps) {
+export default function BankAccountInfo({ account }: BankAccountInfoProps) {
   const copyAccountNumber = async () => {
-    if (!accountNumber) return;
-
-    await copyToClipboard(accountNumber);
+    await copyToClipboard(account.account_number);
     showMobileToast('success', COPIED_MESSAGE);
   };
 
   const rows = [
-    { label: '입금 은행', value: bank || EMPTY_VALUE },
-    { label: '계좌번호', value: accountNumber || EMPTY_VALUE, canCopy: !!accountNumber },
-    { label: '예금주', value: accountHolder || EMPTY_VALUE },
+    { label: '입금 은행', value: account.bank },
+    { label: '계좌번호', value: account.account_number, canCopy: true },
+    { label: '예금주', value: account.account_holder },
   ];
 
   return (
