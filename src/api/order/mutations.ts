@@ -4,20 +4,16 @@ import { smsSend, smsVerify } from 'api/auth';
 import type {
   AddCartRequest,
   CancelPaymentRequest,
-  ConfirmPaymentRequest,
-  DeliveryTemporaryRequest,
+  CreateOrderVariables,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
   OrderType,
-  TakeoutTemporaryRequest,
   UpdateCartItemRequest,
 } from './entity';
 import {
   addCart,
   cancelPayment,
-  confirmPayment,
-  createTemporaryDeliveryPayment,
-  createTemporaryTakeoutPayment,
+  createOrder,
   deleteCartItem,
   registerOffCampusDeliveryAddress,
   resetCart,
@@ -32,6 +28,11 @@ import { orderQueryKeys } from './queries';
 // order처럼 담기·초기화가 성공하면 장바구니 조회(주문 유형·범위 전부)를 무효화한다
 const invalidateCartQueries = (queryClient: QueryClient) =>
   queryClient.invalidateQueries({ queryKey: [...orderQueryKeys.all, 'cart'] });
+
+// 서버가 주문을 만들며 장바구니를 비운다. 바로 다시 받으면 결과 화면으로 넘어가는 동안 결제 화면이 빈 장바구니로
+// 바뀌므로, 오래된 것으로 표시만 하고 다음에 장바구니를 볼 때 다시 받는다
+const markCartQueriesStale = (queryClient: QueryClient) =>
+  queryClient.invalidateQueries({ queryKey: [...orderQueryKeys.all, 'cart'], refetchType: 'none' });
 
 export const orderMutations = {
   addCart: (queryClient: QueryClient, isLoggedIn: boolean) =>
@@ -81,21 +82,13 @@ export const orderMutations = {
       mutationFn: (data: OffCampusDeliveryAddressRequest) => registerOffCampusDeliveryAddress(data),
     }),
 
-  // KOIN_ORDER_WEBVIEW useTemporaryDelivery·useTemporaryTakeout 이전(결제하기에서 임시 주문 생성)
-  createTemporaryDeliveryPayment: () =>
+  // 결제하기에서 계좌이체 주문 생성. 이동은 화면에서 정한다.
+  // 실패하면 장바구니를 다시 받는다. 가격이 바뀌어 `ORDER_PRICE_MISMATCH`로 거절됐을 때 새 금액으로 다시 주문할 수 있게 한다
+  createOrder: (queryClient: QueryClient) =>
     mutationOptions({
-      mutationFn: (data: DeliveryTemporaryRequest) => createTemporaryDeliveryPayment(data),
-    }),
-
-  createTemporaryTakeoutPayment: () =>
-    mutationOptions({
-      mutationFn: (data: TakeoutTemporaryRequest) => createTemporaryTakeoutPayment(data),
-    }),
-
-  // KOIN_ORDER_WEBVIEW useConfirmPayments 이전(결제 승인). 성공·실패 후 이동은 화면에서 정한다
-  confirmPayment: () =>
-    mutationOptions({
-      mutationFn: (data: ConfirmPaymentRequest) => confirmPayment(data),
+      mutationFn: (variables: CreateOrderVariables) => createOrder(variables),
+      onSuccess: () => markCartQueriesStale(queryClient),
+      onError: () => invalidateCartQueries(queryClient),
     }),
 
   // KOIN_ORDER_WEBVIEW useSendSmsVerification 이전(연락처 변경 인증). order와 같은 경로·본문을 쓴다

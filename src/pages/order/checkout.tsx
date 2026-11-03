@@ -18,8 +18,6 @@ interface Props {
   [key: string]: unknown;
   isDesktop: boolean;
   orderType: OrderType;
-  // 결제 실패로 돌아오면(Toss failUrl) 실패 사유를 안내 모달로 띄운다
-  message: string | null;
   dehydratedState?: DehydratedState;
 }
 
@@ -30,14 +28,13 @@ const parseOrderType = (value: unknown): OrderType => (value === 'DELIVERY' ? 'D
 export const getServerSideProps = withCacheControl(
   async (context: GetServerSidePropsContext, _cacheControl, serverRequest): Promise<{ props: Props }> => {
     const orderType = parseOrderType(context.query.orderType);
-    const message = typeof context.query.message === 'string' ? context.query.message : null;
 
     if (serverRequest?.device !== 'mobile') {
-      return { props: { isDesktop: true, orderType, message } };
+      return { props: { isDesktop: true, orderType } };
     }
 
     // 로그인이면 order가 부르는 장바구니·학생 정보·배달기사님 요청 문구와, 장바구니의 상점으로
-    // 배달 가능 여부(배달) 또는 가게 정보(포장)를 서버에서 받아 본문까지 렌더한다.
+    // 가게 정보·입금 계좌와 배달 가능 여부(배달)를 서버에서 받아 본문까지 렌더한다.
     // 실패한 조회는 결과를 내리지 않고 클라이언트가 다시 조회한다
     const queryClient = new QueryClient();
     if (serverRequest.isLoggedIn) {
@@ -49,24 +46,28 @@ export const getServerSideProps = withCacheControl(
         queryClient.prefetchQuery(orderQueries.riderMessages(true)),
       ]);
 
+      // 장바구니는 orderable_shop_id만 주는데 입금 계좌는 shop_id로 조회하는 상점 상세에 있어,
+      // 주문 상점 상세에서 shop_id를 먼저 받은 뒤 상점 상세를 받는다
       const orderableShopId = cart?.orderable_shop_id ?? 0;
-      if (orderableShopId > 0 && orderType === 'DELIVERY') {
-        await queryClient.prefetchQuery(orderQueries.shopDeliveryInfo(orderableShopId));
-      } else if (orderableShopId > 0) {
-        await queryClient.prefetchQuery(storeMobileQueries.orderDetail(String(orderableShopId)));
+      if (orderableShopId > 0) {
+        const [orderShop] = await Promise.all([
+          queryClient.fetchQuery(storeMobileQueries.orderDetail(String(orderableShopId))).catch(() => null),
+          orderType === 'DELIVERY' && queryClient.prefetchQuery(orderQueries.shopDeliveryInfo(orderableShopId)),
+        ]);
+        if (orderShop) await queryClient.prefetchQuery(storeMobileQueries.detail(String(orderShop.shop_id)));
       }
     }
 
-    return { props: { isDesktop: false, orderType, message, dehydratedState: dehydrate(queryClient) } };
+    return { props: { isDesktop: false, orderType, dehydratedState: dehydrate(queryClient) } };
   },
 );
 
-function OrderCheckoutRoute({ isDesktop, orderType, message }: Props) {
+function OrderCheckoutRoute({ isDesktop, orderType }: Props) {
   return (
     <>
       {!isDesktop && <OrderViewport />}
       <StoreMobileHeader title="주문" />
-      {isDesktop ? <DesktopNotice /> : <OrderCheckoutPage orderType={orderType} message={message} />}
+      {isDesktop ? <DesktopNotice /> : <OrderCheckoutPage orderType={orderType} />}
     </>
   );
 }
