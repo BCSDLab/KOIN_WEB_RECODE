@@ -18,7 +18,8 @@
       color: inherit;
     }
 
-    &:last-child > a {
+    &:last-child > a,
+    &:last-child > button {
       display: block;
       padding: 7px 14px 8px;
       border-radius: 9999px;

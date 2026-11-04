@@ -301,7 +301,9 @@
 
   .place {
     flex-direction: row;
+    justify-content: center;
     gap: 6px;
+    margin-top: 12px;
 
     &__name {
       margin: 0;
@@ -325,7 +327,6 @@
 
   .carousel {
     position: relative;
-    margin-top: 12px;
 
     &__viewport {
       display: flex;

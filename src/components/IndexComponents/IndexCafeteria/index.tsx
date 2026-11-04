@@ -212,6 +212,24 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     return () => observer.disconnect();
   }, [isMobile, updateCarouselState]);
 
+  const placeTabs = (
+    <div className={styles.place}>
+      {PLACE_ORDER.map((placeName) => (
+        <button
+          type="button"
+          key={placeName}
+          className={cn({
+            [styles.place__name]: true,
+            [styles['place__name--selected']]: placeName === selectedPlace,
+          })}
+          onClick={() => handlePlaceClick(placeName)}
+        >
+          {placeName === '2캠퍼스' ? '2캠' : placeName}
+        </button>
+      ))}
+    </div>
+  );
+
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>
@@ -250,21 +268,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
       </h2>
 
       <div className={styles.card}>
-        <div className={styles.place}>
-          {PLACE_ORDER.map((placeName) => (
-            <button
-              type="button"
-              key={placeName}
-              className={cn({
-                [styles.place__name]: true,
-                [styles['place__name--selected']]: placeName === selectedPlace,
-              })}
-              onClick={() => handlePlaceClick(placeName)}
-            >
-              {placeName === '2캠퍼스' ? '2캠' : placeName}
-            </button>
-          ))}
-        </div>
+        {isMobile && placeTabs}
         {isMobile ? (
           <button
             type="button"
@@ -335,6 +339,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
             </div>
           </div>
         )}
+        {!isMobile && placeTabs}
       </div>
     </section>
   );

@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element -- 작은 정적 로고/아이콘이라 최적화 이점 대비 설정 비용이 큼 */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import HomeOutlineIcon from 'assets/svg/common/home-outline-icon.svg';
+import InstagramIcon from 'assets/svg/common/instagram-icon.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import KoinLogo from 'components/ui/KoinLogo';
@@ -116,18 +116,12 @@ function Footer() {
           <div className={styles['sitemap__icon-links']}>
             <a
               className={styles['sitemap__icon-link']}
-              href="https://www.facebook.com/bcsdlab"
+              href="https://www.instagram.com/bcsdlab/"
+              aria-label="BCSD Lab 인스타그램"
               target="_blank"
               rel="noreferrer"
             >
-              <img
-                src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png"
-                alt="facebook"
-                width={14}
-                height={30}
-                loading="lazy"
-                decoding="async"
-              />
+              <InstagramIcon aria-hidden />
             </a>
             <Link className={styles['sitemap__icon-link']} href={ROUTES.Main()} aria-label="홈">
               <HomeOutlineIcon aria-hidden />
