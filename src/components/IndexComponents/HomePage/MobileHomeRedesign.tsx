@@ -3,14 +3,13 @@ import Link from 'next/link';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
-import { storeQueries } from 'api/store/queries';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
-import ForkKnifeIcon from 'assets/svg/common/fork-knife-icon.svg';
 import QRCodeIcon from 'assets/svg/common/qr-code-icon.svg';
 import BusRouteIcon from 'assets/svg/common/route-icon.svg';
 import VanIcon from 'assets/svg/common/van-icon.svg';
 import IndexMobileCafeteria from 'components/IndexComponents/IndexMobileCafeteria';
+import StoreCard from 'components/IndexComponents/IndexStore/StoreCard';
 import IconBox from 'components/ui/IconBox';
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
@@ -72,8 +71,6 @@ function MobileHomeRedesign() {
       limit: 1,
     }),
   });
-  const { data: storeCounts } = useSuspenseQuery(storeQueries.counts());
-  const { data: storeEventCount } = useSuspenseQuery(storeQueries.eventCount());
 
   const logClick = (event_label: string, value: string) => {
     logger.actionEventClick({
@@ -166,30 +163,7 @@ function MobileHomeRedesign() {
           </Link>
         </SectionHeader>
 
-        <Link
-          href={mobileStoreLink}
-          className={styles['store-card']}
-          onClick={() => logClick('popular_shop', '많이 찾는 상점 둘러보기')}
-        >
-          <div className={styles['store-card__content-wrapper']}>
-            <IconBox>
-              <ForkKnifeIcon />
-            </IconBox>
-            <span className={styles['store-card__content']}>
-              <span className={styles['store-card__badge']}>KOIN 전용 이벤트 {storeEventCount.count}곳</span>
-              <span className={styles['store-card__title']}>
-                많이 찾는 상점
-                <br />
-                둘러보기
-              </span>
-              <span className={styles['store-card__meta']}>
-                영업중 <span className={styles['store-card__count']}>{storeCounts.open_count}곳</span> | 전체{' '}
-                {storeCounts.total_count}곳
-              </span>
-            </span>
-          </div>
-          <ArrowRightIcon className={styles['store-card__arrow']} aria-hidden />
-        </Link>
+        <StoreCard href={mobileStoreLink} onClick={() => logClick('popular_shop', '많이 찾는 상점 둘러보기')} />
       </section>
     </main>
   );
