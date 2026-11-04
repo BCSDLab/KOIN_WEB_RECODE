@@ -214,7 +214,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     <section className={styles.template}>
       <h2 className={styles.header}>
         <button type="button" className={styles.header__title} onClick={handleMoreClick}>
-          {isMobile ? `${dayLabel} 식단` : '오늘의 식단'}
+          {isMobile ? `${dayLabel} 식단` : `${dayLabel}의 식단`}
         </button>
         <button type="button" className={styles.header__more} onClick={handleMoreClick}>
           {isMobile ? '더보기' : '전체보기'}
@@ -307,7 +307,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
                 [styles['carousel__viewport--dragging']]: isDragging,
               })}
               role="group"
-              aria-label="오늘의 식단 목록"
+              aria-label={`${dayLabel}의 식단 목록`}
               onScroll={updateCarouselState}
               onWheel={handleCarouselInteraction}
               onPointerDown={handleCarouselPointerDown}
