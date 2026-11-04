@@ -1,13 +1,22 @@
-import { CATEGORY, type SubmenuTitle } from './category';
+import { CATEGORY, type Submenu, type SubmenuTitle } from './category';
+
+interface DesktopSubmenu extends Submenu {
+  label: SubmenuTitle | '콜밴팟' | '주변 상점';
+}
+
+export interface DesktopCategory {
+  title: '학교생활' | '커뮤니티' | '교통' | '생활편의';
+  submenu: DesktopSubmenu[];
+}
 
 const submenus = CATEGORY.flatMap((category) => category.submenu);
 
-const labels: Partial<Record<SubmenuTitle, string>> = {
+const labels: Partial<Record<SubmenuTitle, DesktopSubmenu['label']>> = {
   '콜밴팟 모집': '콜밴팟',
   주변상점: '주변 상점',
 };
 
-function getSubmenus(titles: SubmenuTitle[]) {
+function getSubmenus(titles: SubmenuTitle[]): DesktopSubmenu[] {
   return titles.flatMap((title) => {
     const menu = submenus.find((submenu) => submenu.title === title);
 
@@ -15,7 +24,7 @@ function getSubmenus(titles: SubmenuTitle[]) {
   });
 }
 
-export const DESKTOP_NAVIGATION = [
+export const DESKTOP_NAVIGATION: DesktopCategory[] = [
   {
     title: '학교생활',
     submenu: getSubmenus(['시간표', '식단', '교내 시설물 정보', '학교 부서 정보']),

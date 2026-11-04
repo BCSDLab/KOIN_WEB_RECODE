@@ -8,7 +8,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import type { Portal } from 'components/modal/Modal/PortalProvider';
 import KoinLogo from 'components/ui/KoinLogo';
 import type { SubmenuTitle } from 'static/category';
-import { DESKTOP_NAVIGATION } from 'static/desktopNavigation';
+import { DESKTOP_NAVIGATION, type DesktopCategory } from 'static/desktopNavigation';
 import ROUTES from 'static/routes';
 import { SHORTCUT_LOGGING_MAP } from 'utils/hooks/analytics/shortcutLoggingMap';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -26,7 +26,7 @@ interface PCHeaderProps {
 }
 
 export default function PCHeader({ openModal }: PCHeaderProps) {
-  const [activeCategory, setActiveCategory] = useState<(typeof DESKTOP_NAVIGATION)[number] | null>(null);
+  const [activeCategory, setActiveCategory] = useState<DesktopCategory | null>(null);
   const activeCategoryIndex = DESKTOP_NAVIGATION.findIndex((category) => category === activeCategory);
 
   const logout = useLogout();
@@ -88,7 +88,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
   };
 
-  const escapeByheader = (title: string) => {
+  const escapeByheader = (title: '정보수정' | '로그아웃') => {
     if (pathname === ROUTES.GraduationCalculator()) {
       logger.actionEventClick({
         team: 'USER',
