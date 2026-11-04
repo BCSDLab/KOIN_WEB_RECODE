@@ -97,7 +97,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     setHasPreviousCards(carousel.scrollLeft > 1);
     setHasMoreCards(hasMore);
 
-    // 탭으로 이동한 경우에는 끝에서 여러 카드가 보여도 누른 코너의 선택을 유지한다.
+    // 코너 탭이나 카드 포커스로 선택한 코너를 자동 스크롤 위치로 덮어쓰지 않는다.
     if (isTabScrollRef.current) return;
 
     const [firstCard, secondCard] = carousel.children;
@@ -110,8 +110,9 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     if (activePlace) setSelectedPlace(activePlace);
   }, []);
 
-  const handleCarouselInteraction = () => {
-    isTabScrollRef.current = false;
+  const handleCarouselInteraction = (place?: DiningPlace) => {
+    isTabScrollRef.current = place !== undefined;
+    if (place) setSelectedPlace(place);
   };
 
   const handleCarouselPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -149,6 +150,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
       didDragRef.current = true;
     }
     event.preventDefault();
+    isTabScrollRef.current = false;
     event.currentTarget.scrollLeft = drag.scrollLeft - distance;
   };
 
@@ -309,7 +311,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
               role="group"
               aria-label={`${dayLabel}의 식단 목록`}
               onScroll={updateCarouselState}
-              onWheel={handleCarouselInteraction}
+              onWheel={() => handleCarouselInteraction()}
               onPointerDown={handleCarouselPointerDown}
               onPointerMove={handleCarouselPointerMove}
               onPointerUp={handleCarouselPointerEnd}
@@ -327,7 +329,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
                   dining={dinings.find((dining) => dining.place === place && dining.type === diningType)}
                   diningType={diningType}
                   onClick={handleMoreClick}
-                  onInteract={handleCarouselInteraction}
+                  onInteract={() => handleCarouselInteraction(place)}
                 />
               ))}
             </div>
