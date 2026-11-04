@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import { cn } from '@bcsdlab/utils';
@@ -23,12 +24,23 @@ interface HomeGreetingProps {
 
 export default function HomeGreeting({ variant, weatherData }: HomeGreetingProps) {
   const serverRequest = useServerRequest();
+  const [clientNow, setClientNow] = useState<Date | null>(null);
   const serverNow = variant === 'desktop' && serverRequest ? new Date(serverRequest.now) : new Date();
   const { data: userInfo } = useUser();
   const weatherQuery = useQuery({ ...weatherQueries.info(), enabled: variant === 'desktop' });
   const weather = weatherData ?? weatherQuery.data;
   const displayName = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '코리';
-  const todayLabel = dateFormatter.format(serverNow);
+  const todayLabel = dateFormatter.format(variant === 'desktop' && clientNow ? clientNow : serverNow);
+
+  useEffect(() => {
+    if (variant !== 'desktop') return undefined;
+
+    const intervalId = setInterval(() => {
+      setClientNow(new Date());
+    }, 60_000);
+
+    return () => clearInterval(intervalId);
+  }, [variant]);
 
   return (
     <section
