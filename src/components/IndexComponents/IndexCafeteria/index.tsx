@@ -29,11 +29,12 @@ interface DiningCardProps {
   dining?: Dining;
   diningType: DiningType;
   onClick: () => void;
+  onInteract: () => void;
 }
 
-function DiningCard({ place, dining, diningType, onClick }: DiningCardProps) {
+function DiningCard({ place, dining, diningType, onClick, onInteract }: DiningCardProps) {
   return (
-    <button type="button" className={styles['meal-card']} onClick={onClick}>
+    <button type="button" className={styles['meal-card']} onClick={onClick} onFocus={onInteract} onKeyDown={onInteract}>
       <div className={styles['meal-card__meta']}>
         <span>{DINING_TYPE_MAP[diningType]}</span>
         {dining && (
@@ -108,6 +109,10 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
     const activePlace = PLACE_ORDER[activeIndex];
     if (activePlace) setSelectedPlace(activePlace);
   }, []);
+
+  const handleCarouselInteraction = () => {
+    isTabScrollRef.current = false;
+  };
 
   const handleCarouselPointerDown = (event: PointerEvent<HTMLDivElement>) => {
     isTabScrollRef.current = false;
@@ -304,9 +309,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
               role="group"
               aria-label="오늘의 식단 목록"
               onScroll={updateCarouselState}
-              onWheel={() => {
-                isTabScrollRef.current = false;
-              }}
+              onWheel={handleCarouselInteraction}
               onPointerDown={handleCarouselPointerDown}
               onPointerMove={handleCarouselPointerMove}
               onPointerUp={handleCarouselPointerEnd}
@@ -324,6 +327,7 @@ function IndexCafeteria({ serverDining }: IndexCafeteriaProps) {
                   dining={dinings.find((dining) => dining.place === place && dining.type === diningType)}
                   diningType={diningType}
                   onClick={handleMoreClick}
+                  onInteract={handleCarouselInteraction}
                 />
               ))}
             </div>
