@@ -65,6 +65,7 @@ interface BannerProps {
 
 function Banner({ bannersList }: BannerProps) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isFocusedRef = useRef(false);
   const logger = useLogger();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersList.banners[currentPageIndex];
@@ -72,6 +73,7 @@ function Banner({ bannersList }: BannerProps) {
 
   const resetAutoSlide = useCallback(() => {
     if (intervalRef.current) clearTimeout(intervalRef.current);
+    if (isFocusedRef.current) return;
 
     intervalRef.current = setTimeout(() => {
       setCurrentPageIndex((prev) => (prev === bannersList.count - 1 ? 0 : prev + 1));
@@ -141,7 +143,20 @@ function Banner({ bannersList }: BannerProps) {
   if (!isVisible) return null;
 
   return (
-    <section className={styles.inline} aria-label="메인 배너">
+    <section
+      className={styles.inline}
+      aria-label="메인 배너"
+      onFocus={() => {
+        isFocusedRef.current = true;
+        if (intervalRef.current) clearTimeout(intervalRef.current);
+      }}
+      onBlur={(event) => {
+        if (event.currentTarget.contains(event.relatedTarget)) return;
+
+        isFocusedRef.current = false;
+        if (bannersList.count > 1) resetAutoSlide();
+      }}
+    >
       <div className={styles.inline__slider}>
         <BannerCard
           handleImageLinkClick={handleImageLinkClick}

@@ -24,7 +24,7 @@ function DesktopHome({ bannersList, serverDining, serverSemester }: HomePageProp
         </div>
         <div className={styles['right-container']}>
           <IndexTimetable serverSemester={serverSemester} />
-          <Banner bannersList={bannersList} />
+          <Banner key={bannersList.banners.map((banner) => banner.id).join('-')} bannersList={bannersList} />
         </div>
       </div>
     </main>
