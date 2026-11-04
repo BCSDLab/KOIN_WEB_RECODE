@@ -9,6 +9,9 @@ import { useServerRequest } from 'utils/ssr/useServerRequest';
 
 import styles from './HomeGreeting.module.scss';
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
 const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
   month: 'long',
   day: 'numeric',
@@ -22,19 +25,36 @@ interface HomeGreetingProps {
 
 export default function HomeGreeting({ variant }: HomeGreetingProps) {
   const serverRequest = useServerRequest();
-  const [clientNow, setClientNow] = useState<Date | null>(null);
-  const serverNow = serverRequest ? new Date(serverRequest.now) : new Date();
+  const [todayLabel, setTodayLabel] = useState(() =>
+    dateFormatter.format(serverRequest ? new Date(serverRequest.now) : new Date()),
+  );
   const { data: userInfo } = useUser();
   const { data: weather, isPending: isWeatherPending } = useQuery(weatherQueries.info());
   const displayName = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '코리';
-  const todayLabel = dateFormatter.format(clientNow ?? serverNow);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setClientNow(new Date());
-    }, 60_000);
+    if (typeof window === 'undefined') return undefined;
 
-    return () => clearInterval(intervalId);
+    let timeoutId: number | undefined;
+
+    const updateDate = () => {
+      const now = Date.now();
+      setTodayLabel(dateFormatter.format(now));
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(updateDate, DAY_MS - ((now + KST_OFFSET_MS) % DAY_MS));
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') updateDate();
+    };
+
+    updateDate();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   return (
