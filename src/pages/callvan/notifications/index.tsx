@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import type { GetServerSidePropsContext } from 'next';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
@@ -13,23 +12,14 @@ import NotificationEmptyState from 'components/Callvan/components/NotificationEm
 import useDeleteAllNotifications from 'components/Callvan/hooks/useDeleteAllNotifications';
 import useMarkAllNotificationsRead from 'components/Callvan/hooks/useMarkAllNotificationsRead';
 import useMarkNotificationRead from 'components/Callvan/hooks/useMarkNotificationRead';
-import ROUTES from 'static/routes';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
-import useMount from 'utils/hooks/state/useMount';
-import { getDeviceClass } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import styles from './CallvanNotifications.module.scss';
 
 export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
-}>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
-  // 모바일 전용 화면이다. 데스크톱은 서버에서 바로 돌려보낸다.
-  if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
-    return { redirect: { destination: ROUTES.Main(), permanent: false } };
-  }
-
+}>(async (_context, _cacheControl, serverRequest) => {
   const queryClient = new QueryClient();
   const { isLoggedIn } = serverRequest;
 
@@ -52,18 +42,10 @@ export const getServerSideProps = withCacheControl<{
 
 export default function CallvanNotificationsPage() {
   const router = useRouter();
-  const isMobile = useMediaQuery();
-  const mounted = useMount();
   const isLoggedIn = useIsLoggedIn();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (mounted && !isMobile) {
-      router.replace(ROUTES.Main());
-    }
-  }, [mounted, isMobile, router]);
 
   const { data: notifications } = useQuery({
     ...callvanQueries.notifications(isLoggedIn),
