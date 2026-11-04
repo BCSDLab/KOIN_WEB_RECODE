@@ -45,7 +45,10 @@ function DiningCard({ place, dining, diningType, onClick, onInteract }: DiningCa
           </span>
         )}
       </div>
-      <span className={styles['meal-card__title']}>{place}</span>
+      <div className={styles['meal-card__title-row']}>
+        <span className={styles['meal-card__title']}>{place}</span>
+        {dining?.soldout_at && <span className={styles['meal-card__soldout']}>품절</span>}
+      </div>
       {dining ? (
         <p className={styles['meal-card__menu']}>
           {dining.menu
