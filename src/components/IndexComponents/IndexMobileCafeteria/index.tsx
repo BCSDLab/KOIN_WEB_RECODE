@@ -40,7 +40,10 @@ function MealCard({ dining, diningLabel, href }: { dining: Dining; diningLabel: 
           <strong>{dining.kcal}kcal</strong>
         </span>
       </div>
-      <h3 className={styles['meal-card__title']}>{dining.place}</h3>
+      <div className={styles['meal-card__title-row']}>
+        <h3 className={styles['meal-card__title']}>{dining.place}</h3>
+        {dining.soldout_at && <span className={styles['meal-card__soldout']}>품절</span>}
+      </div>
       <p className={styles['meal-card__menu']}>{menu}</p>
     </Link>
   );
