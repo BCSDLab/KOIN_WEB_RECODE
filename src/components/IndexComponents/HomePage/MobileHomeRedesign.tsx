@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { callvanQueries } from 'api/callvan/queries';
 import { storeQueries } from 'api/store/queries';
-import { weatherQueries } from 'api/weather/queries';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimeIcon from 'assets/svg/common/bus-time-icon.svg';
 import ForkKnifeIcon from 'assets/svg/common/fork-knife-icon.svg';
@@ -65,7 +64,6 @@ function SectionHeader({ titleId, title, children }: SectionHeaderProps) {
 
 function MobileHomeRedesign() {
   const logger = useLogger();
-  const { data: weatherData } = useSuspenseQuery(weatherQueries.info());
   const { data: callvanData } = useSuspenseQuery({
     ...callvanQueries.list({
       statuses: ['RECRUITING'],
@@ -87,7 +85,7 @@ function MobileHomeRedesign() {
 
   return (
     <main className={styles.template}>
-      <HomeGreeting weatherData={weatherData} />
+      <HomeGreeting />
 
       <section className={styles.section} aria-labelledby="today-menu-title">
         <SectionHeader titleId="today-menu-title" title="오늘의 식단">

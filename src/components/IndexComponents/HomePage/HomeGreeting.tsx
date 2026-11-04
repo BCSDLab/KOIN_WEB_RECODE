@@ -3,7 +3,6 @@ import Image from 'next/image';
 
 import { cn } from '@bcsdlab/utils';
 import { useQuery } from '@tanstack/react-query';
-import type { WeatherResponse } from 'api/weather/entity';
 import { weatherQueries } from 'api/weather/queries';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useServerRequest } from 'utils/ssr/useServerRequest';
@@ -19,28 +18,24 @@ const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
 
 interface HomeGreetingProps {
   variant?: 'desktop';
-  weatherData?: WeatherResponse;
 }
 
-export default function HomeGreeting({ variant, weatherData }: HomeGreetingProps) {
+export default function HomeGreeting({ variant }: HomeGreetingProps) {
   const serverRequest = useServerRequest();
   const [clientNow, setClientNow] = useState<Date | null>(null);
   const serverNow = serverRequest ? new Date(serverRequest.now) : new Date();
   const { data: userInfo } = useUser();
-  const weatherQuery = useQuery({ ...weatherQueries.info(), enabled: variant === 'desktop' });
-  const weather = weatherData ?? weatherQuery.data;
+  const { data: weather, isPending: isWeatherPending } = useQuery(weatherQueries.info());
   const displayName = userInfo?.nickname?.trim() || userInfo?.name?.trim() || '코리';
-  const todayLabel = dateFormatter.format(variant === 'desktop' && clientNow ? clientNow : serverNow);
+  const todayLabel = dateFormatter.format(clientNow ?? serverNow);
 
   useEffect(() => {
-    if (variant !== 'desktop') return undefined;
-
     const intervalId = setInterval(() => {
       setClientNow(new Date());
     }, 60_000);
 
     return () => clearInterval(intervalId);
-  }, [variant]);
+  }, []);
 
   return (
     <section
@@ -58,9 +53,7 @@ export default function HomeGreeting({ variant, weatherData }: HomeGreetingProps
               </span>
             </>
           ) : (
-            <span className={styles.weather__text}>
-              {weatherQuery.isPending ? '날씨 확인 중' : '날씨 정보 제공 불가'}
-            </span>
+            <span className={styles.weather__text}>{isWeatherPending ? '날씨 확인 중' : '날씨 정보 제공 불가'}</span>
           )}
         </span>
       </div>
