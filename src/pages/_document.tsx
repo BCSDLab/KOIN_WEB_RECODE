@@ -17,24 +17,9 @@ export default function Document() {
         <meta name="google" content="notranslate" />
 
         {/* 파비콘/애플 아이콘 */}
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="https://static.koreatech.in/assets/favicons/favicon-16x16.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
-        />
-        <link rel="shortcut icon" href="https://static.koreatech.in/assets/favicons/favicon-32x32.png" />
+        <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <body>
         {GTM_ID ? (
