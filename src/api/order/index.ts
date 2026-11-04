@@ -8,7 +8,6 @@ import {
   Cart,
   CartItemOptions,
   CartSummary,
-  ConfirmPayment,
   DeleteCartItem,
   InProgressOrders,
   OffCampusDeliveryValidate,
@@ -21,11 +20,10 @@ import {
   RiderMessages,
   ShopDeliveryInfo,
   StudentInfo,
-  TemporaryDeliveryPayment,
-  TemporaryTakeoutPayment,
   UpdateCartItemOptions,
   UpdateCartItemQuantity,
   ValidateCart,
+  CreateOrder,
 } from './APIDetail';
 
 export const getCart = APIClient.of(Cart);
@@ -62,11 +60,7 @@ export const getShopDeliveryInfo = APIClient.of(ShopDeliveryInfo);
 
 export const getRiderMessages = APIClient.of(RiderMessages);
 
-export const createTemporaryDeliveryPayment = APIClient.of(TemporaryDeliveryPayment);
-
-export const createTemporaryTakeoutPayment = APIClient.of(TemporaryTakeoutPayment);
-
-export const confirmPayment = APIClient.of(ConfirmPayment);
+export const createOrder = APIClient.of(CreateOrder);
 
 export const getPaymentInfo = APIClient.of(PaymentInfo);
 

@@ -9,9 +9,6 @@ import type {
   CancelPaymentResponse,
   CartResponse,
   CartSummaryResponse,
-  ConfirmPaymentRequest,
-  ConfirmPaymentResponse,
-  DeliveryTemporaryRequest,
   InProgressOrderResponse,
   OffCampusDeliveryAddressRequest,
   OffCampusDeliveryValidateRequest,
@@ -19,15 +16,15 @@ import type {
   OrderHistoryResponse,
   OrderableShopsParams,
   OrderableShopsResponse,
+  OrderCreateResponse,
   OrderType,
   PaymentInfoResponse,
   RiderMessageResponse,
   ShopDeliveryInfoResponse,
   ShopMenuDetailResponse,
   StudentInfoResponse,
-  TakeoutTemporaryRequest,
-  TemporaryPaymentResponse,
   UpdateCartItemRequest,
+  CreateOrderVariables,
 } from './entity';
 
 // KOIN_ORDER_WEBVIEW api/cart 이전. 같은 엔드포인트를 쓰므로 경로·파라미터를 바꿀 때 양쪽을 함께 맞춘다.
@@ -266,45 +263,22 @@ export class RiderMessages<R extends RiderMessageResponse> implements APIRequest
   response!: R;
 }
 
-export class TemporaryDeliveryPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
+const CREATE_ORDER_PATH = {
+  DELIVERY: 'order/delivery',
+  TAKE_OUT: 'order/takeout',
+} satisfies Record<OrderType, string>;
+
+export class CreateOrder<R extends OrderCreateResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'payments/delivery/temporary';
+  path: string;
 
-  data: DeliveryTemporaryRequest;
+  data: CreateOrderVariables['data'];
 
   response!: R;
 
-  constructor(data: DeliveryTemporaryRequest) {
-    this.data = data;
-  }
-}
-
-export class TemporaryTakeoutPayment<R extends TemporaryPaymentResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = 'payments/takeout/temporary';
-
-  data: TakeoutTemporaryRequest;
-
-  response!: R;
-
-  constructor(data: TakeoutTemporaryRequest) {
-    this.data = data;
-  }
-}
-
-// KOIN_ORDER_WEBVIEW api/payments confirmPayments 이전(결제 승인). Toss 결제 성공 후 승인 화면에서 한 번 보낸다
-export class ConfirmPayment<R extends ConfirmPaymentResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = 'payments/confirm';
-
-  data: ConfirmPaymentRequest;
-
-  response!: R;
-
-  constructor(data: ConfirmPaymentRequest) {
+  constructor({ orderType, data }: CreateOrderVariables) {
+    this.path = CREATE_ORDER_PATH[orderType];
     this.data = data;
   }
 }
