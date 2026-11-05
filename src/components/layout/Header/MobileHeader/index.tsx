@@ -15,7 +15,7 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useMount from 'utils/hooks/state/useMount';
 import { isomorphicSessionStorage } from 'utils/ts/env';
 import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
-import { backButtonTapped } from 'utils/ts/iosBridge';
+import { backButtonTapped } from 'utils/ts/nativeBridge';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
 import type { LegacyRoute } from './legacyRoute';

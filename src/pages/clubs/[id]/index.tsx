@@ -40,7 +40,7 @@ import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { copyToClipboard } from 'utils/ts/copyToClipboard';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
-import { backButtonTapped } from 'utils/ts/iosBridge';
+import { backButtonTapped } from 'utils/ts/nativeBridge';
 import showToast from 'utils/ts/showToast';
 
 import styles from './ClubDetailPage.module.scss';
