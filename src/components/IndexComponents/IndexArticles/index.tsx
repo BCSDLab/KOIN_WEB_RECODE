@@ -4,16 +4,22 @@ import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
+import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 
 import styles from './IndexArticles.module.scss';
 
-export default function IndexArticles() {
+interface IndexArticlesProps {
+  serverNow: string;
+}
+
+export default function IndexArticles({ serverNow }: IndexArticlesProps) {
   const isLoggedIn = useIsLoggedIn();
   const { data: articlesData } = useQuery({
     ...articleQueries.list(isLoggedIn, '1'),
+    select: createArticlesWithNewSelector(serverNow),
   });
   const logger = useLogger();
 
@@ -48,6 +54,15 @@ export default function IndexArticles() {
             >
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
+              {article.isNew && (
+                // eslint-disable-next-line @next/next/no-img-element -- 고정 크기 소형 정적 이미지라 최적화 이점이 거의 없음
+                <img
+                  className={styles['list__item-tag']}
+                  src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                  alt="NEW"
+                  aria-hidden
+                />
+              )}
             </Link>
             <span className={styles['list__item-registered']}>{article.registered_at.replaceAll('-', '.')}</span>
           </li>

@@ -145,6 +145,7 @@ export const getServerSideProps = withCacheControl(
       props: {
         bannersList,
         serverDining,
+        serverNow: serverRequest.now,
         serverSemester,
         dehydratedState: dehydrate(queryClient),
       },

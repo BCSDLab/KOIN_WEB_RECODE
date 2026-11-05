@@ -78,6 +78,13 @@
     color: #b611f5;
   }
 
+  &__item-tag {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-left: 10px;
+  }
+
   &__item-registered {
     flex-shrink: 0;
     color: #999;

@@ -11,5 +11,6 @@ export interface ServerDining {
 export interface HomePageProps {
   bannersList: BannersResponse;
   serverDining: ServerDining;
+  serverNow: string;
   serverSemester: Semester;
 }
