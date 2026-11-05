@@ -1,10 +1,8 @@
 import Link from 'next/link';
 
-import { cn } from '@bcsdlab/utils';
 import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import BusTimetableIcon from 'assets/svg/common/bus-time-icon.svg';
 import BusRouteIcon from 'assets/svg/common/route-icon.svg';
-import CallvanIcon from 'assets/svg/common/van-icon.svg';
 import IconBox from 'components/ui/IconBox';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -12,14 +10,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexBus.module.scss';
 
 const DESKTOP_TRANSPORT_LINKS = [
-  {
-    key: 'callvan',
-    title: '콜밴팟',
-    subtitle: '같이 콜밴 탈 사람찾기',
-    link: ROUTES.Callvan(),
-    SvgIcon: CallvanIcon,
-    logging: { event_label: 'main_callvan_view', value: '' },
-  },
   {
     key: 'timetable',
     title: '버스 시간표',
@@ -54,10 +44,7 @@ function IndexBus() {
           <Link
             href={link}
             key={key}
-            className={cn({
-              [styles.card]: true,
-              [styles['card--callvan']]: key === 'callvan',
-            })}
+            className={styles.card}
             onClick={() => logger.actionEventClick({ team: 'CAMPUS', ...logging })}
           >
             <div className={styles.card__segment}>

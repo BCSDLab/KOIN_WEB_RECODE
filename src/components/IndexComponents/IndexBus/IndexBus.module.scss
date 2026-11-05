@@ -89,32 +89,4 @@
       vector-effect: non-scaling-stroke;
     }
   }
-
-  &--callvan {
-    padding: 20px;
-    background-color: #1f1f1f;
-
-    .card__segment {
-      gap: 12px;
-    }
-
-    .card__icon {
-      flex-basis: 52px;
-      width: 52px;
-      height: 52px;
-      background-color: #b611f5;
-
-      svg {
-        width: 32px;
-      }
-    }
-
-    .card__title {
-      color: #fff;
-    }
-
-    .card__arrow path {
-      stroke: #cacaca;
-    }
-  }
 }

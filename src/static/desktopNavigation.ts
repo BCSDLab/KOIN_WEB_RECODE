@@ -1,7 +1,7 @@
 import { CATEGORY, type Submenu, type SubmenuTitle } from './category';
 
 interface DesktopSubmenu extends Submenu {
-  label: SubmenuTitle | '콜밴팟' | '주변 상점';
+  label: SubmenuTitle | '주변 상점';
 }
 
 export interface DesktopCategory {
@@ -12,7 +12,6 @@ export interface DesktopCategory {
 const submenus = CATEGORY.flatMap((category) => category.submenu);
 
 const labels: Partial<Record<SubmenuTitle, DesktopSubmenu['label']>> = {
-  '콜밴팟 모집': '콜밴팟',
   주변상점: '주변 상점',
 };
 
@@ -35,7 +34,7 @@ export const DESKTOP_NAVIGATION: DesktopCategory[] = [
   },
   {
     title: '교통',
-    submenu: getSubmenus(['버스 교통편', '버스 시간표', '콜밴팟 모집']),
+    submenu: getSubmenus(['버스 교통편', '버스 시간표']),
   },
   {
     title: '생활편의',

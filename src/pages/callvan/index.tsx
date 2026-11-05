@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 
@@ -8,9 +8,12 @@ import { callvanQueries, callvanQueryKeys } from 'api/callvan/queries';
 import CallvanList from 'components/Callvan/components/CallvanList';
 import CallvanPageLayout from 'components/Callvan/components/CallvanPageLayout';
 import { type CallvanParams, parseCallvanQuery } from 'components/Callvan/utils/callvanQuery';
+import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import useMount from 'utils/hooks/state/useMount';
 import useInfiniteScroll from 'utils/hooks/ui/useInfiniteScroll';
+import { getDeviceClass } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 
 import listStyles from 'components/Callvan/components/CallvanList/CallvanList.module.scss';
@@ -42,6 +45,10 @@ export const getServerSideProps = withCacheControl<{
   dehydratedState: ReturnType<typeof dehydrate>;
   initialParams: CallvanParams;
 }>(async (context: GetServerSidePropsContext, _cacheControl, serverRequest) => {
+  if (getDeviceClass(context.req.headers['user-agent']) !== 'mobile') {
+    return { redirect: { destination: ROUTES.Main(), permanent: false } };
+  }
+
   const queryClient = new QueryClient();
   const { query } = context;
 
@@ -79,6 +86,17 @@ function useCallvanParams(initialParams: CallvanParams): CallvanParams {
 }
 
 export default function CallvanPage({ initialParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const isMobile = useMediaQuery();
+  const mounted = useMount();
+
+  // 서버가 이미 걸러내지만, 창 크기를 줄여 모바일 폭이 된 뒤 넓히는 경우를 위해 남긴다.
+  useEffect(() => {
+    if (mounted && !isMobile) {
+      router.replace(ROUTES.Main());
+    }
+  }, [mounted, isMobile, router]);
+
   const params = useCallvanParams(initialParams);
 
   return <CallvanContent key={params.title} params={params} />;
