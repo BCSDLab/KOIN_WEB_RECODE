@@ -89,11 +89,10 @@ class NativeWebBridge {
   }
 }
 
-// 전역 브릿지 인스턴스
 if (isBrowser()) {
   window.NativeBridge = new NativeWebBridge();
 
-  // 네이티브에서 호출할 콜백 함수
+  // iOS 앱이 이 전역 이름으로 결과를 돌려주므로 이름을 바꾸려면 앱도 함께 바꿔야 한다
   window.onNativeCallback = (callbackId: string, result: NativeCallbackResult) => {
     window.NativeBridge?.handleCallback(callbackId, result);
   };
