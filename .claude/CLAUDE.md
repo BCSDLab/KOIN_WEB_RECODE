@@ -44,7 +44,7 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 5. **라우팅:** `ROUTES` 헬퍼 사용. 경로 문자열 하드코딩 금지.
 6. **로깅:** `console.log` 금지. `console.warn`/`console.error`만 허용.
 7. **토스트:** `showToast(type, message)` 사용. `toast()` 직접 호출 금지.
-8. **iOS 브릿지:** `window.webkit` optional chaining 유지 (`src/utils/ts/iosBridge.ts`).
+8. **네이티브 브릿지:** `window.webkit` optional chaining 유지 (`src/utils/ts/nativeBridge.ts`).
 9. **분석 로깅:** 주요 사용자 인터랙션마다 `useLogger()` 훅 포함.
 10. **SSR 렌더 결정성:** 서버 렌더와 하이드레이션 렌더가 갈리면 서버가 그린 DOM이 통째로 버려진다. **React는 이 경우 대부분 경고하지 않는다** — `key` 변경과 `useSyncExternalStore` 스냅샷 전환은 React 입장에선 정상 동작이다. 콘솔이 조용하다고 안전한 게 아니다.
     - **원칙: 서버가 아는 것은 서버에서 렌더한다.** 요청에서 알 수 있는 값(기기·로그인 여부·회원 유형)은 `withCacheControl`이 `serverRequest`로 주입한다. `useServerRequest()`로 읽는다.
@@ -99,3 +99,4 @@ yarn log                # Notion 스펙에서 분석 로깅 훅 생성
 | 2026-08-13 | 명령어·검증 정책 갱신 | CLAUDE.md | 무효 test 스크립트/Jest 스택 제거, typecheck 분리(빌드에서 tsc 이중 실행 제거), CI 정합성 정비 |
 | 2026-10-02 | 규칙 10 인증 상태 설명 갱신 | CLAUDE.md | 세션 쿼리 단일 출처 구조로 전환(영속 userType·토큰 폴백 제거). 옛 `useTokenState()` 설명이 더는 맞지 않음 |
 | 2026-10-16 | 규칙 11(주석)·12(SCSS) 추가 | CLAUDE.md, `doc-comments`·`scss-authoring` 스킬 | private 하네스 용어가 섞인 주석, Figma에서 옮긴 중복 선언(전역·초기값 반복)이 반복적으로 들어옴 |
+| 2026-11-05 | 규칙 8 경로·이름 갱신 | CLAUDE.md | 브릿지가 Android(`window.Android`)까지 지원하며 `iosBridge.ts` → `nativeBridge.ts`로 이름 변경 |
