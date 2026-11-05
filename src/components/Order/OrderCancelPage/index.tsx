@@ -35,7 +35,7 @@ export default function OrderCancelPage({ paymentId }: OrderCancelPageProps) {
   const [selectedCancelReason, setSelectedCancelReason] = useState('');
   const [customCancelReason, setCustomCancelReason] = useState('');
 
-  const { mutate: cancelPayment } = useMutation({
+  const { mutate: cancelPayment, isPending: isCancelPending } = useMutation({
     ...orderMutations.cancelPayment(paymentId),
     onError: (error) => {
       if (isKoinError(error)) showToast('error', error.message);
@@ -151,7 +151,8 @@ export default function OrderCancelPage({ paymentId }: OrderCancelPageProps) {
             >
               닫기
             </Button>
-            <Button onClick={handleClickContinueCancel} className={styles.modal__button}>
+            {/* 앱은 취소가 끝날 때까지 이 화면에 머물러서, 그사이 다시 눌러 요청이 중복되지 않게 막는다 */}
+            <Button onClick={handleClickContinueCancel} className={styles.modal__button} disabled={isCancelPending}>
               취소하기
             </Button>
           </div>
