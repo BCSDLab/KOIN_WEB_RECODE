@@ -17,6 +17,7 @@ export const isIOSApp = () => isBrowser() && window.webkit?.messageHandlers?.tok
  */
 export const isAndroidApp = () => isBrowser() && window.Android != null;
 
+/** iOS·Android 앱 웹뷰인가. 렌더 중에 쓰지 않고 이벤트 핸들러에서만 쓴다. */
 export const isNativeApp = () => isIOSApp() || isAndroidApp();
 
 interface PendingCallback {
@@ -38,7 +39,7 @@ class NativeWebBridge {
 
   private post(methodName: string, args: unknown[], callbackId: string): void {
     if (isIOSApp()) {
-      // iOS는 메시지를 받아 처리한 뒤 window.onNativeCallback(callbackId, result)를 부른다
+      // iOS는 메시지를 받아 처리한 뒤 `window.onNativeCallback(callbackId, result)`를 부른다
       window.webkit?.messageHandlers?.tokenBridge?.postMessage(
         JSON.stringify({ method: methodName, args, callbackId }),
       );
@@ -48,7 +49,7 @@ class NativeWebBridge {
 
     const androidMethod = window.Android?.[methodName];
     if (typeof androidMethod === 'function') {
-      // Android의 @JavascriptInterface 메서드는 동기로 실행되고 콜백을 부르지 않으므로 반환값으로 바로 끝낸다.
+      // Android의 `@JavascriptInterface` 메서드는 동기로 실행되고 콜백을 부르지 않으므로 반환값으로 바로 끝낸다
       const result = androidMethod.apply(window.Android, args) as NativeCallbackResult;
       this.handleCallback(callbackId, result);
 

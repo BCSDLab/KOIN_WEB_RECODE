@@ -32,7 +32,7 @@ declare global {
         [name: string]: { postMessage(body: unknown): void };
       };
     };
-    // Android 앱 웹뷰가 addJavascriptInterface로 주입하는 객체. 메서드 목록은 앱 버전마다 다르다
+    // Android 앱 웹뷰가 `addJavascriptInterface`로 주입하는 객체. 웹뷰 화면마다 주입하는 메서드가 다르다
     Android?: Record<string, ((...args: unknown[]) => unknown) | undefined>;
     onNativeCallback?: (callbackId: string, result: NativeCallbackResult) => void;
     NativeBridge?: {
