@@ -9,7 +9,6 @@ import { bannerQueries } from 'api/banner/queries';
 import { cafeteriaQueries } from 'api/cafeteria/queries';
 import { callvanQueries } from 'api/callvan/queries';
 import { coopshopQueries } from 'api/coopshop/queries';
-import type { StoreCategoriesResponse } from 'api/store/entity';
 import { storeQueries } from 'api/store/queries';
 import type { Semester } from 'api/timetable/entity';
 import { createDefaultTimetableFrameList, timetableQueries, timetableQueryKeys } from 'api/timetable/queries';
@@ -17,17 +16,16 @@ import { weatherQueries } from 'api/weather/queries';
 import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
 import HomePage from 'components/IndexComponents/HomePage';
 import HomeLayout from 'components/layout/HomeLayout';
-import { getDeviceClass } from 'utils/ssr/requestContext';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { getRecentSemester, resolveTimetableSemester } from 'utils/timetable/semester';
 import { isUnauthorizedError } from 'utils/ts/httpError';
 
 export const getServerSideProps = withCacheControl(
-  async (context: GetServerSidePropsContext, cacheControl, serverRequest) => {
+  async (_context: GetServerSidePropsContext, cacheControl, serverRequest) => {
     const queryClient = new QueryClient();
     let isLoggedIn = serverRequest.isLoggedIn;
     let userType = serverRequest.userType;
-    const isMobile = getDeviceClass(context.req.headers['user-agent']) === 'mobile';
+    const isMobile = serverRequest.device === 'mobile';
 
     const resetAuthContext = () => {
       isLoggedIn = false;
@@ -56,7 +54,6 @@ export const getServerSideProps = withCacheControl(
       }
     };
 
-    const serverNow = new Date();
     const diningTime = new DiningTime();
     const diningDate = diningTime.generateDiningDate();
     const serverDining = {
@@ -102,44 +99,37 @@ export const getServerSideProps = withCacheControl(
     const prefetchBanners = async () => {
       const banners = await queryClient.fetchQuery(bannerQueries.categories());
       const categoryId = Number(banners.banner_categories[0].id);
-      const list = await queryClient.fetchQuery(bannerQueries.list(categoryId));
 
-      return { categoryId, list };
+      return queryClient.fetchQuery(bannerQueries.list(categoryId));
     };
 
-    let bannerCategoryId = 0;
     let bannersList: BannersResponse = { count: 0, banners: [] };
-    let categories: StoreCategoriesResponse = { total_count: 0, shop_categories: [] };
 
     const prefetchDeviceContent = async () => {
       if (isMobile) {
         await Promise.all([
-          queryClient.prefetchQuery(weatherQueries.info()),
           queryClient.prefetchQuery(
             callvanQueries.list({ statuses: ['RECRUITING'], sort: 'LATEST_DESC', page: 1, limit: 1 }),
           ),
-          queryClient.prefetchQuery(storeQueries.counts()),
-          queryClient.prefetchQuery(storeQueries.eventCount()),
           queryClient.prefetchQuery(coopshopQueries.cafeteriaInfo()),
         ]);
 
         return;
       }
 
-      const [banners, categoriesResponse] = await Promise.all([
+      const [banners] = await Promise.all([
         prefetchBanners(),
-        queryClient.fetchQuery(storeQueries.categories()),
         queryClient.prefetchQuery(articleQueries.list(isLoggedIn, '1')),
         queryClient.prefetchQuery(timetableQueries.semesterInfo()),
-        queryClient.prefetchQuery(articleQueries.lostItemStat()),
       ]);
-      bannerCategoryId = banners.categoryId;
-      bannersList = banners.list;
-      categories = categoriesResponse;
+      bannersList = banners;
     };
 
     const [userSemester] = await Promise.all([
       prefetchTimetable(),
+      queryClient.prefetchQuery(weatherQueries.info()),
+      queryClient.prefetchQuery(storeQueries.counts()),
+      queryClient.prefetchQuery(storeQueries.eventCount()),
       queryClient.prefetchQuery(cafeteriaQueries.dinings(convertDateToSimpleString(diningDate))),
       isLoggedIn && queryClient.prefetchQuery(authQueries.userInfo(true)),
       prefetchDeviceContent(),
@@ -153,12 +143,10 @@ export const getServerSideProps = withCacheControl(
 
     return {
       props: {
-        bannerCategoryId,
         bannersList,
-        categories,
         serverDining,
+        serverNow: serverRequest.now,
         serverSemester,
-        serverNow: serverNow.toISOString(),
         dehydratedState: dehydrate(queryClient),
       },
     };

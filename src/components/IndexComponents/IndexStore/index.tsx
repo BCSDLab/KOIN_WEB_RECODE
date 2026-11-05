@@ -1,90 +1,18 @@
-import { useEffect } from 'react';
-import Image from 'next/image';
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import type { StoreCategoriesResponse } from 'api/store/entity';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import type { LoggingTeam } from 'lib/gtag';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
+import StoreCard from './StoreCard';
 import styles from './IndexStore.module.scss';
+import cardStyles from './StoreCard.module.scss';
 
-interface Category {
-  id: number;
-  name: string;
-  image_url: string;
-}
-
-interface CategoryWithEvent extends Category {
-  event: {
-    team: LoggingTeam;
-    event_label: string;
-    value: string;
-    previous_page: string;
-    current_page: string;
-  };
-  route: string;
-}
-
-export default function IndexStore({ categories }: { categories: StoreCategoriesResponse }) {
+export default function IndexStore() {
   const logger = useLogger();
-  const router = useRouter();
-  const isMobile = useMediaQuery();
-
-  const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
-    ...category,
-    event: {
-      team: 'BUSINESS' as const,
-      event_label: 'main_shop_categories',
-      value: category.name,
-      previous_page: '메인',
-      current_page: category.name,
-    },
-    route: `${ROUTES.Store()}?category=${category.id}`,
-  }));
-
-  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) => {
-    if (category.name === '전체보기') {
-      return {
-        ...category,
-        name: '혜택',
-        image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
-        event: {
-          ...category.event,
-          event_label: 'main_shop_benefit',
-          value: '전화주문혜택',
-          current_page: 'benefit',
-        },
-        route: `${ROUTES.BenefitStore()}?category=1`,
-      };
-    }
-
-    return {
-      ...category,
-      route: `${ROUTES.Store()}?category=${category.id}`,
-    };
-  });
-
-  const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
   const titleLink = `${ROUTES.Store()}?category=1`;
-
-  const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
-    logger.actionEventClick({
-      ...event,
-      duration_time: getMainDurationTime(),
-    });
-
-    if (route.startsWith('http')) {
-      window.location.assign(route);
-
-      return;
-    }
-
-    router.push(route);
-  };
 
   useEffect(() => {
     initializeMainEntryTime();
@@ -95,26 +23,27 @@ export default function IndexStore({ categories }: { categories: StoreCategories
       <Link href={titleLink} className={styles.template__title}>
         주변 상점
       </Link>
-      <div className={styles.category__wrapper}>
-        {renderCategories.map((category) => (
-          <button
-            key={category.id}
-            className={styles.category__item}
-            onClick={() => handleCategoryClick(category)}
-            type="button"
-          >
-            <Image
-              src={category.image_url}
-              alt={category.name}
-              className={styles.category__image}
-              width={48}
-              height={48}
-              sizes="48px"
-            />
-            {category.name}
-          </button>
-        ))}
-      </div>
+      <ErrorBoundary fallbackClassName={cardStyles['store-card']}>
+        <Suspense
+          fallback={
+            <div className={cardStyles['store-card']} role="status">
+              상점 정보를 불러오는 중입니다.
+            </div>
+          }
+        >
+          <StoreCard
+            href={titleLink}
+            onClick={() =>
+              logger.actionEventClick({
+                team: 'CAMPUS',
+                event_label: 'popular_shop',
+                value: '많이 찾는 상점 둘러보기',
+                duration_time: getMainDurationTime(),
+              })
+            }
+          />
+        </Suspense>
+      </ErrorBoundary>
     </section>
   );
 }

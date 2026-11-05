@@ -1,10 +1,10 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  width: 862px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 
   @include media.media-breakpoint(mobile) {
     display: none;
@@ -14,43 +14,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
   }
 
   &__title {
-    font-family: Pretendard, sans-serif;
-    font-size: 17px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     line-height: 1.6;
-    color: #175c8e;
-    text-decoration: none;
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 18px;
-      padding-left: 3px;
-      margin-left: 16px;
-      font-weight: 700;
-    }
-  }
-
-  &__title-link {
-    text-decoration: none;
+    color: #323232;
   }
 
   &__link {
-    font-size: 12px;
-    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.6;
     display: flex;
     align-items: center;
-    color: #252525;
-    position: relative;
-    left: 8px;
-
-    svg {
-      position: relative;
-      top: -1px;
-      right: 3px;
-    }
+    color: #6f6f6f;
   }
 }
 
@@ -58,22 +37,34 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  min-height: 208px;
+  padding: 20px;
+  border: 0.5px solid #e6e6e6;
+  border-radius: 16px;
+  background: #fff;
+  line-height: normal;
 
   &__item {
     display: flex;
     justify-content: space-between;
-    height: 18px;
+    align-items: center;
+    height: 17px;
+    gap: 14px;
   }
 
   &__item-link {
+    flex: 1;
+    min-width: 0;
     font-size: 14px;
     color: #252525;
-    text-decoration: none;
     display: flex;
     align-items: center;
   }
 
   &__item-title {
+    min-width: 0;
     max-width: 680px;
     white-space: nowrap;
     overflow: hidden;
@@ -81,17 +72,21 @@
   }
 
   &__item-type {
-    font-weight: 600;
-    margin-right: 4px;
+    flex-shrink: 0;
+    font-weight: 700;
+    margin-right: 14px;
+    color: #b611f5;
   }
 
   &__item-tag {
+    flex-shrink: 0;
     width: 14px;
     height: 14px;
     margin-left: 10px;
   }
 
   &__item-registered {
+    flex-shrink: 0;
     color: #999;
     text-align: right;
     font-size: 12px;

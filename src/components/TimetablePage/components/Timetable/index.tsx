@@ -19,6 +19,7 @@ import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
+  variant?: 'home';
   selectedLectureIndex?: number;
   similarSelectedLecture?: Lecture[];
   firstColumnWidth: number;
@@ -31,6 +32,7 @@ interface TimetableProps {
 }
 
 function Timetable({
+  variant,
   timetableFrameId,
   selectedLectureIndex,
   similarSelectedLecture,
@@ -179,8 +181,14 @@ function Timetable({
   }, [myLectures, setTimeString, tempLecture, customTempLecture]);
 
   return (
-    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
-      <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
+    <div
+      className={cn({ [styles.timetable]: true, [styles['timetable--home']]: variant === 'home' })}
+      style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}
+    >
+      <div
+        className={styles.timetable__head}
+        style={{ height: isMobile ? undefined : `${variant === 'home' ? 16 : rowHeight + 5}px` }}
+      >
         <div
           className={cn({
             [styles.timetable__col]: true,

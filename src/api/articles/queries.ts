@@ -12,7 +12,6 @@ import {
   getHotArticles,
   getLostItemArticles,
   getLostItemSearch,
-  getLostItemStat,
   getSingleLostItemArticle,
   searchArticles,
 } from './index';
@@ -47,7 +46,6 @@ export const articleQueryKeys = {
   lostItemDetail: (articleId: number, isLoggedIn?: boolean) =>
     ['lostItem', 'detail', articleId, getViewerScope(isLoggedIn)] as const,
   lostItemSearch: (params: LostItemSearchParams) => ['lostItem', 'search', params] as const,
-  lostItemStat: ['lostItem', 'stat'] as const,
   lostItemChatroomAll: ['chatroom', 'lost-item'] as const,
   lostItemChatroomList: (isLoggedIn?: boolean) =>
     ['chatroom', 'lost-item', 'list', getViewerScope(isLoggedIn)] as const,
@@ -132,12 +130,6 @@ export const articleQueries = {
     queryOptions({
       queryKey: articleQueryKeys.lostItemSearch(params),
       queryFn: () => getLostItemSearch(params),
-    }),
-
-  lostItemStat: () =>
-    queryOptions({
-      queryKey: articleQueryKeys.lostItemStat,
-      queryFn: getLostItemStat,
     }),
 
   lostItemChatroomList: (isLoggedIn: boolean) =>

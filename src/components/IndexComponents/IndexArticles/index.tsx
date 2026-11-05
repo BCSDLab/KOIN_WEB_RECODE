@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from 'api/articles/queries';
-import RightArrow from 'assets/svg/right-arrow.svg';
+import ArrowRightIcon from 'assets/svg/common/arrow-right-icon.svg';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import { createArticlesWithNewSelector } from 'components/Articles/utils/selectArticlesData';
 import ROUTES from 'static/routes';
@@ -12,7 +12,6 @@ import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import styles from './IndexArticles.module.scss';
 
 interface IndexArticlesProps {
-  /** NEW 뱃지 판정 기준 시각. 서버가 확정해 내려준다. */
   serverNow: string;
 }
 
@@ -29,10 +28,9 @@ export default function IndexArticles({ serverNow }: IndexArticlesProps) {
       <div className={styles.template__header}>
         <Link
           href={ROUTES.Articles()}
-          className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice', value: '공지사항' })}
         >
-          <h1 className={styles.template__title}>공지사항</h1>
+          <h2 className={styles.template__title}>공지사항</h2>
         </Link>
         <Link
           href={ROUTES.Articles()}
@@ -41,13 +39,13 @@ export default function IndexArticles({ serverNow }: IndexArticlesProps) {
             logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice_detail', value: '공지사항' })
           }
         >
-          더보기
-          <RightArrow aria-hidden />
+          전체보기
+          <ArrowRightIcon aria-hidden />
         </Link>
       </div>
 
       <ul className={styles.list}>
-        {articlesData?.articles.slice(0, 7).map((article) => (
+        {articlesData?.articles.slice(0, 5).map((article) => (
           <li key={article.id} className={styles.list__item}>
             <Link
               href={ROUTES.ArticlesDetail({ id: String(article.id) })}

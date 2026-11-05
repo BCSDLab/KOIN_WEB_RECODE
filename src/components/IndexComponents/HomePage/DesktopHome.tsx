@@ -1,38 +1,31 @@
 import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
-import IndexCallvan from 'components/IndexComponents/IndexCallvan';
-import IndexLostItem from 'components/IndexComponents/IndexLostItem';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
 
+import HomeGreeting from './HomeGreeting';
 import type { HomePageProps } from './types';
 import styles from './HomePage.module.scss';
 
-function DesktopHome({
-  bannersList,
-  categories,
-  bannerCategoryId,
-  serverDining,
-  serverNow,
-  serverSemester,
-}: HomePageProps) {
+function DesktopHome({ bannersList, serverDining, serverNow, serverSemester }: HomePageProps) {
   return (
     <main className={styles.template}>
-      <Banner bannersList={bannersList} bannerCategoryId={bannerCategoryId} />
       <UserInfoModal />
-      <div className={styles['left-container']}>
-        <IndexStore categories={categories} />
-        <IndexBus />
-        <IndexCallvan />
-        <IndexLostItem />
-        <IndexArticles serverNow={serverNow} />
-      </div>
-      <div className={styles['right-container']}>
-        <IndexTimetable serverSemester={serverSemester} />
-        <IndexCafeteria serverDining={serverDining} />
+      <div className={styles.content}>
+        <HomeGreeting variant="desktop" />
+        <div className={styles['left-container']}>
+          <IndexCafeteria serverDining={serverDining} />
+          <IndexBus />
+          <IndexStore />
+          <IndexArticles serverNow={serverNow} />
+        </div>
+        <div className={styles['right-container']}>
+          <IndexTimetable serverSemester={serverSemester} />
+          <Banner key={bannersList.banners.map((banner) => banner.id).join('-')} bannersList={bannersList} />
+        </div>
       </div>
     </main>
   );
