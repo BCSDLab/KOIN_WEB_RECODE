@@ -9,6 +9,7 @@ import CheckIcon from 'assets/svg/Order/Result/check-icon.svg';
 import CenterModal from 'components/Store/mobile/common/CenterModal';
 import Button from 'components/ui/Button';
 import ROUTES from 'static/routes';
+import { isNativeApp, navigateBack } from 'utils/ts/nativeBridge';
 import showToast from 'utils/ts/showToast';
 
 import styles from './OrderCancelPage.module.scss';
@@ -59,11 +60,20 @@ export default function OrderCancelPage({ paymentId }: OrderCancelPageProps) {
     setCustomCancelReason(e.target.value);
   };
 
-  // order: 취소 요청을 보내고 결과를 기다리지 않고 주문 홈으로 이동한다
   const handleClickContinueCancel = () => {
-    cancelPayment({
+    const body = {
       cancel_reason: selectedCancelReason === OTHER_REASON ? customCancelReason : selectedCancelReason,
-    });
+    };
+
+    // 앱은 웹뷰를 닫으면서 진행 중인 요청도 끊을 수 있어, 취소가 끝난 뒤에 앱으로 돌아간다
+    if (isNativeApp()) {
+      cancelPayment(body, { onSuccess: () => navigateBack() });
+
+      return;
+    }
+
+    // order: 취소 요청을 보내고 결과를 기다리지 않고 주문 홈으로 이동한다
+    cancelPayment(body);
     router.push(ROUTES.OrderHome());
   };
 

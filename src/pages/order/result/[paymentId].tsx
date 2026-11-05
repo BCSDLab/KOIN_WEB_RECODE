@@ -13,6 +13,7 @@ import OrderResultHeader from 'components/Order/OrderResultPage/components/Order
 import ROUTES from 'static/routes';
 import { withCacheControl } from 'utils/ssr/withCacheControl';
 import { isNotFoundKoinError } from 'utils/ts/isr';
+import { isNativeApp, navigateBack } from 'utils/ts/nativeBridge';
 
 // useNaverMapsLoaded가 붙이는 지도 스크립트와 같은 주소(미리 받기용)
 const NAVER_MAPS_SCRIPT_URL = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}&submodules=geocoder`;
@@ -60,6 +61,13 @@ function OrderResultRoute({ isDesktop, paymentId }: Props) {
 
   // order 헤더: 결과 화면은 제목 없이 닫기 버튼으로 주문 홈에 간다(routeTitles에 없는 경로)
   const goToOrderHome = () => {
+    // 앱은 주문 홈을 네이티브로 그리므로 웹 주문 홈 대신 앱으로 돌아간다
+    if (isNativeApp()) {
+      navigateBack();
+
+      return;
+    }
+
     router.replace(ROUTES.OrderHome());
   };
 
