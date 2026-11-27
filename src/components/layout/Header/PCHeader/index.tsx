@@ -45,14 +45,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
     if (info) {
       logger.actionEventClick({ ...info, event_label: 'header' });
-
-      if (pathname === ROUTES.GraduationCalculator()) {
-        logger.actionEventClick({
-          team: 'USER',
-          event_label: 'graduation_calculator_back',
-          value: `탈출_헤더_${title}`,
-        });
-      }
     }
   };
 
@@ -77,23 +69,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         event_category: 'logo',
         current_page: isomorphicSessionStorage.getItem('cameFrom') || '전체보기',
         duration_time: getElapsedSeconds('enter_storeDetail'),
-      });
-    }
-    if (pathname.includes(ROUTES.GraduationCalculator())) {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'graduation_calculator_back',
-        value: '탈출_로고',
-      });
-    }
-  };
-
-  const escapeByheader = (title: '정보수정' | '로그아웃') => {
-    if (pathname === ROUTES.GraduationCalculator()) {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'graduation_calculator_back',
-        value: `탈출_헤더_${title}`,
       });
     }
   };
@@ -237,7 +212,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 className={styles['header__auth-button']}
                 onClick={() => {
                   openModal();
-                  escapeByheader('정보수정');
                 }}
               >
                 정보수정
@@ -247,7 +221,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               <button
                 onClick={() => {
                   logout();
-                  escapeByheader('로그아웃');
                   logger.actionEventClick({
                     team: 'USER',
                     event_label: 'header',

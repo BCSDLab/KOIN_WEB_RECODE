@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import HomeOutlineIcon from 'assets/svg/common/home-outline-icon.svg';
 import InstagramIcon from 'assets/svg/common/instagram-icon.svg';
@@ -24,9 +23,6 @@ function Footer() {
   const portalManager = useModalPortal();
   const isLoggedIn = useIsLoggedIn();
 
-  const router = useRouter();
-  const { pathname } = router; // 현재 URL의 경로
-
   if (isMobile) {
     return null;
   }
@@ -36,14 +32,6 @@ function Footer() {
 
     if (info) {
       logger.actionEventClick({ ...info, event_label: 'footer' });
-
-      if (String(pathname) === ROUTES.GraduationCalculator()) {
-        logger.actionEventClick({
-          team: 'USER',
-          event_label: 'graduation_calculator_back',
-          value: `탈출_푸터_${title}`,
-        });
-      }
     }
   };
 

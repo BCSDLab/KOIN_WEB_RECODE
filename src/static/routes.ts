@@ -8,7 +8,6 @@ const ROUTES = {
   TimetableList: () => '/timetable/list',
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
     `/timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
-  GraduationCalculator: () => '/graduation',
   Course: () => '/course',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
