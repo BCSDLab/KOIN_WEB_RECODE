@@ -8,14 +8,12 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { CATEGORY, type Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import { IS_STAGE } from 'static/url';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useIsLoggedIn from 'utils/hooks/state/useIsLoggedIn';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import getElapsedSeconds from 'utils/ts/getElapsedSeconds';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 
 import styles from './Panel.module.scss';
@@ -28,58 +26,15 @@ export default function Panel({ openModal }: PanelProps) {
   const { isSidebarOpen, closeSidebar } = useMobileSidebar();
   const { data: userInfo } = useUser();
   const router = useRouter();
-  const { pathname } = router;
   const logout = useLogout();
-  const logger = useLogger();
 
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
   const isLoggedIn = useIsLoggedIn();
   const portalManager = useModalPortal();
 
-  const logShortcut = (title: string) => {
-    if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
-    if (title === '분실물') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '분실물' });
-    if (title === '버스 교통편')
-      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교통편 조회하기' });
-    if (title === '버스 시간표')
-      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '버스 시간표' });
-    if (title === '식단') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '식단' });
-    if (title === '시간표') logger.actionEventClick({ team: 'USER', event_label: 'hamburger', value: '시간표' });
-    if (title === '복덕방') logger.actionEventClick({ team: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
-    if (title === '주변상점')
-      logger.actionEventClick({ team: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
-    if (title === '교내 시설물 정보')
-      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
-    if (title === '쪽지') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
-    if (title === '동아리') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '동아리' });
-    if (title === '콜밴팟 모집')
-      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '콜밴팟 모집' });
-    if (title === '팀원 모집')
-      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '팀원 모집' });
-  };
-
-  // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
-  const logExitExistingPage = (title: string) => {
-    if (pathname === '/timetable') {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'timetable_back',
-        value: '햄버거',
-        previous_page: '시간표',
-        current_page: title,
-        duration_time: getElapsedSeconds('enterTimetablePage'),
-      });
-    }
-  };
-
   const handleMyInfoClick = () => {
     if (userInfo) {
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'hamburger',
-        value: '내정보',
-      });
       closeSidebar();
       openModal();
     } else {
@@ -94,9 +49,6 @@ export default function Panel({ openModal }: PanelProps) {
   };
 
   const handleSubmenuClick = (submenu: Submenu) => {
-    logShortcut(submenu.title);
-    logExitExistingPage(submenu.title);
-
     if (!isLoggedIn && submenu.title === '쪽지') {
       openLoginModal();
 
@@ -158,19 +110,9 @@ export default function Panel({ openModal }: PanelProps) {
             userInfo
               ? () => {
                   logout();
-                  logger.actionEventClick({
-                    team: 'USER',
-                    event_label: 'hamburger',
-                    value: '로그아웃',
-                  });
                 }
               : () => {
                   router.push(ROUTES.Auth());
-                  logger.actionEventClick({
-                    team: 'USER',
-                    event_label: 'hamburger',
-                    value: '로그인 시도',
-                  });
                 }
           }
         >
